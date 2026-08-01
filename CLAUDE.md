@@ -62,6 +62,9 @@ Each of the seven movements is a self-contained file that never reaches into ano
 ## Conventions
 
 - **British spelling** in all copy (the current site mixes conventions; the audit flags it).
+- **Verify hard numbers with the client; do not trust the sources.** Mahua Vann is **5 km** from Turia Gate
+  — the Master Brand Record (4 km) and the live site (3 km) are both wrong. Room counts, acreage and drive
+  times from either source deserve the same suspicion. See spec §12.
 - Copy is drafted from the Master Brand Record, in the existing brand voice. The client reviews every line.
 - Specificity is the brand's luxury — name a gate, a tigress, a tree, a dish. Avoid reaching for adjectives.
 - Never reintroduce the phrase "boutique nature resorts in India" as filler; over-repetition is a named

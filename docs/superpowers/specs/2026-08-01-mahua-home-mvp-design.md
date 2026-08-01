@@ -70,8 +70,8 @@ This is the direct fix for the audit finding: *"no single strong tagline or bran
 
 ### 1 · First light — *The Gate*
 Green lifts through warm sand. Full-bleed forest receding on scroll. The safari proposition stated as fact,
-not sold: minutes to Turia Gate, first through at dawn, naturalists who track these particular tigresses
-and their lineages.
+not sold: **five kilometres to Turia Gate**, first through at dawn, naturalists who track these particular
+tigresses and their lineages.
 
 **The tiger arrives here** — the hour one would actually be seen.
 
@@ -90,7 +90,7 @@ Two large plates, unhurried:
 | | **Mahua Vann** · Pench | **Mahua Tola** · Tadoba |
 |---|---|---|
 | Rooms | 26 | 14 (expanded from 11) |
-| Gate | Turia Gate (also near Teliya, Khawasa) | Kolara Gate, 6 km · 7.5 acres |
+| Gate | Turia Gate, **5 km** (also near Teliya, Khawasa) | Kolara Gate, 6 km · 7.5 acres |
 | Character | Mud-plastered cottages under sal and mahua | River-facing *machaans* on a seasonal riverbed |
 
 Each closes with the gentle push: **Discover Mahua Vann →**
@@ -410,9 +410,16 @@ Automated tests cannot tell you whether a page feels expensive. Therefore:
 
 | # | Question | Owner | Blocking? |
 |---|---|---|---|
-| Q1 | **Distance from Mahua Vann to Turia Gate: 3 km or 4 km?** Master Brand Record says 4 km; the live site and both mockups say 3 km. | Client | No — copy detail, resolve before launch |
+| ~~Q1~~ | ~~Distance from Mahua Vann to Turia Gate~~ — **RESOLVED 1 Aug 2026: 5 km.** See warning below. | — | Closed |
 | Q2 | Will a photography/video shoot be funded? | Client | No — D10 assumes not; shot list will inform the decision |
 | Q3 | Current TripAdvisor rating and two or three approved guest quotes for movement 6 | Client | No — placeholder until supplied |
+
+> **⚠️ Data-quality warning arising from Q1.** The client confirmed the true distance is **5 km**. Both
+> existing sources were wrong: the Master Brand Record says 4 km, and the live site plus both HTML mockups
+> say 3 km. Since the Master Brand Record is designated the single source of truth that all copy, OTA
+> listings and B2B materials inherit from, **an error there propagates everywhere.** Correcting it is
+> outside this project's scope but should be raised with the brand owner. Treat other hard numbers from
+> either source (room counts, acreage, drive times) as worth verifying rather than trusted.
 
 ---
 
