@@ -544,11 +544,14 @@ describe("segmentAt", () => {
     expect(segmentAt(99)).toEqual({ from: 5, to: 6, t: 1 });
   });
 
-  it("lands exactly on a boundary at each state", () => {
-    // six segments between seven states
-    const third = segmentAt(2 / 6);
+  it("sits mid-segment between two states", () => {
+    // Six segments between seven states. Deliberately sampled mid-segment, not on a
+    // boundary: progress * 6 at an exact boundary is floating-point ambiguous, and
+    // Math.floor turns a 1-ulp error into an off-by-one segment.
+    const third = segmentAt(2.5 / 6);
     expect(third.from).toBe(2);
-    expect(third.t).toBeCloseTo(0, 10);
+    expect(third.to).toBe(3);
+    expect(third.t).toBeCloseTo(0.5, 6);
   });
 });
 
@@ -685,16 +688,13 @@ export const body = Crimson_Pro({
 
 - [ ] **Step 2: Replace `app/globals.css`**
 
+Note: the `--bg`/`--text`/`--accent`/`--accent-text` values are **not** written here. Hard-coding them in
+CSS would duplicate `lib/palette.ts` and drift from it silently, violating the global constraint. `layout.tsx`
+renders them inline from `LIGHT_STATES[0]` instead (Step 3), which is server-rendered — so there is no flash
+and `palette.ts` stays the only place a colour is defined.
+
 ```css
 @import "tailwindcss";
-
-/* Seeded from lib/palette.ts state 0 (dawn). DaySurface overwrites these on scroll. */
-:root {
-  --bg: #232B21;
-  --text: #E9DFC7;
-  --accent: #D5A63E;
-  --accent-text: #D5A63E;
-}
 
 @theme inline {
   --color-bg: var(--bg);
@@ -734,6 +734,7 @@ Replace the file:
 
 ```tsx
 import type { Metadata } from "next";
+import { LIGHT_STATES } from "@/lib/palette";
 import { body, display, heading, label } from "./fonts";
 import "./globals.css";
 
@@ -744,8 +745,23 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Seeded from the first light state, server-rendered so there is no flash of
+  // unstyled colour. DaySurface overwrites these as the visitor scrolls.
+  // Read from palette.ts rather than written in CSS: one source of truth for colour.
+  const dawn = LIGHT_STATES[0];
+
   return (
-    <html lang="en-GB">
+    <html
+      lang="en-GB"
+      style={
+        {
+          "--bg": dawn.bg,
+          "--text": dawn.text,
+          "--accent": dawn.accent,
+          "--accent-text": dawn.accentText,
+        } as React.CSSProperties
+      }
+    >
       <body
         className={`${display.variable} ${heading.variable} ${label.variable} ${body.variable}`}
       >
@@ -1030,7 +1046,7 @@ export function Grain() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-50 opacity-[0.05] mix-blend-multiply"
+      className="pointer-events-none fixed inset-0 z-50 opacity-[0.07] mix-blend-soft-light"
       style={{ backgroundImage: `url("data:image/svg+xml,${svg}")` }}
     />
   );
@@ -1313,20 +1329,29 @@ npx lighthouse http://localhost:3000/preview/light-states --output html \
 Expected: Accessibility ≥ 95. Record Performance; the preview has almost no imagery, so treat this as the
 baseline the real page must not fall far below.
 
-- [ ] **Step 3: Verify the reduced-motion still state**
+- [ ] **Step 3: Verify the grain reads on both light and dark**
+
+Grain uses `mix-blend-soft-light`, which works on light and dark backgrounds alike — unlike `multiply`,
+which vanishes on the dark states. Scroll to the cream states and to the two forest-green bookends.
+
+Expected: a faint tooth visible in **both**. If it disappears at either end, adjust the opacity or blend
+mode in `components/motion/Grain.tsx` until it reads at both, then re-verify. Spec §4.4 requires it to stop
+the dark movements looking like flat rectangles, so "invisible on dark" is a failure.
+
+- [ ] **Step 4: Verify the reduced-motion still state**
 
 In Chrome DevTools → Rendering → "Emulate CSS prefers-reduced-motion: reduce", reload the page.
 Expected: no smooth-scroll hijacking, content visible immediately, no reveal animation, background still
 tracks scroll position. **Nothing disappears or becomes unreadable.**
 
-- [ ] **Step 4: Commit the evidence**
+- [ ] **Step 5: Commit the evidence**
 
 ```bash
 git add docs/reviews/
 git commit -m "docs: light-states verification evidence"
 ```
 
-- [ ] **Step 5: STOP — client approval gate**
+- [ ] **Step 6: STOP — client approval gate**
 
 **Do not begin Plan 2.** Spec §6.3 requires the client to approve colour and motion from the running page
 before any movement is built on top of it. Present the screenshots and ask specifically:
