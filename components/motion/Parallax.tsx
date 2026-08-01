@@ -17,13 +17,25 @@ export function Parallax({
     gsap.registerPlugin(ScrollTrigger);
 
     const capped = Math.min(Math.abs(strength), PARALLAX_MAX);
-    const shift = el.offsetHeight * capped;
 
-    const tween = gsap.fromTo(el, { y: -shift / 2 }, {
-      y: shift / 2,
-      ease: EASE.drift,
-      scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
-    });
+    // Function-based values + invalidateOnRefresh: GSAP re-evaluates these on
+    // every ScrollTrigger refresh, so a resize or reflow re-measures the height
+    // instead of animating against the height the element had at mount.
+    const tween = gsap.fromTo(
+      el,
+      { y: () => -(el.offsetHeight * capped) / 2 },
+      {
+        y: () => (el.offsetHeight * capped) / 2,
+        ease: EASE.drift,
+        scrollTrigger: {
+          trigger: el,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      },
+    );
     return () => {
       tween.scrollTrigger?.kill();
       tween.kill();

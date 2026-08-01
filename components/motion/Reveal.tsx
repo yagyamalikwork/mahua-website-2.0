@@ -19,14 +19,27 @@ export function Reveal({
       return;
     }
     gsap.registerPlugin(ScrollTrigger);
-    const tween = gsap.fromTo(el, { ...REVEAL_FROM }, {
-      opacity: 1,
-      scale: 1,
-      delay,
-      duration: slow ? DURATION.revealSlow : DURATION.reveal,
-      ease: EASE.settle,
-      scrollTrigger: { trigger: el, start: "top 85%", once: true },
-    });
+
+    // GSAP's fromTo applies its "from" state the moment the ScrollTrigger is
+    // created. Anything already on screen would therefore snap to invisible on
+    // hydration and sit there until the visitor scrolls. Reveal it now instead;
+    // only below-the-fold content waits for its trigger.
+    const onScreenAtMount = el.getBoundingClientRect().top < window.innerHeight;
+
+    const tween = gsap.fromTo(
+      el,
+      { ...REVEAL_FROM },
+      {
+        opacity: 1,
+        scale: 1,
+        delay,
+        duration: slow ? DURATION.revealSlow : DURATION.reveal,
+        ease: EASE.settle,
+        ...(onScreenAtMount
+          ? {}
+          : { scrollTrigger: { trigger: el, start: "top 85%", once: true } }),
+      },
+    );
     return () => {
       tween.scrollTrigger?.kill();
       tween.kill();
