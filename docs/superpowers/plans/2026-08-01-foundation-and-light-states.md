@@ -585,7 +585,11 @@ describe("backgroundAt", () => {
   });
 
   it("never produces a cold background while blending", () => {
-    for (let p = 0; p <= 1; p += 0.01) {
+    // Integer loop counter, not repeated += 0.01. Accumulating 0.01 a hundred
+    // times lands on 0.9900000000000007 and exits before ever testing p = 1,
+    // so the sweep would silently miss the end of the page.
+    for (let i = 0; i <= 100; i++) {
+      const p = i / 100;
       const hex = backgroundAt(p);
       const r = Number.parseInt(hex.slice(1, 3), 16);
       const b = Number.parseInt(hex.slice(5, 7), 16);
@@ -657,7 +661,7 @@ export function textAt(progress: number): string {
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `npx vitest run lib/day-surface.test.ts`
-Expected: PASS, 8 tests.
+Expected: PASS, 7 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -1072,7 +1076,7 @@ export function Grain() {
 - [ ] **Step 4: Verify everything compiles**
 
 Run: `npx tsc --noEmit && npm test`
-Expected: no type errors; all 28 existing tests still pass.
+Expected: no type errors; all 27 existing tests still pass.
 
 - [ ] **Step 5: Commit**
 
@@ -1310,7 +1314,7 @@ back to forest green. **No visible boundary between sections.** Every contrast r
 - [ ] **Step 3: Verify the production build**
 
 Run: `npm run build && npm test`
-Expected: build succeeds; all 32 tests pass.
+Expected: build succeeds; all 31 tests pass.
 
 - [ ] **Step 4: Commit**
 

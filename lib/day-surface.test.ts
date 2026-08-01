@@ -38,7 +38,10 @@ describe("backgroundAt", () => {
   });
 
   it("never produces a cold background while blending", () => {
-    for (let p = 0; p <= 1; p += 0.01) {
+    // Integer loop counter, not repeated += 0.01. Accumulating 0.01 a hundred
+    // times lands on 0.9900000000000007 and exits before ever testing p = 1.
+    for (let i = 0; i <= 100; i++) {
+      const p = i / 100;
       const hex = backgroundAt(p);
       const r = Number.parseInt(hex.slice(1, 3), 16);
       const b = Number.parseInt(hex.slice(5, 7), 16);
