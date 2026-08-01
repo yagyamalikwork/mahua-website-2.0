@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HOME } from "@/content/home";
 
 export const metadata = { title: "Mahua Resorts — early build" };
 
@@ -9,11 +10,11 @@ export default function Home() {
         className="max-w-[20ch] font-[family-name:var(--font-display)] text-[clamp(2rem,6vw,4rem)] font-light leading-[1.1]"
         style={{ color: "var(--text)" }}
       >
-        Mahua Resorts
+        {HOME.placeholder.heading}
       </h1>
 
       <p className="mt-6 max-w-[46ch] text-lg leading-relaxed" style={{ color: "var(--text)" }}>
-        This is an early build of the Mahua Resorts home page, under active construction.
+        {HOME.placeholder.body}
       </p>
 
       <Link
@@ -21,7 +22,7 @@ export default function Home() {
         className="mt-8 inline-block font-[family-name:var(--font-label)] text-xs uppercase tracking-[0.24em] underline underline-offset-8"
         style={{ color: "var(--accent-text)" }}
       >
-        View the light-states preview
+        {HOME.placeholder.cta}
       </Link>
     </main>
   );

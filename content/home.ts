@@ -19,6 +19,11 @@ export const HOME = {
     headline: "The wild and the calm, held together",
     sub: "Two family-run lodges at the gates of Pench and Tadoba.",
   },
+  placeholder: {
+    heading: "Mahua Resorts",
+    body: "This is an early build of the Mahua Resorts home page, under active construction.",
+    cta: "View the light-states preview",
+  },
   movements: [
     {
       id: "dawn",
@@ -40,5 +45,6 @@ export const HOME = {
   ],
 } as const satisfies {
   hero: { headline: string; sub: string };
+  placeholder: { heading: string; body: string; cta: string };
   movements: readonly MovementCopy[];
 };
