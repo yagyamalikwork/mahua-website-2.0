@@ -18,6 +18,21 @@ describe("relativeLuminance", () => {
     expect(relativeLuminance([0, 0, 0])).toBeCloseTo(0, 10);
     expect(relativeLuminance([255, 255, 255])).toBeCloseTo(1, 10);
   });
+
+  it("pins each channel coefficient independently", () => {
+    // A pure primary zeroes the other two channels, so the result IS that
+    // channel's coefficient. Swapping any two coefficients breaks these.
+    expect(relativeLuminance([255, 0, 0])).toBeCloseTo(0.2126, 10);
+    expect(relativeLuminance([0, 255, 0])).toBeCloseTo(0.7152, 10);
+    expect(relativeLuminance([0, 0, 255])).toBeCloseTo(0.0722, 10);
+  });
+
+  it("takes the linear branch below the 0.03928 threshold", () => {
+    // 10/255 = 0.0392157, just under the threshold, so this must divide by
+    // 12.92 rather than taking the gamma branch. Nothing else in the suite
+    // reaches this branch with a non-zero value.
+    expect(relativeLuminance([10, 0, 0])).toBeCloseTo(0.2126 * (10 / 255 / 12.92), 12);
+  });
 });
 
 describe("contrastRatio", () => {
