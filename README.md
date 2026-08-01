@@ -30,7 +30,8 @@ Next.js · TypeScript · Tailwind · GSAP + Lenis · Vercel · Sanity (later)
 earlier design mockups. Regenerate any of it with:
 
 ```bash
-python scripts/crawl_site.py           # live site: pages + imagery
+python scripts/crawl_site.py           # live site: pages + the imagery they use
+python scripts/fetch_wp_media.py       # WordPress media library via its API
 python scripts/extract_mockup_imgs.py  # photographs embedded in the prior HTML mockups
 python scripts/extract_docx.py         # plain text of the strategy documents
 ```

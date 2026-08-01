@@ -51,9 +51,10 @@ Each of the seven movements is a self-contained file that never reaches into ano
 | Path | What |
 |---|---|
 | `docs/superpowers/specs/` | The approved spec |
-| `reference/wp-media/` | ~56 images crawled from the live site (30 MB) |
+| `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |
 | `reference/mockup-media/` | 31 images extracted from the prior HTML mockups — **better curated than the live site's** |
-| `reference/wp-pages/` | Crawled HTML of the current site |
+| `reference/docs-text/` | Plain text of the four strategy/audit documents |
+| `reference/wp-pages/` | Crawled HTML of the current site — **git-ignored; regenerate locally** |
 | `scripts/` | The crawl/extract scripts — rerun to refresh reference material |
 | `../Mahua_Resorts_Master_Brand_Record.md` | **Single source of truth** for brand, voice, properties, philosophy |
 | `../0[1-4]_Mahua_*.docx` | Audit, recommendations, roadmap, benchmark brands |
@@ -83,8 +84,10 @@ npm run lint
 Reference material (already run; rerun only to refresh):
 
 ```bash
-python scripts/crawl_site.py           # crawl live site + download imagery
+python scripts/crawl_site.py           # crawl live site pages + imagery they use
+python scripts/fetch_wp_media.py       # WordPress media library via its API
 python scripts/extract_mockup_imgs.py  # pull images out of the prior HTML mockups
+python scripts/extract_docx.py         # plain text of the strategy documents
 ```
 
 ## Verification

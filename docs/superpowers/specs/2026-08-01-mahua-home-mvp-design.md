@@ -306,7 +306,10 @@ risk to dawn, and movements 2 and 4 can be removed cleanly (§8).
 
 ### What exists (downloaded to `reference/`)
 
-- **~56 images from the live site** (30 MB) via a full crawl — `scripts/crawl_site.py`
+- **~56 unique images from the live site** (30 MB), from two sources:
+  - `scripts/crawl_site.py` — 34 originals actually used on pages (thumbnail variants collapsed)
+  - `scripts/fetch_wp_media.py` — 27 from the WordPress media library API. Note the API *reports* 137
+    items but exposes only 27 to unauthenticated callers; the rest would need credentials.
 - **31 images extracted from the v1/v3 HTML mockups** — `scripts/extract_mockup_imgs.py`
 - **Zero video.** Confirmed across the whole site.
 
