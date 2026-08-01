@@ -1,0 +1,142 @@
+
+MAHUA RESORTS
+Website Analysis
+and Observations
+A detailed audit of mahuaresorts.com
+Prepared for the Mahua Resorts team
+Scope: full website, all three properties
+Reviewed at 1920 x 1080, revised version
+Date: 22 July 2026
+
+1. About this document
+This document records what the current Mahua Resorts website does well and where it can improve. It is based on a hands on review of every public page on mahuaresorts.com, viewed in a live browser at a standard 1920 by 1080 desktop resolution, along with the booking flow that the site links out to. It covers the homepage, the three property pages (Mahua Vann in Pench, Mahua Tola in Tadoba, and Mahua Bagh in Murud), the About Us page, the Offers page, and the In The News page.
+This is a revised version. An earlier draft flagged a few items that turned out to be artifacts of a narrower test window rather than real faults, and those have been removed after re testing. The findings below reflect what is genuinely present at a normal desktop resolution.
+How to read the severity labels used in the summary table:
+Critical: actively hurts trust or bookings and should be fixed now.
+High: noticeably weakens the experience and should be addressed soon.
+Medium: worth improving as part of the wider refresh.
+2. Executive summary
+Mahua Resorts has the raw ingredients of a strong luxury brand. The photography is genuine and appealing, the properties are distinctive, the logo and the earthy green, cream and gold palette are pleasant and used consistently, and the written descriptions of the experiences are warm and detailed. The core layout is clean and, at a normal desktop resolution, the header, hero and section spacing all behave correctly.
+The gap between the current site and a Taj, ITC or Leela property site is therefore not about a broken build. It is about polish, proof and the final step of booking. A small number of real issues stand out: live Lorem ipsum placeholder text sitting on the Offers page, a booking step that hands the guest to a plain third party page in a completely different colour and font, and one property that cannot be booked online at all. There is good social proof already, since each property page carries a TripAdvisor rating and testimonials, but the homepage does not surface it. Alongside these, the copy leans on repeated keywords and the design, while tidy, still reads as a capable template rather than a considered, custom brand experience.
+The good news is that the material is strong and the fixes are focused. The sections below set out the detail.
+3. First impressions and brand identity
+What works
+The mandala style logo in soft gold on a cream disc is attractive and sits well against the forest photography.
+The colour story of forest green, cream and gold is appropriate for a nature and wildlife brand and is used consistently across the main site.
+The hero photographs are real, high quality and inviting. The Pench pool shot and the forest walkway both set the right tone immediately.
+The individual property naming, Vann, Tola and Bagh, is memorable and gives each location its own character.
+What can improve
+The overall visual language, while clean, still feels like a well kept template. Type sizing and section rhythm are functional rather than distinctive, so the site does not yet feel custom or clearly premium.
+There is no single strong tagline or brand promise on first view. The homepage opens into a long introduction rather than one confident line.
+The site does not signal a price tier through its design, so a guest cannot immediately tell this is a four to five star retreat rather than a mid range lodge.
+4. Navigation and site structure
+What works
+The primary menu is short and the three properties are surfaced clearly at the top.
+The Book Now button is present and clearly visible in the top right at desktop resolution.
+A phone number and a WhatsApp link are always visible, which suits Indian travel buyers who often prefer to call or message.
+What can improve
+Book Now lists only two properties. The booking dropdown offers Vann and Tola. Mahua Bagh in Murud has no online booking route, so a guest who wants to book it reaches a dead end.
+Offers sits in the secondary menu rather than the main one, so a commercially important page is harder to find than it should be.
+There is no footer sitemap repeating the main links, and no search.
+5. Homepage
+What works
+The opening hero image is strong and full width, and the header sits cleanly above it.
+The three property cards with a short description and a Tell Me More button are a sensible way to route people to each resort.
+Section spacing and image loading behave correctly at desktop resolution, so the page reads as tidy and finished as you scroll.
+What can improve
+Text heavy introduction. The opening is several paragraphs of similar length, each led by an italic slogan, and it repeats the phrase boutique nature resorts in India many times. It reads more as search engine copy than as writing for a guest.
+The newsletter sign up block is plain compared with the rest of the page and gives no reason to subscribe.
+There is no social proof on the homepage. No guest ratings, review quotes, awards or press logos, which are exactly the trust cues a premium buyer looks for before booking.
+6. Property pages
+The three property pages share a template, so the observations below apply across Vann, Tola and Bagh unless noted. Mahua Vann in Pench was reviewed most closely as the flagship.
+What works
+Each page opens with a strong, relevant hero photograph, and the header does not overlap the content as you scroll at desktop resolution.
+The hand drawn location map on the Vann page, showing the safari gates, the park zones and a we are here marker, is genuinely useful and on brand. It is one of the best elements on the whole site.
+The distance and access information at the top (by air, by train, by road) is practical and answers a real question early.
+The working Google Map in the Find Us section loads correctly and includes a directions link.
+Each property page carries a TripAdvisor reviews and rating widget with genuine guest testimonials, which is a real trust signal in exactly the right place.
+The Stay, Dining and Experiences content is detailed and well written, and the room breakdown with sizes, bed types and views is exactly what a guest needs.
+The range of experiences described, from jeep safaris and bird watching to the potter village visit and riverbed dinners, is rich and differentiating.
+What can improve
+No booking widget or price on the page. There is no date picker, no from price and no inline availability check on the property pages. The only route to book is the header button, which then leaves the site. A guest cannot gauge cost or start a booking in the moment they are convinced.
+The Stay, Dining and Experiences sections use a tabbed layout, but there are no room level photo galleries, so a guest choosing between a Deluxe room and a Cottage with Deck cannot see each option clearly.
+Improve the image alt text in the page code. This is a behind the scenes technical field, not the photos themselves. Several images currently have a missing or generic code level description, so adding a short specific description to each in the site settings would help screen reader users and let the photography rank better in image search.
+7. Offers page
+Live placeholder text. The Offers page currently shows Lorem ipsum dummy Latin text in place of the actual offer inclusions and terms. This is publicly visible on a live commercial page and is the most damaging single issue on the site. It was still present on re review.
+One offer, Pay for 2 nights and stay for 3, has a strong hook but no real detail beneath it.
+The Yoga Retreat offer has a title but almost no supporting content.
+The Lets Go buttons on the offers do not lead anywhere, so even an interested guest cannot act on the offer.
+8. In The News and social proof
+What works
+Each property page carries a TripAdvisor rating and guest testimonials through an embedded reviews widget, so real social proof is present on the pages where a guest is deciding.
+Having a press section at all is a good instinct, and press coverage is a strong trust builder for a luxury property.
+What can improve
+The homepage does not surface the reviews. The TripAdvisor rating and testimonials appear on the individual property pages but not on the homepage that opens when someone searches mahuaresorts.com, so a first time visitor may not see any social proof before choosing to explore further.
+There is no Google rating shown alongside TripAdvisor, and no awards or certifications displayed.
+The featured articles are general listicles. The three linked pieces are broad Pench and India travel round ups rather than dedicated coverage of Mahua, and one is a Guardian travel blog post from 2012. They lend the page a borrowed feel rather than showcasing earned coverage of the resort.
+The reviews widget loads through an external script, so it is worth confirming it renders reliably and quickly for every visitor.
+The same three article cards appear on both the Vann page and the In The News page.
+9. Booking and conversion flow
+This is the moment that matters most commercially, and it is where the experience drops the furthest.
+The brand changes at checkout. Clicking Book Now sends the guest to a third party engine on the domain asiatech.in. That page uses magenta and purple colours, a different font and a generic layout with none of the Mahua green, gold or styling beyond a small logo. After a carefully built forest mood, the guest lands on what looks like a different company.
+The web address changes too. The address moves from mahuaresorts.com to asiatech.in with a token in the link. For a guest about to enter card and personal details, an unfamiliar domain reduces confidence.
+The booking engine itself is functional and shows a live availability calendar, which is good, but it is visually disconnected from everything that came before.
+There is no from price indication anywhere on the main site, so guests cannot gauge affordability before the booking step.
+Mahua Bagh cannot be booked online at all. Only Vann and Tola appear in the booking options.
+10. Content and copywriting
+What works
+The experience descriptions are evocative and specific, and they paint a clear picture of a stay.
+The property level detail on rooms, distances and activities is thorough.
+What can improve
+The homepage and About copy lean heavily on repeated keyword phrases, especially boutique nature resorts in India and boutique eco lodges, which flattens the voice.
+British and American spellings are mixed (harmonise next to favorite and center), which a premium brand would standardise.
+There is little depth on the people, the origin story, or the sustainability practices, which is exactly the kind of narrative luxury nature brands use to justify their rates.
+11. Technical, performance and SEO observations
+The site is built on WordPress with the Google Site Kit plugin. That is fine in itself, though the current theme output feels generic.
+Some images are very large, for example the homepage share image at 2560 pixels wide. Compressing and correctly sizing images would help load times, especially on mobile. A formal page speed and Core Web Vitals test is recommended rather than assuming a specific slowdown.
+Every page has a title tag, a meta description and Open Graph tags, so the SEO basics are present.
+Keyword heavy body copy and the thin, placeholder Offers page send a weaker quality signal than the rest of the site deserves.
+There is no blog or destination guide content that would capture people searching for Pench safari, Tadoba tigers or Murud beaches, which is where a lot of early trip planning demand sits.
+Missing or generic image alt text reduces both accessibility and image search performance.
+Note: a full device by device mobile test and a formal accessibility (WCAG) check should be run as a dedicated technical pass. The observations here are from live desktop browsing.
+12. Summary of issues by severity
+The table below collects the confirmed issues in one place. The companion document proposes fixes and an order of work.
+Area
+Issue
+Severity
+Offers page
+Live Lorem ipsum placeholder text and dead offer buttons
+Critical
+Booking flow
+Checkout switches to an unbranded third party page and domain
+Critical
+Booking
+Mahua Bagh cannot be booked online
+High
+Trust
+TripAdvisor reviews sit on property pages but not on the homepage; no Google rating shown
+Medium
+Conversion
+No prices or inline booking on property pages
+High
+Press
+Featured articles are generic listicles, not Mahua coverage
+Medium
+Content
+Repetitive keyword heavy copy and mixed spelling
+Medium
+Design
+Clean but template like feel, no clear premium signal
+Medium
+Homepage
+Text heavy intro and plain, reasonless newsletter block
+Medium
+Performance
+Some oversized images, formal speed test recommended
+Medium
+SEO
+No destination or blog content, weak alt text
+Medium
+Navigation
+Offers hidden in secondary menu, no footer sitemap
+Medium

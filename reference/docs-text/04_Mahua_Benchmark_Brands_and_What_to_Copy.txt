@@ -1,0 +1,121 @@
+
+MAHUA RESORTS
+Benchmark Brands
+and What to Copy
+Ten reference resort websites, with concrete elements to borrow
+Companion to the Mahua website analysis and feedback documents
+Best five sites reviewed screen by screen
+Date: 22 July 2026
+
+1. Purpose of this document
+This document gives the Mahua team a set of real websites to look at while planning the refresh. Every brand here has a baseline close to Mahua, meaning boutique four to five star nature and wildlife stays, and several sit in the very same parks. The point is not to copy any one of them wholesale. It is to see, on live sites, exactly how a good version of each recommendation in the feedback document looks in practice.
+Section 2 lists all ten brands. Section 3 walks through the five strongest sites screen by screen and pulls out the specific elements worth borrowing. Section 4 is a quick lookup table that maps each element back to the matching Mahua issue. A short note on how the sites were reviewed appears at the end.
+2. The ten benchmark brands
+Grouped loosely from the most directly comparable to the most aspirational. All links were live at the time of review.
+Brand
+What it is
+Website
+Why it is relevant
+Pugdundee Safaris
+Boutique jungle lodges across central India, including Pench
+pugdundeesafaris.com/
+Closest direct peer and a realistic near term target
+Jamtara Wilderness Camp
+Boutique tented camp at the edge of Pench, run by andBeyond
+jamtarawilderness.com/
+Same park as Mahua Vann, strong signature experience
+Svasara Jungle Lodges
+Boutique lodge at Tadoba
+svasararesorts.com/
+Direct Tadoba peer for Mahua Tola
+Reni Pani Jungle Lodge
+Boutique wildlife lodge at Satpura, by Jehan Numa
+jehannuma.com/
+Same size and baseline in Madhya Pradesh, done well
+Taj Safaris (Baghvan)
+Luxury lodges in the central Indian parks, including Pench
+tajsafaris.com/
+Same park, and the Taj standard you aspire to
+The Postcard Hotels
+Boutique luxury Indian hotel brand
+thepostcardhotel.com/
+Minimalist premium design and clean booking
+SUJAN
+Luxury tented wildlife camps in Rajasthan
+thesujanlife.com/
+The design and storytelling bar to aim at
+Evolve Back
+Award winning Indian luxury resort brand, wildlife at Kabini
+evolveback.com/
+Premium look and strong multi property structure
+Aramness, Gir
+Village inspired luxury safari lodge in Gujarat
+aramness.com/
+Top tier visual design and offers presentation
+andBeyond
+Global luxury safari brand with India lodges
+andbeyond.com/
+Gold standard booking and experience journey
+3. The best five, screen by screen
+These five were reviewed page by page in a browser. For each, the concrete element to copy is noted. Open the site to see it live, then compare with the matching Mahua page.
+SUJAN  (thesujanlife.com)
+The reference for your homepage first impression and typography.
+Copy the hero. The homepage opens with a single confident line in a large elegant serif, "Exceptional experiences connecting you to the soul of India", over a calm background, with nothing else competing. This is the direct answer to Mahua’s repeated paragraph introduction.
+Copy the restraint. One serif for headings, generous white space, a small gold Book Now, and full width cinematic imagery as you scroll. It reads as expensive because it holds back.
+Note the illustrations. SUJAN uses delicate hand drawn line sketches as section dividers. Mahua already has this strength in the hand drawn Pench location map, so lean into that style rather than dropping it.
+Aramness  (aramness.com)
+The reference for a premium hero and for how the Offers page should look.
+Copy the video hero. A full screen autoplay drone video of the lodge and landscape, with subtle pause and mute controls, sets a cinematic tone immediately. A short brand film in the Mahua hero would do the same.
+Copy the offer treatment. Aramness runs the same kind of promotion Mahua has, a stay three nights pay for two offer, but it is shown on a strong image with clear dates, a T&C note and a working Know More button. This is exactly how to replace the Lorem ipsum on the Mahua Offers page.
+Copy the nav. Clean top navigation with Our Story, Stay, Experience, Gallery, Journal, Rates and Offers, plus a clear Book Now. Note the dedicated Journal, which is the blog and destination content Mahua is missing.
+Evolve Back  (evolveback.com)
+The reference for presenting three properties under one brand.
+Copy the property switcher. The top navigation lists each destination clearly, and each property is shown as an elegant card with a short description and quick links to Stay, Experiences and Offers. This is a ready made model for switching cleanly between Mahua Vann, Tola and Bagh.
+Copy the contact rail. A tidy vertical Reserve tab with phone, WhatsApp and email icons sits neatly at the edge, rather than a single floating WhatsApp bubble as on Mahua now.
+Copy the tone. A single elegant serif brand line about the spirit of the land, in place of a long keyword heavy paragraph.
+Pugdundee Safaris  (pugdundeesafaris.com)
+The closest peer, and the reference for conservation storytelling and an enquiry route.
+Copy the single hero image. One powerful full width wildlife photograph, not a busy collage, carries the whole first screen.
+Copy the purpose line. The brand carries a short conservation promise, Reform, Coexist, Sustain, right in the logo lockup. Mahua has a real sustainability story to tell in the same way.
+Copy the Plan your trip button. A prominent enquiry call to action sits alongside the standard booking route. This is the model for giving Mahua Bagh, which cannot be booked online, a clear way to enquire.
+andBeyond  (andbeyond.com)
+The aspirational end state for the booking and enquiry journey.
+Copy the guided start. A purpose led headline, "Travel that leaves our world a better place", with a Start With Where button that guides the guest into planning, rather than dropping them straight onto a raw calendar.
+Copy the support cues. A search box in the header and a live chat helper are both present, so a guest can get help in the moment. Both would suit Indian buyers who like to ask before they book.
+Copy the in brand feel. Every step stays inside the andBeyond look. This is the opposite of Mahua’s jump to a plain third party booking page, and the standard to aim at.
+4. Quick lookup: element to Mahua fix
+Site
+What to copy
+Mahua issue it fixes
+SUJAN
+One confident serif hero line, restrained premium type
+Homepage wall of text and template feel
+Aramness
+Offer shown with image, dates, T&C and a working button
+Lorem ipsum and dead buttons on the Offers page
+Aramness
+Full screen brand video in the hero
+Static, text heavy first impression
+Evolve Back
+Multi property switcher with per property quick links
+Presenting Vann, Tola and Bagh cleanly
+Evolve Back
+Neat phone, WhatsApp and email contact rail
+Lone floating WhatsApp bubble
+Pugdundee
+Conservation promise in the brand lockup
+Missing sustainability and origin story
+Pugdundee
+Prominent Plan your trip enquiry button
+Mahua Bagh has no online booking or enquiry
+andBeyond
+Guided trip start, search and live chat
+No inline help or guided path to book
+andBeyond / Taj Safaris
+Booking that stays inside the brand to payment
+Checkout jumps to an unbranded third party page
+Reni Pani / Jamtara
+Same scale storytelling, galleries, signature experience
+Thin property storytelling and no room galleries
+5. How these sites were reviewed
+The five sites in section 3 were opened and scrolled in a live browser, and the specific screens described were seen directly. The other five were confirmed live and are included as close peers worth studying. This document describes the elements to borrow and points to the live pages rather than reproducing the sites, so the notes stay accurate as those sites change. Open each link to see the current version and screenshot the exact screens your designer will work from.

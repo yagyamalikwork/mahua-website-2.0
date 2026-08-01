@@ -1,0 +1,32 @@
+
+MAHUA RESORTS
+Priority Action
+Roadmap
+A phased, at a glance plan for the website refresh
+Prepared for the Mahua Resorts team
+One page companion to the analysis and feedback documents
+Revised version
+Date: 22 July 2026
+
+A phased plan
+This roadmap sequences the work so that the changes with the highest trust and revenue impact happen first, and the deeper design and content work follows. It is a suggested order, not a fixed timeline, and the phases can overlap.
+Phase
+Focus
+Outcome
+Phase 1
+Urgent fixes: remove the Lorem ipsum on the Offers page and make the offer buttons work, and give Mahua Bagh a booking or enquiry route
+A site that no longer breaks trust or dead ends, achievable quickly with no redesign
+Phase 2
+Booking experience: brand the booking engine, keep a familiar web address, and add dates, from prices and availability to the property pages
+A smooth, on brand path from interest to confirmed booking
+Phase 3
+Trust and content: surface the existing TripAdvisor reviews on the homepage, add a Google rating, rewrite copy in one voice, and add room galleries and a genuine sustainability story
+Stronger reasons to choose Mahua over a competitor
+Phase 4
+Design refresh: consistent typography, a confident hero, full width imagery, image compression and a mobile speed and accessibility pass
+A considered, premium look that matches the four to five star positioning
+Phase 5
+Future scope: brand film, experiences store, destination guides, loyalty scheme and a pre arrival guest area
+New engagement and revenue once the core site is strong
+The one sentence version
+Your photography, properties and experiences are already strong and the site works well at normal resolution. Fix the Offers placeholder, keep your brand all the way through booking, add proof and polish, and the site will read like the retreat it is.

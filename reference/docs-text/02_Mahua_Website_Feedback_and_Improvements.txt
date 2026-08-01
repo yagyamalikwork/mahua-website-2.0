@@ -1,0 +1,91 @@
+
+MAHUA RESORTS
+Feedback and
+Recommended Improvements
+A practical plan to lift mahuaresorts.com to a five star standard
+Prepared for the Mahua Resorts team
+Companion to the Website Analysis and Observations document
+Revised version
+Date: 22 July 2026
+
+1. How to use this document
+This document turns the findings from the Website Analysis into a plan of action. It is organised from the most urgent fixes to the longer term ambitions. Each item explains what to change and why it helps a guest decide to book. Where useful, it points to how leading Indian luxury groups such as Taj, ITC Hotels and The Leela handle the same problem, purely as a reference for the standard to aim at.
+The guiding idea is simple. Your content, photography and core layout are already good, and the site behaves correctly at normal resolution. The work is mostly about polish, proof, and the booking step. You do not need to start from zero. You need a focused refresh and a small number of important fixes.
+2. Fix these first (this week)
+These two items actively cost you trust right now and need no redesign to correct.
+Remove the Lorem ipsum placeholder text on the Offers page and replace it with the real offer details, inclusions and terms. If an offer is not ready, take it down rather than showing dummy Latin text. Make the Lets Go buttons link to the correct booking or enquiry.
+Give Mahua Bagh a way to be booked or enquired about online, so no guest reaches a dead end. Either add it to the booking engine or add a clear enquiry form for it.
+3. The booking experience
+This is the highest value improvement after the urgent fixes, because it is where interest turns into revenue.
+Keep the brand all the way to payment
+Style the third party booking engine to match Mahua. Most engines, including the one you use, allow custom colours, fonts and a header. Apply the green, cream and gold palette and the Mahua logo so the guest never feels handed off to a different company.
+If possible, load the booking engine inside a page on mahuaresorts.com, or use a subdomain such as book.mahuaresorts.com, so the web address stays familiar and trusted.
+For reference, Taj, ITC and The Leela all keep the guest inside their own branded environment from browsing right through to confirmation. The visual identity never drops.
+Make it easy to start a booking
+Add a simple date and guest selector on each property page, with a Check Availability button, so a guest can act at the moment they are convinced.
+Show a from price per night on each property so guests can gauge fit before they commit. A premium price shown with confidence is a positioning signal, not a deterrent. If you prefer an enquiry led model, make the enquiry step just as easy and prominent.
+4. Trust and social proof
+You already have a strong foundation here. Each property page carries a TripAdvisor rating and guest testimonials. The opportunity is to make that proof work harder and appear where first time visitors land.
+Surface reviews on the homepage. The TripAdvisor rating and testimonials currently live only on the individual property pages. Add a rating and two or three short quotes to the homepage too, so a first time visitor sees social proof immediately.
+Add a Google rating alongside TripAdvisor, since many guests check Google first, and confirm the reviews widget loads quickly and reliably for every visitor rather than depending on a slow external script.
+Refresh the In The News section. Feature coverage that actually names Mahua. If dedicated coverage is limited, lead with the real guest testimonials and any awards, and keep only the destination articles that genuinely add context. A small amount of real proof beats a long list of general links.
+Display any awards, certifications, or associations, and partner logos such as the safari authorities, to reinforce credibility.
+Add clear trust markers near the booking step, such as a cancellation policy summary, a secure payment note and a contact number.
+5. Design and visual language
+The aim is to move from a clean template to a considered, premium feel, while keeping the warmth of a nature brand.
+Choose one elegant serif for headings and one clean sans for body text, and use a fixed scale of sizes. Consistent, deliberate type is the fastest way to look more expensive.
+Open the homepage with one strong line that captures the brand, for example a short promise about wild places and quiet luxury, rather than a long paragraph. Keep the detail lower down the page.
+Let the photography lead. Use full width, edge to edge images and generous, even spacing, in the way high end lodge sites do. Your photos are strong enough to carry this.
+Add room level galleries so guests can see each room type clearly before choosing.
+Signal the price tier through restraint and quality of layout, so a guest immediately reads this as a four to five star retreat.
+6. Content and storytelling
+Rewrite the homepage and About copy in a single, consistent voice. Cut the repeated phrase boutique nature resorts in India down to natural usage. Write for a guest, not for a search engine.
+Standardise on one spelling convention, ideally British English for an Indian luxury brand, so harmonise, favourite and centre are consistent.
+Tell the founding story and the meaning behind the Mahua name and the tribal brew reference. Origin stories are a core part of how luxury nature brands justify their rates.
+Add a real sustainability and community section. You already do potter village visits, local sourcing and eco cottages. Present these as a clear promise rather than scattered lines.
+7. Conversion, SEO and technical
+Add a proper enquiry form for group, wedding, corporate and Mahua Bagh bookings, rather than relying only on phone and WhatsApp. Keep the WhatsApp and call buttons, since they suit Indian travel buyers.
+Give the newsletter block a reason to subscribe, for example early access to offers or a short Pench and Tadoba safari guide, and style it to match the site.
+Move Offers into the main menu and keep it genuinely current.
+Compress and correctly size images, and run a formal page speed, Core Web Vitals and mobile device test, then fix what it surfaces. Most resort traffic in India is on mobile.
+Add descriptive alt text to every image, for both accessibility and image search, and run a WCAG accessibility pass.
+Start a small destination content section, for example short guides to Pench safaris, Tadoba tiger sightings and Murud beaches, to capture early trip planning searches and support the property pages.
+8. Future scope
+Once the core site is refreshed, these additions would deepen the brand and open new revenue.
+A short brand film and drone footage of each property for the hero areas.
+A photo and video gallery per property, with 360 degree room views.
+A packages and experiences store, so guests can pre book safaris, private dinners and yoga retreats.
+A simple loyalty or repeat guest scheme across the three properties.
+Multi language support if you target international wildlife travellers, and a light guest area to manage bookings before arrival.
+9. Priority summary
+A quick reference to the main moves, grouped by effort. Effort is a rough guide to the work involved, not to importance.
+Recommendation
+Why it matters
+Effort
+Remove Lorem ipsum and fix Offers
+Removes the most damaging trust breaker
+Low
+Enable Mahua Bagh booking or enquiry
+Removes a dead end for a whole property
+Medium
+Brand the booking engine and domain
+Keeps trust through to payment
+Medium
+Add dates, prices and availability to pages
+Turns interest into bookings
+Medium
+Surface TripAdvisor reviews on the homepage, add Google rating
+Builds confidence to book from the first page
+Low
+Rework typography, hero and galleries
+Moves from template to premium feel
+High
+Rewrite copy in one clear voice
+Sharper brand, better SEO
+Medium
+Compress images and test mobile speed
+Faster, smoother site
+Medium
+Add destination content and blog
+Captures early planning demand
+High
