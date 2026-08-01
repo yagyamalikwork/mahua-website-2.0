@@ -152,7 +152,7 @@ git commit -m "chore: scaffold Next.js, Tailwind, Vitest, GSAP and Lenis"
 
 - [ ] **Step 1: Write the failing test**
 
-Create `lib/contrast.test.ts`. These four assertions are exact by definition of the WCAG formula — no
+Create `lib/contrast.test.ts`. Every expected value here is exact by definition of the WCAG formula — no
 approximations of my own arithmetic.
 
 ```ts
@@ -175,6 +175,22 @@ describe("relativeLuminance", () => {
   it("is 0 for black and 1 for white", () => {
     expect(relativeLuminance([0, 0, 0])).toBeCloseTo(0, 10);
     expect(relativeLuminance([255, 255, 255])).toBeCloseTo(1, 10);
+  });
+
+  it("pins each channel coefficient independently", () => {
+    // Black and white are achromatic: white linearises every channel to 1.0,
+    // so it sums to 1 no matter which coefficient sits on which channel.
+    // A pure primary zeroes the other two, isolating one coefficient exactly.
+    expect(relativeLuminance([255, 0, 0])).toBeCloseTo(0.2126, 10);
+    expect(relativeLuminance([0, 255, 0])).toBeCloseTo(0.7152, 10);
+    expect(relativeLuminance([0, 0, 255])).toBeCloseTo(0.0722, 10);
+  });
+
+  it("takes the linear branch below the 0.03928 threshold", () => {
+    // 10/255 = 0.0392157, just under the threshold. Nothing else in the suite
+    // reaches this branch with a non-zero value, so without this the 12.92
+    // divisor is unverifiable: 0/12.92 equals 0/anything.
+    expect(relativeLuminance([10, 0, 0])).toBeCloseTo(0.2126 * (10 / 255 / 12.92), 12);
   });
 });
 
@@ -237,7 +253,7 @@ export function contrastRatio(a: string, b: string): number {
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `npx vitest run lib/contrast.test.ts`
-Expected: PASS, 6 tests.
+Expected: PASS, 8 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -1056,7 +1072,7 @@ export function Grain() {
 - [ ] **Step 4: Verify everything compiles**
 
 Run: `npx tsc --noEmit && npm test`
-Expected: no type errors; all 26 existing tests still pass.
+Expected: no type errors; all 28 existing tests still pass.
 
 - [ ] **Step 5: Commit**
 
@@ -1294,7 +1310,7 @@ back to forest green. **No visible boundary between sections.** Every contrast r
 - [ ] **Step 3: Verify the production build**
 
 Run: `npm run build && npm test`
-Expected: build succeeds; all 30 tests pass.
+Expected: build succeeds; all 32 tests pass.
 
 - [ ] **Step 4: Commit**
 
