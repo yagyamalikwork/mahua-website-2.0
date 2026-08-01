@@ -16,7 +16,7 @@ describe("house style (CLAUDE.md conventions)", () => {
     // "practice", "license" and "curb" are valid in British English too and
     // would produce false failures.
     const american =
-      /\b(colors?|colored|coloring|gray|favorites?|centers?|centered|honors?|honored|flavors?|flavored|neighbors?|labor|humor|harbor|savor|splendor|somber|fiber|liters?|meters?|theater|defense|offense|jewelry|aluminum|catalog|dialog|specialty|program|travelers?|traveled|traveling|canceled|canceling|apologize|organize|realize|recognize|emphasize|minimize|maximize|customize|personalize|prioritize|harmonize|revitalize|analyze|paralyze)\b/i;
+      /\b(colors?|colored|coloring|gray|favorites?|centers?|centered|honors?|honored|flavors?|flavored|neighbors?|labor|humor|harbor|savor|splendor|somber|fiber|liters?|meters?|theaters?|defense|offense|jewelry|aluminum|catalog|dialog|specialty|program|travelers?|traveled|traveling|canceled|canceling|apologize|organize|realize|recognize|emphasize|minimize|maximize|customize|personalize|prioritize|harmonize|revitalize|analyze|paralyze|inquire|inquires|inquired|inquiring|inquiry|inquiries)\b/i;
     for (const s of all) {
       expect(american.test(s), `American spelling in: "${s}"`).toBe(false);
     }
