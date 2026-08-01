@@ -11,7 +11,12 @@ describe("house style (CLAUDE.md conventions)", () => {
   const all = strings(HOME);
 
   it("uses British spelling", () => {
-    const american = /\b(color|colors|favorite|center|centers|honor|organize|realize|traveler|travelers|harmonize)\b/i;
+    // House convention is British with -ise endings (the brand record uses
+    // "harmonise"). Only unambiguously American forms are listed: words like
+    // "practice", "license" and "curb" are valid in British English too and
+    // would produce false failures.
+    const american =
+      /\b(colors?|colored|coloring|gray|favorites?|centers?|centered|honors?|honored|flavors?|flavored|neighbors?|labor|humor|harbor|savor|splendor|somber|fiber|liters?|meters?|theater|defense|offense|jewelry|aluminum|catalog|dialog|specialty|program|travelers?|traveled|traveling|canceled|canceling|apologize|organize|realize|recognize|emphasize|minimize|maximize|customize|personalize|prioritize|harmonize|revitalize|analyze|paralyze)\b/i;
     for (const s of all) {
       expect(american.test(s), `American spelling in: "${s}"`).toBe(false);
     }
@@ -25,7 +30,10 @@ describe("house style (CLAUDE.md conventions)", () => {
 
   it("opens with one confident line, not a paragraph", () => {
     expect(HOME.hero.headline.length).toBeLessThanOrEqual(60);
-    expect(HOME.hero.headline.split(".").filter(Boolean)).toHaveLength(1);
+    // A sentence break followed by more text means two sentences. A single
+    // trailing full stop is fine; counting "." segments is not, since it both
+    // passes run-ons with no punctuation and fails on abbreviations like "St.".
+    expect(HOME.hero.headline).not.toMatch(/[.!?]\s+\S/);
   });
 });
 
