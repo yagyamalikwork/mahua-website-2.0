@@ -152,7 +152,7 @@ git commit -m "chore: scaffold Next.js, Tailwind, Vitest, GSAP and Lenis"
 
 - [ ] **Step 1: Write the failing test**
 
-Create `lib/contrast.test.ts`. These four assertions are exact by definition of the WCAG formula — no
+Create `lib/contrast.test.ts`. Every expected value here is exact by definition of the WCAG formula — no
 approximations of my own arithmetic.
 
 ```ts
@@ -175,6 +175,22 @@ describe("relativeLuminance", () => {
   it("is 0 for black and 1 for white", () => {
     expect(relativeLuminance([0, 0, 0])).toBeCloseTo(0, 10);
     expect(relativeLuminance([255, 255, 255])).toBeCloseTo(1, 10);
+  });
+
+  it("pins each channel coefficient independently", () => {
+    // Black and white are achromatic: white linearises every channel to 1.0,
+    // so it sums to 1 no matter which coefficient sits on which channel.
+    // A pure primary zeroes the other two, isolating one coefficient exactly.
+    expect(relativeLuminance([255, 0, 0])).toBeCloseTo(0.2126, 10);
+    expect(relativeLuminance([0, 255, 0])).toBeCloseTo(0.7152, 10);
+    expect(relativeLuminance([0, 0, 255])).toBeCloseTo(0.0722, 10);
+  });
+
+  it("takes the linear branch below the 0.03928 threshold", () => {
+    // 10/255 = 0.0392157, just under the threshold. Nothing else in the suite
+    // reaches this branch with a non-zero value, so without this the 12.92
+    // divisor is unverifiable: 0/12.92 equals 0/anything.
+    expect(relativeLuminance([10, 0, 0])).toBeCloseTo(0.2126 * (10 / 255 / 12.92), 12);
   });
 });
 
@@ -237,7 +253,7 @@ export function contrastRatio(a: string, b: string): number {
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `npx vitest run lib/contrast.test.ts`
-Expected: PASS, 6 tests.
+Expected: PASS, 8 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -544,11 +560,14 @@ describe("segmentAt", () => {
     expect(segmentAt(99)).toEqual({ from: 5, to: 6, t: 1 });
   });
 
-  it("lands exactly on a boundary at each state", () => {
-    // six segments between seven states
-    const third = segmentAt(2 / 6);
+  it("sits mid-segment between two states", () => {
+    // Six segments between seven states. Deliberately sampled mid-segment, not on a
+    // boundary: progress * 6 at an exact boundary is floating-point ambiguous, and
+    // Math.floor turns a 1-ulp error into an off-by-one segment.
+    const third = segmentAt(2.5 / 6);
     expect(third.from).toBe(2);
-    expect(third.t).toBeCloseTo(0, 10);
+    expect(third.to).toBe(3);
+    expect(third.t).toBeCloseTo(0.5, 6);
   });
 });
 
@@ -566,7 +585,11 @@ describe("backgroundAt", () => {
   });
 
   it("never produces a cold background while blending", () => {
-    for (let p = 0; p <= 1; p += 0.01) {
+    // Integer loop counter, not repeated += 0.01. Accumulating 0.01 a hundred
+    // times lands on 0.9900000000000007 and exits before ever testing p = 1,
+    // so the sweep would silently miss the end of the page.
+    for (let i = 0; i <= 100; i++) {
+      const p = i / 100;
       const hex = backgroundAt(p);
       const r = Number.parseInt(hex.slice(1, 3), 16);
       const b = Number.parseInt(hex.slice(5, 7), 16);
@@ -638,7 +661,7 @@ export function textAt(progress: number): string {
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `npx vitest run lib/day-surface.test.ts`
-Expected: PASS, 8 tests.
+Expected: PASS, 7 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -685,16 +708,13 @@ export const body = Crimson_Pro({
 
 - [ ] **Step 2: Replace `app/globals.css`**
 
+Note: the `--bg`/`--text`/`--accent`/`--accent-text` values are **not** written here. Hard-coding them in
+CSS would duplicate `lib/palette.ts` and drift from it silently, violating the global constraint. `layout.tsx`
+renders them inline from `LIGHT_STATES[0]` instead (Step 3), which is server-rendered — so there is no flash
+and `palette.ts` stays the only place a colour is defined.
+
 ```css
 @import "tailwindcss";
-
-/* Seeded from lib/palette.ts state 0 (dawn). DaySurface overwrites these on scroll. */
-:root {
-  --bg: #232B21;
-  --text: #E9DFC7;
-  --accent: #D5A63E;
-  --accent-text: #D5A63E;
-}
 
 @theme inline {
   --color-bg: var(--bg);
@@ -734,6 +754,7 @@ Replace the file:
 
 ```tsx
 import type { Metadata } from "next";
+import { LIGHT_STATES } from "@/lib/palette";
 import { body, display, heading, label } from "./fonts";
 import "./globals.css";
 
@@ -744,8 +765,23 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Seeded from the first light state, server-rendered so there is no flash of
+  // unstyled colour. DaySurface overwrites these as the visitor scrolls.
+  // Read from palette.ts rather than written in CSS: one source of truth for colour.
+  const dawn = LIGHT_STATES[0];
+
   return (
-    <html lang="en-GB">
+    <html
+      lang="en-GB"
+      style={
+        {
+          "--bg": dawn.bg,
+          "--text": dawn.text,
+          "--accent": dawn.accent,
+          "--accent-text": dawn.accentText,
+        } as React.CSSProperties
+      }
+    >
       <body
         className={`${display.variable} ${heading.variable} ${label.variable} ${body.variable}`}
       >
@@ -953,13 +989,22 @@ export function Reveal({
       return;
     }
     gsap.registerPlugin(ScrollTrigger);
+
+    // GSAP's fromTo applies its "from" state the moment the ScrollTrigger is
+    // created. Anything already on screen would therefore snap to invisible on
+    // hydration and sit there until the visitor scrolls. Reveal it now instead;
+    // only below-the-fold content waits for its trigger.
+    const onScreenAtMount = el.getBoundingClientRect().top < window.innerHeight;
+
     const tween = gsap.fromTo(el, { ...REVEAL_FROM }, {
       opacity: 1,
       scale: 1,
       delay,
       duration: slow ? DURATION.revealSlow : DURATION.reveal,
       ease: EASE.settle,
-      scrollTrigger: { trigger: el, start: "top 85%", once: true },
+      ...(onScreenAtMount
+        ? {}
+        : { scrollTrigger: { trigger: el, start: "top 85%", once: true } }),
     });
     return () => {
       tween.scrollTrigger?.kill();
@@ -994,12 +1039,20 @@ export function Parallax({
     gsap.registerPlugin(ScrollTrigger);
 
     const capped = Math.min(Math.abs(strength), PARALLAX_MAX);
-    const shift = el.offsetHeight * capped;
 
-    const tween = gsap.fromTo(el, { y: -shift / 2 }, {
-      y: shift / 2,
+    // Function-based values + invalidateOnRefresh: GSAP re-evaluates these on
+    // every ScrollTrigger refresh, so a resize or reflow re-measures the height
+    // instead of animating against the height the element had at mount.
+    const tween = gsap.fromTo(el, { y: () => -(el.offsetHeight * capped) / 2 }, {
+      y: () => (el.offsetHeight * capped) / 2,
       ease: EASE.drift,
-      scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+      scrollTrigger: {
+        trigger: el,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+        invalidateOnRefresh: true,
+      },
     });
     return () => {
       tween.scrollTrigger?.kill();
@@ -1030,7 +1083,7 @@ export function Grain() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-50 opacity-[0.05] mix-blend-multiply"
+      className="pointer-events-none fixed inset-0 z-50 opacity-[0.07] mix-blend-soft-light"
       style={{ backgroundImage: `url("data:image/svg+xml,${svg}")` }}
     />
   );
@@ -1040,7 +1093,7 @@ export function Grain() {
 - [ ] **Step 4: Verify everything compiles**
 
 Run: `npx tsc --noEmit && npm test`
-Expected: no type errors; all 26 existing tests still pass.
+Expected: no type errors; all 27 existing tests still pass.
 
 - [ ] **Step 5: Commit**
 
@@ -1278,7 +1331,7 @@ back to forest green. **No visible boundary between sections.** Every contrast r
 - [ ] **Step 3: Verify the production build**
 
 Run: `npm run build && npm test`
-Expected: build succeeds; all 30 tests pass.
+Expected: build succeeds; all 31 tests pass.
 
 - [ ] **Step 4: Commit**
 
@@ -1313,20 +1366,29 @@ npx lighthouse http://localhost:3000/preview/light-states --output html \
 Expected: Accessibility ≥ 95. Record Performance; the preview has almost no imagery, so treat this as the
 baseline the real page must not fall far below.
 
-- [ ] **Step 3: Verify the reduced-motion still state**
+- [ ] **Step 3: Verify the grain reads on both light and dark**
+
+Grain uses `mix-blend-soft-light`, which works on light and dark backgrounds alike — unlike `multiply`,
+which vanishes on the dark states. Scroll to the cream states and to the two forest-green bookends.
+
+Expected: a faint tooth visible in **both**. If it disappears at either end, adjust the opacity or blend
+mode in `components/motion/Grain.tsx` until it reads at both, then re-verify. Spec §4.4 requires it to stop
+the dark movements looking like flat rectangles, so "invisible on dark" is a failure.
+
+- [ ] **Step 4: Verify the reduced-motion still state**
 
 In Chrome DevTools → Rendering → "Emulate CSS prefers-reduced-motion: reduce", reload the page.
 Expected: no smooth-scroll hijacking, content visible immediately, no reveal animation, background still
 tracks scroll position. **Nothing disappears or becomes unreadable.**
 
-- [ ] **Step 4: Commit the evidence**
+- [ ] **Step 5: Commit the evidence**
 
 ```bash
 git add docs/reviews/
 git commit -m "docs: light-states verification evidence"
 ```
 
-- [ ] **Step 5: STOP — client approval gate**
+- [ ] **Step 6: STOP — client approval gate**
 
 **Do not begin Plan 2.** Spec §6.3 requires the client to approve colour and motion from the running page
 before any movement is built on top of it. Present the screenshots and ask specifically:

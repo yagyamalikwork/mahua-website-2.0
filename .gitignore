@@ -38,5 +38,8 @@ yarn-error.log*
 # claude — local overrides only; .claude/settings.json IS committed
 .claude/settings.local.json
 
+# superpowers subagent-driven-development scratch (ledgers, briefs, review packages)
+.superpowers/
+
 # crawled HTML of the old WordPress site — regenerate with scripts/crawl_site.py
 reference/wp-pages/

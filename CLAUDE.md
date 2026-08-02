@@ -11,9 +11,10 @@ night, rendered in a hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Spec approved. Implementation not yet started. |
+| **Phase** | Plan 1 built on `feat/foundation-light-states`. Colour, motion, copy tokens and the seven-state scroll all working; 32 tests green. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **Next step** | Implementation plan, then the light-states preview page. |
+| **See it** | `npm run dev` → `/preview/light-states`. `/` is a holding page. |
+| **Next step** | Client approves colour and motion from the preview, then Plan 2 builds the seven movements. |
 
 ## The non-negotiables
 
@@ -30,7 +31,17 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 5. **The tiger arrives, performs, then dozes.** It is not a permanent fixture — permanent peripheral motion
    contradicts #2 and #4.
 6. **Budgets beat effects.** Hero < 200 KB, first load < 2.5s on 4G. Most traffic is Indian mobile. If a
-   beautiful effect cannot hit budget, the effect loses.
+   beautiful effect cannot hit budget, the effect loses. **Currently breached** — 404 KB and LCP 3.5s with
+   no photography yet. Must be addressed before real images land.
+7. **Plan 2 must place the two light↔dark crossings where no text is on screen.** See spec §13. Through
+   those crossings no warm colour can clear 4.5:1 contrast — it is arithmetic, not tuning — so text falls
+   back to black/white today. Putting the crossings in a photograph or a gap between movements removes the
+   need for the fallback entirely.
+
+**Never test colour only at the seven endpoints.** The background moves between them. A 1.85:1 stretch
+shipped because the palette tests checked static states, Lighthouse checked one frozen frame, and the seam
+check measured colour continuity — none evaluated text against a *moving* background. The sweep in
+`lib/day-surface.test.ts` is the guard; do not weaken it.
 
 ## Architecture rule
 
