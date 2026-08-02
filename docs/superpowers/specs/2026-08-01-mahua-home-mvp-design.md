@@ -46,6 +46,7 @@ pages without rework.
 | D10 | **Design assuming no new photography or video** | Client is unsure of shoot budget. We build with existing stills and deliver a targeted shot list instead (§7). |
 | D11 | **Full replacement is the intent, but must prove itself first** | Migration/SEO work is dormant, not cancelled. See §10. |
 | D12 | **Test Cormorant Garamond for display sizes**, keep Gilda Display elsewhere | Gilda is a single delicate weight that reads weak at full-screen size. One-line revert if disliked. |
+| D13 | **The two light↔dark crossings must fall where the page has no text.** Until then, text falls back to pure black/white through the crossing. | See §13 — a hard arithmetic limit, decided by the client on 2 Aug 2026. |
 
 ---
 
@@ -385,6 +386,51 @@ crawled URL list.
 
 Note `/resorts/mahua-bagh/` — the removed property (D1) still needs a redirect target, most likely the
 home page.
+
+---
+
+## 13. The light↔dark crossings — a binding constraint on Plan 2
+
+**Discovered by the whole-branch review, 2 Aug 2026. Decided by the client the same day.**
+
+The background blends continuously between light states; the text colour is chosen per scroll position. In
+the four all-light segments both are warm and contrast sits at 5.0–9.1:1. But the **two segments that cross
+between dark and light** (firstLight→midMorning, dusk→night) pass through a mid-luminance background that
+**no warm colour can clear 4.5:1 against.**
+
+This is arithmetic, not tuning. WCAG measures luminance alone, and this palette's endpoints are far enough
+apart that the midpoint sits where neither the cream nor the ink family reaches the threshold. Measured
+across every candidate:
+
+| Warm tint in the fallback | Min contrast | % of scroll below 4.5:1 |
+|---|---|---|
+| 0% — pure black/white | 4.503 | 0.00% |
+| 1–5% — imperceptible | 4.503 | 0.00% |
+| 10% | 4.472 | 0.35% |
+| 20% | 4.359 | 1.72% |
+| 100% — `#14180F` / `#FBF6EA` | 4.093 | 4.50% |
+
+**Only tints too subtle to see as warm survive the floor.** The original snapping design was far worse —
+1.85:1 across 16.6% of the scroll — and shipped because the palette tests checked the seven states as static
+endpoints while nothing ever evaluated text against a *moving* background.
+
+### The decision
+
+Text falls back to pure black/white through the crossings **for now**. This is acceptable only because it
+appears on an internal preview page that carries text on every screen — the worst possible case.
+
+**Plan 2 must place the two light↔dark crossings where the page has no text on screen** — a full-bleed
+photograph, or a quiet gap between movements. The fallback then effectively never fires, and warmth (§9) and
+legibility (§11) both hold with no compromise. This is a layout requirement, not a colour one.
+
+Rejected alternatives, with the reason: lightening the dark bookends (removes the problem but softens
+opening in near-darkness and closing under a night sky, which is what the whole concept rests on); fading
+text out through the crossing (content vanishes mid-sentence, and needs separate handling for reduced-motion
+visitors).
+
+**Guard:** `lib/day-surface.test.ts` sweeps 1,001 scroll positions asserting
+`contrastRatio(textAt(p), backgroundAt(p)) >= 4.5`. It was confirmed to fail against the old snapping
+implementation before passing against the new one. Do not weaken it.
 
 ---
 
