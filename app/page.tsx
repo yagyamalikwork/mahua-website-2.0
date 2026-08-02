@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HOME } from "@/content/home";
 
-export const metadata = { title: "Mahua Resorts — early build" };
+export const metadata = { title: HOME.meta.homeTitle };
 
 export default function Home() {
   return (

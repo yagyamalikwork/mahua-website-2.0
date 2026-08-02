@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { LIGHT_STATES } from "./palette";
+import { contrastRatio } from "./contrast";
 import { backgroundAt, segmentAt, textAt } from "./day-surface";
 
 describe("segmentAt", () => {
@@ -51,10 +52,20 @@ describe("backgroundAt", () => {
 });
 
 describe("textAt", () => {
-  it("snaps to the nearer state rather than blending", () => {
+  it("returns the endpoint states' text at the segment boundaries", () => {
     expect(textAt(0)).toBe(LIGHT_STATES[0].text);
-    expect(textAt(0.4 / 6)).toBe(LIGHT_STATES[0].text);
-    expect(textAt(0.6 / 6)).toBe(LIGHT_STATES[1].text);
     expect(textAt(1)).toBe(LIGHT_STATES[6].text);
+  });
+
+  it("keeps text legible against the blended background at every scroll position", () => {
+    // The background blends continuously while text is chosen per-position.
+    // Testing the seven endpoints alone misses the light/dark crossings entirely,
+    // which is how a 1.85:1 stretch shipped: both halves were individually correct.
+    for (let i = 0; i <= 1000; i++) {
+      const p = i / 1000;
+      const ratio = contrastRatio(textAt(p), backgroundAt(p));
+      expect(ratio, `progress ${p.toFixed(3)}: ${textAt(p)} on ${backgroundAt(p)}`)
+        .toBeGreaterThanOrEqual(4.5);
+    }
   });
 });

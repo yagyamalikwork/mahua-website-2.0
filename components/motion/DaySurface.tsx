@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import { LIGHT_STATES } from "@/lib/palette";
-import { backgroundAt, segmentAt, textAt } from "@/lib/day-surface";
+import { surfaceAt } from "@/lib/day-surface";
 
 /**
  * The clock. One continuously bleeding surface driven by document scroll progress
  * (spec section 4.1). Writes CSS variables rather than re-rendering React, so the
  * colour update costs nothing on the main thread.
+ *
+ * A pure applicator: all colour derivation (which text, which accent, contrast
+ * floors during the light/dark crossings) lives in `surfaceAt` — this component
+ * imports no palette internals and re-derives none of that logic itself, so it
+ * cannot drift out of sync with it.
  */
 export function DaySurface() {
   useEffect(() => {
@@ -16,13 +20,12 @@ export function DaySurface() {
     const apply = () => {
       const scrollable = document.body.scrollHeight - window.innerHeight;
       const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
-      const { from, to, t } = segmentAt(progress);
-      const nearer = LIGHT_STATES[t < 0.5 ? from : to];
+      const surface = surfaceAt(progress);
 
-      root.style.setProperty("--bg", backgroundAt(progress));
-      root.style.setProperty("--text", textAt(progress));
-      root.style.setProperty("--accent", nearer.accent);
-      root.style.setProperty("--accent-text", nearer.accentText);
+      root.style.setProperty("--bg", surface.bg);
+      root.style.setProperty("--text", surface.text);
+      root.style.setProperty("--accent", surface.accent);
+      root.style.setProperty("--accent-text", surface.accentText);
     };
 
     let queued = false;

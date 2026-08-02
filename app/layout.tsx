@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { LIGHT_STATES } from "@/lib/palette";
-import { body, display, heading, label } from "./fonts";
+import { HOME } from "@/content/home";
+import { body, display, label } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mahua Resorts — The wild and the calm, held together",
-  description:
-    "Two family-run lodges at the gates of Pench and Tadoba, in central India's tiger country.",
+  title: HOME.meta.title,
+  description: HOME.meta.description,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -27,9 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         } as React.CSSProperties
       }
     >
-      <body
-        className={`${display.variable} ${heading.variable} ${label.variable} ${body.variable}`}
-      >
+      <body className={`${display.variable} ${label.variable} ${body.variable}`}>
         {children}
       </body>
     </html>

@@ -14,10 +14,24 @@ export type MovementCopy = {
   readonly body: string;
 };
 
+const HERO_HEADLINE = "The wild and the calm, held together";
+
 export const HOME = {
   hero: {
-    headline: "The wild and the calm, held together",
+    headline: HERO_HEADLINE,
     sub: "Two family-run lodges at the gates of Pench and Tadoba.",
+  },
+  // Every <title>/<meta description> on the site, so the two most externally
+  // visible strings on the site sit under the house-style guard like everything
+  // else, instead of being hard-coded per-page and free to drift (spec section 6.2).
+  meta: {
+    title: `Mahua Resorts — ${HERO_HEADLINE}`,
+    // Longer than hero.sub on purpose — a search-result description earns its
+    // extra clause ("tiger country") that a one-line on-page sub-headline doesn't.
+    description:
+      "Two family-run lodges at the gates of Pench and Tadoba, in central India's tiger country.",
+    homeTitle: "Mahua Resorts — early build",
+    previewTitle: "Light states — Mahua Resorts",
   },
   placeholder: {
     heading: "Mahua Resorts",
@@ -45,6 +59,7 @@ export const HOME = {
   ],
 } as const satisfies {
   hero: { headline: string; sub: string };
+  meta: { title: string; description: string; homeTitle: string; previewTitle: string };
   placeholder: { heading: string; body: string; cta: string };
   movements: readonly MovementCopy[];
 };

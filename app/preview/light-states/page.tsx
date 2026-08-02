@@ -6,7 +6,7 @@ import { contrastRatio } from "@/lib/contrast";
 import { LIGHT_STATES } from "@/lib/palette";
 import { HOME } from "@/content/home";
 
-export const metadata = { title: "Light states — Mahua Resorts" };
+export const metadata = { title: HOME.meta.previewTitle };
 
 export default function LightStatesPreview() {
   return (
@@ -44,13 +44,14 @@ export default function LightStatesPreview() {
                       "above arrived without you noticing a boundary."}
                 </p>
 
-                <a
-                  href="#"
+                {/* Demonstration only, not a real destination — a <span> rather than an
+                    <a href="#">, so a click mid-scroll can't jump the page to the top. */}
+                <span
                   className="mt-8 inline-block font-[family-name:var(--font-label)] text-xs uppercase tracking-[0.24em] underline underline-offset-8"
                   style={{ color: "var(--accent-text)" }}
                 >
                   A link at this state
-                </a>
+                </span>
 
                 <dl className="mt-16 grid max-w-lg grid-cols-2 gap-x-8 gap-y-2 font-mono text-xs opacity-70">
                   <dt>background</dt><dd>{state.bg}</dd>
