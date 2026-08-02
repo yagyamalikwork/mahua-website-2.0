@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { MEDIA, media } from "./media";
 
@@ -30,5 +33,28 @@ describe("MEDIA", () => {
   it("throws on an unknown id rather than returning undefined", () => {
     // @ts-expect-error deliberately invalid id
     expect(() => media("no-such-image")).toThrow();
+  });
+
+  it("records the true emitted dimensions of the largest derivative on disk, not the source file's", async () => {
+    // sharp's .metadata() reads the input header and never runs the pixel
+    // pipeline, so if the manifest is built by resizing-then-reading a
+    // buffer's own .metadata(), it silently reports the *source's*
+    // dimensions instead of what was actually encoded to disk. That
+    // mismatch reintroduces client-side upscaling for anything that sets
+    // <img width height> from the manifest, exactly what this pipeline was
+    // built to avoid. Guard against it by reading the real emitted AVIF
+    // back off disk and comparing.
+    for (const m of MEDIA) {
+      const filePath = path.join(process.cwd(), "public", m.avif);
+      const buffer = await readFile(filePath);
+      const meta = await sharp(buffer).metadata();
+      expect(meta.width, `${m.id}: manifest width ${m.width} does not match the emitted AVIF`).toBe(
+        m.width,
+      );
+      expect(
+        meta.height,
+        `${m.id}: manifest height ${m.height} does not match the emitted AVIF`,
+      ).toBe(m.height);
+    }
   });
 });

@@ -126,7 +126,16 @@ async function buildOne(entry) {
   for (const width of widthsToGenerate) {
     const resized = sharp(srcBuffer).resize({ width, withoutEnlargement: true });
 
-    const avifBuffer = await resized.clone().avif({ quality: AVIF_QUALITY }).toBuffer();
+    // `.metadata()` reads the *input* header and never runs the pixel
+    // pipeline, so it cannot be used to learn what a queued `.resize()`
+    // will actually emit. `.toBuffer({ resolveWithObject: true })` returns
+    // `{ data, info }`, where `info.width`/`info.height` are the true
+    // dimensions of the bytes just encoded — read those back instead of
+    // re-deriving (and re-guessing) dimensions separately.
+    const { data: avifBuffer, info: avifInfo } = await resized
+      .clone()
+      .avif({ quality: AVIF_QUALITY })
+      .toBuffer({ resolveWithObject: true });
     const avifName = `${entry.id}-${width}.avif`;
     await writeFile(path.join(OUT_DIR, avifName), avifBuffer);
 
@@ -134,15 +143,20 @@ async function buildOne(entry) {
     const webpName = `${entry.id}-${width}.webp`;
     await writeFile(path.join(OUT_DIR, webpName), webpBuffer);
 
-    produced.push({ width, avifName, webpName, avifBytes: avifBuffer.length });
+    produced.push({
+      width,
+      avifName,
+      webpName,
+      avifBytes: avifBuffer.length,
+      actualWidth: avifInfo.width,
+      actualHeight: avifInfo.height,
+    });
   }
 
   // Largest tier actually produced becomes the manifest's canonical entry
-  // and the JPEG fallback.
+  // and the JPEG fallback. Its dimensions come from the buffer sharp just
+  // encoded (captured above), not from re-reading the source.
   const largest = produced.reduce((a, b) => (b.width > a.width ? b : a));
-  const largestMeta = await sharp(srcBuffer)
-    .resize({ width: largest.width, withoutEnlargement: true })
-    .metadata();
 
   const jpgBuffer = await sharp(srcBuffer)
     .resize({ width: largest.width, withoutEnlargement: true })
@@ -161,8 +175,8 @@ async function buildOne(entry) {
   return {
     id: entry.id,
     alt: entry.alt,
-    width: largestMeta.width,
-    height: largestMeta.height,
+    width: largest.actualWidth,
+    height: largest.actualHeight,
     avif: `/media/${largest.avifName}`,
     webp: `/media/${largest.webpName}`,
     jpg: `/media/${jpgName}`,
