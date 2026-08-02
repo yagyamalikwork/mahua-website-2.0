@@ -48,19 +48,19 @@ export function MovementSection({
 
   return (
     <section
-      className="flex flex-col gap-16 px-[8vw] pt-24 pb-32 md:pt-32"
+      className="flex flex-col gap-16 px-[8vw] pt-24 pb-32 short:gap-6 short:pt-8 short:pb-8 md:pt-32 short:md:pt-8"
       style={{ minHeight: bandMinHeight(id) }}
     >
       <Reveal>
         <ChapterLabel>{chapter}</ChapterLabel>
         <HeadingTag
-          className="mt-6 max-w-[20ch] font-[family-name:var(--font-display)] text-[clamp(2rem,6vw,4rem)] font-light leading-[1.1]"
+          className="mt-6 max-w-[20ch] font-[family-name:var(--font-display)] text-[clamp(2rem,6vw,4rem)] font-light leading-[1.1] short:mt-3"
           style={{ color: "var(--text)" }}
         >
           {heading}
         </HeadingTag>
         <p
-          className="mt-8 max-w-[60ch] text-lg leading-relaxed"
+          className="mt-8 max-w-[60ch] text-lg leading-relaxed short:mt-4"
           style={{ color: "var(--text)" }}
         >
           {body}

@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+/*
+ * "short:" — a compact-layout variant for short viewport heights (landscape
+ * phones, small laptops). Band boxes are `min-height` scaled from `weight` in
+ * vh (lib/band-height.ts), but the vertical rhythm (padding, margins, plate
+ * image height) was tuned in rem/vw, so it does not shrink with viewport
+ * height the way the box does. Below a short viewport, content can grow
+ * taller than its weight-derived box — harmless-looking (nothing clips), but
+ * it detaches rendered height from weight, which is exactly what desyncs the
+ * light timeline (lib/timeline.ts assumes rendered height matches weight
+ * share). 800px clears both of this task's required short-viewport checks
+ * (390x667 and 844x390) with margin, and also closes 1024x768 (tablet
+ * landscape) — a pre-existing overflow the Task 7 report measured and
+ * deliberately left unfixed as out of that task's scope, but which is the
+ * same bug and this variant closes for free. The smallest "normal" height in
+ * this project's own verification matrix is 844px (390x844, 768x1024), so
+ * 800px leaves every one of those untouched.
+ */
+@custom-variant short (@media (max-height: 800px));
+
 @theme inline {
   --color-bg: var(--bg);
   --color-text: var(--text);

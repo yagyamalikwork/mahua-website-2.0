@@ -39,7 +39,15 @@ export function Plate({
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? undefined : "async"}
             fetchPriority={priority ? "high" : undefined}
-            className="block h-auto w-full"
+            // `short:` (a viewport-height media variant, app/globals.css) caps
+            // a plate's rendered height at short viewports (landscape phones)
+            // instead of letting it hold its full width-derived height — a
+            // full-width plate is the single largest content contributor in
+            // every band that has one, and at short heights that height alone
+            // can exceed the whole weight-derived band box. `w-auto` keeps
+            // the aspect ratio intact; `mx-auto` recentres the now-narrower
+            // image under its full-width caption.
+            className="block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto"
             style={{
               backgroundImage: `url(${entry.blur})`,
               backgroundSize: "cover",
@@ -49,7 +57,7 @@ export function Plate({
         </picture>
         {caption && (
           <figcaption
-            className="mt-4 max-w-[46ch] font-[family-name:var(--font-body)] text-base italic leading-relaxed"
+            className="mt-4 max-w-[46ch] font-[family-name:var(--font-body)] text-base italic leading-relaxed short:mt-2"
             style={{ color: "var(--text)" }}
           >
             {plate && (
