@@ -35,19 +35,3 @@ export function lightState(id: LightStateId): LightState {
   if (!found) throw new Error(`Unknown light state: ${id}`);
   return found;
 }
-
-/**
- * Legibility floor for the two segments whose background crosses the light/dark
- * divide (firstLight→midMorning, dusk→night — the two segments whose bracketing
- * states differ sharply in luminance; see lib/day-surface.ts `backgroundAt`).
- * Partway through those blends the background sits at a mid luminance no single
- * light state's `text` was designed for, and WCAG contrast is luminance-only, so no
- * warm hue can rescue it: true black/white against a mid-tone background is the
- * mathematical ceiling (~4.58:1) for holding the whole crossing at or above 4.5:1 —
- * anything less extreme (tested down to a ~1% luminance shift) drops below the
- * floor. Text-only: the background-warmth rule does not apply to these.
- */
-export const CROSSING_TEXT = {
-  deep: "#000000",
-  pale: "#FFFFFF",
-} as const;
