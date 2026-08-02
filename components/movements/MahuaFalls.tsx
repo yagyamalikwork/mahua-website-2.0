@@ -4,7 +4,7 @@ import { bandMinHeight } from "@/lib/band-height";
 import { HOME, movementCopy } from "@/content/home";
 
 /**
- * "mahua-falls" — the opening movement (content/movements.ts: dawn, weight 8).
+ * "mahua-falls" — the opening movement (content/movements.ts: dawn).
  * The page's one true title lives here (spec section 3, movement 0): `HOME.hero`
  * carries the H1/sub exactly as the spec gives them, and `movementCopy("dawn")`
  * supplies the chapter label and the mahua-blossom explanation beneath — "not

@@ -3,7 +3,7 @@ import { movementCopy } from "@/content/home";
 import { MovementSection } from "./MovementSection";
 
 /**
- * "rooted" — content/movements.ts: lateAfternoon, weight 18. Its one plate,
+ * "rooted" — content/movements.ts: lateAfternoon. Its one plate,
  * potters-hands, is the narrowest photograph in the manifest (700px — see
  * lib/media-manifest.ts and the Task 5 report's resolution note) and must never
  * be stretched edge-to-edge. Constraining its column to `max-w-md` (28rem)

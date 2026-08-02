@@ -3,7 +3,7 @@ import { movementCopy } from "@/content/home";
 import { MovementSection } from "./MovementSection";
 
 /**
- * "the-gate" — content/movements.ts: firstLight, weight 8. The first band on
+ * "the-gate" — content/movements.ts: firstLight. The first band on
  * the page carrying an actual photograph, so its plate is the one image marked
  * `priority` (see app/page.tsx and the Task 6 report — the opening movement,
  * "mahua-falls", has none).

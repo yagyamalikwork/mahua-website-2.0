@@ -34,7 +34,7 @@ function renderBand(band: Band): ReactNode {
     case "the-gate":
       return <TheGate key={band.id} />;
     case "into-the-day":
-      return <FullBleed key={band.id} id="tiger-golden-grass" />;
+      return <FullBleed key={band.id} id="tiger-golden-grass" bandId={band.id} />;
     case "the-residents":
       return <TheResidents key={band.id} />;
     case "the-lodges":
@@ -44,7 +44,7 @@ function renderBand(band: Band): ReactNode {
     case "the-ritual":
       return <TheRitual key={band.id} />;
     case "into-the-dark":
-      return <FullBleed key={band.id} id="mahua-tola-pool" />;
+      return <FullBleed key={band.id} id="mahua-tola-pool" bandId={band.id} />;
     case "the-sky":
       return <TheSky key={band.id} />;
     default:
