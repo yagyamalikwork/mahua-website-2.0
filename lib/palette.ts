@@ -38,7 +38,8 @@ export function lightState(id: LightStateId): LightState {
 
 /**
  * Legibility floor for the two segments whose background crosses the light/dark
- * divide (firstLight→midMorning, dusk→night — see lib/day-surface.ts `isCrossing`).
+ * divide (firstLight→midMorning, dusk→night — the two segments whose bracketing
+ * states differ sharply in luminance; see lib/day-surface.ts `backgroundAt`).
  * Partway through those blends the background sits at a mid luminance no single
  * light state's `text` was designed for, and WCAG contrast is luminance-only, so no
  * warm hue can rescue it: true black/white against a mid-tone background is the

@@ -1,4 +1,4 @@
-import { contrastRatio, hexToRgb, relativeLuminance } from "./contrast";
+import { contrastRatio, hexToRgb } from "./contrast";
 import { CROSSING_TEXT, LIGHT_STATES } from "./palette";
 
 const SEGMENTS = LIGHT_STATES.length - 1; // six gaps between seven states
@@ -16,50 +16,26 @@ export function segmentAt(progress: number): { from: number; to: number; t: numb
 const toHex = (n: number) => Math.round(n).toString(16).padStart(2, "0").toUpperCase();
 
 /**
- * A segment "crosses" the light/dark divide when its two background luminances are
- * this far apart. The gap is ~0.63–0.76 for the two real crossings (firstLight→
- * midMorning, dusk→night) and ≤0.09 for the other four, so 0.3 sits in a wide, safe
- * margin between them — see the sweep in day-surface.test.ts for the actual numbers.
- */
-const CROSSING_LUMINANCE_GAP = 0.3;
-
-function isCrossing(from: number, to: number): boolean {
-  const a = relativeLuminance(hexToRgb(LIGHT_STATES[from].bg));
-  const b = relativeLuminance(hexToRgb(LIGHT_STATES[to].bg));
-  return Math.abs(a - b) > CROSSING_LUMINANCE_GAP;
-}
-
-/**
- * Smootherstep (Ken Perlin's), flat near both ends and steepest through the middle.
- * Applied only inside the two crossing segments (see isCrossing), so the background
- * spends less of the *scroll* sitting at the mid-luminance tone neither bracketing
- * state's text was designed for. eased(0) = 0 and eased(1) = 1 exactly, so segment
- * boundaries still land on the anchor colour precisely — no seam is introduced.
- *
- * This reshapes *timing*, not the colour path: every colour between the two
- * backgrounds is still visited (it's still a straight sRGB blend), so this alone
- * cannot rescue the single worst-contrast point — that's what CROSSING_TEXT is for.
- * It does shrink how much of the scroll sits in the low-margin band around it.
- */
-function ease(t: number): number {
-  return t * t * t * (t * (t * 6 - 15) + 10);
-}
-
-function easedT(from: number, to: number, t: number): number {
-  return isCrossing(from, to) ? ease(t) : t;
-}
-
-/**
  * The background is one continuously bleeding surface, not seven blocks (spec section 4.1).
- * Interpolated in sRGB: every state is warm, so the path between any two never passes
- * through a cold tone — which the test suite verifies across the whole range.
+ * Interpolated in sRGB, linearly against scroll progress across all six segments —
+ * including the two that cross the light/dark divide (firstLight→midMorning,
+ * dusk→night). An earlier version eased those two crossings through smootherstep
+ * (flat at both ends, steepest through the middle) to shrink how much of the scroll
+ * sat at the low-margin mid-luminance band; client review reported that easing as an
+ * abrupt, snappy transition — crawl/rush/crawl reads as a seam even though the pixel
+ * step size stays small. Plain linear blending removes that rush: the rate of colour
+ * change is now constant across every segment, all six behave identically, and the
+ * worst-case contrast point survives unchanged because it is a property of the
+ * palette (see CROSSING_TEXT), not of the timing curve.
+ *
+ * Every state is warm, so the path between any two never passes through a cold
+ * tone — which the test suite verifies across the whole range.
  */
 export function backgroundAt(progress: number): string {
   const { from, to, t } = segmentAt(progress);
-  const et = easedT(from, to, t);
   const a = hexToRgb(LIGHT_STATES[from].bg);
   const b = hexToRgb(LIGHT_STATES[to].bg);
-  const mix = a.map((channel, i) => channel + (b[i] - channel) * et);
+  const mix = a.map((channel, i) => channel + (b[i] - channel) * t);
   return `#${mix.map(toHex).join("")}`;
 }
 
