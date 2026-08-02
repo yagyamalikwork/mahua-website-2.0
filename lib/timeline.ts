@@ -8,16 +8,20 @@ const TOTAL = BANDS.reduce((n, b) => n + b.weight, 0);
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 /**
- * Two stops per band, both naming that band's own state. Identical consecutive
- * states hold the colour still for the band's full height; the colour therefore
- * only moves across a band boundary — and the two light/dark boundaries are
- * bracketed by crossing bands that carry no text (spec section 13).
+ * Two stops per band: the band's start carries the *previous* band's state,
+ * its end carries its own. A band therefore sweeps from what came before it
+ * to itself across its own full width — bands whose state matches their
+ * predecessor's hold the colour perfectly still, and every genuine
+ * transition gets a whole band's width to happen in rather than being
+ * squeezed into the zero-width seam between two bands. The two light/dark
+ * transitions land inside crossing bands that carry no text (spec section 13).
  */
 export const STOPS: readonly Stop[] = BANDS.flatMap((band, i) => {
   const start = BANDS.slice(0, i).reduce((n, b) => n + b.weight, 0) / TOTAL;
   const end = start + band.weight / TOTAL;
+  const entering = i === 0 ? band.state : BANDS[i - 1].state;
   return [
-    { at: start, state: band.state },
+    { at: start, state: entering },
     { at: end, state: band.state },
   ];
 });
