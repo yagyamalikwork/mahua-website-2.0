@@ -61,7 +61,11 @@ Copied verbatim from the spec. Every task inherits these.
 
 **Files:**
 - Create: `scripts/build_images.mjs`, `lib/media.ts`, `lib/media.test.ts`
-- Create (generated, committed): `public/media/*`, `lib/media-manifest.json`
+- Create (generated, committed): `public/media/*`, `lib/media-manifest.ts`
+
+**The manifest must be generated as `.ts` with `as const`, not `.json`.** A JSON import widens `id` to
+`string`, so `MediaId` could not be a union and `media("typo")` would compile. Emitting TypeScript with
+`as const` makes every id a literal, so a wrong id is a build error rather than a runtime throw.
 
 **Interfaces:**
 - Consumes: nothing
@@ -141,7 +145,7 @@ Run: `npx vitest run lib/media.test.ts` → FAIL, cannot resolve `./media`.
 
 Reads a curation list at the top of the file (id → source path → alt text), and for each source emits
 `public/media/<id>-{960,1440,1920}.{avif,webp}` plus a 1920 `.jpg` fallback and a tiny base64 blur
-placeholder. Uses `sharp`, already installed. Writes `lib/media-manifest.json`.
+placeholder. Uses `sharp`, already installed. Writes `lib/media-manifest.ts` ending in `as const`.
 
 Quality settings: AVIF quality 55, WebP quality 72. Re-encode from the source, never upscale — if a source
 is narrower than a target width, skip that width.
@@ -161,7 +165,7 @@ spec's hero budget. If any exceeds it, lower quality for that image and re-run b
 
 - [ ] **Step 5: Write `lib/media.ts`**
 
-Imports the generated JSON, derives `MediaId` from it, exports `MEDIA` and `media(id)`. `media` throws
+Imports the generated `media-manifest.ts`, derives `MediaId` as `(typeof MANIFEST)[number]["id"]`, exports `MEDIA` and `media(id)`. `media` throws
 `new Error(\`Unknown media id: ${id}\`)` on a miss.
 
 - [ ] **Step 6: Run the test to verify it passes**
@@ -171,7 +175,7 @@ Run: `npx vitest run lib/media.test.ts` → PASS, 5 tests.
 - [ ] **Step 7: Commit**
 
 ```bash
-git add scripts/build_images.mjs lib/media.ts lib/media.test.ts lib/media-manifest.json public/media
+git add scripts/build_images.mjs lib/media.ts lib/media.test.ts lib/media-manifest.ts public/media
 git commit -m "feat: add build-time image pipeline and curated media manifest"
 ```
 
