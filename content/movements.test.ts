@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { hexToRgb, relativeLuminance } from "@/lib/contrast";
-import { lightState } from "@/lib/palette";
+import { lightState, LIGHT_STATES } from "@/lib/palette";
 import { BANDS } from "./movements";
 
 const lum = (id: string) => relativeLuminance(hexToRgb(lightState(id as never).bg));
@@ -40,6 +40,21 @@ describe("BANDS", () => {
   it("gives every text-free crossing band an image, so it is not a blank screen", () => {
     for (const b of BANDS.filter((x) => !x.carriesText)) {
       expect(b.image, `${b.id} carries no text and no image`).toBeTruthy();
+    }
+  });
+
+  it("runs the day forwards — states never go backwards", () => {
+    // BANDS is the single source of truth for order, so ordering is exactly
+    // what it must verify. Consecutive bands may repeat a state (a crossing
+    // band shares its state with the movement it leads into), but the day
+    // must never run backwards.
+    const order = LIGHT_STATES.map((s) => s.id);
+    let previous = -1;
+    for (const band of BANDS) {
+      const index = order.indexOf(band.state);
+      expect(index, `${band.id} has an unknown state`).toBeGreaterThanOrEqual(0);
+      expect(index, `${band.id} (${band.state}) goes backwards`).toBeGreaterThanOrEqual(previous);
+      previous = index;
     }
   });
 });
