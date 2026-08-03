@@ -1,7 +1,7 @@
 /**
  * Fine paper grain across the whole page. Ties everything to the field-guide idiom and
- * stops the dark movements reading as flat rectangles (spec section 4.4).
- * Inline SVG so it costs no network request.
+ * stops the cream surface reading as flat digital colour rather than paper (spec
+ * section 4.4). Inline SVG so it costs no network request.
  *
  * Blend mode is `hard-light`, not `soft-light`. Soft-light's perturbation is scaled by
  * backdrop*(1-backdrop), which collapses toward zero as the backdrop approaches white —

@@ -1,20 +1,23 @@
 # Mahua Resorts — Website 2.0
 
 New home page for **Mahua Resorts**, a family-run boutique wildlife lodge brand in central India.
-Replaces a monotone WordPress template site. Concept: **the scroll is a single day at the lodge**, dawn to
-night, rendered in a hand-drawn field-guide idiom.
+Replaces a monotone WordPress template site. Concept: **a dense, image-led journey in chapters** — cream
+throughout, in the layout language of [thesujanlife.com](https://thesujanlife.com/), rendered in a
+hand-drawn field-guide idiom.
 
-> **Read [`docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md`](docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md) before doing any work.**
-> It is the approved spec — narrative, palette, interactions, architecture. This file is the map; the spec is the territory.
+> **Read [`docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md) before doing any work.**
+> It is the current plan and overrides the original spec where they conflict. The original spec,
+> [`docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md`](docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md),
+> still holds for everything the plan doesn't touch — its §3, §4.1 and §13 are superseded.
 
 ## Status
 
 | | |
 |---|---|
-| **Phase** | Plan 1 built on `feat/foundation-light-states`. Colour, motion, copy tokens and the seven-state scroll all working; 32 tests green. |
+| **Phase** | Rebuilding as chapters, on `feat/chapters-rebuild` (Plan 3). The prior scroll-through-a-day colour system was retired 3 Aug 2026 — the client rejected that build (too few images, no perceptible scroll animation, too much empty space, no resemblance to the reference site). |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/preview/light-states`. `/` is a holding page. |
-| **Next step** | Client approves colour and motion from the preview, then Plan 2 builds the seven movements. |
+| **See it** | `npm run dev` → `/`. Currently a placeholder heading; the real chaptered page is built in Plan 3 Task 7. |
+| **Next step** | Work through Plan 3's tasks in order — each is TDD, verified, and committed before the next starts. |
 
 ## The non-negotiables
 
@@ -23,52 +26,54 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 1. **Two properties** — Mahua Vann (Pench) and Mahua Tola (Tadoba). Mahua Bagh is removed from the brand;
    the live site still shows it and is wrong.
 2. **Seduce, not convert.** Unhurried and warm, gentle push toward "discover". Not a booking funnel.
-3. **The page must stay warm.** Cream/warm paper is the home key, ~80% of page height. Dark is punctuation
-   only, always warm-toned (`#232B21`, never cold blue-black). See spec §9 — the client raised this and was
-   right.
-4. **Restraint is a requirement, not a preference.** Sujan is the benchmark: it reads expensive because it
-   holds back. Nothing bounces. If you notice the animation, it is too fast.
-5. **The tiger arrives, performs, then dozes.** It is not a permanent fixture — permanent peripheral motion
-   contradicts #2 and #4.
-6. **Budgets beat effects.** Hero < 200 KB, first load < 2.5s on 4G. Most traffic is Indian mobile. If a
-   beautiful effect cannot hit budget, the effect loses. **Currently breached** — 404 KB and LCP 3.5s with
-   no photography yet. Must be addressed before real images land.
-7. **The crossings live in text-free bands** (`carriesText: false` in `content/movements.ts`). Plan 2 did
-   this and the black/white fallback was deleted outright — minimum contrast where text is on screen is now
-   **7.098:1**. One residual case remains at 390px (4.46:1); **Plan 3 must close it** — see spec §13.
-   Do not attempt another scroll-progress formula change: that was tried and made it three times worse.
-8. **Band heights are `min-height` — a floor, not a ceiling.** Content taller than its box makes the band
-   grow, detaching rendered height from `weight` and desynchronising the light from the content. This has
-   been hit twice already. Re-measure band content against its weight-derived box after any copy or layout
-   change, at narrow widths *and* short viewport heights.
-9. **The ≥70% light share has almost no slack.** It sits at 70.21% with ~0.29 weight-units to spare. Any
-   dark band gaining 1, any light band losing 1, or any new dark band breaks the test. Re-check on every
-   weight change.
+3. **Cream is the page, throughout.** Base `#F1E9D7`, second surface `#E9DFC8`, ink `#31402C`, dim
+   `#5A5240`. No dark sections except photographs and their overlays — see spec §9, the client raised this
+   and was right, and Plan 3's rejected-build review reconfirmed it.
+4. **Restraint is a requirement, not a preference.** Sujan is both the tone and the layout benchmark now —
+   it reads expensive because it holds back. Nothing bounces. If you notice the animation, it is too fast.
+5. **The tiger arrives, performs, then dozes** (Plan 4, not yet built). It is not a permanent fixture —
+   permanent peripheral motion contradicts #2 and #4.
+6. **Budgets beat effects.** Largest image < 200 KB, total page transfer < 1.5 MB, LCP < 2.5s on simulated
+   4G. Most traffic is Indian mobile. If a beautiful effect cannot hit budget, the effect loses.
+7. **Gold is decorative only.** `gold` (`#BB8F2E`) is for rules, ornaments, the emblem — it measures
+   ~2.5:1 on cream and must never carry text. `goldText` (`#7A5C18`) is the legible sibling; use it for any
+   text or link that would otherwise sit in gold. Guarded by `lib/palette.test.ts`.
+8. **Every screen must carry weight.** No section may render more than ~30% empty space at 1440×900. If a
+   section cannot be filled, it is cut or merged — not padded. This is the direct fix for the client's
+   "too much empty space" complaint.
+9. **Alternate the rhythm.** Never two consecutive text-only screens — a full-bleed photograph or an
+   image-led block must sit between them. Enforced mechanically by a test on `content/chapters.ts`, not by
+   good intentions.
+10. **Only images ≥ 1400px wide may go full-bleed.** Narrower images tiled edge-to-edge is exactly the
+    "resemblance to a template, not the reference" complaint. `lib/media.ts` marks each entry
+    `fullBleedSafe`; below 1400px it must be `false`.
 
-**Never test colour only at the seven endpoints.** The background moves between them. A 1.85:1 stretch
-shipped because the palette tests checked static states, Lighthouse checked one frozen frame, and the seam
-check measured colour continuity — none evaluated text against a *moving* background. The sweep in
-`lib/day-surface.test.ts` is the guard; do not weaken it.
+**Contrast is checked by test, not by eye.** `lib/contrast.ts` + `lib/palette.test.ts` guard the fixed
+palette (≥4.5:1 body text, ≥4.5:1 links, on both paper surfaces). Text laid over a photograph (hero,
+full-bleed quotes) needs its own check — a scrim or equivalent, verified by a contrast test against the
+actual rendered result, not assumed from the image looking dark enough.
 
 ## Architecture rule
 
-Four files are **dials**. No component may hard-code a colour, a duration, or a string of copy — all three
+Two files are **dials**. No component may hard-code a colour, a duration, or a string of copy — all three
 are imported:
 
 | File | Holds |
 |---|---|
-| `lib/palette.ts` | The seven light states |
+| `lib/palette.ts` | The fixed cream palette (`PALETTE`) |
 | `lib/motion.ts` | Every duration and easing |
 | `content/home.ts` | Every word on the page |
-| `lib/tiger/rig.ts` | Tiger skeleton + state machine (art swaps separately) |
 
-Each of the seven movements is a self-contained file that never reaches into another.
+Each chapter section component (`components/sections/`, Plan 3 Task 7) is self-contained and never reaches
+into another. `content/chapters.ts` (Plan 3 Task 4) is the page's spine — the sequence and rhythm rule live
+there, not in `app/page.tsx`.
 
 ## Where things are
 
 | Path | What |
 |---|---|
-| `docs/superpowers/specs/` | The approved spec |
+| `docs/superpowers/specs/` | The original approved spec |
+| `docs/superpowers/plans/` | Plan history — `2026-08-03-rebuild-chapters-layout.md` is current |
 | `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |
 | `reference/mockup-media/` | 31 images extracted from the prior HTML mockups — **better curated than the live site's** |
 | `reference/docs-text/` | Plain text of the four strategy/audit documents |
@@ -80,24 +85,23 @@ Each of the seven movements is a self-contained file that never reaches into ano
 ## Conventions
 
 - **British spelling** in all copy (the current site mixes conventions; the audit flags it).
+- **All copy lives in `content/`.** No user-facing strings in components.
 - **Verify hard numbers with the client; do not trust the sources.** Mahua Vann is **5 km** from Turia Gate
   — the Master Brand Record (4 km) and the live site (3 km) are both wrong. Room counts, acreage and drive
   times from either source deserve the same suspicion. See spec §12.
-- Copy is drafted from the Master Brand Record, in the existing brand voice. The client reviews every line.
+- Copy is drafted from the Master Brand Record and the live site's own text (Plan 3 Task 2), in the
+  existing brand voice. The client reviews every line.
 - Specificity is the brand's luxury — name a gate, a tigress, a tree, a dish. Avoid reaching for adjectives.
 - Never reintroduce the phrase "boutique nature resorts in India" as filler; over-repetition is a named
   audit finding.
 - Everything decorative (leaf cursor, tiger, butterfly, grain) is `aria-hidden` and has a defined still
   state under `prefers-reduced-motion`.
-- Contrast must be checked **independently at each of the seven light states** — text colour changes seven
-  times down the page.
 
 ## Commands
 
-Nothing is scaffolded yet. Once Next.js is initialised:
-
 ```bash
 npm run dev      # local dev server
+npm test         # vitest
 npm run build    # production build — must pass before any commit claiming completion
 npm run lint
 ```
@@ -113,6 +117,7 @@ python scripts/extract_docx.py         # plain text of the strategy documents
 
 ## Verification
 
-Do not claim work is done without showing it. Run the real page, screenshot at 390 / 768 / 1440 / 1920 px.
-Automated tests cannot judge whether a page feels expensive — but the **tiger state machine is pure logic
-and must be tested properly**. Lighthouse against the budgets above.
+Do not claim work is done without showing it — **verify by running the page, not by asserting it works.**
+Run the real page, screenshot at 390 / 768 / 1440 / 1920 px. Automated tests cannot judge whether a page
+feels expensive, but every mechanical rule above (rhythm, full-bleed eligibility, contrast, palette) is
+covered by a test and must stay green. Lighthouse against the budgets in non-negotiable #6.

@@ -43,10 +43,10 @@ export function Plate({
             // a plate's rendered height at short viewports (landscape phones)
             // instead of letting it hold its full width-derived height — a
             // full-width plate is the single largest content contributor in
-            // every band that has one, and at short heights that height alone
-            // can exceed the whole weight-derived band box. `w-auto` keeps
-            // the aspect ratio intact; `mx-auto` recentres the now-narrower
-            // image under its full-width caption.
+            // any section that has one, and at short heights that height
+            // alone can overflow the section around it. `w-auto` keeps the
+            // aspect ratio intact; `mx-auto` recentres the now-narrower image
+            // under its full-width caption.
             className="block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto"
             style={{
               backgroundImage: `url(${entry.blur})`,
