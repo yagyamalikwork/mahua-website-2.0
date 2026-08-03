@@ -1,37 +1,23 @@
 /**
- * The seven light states of "One Day at Mahua".
+ * The palette. One cream surface, not a scroll-driven sequence.
  *
- * THE DIAL. Retuning the whole scroll arc happens here and nowhere else.
- * No component may hard-code a colour (spec section 6.2).
+ * The previous design moved the background through seven states as you scrolled.
+ * It was retired on 3 Aug 2026: section heights had to be sized by colour ratio
+ * rather than by content, which left the page sparse, and it pulled against both
+ * the brand guidelines and the reference site, which are cream throughout.
  *
- * `accent`     DECORATIVE ONLY — rules, ornaments, the logo. Never text:
- *              gold on cream measures ~2.5:1 and fails at every size.
- * `accentText` The AA-compliant link/label colour for this background.
+ * `gold` is decorative only — rules, ornaments, the emblem. It measures about
+ * 2.5:1 on cream and must never carry text. `goldText` is the legible sibling.
  */
-export type LightStateId =
-  | "dawn" | "firstLight" | "midMorning" | "afternoon" | "lateAfternoon" | "dusk" | "night";
+export type PaletteToken =
+  | "paper" | "paperDeep" | "ink" | "dim" | "gold" | "goldText" | "overlay";
 
-export type LightState = {
-  readonly id: LightStateId;
-  readonly label: string;
-  readonly bg: string;
-  readonly text: string;
-  readonly accent: string;
-  readonly accentText: string;
-};
-
-export const LIGHT_STATES: readonly LightState[] = [
-  { id: "dawn",          label: "Pre-dawn",       bg: "#232B21", text: "#E9DFC7", accent: "#D5A63E", accentText: "#D5A63E" },
-  { id: "firstLight",    label: "First light",    bg: "#3E4A33", text: "#E9DFC7", accent: "#D5A63E", accentText: "#E3B85C" },
-  { id: "midMorning",    label: "Mid-morning",    bg: "#F1E9D7", text: "#31402C", accent: "#BB8F2E", accentText: "#7A5C18" },
-  { id: "afternoon",     label: "Afternoon",      bg: "#F1E9D7", text: "#31402C", accent: "#BB8F2E", accentText: "#7A5C18" },
-  { id: "lateAfternoon", label: "Late afternoon", bg: "#E9DFC8", text: "#31402C", accent: "#BB8F2E", accentText: "#7A5C18" },
-  { id: "dusk",          label: "Dusk",           bg: "#E4D2AC", text: "#6E4F2F", accent: "#DCA457", accentText: "#744A12" },
-  { id: "night",         label: "Night",          bg: "#232B21", text: "#E9DFC7", accent: "#BB8F2E", accentText: "#D5A63E" },
-] as const;
-
-export function lightState(id: LightStateId): LightState {
-  const found = LIGHT_STATES.find((s) => s.id === id);
-  if (!found) throw new Error(`Unknown light state: ${id}`);
-  return found;
-}
+export const PALETTE: Record<PaletteToken, string> = {
+  paper: "#F1E9D7",
+  paperDeep: "#E9DFC8",
+  ink: "#31402C",
+  dim: "#5A5240",
+  gold: "#BB8F2E",
+  goldText: "#7A5C18",
+  overlay: "#232B21",
+} as const;

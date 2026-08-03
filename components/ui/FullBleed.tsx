@@ -1,29 +1,16 @@
 import { Parallax } from "@/components/motion/Parallax";
-import { bandHeightVh } from "@/lib/band-height";
 import { media, type MediaId } from "@/lib/media";
 import { PARALLAX_MAX } from "@/lib/motion";
 
 /**
- * An edge-to-edge, viewport-height photograph with no text at all — what the two
- * light/dark crossing bands render (content/movements.ts's `carriesText: false`
- * bands). Text-free is the entire point: the light crosses between dark and cream
- * inside these, and no warm text colour stays legible mid-crossing (spec section
- * 13). `alt=""` plus `role="presentation"` give it no accessible name, and no
- * `children` prop exists — nothing can be laid on top of it by mistake.
+ * An edge-to-edge photograph with no text at all. `alt=""` plus
+ * `role="presentation"` give it no accessible name, and no `children` prop
+ * exists — nothing can be laid on top of it by mistake.
  *
- * `bandId` — required, not optional — is the id this crossing band has in
- * `content/movements.ts`'s `BANDS` (e.g. `"into-the-day"`). The container's
- * height comes from `bandHeightVh(bandId)`, the same function every text
- * movement calls (`lib/band-height.ts`), rather than a hard-coded `h-screen`.
- * Fix round 1: an earlier version hard-coded `h-screen` here, which rendered
- * at exactly one viewport only because both crossing bands *happened* to carry
- * the same `weight` — nothing tied FullBleed's own markup to that fact, so
- * editing one crossing band's weight alone would have silently detached its
- * rendered height from what `lib/timeline.ts` assumes for it, which is
- * precisely the drift the whole plan exists to prevent. Both crossing bands
- * are still required to share a weight (`lib/band-height.test.ts` guards it),
- * but now that requirement is what keeps this component's own maths
- * self-consistent, not an unrelated coincidence it depended on blindly.
+ * `heightVh` — the container's height in viewport-height units. Defaults to a
+ * full viewport (100). The day-arc used to derive this from a band's share of
+ * the scroll timeline (`lib/band-height.ts`, removed 3 Aug 2026); callers now
+ * pass whatever height their layout calls for.
  *
  * Parallax translates the wrapped element by up to (its own height * PARALLAX_MAX)
  * / 2 in either direction. Left alone, that would drag the image's edge past the
@@ -32,27 +19,25 @@ import { PARALLAX_MAX } from "@/lib/motion";
  * touches it: buffer on each side must be at least oversizeHeight *
  * PARALLAX_MAX / 2 (half the total translate range), solved here for a
  * comfortable (not knife-edge) margin. The oversize target is expressed
- * relative to `containerVh` (not a bare `100`) so the inequality still holds
- * if a crossing band's height is ever anything other than one full viewport —
- * derived from the container's real height, not assumed to equal it.
+ * relative to `heightVh` (not a bare `100`) so the inequality still holds for
+ * any container height, not just a full viewport.
  */
 export function FullBleed({
   id,
-  bandId,
+  heightVh = 100,
   priority = false,
 }: {
   id: MediaId;
-  bandId: string;
+  heightVh?: number;
   priority?: boolean;
 }) {
   const entry = media(id);
-  const containerVh = bandHeightVh(bandId);
 
-  const oversizeVh = containerVh / (1 - PARALLAX_MAX) + 10;
-  const bufferVh = (oversizeVh - containerVh) / 2;
+  const oversizeVh = heightVh / (1 - PARALLAX_MAX) + 10;
+  const bufferVh = (oversizeVh - heightVh) / 2;
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ height: `${containerVh}vh` }}>
+    <div className="relative w-full overflow-hidden" style={{ height: `${heightVh}vh` }}>
       <Parallax>
         <picture
           className="block w-full"

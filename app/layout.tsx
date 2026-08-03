@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { LIGHT_STATES } from "@/lib/palette";
+import { Grain } from "@/components/motion/Grain";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
 import "./globals.css";
@@ -10,25 +12,27 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Seeded from the first light state, server-rendered so there is no flash of
-  // unstyled colour. DaySurface overwrites these as the visitor scrolls.
+  // Written once from PALETTE, server-rendered so there is no flash of unstyled
+  // colour. The page no longer moves through a scroll-driven sequence of light
+  // states, so these values never change after paint (retired 3 Aug 2026).
   // Read from palette.ts rather than written in CSS: one source of truth for colour.
-  const dawn = LIGHT_STATES[0];
-
   return (
     <html
       lang="en-GB"
       style={
         {
-          "--bg": dawn.bg,
-          "--text": dawn.text,
-          "--accent": dawn.accent,
-          "--accent-text": dawn.accentText,
+          "--bg": PALETTE.paper,
+          "--text": PALETTE.ink,
+          "--accent": PALETTE.gold,
+          "--accent-text": PALETTE.goldText,
         } as React.CSSProperties
       }
     >
       <body className={`${display.variable} ${label.variable} ${body.variable}`}>
-        {children}
+        <SmoothScroll>
+          <Grain />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

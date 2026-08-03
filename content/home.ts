@@ -1,5 +1,4 @@
 import type { MediaId } from "@/lib/media";
-import type { LightStateId } from "@/lib/palette";
 
 /**
  * THE DIAL for copy. Every word on the page lives here, so text edits never touch layout
@@ -23,7 +22,7 @@ export type PlateCopy = {
 };
 
 export type MovementCopy = {
-  readonly id: LightStateId;
+  readonly id: string;
   readonly chapter: string;
   readonly heading: string;
   readonly body: string;
@@ -49,9 +48,10 @@ export const HOME = {
     homeTitle: "Mahua Resorts — early build",
     previewTitle: "Light states — Mahua Resorts",
   },
-  // In scroll order — dawn to night, matching content/movements.ts's BANDS.
   // Provisional prose for Plan 2 (drawn from spec section 3); Plan 3 owns the
-  // final copy pass.
+  // final copy pass, including how this content maps onto the rebuilt page
+  // (the day-arc's dawn-to-night band order this list used to follow was
+  // retired 3 Aug 2026 along with content/movements.ts).
   movements: [
     {
       id: "dawn",
@@ -166,11 +166,11 @@ export const HOME = {
 };
 
 /**
- * The single accessor for a movement's copy, mirroring `lightState()` and
- * `media()` elsewhere — throws on a miss rather than handing a component
- * `undefined` and letting a missing heading surface as a blank patch of page.
+ * The single accessor for a movement's copy, mirroring `media()` elsewhere —
+ * throws on a miss rather than handing a component `undefined` and letting a
+ * missing heading surface as a blank patch of page.
  */
-export function movementCopy(id: LightStateId): MovementCopy {
+export function movementCopy(id: string): MovementCopy {
   const found = HOME.movements.find((m) => m.id === id);
   if (!found) throw new Error(`Unknown movement id: ${id}`);
   return found;
