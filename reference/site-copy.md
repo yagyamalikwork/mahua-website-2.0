@@ -2,17 +2,17 @@
 
 # Live Site Copy Transcript
 
-9 pages, 3094 words total.
+9 pages, 3036 words total.
 
-- [Boutique Nature Resorts in India - Mahua Resorts](#boutique-nature-resorts-in-india---mahua-resorts) -- https://mahuaresorts.com/ (445 words)
-- [Mahua Vann - Mahua Resorts](#mahua-vann---mahua-resorts) -- https://mahuaresorts.com/resorts/mahua-vann/ (969 words)
-- [Mahua Tola - Mahua Resorts](#mahua-tola---mahua-resorts) -- https://mahuaresorts.com/resorts/mahua-tola/ (646 words)
-- [Mahua Bagh - Mahua Resorts](#mahua-bagh---mahua-resorts) -- https://mahuaresorts.com/resorts/mahua-bagh/ (436 words)
-- [About Us - Mahua Resorts](#about-us---mahua-resorts) -- https://mahuaresorts.com/about-us/ (200 words)
-- [Offers - Mahua Resorts](#offers---mahua-resorts) -- https://mahuaresorts.com/offers/ (26 words)
-- [In The News - Mahua Resorts](#in-the-news---mahua-resorts) -- https://mahuaresorts.com/in-the-news/ (66 words)
-- [Mahua Resorts Terms and Conditions](#mahua-resorts-terms-and-conditions) -- https://mahuaresorts.com/terms-conditions/ (268 words)
-- [Work With Us - Mahua Resorts](#work-with-us---mahua-resorts) -- https://mahuaresorts.com/work-with-us/ (38 words)
+- [Boutique Nature Resorts in India - Mahua Resorts](#boutique-nature-resorts-in-india---mahua-resorts) -- https://mahuaresorts.com/ (426 words)
+- [Mahua Vann - Mahua Resorts](#mahua-vann---mahua-resorts) -- https://mahuaresorts.com/resorts/mahua-vann/ (964 words)
+- [Mahua Tola - Mahua Resorts](#mahua-tola---mahua-resorts) -- https://mahuaresorts.com/resorts/mahua-tola/ (641 words)
+- [Mahua Bagh - Mahua Resorts](#mahua-bagh---mahua-resorts) -- https://mahuaresorts.com/resorts/mahua-bagh/ (431 words) **(RETIRED)**
+- [About Us - Mahua Resorts](#about-us---mahua-resorts) -- https://mahuaresorts.com/about-us/ (195 words)
+- [Offers - Mahua Resorts](#offers---mahua-resorts) -- https://mahuaresorts.com/offers/ (24 words)
+- [In The News - Mahua Resorts](#in-the-news---mahua-resorts) -- https://mahuaresorts.com/in-the-news/ (60 words)
+- [Mahua Resorts Terms and Conditions](#mahua-resorts-terms-and-conditions) -- https://mahuaresorts.com/terms-conditions/ (263 words)
+- [Work With Us - Mahua Resorts](#work-with-us---mahua-resorts) -- https://mahuaresorts.com/work-with-us/ (32 words)
 
 ---
 
@@ -21,8 +21,6 @@
 **Source:** https://mahuaresorts.com/
 
 ## Experience Mahua Resorts – Boutique Eco Lodges in India’s Wildest Corners
-
-Experience Mahua Resorts – Boutique Eco Lodges in India’s Wildest Corners
 
 Welcome to Mahua Resorts, your destination for exclusive boutique eco lodges for those seeking both comfort and connection with Mother Nature. Step into an oasis of serenity amidst the jungles or by the shores for immersive natural experiences. Our exclusive eco resorts are tucked away in pristine forests, serene beachfronts, and untamed jungles, offering the perfect blend of luxury, sustainability, and adventure.
 
@@ -51,6 +49,8 @@ Situated just 3 km away from the Turia Safari Gate of the Pench National Park in
 Luxury in the Heart of the Tiger Reserve. Located just 6 km from Tadoba’s Kolara Gate, Mahua Tola is a boutique retreat set across 7.5 acres along a seasonal river. With its mix of ethnic-inspired architecture and modern amenities, this resort offers the perfect setting for an immersive jungle experience.
 
 Located by the serene Nandgaon Bay in Maharashtra, Mahua Bagh, Murud is a pet-friendly 27acre orchard offering a unique farm stay experience.
+
+**[RETIRED PROPERTY -- do not reuse]**
 
 ---
 
@@ -346,7 +346,11 @@ An authentic jungle escape at Tadoba Andhari Tiger Reserve (TATR). Here, you’l
 
 Mahua Bagh, Murud
 
+**[RETIRED PROPERTY -- do not reuse]**
+
 A hidden gem on India’s west coast. Set amidst orchards and overlooking a quiet beach, it’s also home to Buddy, our friendly in-house Labrador.
+
+**[RETIRED PROPERTY -- do not reuse]**
 
 From dense forests to pristine beaches, Mahua Resorts invites you to explore the best boutique eco resorts in India. Reconnect with nature, experience local culture, and create lasting memories in some of the country’s most breathtaking landscapes.
 
@@ -356,7 +360,7 @@ From dense forests to pristine beaches, Mahua Resorts invites you to explore the
 
 **Source:** https://mahuaresorts.com/offers/
 
-#### Pay for 2 nightsandstay for 3
+#### Pay for 2 nights and stay for 3
 
 at Mahua Vann, Pench
 

@@ -15,16 +15,20 @@ navigation and footer text without any class/id guessing, and any <script>/<styl
 still turn up inside <main> (a couple of pages have one) are stripped explicitly.
 
 Two housekeeping steps beyond the per-tag walk:
-  - Adjacent exact-duplicate blocks are collapsed to one. The home page's hero literally
-    restates its own <h1> as the next paragraph, in italics -- a WordPress editing artefact,
-    not a second fact -- so repeating it in the transcript would be noise, not signal.
+  - Adjacent exact-duplicate blocks are collapsed to one, comparing text only (not tag). The
+    home page's hero restates its own <h1> as the very next paragraph, in italics -- an <h1>
+    and a <p> with identical wording -- a WordPress editing artefact, not a second fact, so
+    repeating it in the transcript would be noise, not signal.
   - Pages whose extracted body is byte-for-byte identical to an already-emitted page are
     skipped once found. The site serves /work-with-us/ and /mahuaresorts/work-with-us/ as the
     same content; only the shorter, canonical URL is kept.
 
-Mahua Bagh (Murud) has been retired from the brand, but the live site still sells it, so its
-page is extracted for completeness and its section is marked RETIRED so nobody lifts its copy
-into new work by accident.
+Mahua Bagh (Murud) has been retired from the brand, but the live site still sells it. Its own
+page is extracted for completeness with a page-level RETIRED note, and -- because Task 6 will
+skim this file by chapter rather than read it end to end -- every OTHER page that mentions Bagh
+in passing (Home, About Us) gets an inline "[RETIRED PROPERTY -- do not reuse]" marker directly
+under the offending block, not just a warning on the dedicated section someone may never scroll
+to. See flag_bagh_mentions().
 """
 import os
 import re
@@ -128,6 +132,14 @@ class BodyExtractor(HTMLParser):
             return
         if self._skip_depth:
             return
+        if tag == "br":
+            # offers.html has a stray, unmatched </br> (no opening <br>): "Pay for 2
+            # nights</br><i>and</i></br>stay for 3". A browser still renders that as a line
+            # break per the HTML5 spec, so a real visitor sees a space there -- match that,
+            # not just the well-formed <br> case handled in handle_starttag.
+            if self._capture_tag is not None:
+                self._buffer.append(" ")
+            return
         if self._capture_tag is not None and tag == self._capture_tag:
             self._capture_depth -= 1
             if self._capture_depth == 0:
@@ -156,29 +168,60 @@ def extract_blocks(main_html):
     parser.feed(main_html)
     parser.close()
     # Collapse immediately-adjacent exact duplicates (e.g. the homepage's <h1>, restated
-    # verbatim as the very next paragraph). Deliberately NOT a page-wide or site-wide dedup:
-    # short headings like "Stay" or "Dining" legitimately recur once per resort page, and
-    # room-feature lines like "Forest view" legitimately recur once per room type -- collapsing
-    # those would delete real structure, not noise.
+    # verbatim as the very next paragraph, in italics). Compare TEXT only, not (tag, text):
+    # the homepage case is an <h1> followed by a <p> with identical wording, so comparing the
+    # full tuple never matched and both copies survived -- an adjacent identical string is
+    # boilerplate regardless of which tag wraps it. Deliberately NOT a page-wide or site-wide
+    # dedup: short headings like "Stay" or "Dining" legitimately recur once per resort page,
+    # and room-feature lines like "Forest view" legitimately recur once per room type but are
+    # never adjacent to each other (other facts sit between them) -- collapsing those would
+    # delete real structure, not noise.
     collapsed = []
-    for block in parser.blocks:
-        if collapsed and collapsed[-1] == block:
+    for tag, text in parser.blocks:
+        if collapsed and collapsed[-1][1] == text:
             continue
-        collapsed.append(block)
+        collapsed.append((tag, text))
     return collapsed
 
 
-def render_page(url, title, note, blocks):
+RETIRED_MARKER = "**[RETIRED PROPERTY -- do not reuse]**"
+
+
+def flag_bagh_mentions(blocks):
+    """Indices of blocks, on a page OTHER than the dedicated Mahua Bagh section, that mention
+    the retired property. Home and About Us both describe Bagh warmly in passing -- a reader
+    skimming by chapter would never see the warning on the dedicated Bagh section, so every
+    stray mention needs its own marker.
+
+    A block is flagged if it names "Bagh" itself, or if it immediately follows a block that
+    does -- the pattern on About Us is a short label ("Mahua Bagh, Murud") followed by its
+    one-sentence description, which doesn't repeat the name. This does not chain further: the
+    generic closing paragraph after that description doesn't mention Bagh and doesn't follow a
+    block that does (the description itself doesn't say "Bagh"), so it is correctly left alone.
+    """
+    flagged = set()
+    for i, (_, text) in enumerate(blocks):
+        if "bagh" in text.lower():
+            flagged.add(i)
+        elif i > 0 and "bagh" in blocks[i - 1][1].lower():
+            flagged.add(i)
+    return flagged
+
+
+def render_page(url, title, note, blocks, bagh_indices=frozenset()):
     lines = [f"# {title}", "", f"**Source:** {url}"]
     if note:
         lines += ["", f"> **{note}**"]
     lines.append("")
-    for tag, text in blocks:
+    for i, (tag, text) in enumerate(blocks):
         if tag == "p":
             lines.append(text)
         else:
             lines.append(f"{HEADING_MARK[tag]} {text}")
         lines.append("")
+        if i in bagh_indices:
+            lines.append(RETIRED_MARKER)
+            lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -225,12 +268,23 @@ def main():
         seen_bodies[body_key] = filename
 
         title = extract_title(raw)
-        words = len(title.split()) + sum(len(text.split()) for _, text in blocks)
+        # Word count is body content only (headings + paragraphs) -- the page <title> is
+        # metadata, not body copy, and folding it in overstated every page's total by a
+        # handful of words.
+        words = sum(len(text.split()) for _, text in blocks)
         total_words += words
         print(f"{filename}: {len(blocks)} blocks, {words} words")
 
-        out_sections.append(render_page(url, title, note, blocks))
-        toc.append(f"- [{title}](#{'-'.join(title.lower().split())}) -- {url} ({words} words)")
+        # The Bagh page's own note already carries its warning at the top of its section;
+        # every OTHER page gets a marker inline, adjacent to each block that mentions Bagh.
+        bagh_indices = frozenset() if note else flag_bagh_mentions(blocks)
+        out_sections.append(render_page(url, title, note, blocks, bagh_indices))
+
+        anchor = "-".join(title.lower().split())
+        toc_line = f"- [{title}](#{anchor}) -- {url} ({words} words)"
+        if note:
+            toc_line += " **(RETIRED)**"
+        toc.append(toc_line)
 
     header = (
         "<!-- Generated by scripts/extract_site_copy.py. Do not hand-edit; re-run the script "
