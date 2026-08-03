@@ -61,9 +61,14 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
-    id: "veranda-dusk",
+    // Was "veranda-dusk". Merged 4 Aug 2026 with the near-identical
+    // "veranda-through-leaves" (mahua-brand-guidelines-v1-forest-15), which was
+    // the same photograph at 700px against this one's 960px. The surviving
+    // entry keeps the larger source and the more accurate of the two captions —
+    // the veranda really is glimpsed through foreground leaves.
+    id: "veranda-through-leaves",
     src: "reference/mockup-media/lantern-lit-veranda-walkway-at-dusk-24dbe6defa.jpg",
-    alt: "A lantern-lit veranda walkway threading through the gardens at dusk.",
+    alt: "A lantern-lit veranda glimpsed through leaves at dusk, a rattan lampshade glowing above the tables.",
     category: "lanternHour",
     orientation: "portrait",
     fullBleedSafe: false,
@@ -76,14 +81,11 @@ const CURATION = [
     orientation: "landscape",
     fullBleedSafe: true,
   },
-  {
-    id: "lantern-boardwalk-map",
-    src: "reference/mockup-media/mahua-brand-guidelines-v1-forest-14-437cdbc903.jpg",
-    alt: "A lantern-lit timber boardwalk leading to a hand-painted forest map at dusk.",
-    category: "lanternHour",
-    orientation: "landscape",
-    fullBleedSafe: false,
-  },
+  // "lantern-boardwalk-map" (mockup-media, mahua-brand-guidelines-v1-forest-14)
+  // was removed 4 Aug 2026: perceptual hashing showed it is *pixel-identical*
+  // to "lantern-bridge-dusk" above, which the mockup pack had also exported
+  // under a descriptive name. Its alt text described a hand-painted forest map
+  // that is not in the frame. See the duplicate guard in lib/media.test.ts.
   {
     id: "reception-path-dusk",
     src: "reference/wp-media/DSC00063-scaled.jpg",
@@ -108,13 +110,22 @@ const CURATION = [
     orientation: "landscape",
     fullBleedSafe: true,
   },
+  // The 700px duplicate of "veranda-through-leaves" lived here until 4 Aug 2026.
   {
-    id: "veranda-through-leaves",
-    src: "reference/mockup-media/mahua-brand-guidelines-v1-forest-15-a0b138c9ef.jpg",
-    alt: "A lantern-lit veranda glimpsed through leaves at dusk, a rattan lampshade glowing above the tables.",
+    id: "petal-table-night",
+    src: "reference/video-stills/petal-table-night.png",
+    alt: "A candlelit table strewn with bougainvillea petals on the night lawn, the lit veranda beyond.",
     category: "lanternHour",
-    orientation: "portrait",
-    fullBleedSafe: false,
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    id: "bonfire-circle-night",
+    src: "reference/video-stills/bonfire-circle-night.png",
+    alt: "A bonfire burning inside a ring of bamboo benches, the forest dark beyond the firelight.",
+    category: "lanternHour",
+    orientation: "landscape",
+    fullBleedSafe: true,
   },
 
   // ---- forest: wildlife from the lodges' own drives at Pench and Tadoba ----
@@ -127,9 +138,16 @@ const CURATION = [
     fullBleedSafe: true,
   },
   {
-    id: "tiger-yawning",
+    // Was "tiger-yawning", from a source file named "tiger-yawning-in-the-
+    // undergrowth". The photograph is nothing of the kind — it is a close side
+    // profile, mouth shut, with a second cat's flank behind it. Merged 4 Aug
+    // 2026 with the pixel-identical 700px "tiger-pair-profile"
+    // (mahua-brand-guidelines-v1-forest-17); this 900px source survives under
+    // that entry's accurate caption. Both were in the same plate grid, so the
+    // Forest chapter would have shown one photograph twice, side by side.
+    id: "tiger-pair-profile",
     src: "reference/mockup-media/tiger-yawning-in-the-undergrowth-07140d7db1.jpg",
-    alt: "A tiger yawning low in golden undergrowth, whiskers catching the light.",
+    alt: "A tiger in close profile, a second cat's flank passing just behind it.",
     category: "forest",
     orientation: "portrait",
     fullBleedSafe: false,
@@ -150,22 +168,10 @@ const CURATION = [
     orientation: "portrait",
     fullBleedSafe: false,
   },
-  {
-    id: "tiger-approaching-grass",
-    src: "reference/mockup-media/mahua-brand-guidelines-v1-forest-01-f66b804a2a.jpg",
-    alt: "A tiger advancing through golden grass, jaw open in a low growl.",
-    category: "forest",
-    orientation: "landscape",
-    fullBleedSafe: false,
-  },
-  {
-    id: "tiger-pair-profile",
-    src: "reference/mockup-media/mahua-brand-guidelines-v1-forest-17-ba2efe624f.jpg",
-    alt: "A tiger's profile in close-up, a second tiger following just behind.",
-    category: "forest",
-    orientation: "portrait",
-    fullBleedSafe: false,
-  },
+  // Two more removed 4 Aug 2026, both re-exports from the v1 guidelines pack:
+  // "tiger-approaching-grass" (forest-01) is the same walk-through-grass frame
+  // as "tiger-golden-grass" at two-thirds the width, and "tiger-pair-profile"
+  // (forest-17) is the 700px twin of the entry above.
   {
     id: "forest-boardwalk-daylight",
     src: "reference/wp-media/RAG1474-scaled.jpg",
@@ -261,23 +267,36 @@ const CURATION = [
   {
     id: "suite-tiger-painting",
     src: "reference/wp-media/Cottage-with-deck-2-scaled.jpg",
-    alt: "A suite with a tiger painting above the bed and glass doors open to the forest.",
+    alt: "A mud-walled suite with a painted cat's face above the bed and doors open to a forest deck.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: true,
   },
   {
+    // These two had each other's source file until 4 Aug 2026: JAS05507 is the
+    // lawn and JAS06485 is the bedroom, and the ids said the opposite. Nothing
+    // in the suite could see it — the tests check that a file exists and is
+    // under budget, not that the words describe the picture. Caught by eye,
+    // during an audit of all 35 against their captions.
     id: "room-open-to-bamboo",
-    src: "reference/wp-media/JAS05507-HDR-scaled.jpg",
-    alt: "A stone-ceilinged room with doors thrown open to a wall of bamboo.",
+    src: "reference/wp-media/JAS06485-scaled.jpg",
+    alt: "A room with a dark timber dado and terracotta beams, its doors open to a wall of bamboo.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: true,
   },
   {
     id: "lawn-picnic-golden-hour",
-    src: "reference/wp-media/JAS06485-scaled.jpg",
-    alt: "Picnic tables and a striped umbrella set on the lawn as the trees turn gold.",
+    src: "reference/wp-media/JAS05507-HDR-scaled.jpg",
+    alt: "Picnic tables and umbrellas set out on the lawn as the trees turn gold.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    id: "hammocks-shade",
+    src: "reference/video-stills/hammocks-shade.png",
+    alt: "Two rope hammocks slung between slender trees in dappled afternoon shade.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: true,

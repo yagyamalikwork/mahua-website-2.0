@@ -97,23 +97,32 @@ const CHAPTER_LIST = [
     number: "02",
     label: "Rooted like the mahua",
     kind: "chapterIntro",
-    media: ["potters-hands", "forest-shrine-incense", "lantern-boardwalk-map"],
+    media: ["potters-hands", "forest-shrine-incense", "lantern-bridge-dusk"],
   },
   {
-    // Four portraits, one orientation — a plate grid reads as a field guide only
-    // if the plates match.
+    // Three portraits, one orientation — a plate grid reads as a field guide
+    // only if the plates match. It was four until 4 Aug 2026, when two of them
+    // turned out to be the same tiger photograph under two ids.
     id: "forest",
     number: "03",
     label: "The Forest",
     kind: "plateGrid",
-    media: ["tiger-yawning", "leopard-on-rock", "melanistic-leopard", "tiger-pair-profile"],
+    media: ["tiger-pair-profile", "leopard-on-rock", "melanistic-leopard"],
   },
   {
     id: "field-days",
     number: "04",
     label: "Days in the Field",
     kind: "splitFeature",
-    media: ["guide-sunrise", "forest-boardwalk-daylight", "tiger-crossing-track", "forest-trail-canopy"],
+    // The hammocks carry the chapter's second paragraph — the half of the day
+    // most lodges leave out. Nothing else in the library says "rest".
+    media: [
+      "guide-sunrise",
+      "forest-boardwalk-daylight",
+      "tiger-crossing-track",
+      "forest-trail-canopy",
+      "hammocks-shade",
+    ],
   },
   {
     // The rooms had no chapter at all in the rejected build, on a site selling
@@ -141,14 +150,17 @@ const CHAPTER_LIST = [
     number: "06",
     label: "The Lantern Hour",
     kind: "chapterIntro",
-    media: ["bonfire-dinner", "sound-healing", "lantern-bridge-dusk"],
+    // The petal table is the full-moon ritual this chapter's copy describes —
+    // "a diya set afloat with water and flowers" — and we had no photograph of
+    // it until one was harvested from the client's own property video.
+    media: ["bonfire-circle-night", "sound-healing", "petal-table-night"],
   },
   {
     id: "details",
     number: "07",
     label: "Details",
     kind: "plateGrid",
-    media: ["petal-bowl-map", "veranda-dusk", "veranda-through-leaves", "lily-pond-fountain"],
+    media: ["petal-bowl-map", "veranda-through-leaves", "lily-pond-fountain", "geese-garden-pond"],
   },
   {
     id: "guests",

@@ -30,9 +30,9 @@ out of view in order to bring them back — so no JavaScript, a thrown error, or
 page readable. Captured and measured in Chromium; see the review folder, which also records the one real
 defect found (a flicker on headlines already on screen at load) and two false alarms worth not repeating.
 
-**The spine (Task 4).** `content/chapters.ts` holds twelve chapters carrying **32 of the 35 curated
-photographs**, none repeated, all four guideline categories present. Three images are held in reserve
-(`tiger-approaching-grass`, `pool-daylight-forest`, `geese-garden-pond`). Two editorial calls worth knowing:
+**The spine (Task 4).** `content/chapters.ts` holds twelve chapters carrying **32 of the 34 curated
+photographs**, none repeated, all four guideline categories present. Two are held in reserve
+(`bonfire-dinner`, `pool-daylight-forest`). Two editorial calls worth knowing:
 the hero is the **lantern-lit arrival**, not a tiger — every wildlife lodge in central India opens on a
 tiger and almost none can open on that light, so the tiger is spent at full viewport two chapters later;
 and **05 · The Rooms** is new, because the rejected build had no rooms chapter at all on a site selling
@@ -109,15 +109,24 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
   and Tola, plus EPS/PDF/PNG and a 3D render. **This removes the need to reconstruct the emblem** for the
   planned counter-rotation animation (petals clockwise, leaves anticlockwise) — real petal and leaf groups
   already exist.
-- **`public/media/`** — 35 curated images, 14 MB, largest derivative 199.7 KB. **14 are `fullBleedSafe`**
-  (≥1400px), up from 2 across the whole previous build. Categories: `lanternHour` 9, `forest` 9,
-  `lodgeLife` 12, `details` 5.
+- **`public/media/`** — 34 curated images, largest derivative 199.7 KB. **17 are `fullBleedSafe`**
+  (≥1400px), up from 2 across the whole previous build. Categories: `lanternHour` 9, `forest` 7,
+  `lodgeLife` 13, `details` 5. **Distinctness is guarded by perceptual hash** — see
+  [`docs/reviews/2026-08-04-image-audit/`](reviews/2026-08-04-image-audit/), where four pairs turned out to
+  be the same photograph under two ids.
+- **`reference/video-stills/`** — three frames harvested from the client's Mahua Tola property video: the
+  candlelit petal table, the bonfire, the hammocks. All 1920px, wider than anything from the live site.
+- **`reference/video/`** — the client's 1080p property video (25 MB, **git-ignored**). Not usable as video:
+  44 shots in 54 seconds, and it shows BeyondStay branding in close-up.
 - **`reference/site-copy.md`** — 3,036 words of the live site's copy, by page.
 
 ## Still owed to the client
 
 - **The targeted shot list** — the 3–4 photographs that would most transform the page, so a small shoot can
-  be priced precisely. The source library tops out at 1600px and only 14 images clear 1400px.
+  be priced precisely. The library tops out at 1920px and only 17 of 34 images clear 1400px. **More urgent
+  than it was**: the audit of 4 Aug cut four duplicates out of what was thought to be a 35-image library,
+  and three of the replacements are frame-grabs from a property video. The client confirmed a fresh photo
+  and video shoot is planned but **not soon**, and that newer assets can replace these later.
 - **Plan 4:** the signature interactions — spinning mahua emblem, leaf cursor, ink tiger.
 - **Plan 5:** performance hardening, the SEO redirect map (spec §10), Sanity CMS wiring.
 

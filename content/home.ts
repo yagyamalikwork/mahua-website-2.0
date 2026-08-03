@@ -153,9 +153,9 @@ export const HOME = {
         "ever setting foot in it; Tadoba's tiger density is among the highest in the country.",
       plates: [
         {
-          mediaId: "tiger-yawning",
+          mediaId: "tiger-pair-profile",
           plate: "I",
-          caption: "Bengal tiger — Panthera tigris tigris.",
+          caption: "Bengal tiger — Panthera tigris tigris. A second cat passes just behind.",
         },
         {
           mediaId: "leopard-on-rock",
@@ -166,11 +166,6 @@ export const HOME = {
           mediaId: "melanistic-leopard",
           plate: "III",
           caption: "The melanistic leopard, seen rarely and photographed less.",
-        },
-        {
-          mediaId: "tiger-pair-profile",
-          plate: "IV",
-          caption: "One cat, then another, on the same line through the grass.",
         },
       ],
     },
@@ -231,7 +226,7 @@ export const HOME = {
         {
           mediaId: "room-open-to-bamboo",
           plate: "I",
-          caption: "A stone ceiling, and doors that open onto a wall of bamboo.",
+          caption: "Terracotta beams, and doors that open onto a wall of bamboo.",
         },
         {
           mediaId: "suite-tiger-painting",
@@ -284,19 +279,19 @@ export const HOME = {
           caption: "Rose petals in a stone bowl, before a hand-painted map of the forest.",
         },
         {
-          mediaId: "veranda-dusk",
-          plate: "II",
-          caption: "The veranda walk, as the lanterns come on.",
-        },
-        {
           mediaId: "veranda-through-leaves",
-          plate: "III",
+          plate: "II",
           caption: "Rattan and lamplight, glimpsed through the leaves.",
         },
         {
           mediaId: "lily-pond-fountain",
-          plate: "IV",
+          plate: "III",
           caption: "Water lilies crowding a stone fountain.",
+        },
+        {
+          mediaId: "geese-garden-pond",
+          plate: "IV",
+          caption: "Geese crossing the garden pond, under the overhanging leaves.",
         },
       ],
     },

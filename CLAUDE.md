@@ -87,7 +87,8 @@ rhythm rule. The sequence lives there, not in `app/page.tsx`, and `content/chapt
 | `reference/site-copy.md` | 3,036 words of the live site's copy, by page (Plan 3 Task 2) |
 | `docs/copy-provenance.md` | **Where every line came from**, and the eleven hard numbers awaiting the client |
 | `Mahua property logos/` | Client-supplied **vector** logos — real paths, not traced. Emblem is 340 paths / 439 groups, so petals and leaves already separate |
-| `public/media/` | 35 curated images, 14 MB, 14 of them `fullBleedSafe` |
+| `public/media/` | 34 curated images, 17 of them `fullBleedSafe`. **Distinctness is guarded by perceptual hash** — four pairs turned out to be the same photograph under two ids on 4 Aug |
+| `reference/video-stills/` | Frames harvested from the client's property video — the petal table, the bonfire, the hammocks. 1920px, so all three go full-bleed |
 | `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |
 | `reference/mockup-media/` | 31 images extracted from the prior HTML mockups — **better curated than the live site's** |
 | `reference/docs-text/` | Plain text of the four strategy/audit documents |

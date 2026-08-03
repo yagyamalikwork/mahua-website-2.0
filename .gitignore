@@ -43,3 +43,6 @@ yarn-error.log*
 
 # crawled HTML of the old WordPress site — regenerate with scripts/crawl_site.py
 reference/wp-pages/
+
+# Client-supplied source video — 25 MB, kept locally, frames harvested into public/media
+reference/video/
