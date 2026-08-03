@@ -18,11 +18,19 @@ export function Plate({
   id,
   caption,
   plate,
+  sizes,
   priority = false,
 }: {
   id: MediaId;
   caption?: string;
   plate?: string;
+  /**
+   * How wide the plate is laid out. A plate has no width of its own — it fills
+   * whatever grid cell it is dropped into, and `PlateGrid` picks its column
+   * count from the photographs' orientations — so the rule has to come from the
+   * caller. See `ui/Photo.tsx` on why a missing `sizes` is a 1440px download.
+   */
+  sizes?: string;
   priority?: boolean;
 }) {
   return (
@@ -31,6 +39,7 @@ export function Plate({
         <Photo
           id={id}
           priority={priority}
+          sizes={sizes}
           pictureClassName="block"
           // `short:` (a viewport-height media variant, app/globals.css) caps a
           // plate's rendered height at short viewports (landscape phones)

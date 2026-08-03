@@ -52,6 +52,10 @@ export function Hero({ chapter }: { chapter: Chapter }) {
             id={chapter.media[0]}
             decorative
             priority
+            // The one photograph on the page that genuinely is the viewport, and
+            // the only one whose arrival the visitor sits and waits for. At 390px
+            // this now resolves to the 400w tier rather than the 1440w file.
+            sizes="100vw"
             pictureClassName="block h-full w-full"
             className="h-full w-full object-cover"
           />

@@ -27,8 +27,24 @@ describe("PALETTE", () => {
     }
   });
 
-  it("clears 4.5:1 for dim secondary text on the base paper", () => {
-    expect(contrastRatio(PALETTE.dim, PALETTE.paper)).toBeGreaterThanOrEqual(4.5);
+  it("clears 4.5:1 for dim secondary text on both paper surfaces", () => {
+    // `paperDeep` was added to this assertion on 4 Aug 2026. It had been guarded
+    // on `paper` only, from when `paperDeep` was an unused second surface — but
+    // Task 7's `ChapterSurface` alternates the two creams across the cream
+    // chapters, and `dim` carries the intro paragraph in five of them. It
+    // measures 5.84:1 and always did; the point is that nothing was checking.
+    // CLAUDE.md: contrast is checked by test, not by eye.
+    for (const surface of [PALETTE.paper, PALETTE.paperDeep]) {
+      expect(contrastRatio(PALETTE.dim, surface), `dim on ${surface}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("clears 4.5:1 for the pill's label on gold", () => {
+    // `ui/PillButton.tsx` fills with `gold` and sets its label in `overlay`,
+    // because the two the brief proposed both fail: white measures 2.97:1 and
+    // `ink` 3.73:1. That measurement lived only in a comment, so the pairing it
+    // justifies could have been changed back with nothing to object. 5.00:1.
+    expect(contrastRatio(PALETTE.overlay, PALETTE.gold)).toBeGreaterThanOrEqual(4.5);
   });
 
   it("keeps gold decorative — it is not required to pass as text", () => {

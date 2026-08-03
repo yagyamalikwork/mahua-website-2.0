@@ -1,4 +1,4 @@
-# Project state — 3 August 2026
+# Project state — 4 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
@@ -17,10 +17,39 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 | 4 · The chapter sequence | ✅ 12 chapters, 32 distinct images |
 | 5 · Scroll choreography | ✅ measured in a browser, see `docs/reviews/2026-08-04-motion/` |
 | 6 · The copy | ✅ see `docs/copy-provenance.md` |
-| 7 · Build the sections | ⬜ **next — stop here for review** |
-| 8 · Verify against the complaints | ⬜ |
+| 7 · Build the sections | ✅ built, reviewed, **fix round 1 landed** — see below |
+| 8 · Verify against the complaints | ⬜ **next** |
 
-59 tests. `/` is a placeholder heading until Task 7.
+69 tests. **`/` is the real page**: twelve chapters, eight section components, 32 photographs.
+
+**Task 7 (4 Aug).** Eight components under `components/sections/`, one per `ChapterKind`; `app/page.tsx` maps
+`CHAPTERS` and dispatches on `kind` through an exhaustive switch, so adding a kind without a component is a
+compile error. Full record in `.superpowers/sdd/2026-08-03-rebuild-chapters-layout/task-7-report.md`.
+Reviewed independently: spec ✅, quality approved, one Important finding and four Minor.
+
+**Fix round 1 (4 Aug)** cleared all five:
+
+- **Responsive images, and they were the Important one.** The pipeline had always encoded several widths
+  per photograph, but the manifest recorded only the largest, so every `<img>` on the page pointed at it —
+  a 390px phone downloaded the 1440-wide hero. On Slow 4G (1.6 Mbps / 150 ms RTT / 4x CPU) that hero
+  arrived at **4,954 ms** against CLAUDE.md #6's 2.5s, and **Chrome hid it**: LCP resolved to a paragraph
+  at 1,536 ms, so both the budget check and a Lighthouse run would have passed. The manifest now carries
+  every tier, `ui/Photo.tsx` emits a real `srcset`, and every call site passes a `sizes` describing its own
+  layout. Hero **4,954 → 940 ms**. Whole-page transfer **3,386 → 799 KB at 390** (now inside the 1.5 MB
+  budget on mobile) and **→ 1,966 KB at 1440**.
+- The dead "MENU" button now opens `components/ui/ChapterMenu.tsx` — the seven numbered chapters, read from
+  `content/chapters.ts` so it cannot fall out of step with the page.
+- `dim` on `paperDeep` and the pill's `overlay`-on-`gold` label are now guarded by `lib/palette.test.ts`.
+  Both were live and unchecked.
+
+**The measurement rigs are in `scripts/` now, not in a scratchpad.** `measure_page.mjs` (transfer, hero
+`responseEnd`, motion, reduced motion, horizontal overflow), `check_contrast_over_photos.mjs` (worst-pixel
+contrast for every run of type laid over a photograph) and `check_image_resolution.mjs` (is any photograph
+served below its own box). This is a direct fix: the committed `verification.json` had drifted from the
+report because the rig that wrote it no longer existed. Every number in `docs/reviews/2026-08-04-task-7/`
+can now be re-derived with one command. The four `contrast-{390,768,1440,1920}.json` and `measurements.json`
+files are the original build's record and predate the rigs; `contrast-over-photos.json` supersedes the four
+and reproduces them.
 
 **The motion vocabulary (Task 5).** `ImageReveal` (a mask wipes up off a photograph while it settles from
 1.08 scale), `SplitLines` (headline lines rise from behind a mask, staggered per *visual* line, measured
@@ -109,9 +138,12 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
   and Tola, plus EPS/PDF/PNG and a 3D render. **This removes the need to reconstruct the emblem** for the
   planned counter-rotation animation (petals clockwise, leaves anticlockwise) — real petal and leaf groups
   already exist.
-- **`public/media/`** — 34 curated images, largest derivative 199.7 KB. **17 are `fullBleedSafe`**
-  (≥1400px), up from 2 across the whole previous build. Categories: `lanternHour` 9, `forest` 7,
-  `lodgeLife` 13, `details` 5. **Distinctness is guarded by perceptual hash** — see
+- **`public/media/`** — 34 curated images at **four widths each** (400 / 640 / 960 / 1440, plus the source's
+  own width where it falls between them), 127 AVIF derivatives, ~20 MB on disk, largest 199.7 KB. **17 are
+  `fullBleedSafe`** (≥1400px), up from 2 across the whole previous build. Categories: `lanternHour` 9,
+  `forest` 7, `lodgeLife` 13, `details` 5. Disk went up so that transfer could come down: a phone now
+  downloads 799 KB for the whole page instead of 3,386 KB. **Distinctness is guarded by perceptual hash** —
+  see
   [`docs/reviews/2026-08-04-image-audit/`](reviews/2026-08-04-image-audit/), where four pairs turned out to
   be the same photograph under two ids.
 - **`reference/video-stills/`** — three frames harvested from the client's Mahua Tola property video: the
@@ -119,6 +151,19 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
 - **`reference/video/`** — the client's 1080p property video (25 MB, **git-ignored**). Not usable as video:
   44 shots in 54 seconds, and it shows BeyondStay branding in close-up.
 - **`reference/site-copy.md`** — 3,036 words of the live site's copy, by page.
+
+## Open with the client
+
+1. **Does CLAUDE.md #6's 1.5 MB mean the initial load or the whole scroll?** After the responsive-image
+   work a phone pays **399 KB initially and 799 KB for the entire page** — inside the budget on both
+   readings. A 1440px desktop pays 763 KB initially and **1,966 KB scrolled**, still over on the second
+   reading. The only lever left there is fewer or smaller photographs, which is what this plan exists to
+   avoid. Raised by Task 7 and not resolved.
+2. **Is the closing photograph too dark?** It carries the heaviest scrim on the page (`flat .54`), and the
+   trade is real: the lighter, radial-led version measured 4.20:1 on body text at 768px against a 4.5 floor.
+3. **Should the two `chapterIntro` chapters have a CTA?** Ruled *no* on 4 Aug — the header, the lodge cards
+   and the closing invitation already invite, and a fourth would make the page a booking funnel. Reopen only
+   if the client asks.
 
 ## Still owed to the client
 

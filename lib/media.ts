@@ -15,15 +15,36 @@ export type MediaCategory = "lanternHour" | "forest" | "lodgeLife" | "details";
 
 export type MediaOrientation = "landscape" | "portrait" | "square";
 
+/**
+ * One emitted responsive tier. `scripts/build_images.mjs` has always written
+ * several widths per photograph; until 4 Aug 2026 the manifest recorded only the
+ * largest, so every `<img>` on the page pointed at it and a 390px phone
+ * downloaded the 1440-wide hero. These are what `ui/Photo.tsx` turns into a
+ * `srcset` — the widths were already on disk, just unreferenced.
+ *
+ * `width`/`height` are the dimensions sharp actually encoded, read back off the
+ * buffer it returned, and `lib/media.test.ts` re-reads every one of them off
+ * disk rather than trusting the build script's bookkeeping.
+ */
+export type MediaSource = {
+  width: number;
+  height: number;
+  avif: string;
+  webp: string;
+};
+
 export type MediaEntry = {
   id: MediaId;
   alt: string;
+  /** The largest tier's width — i.e. `sources[sources.length - 1].width`. */
   width: number;
   height: number;
   avif: string;
   webp: string;
   jpg: string;
   blur: string;
+  /** Ascending by width. Never empty; the last entry is the canonical one above. */
+  sources: readonly MediaSource[];
   category: MediaCategory;
   orientation: MediaOrientation;
   /** Only true when width >= 1400px — see CLAUDE.md non-negotiable #10. */

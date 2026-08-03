@@ -14,6 +14,24 @@ type LodgesCopy = {
 };
 
 /**
+ * How wide these two photographs actually are, so the browser fetches a tier
+ * that fits rather than the 1440 file (`ui/Photo.tsx` explains what that cost).
+ *
+ * Derived from `ChapterSurface`'s container — `max-w-[1600px]`, `px-6` /
+ * `md:px-12` — and the `lg:grid-cols-2 lg:gap-x-14` below: a card is
+ * `(container - 56px) / 2` from 1024px up, and the whole container beneath that.
+ * Rounded up, never down.
+ */
+const SIZES = {
+  /** The 4:3 photograph that fills the card. */
+  primary:
+    "(min-width: 1600px) 724px, (min-width: 1024px) calc((100vw - 152px) / 2), (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)",
+  /** The second laid over its corner: `w-[46%]` of the card, less its cream border. */
+  secondary:
+    "(min-width: 1600px) 310px, (min-width: 1024px) calc((100vw - 152px) * 0.23), (min-width: 768px) calc((100vw - 96px) * 0.46), calc((100vw - 48px) * 0.46)",
+} as const;
+
+/**
  * The two properties, two photographs each. This is the first cream screen the
  * visitor reaches and the one that has to prove the page is not the old template,
  * so both lodges lead with a large photograph and carry a second laid over its
@@ -62,6 +80,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                   <ImageReveal className="block aspect-[4/3] w-full">
                     <Photo
                       id={primary}
+                      sizes={SIZES.primary}
                       pictureClassName="block h-full w-full"
                       className="h-full w-full object-cover"
                     />
@@ -75,6 +94,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                     <ImageReveal className="block aspect-[4/3] w-full" delay={0.15}>
                       <Photo
                         id={secondary}
+                        sizes={SIZES.secondary}
                         pictureClassName="block h-full w-full"
                         className="h-full w-full object-cover"
                       />

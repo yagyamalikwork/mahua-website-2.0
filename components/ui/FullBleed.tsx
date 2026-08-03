@@ -42,6 +42,9 @@ export function FullBleed({
           id={id}
           decorative
           priority={priority}
+          // Edge to edge by definition. The only photographs on the page for
+          // which `100vw` is the honest answer rather than the lazy one.
+          sizes="100vw"
           pictureClassName="block w-full"
           pictureStyle={{
             height: `${oversizeVh}vh`,

@@ -101,7 +101,7 @@ describe("MEDIA", () => {
     expect(() => media("no-such-image")).toThrow();
   });
 
-  it("records the true emitted dimensions of the largest derivative on disk, not the source file's", async () => {
+  it("records the true emitted dimensions of every derivative on disk, not the source file's", async () => {
     // sharp's .metadata() reads the input header and never runs the pixel
     // pipeline, so if the manifest is built by resizing-then-reading a
     // buffer's own .metadata(), it silently reports the *source's*
@@ -110,17 +110,56 @@ describe("MEDIA", () => {
     // <img width height> from the manifest, exactly what this pipeline was
     // built to avoid. Guard against it by reading the real emitted AVIF
     // back off disk and comparing.
+    //
+    // Widened on 4 Aug 2026 from "the largest derivative" to *every* tier. The
+    // manifest now carries a `sources` array that `ui/Photo.tsx` renders as a
+    // `srcset`, and a `srcset` width descriptor that lies is worse than no
+    // srcset at all: the browser picks a candidate by the width it was
+    // promised, so a wrong number there is a wrong *image*, silently, at one
+    // viewport size and not another. Checking only the largest would have left
+    // the three new tiers entirely unguarded.
     for (const m of MEDIA) {
-      const filePath = path.join(process.cwd(), "public", m.avif);
-      const buffer = await readFile(filePath);
-      const meta = await sharp(buffer).metadata();
-      expect(meta.width, `${m.id}: manifest width ${m.width} does not match the emitted AVIF`).toBe(
-        m.width,
-      );
+      for (const s of m.sources) {
+        const buffer = await readFile(path.join(process.cwd(), "public", s.avif));
+        const meta = await sharp(buffer).metadata();
+        expect(meta.width, `${s.avif}: manifest says ${s.width}px`).toBe(s.width);
+        expect(meta.height, `${s.avif}: manifest says ${s.height}px`).toBe(s.height);
+      }
+    }
+  });
+
+  it("offers ascending, non-empty tiers whose largest is the canonical entry", async () => {
+    // The canonical `width`/`height`/`avif`/`webp` fields are what `<img>` sets
+    // its intrinsic box from and what full-bleed eligibility is judged on
+    // (CLAUDE.md non-negotiable #10). They must stay the *largest* tier, not
+    // merely one of them, or a 1440px entry could advertise itself as
+    // fullBleedSafe while serving a 400px file as its fallback.
+    for (const m of MEDIA) {
+      expect(m.sources.length, `${m.id} has no sources`).toBeGreaterThan(0);
+
+      const widths = m.sources.map((s) => s.width);
+      expect(widths, `${m.id} tiers are not ascending`).toEqual([...widths].sort((a, b) => a - b));
+      expect(new Set(widths).size, `${m.id} has duplicate tier widths`).toBe(widths.length);
+
+      const largest = m.sources[m.sources.length - 1];
+      expect(largest.width, `${m.id}: canonical width is not the largest tier`).toBe(m.width);
+      expect(largest.height, `${m.id}: canonical height is not the largest tier`).toBe(m.height);
+      expect(largest.avif, `${m.id}: canonical avif is not the largest tier`).toBe(m.avif);
+      expect(largest.webp, `${m.id}: canonical webp is not the largest tier`).toBe(m.webp);
+    }
+  });
+
+  it("serves every photograph small enough for a phone", async () => {
+    // The whole point of the 4 Aug 2026 responsive-image work. Without a tier
+    // at or under 640px, a 390px phone is handed the 960 or 1440 file however
+    // good the `sizes` attribute is — which is exactly the state that put the
+    // hero at 4,954 ms on Slow 4G. `<= 640` rather than `== 400` because a
+    // source narrower than 400px would legitimately emit only its own width.
+    for (const m of MEDIA) {
       expect(
-        meta.height,
-        `${m.id}: manifest height ${m.height} does not match the emitted AVIF`,
-      ).toBe(m.height);
+        m.sources[0].width,
+        `${m.id}'s smallest tier is ${m.sources[0].width}px — a phone has nothing small to pick`,
+      ).toBeLessThanOrEqual(640);
     }
   });
 
@@ -130,9 +169,14 @@ describe("MEDIA", () => {
     // an entirely unbudgeted JPEG encoder both shipped unnoticed. This reads the
     // real bytes off disk — the only check that cannot be fooled by the build
     // script's own bookkeeping.
+    //
+    // Covers every tier, not just the largest: the smaller ones are smaller by
+    // construction today, but "by construction" is what the console.warn was
+    // trusting too.
     const MAX_BYTES = 200 * 1024;
     for (const m of MEDIA) {
-      for (const rel of [m.avif, m.webp, m.jpg]) {
+      const files = [m.jpg, ...m.sources.flatMap((s) => [s.avif, s.webp])];
+      for (const rel of files) {
         const { size } = await stat(path.join(process.cwd(), "public", rel));
         expect(size, `${rel} is ${(size / 1024).toFixed(1)} KB`).toBeLessThanOrEqual(MAX_BYTES);
       }

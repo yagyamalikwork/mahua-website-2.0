@@ -14,6 +14,17 @@ type GuestsCopy = {
 };
 
 /**
+ * The offset pair's real widths, for `srcset` (see `ui/Photo.tsx`). A 12-column
+ * grid with a 32px gutter from 768px up inside `ChapterSurface`'s container, so
+ * the wide one is `col-span-7` (~54vw) and the tall one `col-span-5` (~38vw);
+ * both stack full-width below that. Rounded up.
+ */
+const SIZES = {
+  wide: "(min-width: 768px) 58vw, calc(100vw - 48px)",
+  tall: "(min-width: 768px) 41vw, calc(100vw - 48px)",
+} as const;
+
+/**
  * What guests said, under two photographs of the place they said it about.
  *
  * A testimonial block is the easiest section on any page to leave as three
@@ -53,6 +64,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
               <ImageReveal className="block aspect-[3/2] w-full">
                 <Photo
                   id={wide}
+                  sizes={SIZES.wide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -64,6 +76,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
               <ImageReveal className="block aspect-[4/5] w-full">
                 <Photo
                   id={tall}
+                  sizes={SIZES.tall}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />

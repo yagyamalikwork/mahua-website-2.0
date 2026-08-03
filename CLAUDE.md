@@ -21,12 +21,12 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–7 done.** Day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured, copy written, **and the page built and composed**. Task 7 awaits review. |
-| **Working mode** | Solo through Tasks 4–6; Task 7 built by an implementer and **awaiting the reviewer**. Agreed with the client 3 Aug. |
+| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–7 done.** Day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured, copy written, **and the page built and composed**. Task 7 reviewed and **fix round 1 landed** — responsive images, a real chapter menu, two new palette guards. Task 8 is next. |
+| **Working mode** | Solo through Tasks 4–6; Task 7 got the full implementer/reviewer treatment and one fix round. Agreed with the client 3 Aug. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
 | **See it** | `npm run dev` → `/`. Twelve chapters, 32 photographs, 16 screens at 1440×900. |
-| **Tests** | 66, all green. `npm test` must stay green before any commit claiming completion. |
-| **Evidence** | `docs/reviews/2026-08-04-task-7/` — every chapter screenshotted at 390/768/1440/1920, plus measured contrast, transfer and motion figures. |
+| **Tests** | 69, all green. `npm test` must stay green before any commit claiming completion. |
+| **Evidence** | `docs/reviews/2026-08-04-task-7/` — every chapter screenshotted at 390/768/1440/1920, plus measured contrast, transfer and motion figures. **Regenerate any of it** with `scripts/measure_page.mjs`, `scripts/check_contrast_over_photos.mjs` and `scripts/check_image_resolution.mjs` against a running production build. |
 
 ## The non-negotiables
 
@@ -88,13 +88,13 @@ rhythm rule. The sequence lives there, not in `app/page.tsx`, and `content/chapt
 | `reference/site-copy.md` | 3,036 words of the live site's copy, by page (Plan 3 Task 2) |
 | `docs/copy-provenance.md` | **Where every line came from**, and the eleven hard numbers awaiting the client |
 | `Mahua property logos/` | Client-supplied **vector** logos — real paths, not traced. Emblem is 340 paths / 439 groups, so petals and leaves already separate |
-| `public/media/` | 34 curated images, 17 of them `fullBleedSafe`. **Distinctness is guarded by perceptual hash** — four pairs turned out to be the same photograph under two ids on 4 Aug |
+| `public/media/` | 34 curated images at four widths each (400/640/960/1440), 17 of them `fullBleedSafe`. **Distinctness is guarded by perceptual hash** — four pairs turned out to be the same photograph under two ids on 4 Aug |
 | `reference/video-stills/` | Frames harvested from the client's property video — the petal table, the bonfire, the hammocks. 1920px, so all three go full-bleed |
 | `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |
 | `reference/mockup-media/` | 31 images extracted from the prior HTML mockups — **better curated than the live site's** |
 | `reference/docs-text/` | Plain text of the four strategy/audit documents |
 | `reference/wp-pages/` | Crawled HTML of the current site — **git-ignored; regenerate locally** |
-| `scripts/` | The crawl/extract scripts — rerun to refresh reference material |
+| `scripts/` | The image pipeline, the browser measurement rigs, and the crawl/extract scripts — see Commands |
 | `../Mahua_Resorts_Master_Brand_Record.md` | **Single source of truth** for brand, voice, properties, philosophy |
 | `../0[1-4]_Mahua_*.docx` | Audit, recommendations, roadmap, benchmark brands |
 
@@ -124,6 +124,18 @@ npm run build    # production build — must pass before any commit claiming com
 npm run lint
 ```
 
+The browser measurements. **Every committed number in `docs/reviews/` comes from one of these** — they live
+in `scripts/` precisely so nobody has to trust a figure they cannot re-derive:
+
+```bash
+node scripts/build_images.mjs                    # re-encode public/media + lib/media-manifest.ts
+
+npm run build && npx next start -p 3100          # then, against the production build:
+node scripts/measure_page.mjs                    # transfer, hero responseEnd on Slow 4G, motion, overflow
+node scripts/check_contrast_over_photos.mjs      # worst-pixel contrast for type laid over a photograph
+node scripts/check_image_resolution.mjs          # is any photograph served below its own box
+```
+
 Reference material (already run; rerun only to refresh):
 
 ```bash
@@ -138,4 +150,9 @@ python scripts/extract_docx.py         # plain text of the strategy documents
 Do not claim work is done without showing it — **verify by running the page, not by asserting it works.**
 Run the real page, screenshot at 390 / 768 / 1440 / 1920 px. Automated tests cannot judge whether a page
 feels expensive, but every mechanical rule above (rhythm, full-bleed eligibility, contrast, palette) is
-covered by a test and must stay green. Lighthouse against the budgets in non-negotiable #6.
+covered by a test and must stay green.
+
+**Do not check the image budget with Lighthouse alone.** Chrome resolves this page's LCP to a paragraph,
+not to the hero photograph, so LCP passed at 1.4s on 4 Aug while the hero itself was landing at 4.9s on a
+throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd`; that is the number that
+means anything here.

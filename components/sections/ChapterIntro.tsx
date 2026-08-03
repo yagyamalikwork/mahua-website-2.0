@@ -14,6 +14,25 @@ type IntroCopy = {
 };
 
 /**
+ * The three flanking photographs' real widths, for `srcset` (see `ui/Photo.tsx`).
+ *
+ * Below 1024px each one spans the container and bleeds 24px past one edge. From
+ * 1024px the grid is `0.95fr 1.5fr 0.95fr` with a 40px gutter inside a
+ * `max-w-[1600px]` container, so a flank is ~28% of the content width — and then
+ * grows again by the 13vw / 11vw it reaches past the viewport edge. Rounded up to
+ * whole vw, because over-stating costs a tier and under-stating ships softness.
+ */
+const SIZES = {
+  /** The single flank: ~28% of content + a 13vw bleed. */
+  solo: "(min-width: 1024px) 42vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
+  /** The upper of the pair: ~28% of content + an 11vw bleed. */
+  pairTop: "(min-width: 1024px) 40vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
+  /** The lower of the pair: 70% of that column on desktop, 82% below it. */
+  pairLower:
+    "(min-width: 1024px) 28vw, (min-width: 768px) calc((100vw - 72px) * 0.82), calc((100vw - 24px) * 0.82)",
+} as const;
+
+/**
  * The reference's signature move: a two-tone display heading over a centred
  * column of prose, with photographs floating asymmetrically at both margins,
  * partially cropped by the viewport edge. Not a grid.
@@ -84,6 +103,7 @@ export function ChapterIntro({
                 <ImageReveal className="block aspect-[3/2] w-full lg:aspect-[7/9]">
                   <Photo
                     id={solo}
+                    sizes={SIZES.solo}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />
@@ -136,6 +156,7 @@ export function ChapterIntro({
                 <ImageReveal className="block aspect-[3/2] w-full">
                   <Photo
                     id={pairTop}
+                    sizes={SIZES.pairTop}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />
@@ -147,6 +168,7 @@ export function ChapterIntro({
                 <ImageReveal className="block aspect-[4/5] w-full">
                   <Photo
                     id={pairLower}
+                    sizes={SIZES.pairLower}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />

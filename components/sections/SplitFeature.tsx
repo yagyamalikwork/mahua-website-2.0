@@ -15,6 +15,28 @@ type SplitFeatureCopy = {
 };
 
 /**
+ * The five photographs' real widths, for `srcset` (see `ui/Photo.tsx`).
+ *
+ * Bands 1 and 2 run a 12-column grid with a 56px gutter inside
+ * `ChapterSurface`'s `max-w-[1600px]` / `px-6` / `md:px-12` container: the large
+ * photograph is `col-span-7` plus the 9vw it reaches past the viewport edge
+ * (~62vw at 1440), the small one laid over it is 34% / 32% of that, and band 3's
+ * sticky photograph is `col-span-4` (~29vw). Rounded up.
+ */
+const SIZES = {
+  /** `dawn` and `hammocks` — col-span-7 plus a 9vw bleed. */
+  wide: "(min-width: 1024px) 63vw, (min-width: 768px) calc(100vw - 48px), calc(100vw - 24px)",
+  /** `tigerTrack` — laid over band 1 at 34% of the photograph beneath it. */
+  inlayWide:
+    "(min-width: 1024px) 22vw, (min-width: 768px) calc((100vw - 48px) * 0.42), calc((100vw - 24px) * 0.42)",
+  /** `canopy` — laid over band 2 at 32%. */
+  inlayTall:
+    "(min-width: 1024px) 21vw, (min-width: 768px) calc((100vw - 48px) * 0.4), calc((100vw - 24px) * 0.4)",
+  /** `boardwalk` — the sticky col-span-4 beside the index. */
+  sticky: "(min-width: 1024px) 30vw, calc(100vw - 48px)",
+} as const;
+
+/**
  * Copy one side, imagery the other — three times over, and the side alternates
  * every time. The brief asks for the sides to alternate *between instances*; the
  * page only has one instance of this layout, so the alternation happens inside
@@ -71,6 +93,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               <ImageReveal className="block aspect-[3/2] w-full lg:aspect-[16/9]">
                 <Photo
                   id={dawn}
+                  sizes={SIZES.wide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -86,6 +109,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               <ImageReveal className="block aspect-square w-full" delay={0.15}>
                 <Photo
                   id={tigerTrack}
+                  sizes={SIZES.inlayWide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -101,6 +125,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               <ImageReveal className="block aspect-[16/9] w-full">
                 <Photo
                   id={hammocks}
+                  sizes={SIZES.wide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -113,6 +138,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               <ImageReveal className="block aspect-[3/4] w-full" delay={0.15}>
                 <Photo
                   id={canopy}
+                  sizes={SIZES.inlayTall}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -144,6 +170,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 <ImageReveal className="block aspect-[4/5] w-full lg:aspect-[3/4]">
                   <Photo
                     id={boardwalk}
+                    sizes={SIZES.sticky}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />

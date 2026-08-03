@@ -77,6 +77,13 @@ export const HOME = {
     // name in the display serif instead (Task 7 report).
     brand: "Mahua Resorts",
     menu: "Menu",
+    // The chapter menu's own words. `components/ui/ChapterMenu.tsx` lists the
+    // seven numbered chapters, and it takes their numbers and names from
+    // `content/chapters.ts` — these three are the only strings the panel needs
+    // that are not already a chapter's own.
+    menuTitle: "The chapters",
+    menuClose: "Close",
+    menuHint: "Jump to a chapter",
     cta: "Plan your stay",
   },
 
@@ -353,7 +360,14 @@ export const HOME = {
   },
 } as const satisfies {
   meta: { title: string; description: string };
-  nav: { brand: string; menu: string; cta: string };
+  nav: {
+    brand: string;
+    menu: string;
+    menuTitle: string;
+    menuClose: string;
+    menuHint: string;
+    cta: string;
+  };
   chapters: Record<
     string,
     {

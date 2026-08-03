@@ -375,8 +375,22 @@ const CURATION = [
  * of the busiest Task 3 sources (dense foliage, bamboo, tangled vines)
  * cannot hit the 200 KB budget at 1920 even at floor quality — the extra
  * pixels aren't worth the budget they cost. See encodeUnderBudget below.
+ *
+ * The two small tiers were added on 4 Aug 2026, and they are the point of the
+ * whole exercise. Until then the manifest recorded only the *largest* tier and
+ * every `<img>` on the page pointed at it, so a 390px phone downloaded the
+ * 1440-wide hero: 192 KB where ~30 KB covers the same pixels. Measured on Slow
+ * 4G (1.6 Mbps / 150 ms RTT) that hero landed at 4,954 ms against CLAUDE.md
+ * non-negotiable #6's 2.5s budget, and Chrome's LCP hid it by resolving to a
+ * paragraph instead.
+ *
+ * - **400** — a 390px phone at DPR 1, and every small inset and 4-up plate.
+ * - **640** — a phone at DPR ~1.6, a 2-up plate, the offset pair in `guests`.
+ * - **960**, **1440** — the pre-existing pair; 1440 stays the canonical entry
+ *   recorded as `width`/`height`/`avif`/`webp` so nothing downstream that reads
+ *   the largest derivative changes meaning.
  */
-const WIDTHS = [960, 1440];
+const WIDTHS = [400, 640, 960, 1440];
 const AVIF_QUALITY = 55;
 const WEBP_QUALITY = 72;
 const JPG_QUALITY = 78;
@@ -451,16 +465,27 @@ async function buildOne(entry) {
   }
 
   // Never upscale: only emit tiers that fit within the source's native width.
-  // If the source is narrower than every configured tier (several of the
-  // strongest curated shots are ~900px wide), fall back to one derivative at
-  // the source's own width rather than emitting nothing for that image.
   // `maxWidth` is a per-entry escape valve for a source that cannot be served
   // at a given tier inside the 200 KB budget without dropping below its quality
   // floor. Capping the tier is honest — the image simply is not offered wide —
   // where shipping it over budget, or below the floor, would not be.
+  //
+  // The source's own width is always offered as a final tier, capped at the
+  // widest configured one. This used to be a fallback for when *no* tier fitted,
+  // and adding the 400/640 tiers on 4 Aug 2026 turned that into a silent
+  // downgrade: a 900px source that previously emitted one 900px derivative now
+  // matched 400 and 640, so the fallback never fired and its largest derivative
+  // dropped from 900px to 640px. Seven of the thirty-five images lost native
+  // resolution that way — including all three cats in the *forest* plate grid —
+  // and nothing failed, because "the manifest matches what was emitted" stays
+  // true when both get smaller together. Offering the native width rather than
+  // falling back to it makes the tier list purely additive.
+  const largestTier = WIDTHS[WIDTHS.length - 1];
   const ceiling = Math.min(srcMeta.width, entry.maxWidth ?? Number.POSITIVE_INFINITY);
   const fittingWidths = WIDTHS.filter((w) => w <= ceiling);
-  const widthsToGenerate = fittingWidths.length > 0 ? fittingWidths : [srcMeta.width];
+  const widthsToGenerate = [
+    ...new Set([...fittingWidths, Math.min(ceiling, largestTier)]),
+  ].sort((a, b) => a - b);
 
   const produced = [];
   for (const width of widthsToGenerate) {
@@ -555,6 +580,19 @@ async function buildOne(entry) {
     webp: `/media/${largest.webpName}`,
     jpg: `/media/${jpgName}`,
     blur,
+    // Every tier this entry emitted, ascending, with the dimensions sharp
+    // actually encoded (`info.width`/`info.height` off the returned buffer, the
+    // same source of truth the canonical width/height above uses — never the
+    // input header). This is what `ui/Photo.tsx` turns into a real `srcset`.
+    // Before it existed the pipeline was already writing these files and then
+    // throwing away every reference to all but the largest, so the widths were
+    // encoded, paid for on disk, and never served.
+    sources: produced.map((p) => ({
+      width: p.actualWidth,
+      height: p.actualHeight,
+      avif: `/media/${p.avifName}`,
+      webp: `/media/${p.webpName}`,
+    })),
     category: entry.category,
     orientation: entry.orientation,
     fullBleedSafe: entry.fullBleedSafe,
@@ -610,6 +648,13 @@ function renderManifest(entries) {
     lines.push(`    webp: ${tsStringLiteral(e.webp)},`);
     lines.push(`    jpg: ${tsStringLiteral(e.jpg)},`);
     lines.push(`    blur: ${tsStringLiteral(e.blur)},`);
+    lines.push("    sources: [");
+    for (const s of e.sources) {
+      lines.push(
+        `      { width: ${s.width}, height: ${s.height}, avif: ${tsStringLiteral(s.avif)}, webp: ${tsStringLiteral(s.webp)} },`,
+      );
+    }
+    lines.push("    ],");
     lines.push(`    category: ${tsStringLiteral(e.category)},`);
     lines.push(`    orientation: ${tsStringLiteral(e.orientation)},`);
     lines.push(`    fullBleedSafe: ${e.fullBleedSafe},`);

@@ -1,3 +1,4 @@
+import { ChapterMenu } from "@/components/ui/ChapterMenu";
 import { PillButton } from "@/components/ui/PillButton";
 import { HOME } from "@/content/home";
 
@@ -18,21 +19,17 @@ import { HOME } from "@/content/home";
  * width, which is the difference between a centred wordmark and one that drifts
  * left because "Plan your stay" is wider than "Menu".
  *
- * **The menu is deliberately inert.** No menu exists in this scope. A `<button>`
- * that does nothing is honest about that — it is reachable, announced as a
- * button, and traps nothing; an `<a href="#">` would promise a destination and
- * throw the visitor back to the top of the page instead.
+ * **The menu used to be inert** — a `<button>` labelled "Menu" that did nothing,
+ * in the most prominent position on the page. It now opens `ChapterMenu`, which
+ * lists the seven numbered chapters of `content/chapters.ts` and goes to them.
+ * That component is the only client component in the header; everything else
+ * here is static markup and stays on the server.
  */
 export function SiteHeader({ ctaHref }: { ctaHref: string }) {
   return (
     <header className="pointer-events-none absolute inset-x-0 top-0 z-40">
       <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-5 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
-        <button
-          type="button"
-          className="pointer-events-auto justify-self-start font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] text-[color:var(--bg)] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
-        >
-          {HOME.nav.menu}
-        </button>
+        <ChapterMenu />
 
         <p className="justify-self-center text-center font-[family-name:var(--font-display)] text-sm font-light uppercase tracking-[0.16em] text-[color:var(--bg)] sm:text-lg sm:tracking-[0.26em] md:text-2xl md:tracking-[0.3em]">
           {HOME.nav.brand}
