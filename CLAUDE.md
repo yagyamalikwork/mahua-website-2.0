@@ -5,8 +5,15 @@ Replaces a monotone WordPress template site. Concept: **a dense, image-led journ
 throughout, in the layout language of [thesujanlife.com](https://thesujanlife.com/), rendered in a
 hand-drawn field-guide idiom.
 
-> **Read [`docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md) before doing any work.**
-> It is the current plan and overrides the original spec where they conflict. The original spec,
+> **Read these three, in order, before doing any work:**
+> 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
+>    said, and what is still owed. **Start here.**
+> 2. [`docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md)
+>    — the current plan. Overrides the original spec where they conflict.
+> 3. [`docs/reference-sujan-layout.md`](docs/reference-sujan-layout.md) — the layout language the client
+>    asked us to follow, analysed from the live reference site.
+>
+> The original spec,
 > [`docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md`](docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md),
 > still holds for everything the plan doesn't touch — its §3, §4.1 and §13 are superseded.
 
@@ -14,10 +21,11 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Rebuilding as chapters, on `feat/chapters-rebuild` (Plan 3). The prior scroll-through-a-day colour system was retired 3 Aug 2026 — the client rejected that build (too few images, no perceptible scroll animation, too much empty space, no resemblance to the reference site). |
+| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. Tasks 1–3 done (day-arc retired, live copy harvested, image library 14 → 35). **Task 4 is next.** |
+| **Working mode** | Solo through Tasks 4–6, then **stop before Task 7** so the page build gets full implementer/reviewer treatment. Agreed with the client 3 Aug. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/`. Currently a placeholder heading; the real chaptered page is built in Plan 3 Task 7. |
-| **Next step** | Work through Plan 3's tasks in order — each is TDD, verified, and committed before the next starts. |
+| **See it** | `npm run dev` → `/`. A placeholder heading until Task 7 builds the real page. |
+| **Tests** | 32, all green. `npm test` must stay green before any commit claiming completion. |
 
 ## The non-negotiables
 
@@ -74,6 +82,11 @@ there, not in `app/page.tsx`.
 |---|---|
 | `docs/superpowers/specs/` | The original approved spec |
 | `docs/superpowers/plans/` | Plan history — `2026-08-03-rebuild-chapters-layout.md` is current |
+| `docs/PROJECT-STATE.md` | **Session handoff** — state, history, client findings, what's owed |
+| `docs/reference-sujan-layout.md` | The reference site's layout DNA, analysed from screenshots |
+| `reference/site-copy.md` | 3,036 words of the live site's copy, by page (Plan 3 Task 2) |
+| `Mahua property logos/` | Client-supplied **vector** logos — real paths, not traced. Emblem is 340 paths / 439 groups, so petals and leaves already separate |
+| `public/media/` | 35 curated images, 14 MB, 14 of them `fullBleedSafe` |
 | `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |
 | `reference/mockup-media/` | 31 images extracted from the prior HTML mockups — **better curated than the live site's** |
 | `reference/docs-text/` | Plain text of the four strategy/audit documents |

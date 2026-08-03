@@ -1,0 +1,109 @@
+# Project state — 3 August 2026
+
+Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
+`CLAUDE.md`.
+
+## Where we are
+
+**Branch `feat/chapters-rebuild`.** Executing
+[`docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`](superpowers/plans/2026-08-03-rebuild-chapters-layout.md)
+— the rebuild after the client rejected the previous build.
+
+| Task | State |
+|---|---|
+| 1 · Retire the day-arc | ✅ 996 lines removed |
+| 2 · Harvest the live site's copy | ✅ `reference/site-copy.md` |
+| 3 · Expand the image library | ✅ 14 → 35 images |
+| 4 · The chapter sequence | ⬜ next |
+| 5 · Scroll choreography | ⬜ |
+| 6 · The copy | ⬜ |
+| 7 · Build the sections | ⬜ **stop here for review** |
+| 8 · Verify against the complaints | ⬜ |
+
+32 tests. `/` is a placeholder heading until Task 7.
+
+**Agreed working mode (Option C, 3 Aug):** proceed solo through Tasks 4–6, then **stop before Task 7** so the
+page build — where design judgement matters most — gets the full implementer/reviewer treatment. Usage
+limits have renewed, so subagents are available.
+
+## The two builds that came before
+
+Both are on branches and in git history; neither is live.
+
+- **Plan 1** (`main`) — the seven-state scroll-through-a-day colour system. Client approved it at a preview
+  gate.
+- **Plan 2** (`feat/page-structure`) — nine content bands built on that system. **Client rejected it**: too
+  few images, no perceptible scroll animation, too much empty space, no resemblance to the reference.
+
+The day-arc was the root cause: band heights had to be derived from each band's share of the colour timeline
+rather than from how much content it held, so heavy sections reserved three screens for a paragraph. Retired
+3 Aug. Do not revive it.
+
+## Client feedback that drives everything now (3 Aug, verbatim in substance)
+
+1. Too few images · no scroll animation · too much empty space · no resemblance to Sujan.
+2. **Take heavy inspiration from the Sujan homepage** — layout, scroll behaviour, image and text placement.
+3. **Present the experience as a journey in chapters**, as the v3 fieldguide guidelines do.
+4. **Use the existing mahuaresorts.com text and images** — both were under-used.
+5. **Creative freedom over the guidelines.** Keep what is good, rework what is not, invent where neither the
+   guidelines nor the reference serve us. Explicitly *not* line-by-line compliance.
+
+See [`docs/reference-sujan-layout.md`](reference-sujan-layout.md) for the layout analysis this produced.
+
+## Findings the client needs, independent of the build
+
+**The live site's distances are all wrong and contradict each other.** Five published claims across two
+lodges; not one is correct:
+
+| Gate | Homepage | About Us | Elsewhere | Truth |
+|---|---|---|---|---|
+| Turia (Mahua Vann) | 3 km | 4 km | — | **5 km** (client-confirmed) |
+| Kolara (Mahua Tola) | 6 km | 10 km | 12 km (review widget) | unverified |
+
+**Mahua Bagh is still being sold** on About Us and its own page as a "signature eco lodge", though the brand
+record retired it. Every mention in `reference/site-copy.md` is marked `[RETIRED PROPERTY — do not reuse]`.
+
+**Best raw material found:** *"Explore 'Pachdhar', a village adjoining Pench National Park, where over 100
+'Kumhars' families have upheld the art of pottery."* Named place, real number, living craft — and it explains
+the potter's-hands photograph in the library. Strong candidate for its own chapter.
+
+**Two images excluded on consent grounds**, not quality: `bush-breakfast` (a guest's face, lit and in focus)
+and `stargazing-telescope` (a figure's features discernible; guest or staff unclear). Four other
+people-containing images were kept after inspection — `guide-sunrise`, `sound-healing`, `tiger-crossing-track`,
+`potters-hands`. **The client can reinstate any of these if releases exist.**
+
+## Assets
+
+- **`Mahua property logos/`** — client-supplied vector logos, added 3 Aug. `Mahua Resorts.svg` is genuine
+  artwork: **340 paths, 0 embedded rasters, 439 groups, viewBox 0 0 500 500**. Per-property marks for Vann
+  and Tola, plus EPS/PDF/PNG and a 3D render. **This removes the need to reconstruct the emblem** for the
+  planned counter-rotation animation (petals clockwise, leaves anticlockwise) — real petal and leaf groups
+  already exist.
+- **`public/media/`** — 35 curated images, 14 MB, largest derivative 199.7 KB. **14 are `fullBleedSafe`**
+  (≥1400px), up from 2 across the whole previous build. Categories: `lanternHour` 9, `forest` 9,
+  `lodgeLife` 12, `details` 5.
+- **`reference/site-copy.md`** — 3,036 words of the live site's copy, by page.
+
+## Still owed to the client
+
+- **The targeted shot list** — the 3–4 photographs that would most transform the page, so a small shoot can
+  be priced precisely. The source library tops out at 1600px and only 14 images clear 1400px.
+- **Plan 4:** the signature interactions — spinning mahua emblem, leaf cursor, ink tiger.
+- **Plan 5:** performance hardening, the SEO redirect map (spec §10), Sanity CMS wiring.
+
+## Process notes worth keeping
+
+The implementer/reviewer split has caught something real in **every task**, and the defects have almost
+always been in the *plan* rather than the implementation. Examples worth remembering:
+
+- A colour timeline that could never interpolate — every transition squeezed to zero width.
+- A warmth test written as `red >= blue`, which pure black (`0 >= 0`) passes trivially.
+- A contrast guard that only tested seven static states while the background moved between them.
+- An image budget that was a `console.warn` nothing checked — which is how a 636 KB file shipped.
+
+**One fix round on Task 3 was done by the controller solo** (during the usage-limit window) and never got
+independent review. Flagged in the ledger; the whole-branch review should look at commit `04a82c2`
+specifically.
+
+The SDD ledger at `.superpowers/sdd/2026-08-03-rebuild-chapters-layout/progress.md` (git-ignored) holds the
+full per-task record.
