@@ -154,11 +154,10 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
 
 ## Open with the client
 
-1. **Does CLAUDE.md #6's 1.5 MB mean the initial load or the whole scroll?** After the responsive-image
-   work a phone pays **399 KB initially and 799 KB for the entire page** — inside the budget on both
-   readings. A 1440px desktop pays 763 KB initially and **1,966 KB scrolled**, still over on the second
-   reading. The only lever left there is fewer or smaller photographs, which is what this plan exists to
-   avoid. Raised by Task 7 and not resolved.
+1. ~~**Does CLAUDE.md #6's 1.5 MB mean the initial load or the whole scroll?**~~ **Ruled 4 Aug: the initial
+   load.** A phone pays 399 KB initially (799 KB for the whole scroll) and a 1440px desktop 763 KB
+   (1,966 KB scrolled), so both pass. Desktop whole-scroll stays above 1.5 MB and is accepted — the client
+   traded that number for the image density that answered their rejection. Written into CLAUDE.md #6.
 2. **Is the closing photograph too dark?** It carries the heaviest scrim on the page (`flat .54`), and the
    trade is real: the lighter, radial-led version measured 4.20:1 on body text at 768px against a 4.5 floor.
 3. **Should the two `chapterIntro` chapters have a CTA?** Ruled *no* on 4 Aug — the header, the lodge cards

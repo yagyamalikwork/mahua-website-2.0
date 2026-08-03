@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useScrollControl } from "@/components/motion/SmoothScroll";
 import { CHAPTERS } from "@/content/chapters";
 import { HOME } from "@/content/home";
 
@@ -28,9 +29,14 @@ import { HOME } from "@/content/home";
  *   point of trapping focus in the first place — a visitor who opens a menu by
  *   keyboard must not be dropped at the top of the document when they dismiss it.
  * - Tab cycles inside the panel while it is open.
- * - Scrolling is locked on `<html>` while it is open. The panel covers the
- *   viewport, so without this the wheel moves a page the visitor cannot see and
- *   dismissing the menu lands them somewhere they never chose.
+ * - **Scrolling is locked through `useScrollControl`, not through CSS here.** The
+ *   first version set `overflow: hidden` on `<html>` and that is not a lock on
+ *   this page: Lenis intercepts the wheel and scrolls programmatically, so the
+ *   keyboard stopped and the wheel did not — the hidden page still travelled
+ *   ~1,485px, and Escape returned the visitor somewhere they never chose. It also
+ *   slipped through verification, because what was checked was that the CSS
+ *   property had been *set*, not that scrolling had *stopped*. Those are
+ *   different claims and only the second one is the requirement.
  *
  * ## Motion
  *
@@ -52,6 +58,7 @@ export function ChapterMenu() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const scroll = useScrollControl();
 
   const numbered = CHAPTERS.filter((c) => c.number && c.label);
 
@@ -64,10 +71,7 @@ export function ChapterMenu() {
     if (!open) return;
 
     closeRef.current?.focus();
-
-    const { style } = document.documentElement;
-    const previousOverflow = style.overflow;
-    style.overflow = "hidden";
+    scroll?.lock();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -96,9 +100,11 @@ export function ChapterMenu() {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      style.overflow = previousOverflow;
+      // Unlock runs in the cleanup, not in `close`, so that unmounting while open
+      // cannot leave Lenis stopped and the page frozen with nothing to unfreeze it.
+      scroll?.unlock();
     };
-  }, [open, close]);
+  }, [open, close, scroll]);
 
   return (
     <>

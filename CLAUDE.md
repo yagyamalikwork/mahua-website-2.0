@@ -21,7 +21,7 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–7 done.** Day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured, copy written, **and the page built and composed**. Task 7 reviewed and **fix round 1 landed** — responsive images, a real chapter menu, two new palette guards. Task 8 is next. |
+| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–7 done.** Day-arc retired, live copy harvested, image library 14 → 34, chapter sequence defined, scroll primitives built and measured, copy written, **and the page built and composed**. Task 7 reviewed and **fix round 1 landed** — responsive images, a real chapter menu, two new palette guards. Task 8 is next. |
 | **Working mode** | Solo through Tasks 4–6; Task 7 got the full implementer/reviewer treatment and one fix round. Agreed with the client 3 Aug. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
 | **See it** | `npm run dev` → `/`. Twelve chapters, 32 photographs, 16 screens at 1440×900. |
@@ -42,8 +42,27 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    it reads expensive because it holds back. Nothing bounces. If you notice the animation, it is too fast.
 5. **The tiger arrives, performs, then dozes** (Plan 4, not yet built). It is not a permanent fixture —
    permanent peripheral motion contradicts #2 and #4.
-6. **Budgets beat effects.** Largest image < 200 KB, total page transfer < 1.5 MB, LCP < 2.5s on simulated
-   4G. Most traffic is Indian mobile. If a beautiful effect cannot hit budget, the effect loses.
+6. **Budgets beat effects.** Largest image < 200 KB; **initial page transfer < 1.5 MB**; hero photograph
+   on screen in < 2.5s on simulated 4G. Most traffic is Indian mobile. If a beautiful effect cannot hit
+   budget, the effect loses.
+
+   **The 1.5 MB is the initial load, not the whole scroll — the client ruled this on 4 Aug**, when the two
+   readings collided with the image density that answered their rejection of the previous build. "Initial
+   load" is what a visitor pays before scrolling; everything below the fold is lazy. Measured after the
+   responsive-image work:
+
+   | | Initial load | Whole page scrolled |
+   |---|---|---|
+   | 390px | **399 KB** ✓ | 799 KB |
+   | 1440px | **763 KB** ✓ | 1,966 KB |
+
+   **Desktop whole-scroll sits above 1.5 MB and is accepted under this reading.** Do not "fix" it by
+   cutting photographs — density is why this plan exists (non-negotiable #8), and the client has already
+   traded that number away deliberately.
+
+   **Do not check the < 2.5s with Lighthouse's LCP.** Chrome resolves this page's LCP to a paragraph, not
+   to the hero photograph, so LCP read 1.4s on 4 Aug while the hero itself was landing at 4.9s on a
+   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — currently 940 ms.
 7. **Gold is decorative only.** `gold` (`#BB8F2E`) is for rules, ornaments, the emblem — it measures
    ~2.5:1 on cream and must never carry text. `goldText` (`#7A5C18`) is the legible sibling; use it for any
    text or link that would otherwise sit in gold. Guarded by `lib/palette.test.ts`.
