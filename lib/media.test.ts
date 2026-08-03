@@ -5,9 +5,32 @@ import { describe, expect, it } from "vitest";
 import { MEDIA, media } from "./media";
 
 describe("MEDIA", () => {
-  it("curates a small set, not the whole library", () => {
-    expect(MEDIA.length).toBeGreaterThan(0);
-    expect(MEDIA.length).toBeLessThanOrEqual(14);
+  it("curates enough images to fill a long page", () => {
+    expect(MEDIA.length).toBeGreaterThanOrEqual(28);
+  });
+
+  it("gives every image a category and an orientation", () => {
+    const categories = ["lanternHour", "forest", "lodgeLife", "details"];
+    const orientations = ["landscape", "portrait", "square"];
+    for (const m of MEDIA) {
+      expect(categories, `${m.id} category`).toContain(m.category);
+      expect(orientations, `${m.id} orientation`).toContain(m.orientation);
+    }
+  });
+
+  it("never marks an image under 1400px as safe for full-bleed", () => {
+    for (const m of MEDIA) {
+      if (m.width < 1400) {
+        expect(m.fullBleedSafe, `${m.id} is ${m.width}px and cannot go full-bleed`).toBe(false);
+      }
+    }
+  });
+
+  it("has at least four images in each category", () => {
+    for (const c of ["lanternHour", "forest", "lodgeLife", "details"]) {
+      const n = MEDIA.filter((m) => m.category === c).length;
+      expect(n, `only ${n} images in ${c}`).toBeGreaterThanOrEqual(4);
+    }
   });
 
   it("gives every image real alt text", () => {
