@@ -16,8 +16,8 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 | 3 · Expand the image library | ✅ 14 → 35 images |
 | 4 · The chapter sequence | ✅ 12 chapters, 32 distinct images |
 | 5 · Scroll choreography | ✅ measured in a browser, see `docs/reviews/2026-08-04-motion/` |
-| 6 · The copy | ⬜ next |
-| 7 · Build the sections | ⬜ **stop here for review** |
+| 6 · The copy | ✅ see `docs/copy-provenance.md` |
+| 7 · Build the sections | ⬜ **next — stop here for review** |
 | 8 · Verify against the complaints | ⬜ |
 
 59 tests. `/` is a placeholder heading until Task 7.
@@ -68,6 +68,17 @@ rather than from how much content it held, so heavy sections reserved three scre
 See [`docs/reference-sujan-layout.md`](reference-sujan-layout.md) for the layout analysis this produced.
 
 ## Findings the client needs, independent of the build
+
+**The guest quotes on the page are real Tripadvisor reviews**, pulled verbatim from the Trustindex widget
+in the crawled HTML and attributed by name and year. **The aggregate rating and review count are
+deliberately absent** — the widget reports "126 reviews" on *both* property pages, so it cannot be
+attributed to either lodge, and no star rating was recoverable. Owed by the client. A test fails if any
+quote appears without a name, source and year, so an invented testimonial cannot slip in.
+
+**Eleven hard numbers now sit in the copy and only one is confirmed** (5 km to Turia Gate). The full table,
+with the two numbers deliberately left out rather than published wrong, is in
+[`docs/copy-provenance.md`](copy-provenance.md). The sharpest open question: the live site's room list for
+Mahua Tola totals **twelve**, while the brand record says fourteen.
 
 **The live site's distances are all wrong and contradict each other.** Five published claims across two
 lodges; not one is correct:

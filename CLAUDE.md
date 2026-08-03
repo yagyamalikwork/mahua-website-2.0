@@ -21,11 +21,11 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. Tasks 1–5 done (day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured). **Task 6, the copy, is next.** |
+| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–6 done.** Day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured, copy written. **Stop here: Task 7 gets the implementer/reviewer treatment.** |
 | **Working mode** | Solo through Tasks 4–6, then **stop before Task 7** so the page build gets full implementer/reviewer treatment. Agreed with the client 3 Aug. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
 | **See it** | `npm run dev` → `/`. A placeholder heading until Task 7 builds the real page. |
-| **Tests** | 59, all green. `npm test` must stay green before any commit claiming completion. |
+| **Tests** | 65, all green. `npm test` must stay green before any commit claiming completion. |
 
 ## The non-negotiables
 
@@ -85,6 +85,7 @@ rhythm rule. The sequence lives there, not in `app/page.tsx`, and `content/chapt
 | `docs/PROJECT-STATE.md` | **Session handoff** — state, history, client findings, what's owed |
 | `docs/reference-sujan-layout.md` | The reference site's layout DNA, analysed from screenshots |
 | `reference/site-copy.md` | 3,036 words of the live site's copy, by page (Plan 3 Task 2) |
+| `docs/copy-provenance.md` | **Where every line came from**, and the eleven hard numbers awaiting the client |
 | `Mahua property logos/` | Client-supplied **vector** logos — real paths, not traced. Emblem is 340 paths / 439 groups, so petals and leaves already separate |
 | `public/media/` | 35 curated images, 14 MB, 14 of them `fullBleedSafe` |
 | `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |

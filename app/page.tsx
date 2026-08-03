@@ -7,5 +7,5 @@ import { HOME } from "@/content/home";
  * palette in lib/palette.ts.
  */
 export default function Home() {
-  return <h1>{HOME.hero.headline}</h1>;
+  return <h1>{HOME.chapters.arrival.headline}</h1>;
 }
