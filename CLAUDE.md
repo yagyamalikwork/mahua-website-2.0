@@ -100,9 +100,11 @@ rhythm rule. The sequence lives there, not in `app/page.tsx`, and `content/chapt
 
 - **British spelling** in all copy (the current site mixes conventions; the audit flags it).
 - **All copy lives in `content/`.** No user-facing strings in components.
-- **Verify hard numbers with the client; do not trust the sources.** Mahua Vann is **5 km** from Turia Gate
-  — the Master Brand Record (4 km) and the live site (3 km) are both wrong. Room counts, acreage and drive
-  times from either source deserve the same suspicion. See spec §12.
+- **Verify hard numbers with the client; do not trust the sources.** **Both lodges are 5 km from their
+  gate** — Vann from Turia, Tola from Kolara (client-confirmed). The sources publish *five* different
+  distances between them and not one is right: Turia as 3 km and 4 km, Kolara as 6 km, 10 km and 12 km.
+  Room counts, acreage and drive times deserve the same suspicion — see
+  [`docs/copy-provenance.md`](docs/copy-provenance.md) for what is still unconfirmed, and spec §12.
 - Copy is drafted from the Master Brand Record and the live site's own text (Plan 3 Task 2), in the
   existing brand voice. The client reviews every line.
 - Specificity is the brand's luxury — name a gate, a tigress, a tree, a dish. Avoid reaching for adjectives.

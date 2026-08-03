@@ -70,12 +70,12 @@ See [`docs/reference-sujan-layout.md`](reference-sujan-layout.md) for the layout
 ## Findings the client needs, independent of the build
 
 **The guest quotes on the page are real Tripadvisor reviews**, pulled verbatim from the Trustindex widget
-in the crawled HTML and attributed by name and year. **The aggregate rating and review count are
-deliberately absent** — the widget reports "126 reviews" on *both* property pages, so it cannot be
-attributed to either lodge, and no star rating was recoverable. Owed by the client. A test fails if any
-quote appears without a name, source and year, so an invented testimonial cannot slip in.
+in the crawled HTML and attributed by name and year. Client confirmed 4 Aug that these hard-coded quotes
+are the **interim**: the site will be wired to Tripadvisor directly for live reviews (Plan 5), which also
+supplies the aggregate rating and review count currently missing. A test fails if any quote appears without
+a name, source and year, so an invented testimonial cannot slip in.
 
-**Eleven hard numbers now sit in the copy and only one is confirmed** (5 km to Turia Gate). The full table,
+**Ten hard numbers now sit in the copy and only two are confirmed** (5 km to both gates). The full table,
 with the two numbers deliberately left out rather than published wrong, is in
 [`docs/copy-provenance.md`](copy-provenance.md). The sharpest open question: the live site's room list for
 Mahua Tola totals **twelve**, while the brand record says fourteen.
@@ -85,8 +85,10 @@ lodges; not one is correct:
 
 | Gate | Homepage | About Us | Elsewhere | Truth |
 |---|---|---|---|---|
-| Turia (Mahua Vann) | 3 km | 4 km | — | **5 km** (client-confirmed) |
-| Kolara (Mahua Tola) | 6 km | 10 km | 12 km (review widget) | unverified |
+| Turia (Mahua Vann) | 3 km | 4 km | — | **5 km** (client-confirmed 3 and 4 Aug) |
+| Kolara (Mahua Tola) | 6 km | 10 km | 12 km (review widget) | **5 km** (client-confirmed 4 Aug) |
+
+Five published distances across two lodges, and **not one of them is right**. Both are 5 km.
 
 **Mahua Bagh is still being sold** on About Us and its own page as a "signature eco lodge", though the brand
 record retired it. Every mention in `reference/site-copy.md` is marked `[RETIRED PROPERTY — do not reuse]`.

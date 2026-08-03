@@ -108,7 +108,7 @@ export const HOME = {
         {
           name: "Mahua Tola",
           place: "Tadoba-Andhari, Maharashtra",
-          gate: "At Tadoba's Kolara Gate",
+          gate: "Five kilometres from Kolara Gate",
           rooms: "Fourteen rooms",
           body:
             "Set along the seasonal Hattinala river, where three new river-facing machaans look " +

@@ -30,14 +30,13 @@ Three Tripadvisor reviews, pulled from the Trustindex widget in the crawled HTML
 (`reference/wp-pages/resorts_mahua-tola.html`), quoted verbatim and trimmed only at sentence boundaries.
 Names, years and the source are as published.
 
-**Two things to decide before launch:**
+**Agreed 4 Aug:** these hard-coded quotes are the interim. The site will be wired to Tripadvisor directly
+for live reviews, which also settles the two problems with quoting them statically — that a 2019 review
+hard-coded into the page still says 2019 in 2030, and that the aggregate rating and review count are
+currently missing (the widget reports "126 reviews" on *both* property pages, so it cannot be attributed to
+either lodge, and no star rating was recoverable from the crawl). The live feed supplies all of it.
 
-1. These are a **frozen copy of a live widget**. A 2019 review hard-coded into the site will still say 2019
-   in 2030. Either re-embed the widget or refresh these periodically.
-2. **The aggregate rating and review count are deliberately absent.** The widget reports "126 reviews" on
-   *both* the Mahua Vann and the Mahua Tola pages, so it cannot be attributed to either lodge with
-   confidence, and a star rating was not recoverable from the crawl at all. Send us the real figures and
-   they go straight in.
+That integration is **Plan 5** work, alongside the CMS wiring — not this plan.
 
 Nothing else on the page is a testimonial, and `content/home.test.ts` fails if a quote appears without a
 name, a source and a year — so an invented one cannot be added quietly.
@@ -49,11 +48,11 @@ numbers now in the copy:
 
 | Claim | Source | Confidence |
 |---|---|---|
-| **Five kilometres from Turia Gate** | **You, 3 Aug** | ✅ Confirmed. The live site publishes 3 km on the homepage and 4 km on About Us; the brand record says 4 km. All three are wrong and should be corrected wherever they still appear |
+| **Five kilometres from Turia Gate** (Vann) | **You, 3 and 4 Aug** | ✅ Confirmed twice. The live site publishes 3 km on the homepage and 4 km on About Us; the brand record says 4 km. All three are wrong and should be corrected wherever they still appear |
+| **Five kilometres from Kolara Gate** (Tola) | **You, 4 Aug** | ✅ Confirmed. The live site publishes 6 km, 10 km *and* 12 km across three places. All three are wrong |
 | Twenty-six rooms at Mahua Vann | Brand record | ⚠️ Cross-checks against the live site's own room list (13 + 5 + 8 = 26) |
 | Fourteen rooms at Mahua Tola | Brand record | ⚠️ The live site's list totals **twelve** (5 + 2 + 3 + 1 + 1). The record says "growing to 14" once the new machaans open. **Is fourteen true today?** |
 | Eight cottages with a deck | Live site | ⚠️ Unverified |
-| Kolara Gate, Tadoba | Both | ⚠️ Consistent, but the **distance** is not: 6 km on the homepage, 10 km on About Us, 12 km in the review widget. We have published no number |
 | More than a hundred Kumhar families at Pachdhar | Live site | ⚠️ Unverified |
 | Some three hundred recorded birds | Live site | ⚠️ Unverified |
 | Tadoba's tiger density among the highest in the country | Live site | ⚠️ The live site says 115 tigers and the highest Sighting Rating Index in India. We softened it to a comparative claim rather than repeat a specific count that will date |
