@@ -12,8 +12,11 @@
 export const DURATION = {
   reveal: 1.0,
   revealSlow: 1.4,
+  /** A mask wiping upward off a photograph as it enters. */
+  imageMask: 1.2,
+  /** Delay between successive lines of a headline, not between words. */
+  lineStagger: 0.09,
   stagger: 0.06,
-  colourBleed: 0.6,
   logoRotation: 75,
 } as const;
 
@@ -26,6 +29,24 @@ export const EASE = {
 export const PARALLAX_MAX = 0.15;
 
 export const REVEAL_FROM = { opacity: 0, scale: 0.96 } as const;
+
+/**
+ * A photograph settles *down* to rest from slightly oversize. Scaling up on
+ * entry reads as a zoom-in gimmick; settling down reads as the image coming to
+ * rest. Law 2 binds here exactly as it binds `REVEAL_FROM` — no `x`, no `y`.
+ */
+export const IMAGE_FROM = { scale: 1.08 } as const;
+
+/**
+ * The most screens of scroll a pinned scene may consume.
+ *
+ * This is a motion token because it is scroll *distance*, but it exists for a
+ * layout reason: the day-arc was retired on 3 Aug 2026 because section heights
+ * were set by a number rather than by their content, which is what left the page
+ * empty. A pinned scene is the one remaining construct that can do that again,
+ * so its rope is short and `StickyScene` clamps to it.
+ */
+export const STICKY_SCREENS_MAX = 3;
 
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */
 export function prefersReducedMotion(): boolean {

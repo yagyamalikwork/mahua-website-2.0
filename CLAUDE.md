@@ -21,11 +21,11 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. Tasks 1–4 done (day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined). **Task 5 is next.** |
+| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. Tasks 1–5 done (day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured). **Task 6, the copy, is next.** |
 | **Working mode** | Solo through Tasks 4–6, then **stop before Task 7** so the page build gets full implementer/reviewer treatment. Agreed with the client 3 Aug. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
 | **See it** | `npm run dev` → `/`. A placeholder heading until Task 7 builds the real page. |
-| **Tests** | 44, all green. `npm test` must stay green before any commit claiming completion. |
+| **Tests** | 59, all green. `npm test` must stay green before any commit claiming completion. |
 
 ## The non-negotiables
 

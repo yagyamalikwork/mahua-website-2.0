@@ -34,10 +34,38 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/*
+ * `components/motion/StickyScene.tsx`. `--sticky-screens` is set inline by the
+ * component, which clamps it to STICKY_SCREENS_MAX first.
+ */
+.sticky-scene {
+  height: calc(var(--sticky-screens, 2) * 100vh);
+}
+
+.sticky-scene > .sticky-scene-inner {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  /*
+   * No pin — and, just as importantly, none of the scroll it reserved. Leaving
+   * the height behind would make a visitor who asked for less motion travel
+   * through empty screens to reach the next chapter.
+   */
+  .sticky-scene {
+    height: auto;
+  }
+
+  .sticky-scene > .sticky-scene-inner {
+    position: static;
+    height: auto;
   }
 }

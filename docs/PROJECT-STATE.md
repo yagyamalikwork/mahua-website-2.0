@@ -15,12 +15,20 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 | 2 · Harvest the live site's copy | ✅ `reference/site-copy.md` |
 | 3 · Expand the image library | ✅ 14 → 35 images |
 | 4 · The chapter sequence | ✅ 12 chapters, 32 distinct images |
-| 5 · Scroll choreography | ⬜ next |
-| 6 · The copy | ⬜ |
+| 5 · Scroll choreography | ✅ measured in a browser, see `docs/reviews/2026-08-04-motion/` |
+| 6 · The copy | ⬜ next |
 | 7 · Build the sections | ⬜ **stop here for review** |
 | 8 · Verify against the complaints | ⬜ |
 
-44 tests. `/` is a placeholder heading until Task 7.
+59 tests. `/` is a placeholder heading until Task 7.
+
+**The motion vocabulary (Task 5).** `ImageReveal` (a mask wipes up off a photograph while it settles from
+1.08 scale), `SplitLines` (headline lines rise from behind a mask, staggered per *visual* line, measured
+after layout) and `StickyScene` (plain CSS `position: sticky`, clamped to three screens). All three are
+**fail-safe by construction**: the server markup is the at-rest state, and script only ever moves things
+out of view in order to bring them back — so no JavaScript, a thrown error, or reduced motion all leave the
+page readable. Captured and measured in Chromium; see the review folder, which also records the one real
+defect found (a flicker on headlines already on screen at load) and two false alarms worth not repeating.
 
 **The spine (Task 4).** `content/chapters.ts` holds twelve chapters carrying **32 of the 35 curated
 photographs**, none repeated, all four guideline categories present. Three images are held in reserve
