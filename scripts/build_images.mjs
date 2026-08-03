@@ -180,7 +180,11 @@ const CURATION = [
     alt: "A sunlit trail tunnelling beneath an arch of forest canopy.",
     category: "forest",
     orientation: "landscape",
-    fullBleedSafe: true,
+    // Dense foliage compresses badly: at 1440 its WebP lands at 203 KB even at
+    // the quality floor. Capped at 960 and dropped from full-bleed rather than
+    // shipped over budget or visibly soft.
+    maxWidth: 960,
+    fullBleedSafe: false,
   },
   {
     id: "tiger-crossing-track",
@@ -387,6 +391,14 @@ const WEBP_QUALITY_FLOOR = 20;
 // trade against a hard 200 KB ceiling.
 const JPG_QUALITY_FLOOR = 35;
 
+// Filenames that landed over MAX_DERIVATIVE_BYTES even at their quality
+// floor, collected as buildOne() runs. A non-empty list at the end of
+// main() sets a non-zero process.exitCode — previously an oversized file
+// only ever got a console.warn, which a CI run (or a human skimming
+// terminal output) can miss entirely. That is exactly how the JPEG-never-
+// budgeted bug shipped in the first place: nothing failed loudly.
+const overBudgetFiles = [];
+
 async function encodeUnderBudget(resized, format, startQuality, floorQuality, extraOptions = {}) {
   let quality = startQuality;
   let result;
@@ -399,7 +411,14 @@ async function encodeUnderBudget(resized, format, startQuality, floorQuality, ex
           ? await pipeline.webp({ quality, ...extraOptions }).toBuffer({ resolveWithObject: true })
           : await pipeline.jpeg({ quality, ...extraOptions }).toBuffer({ resolveWithObject: true });
     if (result.data.length <= MAX_DERIVATIVE_BYTES || quality <= floorQuality) break;
-    quality -= QUALITY_STEP;
+    // Clamp to floorQuality rather than always subtracting a full QUALITY_STEP:
+    // when (startQuality - floorQuality) isn't a multiple of QUALITY_STEP, an
+    // unclamped decrement overshoots and the *next* iteration encodes one
+    // full step below the configured floor before the `quality <= floorQuality`
+    // check above ever sees it — e.g. WebP (72 -> 20, step 5) bottomed out at
+    // 17, JPEG (78 -> 35, step 5) at 33. Clamping guarantees the floor is the
+    // lowest quality this function ever actually encodes at.
+    quality = Math.max(quality - QUALITY_STEP, floorQuality);
   }
   return { ...result, quality };
 }
@@ -416,7 +435,12 @@ async function buildOne(entry) {
   // If the source is narrower than every configured tier (several of the
   // strongest curated shots are ~900px wide), fall back to one derivative at
   // the source's own width rather than emitting nothing for that image.
-  const fittingWidths = WIDTHS.filter((w) => w <= srcMeta.width);
+  // `maxWidth` is a per-entry escape valve for a source that cannot be served
+  // at a given tier inside the 200 KB budget without dropping below its quality
+  // floor. Capping the tier is honest — the image simply is not offered wide —
+  // where shipping it over budget, or below the floor, would not be.
+  const ceiling = Math.min(srcMeta.width, entry.maxWidth ?? Number.POSITIVE_INFINITY);
+  const fittingWidths = WIDTHS.filter((w) => w <= ceiling);
   const widthsToGenerate = fittingWidths.length > 0 ? fittingWidths : [srcMeta.width];
 
   const produced = [];
@@ -438,6 +462,7 @@ async function buildOne(entry) {
       console.warn(
         `  ! ${avifName}: ${(avifBuffer.length / 1024).toFixed(1)} KB at floor quality ${avifResult.quality} — still over the 200 KB budget`,
       );
+      overBudgetFiles.push({ name: avifName, bytes: avifBuffer.length, quality: avifResult.quality });
     }
 
     const webpResult = await encodeUnderBudget(resized, "webp", WEBP_QUALITY, WEBP_QUALITY_FLOOR);
@@ -448,6 +473,7 @@ async function buildOne(entry) {
       console.warn(
         `  ! ${webpName}: ${(webpBuffer.length / 1024).toFixed(1)} KB at floor quality ${webpResult.quality} — still over the 200 KB budget`,
       );
+      overBudgetFiles.push({ name: webpName, bytes: webpBuffer.length, quality: webpResult.quality });
     }
 
     produced.push({
@@ -456,6 +482,8 @@ async function buildOne(entry) {
       webpName,
       avifBytes: avifBuffer.length,
       webpBytes: webpBuffer.length,
+      avifQuality: avifResult.quality,
+      webpQuality: webpResult.quality,
       actualWidth: avifInfo.width,
       actualHeight: avifInfo.height,
     });
@@ -477,6 +505,7 @@ async function buildOne(entry) {
     console.warn(
       `  ! ${jpgName}: ${(jpgBuffer.length / 1024).toFixed(1)} KB at floor quality ${jpgResult.quality} — still over the 200 KB budget`,
     );
+    overBudgetFiles.push({ name: jpgName, bytes: jpgBuffer.length, quality: jpgResult.quality });
   }
 
   const blurBuffer = await sharp(srcBuffer)
@@ -525,6 +554,19 @@ async function buildOne(entry) {
     // cleanupStaleFiles() uses to find files the current curation list and
     // WIDTHS would not produce.
     _allFilenames: [...produced.flatMap((p) => [p.avifName, p.webpName]), jpgName],
+    // Per-tier, per-format quality actually used, for the build log. This
+    // used to exist only in a console.log line, gone the moment the
+    // terminal scrolled past it — nobody could tell, weeks later, whether a
+    // given derivative was crisp at quality 55 or scraped its floor at 30.
+    _tiers: produced.map((p) => ({
+      width: p.width,
+      avifQuality: p.avifQuality,
+      avifBytes: p.avifBytes,
+      webpQuality: p.webpQuality,
+      webpBytes: p.webpBytes,
+    })),
+    _jpgQuality: jpgResult.quality,
+    _jpgBytes: jpgBuffer.length,
   };
 }
 
@@ -569,6 +611,13 @@ function renderManifest(entries) {
 // tier removed (as happened when 1920 was dropped for budget reasons),
 // previously left its old derivatives on disk forever with nothing to ever
 // clean them up.
+//
+// Assumption this relies on: nothing but this script ever writes into
+// OUT_DIR (public/media/). A hand-placed favicon, OG image, or any other
+// file dropped straight into public/media/ outside this pipeline will be
+// silently deleted on the next run — it won't be in any entry's
+// `_allFilenames`. Keep any such file in a different directory under
+// public/.
 async function cleanupStaleFiles(expectedFilenames) {
   const existing = await readdir(OUT_DIR);
   const stale = existing.filter((f) => !expectedFilenames.has(f));
@@ -611,10 +660,22 @@ async function main() {
   console.log(
     `Largest derivative overall: ${largest.id} at ${(largest._largestDerivativeBytes / 1024).toFixed(1)} KB`,
   );
-  if (largest._largestDerivativeBytes > MAX_DERIVATIVE_BYTES) {
-    console.warn(
-      `WARNING: budget is 200 KB per derivative (CLAUDE.md non-negotiable #6) — ${largest.id} is over even at the quality floor.`,
+  // Fail loudly. Previously an oversized derivative only produced a console
+  // warning, which CI and a human skimming output both miss — that is exactly
+  // how a 636 KB file and an unbudgeted JPEG encoder both shipped unnoticed.
+  if (overBudgetFiles.length > 0) {
+    console.error(
+      `\nFAILED: ${overBudgetFiles.length} derivative(s) exceed the 200 KB budget ` +
+        `(CLAUDE.md non-negotiable #6) even at their quality floor:`,
     );
+    for (const f of overBudgetFiles) {
+      console.error(`  ${f.name} — ${(f.bytes / 1024).toFixed(1)} KB at quality ${f.quality}`);
+    }
+    console.error(
+      `Cap the offending entry with \`maxWidth\` so it is not offered at that tier, ` +
+        `or drop it. Do not lower the quality floor.`,
+    );
+    process.exitCode = 1;
   }
 }
 

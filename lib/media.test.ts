@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
@@ -78,6 +78,21 @@ describe("MEDIA", () => {
         meta.height,
         `${m.id}: manifest height ${m.height} does not match the emitted AVIF`,
       ).toBe(m.height);
+    }
+  });
+
+  it("keeps every emitted derivative under the 200 KB budget", async () => {
+    // The budget existed only as a console warning until now, so nothing in the
+    // suite could catch an oversized file. That is how a 636 KB derivative and
+    // an entirely unbudgeted JPEG encoder both shipped unnoticed. This reads the
+    // real bytes off disk — the only check that cannot be fooled by the build
+    // script's own bookkeeping.
+    const MAX_BYTES = 200 * 1024;
+    for (const m of MEDIA) {
+      for (const rel of [m.avif, m.webp, m.jpg]) {
+        const { size } = await stat(path.join(process.cwd(), "public", rel));
+        expect(size, `${rel} is ${(size / 1024).toFixed(1)} KB`).toBeLessThanOrEqual(MAX_BYTES);
+      }
     }
   });
 });
