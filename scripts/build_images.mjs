@@ -7,7 +7,7 @@
 //
 // Run: node scripts/build_images.mjs
 
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -216,14 +216,12 @@ const CURATION = [
     orientation: "landscape",
     fullBleedSafe: false,
   },
-  {
-    id: "bush-breakfast",
-    src: "reference/mockup-media/guests-birdwatching-over-bush-breakfast-beside-the-safa-7f7e228366.jpg",
-    alt: "Guests birdwatching over a bush breakfast laid out beside the safari vehicle.",
-    category: "lodgeLife",
-    orientation: "landscape",
-    fullBleedSafe: false,
-  },
+  // "bush-breakfast" (mockup-media, guests-birdwatching-over-bush-breakfast-...jpg)
+  // was removed on a guest-consent basis: a guest's face is fully lit, in
+  // focus, and recognisable. That is a consent question, not a quality one —
+  // Mahua may hold a release for that guest, but this pipeline does not know
+  // that, so the image is excluded rather than assumed clear. See
+  // task-3-report.md for the fuller reasoning.
   {
     id: "sound-healing",
     src: "reference/mockup-media/sound-healing-session-by-candlelight-a65d35e28c.jpg",
@@ -280,14 +278,13 @@ const CURATION = [
     orientation: "landscape",
     fullBleedSafe: true,
   },
-  {
-    id: "stargazing-telescope",
-    src: "reference/mockup-media/mahua-brand-guidelines-v1-forest-23-6b8a67bfd1.jpg",
-    alt: "Guests and a naturalist tracing the night sky beside a telescope on the lawn.",
-    category: "lodgeLife",
-    orientation: "portrait",
-    fullBleedSafe: false,
-  },
+  // "stargazing-telescope" (mockup-media, mahua-brand-guidelines-v1-forest-23-...jpg)
+  // was also removed on a guest-consent basis on re-review: dim night
+  // lighting makes two of the three figures unrecognisable, but the third
+  // (left, glasses and beard visible) has discernible features under
+  // low-but-not-negligible ambient light, and it is not clear from the frame
+  // whether that figure is a guest or the naturalist. Excluded rather than
+  // guessed — see task-3-report.md.
   {
     id: "garden-path-lodge",
     src: "reference/wp-media/3B84C808-5785-4721-82CD-5F6B68F83EE3-scaled.jpg",
@@ -377,21 +374,30 @@ const MAX_DERIVATIVE_BYTES = 200 * 1024;
 const QUALITY_STEP = 5;
 const AVIF_QUALITY_FLOOR = 30;
 const WEBP_QUALITY_FLOOR = 20;
+// The JPEG fallback used to be encoded once at a fixed quality with no
+// budget check at all — every other format stepped down to meet the 200 KB
+// cap, JPEG just didn't. That gap is exactly how 1440px JPEGs for the
+// busiest Task 3 sources (forest-trail-canopy, garden-path-lodge, and
+// others — dense foliage and bamboo again) ended up 1.5-2x over budget even
+// after the 1920 tier was removed. Same floor-stepping treatment as AVIF/
+// WebP now applies. mozjpeg holds up worse than AVIF at very low quality
+// (visible blocking, not just softness), so its floor sits higher than
+// WebP's — this is the fallback of last resort, not the format most
+// visitors download, so some quality loss at the floor is an acceptable
+// trade against a hard 200 KB ceiling.
+const JPG_QUALITY_FLOOR = 35;
 
 async function encodeUnderBudget(resized, format, startQuality, floorQuality, extraOptions = {}) {
   let quality = startQuality;
   let result;
   for (;;) {
+    const pipeline = resized.clone();
     result =
       format === "avif"
-        ? await resized
-            .clone()
-            .avif({ quality, ...extraOptions })
-            .toBuffer({ resolveWithObject: true })
-        : await resized
-            .clone()
-            .webp({ quality, ...extraOptions })
-            .toBuffer({ resolveWithObject: true });
+        ? await pipeline.avif({ quality, ...extraOptions }).toBuffer({ resolveWithObject: true })
+        : format === "webp"
+          ? await pipeline.webp({ quality, ...extraOptions }).toBuffer({ resolveWithObject: true })
+          : await pipeline.jpeg({ quality, ...extraOptions }).toBuffer({ resolveWithObject: true });
     if (result.data.length <= MAX_DERIVATIVE_BYTES || quality <= floorQuality) break;
     quality -= QUALITY_STEP;
   }
@@ -460,12 +466,18 @@ async function buildOne(entry) {
   // encoded (captured above), not from re-reading the source.
   const largest = produced.reduce((a, b) => (b.width > a.width ? b : a));
 
-  const jpgBuffer = await sharp(srcBuffer)
-    .resize({ width: largest.width, withoutEnlargement: true })
-    .jpeg({ quality: JPG_QUALITY, mozjpeg: true })
-    .toBuffer();
+  const jpgResized = sharp(srcBuffer).resize({ width: largest.width, withoutEnlargement: true });
+  const jpgResult = await encodeUnderBudget(jpgResized, "jpeg", JPG_QUALITY, JPG_QUALITY_FLOOR, {
+    mozjpeg: true,
+  });
+  const jpgBuffer = jpgResult.data;
   const jpgName = `${entry.id}-${largest.width}.jpg`;
   await writeFile(path.join(OUT_DIR, jpgName), jpgBuffer);
+  if (jpgBuffer.length > MAX_DERIVATIVE_BYTES) {
+    console.warn(
+      `  ! ${jpgName}: ${(jpgBuffer.length / 1024).toFixed(1)} KB at floor quality ${jpgResult.quality} — still over the 200 KB budget`,
+    );
+  }
 
   const blurBuffer = await sharp(srcBuffer)
     .resize({ width: BLUR_WIDTH, withoutEnlargement: true })
@@ -500,7 +512,19 @@ async function buildOne(entry) {
     fullBleedSafe: entry.fullBleedSafe,
     _widthsGenerated: produced.map((p) => p.width),
     _largestAvifBytes: largest.avifBytes,
-    _largestDerivativeBytes: Math.max(...produced.map((p) => Math.max(p.avifBytes, p.webpBytes))),
+    // Includes the JPEG fallback now that it is budget-checked too — this
+    // used to only look at avif/webp bytes, which is how a 636 KB JPEG sat
+    // on disk while this figure quietly reported everything as compliant.
+    _largestDerivativeBytes: Math.max(
+      ...produced.map((p) => Math.max(p.avifBytes, p.webpBytes)),
+      jpgBuffer.length,
+    ),
+    // Every file this entry actually wrote to OUT_DIR at every tier — not
+    // just the largest tier recorded in the manifest above. This is the
+    // per-entry contribution to the "what should exist" set that
+    // cleanupStaleFiles() uses to find files the current curation list and
+    // WIDTHS would not produce.
+    _allFilenames: [...produced.flatMap((p) => [p.avifName, p.webpName]), jpgName],
   };
 }
 
@@ -535,17 +559,46 @@ function renderManifest(entries) {
   return lines.join("\n");
 }
 
+// Deletes anything sitting in OUT_DIR that the current CURATION list and
+// WIDTHS would not produce. The manifest this run is about to write is the
+// authority on what should exist — `expectedFilenames` is built from exactly
+// what buildOne() wrote for every entry actually in CURATION this run, at
+// every tier it generated (not just the tier the manifest records), so
+// nothing still-referenced can be swept up here. This closes a gap flagged
+// as a deferred minor in Plan 2: a source removed from CURATION, or a WIDTHS
+// tier removed (as happened when 1920 was dropped for budget reasons),
+// previously left its old derivatives on disk forever with nothing to ever
+// clean them up.
+async function cleanupStaleFiles(expectedFilenames) {
+  const existing = await readdir(OUT_DIR);
+  const stale = existing.filter((f) => !expectedFilenames.has(f));
+  for (const f of stale) {
+    await rm(path.join(OUT_DIR, f));
+  }
+  return stale;
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
   const results = [];
+  const expectedFilenames = new Set();
   for (const entry of CURATION) {
     process.stdout.write(`Building ${entry.id} <- ${entry.src} ... `);
     const result = await buildOne(entry);
     results.push(result);
+    for (const filename of result._allFilenames) expectedFilenames.add(filename);
     console.log(
       `widths [${result._widthsGenerated.join(", ")}], largest derivative ${(result._largestDerivativeBytes / 1024).toFixed(1)} KB`,
     );
+  }
+
+  const stale = await cleanupStaleFiles(expectedFilenames);
+  if (stale.length > 0) {
+    console.log(`\nRemoved ${stale.length} stale file(s) no longer produced by the current curation list/WIDTHS:`);
+    for (const f of stale) console.log(`  - ${f}`);
+  } else {
+    console.log("\nNo stale files found in public/media.");
   }
 
   const manifestSource = renderManifest(results);
