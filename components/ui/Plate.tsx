@@ -1,16 +1,18 @@
-import { Reveal } from "@/components/motion/Reveal";
-import { media, type MediaId } from "@/lib/media";
+import { ImageReveal } from "@/components/motion/ImageReveal";
+import { Photo } from "@/components/ui/Photo";
+import type { MediaId } from "@/lib/media";
 
 /**
  * A captioned photograph in the field-guide idiom — a numbered plate, not a hero
- * shot. `<picture>` offers AVIF then WebP ahead of the JPEG fallback; the manifest's
- * own width/height go on the `<img>` so the browser reserves the right box before a
- * single byte arrives (the manifest records the true emitted dimensions, not the
- * source file's — see lib/media.test.ts), and the manifest's blur placeholder sits
- * behind it as a CSS background so the wait reads as warm colour, not a white hole.
+ * shot. The `<picture>` itself is `Photo`; this adds the frame, the caption and
+ * the arrival.
  *
  * Image and caption reveal together as one developing unit (spec section 4.3, law
- * 2) — the caption is not a separate reveal, it is part of the plate.
+ * 2) — the caption is not a separate reveal, it is part of the plate. Task 7
+ * swapped the `Reveal` fade for `ImageReveal`'s mask: a cream mask wiping upward
+ * off a plate is legible as motion from across the room, and "no scroll
+ * animation" was one of the three things the client rejected the last build for.
+ * A fade at 3% opacity per frame is not.
  */
 export function Plate({
   id,
@@ -23,38 +25,23 @@ export function Plate({
   plate?: string;
   priority?: boolean;
 }) {
-  const entry = media(id);
-
   return (
-    <Reveal>
+    <ImageReveal>
       <figure>
-        <picture>
-          <source srcSet={entry.avif} type="image/avif" />
-          <source srcSet={entry.webp} type="image/webp" />
-          <img
-            src={entry.jpg}
-            alt={entry.alt}
-            width={entry.width}
-            height={entry.height}
-            loading={priority ? "eager" : "lazy"}
-            decoding={priority ? undefined : "async"}
-            fetchPriority={priority ? "high" : undefined}
-            // `short:` (a viewport-height media variant, app/globals.css) caps
-            // a plate's rendered height at short viewports (landscape phones)
-            // instead of letting it hold its full width-derived height — a
-            // full-width plate is the single largest content contributor in
-            // any section that has one, and at short heights that height
-            // alone can overflow the section around it. `w-auto` keeps the
-            // aspect ratio intact; `mx-auto` recentres the now-narrower image
-            // under its full-width caption.
-            className="block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto"
-            style={{
-              backgroundImage: `url(${entry.blur})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-        </picture>
+        <Photo
+          id={id}
+          priority={priority}
+          pictureClassName="block"
+          // `short:` (a viewport-height media variant, app/globals.css) caps a
+          // plate's rendered height at short viewports (landscape phones)
+          // instead of letting it hold its full width-derived height — a
+          // full-width plate is the single largest content contributor in any
+          // section that has one, and at short heights that height alone can
+          // overflow the section around it. `w-auto` keeps the aspect ratio
+          // intact; `mx-auto` recentres the now-narrower image under its
+          // full-width caption.
+          className="block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto"
+        />
         {caption && (
           <figcaption
             className="mt-4 max-w-[46ch] font-[family-name:var(--font-body)] text-base italic leading-relaxed short:mt-2"
@@ -69,6 +56,6 @@ export function Plate({
           </figcaption>
         )}
       </figure>
-    </Reveal>
+    </ImageReveal>
   );
 }

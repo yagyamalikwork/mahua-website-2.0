@@ -71,6 +71,11 @@ export const HOME = {
   },
 
   nav: {
+    // The wordmark in the centre of the header. The client's vector emblem is a
+    // 127 KB full-colour illustration with white fills — unreadable at 24px over
+    // a photograph and a sixth of the whole page budget, so the header sets the
+    // name in the display serif instead (Task 7 report).
+    brand: "Mahua Resorts",
     menu: "Menu",
     cta: "Plan your stay",
   },
@@ -348,7 +353,7 @@ export const HOME = {
   },
 } as const satisfies {
   meta: { title: string; description: string };
-  nav: { menu: string; cta: string };
+  nav: { brand: string; menu: string; cta: string };
   chapters: Record<
     string,
     {

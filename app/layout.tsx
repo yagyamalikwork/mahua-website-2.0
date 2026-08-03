@@ -22,9 +22,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       style={
         {
           "--bg": PALETTE.paper,
+          "--surface": PALETTE.paperDeep,
           "--text": PALETTE.ink,
+          "--dim": PALETTE.dim,
           "--accent": PALETTE.gold,
           "--accent-text": PALETTE.goldText,
+          // The only dark value on the page, and only ever laid over a
+          // photograph — scrims, and the fill of a pill that sits on one.
+          "--overlay": PALETTE.overlay,
         } as React.CSSProperties
       }
     >

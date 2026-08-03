@@ -1,5 +1,6 @@
 import { Parallax } from "@/components/motion/Parallax";
-import { media, type MediaId } from "@/lib/media";
+import { Photo } from "@/components/ui/Photo";
+import type { MediaId } from "@/lib/media";
 import { PARALLAX_MAX } from "@/lib/motion";
 
 /**
@@ -31,37 +32,24 @@ export function FullBleed({
   heightVh?: number;
   priority?: boolean;
 }) {
-  const entry = media(id);
-
   const oversizeVh = heightVh / (1 - PARALLAX_MAX) + 10;
   const bufferVh = (oversizeVh - heightVh) / 2;
 
   return (
     <div className="relative w-full overflow-hidden" style={{ height: `${heightVh}vh` }}>
       <Parallax>
-        <picture
-          className="block w-full"
-          style={{ height: `${oversizeVh}vh`, position: "relative", top: `-${bufferVh}vh` }}
-        >
-          <source srcSet={entry.avif} type="image/avif" />
-          <source srcSet={entry.webp} type="image/webp" />
-          <img
-            src={entry.jpg}
-            alt=""
-            role="presentation"
-            width={entry.width}
-            height={entry.height}
-            loading={priority ? "eager" : "lazy"}
-            decoding={priority ? undefined : "async"}
-            fetchPriority={priority ? "high" : undefined}
-            className="h-full w-full object-cover"
-            style={{
-              backgroundImage: `url(${entry.blur})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-        </picture>
+        <Photo
+          id={id}
+          decorative
+          priority={priority}
+          pictureClassName="block w-full"
+          pictureStyle={{
+            height: `${oversizeVh}vh`,
+            position: "relative",
+            top: `-${bufferVh}vh`,
+          }}
+          className="h-full w-full object-cover"
+        />
       </Parallax>
     </div>
   );

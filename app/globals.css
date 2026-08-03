@@ -14,9 +14,12 @@
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-surface: var(--surface);
   --color-text: var(--text);
+  --color-dim: var(--dim);
   --color-accent: var(--accent);
   --color-accent-text: var(--accent-text);
+  --color-overlay: var(--overlay);
   --font-display: var(--font-display);
   --font-label: var(--font-label);
   --font-body: var(--font-body);

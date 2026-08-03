@@ -26,12 +26,31 @@ export function SplitLines({
   className,
   delay = 0,
   slow = false,
+  dim,
+  dimColour = "var(--dim)",
 }: {
   children: string;
   as?: "h1" | "h2" | "h3" | "p";
   className?: string;
   delay?: number;
   slow?: boolean;
+  /**
+   * The reference site's signature move: one run of words inside the headline
+   * dropped to a lighter tone while the rest stays ink. Passed as the words
+   * themselves rather than as markup, so `content/home.ts` stays free of HTML —
+   * `content/home.test.ts` guarantees the run occurs in the headline exactly
+   * once, which is what makes splitting on it unambiguous.
+   *
+   * It lives here rather than in a separate two-tone heading component because
+   * the alternative is two headline implementations, only one of which reveals.
+   */
+  dim?: string;
+  /**
+   * Ink-on-cream headings dim to `--dim`. A heading laid over a photograph has
+   * to dim to something that still clears 3:1 against the scrim, so those pass
+   * a pale cream instead — `--dim` over a photograph is unreadable.
+   */
+  dimColour?: string;
 }) {
   const ref = useRef<HTMLElement | null>(null);
 
@@ -94,7 +113,7 @@ export function SplitLines({
     };
   }, [children, delay, slow]);
 
-  const words = children.trim().split(/\s+/);
+  const words = splitWords(children, dim);
 
   return (
     <Tag
@@ -103,7 +122,7 @@ export function SplitLines({
       }}
       className={className}
     >
-      {words.map((word, i) => (
+      {words.map(({ word, dimmed }, i) => (
         <Fragment key={`${i}-${word}`}>
           {/*
            * `overflow-hidden` is the mask. The padding/negative-margin pair gives
@@ -112,7 +131,11 @@ export function SplitLines({
            * than an animation one.
            */}
           <span data-word className="inline-block overflow-hidden align-top pb-[0.16em] -mb-[0.16em]">
-            <span data-line-inner className="inline-block">
+            <span
+              data-line-inner
+              className="inline-block"
+              style={dimmed ? { color: dimColour } : undefined}
+            >
               {word}
             </span>
           </span>
@@ -121,4 +144,31 @@ export function SplitLines({
       ))}
     </Tag>
   );
+}
+
+type SplitWord = { word: string; dimmed: boolean };
+
+/**
+ * The headline as words, each flagged for whether it belongs to the dimmed run.
+ *
+ * Tokenised on whitespace first and only then intersected with the run's
+ * character range, rather than slicing the string at the run's boundaries. The
+ * slicing version splits "the cats, and" into "cats" and a homeless comma, and
+ * renders it as `cats , and`. Overlap also means a `dim` of two words dims both,
+ * and a `dim` that lands inside a longer word dims that whole word instead of
+ * cutting it in half.
+ *
+ * If the run is absent — which `content/home.test.ts` forbids for anything in
+ * `HOME`, but a caller elsewhere could still manage — every word comes back
+ * undimmed and the headline simply reads in one tone.
+ */
+function splitWords(text: string, dim?: string): SplitWord[] {
+  const at = dim ? text.indexOf(dim) : -1;
+  const end = at === -1 ? -1 : at + (dim as string).length;
+
+  return [...text.matchAll(/\S+/g)].map((match) => {
+    const start = match.index;
+    const stop = start + match[0].length;
+    return { word: match[0], dimmed: at !== -1 && start < end && stop > at };
+  });
 }

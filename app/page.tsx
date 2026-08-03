@@ -1,11 +1,122 @@
-import { HOME } from "@/content/home";
+import { ChapterIntro } from "@/components/sections/ChapterIntro";
+import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
+import { Hero } from "@/components/sections/Hero";
+import { Invitation } from "@/components/sections/Invitation";
+import { LodgeCards } from "@/components/sections/LodgeCards";
+import { PlateGrid } from "@/components/sections/PlateGrid";
+import { SplitFeature } from "@/components/sections/SplitFeature";
+import { Testimonials } from "@/components/sections/Testimonials";
+import type { ScrimStrength } from "@/components/ui/Scrim";
+import { SiteHeader } from "@/components/ui/SiteHeader";
+import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
 
 /**
- * Placeholder. The nine-band day-arc composition this page used to render was
- * retired 3 Aug 2026 along with the colour system it depended on — Task 7
- * (docs/superpowers/plans) builds the real page on top of the flat cream
- * palette in lib/palette.ts.
+ * The home page is `content/chapters.ts`, rendered.
+ *
+ * There is no JSX sequence here to fall out of step with the spine — the order,
+ * the numbering and the rhythm are all decided there and tested there, and this
+ * file only knows how to turn a `kind` into a component. Two things follow from
+ * that: adding a chapter is a content edit, and adding a `ChapterKind` without a
+ * component is a compile error rather than a blank patch of page (see the
+ * `never` at the bottom of `renderChapter`).
+ *
+ * The two pieces of composition that genuinely belong to the page rather than to
+ * any one section:
+ *
+ * - **Which margin each `chapterIntro` floats its images at.** Both instances
+ *   using the same composition would read as a template, and a section cannot
+ *   know it is the second of its kind. The page counts them and alternates.
+ * - **How heavy each full-bleed quote's scrim is.** It is a property of the
+ *   photograph, not of the layout: `tiger-golden-grass` is a bright midday frame
+ *   and `lodge-facade-night` is already lit for night. Both figures below were
+ *   measured off a rendered browser frame with the type hidden, not chosen by
+ *   eye — see `docs/reviews/2026-08-04-task-7/`.
  */
+
+/** Per-photograph, and only ever raised by measuring the rendered result. */
+const QUOTE_SCRIM: Record<string, ScrimStrength> = {
+  // Noon, dry golden grass, no shadow anywhere in the frame. The heaviest wash
+  // on the page and still the tightest ratio.
+  "why-you-came": { flat: 0.34, centre: 0.45 },
+  // Lantern-lit facade against a night sky; the photograph does most of the work.
+  "after-dark": { flat: 0.32, centre: 0.36 },
+};
+
+/** The chapters that render on cream rather than on a photograph. */
+const CREAM_KINDS: readonly ChapterKind[] = [
+  "lodgeCards",
+  "chapterIntro",
+  "plateGrid",
+  "splitFeature",
+  "testimonials",
+];
+
+type Position = {
+  /** Index among the `chapterIntro` chapters, for the mirrored composition. */
+  intro: number;
+  /** True on every other cream chapter, for the second cream surface. */
+  surface: boolean;
+};
+
+function renderChapter(chapter: Chapter, at: Position) {
+  const kind: ChapterKind = chapter.kind;
+
+  switch (kind) {
+    case "hero":
+      return <Hero key={chapter.id} chapter={chapter} />;
+    case "lodgeCards":
+      return <LodgeCards key={chapter.id} chapter={chapter} surface={at.surface} />;
+    case "fullBleedQuote":
+      return (
+        <FullBleedQuote
+          key={chapter.id}
+          chapter={chapter}
+          scrim={QUOTE_SCRIM[chapter.id] ?? { flat: 0.4, centre: 0.4 }}
+        />
+      );
+    case "chapterIntro":
+      return (
+        <ChapterIntro
+          key={chapter.id}
+          chapter={chapter}
+          mirrored={at.intro % 2 === 1}
+          surface={at.surface}
+        />
+      );
+    case "plateGrid":
+      return <PlateGrid key={chapter.id} chapter={chapter} surface={at.surface} />;
+    case "splitFeature":
+      return <SplitFeature key={chapter.id} chapter={chapter} surface={at.surface} />;
+    case "testimonials":
+      return <Testimonials key={chapter.id} chapter={chapter} surface={at.surface} />;
+    case "invitation":
+      return <Invitation key={chapter.id} chapter={chapter} />;
+    default: {
+      // Adding a `ChapterKind` without a section here fails to compile.
+      const unhandled: never = kind;
+      throw new Error(`No section component for chapter kind: ${String(unhandled)}`);
+    }
+  }
+}
+
 export default function Home() {
-  return <h1>{HOME.chapters.arrival.headline}</h1>;
+  let intro = 0;
+  let cream = 0;
+
+  return (
+    <>
+      {/* The header overlays the hero but is not part of it, and its pill goes to
+          the chapter that actually invites you — the last one, which carries the
+          real link out to the booking site. */}
+      <SiteHeader ctaHref={`#${CHAPTERS[CHAPTERS.length - 1].id}`} />
+      <main>
+        {CHAPTERS.map((chapter) =>
+          renderChapter(chapter, {
+            intro: chapter.kind === "chapterIntro" ? intro++ : 0,
+            surface: CREAM_KINDS.includes(chapter.kind) ? cream++ % 2 === 1 : false,
+          }),
+        )}
+      </main>
+    </>
+  );
 }
