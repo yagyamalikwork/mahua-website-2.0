@@ -14,13 +14,22 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 | 1 · Retire the day-arc | ✅ 996 lines removed |
 | 2 · Harvest the live site's copy | ✅ `reference/site-copy.md` |
 | 3 · Expand the image library | ✅ 14 → 35 images |
-| 4 · The chapter sequence | ⬜ next |
-| 5 · Scroll choreography | ⬜ |
+| 4 · The chapter sequence | ✅ 12 chapters, 32 distinct images |
+| 5 · Scroll choreography | ⬜ next |
 | 6 · The copy | ⬜ |
 | 7 · Build the sections | ⬜ **stop here for review** |
 | 8 · Verify against the complaints | ⬜ |
 
-32 tests. `/` is a placeholder heading until Task 7.
+44 tests. `/` is a placeholder heading until Task 7.
+
+**The spine (Task 4).** `content/chapters.ts` holds twelve chapters carrying **32 of the 35 curated
+photographs**, none repeated, all four guideline categories present. Three images are held in reserve
+(`tiger-approaching-grass`, `pool-daylight-forest`, `geese-garden-pond`). Two editorial calls worth knowing:
+the hero is the **lantern-lit arrival**, not a tiger — every wildlife lodge in central India opens on a
+tiger and almost none can open on that light, so the tiger is spent at full viewport two chapters later;
+and **05 · The Rooms** is new, because the rejected build had no rooms chapter at all on a site selling
+rooms. There is no village chapter: the library has one potter photograph and nothing else, so Pachdhar
+folds into *02 · Rooted like the mahua* rather than being faked. That gap belongs on the shot list.
 
 **Agreed working mode (Option C, 3 Aug):** proceed solo through Tasks 4–6, then **stop before Task 7** so the
 page build — where design judgement matters most — gets the full implementer/reviewer treatment. Usage

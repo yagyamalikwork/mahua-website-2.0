@@ -1,0 +1,174 @@
+import type { MediaId } from "@/lib/media";
+
+/**
+ * The page's spine — the journey in chapters, in order, and which photographs
+ * each one carries.
+ *
+ * This file exists so the sequence and its rhythm live in one readable place
+ * rather than being implied by the order of JSX in `app/page.tsx`. Task 7's page
+ * maps over `CHAPTERS` and dispatches on `kind`; Task 6's copy is keyed by `id`.
+ *
+ * The rhythm rule — never two quiet screens consecutively — is enforced by
+ * `chapters.test.ts`, not by good intentions. The previous build ran thirteen
+ * screens with fourteen photographs and the client rejected it as empty; the
+ * reference site runs eight and fills every one. Density, not length.
+ */
+
+export type ChapterKind =
+  | "hero"
+  | "fullBleedQuote"
+  | "chapterIntro"
+  | "splitFeature"
+  | "plateGrid"
+  | "lodgeCards"
+  | "testimonials"
+  | "invitation";
+
+export type Chapter = {
+  /** Stable key. `content/home.ts` keys its copy by this, and the test enforces the join. */
+  id: string;
+  /** Zero-padded, e.g. "01". Absent on the hero, the pull-quotes and the close. */
+  number?: string;
+  /** The words beside the number, e.g. "The Lodges". Present wherever `number` is. */
+  label?: string;
+  kind: ChapterKind;
+  /** Order matters — components read positionally. See the note on each chapter below. */
+  media: readonly MediaId[];
+};
+
+/**
+ * The kinds that count as carrying a screen on their photography.
+ *
+ * Deliberately conservative: `lodgeCards` and `splitFeature` both show
+ * substantial imagery, but counting them as quiet makes the alternation test
+ * stricter rather than looser, which is the direction to err in.
+ */
+export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
+  "hero",
+  "fullBleedQuote",
+  "plateGrid",
+  "invitation",
+];
+
+/**
+ * The kinds whose photograph is tiled edge-to-edge across the viewport, and so
+ * may only use images ≥ 1400px wide (CLAUDE.md non-negotiable #10). Fourteen of
+ * the thirty-five curated images qualify; the four used here are all of them
+ * that suit a full screen.
+ */
+export const FULL_BLEED_KINDS: readonly ChapterKind[] = ["hero", "fullBleedQuote", "invitation"];
+
+/**
+ * Kept `as const` so `ChapterId` below is a literal union — Task 6 keys `HOME`
+ * by it, and a typo'd chapter id must be a build error rather than a blank patch
+ * of page. `CHAPTERS` itself is re-exported widened to `readonly Chapter[]`, or
+ * `number` and `label` would only exist on the members that happen to set them.
+ */
+const CHAPTER_LIST = [
+  {
+    // The lantern-lit arrival rather than a tiger. Every wildlife lodge in
+    // central India opens on a tiger; almost none can open on this light, and
+    // "the lantern hour" is the brand's own signature. The tiger is spent three
+    // chapters later, at full viewport, where it lands harder for being earned.
+    id: "arrival",
+    kind: "hero",
+    media: ["reception-path-dusk"],
+  },
+  {
+    // Two lodges, two photographs each: [Vann exterior, Vann room, Tola pool,
+    // Tola suite]. Orientation is Vann first, Tola second — Task 7 reads the
+    // pairs positionally.
+    id: "lodges",
+    number: "01",
+    label: "The Lodges",
+    kind: "lodgeCards",
+    media: ["bungalow-exterior-palms", "mahua-vann-room", "mahua-tola-pool", "mahua-tola-suite"],
+  },
+  {
+    id: "why-you-came",
+    kind: "fullBleedQuote",
+    media: ["tiger-golden-grass"],
+  },
+  {
+    // The mahua tree, the Gond, building in the vernacular, the potters of
+    // Pachdhar. Three images floating at the margins, cropped by the viewport
+    // edge — the reference's signature move.
+    id: "rooted",
+    number: "02",
+    label: "Rooted like the mahua",
+    kind: "chapterIntro",
+    media: ["potters-hands", "forest-shrine-incense", "lantern-boardwalk-map"],
+  },
+  {
+    // Four portraits, one orientation — a plate grid reads as a field guide only
+    // if the plates match.
+    id: "forest",
+    number: "03",
+    label: "The Forest",
+    kind: "plateGrid",
+    media: ["tiger-yawning", "leopard-on-rock", "melanistic-leopard", "tiger-pair-profile"],
+  },
+  {
+    id: "field-days",
+    number: "04",
+    label: "Days in the Field",
+    kind: "splitFeature",
+    media: ["guide-sunrise", "forest-boardwalk-daylight", "tiger-crossing-track", "forest-trail-canopy"],
+  },
+  {
+    // The rooms had no chapter at all in the rejected build, on a site selling
+    // rooms. Four landscape interiors, 2×2.
+    id: "rooms",
+    number: "05",
+    label: "The Rooms",
+    kind: "plateGrid",
+    media: [
+      "room-open-to-bamboo",
+      "suite-tiger-painting",
+      "room-hanging-chair-view",
+      "hanging-chair-forest-deck",
+    ],
+  },
+  {
+    // Night-lit, so white type over it needs the least scrim of any full-bleed
+    // on the page. Task 7 still measures it rather than assuming.
+    id: "after-dark",
+    kind: "fullBleedQuote",
+    media: ["lodge-facade-night"],
+  },
+  {
+    id: "lantern-hour",
+    number: "06",
+    label: "The Lantern Hour",
+    kind: "chapterIntro",
+    media: ["bonfire-dinner", "sound-healing", "lantern-bridge-dusk"],
+  },
+  {
+    id: "details",
+    number: "07",
+    label: "Details",
+    kind: "plateGrid",
+    media: ["petal-bowl-map", "veranda-dusk", "veranda-through-leaves", "lily-pond-fountain"],
+  },
+  {
+    id: "guests",
+    kind: "testimonials",
+    media: ["lawn-picnic-golden-hour", "garden-path-lodge"],
+  },
+  {
+    id: "invitation",
+    kind: "invitation",
+    media: ["birding-cairn-dusk"],
+  },
+] as const satisfies readonly Chapter[];
+
+export type ChapterId = (typeof CHAPTER_LIST)[number]["id"];
+
+export const CHAPTERS: readonly Chapter[] = CHAPTER_LIST;
+
+/** Throws on a miss rather than handing a component `undefined`, as `media()` does. */
+export function chapter(id: ChapterId): Chapter {
+  const found = CHAPTERS.find((c) => c.id === id);
+  if (!found) throw new Error(`Unknown chapter id: ${id}`);
+  return found;
+}
