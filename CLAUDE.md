@@ -33,10 +33,17 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 6. **Budgets beat effects.** Hero < 200 KB, first load < 2.5s on 4G. Most traffic is Indian mobile. If a
    beautiful effect cannot hit budget, the effect loses. **Currently breached** — 404 KB and LCP 3.5s with
    no photography yet. Must be addressed before real images land.
-7. **Plan 2 must place the two light↔dark crossings where no text is on screen.** See spec §13. Through
-   those crossings no warm colour can clear 4.5:1 contrast — it is arithmetic, not tuning — so text falls
-   back to black/white today. Putting the crossings in a photograph or a gap between movements removes the
-   need for the fallback entirely.
+7. **The crossings live in text-free bands** (`carriesText: false` in `content/movements.ts`). Plan 2 did
+   this and the black/white fallback was deleted outright — minimum contrast where text is on screen is now
+   **7.098:1**. One residual case remains at 390px (4.46:1); **Plan 3 must close it** — see spec §13.
+   Do not attempt another scroll-progress formula change: that was tried and made it three times worse.
+8. **Band heights are `min-height` — a floor, not a ceiling.** Content taller than its box makes the band
+   grow, detaching rendered height from `weight` and desynchronising the light from the content. This has
+   been hit twice already. Re-measure band content against its weight-derived box after any copy or layout
+   change, at narrow widths *and* short viewport heights.
+9. **The ≥70% light share has almost no slack.** It sits at 70.21% with ~0.29 weight-units to spare. Any
+   dark band gaining 1, any light band losing 1, or any new dark band breaks the test. Re-check on every
+   weight change.
 
 **Never test colour only at the seven endpoints.** The background moves between them. A 1.85:1 stretch
 shipped because the palette tests checked static states, Lighthouse checked one frozen frame, and the seam

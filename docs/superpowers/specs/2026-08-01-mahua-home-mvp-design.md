@@ -432,6 +432,43 @@ visitors).
 `contrastRatio(textAt(p), backgroundAt(p)) >= 4.5`. It was confirmed to fail against the old snapping
 implementation before passing against the new one. Do not weaken it.
 
+### Residual overlap — MUST FIX IN PLAN 3
+
+Plan 2 moved the crossings into text-free bands, which removed the black/white fallback entirely (minimum
+contrast where text is on screen rose from 4.503:1 to **7.098:1**). One residual case remains:
+
+**At 390px width, the `into-the-dark` crossing overlaps the tail of `the-ritual`'s text by ~51px,
+measuring 4.46:1 — just below the 4.5 floor.**
+
+The cause is **geometric, not arithmetic.** A crossing band is exactly one viewport tall, so the
+photograph fully covers the screen at only a single instant; any transition spread across that band
+necessarily begins while the previous band's text still occupies half the viewport. A scroll-progress
+formula change was attempted and **made it materially worse** — 2.52–3.55:1 across all three widths, with
+three previously-clean boundaries newly overlapping. That change was reverted. Do not attempt another
+normalisation fix; the problem is not in the progress calculation.
+
+**The structural fix** is crossing bands of roughly two viewports, with the colour sweep confined to the
+middle portion where only the photograph is on screen. Measured consequences at Plan 2's weights:
+
+| Option | Light share | Page length | Blocker |
+|---|---|---|---|
+| Plan 2 as shipped | 70.21% | 13.4 screens | the 4.46:1 case |
+| Crossings doubled | 67.59% | 15.4 screens | breaks the ≥70% rule (§9) |
+| Doubled + dark bands trimmed | 70.87% | 14.7 screens | `mahua-falls` then overflows: 639px box, 728px content |
+
+**Client decision, 3 Aug 2026: defer to Plan 3.** Reasoning: Plan 3 rewrites every movement's copy, which
+changes each band's content height, which forces a weight re-tune regardless. Solving this against
+placeholder prose would mean solving it twice, the second time against different numbers.
+
+**This is a gate on Plan 3, not an observation.** Plan 3 must re-tune the weights with real copy in hand
+and close this case, verifying `contrastRatio >= 4.5` at 390, 768, 1440 and 1920 px — not only in the unit
+sweep, which tests the timeline in isolation and cannot see rendered overflow.
+
+**Related trap, same root cause:** band heights are `min-height`, a floor rather than a ceiling. Content
+taller than its box makes the band grow, which detaches rendered height from `weight` and desynchronises
+the light from the content. This has already been hit twice — once at 390px width, once at viewport
+heights ≤667px. Any copy or layout change must re-measure band content against its weight-derived box.
+
 ---
 
 ## 11. Verification
