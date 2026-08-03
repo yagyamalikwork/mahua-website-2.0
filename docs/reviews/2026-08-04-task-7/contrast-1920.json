@@ -1,0 +1,128 @@
+[
+  {
+    "name": "header · menu",
+    "min": 4.5,
+    "worst": 7.43,
+    "p99": 7.66,
+    "median": 9.95,
+    "brightest": [
+      69,
+      75,
+      66
+    ],
+    "boxes": 1,
+    "pass": true
+  },
+  {
+    "name": "header · wordmark",
+    "min": 4.5,
+    "worst": 5.78,
+    "p99": 5.96,
+    "median": 10.87,
+    "brightest": [
+      85,
+      91,
+      83
+    ],
+    "boxes": 1,
+    "pass": true
+  },
+  {
+    "name": "hero · headline",
+    "min": 3,
+    "worst": 4.19,
+    "p99": 5.69,
+    "median": 9.67,
+    "brightest": [
+      108,
+      112,
+      102
+    ],
+    "boxes": 7,
+    "pass": true
+  },
+  {
+    "name": "hero · sub",
+    "min": 4.5,
+    "worst": 8.48,
+    "p99": 9.23,
+    "median": 11.26,
+    "brightest": [
+      63,
+      66,
+      57
+    ],
+    "boxes": 1,
+    "pass": true
+  },
+  {
+    "name": "hero · scroll cue",
+    "min": 4.5,
+    "worst": 9.36,
+    "p99": 10.19,
+    "median": 11.33,
+    "brightest": [
+      56,
+      60,
+      47
+    ],
+    "boxes": 1,
+    "pass": true
+  },
+  {
+    "name": "quote · why-you-came",
+    "min": 3,
+    "worst": 4.08,
+    "p99": 4.9,
+    "median": 9.56,
+    "brightest": [
+      116,
+      113,
+      93
+    ],
+    "boxes": 12,
+    "pass": true
+  },
+  {
+    "name": "quote · after-dark",
+    "min": 3,
+    "worst": 3.93,
+    "p99": 5.76,
+    "median": 10.31,
+    "brightest": [
+      119,
+      116,
+      87
+    ],
+    "boxes": 11,
+    "pass": true
+  },
+  {
+    "name": "invitation · heading",
+    "min": 3,
+    "worst": 5.19,
+    "p99": 5.69,
+    "median": 11.4,
+    "brightest": [
+      92,
+      98,
+      89
+    ],
+    "boxes": 5,
+    "pass": true
+  },
+  {
+    "name": "invitation · body",
+    "min": 4.5,
+    "worst": 5.55,
+    "p99": 7.09,
+    "median": 11.49,
+    "brightest": [
+      87,
+      94,
+      83
+    ],
+    "boxes": 2,
+    "pass": true
+  }
+]

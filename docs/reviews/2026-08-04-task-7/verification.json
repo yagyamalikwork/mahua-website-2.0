@@ -1,0 +1,99 @@
+{
+  "budget": {
+    "requests": 22,
+    "initialKB": 1643,
+    "imagesKB": 690,
+    "imagesLoaded": 9,
+    "largest": [
+      "/media/bungalow-exterior-palms-1440.avif 196KB",
+      "/media/reception-path-dusk-1440.avif 191KB",
+      "/media/mahua-tola-pool-1440.avif 97KB",
+      "/media/mahua-vann-room-960.avif 56KB"
+    ],
+    "lcpMs": 308,
+    "wholePageKB": 4017,
+    "wholePageImages": 32,
+    "largestImageKB": 196,
+    "largestImage": "/media/bungalow-exterior-palms-1440.avif"
+  },
+  "motion": [
+    {
+      "id": "lodges",
+      "changedPercent": 27.8
+    },
+    {
+      "id": "rooted",
+      "changedPercent": 35.4
+    },
+    {
+      "id": "forest",
+      "changedPercent": 32.1
+    },
+    {
+      "id": "field-days",
+      "changedPercent": 54.9
+    },
+    {
+      "id": "rooms",
+      "changedPercent": 30.6
+    },
+    {
+      "id": "guests",
+      "changedPercent": 36.7
+    }
+  ],
+  "reducedMotion": {
+    "changedPercentWhileStill": 0,
+    "wordsLeftDisplaced": 0
+  },
+  "responsive": [
+    {
+      "width": 390,
+      "horizontalScroll": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "offenders": [
+        "DIV.h-full w-full",
+        "PICTURE.block h-full w-full",
+        "IMG.h-full w-full object-cover",
+        "DIV.h-full w-full"
+      ]
+    },
+    {
+      "width": 768,
+      "horizontalScroll": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "offenders": [
+        "DIV.h-full w-full",
+        "PICTURE.block h-full w-full",
+        "IMG.h-full w-full object-cover",
+        "DIV.h-full w-full"
+      ]
+    },
+    {
+      "width": 1440,
+      "horizontalScroll": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "offenders": [
+        "DIV.flex flex-col gap-10 lg:col-start-3 lg:-mr-[11vw",
+        "DIV.-mr-6 w-[calc(100%+1.5rem)] md:-mr-12 md:w-[calc",
+        "DIV.",
+        "DIV.relative overflow-hidden block aspect-[3/2] w-fu"
+      ]
+    },
+    {
+      "width": 1920,
+      "horizontalScroll": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "offenders": [
+        "DIV.flex flex-col gap-10 lg:col-start-3 lg:-mr-[11vw",
+        "DIV.-mr-6 w-[calc(100%+1.5rem)] md:-mr-12 md:w-[calc",
+        "DIV.",
+        "DIV.relative overflow-hidden block aspect-[3/2] w-fu"
+      ]
+    }
+  ]
+}

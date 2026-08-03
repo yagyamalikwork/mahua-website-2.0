@@ -1,0 +1,139 @@
+{
+  "viewport": "1440x900",
+  "source": "production build (next start)",
+  "pageHeightPx": 14389,
+  "pageScreens": 16,
+  "distinctPhotographs": 32,
+  "note": "coverage = % of pixels in the frame differing from that frame's own modal (paper) colour",
+  "chapters": [
+    {
+      "i": 0,
+      "id": "arrival",
+      "top": 0,
+      "height": 900,
+      "screens": 1,
+      "coverage": [
+        69
+      ]
+    },
+    {
+      "i": 1,
+      "id": "lodges",
+      "top": 900,
+      "height": 1478,
+      "screens": 2,
+      "coverage": [
+        42.7,
+        46.7
+      ]
+    },
+    {
+      "i": 2,
+      "id": "why-you-came",
+      "top": 2377.875,
+      "height": 900,
+      "screens": 1,
+      "coverage": [
+        73.8
+      ]
+    },
+    {
+      "i": 3,
+      "id": "rooted",
+      "top": 3277.875,
+      "height": 1021,
+      "screens": 2,
+      "coverage": [
+        46.5,
+        52.1
+      ]
+    },
+    {
+      "i": 4,
+      "id": "forest",
+      "top": 4298.53125,
+      "height": 1202,
+      "screens": 2,
+      "coverage": [
+        51.2,
+        64.9
+      ]
+    },
+    {
+      "i": 5,
+      "id": "field-days",
+      "top": 5500.15625,
+      "height": 2114,
+      "screens": 3,
+      "coverage": [
+        42.8,
+        38.2,
+        59.8
+      ]
+    },
+    {
+      "i": 6,
+      "id": "rooms",
+      "top": 7613.890625,
+      "height": 1484,
+      "screens": 2,
+      "coverage": [
+        41.6,
+        71.6
+      ]
+    },
+    {
+      "i": 7,
+      "id": "after-dark",
+      "top": 9098.21875,
+      "height": 900,
+      "screens": 1,
+      "coverage": [
+        53.2
+      ]
+    },
+    {
+      "i": 8,
+      "id": "lantern-hour",
+      "top": 9998.21875,
+      "height": 1021,
+      "screens": 2,
+      "coverage": [
+        45.6,
+        44.1
+      ]
+    },
+    {
+      "i": 9,
+      "id": "details",
+      "top": 11018.859375,
+      "height": 1054,
+      "screens": 2,
+      "coverage": [
+        35.1,
+        56.9
+      ]
+    },
+    {
+      "i": 10,
+      "id": "guests",
+      "top": 12072.5625,
+      "height": 1416,
+      "screens": 2,
+      "coverage": [
+        52.4,
+        52.1
+      ]
+    },
+    {
+      "i": 11,
+      "id": "invitation",
+      "top": 13488.96875,
+      "height": 900,
+      "screens": 1,
+      "coverage": [
+        69.4
+      ]
+    }
+  ]
+}

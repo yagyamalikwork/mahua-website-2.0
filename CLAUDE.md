@@ -21,11 +21,12 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–6 done.** Day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured, copy written. **Stop here: Task 7 gets the implementer/reviewer treatment.** |
-| **Working mode** | Solo through Tasks 4–6, then **stop before Task 7** so the page build gets full implementer/reviewer treatment. Agreed with the client 3 Aug. |
+| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–7 done.** Day-arc retired, live copy harvested, image library 14 → 35, chapter sequence defined, scroll primitives built and measured, copy written, **and the page built and composed**. Task 7 awaits review. |
+| **Working mode** | Solo through Tasks 4–6; Task 7 built by an implementer and **awaiting the reviewer**. Agreed with the client 3 Aug. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/`. A placeholder heading until Task 7 builds the real page. |
-| **Tests** | 65, all green. `npm test` must stay green before any commit claiming completion. |
+| **See it** | `npm run dev` → `/`. Twelve chapters, 32 photographs, 16 screens at 1440×900. |
+| **Tests** | 66, all green. `npm test` must stay green before any commit claiming completion. |
+| **Evidence** | `docs/reviews/2026-08-04-task-7/` — every chapter screenshotted at 390/768/1440/1920, plus measured contrast, transfer and motion figures. |
 
 ## The non-negotiables
 
