@@ -1,4 +1,5 @@
 import { media, type MediaId } from "@/lib/media";
+import { capDensity } from "@/lib/sizes";
 
 /**
  * The page's one `<picture>`.
@@ -42,6 +43,14 @@ import { media, type MediaId } from "@/lib/media";
  *
  * `100vw` is the default only because it is the safe answer — it is right for the
  * three full-bleed screens and wasteful everywhere else.
+ *
+ * ## What the caller writes is not quite what ships
+ *
+ * Every `sizes` here goes through `lib/sizes.ts`'s `capDensity` first, which
+ * prepends entries that hold screens denser than 2x to roughly 2x. Callers still
+ * describe their own box honestly and only their own box; the density trade is
+ * made in one place, with the measurements that justify it, rather than smuggled
+ * into eight components' `sizes` strings where nobody could see it.
  */
 export function Photo({
   id,
@@ -71,14 +80,15 @@ export function Photo({
   decorative?: boolean;
 }) {
   const entry = media(id);
+  const served = capDensity(sizes);
 
   const srcSet = (format: "avif" | "webp") =>
     entry.sources.map((s) => `${s[format]} ${s.width}w`).join(", ");
 
   return (
     <picture className={pictureClassName} style={pictureStyle}>
-      <source srcSet={srcSet("avif")} sizes={sizes} type="image/avif" />
-      <source srcSet={srcSet("webp")} sizes={sizes} type="image/webp" />
+      <source srcSet={srcSet("avif")} sizes={served} type="image/avif" />
+      <source srcSet={srcSet("webp")} sizes={served} type="image/webp" />
       {/* A plain <img>, not next/image: the manifest is already sized, compressed
           and budgeted by scripts/build_images.mjs, and next/image would add a
           runtime loader in front of work that is finished.

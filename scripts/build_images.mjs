@@ -386,11 +386,18 @@ const CURATION = [
  *
  * - **400** — a 390px phone at DPR 1, and every small inset and 4-up plate.
  * - **640** — a phone at DPR ~1.6, a 2-up plate, the offset pair in `guests`.
+ * - **768**, **1200** — added 4 Aug 2026, and they are pure fit. A tier list is
+ *   a staircase the browser has to round *up* on: Lighthouse's mobile emulation
+ *   is 412px at DPR 1.75, which asks for 721px, and with 640 and 960 as the only
+ *   neighbours it was landing on the 960 file — 98 KB where 768 covers the same
+ *   pixels in 63. 1200 does the same job for a laptop-width full-bleed, which
+ *   was rounding 1024-1280 up to 1440. Nothing is served smaller than before;
+ *   the staircase just has more steps, so fewer visitors overshoot one.
  * - **960**, **1440** — the pre-existing pair; 1440 stays the canonical entry
  *   recorded as `width`/`height`/`avif`/`webp` so nothing downstream that reads
  *   the largest derivative changes meaning.
  */
-const WIDTHS = [400, 640, 960, 1440];
+const WIDTHS = [400, 640, 768, 960, 1200, 1440];
 const AVIF_QUALITY = 55;
 const WEBP_QUALITY = 72;
 const JPG_QUALITY = 78;

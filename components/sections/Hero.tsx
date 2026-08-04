@@ -1,15 +1,21 @@
+import { preload } from "react-dom";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { SplitLines } from "@/components/motion/SplitLines";
 import { Photo } from "@/components/ui/Photo";
 import { Scrim } from "@/components/ui/Scrim";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey } from "@/content/home";
+import { media } from "@/lib/media";
+import { capDensity } from "@/lib/sizes";
 
 type HeroCopy = {
   readonly headline: string;
   readonly sub: string;
   readonly scrollCue: string;
 };
+
+/** The hero's `sizes`, written once and used by both the preload and the `<img>`. */
+const HERO_SIZES = "100vw";
 
 /**
  * The photograph fills the viewport; the headline sits bottom-left in cream
@@ -39,6 +45,33 @@ export function Hero({ chapter }: { chapter: Chapter }) {
   // the exported type, and nothing in the type system ties a `kind` to the shape
   // of the copy that kind renders. `content/home.test.ts` guards the join itself.
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as HeroCopy;
+  const heroImage = media(chapter.media[0]);
+
+  // `react-dom`'s `preload`, not a `<link>` in the JSX. A hand-written
+  // `<link rel="preload">` renders exactly where it sits in the tree — measured
+  // at byte 9,632 of the document, three lines above the `<picture>` it was
+  // meant to get ahead of, which buys nothing. `preload()` is hoisted into
+  // `<head>`, so the preload scanner meets it in the first kilobyte.
+  //
+  // Measured on Slow 4G at 412px/DPR 1.75 before this: the hero was 65 KB and
+  // took 1,874 ms to arrive, because twelve requests were sharing six HTTP/1.1
+  // connections and it was getting roughly a sixth of the pipe. That is an
+  // ordering problem, not a byte problem, and no amount of re-encoding fixes it.
+  //
+  // `imageSizes` **must** be the same string `Photo` emits, and `type` the same
+  // format the first `<source>` offers, or the preload fetches a candidate the
+  // `<picture>` then declines and the page pays for the hero twice.
+  // `scripts/measure_first_fold.mjs` fails the run if any photograph is ever
+  // downloaded at two widths in one load, which is what that mistake looks like.
+  // `href` is required by the API and ignored by the browser whenever
+  // `imageSrcSet` carries `w` descriptors.
+  preload(heroImage.avif, {
+    as: "image",
+    type: "image/avif",
+    imageSrcSet: heroImage.sources.map((s) => `${s.avif} ${s.width}w`).join(", "),
+    imageSizes: capDensity(HERO_SIZES),
+    fetchPriority: "high",
+  });
 
   return (
     <section
@@ -55,7 +88,7 @@ export function Hero({ chapter }: { chapter: Chapter }) {
             // The one photograph on the page that genuinely is the viewport, and
             // the only one whose arrival the visitor sits and waits for. At 390px
             // this now resolves to the 400w tier rather than the 1440w file.
-            sizes="100vw"
+            sizes={HERO_SIZES}
             pictureClassName="block h-full w-full"
             className="h-full w-full object-cover"
           />

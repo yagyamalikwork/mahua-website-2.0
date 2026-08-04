@@ -1,0 +1,320 @@
+{
+  "measuredAt": "2026-08-04T06:37:43.973Z",
+  "method": "Lighthouse 13.4.1 against `npx next start -p 3100` on the production build, default mobile (412x823 @1.75x, Slow 4G, 4x CPU, simulated throttling) and the desktop preset. `before` is commit aee6dcf, `after` is this commit; both built and measured in the same session on the same machine, because the simulated LCP moves with machine load and cross-session figures are not comparable. Five mobile runs and three desktop runs per state — one run is not a measurement.",
+  "before": {
+    "mobile": {
+      "runs": 5,
+      "score": {
+        "median": 83,
+        "min": 82,
+        "max": 95
+      },
+      "fcp": {
+        "median": 955,
+        "min": 911,
+        "max": 992
+      },
+      "lcp": {
+        "median": 4210,
+        "min": 2562,
+        "max": 4449
+      },
+      "tbt": {
+        "median": 179,
+        "min": 150,
+        "max": 208
+      },
+      "si": {
+        "median": 2179,
+        "min": 1756,
+        "max": 3087
+      },
+      "cls": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "transferKiB": 597,
+      "byTypeKiB": {
+        "document": 33.5,
+        "font": 110.1,
+        "stylesheet": 8.3,
+        "script": 196.4,
+        "image": 222.9,
+        "other": 25.6
+      },
+      "lcpElement": "main > section#arrival > div.mx-auto > p.mt-6 — Two family-run lodges at the gates of Pench and Tadoba.",
+      "perRun": [
+        {
+          "score": 82,
+          "lcp": 4250,
+          "observedLcp": 741,
+          "fcp": 992,
+          "tbt": 202,
+          "si": 2356
+        },
+        {
+          "score": 82,
+          "lcp": 4449,
+          "observedLcp": 672,
+          "fcp": 955,
+          "tbt": 168,
+          "si": 1982
+        },
+        {
+          "score": 95,
+          "lcp": 2562,
+          "observedLcp": 647,
+          "fcp": 939,
+          "tbt": 179,
+          "si": 2179
+        },
+        {
+          "score": 83,
+          "lcp": 4210,
+          "observedLcp": 489,
+          "fcp": 911,
+          "tbt": 208,
+          "si": 1756
+        },
+        {
+          "score": 94,
+          "lcp": 2613,
+          "observedLcp": 1394,
+          "fcp": 969,
+          "tbt": 150,
+          "si": 3087
+        }
+      ]
+    },
+    "desktop": {
+      "runs": 3,
+      "score": {
+        "median": 99,
+        "min": 98,
+        "max": 99
+      },
+      "fcp": {
+        "median": 263,
+        "min": 254,
+        "max": 295
+      },
+      "lcp": {
+        "median": 992,
+        "min": 975,
+        "max": 1003
+      },
+      "tbt": {
+        "median": 9,
+        "min": 5,
+        "max": 9
+      },
+      "si": {
+        "median": 822,
+        "min": 719,
+        "max": 1007
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ],
+      "transferKiB": 737,
+      "byTypeKiB": {
+        "document": 33.5,
+        "font": 110.1,
+        "stylesheet": 8.3,
+        "script": 196.4,
+        "image": 363.2,
+        "other": 25.6
+      },
+      "lcpElement": "main > section#arrival > div.mx-auto > h1.max-w-[15ch] — The wild and the calm, held together",
+      "perRun": [
+        {
+          "score": 98,
+          "lcp": 1003,
+          "observedLcp": 1060,
+          "fcp": 263,
+          "tbt": 9,
+          "si": 1007
+        },
+        {
+          "score": 99,
+          "lcp": 992,
+          "observedLcp": 663,
+          "fcp": 254,
+          "tbt": 9,
+          "si": 719
+        },
+        {
+          "score": 99,
+          "lcp": 975,
+          "observedLcp": 843,
+          "fcp": 295,
+          "tbt": 5,
+          "si": 822
+        }
+      ]
+    }
+  },
+  "after": {
+    "mobile": {
+      "runs": 5,
+      "score": {
+        "median": 92,
+        "min": 83,
+        "max": 96
+      },
+      "fcp": {
+        "median": 968,
+        "min": 922,
+        "max": 990
+      },
+      "lcp": {
+        "median": 3196,
+        "min": 2462,
+        "max": 4140
+      },
+      "tbt": {
+        "median": 161,
+        "min": 146,
+        "max": 218
+      },
+      "si": {
+        "median": 2186,
+        "min": 1659,
+        "max": 2497
+      },
+      "cls": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "transferKiB": 536,
+      "byTypeKiB": {
+        "document": 36.9,
+        "font": 110.1,
+        "image": 182.8,
+        "stylesheet": 8.3,
+        "script": 196.4,
+        "other": 1.9
+      },
+      "lcpElement": "main > section#arrival > div.mx-auto > p.mt-6 — Two family-run lodges at the gates of Pench and Tadoba.",
+      "perRun": [
+        {
+          "score": 92,
+          "lcp": 2872,
+          "observedLcp": 565,
+          "fcp": 922,
+          "tbt": 201,
+          "si": 1659
+        },
+        {
+          "score": 92,
+          "lcp": 3196,
+          "observedLcp": 619,
+          "fcp": 990,
+          "tbt": 148,
+          "si": 1867
+        },
+        {
+          "score": 96,
+          "lcp": 2462,
+          "observedLcp": 858,
+          "fcp": 978,
+          "tbt": 146,
+          "si": 2186
+        },
+        {
+          "score": 83,
+          "lcp": 4140,
+          "observedLcp": 828,
+          "fcp": 944,
+          "tbt": 218,
+          "si": 2335
+        },
+        {
+          "score": 85,
+          "lcp": 4063,
+          "observedLcp": 1076,
+          "fcp": 968,
+          "tbt": 161,
+          "si": 2497
+        }
+      ]
+    },
+    "desktop": {
+      "runs": 3,
+      "score": {
+        "median": 99,
+        "min": 99,
+        "max": 99
+      },
+      "fcp": {
+        "median": 256,
+        "min": 253,
+        "max": 272
+      },
+      "lcp": {
+        "median": 968,
+        "min": 956,
+        "max": 977
+      },
+      "tbt": {
+        "median": 10,
+        "min": 9,
+        "max": 13
+      },
+      "si": {
+        "median": 738,
+        "min": 623,
+        "max": 844
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ],
+      "transferKiB": 717,
+      "byTypeKiB": {
+        "document": 36.9,
+        "font": 110.1,
+        "image": 363.2,
+        "stylesheet": 8.3,
+        "script": 196.4,
+        "other": 1.9
+      },
+      "lcpElement": "main > section#arrival > div.mx-auto > h1.max-w-[15ch] — The wild and the calm, held together",
+      "perRun": [
+        {
+          "score": 99,
+          "lcp": 956,
+          "observedLcp": 705,
+          "fcp": 256,
+          "tbt": 10,
+          "si": 738
+        },
+        {
+          "score": 99,
+          "lcp": 968,
+          "observedLcp": 911,
+          "fcp": 253,
+          "tbt": 13,
+          "si": 844
+        },
+        {
+          "score": 99,
+          "lcp": 977,
+          "observedLcp": 496,
+          "fcp": 272,
+          "tbt": 9,
+          "si": 623
+        }
+      ]
+    }
+  }
+}

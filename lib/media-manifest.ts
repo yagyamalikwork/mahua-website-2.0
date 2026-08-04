@@ -15,7 +15,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/lantern-bridge-dusk-400.avif", webp: "/media/lantern-bridge-dusk-400.webp" },
       { width: 640, height: 426, avif: "/media/lantern-bridge-dusk-640.avif", webp: "/media/lantern-bridge-dusk-640.webp" },
+      { width: 768, height: 512, avif: "/media/lantern-bridge-dusk-768.avif", webp: "/media/lantern-bridge-dusk-768.webp" },
       { width: 960, height: 640, avif: "/media/lantern-bridge-dusk-960.avif", webp: "/media/lantern-bridge-dusk-960.webp" },
+      { width: 1200, height: 799, avif: "/media/lantern-bridge-dusk-1200.avif", webp: "/media/lantern-bridge-dusk-1200.webp" },
       { width: 1300, height: 866, avif: "/media/lantern-bridge-dusk-1300.avif", webp: "/media/lantern-bridge-dusk-1300.webp" },
     ],
     category: "lanternHour",
@@ -34,6 +36,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 267, avif: "/media/bonfire-dinner-400.avif", webp: "/media/bonfire-dinner-400.webp" },
       { width: 640, height: 426, avif: "/media/bonfire-dinner-640.avif", webp: "/media/bonfire-dinner-640.webp" },
+      { width: 768, height: 512, avif: "/media/bonfire-dinner-768.avif", webp: "/media/bonfire-dinner-768.webp" },
       { width: 960, height: 640, avif: "/media/bonfire-dinner-960.avif", webp: "/media/bonfire-dinner-960.webp" },
       { width: 1100, height: 733, avif: "/media/bonfire-dinner-1100.avif", webp: "/media/bonfire-dinner-1100.webp" },
     ],
@@ -53,6 +56,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 600, avif: "/media/veranda-through-leaves-400.avif", webp: "/media/veranda-through-leaves-400.webp" },
       { width: 640, height: 960, avif: "/media/veranda-through-leaves-640.avif", webp: "/media/veranda-through-leaves-640.webp" },
+      { width: 768, height: 1152, avif: "/media/veranda-through-leaves-768.avif", webp: "/media/veranda-through-leaves-768.webp" },
       { width: 960, height: 1440, avif: "/media/veranda-through-leaves-960.avif", webp: "/media/veranda-through-leaves-960.webp" },
       { width: 1100, height: 1650, avif: "/media/veranda-through-leaves-1100.avif", webp: "/media/veranda-through-leaves-1100.webp" },
     ],
@@ -72,7 +76,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 267, avif: "/media/mahua-tola-pool-400.avif", webp: "/media/mahua-tola-pool-400.webp" },
       { width: 640, height: 426, avif: "/media/mahua-tola-pool-640.avif", webp: "/media/mahua-tola-pool-640.webp" },
+      { width: 768, height: 512, avif: "/media/mahua-tola-pool-768.avif", webp: "/media/mahua-tola-pool-768.webp" },
       { width: 960, height: 640, avif: "/media/mahua-tola-pool-960.avif", webp: "/media/mahua-tola-pool-960.webp" },
+      { width: 1200, height: 800, avif: "/media/mahua-tola-pool-1200.avif", webp: "/media/mahua-tola-pool-1200.webp" },
       { width: 1440, height: 959, avif: "/media/mahua-tola-pool-1440.avif", webp: "/media/mahua-tola-pool-1440.webp" },
     ],
     category: "lanternHour",
@@ -91,7 +97,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/reception-path-dusk-400.avif", webp: "/media/reception-path-dusk-400.webp" },
       { width: 640, height: 427, avif: "/media/reception-path-dusk-640.avif", webp: "/media/reception-path-dusk-640.webp" },
+      { width: 768, height: 512, avif: "/media/reception-path-dusk-768.avif", webp: "/media/reception-path-dusk-768.webp" },
       { width: 960, height: 640, avif: "/media/reception-path-dusk-960.avif", webp: "/media/reception-path-dusk-960.webp" },
+      { width: 1200, height: 800, avif: "/media/reception-path-dusk-1200.avif", webp: "/media/reception-path-dusk-1200.webp" },
       { width: 1440, height: 960, avif: "/media/reception-path-dusk-1440.avif", webp: "/media/reception-path-dusk-1440.webp" },
     ],
     category: "lanternHour",
@@ -110,7 +118,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/birding-cairn-dusk-400.avif", webp: "/media/birding-cairn-dusk-400.webp" },
       { width: 640, height: 427, avif: "/media/birding-cairn-dusk-640.avif", webp: "/media/birding-cairn-dusk-640.webp" },
+      { width: 768, height: 512, avif: "/media/birding-cairn-dusk-768.avif", webp: "/media/birding-cairn-dusk-768.webp" },
       { width: 960, height: 640, avif: "/media/birding-cairn-dusk-960.avif", webp: "/media/birding-cairn-dusk-960.webp" },
+      { width: 1200, height: 800, avif: "/media/birding-cairn-dusk-1200.avif", webp: "/media/birding-cairn-dusk-1200.webp" },
       { width: 1440, height: 960, avif: "/media/birding-cairn-dusk-1440.avif", webp: "/media/birding-cairn-dusk-1440.webp" },
     ],
     category: "lanternHour",
@@ -129,7 +139,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 267, avif: "/media/lodge-facade-night-400.avif", webp: "/media/lodge-facade-night-400.webp" },
       { width: 640, height: 427, avif: "/media/lodge-facade-night-640.avif", webp: "/media/lodge-facade-night-640.webp" },
+      { width: 768, height: 512, avif: "/media/lodge-facade-night-768.avif", webp: "/media/lodge-facade-night-768.webp" },
       { width: 960, height: 641, avif: "/media/lodge-facade-night-960.avif", webp: "/media/lodge-facade-night-960.webp" },
+      { width: 1200, height: 801, avif: "/media/lodge-facade-night-1200.avif", webp: "/media/lodge-facade-night-1200.webp" },
       { width: 1440, height: 961, avif: "/media/lodge-facade-night-1440.avif", webp: "/media/lodge-facade-night-1440.webp" },
     ],
     category: "lanternHour",
@@ -148,7 +160,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 225, avif: "/media/petal-table-night-400.avif", webp: "/media/petal-table-night-400.webp" },
       { width: 640, height: 360, avif: "/media/petal-table-night-640.avif", webp: "/media/petal-table-night-640.webp" },
+      { width: 768, height: 432, avif: "/media/petal-table-night-768.avif", webp: "/media/petal-table-night-768.webp" },
       { width: 960, height: 540, avif: "/media/petal-table-night-960.avif", webp: "/media/petal-table-night-960.webp" },
+      { width: 1200, height: 675, avif: "/media/petal-table-night-1200.avif", webp: "/media/petal-table-night-1200.webp" },
       { width: 1440, height: 810, avif: "/media/petal-table-night-1440.avif", webp: "/media/petal-table-night-1440.webp" },
     ],
     category: "lanternHour",
@@ -167,7 +181,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 225, avif: "/media/bonfire-circle-night-400.avif", webp: "/media/bonfire-circle-night-400.webp" },
       { width: 640, height: 360, avif: "/media/bonfire-circle-night-640.avif", webp: "/media/bonfire-circle-night-640.webp" },
+      { width: 768, height: 432, avif: "/media/bonfire-circle-night-768.avif", webp: "/media/bonfire-circle-night-768.webp" },
       { width: 960, height: 540, avif: "/media/bonfire-circle-night-960.avif", webp: "/media/bonfire-circle-night-960.webp" },
+      { width: 1200, height: 675, avif: "/media/bonfire-circle-night-1200.avif", webp: "/media/bonfire-circle-night-1200.webp" },
       { width: 1440, height: 810, avif: "/media/bonfire-circle-night-1440.avif", webp: "/media/bonfire-circle-night-1440.webp" },
     ],
     category: "lanternHour",
@@ -186,7 +202,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/tiger-golden-grass-400.avif", webp: "/media/tiger-golden-grass-400.webp" },
       { width: 640, height: 426, avif: "/media/tiger-golden-grass-640.avif", webp: "/media/tiger-golden-grass-640.webp" },
+      { width: 768, height: 511, avif: "/media/tiger-golden-grass-768.avif", webp: "/media/tiger-golden-grass-768.webp" },
       { width: 960, height: 639, avif: "/media/tiger-golden-grass-960.avif", webp: "/media/tiger-golden-grass-960.webp" },
+      { width: 1200, height: 799, avif: "/media/tiger-golden-grass-1200.avif", webp: "/media/tiger-golden-grass-1200.webp" },
       { width: 1440, height: 959, avif: "/media/tiger-golden-grass-1440.avif", webp: "/media/tiger-golden-grass-1440.webp" },
     ],
     category: "forest",
@@ -205,6 +223,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 504, avif: "/media/tiger-pair-profile-400.avif", webp: "/media/tiger-pair-profile-400.webp" },
       { width: 640, height: 806, avif: "/media/tiger-pair-profile-640.avif", webp: "/media/tiger-pair-profile-640.webp" },
+      { width: 768, height: 967, avif: "/media/tiger-pair-profile-768.avif", webp: "/media/tiger-pair-profile-768.webp" },
       { width: 900, height: 1133, avif: "/media/tiger-pair-profile-900.avif", webp: "/media/tiger-pair-profile-900.webp" },
     ],
     category: "forest",
@@ -223,6 +242,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 601, avif: "/media/leopard-on-rock-400.avif", webp: "/media/leopard-on-rock-400.webp" },
       { width: 640, height: 961, avif: "/media/leopard-on-rock-640.avif", webp: "/media/leopard-on-rock-640.webp" },
+      { width: 768, height: 1154, avif: "/media/leopard-on-rock-768.avif", webp: "/media/leopard-on-rock-768.webp" },
       { width: 900, height: 1352, avif: "/media/leopard-on-rock-900.avif", webp: "/media/leopard-on-rock-900.webp" },
     ],
     category: "forest",
@@ -241,6 +261,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 601, avif: "/media/melanistic-leopard-400.avif", webp: "/media/melanistic-leopard-400.webp" },
       { width: 640, height: 961, avif: "/media/melanistic-leopard-640.avif", webp: "/media/melanistic-leopard-640.webp" },
+      { width: 768, height: 1154, avif: "/media/melanistic-leopard-768.avif", webp: "/media/melanistic-leopard-768.webp" },
       { width: 900, height: 1352, avif: "/media/melanistic-leopard-900.avif", webp: "/media/melanistic-leopard-900.webp" },
     ],
     category: "forest",
@@ -259,7 +280,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/forest-boardwalk-daylight-400.avif", webp: "/media/forest-boardwalk-daylight-400.webp" },
       { width: 640, height: 427, avif: "/media/forest-boardwalk-daylight-640.avif", webp: "/media/forest-boardwalk-daylight-640.webp" },
+      { width: 768, height: 512, avif: "/media/forest-boardwalk-daylight-768.avif", webp: "/media/forest-boardwalk-daylight-768.webp" },
       { width: 960, height: 640, avif: "/media/forest-boardwalk-daylight-960.avif", webp: "/media/forest-boardwalk-daylight-960.webp" },
+      { width: 1200, height: 800, avif: "/media/forest-boardwalk-daylight-1200.avif", webp: "/media/forest-boardwalk-daylight-1200.webp" },
       { width: 1440, height: 960, avif: "/media/forest-boardwalk-daylight-1440.avif", webp: "/media/forest-boardwalk-daylight-1440.webp" },
     ],
     category: "forest",
@@ -278,6 +301,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/forest-trail-canopy-400.avif", webp: "/media/forest-trail-canopy-400.webp" },
       { width: 640, height: 427, avif: "/media/forest-trail-canopy-640.avif", webp: "/media/forest-trail-canopy-640.webp" },
+      { width: 768, height: 512, avif: "/media/forest-trail-canopy-768.avif", webp: "/media/forest-trail-canopy-768.webp" },
       { width: 960, height: 640, avif: "/media/forest-trail-canopy-960.avif", webp: "/media/forest-trail-canopy-960.webp" },
     ],
     category: "forest",
@@ -313,6 +337,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 267, avif: "/media/mahua-vann-room-400.avif", webp: "/media/mahua-vann-room-400.webp" },
       { width: 640, height: 427, avif: "/media/mahua-vann-room-640.avif", webp: "/media/mahua-vann-room-640.webp" },
+      { width: 768, height: 512, avif: "/media/mahua-vann-room-768.avif", webp: "/media/mahua-vann-room-768.webp" },
       { width: 960, height: 641, avif: "/media/mahua-vann-room-960.avif", webp: "/media/mahua-vann-room-960.webp" },
       { width: 1100, height: 734, avif: "/media/mahua-vann-room-1100.avif", webp: "/media/mahua-vann-room-1100.webp" },
     ],
@@ -332,6 +357,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 267, avif: "/media/mahua-tola-suite-400.avif", webp: "/media/mahua-tola-suite-400.webp" },
       { width: 640, height: 426, avif: "/media/mahua-tola-suite-640.avif", webp: "/media/mahua-tola-suite-640.webp" },
+      { width: 768, height: 512, avif: "/media/mahua-tola-suite-768.avif", webp: "/media/mahua-tola-suite-768.webp" },
       { width: 960, height: 640, avif: "/media/mahua-tola-suite-960.avif", webp: "/media/mahua-tola-suite-960.webp" },
       { width: 1100, height: 733, avif: "/media/mahua-tola-suite-1100.avif", webp: "/media/mahua-tola-suite-1100.webp" },
     ],
@@ -351,6 +377,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/guide-sunrise-400.avif", webp: "/media/guide-sunrise-400.webp" },
       { width: 640, height: 426, avif: "/media/guide-sunrise-640.avif", webp: "/media/guide-sunrise-640.webp" },
+      { width: 768, height: 511, avif: "/media/guide-sunrise-768.avif", webp: "/media/guide-sunrise-768.webp" },
       { width: 960, height: 639, avif: "/media/guide-sunrise-960.avif", webp: "/media/guide-sunrise-960.webp" },
       { width: 1000, height: 666, avif: "/media/guide-sunrise-1000.avif", webp: "/media/guide-sunrise-1000.webp" },
     ],
@@ -370,6 +397,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/sound-healing-400.avif", webp: "/media/sound-healing-400.webp" },
       { width: 640, height: 426, avif: "/media/sound-healing-640.avif", webp: "/media/sound-healing-640.webp" },
+      { width: 768, height: 511, avif: "/media/sound-healing-768.avif", webp: "/media/sound-healing-768.webp" },
       { width: 960, height: 639, avif: "/media/sound-healing-960.avif", webp: "/media/sound-healing-960.webp" },
       { width: 1000, height: 666, avif: "/media/sound-healing-1000.avif", webp: "/media/sound-healing-1000.webp" },
     ],
@@ -389,7 +417,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 225, avif: "/media/room-hanging-chair-view-400.avif", webp: "/media/room-hanging-chair-view-400.webp" },
       { width: 640, height: 360, avif: "/media/room-hanging-chair-view-640.avif", webp: "/media/room-hanging-chair-view-640.webp" },
+      { width: 768, height: 432, avif: "/media/room-hanging-chair-view-768.avif", webp: "/media/room-hanging-chair-view-768.webp" },
       { width: 960, height: 540, avif: "/media/room-hanging-chair-view-960.avif", webp: "/media/room-hanging-chair-view-960.webp" },
+      { width: 1200, height: 675, avif: "/media/room-hanging-chair-view-1200.avif", webp: "/media/room-hanging-chair-view-1200.webp" },
       { width: 1440, height: 810, avif: "/media/room-hanging-chair-view-1440.avif", webp: "/media/room-hanging-chair-view-1440.webp" },
     ],
     category: "lodgeLife",
@@ -408,7 +438,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 225, avif: "/media/hanging-chair-forest-deck-400.avif", webp: "/media/hanging-chair-forest-deck-400.webp" },
       { width: 640, height: 360, avif: "/media/hanging-chair-forest-deck-640.avif", webp: "/media/hanging-chair-forest-deck-640.webp" },
+      { width: 768, height: 432, avif: "/media/hanging-chair-forest-deck-768.avif", webp: "/media/hanging-chair-forest-deck-768.webp" },
       { width: 960, height: 540, avif: "/media/hanging-chair-forest-deck-960.avif", webp: "/media/hanging-chair-forest-deck-960.webp" },
+      { width: 1200, height: 675, avif: "/media/hanging-chair-forest-deck-1200.avif", webp: "/media/hanging-chair-forest-deck-1200.webp" },
       { width: 1440, height: 810, avif: "/media/hanging-chair-forest-deck-1440.avif", webp: "/media/hanging-chair-forest-deck-1440.webp" },
     ],
     category: "lodgeLife",
@@ -427,7 +459,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 300, avif: "/media/bungalow-exterior-palms-400.avif", webp: "/media/bungalow-exterior-palms-400.webp" },
       { width: 640, height: 480, avif: "/media/bungalow-exterior-palms-640.avif", webp: "/media/bungalow-exterior-palms-640.webp" },
+      { width: 768, height: 576, avif: "/media/bungalow-exterior-palms-768.avif", webp: "/media/bungalow-exterior-palms-768.webp" },
       { width: 960, height: 720, avif: "/media/bungalow-exterior-palms-960.avif", webp: "/media/bungalow-exterior-palms-960.webp" },
+      { width: 1200, height: 900, avif: "/media/bungalow-exterior-palms-1200.avif", webp: "/media/bungalow-exterior-palms-1200.webp" },
       { width: 1440, height: 1080, avif: "/media/bungalow-exterior-palms-1440.avif", webp: "/media/bungalow-exterior-palms-1440.webp" },
     ],
     category: "lodgeLife",
@@ -446,7 +480,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 267, avif: "/media/suite-tiger-painting-400.avif", webp: "/media/suite-tiger-painting-400.webp" },
       { width: 640, height: 427, avif: "/media/suite-tiger-painting-640.avif", webp: "/media/suite-tiger-painting-640.webp" },
+      { width: 768, height: 512, avif: "/media/suite-tiger-painting-768.avif", webp: "/media/suite-tiger-painting-768.webp" },
       { width: 960, height: 641, avif: "/media/suite-tiger-painting-960.avif", webp: "/media/suite-tiger-painting-960.webp" },
+      { width: 1200, height: 801, avif: "/media/suite-tiger-painting-1200.avif", webp: "/media/suite-tiger-painting-1200.webp" },
       { width: 1440, height: 961, avif: "/media/suite-tiger-painting-1440.avif", webp: "/media/suite-tiger-painting-1440.webp" },
     ],
     category: "lodgeLife",
@@ -465,7 +501,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 225, avif: "/media/room-open-to-bamboo-400.avif", webp: "/media/room-open-to-bamboo-400.webp" },
       { width: 640, height: 360, avif: "/media/room-open-to-bamboo-640.avif", webp: "/media/room-open-to-bamboo-640.webp" },
+      { width: 768, height: 432, avif: "/media/room-open-to-bamboo-768.avif", webp: "/media/room-open-to-bamboo-768.webp" },
       { width: 960, height: 540, avif: "/media/room-open-to-bamboo-960.avif", webp: "/media/room-open-to-bamboo-960.webp" },
+      { width: 1200, height: 675, avif: "/media/room-open-to-bamboo-1200.avif", webp: "/media/room-open-to-bamboo-1200.webp" },
       { width: 1440, height: 811, avif: "/media/room-open-to-bamboo-1440.avif", webp: "/media/room-open-to-bamboo-1440.webp" },
     ],
     category: "lodgeLife",
@@ -484,7 +522,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/lawn-picnic-golden-hour-400.avif", webp: "/media/lawn-picnic-golden-hour-400.webp" },
       { width: 640, height: 427, avif: "/media/lawn-picnic-golden-hour-640.avif", webp: "/media/lawn-picnic-golden-hour-640.webp" },
+      { width: 768, height: 512, avif: "/media/lawn-picnic-golden-hour-768.avif", webp: "/media/lawn-picnic-golden-hour-768.webp" },
       { width: 960, height: 640, avif: "/media/lawn-picnic-golden-hour-960.avif", webp: "/media/lawn-picnic-golden-hour-960.webp" },
+      { width: 1200, height: 800, avif: "/media/lawn-picnic-golden-hour-1200.avif", webp: "/media/lawn-picnic-golden-hour-1200.webp" },
       { width: 1440, height: 960, avif: "/media/lawn-picnic-golden-hour-1440.avif", webp: "/media/lawn-picnic-golden-hour-1440.webp" },
     ],
     category: "lodgeLife",
@@ -503,7 +543,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 225, avif: "/media/hammocks-shade-400.avif", webp: "/media/hammocks-shade-400.webp" },
       { width: 640, height: 360, avif: "/media/hammocks-shade-640.avif", webp: "/media/hammocks-shade-640.webp" },
+      { width: 768, height: 432, avif: "/media/hammocks-shade-768.avif", webp: "/media/hammocks-shade-768.webp" },
       { width: 960, height: 540, avif: "/media/hammocks-shade-960.avif", webp: "/media/hammocks-shade-960.webp" },
+      { width: 1200, height: 675, avif: "/media/hammocks-shade-1200.avif", webp: "/media/hammocks-shade-1200.webp" },
       { width: 1440, height: 810, avif: "/media/hammocks-shade-1440.avif", webp: "/media/hammocks-shade-1440.webp" },
     ],
     category: "lodgeLife",
@@ -522,7 +564,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 300, avif: "/media/garden-path-lodge-400.avif", webp: "/media/garden-path-lodge-400.webp" },
       { width: 640, height: 480, avif: "/media/garden-path-lodge-640.avif", webp: "/media/garden-path-lodge-640.webp" },
+      { width: 768, height: 576, avif: "/media/garden-path-lodge-768.avif", webp: "/media/garden-path-lodge-768.webp" },
       { width: 960, height: 720, avif: "/media/garden-path-lodge-960.avif", webp: "/media/garden-path-lodge-960.webp" },
+      { width: 1200, height: 900, avif: "/media/garden-path-lodge-1200.avif", webp: "/media/garden-path-lodge-1200.webp" },
       { width: 1440, height: 1080, avif: "/media/garden-path-lodge-1440.avif", webp: "/media/garden-path-lodge-1440.webp" },
     ],
     category: "lodgeLife",
@@ -541,6 +585,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 175, avif: "/media/pool-daylight-forest-400.avif", webp: "/media/pool-daylight-forest-400.webp" },
       { width: 640, height: 281, avif: "/media/pool-daylight-forest-640.avif", webp: "/media/pool-daylight-forest-640.webp" },
+      { width: 768, height: 337, avif: "/media/pool-daylight-forest-768.avif", webp: "/media/pool-daylight-forest-768.webp" },
       { width: 960, height: 421, avif: "/media/pool-daylight-forest-960.avif", webp: "/media/pool-daylight-forest-960.webp" },
       { width: 1163, height: 510, avif: "/media/pool-daylight-forest-1163.avif", webp: "/media/pool-daylight-forest-1163.webp" },
     ],
@@ -614,6 +659,7 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 400, avif: "/media/lily-pond-fountain-400.avif", webp: "/media/lily-pond-fountain-400.webp" },
       { width: 640, height: 640, avif: "/media/lily-pond-fountain-640.avif", webp: "/media/lily-pond-fountain-640.webp" },
+      { width: 768, height: 768, avif: "/media/lily-pond-fountain-768.avif", webp: "/media/lily-pond-fountain-768.webp" },
       { width: 960, height: 960, avif: "/media/lily-pond-fountain-960.avif", webp: "/media/lily-pond-fountain-960.webp" },
       { width: 1080, height: 1080, avif: "/media/lily-pond-fountain-1080.avif", webp: "/media/lily-pond-fountain-1080.webp" },
     ],
@@ -633,7 +679,9 @@ export const MANIFEST = [
     sources: [
       { width: 400, height: 266, avif: "/media/geese-garden-pond-400.avif", webp: "/media/geese-garden-pond-400.webp" },
       { width: 640, height: 427, avif: "/media/geese-garden-pond-640.avif", webp: "/media/geese-garden-pond-640.webp" },
+      { width: 768, height: 512, avif: "/media/geese-garden-pond-768.avif", webp: "/media/geese-garden-pond-768.webp" },
       { width: 960, height: 640, avif: "/media/geese-garden-pond-960.avif", webp: "/media/geese-garden-pond-960.webp" },
+      { width: 1200, height: 800, avif: "/media/geese-garden-pond-1200.avif", webp: "/media/geese-garden-pond-1200.webp" },
       { width: 1440, height: 960, avif: "/media/geese-garden-pond-1440.avif", webp: "/media/geese-garden-pond-1440.webp" },
     ],
     category: "details",

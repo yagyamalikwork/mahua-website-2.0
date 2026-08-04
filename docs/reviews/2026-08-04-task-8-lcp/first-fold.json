@@ -1,0 +1,1215 @@
+{
+  "measuredAt": "2026-08-04T06:44:40.506Z",
+  "method": "scripts/measure_first_fold.mjs against the production build over `npx next start`, real CDP throttling (1.6 Mbps / 150 ms RTT / 4x CPU) — not Lighthouse's simulation. `visuallyCompleteMs` is the first screencast frame after which under 1% of the first screen's pixels change again; it is the only outcome measure here, every other figure being a browser API describing its own intent. `before` is commit aee6dcf, `after` is this commit, both measured in the same session.",
+  "caveat": "The `before` rows were taken before a bug in this rig was found and fixed: a module-level constant named `URL` shadowed the URL constructor, so every request's `priority` came back null. Only the priority field was affected — timings and bytes are unaffected and are the comparison. The `after` rows were re-measured with the fixed rig and carry real priorities.",
+  "before": {
+    "dpr1": {
+      "viewport": "390x844@1x",
+      "devicePixelRatio": 1,
+      "profile": "1.6 Mbps down / 150 ms RTT / 4x CPU",
+      "fcpMs": 1336,
+      "lcpMs": 1336,
+      "lcpElement": "P — Two family-run lodges at the gates of Pench and Tadoba.",
+      "visuallyCompleteMs": 1750,
+      "firstPaintedFrameMs": 1333,
+      "firstFoldKB": 432,
+      "byKind": {
+        "document": {
+          "kb": 33.3,
+          "count": 1,
+          "lastEndMs": 345
+        },
+        "font": {
+          "kb": 110.1,
+          "count": 3,
+          "lastEndMs": 1578
+        },
+        "css": {
+          "kb": 8.2,
+          "count": 1,
+          "lastEndMs": 579
+        },
+        "js": {
+          "kb": 195.5,
+          "count": 7,
+          "lastEndMs": 2462
+        },
+        "image": {
+          "kb": 84.4,
+          "count": 7,
+          "lastEndMs": 2393
+        }
+      },
+      "doubleFetched": [],
+      "heroRequest": {
+        "kind": "image",
+        "file": "/media/reception-path-dusk-400.avif",
+        "kb": 20.7,
+        "startMs": 187,
+        "endMs": 910,
+        "priority": null
+      },
+      "requests": [
+        {
+          "kind": "document",
+          "file": "/",
+          "kb": 33.3,
+          "startMs": 0,
+          "endMs": 345,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "startMs": 182,
+          "endMs": 1304,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "startMs": 182,
+          "endMs": 1578,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "startMs": 182,
+          "endMs": 1036,
+          "priority": null
+        },
+        {
+          "kind": "css",
+          "file": "/_next/static/chunks/2573dmou682f_.css",
+          "kb": 8.2,
+          "startMs": 182,
+          "endMs": 579,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1jq4o6yq14o4c.js",
+          "kb": 6.2,
+          "startMs": 182,
+          "endMs": 713,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+          "kb": 4.3,
+          "startMs": 182,
+          "endMs": 1209,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1de9myc15dqxx.js",
+          "kb": 49.6,
+          "startMs": 182,
+          "endMs": 1958,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/25o46h8mdjlrg.js",
+          "kb": 69.6,
+          "startMs": 182,
+          "endMs": 2462,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/158myu8e_yme3.js",
+          "kb": 13.8,
+          "startMs": 182,
+          "endMs": 1579,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/3mqpve7afpwzf.js",
+          "kb": 3.4,
+          "startMs": 182,
+          "endMs": 1593,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1xa_9v-nkw59f.js",
+          "kb": 48.6,
+          "startMs": 182,
+          "endMs": 2462,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/reception-path-dusk-400.avif",
+          "kb": 20.7,
+          "startMs": 187,
+          "endMs": 910,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/bungalow-exterior-palms-400.avif",
+          "kb": 17,
+          "startMs": 1313,
+          "endMs": 2189,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-vann-room-400.avif",
+          "kb": 13,
+          "startMs": 1314,
+          "endMs": 2091,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-pool-400.avif",
+          "kb": 10.1,
+          "startMs": 1314,
+          "endMs": 2043,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-suite-400.avif",
+          "kb": 11.8,
+          "startMs": 1314,
+          "endMs": 2393,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/tiger-golden-grass-400.avif",
+          "kb": 6.7,
+          "startMs": 1314,
+          "endMs": 2375,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/potters-hands-400.avif",
+          "kb": 5.1,
+          "startMs": 1314,
+          "endMs": 2375,
+          "priority": null
+        }
+      ]
+    },
+    "dpr1.75": {
+      "viewport": "412x823@1.75x",
+      "devicePixelRatio": 1.75,
+      "profile": "1.6 Mbps down / 150 ms RTT / 4x CPU",
+      "fcpMs": 1408,
+      "lcpMs": 1408,
+      "lcpElement": "P — Two family-run lodges at the gates of Pench and Tadoba.",
+      "visuallyCompleteMs": 3009,
+      "firstPaintedFrameMs": 1404,
+      "firstFoldKB": 570,
+      "byKind": {
+        "document": {
+          "kb": 33.3,
+          "count": 1,
+          "lastEndMs": 338
+        },
+        "font": {
+          "kb": 110.1,
+          "count": 3,
+          "lastEndMs": 1631
+        },
+        "css": {
+          "kb": 8.2,
+          "count": 1,
+          "lastEndMs": 587
+        },
+        "js": {
+          "kb": 195.5,
+          "count": 7,
+          "lastEndMs": 2848
+        },
+        "image": {
+          "kb": 223,
+          "count": 7,
+          "lastEndMs": 3185
+        }
+      },
+      "doubleFetched": [],
+      "heroRequest": {
+        "kind": "image",
+        "file": "/media/reception-path-dusk-960.avif",
+        "kb": 98.3,
+        "startMs": 191,
+        "endMs": 2963,
+        "priority": null
+      },
+      "requests": [
+        {
+          "kind": "document",
+          "file": "/",
+          "kb": 33.3,
+          "startMs": 0,
+          "endMs": 338,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "startMs": 191,
+          "endMs": 1362,
+          "priority": null
+        },
+        {
+          "kind": "css",
+          "file": "/_next/static/chunks/2573dmou682f_.css",
+          "kb": 8.2,
+          "startMs": 191,
+          "endMs": 587,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "startMs": 191,
+          "endMs": 1051,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "startMs": 191,
+          "endMs": 1631,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1jq4o6yq14o4c.js",
+          "kb": 6.2,
+          "startMs": 191,
+          "endMs": 703,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1de9myc15dqxx.js",
+          "kb": 49.6,
+          "startMs": 191,
+          "endMs": 2047,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/25o46h8mdjlrg.js",
+          "kb": 69.6,
+          "startMs": 191,
+          "endMs": 2763,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+          "kb": 4.3,
+          "startMs": 191,
+          "endMs": 1376,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/158myu8e_yme3.js",
+          "kb": 13.8,
+          "startMs": 191,
+          "endMs": 1913,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/3mqpve7afpwzf.js",
+          "kb": 3.4,
+          "startMs": 191,
+          "endMs": 1930,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1xa_9v-nkw59f.js",
+          "kb": 48.6,
+          "startMs": 191,
+          "endMs": 2848,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/reception-path-dusk-960.avif",
+          "kb": 98.3,
+          "startMs": 191,
+          "endMs": 2963,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/bungalow-exterior-palms-640.avif",
+          "kb": 41.5,
+          "startMs": 1377,
+          "endMs": 3057,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-vann-room-400.avif",
+          "kb": 13,
+          "startMs": 1377,
+          "endMs": 2463,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-pool-640.avif",
+          "kb": 24.5,
+          "startMs": 1377,
+          "endMs": 2897,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-suite-400.avif",
+          "kb": 11.8,
+          "startMs": 1377,
+          "endMs": 2963,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/tiger-golden-grass-960.avif",
+          "kb": 23.8,
+          "startMs": 1377,
+          "endMs": 3185,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/potters-hands-700.avif",
+          "kb": 10.1,
+          "startMs": 1377,
+          "endMs": 3130,
+          "priority": null
+        }
+      ]
+    },
+    "dpr3": {
+      "viewport": "390x844@3x",
+      "devicePixelRatio": 3,
+      "profile": "1.6 Mbps down / 150 ms RTT / 4x CPU",
+      "fcpMs": 1316,
+      "lcpMs": 1316,
+      "lcpElement": "P — Two family-run lodges at the gates of Pench and Tadoba.",
+      "visuallyCompleteMs": 4761,
+      "firstPaintedFrameMs": 1314,
+      "firstFoldKB": 942,
+      "byKind": {
+        "document": {
+          "kb": 33.3,
+          "count": 1,
+          "lastEndMs": 343
+        },
+        "font": {
+          "kb": 110.1,
+          "count": 3,
+          "lastEndMs": 1625
+        },
+        "css": {
+          "kb": 8.2,
+          "count": 1,
+          "lastEndMs": 559
+        },
+        "js": {
+          "kb": 195.5,
+          "count": 7,
+          "lastEndMs": 2892
+        },
+        "image": {
+          "kb": 594.9,
+          "count": 7,
+          "lastEndMs": 5061
+        }
+      },
+      "doubleFetched": [],
+      "heroRequest": {
+        "kind": "image",
+        "file": "/media/reception-path-dusk-1440.avif",
+        "kb": 191.5,
+        "startMs": 192,
+        "endMs": 4715,
+        "priority": null
+      },
+      "requests": [
+        {
+          "kind": "document",
+          "file": "/",
+          "kb": 33.3,
+          "startMs": 0,
+          "endMs": 343,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "startMs": 190,
+          "endMs": 1317,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "startMs": 190,
+          "endMs": 1625,
+          "priority": null
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "startMs": 191,
+          "endMs": 1063,
+          "priority": null
+        },
+        {
+          "kind": "css",
+          "file": "/_next/static/chunks/2573dmou682f_.css",
+          "kb": 8.2,
+          "startMs": 191,
+          "endMs": 559,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1jq4o6yq14o4c.js",
+          "kb": 6.2,
+          "startMs": 191,
+          "endMs": 700,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1de9myc15dqxx.js",
+          "kb": 49.6,
+          "startMs": 191,
+          "endMs": 2026,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/25o46h8mdjlrg.js",
+          "kb": 69.6,
+          "startMs": 191,
+          "endMs": 2779,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+          "kb": 4.3,
+          "startMs": 192,
+          "endMs": 1378,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/158myu8e_yme3.js",
+          "kb": 13.8,
+          "startMs": 192,
+          "endMs": 1876,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/3mqpve7afpwzf.js",
+          "kb": 3.4,
+          "startMs": 192,
+          "endMs": 1910,
+          "priority": null
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1xa_9v-nkw59f.js",
+          "kb": 48.6,
+          "startMs": 192,
+          "endMs": 2892,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/reception-path-dusk-1440.avif",
+          "kb": 191.5,
+          "startMs": 192,
+          "endMs": 4715,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/bungalow-exterior-palms-1440.avif",
+          "kb": 196,
+          "startMs": 1292,
+          "endMs": 5061,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-vann-room-640.avif",
+          "kb": 28.5,
+          "startMs": 1293,
+          "endMs": 2908,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-suite-640.avif",
+          "kb": 24,
+          "startMs": 1293,
+          "endMs": 3593,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-pool-1440.avif",
+          "kb": 97.7,
+          "startMs": 1293,
+          "endMs": 4481,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/potters-hands-700.avif",
+          "kb": 10.1,
+          "startMs": 1294,
+          "endMs": 3377,
+          "priority": null
+        },
+        {
+          "kind": "image",
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "kb": 47.1,
+          "startMs": 1294,
+          "endMs": 4198,
+          "priority": null
+        }
+      ]
+    }
+  },
+  "after": {
+    "dpr1": {
+      "viewport": "390x844@1x",
+      "devicePixelRatio": 1,
+      "profile": "1.6 Mbps down / 150 ms RTT / 4x CPU",
+      "fcpMs": 1420,
+      "lcpMs": 1420,
+      "lcpElement": "P — Two family-run lodges at the gates of Pench and Tadoba.",
+      "visuallyCompleteMs": 1707,
+      "firstPaintedFrameMs": 1418,
+      "firstFoldKB": 435,
+      "byKind": {
+        "document": {
+          "kb": 36.7,
+          "count": 1,
+          "lastEndMs": 356
+        },
+        "font": {
+          "kb": 110.1,
+          "count": 3,
+          "lastEndMs": 1584
+        },
+        "image": {
+          "kb": 84.4,
+          "count": 7,
+          "lastEndMs": 2406
+        },
+        "css": {
+          "kb": 8.2,
+          "count": 1,
+          "lastEndMs": 589
+        },
+        "js": {
+          "kb": 195.5,
+          "count": 7,
+          "lastEndMs": 2471
+        }
+      },
+      "doubleFetched": [],
+      "heroRequest": {
+        "kind": "image",
+        "file": "/media/reception-path-dusk-400.avif",
+        "kb": 20.7,
+        "startMs": 196,
+        "endMs": 904,
+        "priority": "High"
+      },
+      "requests": [
+        {
+          "kind": "document",
+          "file": "/",
+          "kb": 36.7,
+          "startMs": 0,
+          "endMs": 356,
+          "priority": "VeryHigh"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "startMs": 194,
+          "endMs": 1315,
+          "priority": "High"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "startMs": 196,
+          "endMs": 1030,
+          "priority": "High"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "startMs": 196,
+          "endMs": 1584,
+          "priority": "High"
+        },
+        {
+          "kind": "image",
+          "file": "/media/reception-path-dusk-400.avif",
+          "kb": 20.7,
+          "startMs": 196,
+          "endMs": 904,
+          "priority": "High"
+        },
+        {
+          "kind": "css",
+          "file": "/_next/static/chunks/2573dmou682f_.css",
+          "kb": 8.2,
+          "startMs": 196,
+          "endMs": 589,
+          "priority": "VeryHigh"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1jq4o6yq14o4c.js",
+          "kb": 6.2,
+          "startMs": 196,
+          "endMs": 722,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1de9myc15dqxx.js",
+          "kb": 49.6,
+          "startMs": 196,
+          "endMs": 1972,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+          "kb": 4.3,
+          "startMs": 196,
+          "endMs": 1204,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/25o46h8mdjlrg.js",
+          "kb": 69.6,
+          "startMs": 196,
+          "endMs": 2471,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/158myu8e_yme3.js",
+          "kb": 13.8,
+          "startMs": 196,
+          "endMs": 1569,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/3mqpve7afpwzf.js",
+          "kb": 3.4,
+          "startMs": 196,
+          "endMs": 1600,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1xa_9v-nkw59f.js",
+          "kb": 48.6,
+          "startMs": 196,
+          "endMs": 2456,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/bungalow-exterior-palms-400.avif",
+          "kb": 17,
+          "startMs": 1399,
+          "endMs": 2173,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-vann-room-400.avif",
+          "kb": 13,
+          "startMs": 1400,
+          "endMs": 2105,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-pool-400.avif",
+          "kb": 10.1,
+          "startMs": 1400,
+          "endMs": 2038,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/tiger-golden-grass-400.avif",
+          "kb": 6.7,
+          "startMs": 1400,
+          "endMs": 2343,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-suite-400.avif",
+          "kb": 11.8,
+          "startMs": 1400,
+          "endMs": 2406,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/potters-hands-400.avif",
+          "kb": 5.1,
+          "startMs": 1401,
+          "endMs": 2389,
+          "priority": "Low"
+        }
+      ]
+    },
+    "dpr1.75": {
+      "viewport": "412x823@1.75x",
+      "devicePixelRatio": 1.75,
+      "profile": "1.6 Mbps down / 150 ms RTT / 4x CPU",
+      "fcpMs": 1400,
+      "lcpMs": 1400,
+      "lcpElement": "P — Two family-run lodges at the gates of Pench and Tadoba.",
+      "visuallyCompleteMs": 2067,
+      "firstPaintedFrameMs": 1397,
+      "firstFoldKB": 534,
+      "byKind": {
+        "document": {
+          "kb": 36.7,
+          "count": 1,
+          "lastEndMs": 421
+        },
+        "font": {
+          "kb": 110.1,
+          "count": 3,
+          "lastEndMs": 1620
+        },
+        "image": {
+          "kb": 183,
+          "count": 7,
+          "lastEndMs": 2969
+        },
+        "css": {
+          "kb": 8.2,
+          "count": 1,
+          "lastEndMs": 587
+        },
+        "js": {
+          "kb": 195.5,
+          "count": 7,
+          "lastEndMs": 2786
+        }
+      },
+      "doubleFetched": [],
+      "heroRequest": {
+        "kind": "image",
+        "file": "/media/reception-path-dusk-768.avif",
+        "kb": 65.4,
+        "startMs": 179,
+        "endMs": 2038,
+        "priority": "High"
+      },
+      "requests": [
+        {
+          "kind": "document",
+          "file": "/",
+          "kb": 36.7,
+          "startMs": 0,
+          "endMs": 421,
+          "priority": "VeryHigh"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "startMs": 179,
+          "endMs": 1340,
+          "priority": "High"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "startMs": 179,
+          "endMs": 1620,
+          "priority": "High"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "startMs": 179,
+          "endMs": 1040,
+          "priority": "High"
+        },
+        {
+          "kind": "image",
+          "file": "/media/reception-path-dusk-768.avif",
+          "kb": 65.4,
+          "startMs": 179,
+          "endMs": 2038,
+          "priority": "High"
+        },
+        {
+          "kind": "css",
+          "file": "/_next/static/chunks/2573dmou682f_.css",
+          "kb": 8.2,
+          "startMs": 179,
+          "endMs": 587,
+          "priority": "VeryHigh"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1jq4o6yq14o4c.js",
+          "kb": 6.2,
+          "startMs": 179,
+          "endMs": 770,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1de9myc15dqxx.js",
+          "kb": 49.6,
+          "startMs": 179,
+          "endMs": 2053,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+          "kb": 4.3,
+          "startMs": 179,
+          "endMs": 1371,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/25o46h8mdjlrg.js",
+          "kb": 69.6,
+          "startMs": 179,
+          "endMs": 2741,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/158myu8e_yme3.js",
+          "kb": 13.8,
+          "startMs": 179,
+          "endMs": 1887,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1xa_9v-nkw59f.js",
+          "kb": 48.6,
+          "startMs": 179,
+          "endMs": 2786,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/3mqpve7afpwzf.js",
+          "kb": 3.4,
+          "startMs": 180,
+          "endMs": 1903,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/bungalow-exterior-palms-640.avif",
+          "kb": 41.5,
+          "startMs": 1372,
+          "endMs": 2969,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-vann-room-400.avif",
+          "kb": 13,
+          "startMs": 1372,
+          "endMs": 2392,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-pool-640.avif",
+          "kb": 24.5,
+          "startMs": 1372,
+          "endMs": 2870,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-suite-400.avif",
+          "kb": 11.8,
+          "startMs": 1372,
+          "endMs": 2586,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/tiger-golden-grass-768.avif",
+          "kb": 16.7,
+          "startMs": 1372,
+          "endMs": 2936,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/potters-hands-700.avif",
+          "kb": 10.1,
+          "startMs": 1373,
+          "endMs": 2957,
+          "priority": "Low"
+        }
+      ]
+    },
+    "dpr3": {
+      "viewport": "390x844@3x",
+      "devicePixelRatio": 3,
+      "profile": "1.6 Mbps down / 150 ms RTT / 4x CPU",
+      "fcpMs": 1492,
+      "lcpMs": 1492,
+      "lcpElement": "P — Two family-run lodges at the gates of Pench and Tadoba.",
+      "visuallyCompleteMs": 3064,
+      "firstPaintedFrameMs": 1491,
+      "firstFoldKB": 601,
+      "byKind": {
+        "document": {
+          "kb": 36.7,
+          "count": 1,
+          "lastEndMs": 411
+        },
+        "font": {
+          "kb": 110.1,
+          "count": 3,
+          "lastEndMs": 1634
+        },
+        "image": {
+          "kb": 250.9,
+          "count": 7,
+          "lastEndMs": 3329
+        },
+        "css": {
+          "kb": 8.2,
+          "count": 1,
+          "lastEndMs": 577
+        },
+        "js": {
+          "kb": 195.5,
+          "count": 7,
+          "lastEndMs": 2894
+        }
+      },
+      "doubleFetched": [],
+      "heroRequest": {
+        "kind": "image",
+        "file": "/media/reception-path-dusk-960.avif",
+        "kb": 98.3,
+        "startMs": 194,
+        "endMs": 2961,
+        "priority": "High"
+      },
+      "requests": [
+        {
+          "kind": "document",
+          "file": "/",
+          "kb": 36.7,
+          "startMs": 0,
+          "endMs": 411,
+          "priority": "VeryHigh"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "startMs": 192,
+          "endMs": 1357,
+          "priority": "High"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "startMs": 194,
+          "endMs": 1634,
+          "priority": "High"
+        },
+        {
+          "kind": "font",
+          "file": "/_next/static/media/cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "startMs": 194,
+          "endMs": 1063,
+          "priority": "High"
+        },
+        {
+          "kind": "image",
+          "file": "/media/reception-path-dusk-960.avif",
+          "kb": 98.3,
+          "startMs": 194,
+          "endMs": 2961,
+          "priority": "High"
+        },
+        {
+          "kind": "css",
+          "file": "/_next/static/chunks/2573dmou682f_.css",
+          "kb": 8.2,
+          "startMs": 194,
+          "endMs": 577,
+          "priority": "VeryHigh"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1jq4o6yq14o4c.js",
+          "kb": 6.2,
+          "startMs": 195,
+          "endMs": 761,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1de9myc15dqxx.js",
+          "kb": 49.6,
+          "startMs": 195,
+          "endMs": 2049,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+          "kb": 4.3,
+          "startMs": 195,
+          "endMs": 1390,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/25o46h8mdjlrg.js",
+          "kb": 69.6,
+          "startMs": 195,
+          "endMs": 2812,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/158myu8e_yme3.js",
+          "kb": 13.8,
+          "startMs": 195,
+          "endMs": 1927,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/1xa_9v-nkw59f.js",
+          "kb": 48.6,
+          "startMs": 195,
+          "endMs": 2894,
+          "priority": "Low"
+        },
+        {
+          "kind": "js",
+          "file": "/_next/static/chunks/3mqpve7afpwzf.js",
+          "kb": 3.4,
+          "startMs": 195,
+          "endMs": 1927,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/bungalow-exterior-palms-768.avif",
+          "kb": 60.4,
+          "startMs": 1471,
+          "endMs": 3329,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-vann-room-400.avif",
+          "kb": 13,
+          "startMs": 1471,
+          "endMs": 2461,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-pool-768.avif",
+          "kb": 33.5,
+          "startMs": 1471,
+          "endMs": 3080,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/mahua-tola-suite-400.avif",
+          "kb": 11.8,
+          "startMs": 1471,
+          "endMs": 2976,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/potters-hands-700.avif",
+          "kb": 10.1,
+          "startMs": 1472,
+          "endMs": 3214,
+          "priority": "Low"
+        },
+        {
+          "kind": "image",
+          "file": "/media/tiger-golden-grass-960.avif",
+          "kb": 23.8,
+          "startMs": 1472,
+          "endMs": 3312,
+          "priority": "Low"
+        }
+      ]
+    }
+  }
+}

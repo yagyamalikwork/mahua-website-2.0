@@ -1,0 +1,12 @@
+{
+  "question": "How much of the hero's wait belongs to the site, and how much to `next start` speaking HTTP/1.1?",
+  "method": "scripts/serve_http2.mjs proxies the same `next start` upstream over TLS twice — once with ALPN h2, once with h2 withheld — so the only difference between the two runs is the protocol. Both measured with scripts/measure_first_fold.mjs at 412x823 @1.75x on Slow 4G / 4x CPU, twice each. The plain http:// baseline is shown for scale but is NOT the control: it pays no TLS handshake, and over a 150 ms-RTT link that alone is worth ~300-450 ms.",
+  "runs": {
+    "http1.1 plain (the baseline everything else in this folder uses)": { "fcpMs": 1300, "visuallyCompleteMs": 2061 },
+    "http1.1 over TLS": [ { "fcpMs": 1412, "visuallyCompleteMs": 2092 }, { "fcpMs": 1388, "visuallyCompleteMs": 2088 } ],
+    "http2 over TLS":   [ { "fcpMs": 1648, "visuallyCompleteMs": 2877 }, { "fcpMs": 1652, "visuallyCompleteMs": 2891 } ]
+  },
+  "result": "HTTP/2 was reproducibly SLOWER here: 2,884 ms mean visually-complete against 2,090 ms for HTTP/1.1 over the same TLS.",
+  "interpretation": "This does not mean HTTP/2 is slower, and it must not be quoted as though it did. Node's http2 server round-robins between streams and implements no priority scheduling, so on a bandwidth-constrained link it interleaves all twenty responses and nothing finishes early — where HTTP/1.1's six-connection limit acts as an accidental concurrency cap and lets individual responses complete. A CDN that honours stream priority would behave differently, and this rig cannot show how differently.",
+  "whatItDoesEstablish": "The improvement cannot be assumed to arrive for free from production hosting, and the figures in this folder should not be discounted on the grounds that `next start` is HTTP/1.1. Re-measure against the real host once one exists; that is the only rig that settles it."
+}

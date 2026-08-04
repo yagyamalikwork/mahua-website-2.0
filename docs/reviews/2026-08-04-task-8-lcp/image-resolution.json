@@ -1,0 +1,160 @@
+{
+  "measuredAt": "2026-08-04T06:31:40.202Z",
+  "url": "http://localhost:3100/",
+  "densityCap": 2,
+  "results": [
+    {
+      "viewport": "390x844@1x",
+      "images": 32,
+      "softestServed": {
+        "file": "/media/reception-path-dusk-400.avif",
+        "fileWidth": 400,
+        "widestOffered": 1440,
+        "cssWidth": 390,
+        "needed": 390,
+        "ratio": 1.03,
+        "ratioAtDeviceDensity": 1.03,
+        "atLibraryCeiling": false
+      },
+      "deviceDensity": {
+        "worst": 1.03,
+        "median": 1.17,
+        "best": 3.08
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": []
+    },
+    {
+      "viewport": "390x844@3x",
+      "images": 32,
+      "softestServed": {
+        "file": "/media/potters-hands-700.avif",
+        "fileWidth": 700,
+        "widestOffered": 700,
+        "cssWidth": 366,
+        "needed": 732,
+        "ratio": 0.96,
+        "ratioAtDeviceDensity": 0.64,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.64,
+        "median": 0.75,
+        "best": 1.03
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/potters-hands-700.avif",
+          "needed": 732,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "needed": 732,
+          "ratio": 0.96
+        }
+      ]
+    },
+    {
+      "viewport": "768x1024@1x",
+      "images": 32,
+      "softestServed": {
+        "file": "/media/potters-hands-700.avif",
+        "fileWidth": 700,
+        "widestOffered": 700,
+        "cssWidth": 720,
+        "needed": 720,
+        "ratio": 0.97,
+        "ratioAtDeviceDensity": 0.97,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.97,
+        "median": 1.25,
+        "best": 1.69
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/potters-hands-700.avif",
+          "needed": 720,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "needed": 720,
+          "ratio": 0.97
+        }
+      ]
+    },
+    {
+      "viewport": "1440x900@1x",
+      "images": 32,
+      "softestServed": {
+        "file": "/media/reception-path-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "cssWidth": 1440,
+        "needed": 1440,
+        "ratio": 1,
+        "ratioAtDeviceDensity": 1,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 1,
+        "median": 1.25,
+        "best": 1.79
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": []
+    },
+    {
+      "viewport": "1920x1080@1x",
+      "images": 32,
+      "softestServed": {
+        "file": "/media/reception-path-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "cssWidth": 1920,
+        "needed": 1920,
+        "ratio": 0.75,
+        "ratioAtDeviceDensity": 0.75,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.75,
+        "median": 1.16,
+        "best": 2.1
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/guide-sunrise-1000.avif",
+          "needed": 1027,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        }
+      ]
+    }
+  ]
+}
