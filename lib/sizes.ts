@@ -283,7 +283,27 @@ function grow(value: string, factor: number): string {
   return factor <= 1.005 ? value : scale(value, factor);
 }
 
-function viewportCoverSizes(imageAspect: number, heightVh: number): string {
+/**
+ * The `sizes` for a box measured in viewport *height*, where the crop factor
+ * depends on the viewport's own aspect ratio rather than on a fixed box shape.
+ *
+ * **This builds its width list from scratch and cannot honour the caller's.**
+ * The arithmetic below assumes the box spans the full viewport width, which is
+ * true of both call sites (`Hero` and `FullBleed` are edge-to-edge) and is not a
+ * property this function can check for itself — so it checks the input that
+ * implies it. Until 5 Aug 2026 it simply ignored whatever it was given:
+ * `coverSizes("50vw", { viewportHeightVh: 100 }, 1.5)` returned `375vw`, sizing
+ * a half-width box as though it were the whole screen. Latent, since nothing
+ * asked for that, and silent in a file where every other bad input throws.
+ */
+function viewportCoverSizes(sizes: string, imageAspect: number, heightVh: number): string {
+  if (sizes.trim() !== "100vw") {
+    throw new Error(
+      `sizes: a viewportHeightVh box assumes a full-width box and so only accepts "100vw", got ` +
+        `${JSON.stringify(sizes)}. Give the box a width-based ratio instead, or teach this function ` +
+        `to scale by the caller's width — do not let it silently discard one.`,
+    );
+  }
   const boxHeightInViewports = heightVh / 100;
   const entries = VIEWPORT_ASPECT_BUCKETS.map((bucket) => {
     const factor = Math.max(1, (imageAspect * boxHeightInViewports) / bucket.floor);
@@ -315,7 +335,11 @@ export function coverSizes(sizes: string, box: CoverBox | undefined, imageAspect
   if (!(imageAspect > 0)) throw new Error(`sizes: image aspect must be positive, got ${imageAspect}`);
 
   if (typeof box === "object" && !Array.isArray(box)) {
-    return viewportCoverSizes(imageAspect, (box as { viewportHeightVh: number }).viewportHeightVh);
+    return viewportCoverSizes(
+      sizes,
+      imageAspect,
+      (box as { viewportHeightVh: number }).viewportHeightVh,
+    );
   }
 
   const ratios = (typeof box === "number" ? [[0, box] as const] : box) as readonly (readonly [

@@ -224,6 +224,127 @@ describe("the sizes the page actually serves", () => {
   });
 });
 
+/**
+ * The two halves of a cover crop, held together.
+ *
+ * A photograph in an `object-fit: cover` box is drawn wider than its box
+ * whenever the box is taller than the photograph, and `sizes` has to describe
+ * the *drawn* width or the browser fetches a file a quarter of the resolution it
+ * needs. That was a Critical on this branch: the hero and the tiger shipped
+ * visibly blurred on a phone, and the rig built to catch it measured the box too.
+ *
+ * The fix pairs a Tailwind `aspect-[a/b]` class in the markup with a ratio in a
+ * `BOXES` constant, and **nothing connected the two**. A reviewer demonstrated
+ * it precisely: deleting `box={HERO_BOX}` from `Hero.tsx`, and flattening
+ * `ChapterIntro`'s `BOXES.solo` to a single ratio, each reintroduced the defect
+ * with the whole suite still green. `BOXES` is a hand transcription of classes
+ * written somewhere else in the same file, and only a browser rig — a build plus
+ * a server, not `npm test` — ever compared them.
+ *
+ * These two tests are that comparison, in CI, on the source text.
+ */
+describe("cover boxes match the markup they describe", () => {
+  const root = path.resolve(import.meta.dirname, "..");
+  const read = (rel: string) => readFileSync(path.join(root, rel), "utf8");
+
+  /** Every distinct aspect ratio written as a Tailwind class in a file. */
+  const ratiosInMarkup = (src: string): Set<number> => {
+    const found = new Set<number>();
+    for (const [, a, b] of src.matchAll(/aspect-\[(\d+)\/(\d+)\]/g)) {
+      found.add(Number(a) / Number(b));
+    }
+    if (/aspect-square/.test(src)) found.add(1);
+    return found;
+  };
+
+  /**
+   * Every distinct aspect ratio a `BOXES`-style declaration resolves to.
+   *
+   * Walks the four shapes a box is written in rather than collecting every
+   * number it can find. A blind walk picks up the `0` in a `[0, 3/2]` breakpoint
+   * pair and the `100` in `{ viewportHeightVh: 100 }` and calls them aspect
+   * ratios — which is how the first draft of this test failed three components
+   * that were perfectly correct.
+   */
+  const ratiosDeclared = (box: unknown): Set<number> => {
+    const found = new Set<number>();
+    const walk = (v: unknown): void => {
+      if (typeof v === "number") {
+        found.add(v);
+      } else if (Array.isArray(v)) {
+        // A breakpoint list: `[minWidth, ratio]` pairs. Only the ratio is one.
+        for (const entry of v) {
+          if (Array.isArray(entry)) walk(entry[1]);
+          else walk(entry);
+        }
+      } else if (v && typeof v === "object") {
+        const o = v as Record<string, unknown>;
+        // A viewport-height box describes a share of the screen, not a shape,
+        // and produces no `aspect-*` class to compare against.
+        if ("viewportHeightVh" in o) return;
+        if ("ratio" in o) return void walk(o.ratio);
+        Object.values(o).forEach(walk);
+      }
+    };
+    walk(box);
+    return found;
+  };
+
+  const CASES: readonly { file: string; declared: unknown }[] = [
+    { file: "components/sections/Hero.tsx", declared: HERO_BOX },
+    { file: "components/sections/ChapterIntro.tsx", declared: INTRO_BOXES },
+    { file: "components/sections/LodgeCards.tsx", declared: LODGE_BOXES },
+    { file: "components/sections/SplitFeature.tsx", declared: SPLIT_BOXES },
+    { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
+    { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
+  ];
+
+  it.each(CASES.map((c) => [c.file, c.declared] as const))(
+    "%s declares exactly the ratios its markup uses",
+    (file, declared) => {
+      const inMarkup = [...ratiosInMarkup(read(file))].sort((a, b) => a - b);
+      const inCode = [...ratiosDeclared(declared)].sort((a, b) => a - b);
+
+      // Set equality, both directions on purpose. A ratio in the markup that
+      // nothing declares is a photograph whose `sizes` never learns it is being
+      // cropped; a declared ratio no class produces is a `sizes` describing a
+      // box that does not exist.
+      expect(inCode, `${file}: declared ratios do not match its aspect-* classes`).toEqual(inMarkup);
+    },
+  );
+
+  it("passes a box to every Photo that sits in one", () => {
+    // The other half. Set equality above cannot see a `box={...}` deleted from
+    // the JSX while its constant stays declared and its class stays in the
+    // markup — which is exactly what the reviewer did to `Hero.tsx`. Every
+    // `<Photo` in these files is inside a cover box, so the counts must agree.
+    for (const { file } of CASES) {
+      const src = read(file);
+      const photos = (src.match(/<Photo\b/g) ?? []).length;
+      const boxes = (src.match(/\bbox=/g) ?? []).length;
+      if (photos === 0) continue; // PlateGrid hands its frame to `ui/Plate.tsx`.
+      expect(boxes, `${file}: ${photos} <Photo> but ${boxes} box= props`).toBe(photos);
+    }
+  });
+
+  it("refuses a viewport-height box it cannot honour, rather than discarding the width", () => {
+    // A `viewportHeightVh` box rebuilds the width list from the viewport's own
+    // aspect, which is only correct for a full-width box. It used to ignore the
+    // caller's list without saying so: "50vw" in, "375vw" out.
+    expect(() => coverSizes("50vw", { viewportHeightVh: 100 }, 3 / 2)).toThrow(/only accepts "100vw"/);
+    expect(() => coverSizes("100vw", { viewportHeightVh: 100 }, 3 / 2)).not.toThrow();
+  });
+
+  it("keeps ui/Plate.tsx forwarding its frame ratio to the photograph", () => {
+    // PlateGrid is the one case the count check above skips, because its box
+    // travels as `frame` through `ui/Plate.tsx`. If that forwarding is dropped,
+    // three chapters' plates go back to being sized by their box.
+    expect(read("components/ui/Plate.tsx"), "Plate no longer forwards frame.ratio to Photo").toMatch(
+      /box=\{\s*frame\?\.\s*ratio\s*\}/,
+    );
+  });
+});
+
 describe("coverSizes", () => {
   it("leaves a box the photograph exactly fills alone", () => {
     expect(coverSizes("(min-width: 1024px) 42vw, 100vw", 3 / 2, 3 / 2)).toBe(
