@@ -12,6 +12,18 @@
  */
 @custom-variant short (@media (max-height: 800px));
 
+/*
+ * "tall:" — the exact complement of "short:", and it exists so the two can
+ * never fight. `components/ui/Plate.tsx` swaps between a fixed-ratio frame and
+ * an auto-height image at the same threshold; written as `sm:aspect-[2/3]`
+ * plus `short:aspect-auto` that is two rules matching the same element at the
+ * same breakpoint, and which one wins depends on the order Tailwind happens to
+ * emit its variants in. `ChapterIntro`'s solo column was broken by exactly that
+ * (see its comment). Mutually exclusive media queries have no order to get
+ * wrong.
+ */
+@custom-variant tall (@media (min-height: 801px));
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);

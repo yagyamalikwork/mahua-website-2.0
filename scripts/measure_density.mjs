@@ -2,9 +2,20 @@
 //
 // The client rejected the previous build for "too few images" and "too much
 // empty space". CLAUDE.md turns the second into non-negotiable #8: *no section
-// may render more than ~30% empty space at 1440x900*. Nothing measured it until
+// may render more than 45% empty space at 1440x900*. Nothing measured it until
 // this rig; one band of `field-days` had been called "~32%" by eye, which is
 // exactly the kind of assurance this project has twice been embarrassed by.
+//
+// **The figure was 30% here until 5 Aug 2026, three days after CLAUDE.md moved
+// it.** The rule changed on 4 Aug when this same rig, pointed at the reference
+// site the client chose, scored it 58.1% mean empty against our 42.9% — the
+// budget was stricter than the benchmark it existed to chase — and 45% is the
+// midpoint the client picked. The constant here was never updated, so every run
+// since has printed OVER against a number nothing enforces. It is corrected
+// rather than reinterpreted: `passesMean` is the rule as CLAUDE.md #8 states it
+// and as its own table of failing chapters applies it, and `worstEmptyPercent`
+// is still reported beside it so the single emptiest screen in a chapter cannot
+// hide inside a mean.
 //
 // ## The unit is a screen
 //
@@ -93,7 +104,7 @@ const CELL = 6;
 /** Distance between sampled scroll positions. */
 const STEP = Number(flag("step", "150"));
 /** Non-negotiable #8. */
-const MAX_EMPTY = 30;
+const MAX_EMPTY = 45;
 
 /**
  * One screen, hit-tested. Runs in the page.
@@ -356,7 +367,10 @@ async function main() {
       screensTall: Number((s.height / HEIGHT).toFixed(2)),
       wholeScreensAvailable,
       ...stats,
-      passes: stats.worstEmptyPercent <= MAX_EMPTY,
+      /** The rule: non-negotiable #8, applied to the chapter as CLAUDE.md states it. */
+      passesMean: stats.meanEmptyPercent <= MAX_EMPTY,
+      /** Not the rule, and reported anyway — a mean can bury one very empty screen. */
+      passesWorst: stats.worstEmptyPercent <= MAX_EMPTY,
     };
   });
 
@@ -431,14 +445,21 @@ async function main() {
   );
 
   if (chapters.length) {
-    console.log("\nchapter          tall  screens  mean empty  worst empty");
+    console.log(`\nchapter          tall  screens  mean empty  worst empty   (budget ${MAX_EMPTY}%)`);
     for (const c of chapters) {
       console.log(
         `${c.id.padEnd(15)} ${String(c.screensTall).padStart(4)}  ${String(c.screens).padStart(7)}  ` +
           `${String(c.meanEmptyPercent).padStart(9)}%  ${String(c.worstEmptyPercent).padStart(9)}%` +
-          `${c.passes ? "" : "  OVER"}${c.wholeScreensAvailable ? "" : "  (no whole screen fits)"}`,
+          `${c.passesMean ? "" : "  OVER"}${c.passesMean && !c.passesWorst ? "  (worst screen over)" : ""}` +
+          `${c.wholeScreensAvailable ? "" : "  (no whole screen fits)"}`,
       );
     }
+    const over = chapters.filter((c) => !c.passesMean);
+    console.log(
+      over.length
+        ? `\n${over.length} chapter(s) over the ${MAX_EMPTY}% budget: ${over.map((c) => c.id).join(", ")}`
+        : `\nall ${chapters.length} chapters inside the ${MAX_EMPTY}% budget`,
+    );
   }
   console.log("\nemptiest screens:");
   for (const w of report.emptiestScreens) {

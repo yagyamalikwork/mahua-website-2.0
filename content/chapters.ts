@@ -116,12 +116,20 @@ const CHAPTER_LIST = [
     kind: "splitFeature",
     // The hammocks carry the chapter's second paragraph — the half of the day
     // most lodges leave out. Nothing else in the library says "rest".
+    //
+    // `pool-daylight-forest` was one of the two photographs held in reserve after
+    // Task 4 and came off the bench on 5 Aug 2026. It sits under that same
+    // sentence, in a column that until then held one display line and 500px of
+    // paper — and it is the only other frame in the library of the slow half of
+    // the day. Its 1163px width is why it is a letterbox in a half-width column
+    // rather than anything larger.
     media: [
       "guide-sunrise",
       "forest-boardwalk-daylight",
       "tiger-crossing-track",
       "forest-trail-canopy",
       "hammocks-shade",
+      "pool-daylight-forest",
     ],
   },
   {

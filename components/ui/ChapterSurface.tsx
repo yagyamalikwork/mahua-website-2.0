@@ -16,9 +16,15 @@
  *
  * `PALETTE.paperDeep` is the guidelines' own second surface and CLAUDE.md
  * non-negotiable #3 names it. It is here for a measured reason: with all eight
- * cream chapters on one colour, the ~190px where one section's bottom padding
+ * cream chapters on one colour, the ~160px where one section's bottom padding
  * meets the next one's top padding reads as a hole in the page. As a tonal step
  * it reads as two panels meeting, which is what it is.
+ *
+ * **That stack was 192px until 5 Aug 2026** — `lg:py-24` twice over — and the
+ * five emptiest screens on the whole page were all of them chapter joins, at
+ * 67-71% empty, belonging to no chapter and so appearing in no chapter's score
+ * (`docs/reviews/2026-08-05-density/`). 80px a side is the dial this comment
+ * always said it was; nothing was removed to turn it.
  */
 export function ChapterSurface({
   id,
@@ -38,7 +44,7 @@ export function ChapterSurface({
       // `overflow-x-clip`, never `overflow-x-hidden`: several chapters push a
       // photograph past the viewport edge on purpose, and `hidden` would make
       // the page a scroll container and break `position: sticky` inside it.
-      className={`relative overflow-x-clip bg-[color:var(--bg)] py-16 md:py-20 lg:py-24 ${className ?? ""}`}
+      className={`relative overflow-x-clip bg-[color:var(--bg)] py-14 md:py-16 lg:py-20 ${className ?? ""}`}
       style={surface ? ({ "--bg": "var(--surface)" } as React.CSSProperties) : undefined}
     >
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">{children}</div>

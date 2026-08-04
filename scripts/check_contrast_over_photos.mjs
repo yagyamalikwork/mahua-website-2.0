@@ -56,7 +56,17 @@ const ratio = (rgb) => {
  */
 const RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='chapter-menu']" },
-  { name: "header · wordmark", min: 4.5, at: "#arrival", container: "header", sel: "header > div > p" },
+  {
+    name: "header · wordmark",
+    min: 4.5,
+    at: "#arrival",
+    container: "header",
+    // Targeted by attribute, not by structure. `header > div > p` was the
+    // selector until 5 Aug 2026, when the wordmark became part of a flower+name
+    // lockup and stopped being a `<p>`. Nothing failed — the run simply reported
+    // "not visible", which this script used to treat as neither pass nor fail.
+    sel: '[data-contrast="brand-wordmark"]',
+  },
   { name: "hero · headline", min: 3, at: "#arrival", container: "#arrival", sel: "#arrival h1 [data-word]" },
   { name: "hero · sub", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival > div > p" },
   { name: "hero · scroll cue", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival div.flex > span:nth-child(2)" },
@@ -127,6 +137,18 @@ async function main() {
   const browser = await chromium.launch();
   const report = { measuredAt: new Date().toISOString(), url: URL, widths: {} };
   let failures = 0;
+  /**
+   * A target this script was asked to measure and could not find.
+   *
+   * Counted separately and still fatal. Until 5 Aug 2026 an unfindable target
+   * printed "not visible" and was neither a pass nor a failure, so when the
+   * header wordmark stopped being a `<p>` the check quietly stopped running and
+   * the suite stayed green — cream type over a photograph, unmeasured, for as
+   * long as nobody read the log. A contrast target that cannot be located is a
+   * broken check, and a broken check is worse than a failing one because it
+   * looks like success.
+   */
+  let missing = 0;
 
   for (const width of WIDTHS) {
     const context = await browser.newContext({
@@ -143,9 +165,10 @@ async function main() {
     console.log(`--- ${width}px ---`);
     for (const r of rows) {
       if (r.pass === false) failures++;
+      if (r.pass === null) missing++;
       console.log(
         `  ${r.name.padEnd(24)} floor ${String(r.min).padEnd(4)} worst ${String(r.worst).padEnd(6)} ${
-          r.pass === null ? "not visible" : r.pass ? "ok" : "FAIL"
+          r.pass === null ? "NOT FOUND" : r.pass ? "ok" : "FAIL"
         }`,
       );
     }
@@ -159,6 +182,15 @@ async function main() {
 
   if (failures > 0) {
     console.error(`FAILED: ${failures} text run(s) below their contrast floor over a photograph.`);
+    process.exitCode = 1;
+  }
+
+  if (missing > 0) {
+    console.error(
+      `FAILED: ${missing} target(s) could not be found on the page. Either the markup moved and the ` +
+        `selector needs updating, or the run genuinely no longer exists and should be deleted from RUNS. ` +
+        `A target that is silently skipped is an unmeasured piece of type over a photograph.`,
+    );
     process.exitCode = 1;
   }
 }

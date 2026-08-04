@@ -17,19 +17,25 @@ type IntroCopy = {
  * The three flanking photographs' real widths, for `srcset` (see `ui/Photo.tsx`).
  *
  * Below 1024px each one spans the container and bleeds 24px past one edge. From
- * 1024px the grid is `0.95fr 1.5fr 0.95fr` with a 40px gutter inside a
- * `max-w-[1600px]` container, so a flank is ~28% of the content width — and then
+ * 1024px the grid is `1.15fr 1.3fr 1.15fr` with a 40px gutter inside a
+ * `max-w-[1600px]` container, so a flank is ~32% of the content width — and then
  * grows again by the 13vw / 11vw it reaches past the viewport edge. Rounded up to
  * whole vw, because over-stating costs a tier and under-stating ships softness.
+ *
+ * The column split was `0.95fr 1.5fr 0.95fr` until 5 Aug 2026. *Lantern hour*
+ * measured 46.7% empty against non-negotiable #8's 45%, and the middle of the
+ * screen — a centred column of prose 558px wide with paper above and below it —
+ * was where the emptiness was. Moving 100px of screen width from the text to the
+ * photographs is the fix that adds nothing.
  */
 export const SIZES = {
-  /** The single flank: ~28% of content + a 13vw bleed. */
+  /** The single flank: ~32% of content + a 13vw bleed. */
   solo: "(min-width: 1024px) 42vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
-  /** The upper of the pair: ~28% of content + an 11vw bleed. */
+  /** The upper of the pair: ~32% of content + an 11vw bleed. */
   pairTop: "(min-width: 1024px) 40vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
-  /** The lower of the pair: 70% of that column on desktop, 82% below it. */
+  /** The lower of the pair: 86% of that column on desktop, 82% below it. */
   pairLower:
-    "(min-width: 1024px) 28vw, (min-width: 768px) calc((100vw - 72px) * 0.82), calc((100vw - 24px) * 0.82)",
+    "(min-width: 1024px) 35vw, (min-width: 768px) calc((100vw - 72px) * 0.82), calc((100vw - 24px) * 0.82)",
 } as const;
 
 /**
@@ -106,7 +112,7 @@ export function ChapterIntro({
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
       <div>
-        <div className="flex flex-col gap-14 lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.5fr)_minmax(0,0.95fr)] lg:items-start lg:gap-x-10">
+        <div className="flex flex-col gap-14 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.3fr)_minmax(0,1.15fr)] lg:items-start lg:gap-x-10">
           {/*
            * Single image at one margin.
            *
@@ -119,7 +125,7 @@ export function ChapterIntro({
            * margin did not pull back, and the photograph sat on top of the
            * chapter's own text. Caught in a browser, not by any test here.
            */}
-          <div className={`${soloColumn} ${soloBleed} lg:row-start-1 lg:mt-10`}>
+          <div className={`${soloColumn} ${soloBleed} lg:row-start-1`}>
             <div className="-ml-6 w-[calc(100%+1.5rem)] md:-ml-12 md:w-[calc(100%+3rem)] lg:ml-0 lg:w-full">
               <Parallax strength={0.08}>
                 <ImageReveal className="block aspect-[3/2] w-full lg:aspect-[7/9]">
@@ -173,7 +179,7 @@ export function ChapterIntro({
           </div>
 
           {/* Two images at the opposite margin, at different widths and heights. */}
-          <div className={`flex flex-col gap-10 ${pairColumn} ${pairBleed} lg:row-start-1 lg:gap-10`}>
+          <div className={`flex flex-col gap-10 ${pairColumn} ${pairBleed} lg:row-start-1 lg:gap-7`}>
             <div className="-mr-6 w-[calc(100%+1.5rem)] md:-mr-12 md:w-[calc(100%+3rem)] lg:mr-0 lg:w-full">
               <Parallax strength={0.1}>
                 <ImageReveal className="block aspect-[3/2] w-full">
@@ -187,7 +193,7 @@ export function ChapterIntro({
                 </ImageReveal>
               </Parallax>
             </div>
-            <div className={`w-[82%] ${pairLowerPull} lg:w-[70%]`}>
+            <div className={`w-[82%] ${pairLowerPull} lg:w-[86%]`}>
               <Parallax strength={0.06}>
                 <ImageReveal className="block aspect-[4/5] w-full">
                   <Photo

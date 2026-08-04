@@ -15,33 +15,36 @@ type SplitFeatureCopy = {
 };
 
 /**
- * The five photographs' real widths, for `srcset` (see `ui/Photo.tsx`).
+ * The six photographs' real widths, for `srcset` (see `ui/Photo.tsx`).
  *
  * Bands 1 and 2 run a 12-column grid with a 56px gutter inside
  * `ChapterSurface`'s `max-w-[1600px]` / `px-6` / `md:px-12` container: the large
  * photograph is `col-span-7` plus the 9vw it reaches past the viewport edge
- * (~62vw at 1440), the small one laid over it is 34% / 32% of that, and band 3's
- * sticky photograph is `col-span-4` (~29vw). Rounded up.
+ * (~62vw at 1440), the small one laid over it is 38% / 32% of that, the pool
+ * beside band 2's line is `col-span-5` (~38vw), and band 3's sticky photograph
+ * is `col-span-5` (~37vw). Rounded up.
  */
 export const SIZES = {
   /** `dawn` and `hammocks` — col-span-7 plus a 9vw bleed. */
   wide: "(min-width: 1024px) 63vw, (min-width: 768px) calc(100vw - 48px), calc(100vw - 24px)",
-  /** `tigerTrack` — laid over band 1 at 34% of the photograph beneath it. */
+  /** `tigerTrack` — laid over band 1 at 38% of the photograph beneath it. */
   inlayWide:
-    "(min-width: 1024px) 22vw, (min-width: 768px) calc((100vw - 48px) * 0.42), calc((100vw - 24px) * 0.42)",
+    "(min-width: 1024px) 25vw, (min-width: 768px) calc((100vw - 48px) * 0.42), calc((100vw - 24px) * 0.42)",
   /** `canopy` — laid over band 2 at 32%. */
   inlayTall:
     "(min-width: 1024px) 21vw, (min-width: 768px) calc((100vw - 48px) * 0.4), calc((100vw - 24px) * 0.4)",
-  /** `boardwalk` — the sticky col-span-4 beside the index. */
-  sticky: "(min-width: 1024px) 30vw, calc(100vw - 48px)",
+  /** `pool` — in flow under band 2's line, col-span-5. */
+  aside: "(min-width: 1024px) 40vw, calc(100vw - 48px)",
+  /** `boardwalk` — the sticky column beside the index: col-span-6 from xl, 5 below it. */
+  sticky: "(min-width: 1280px) 45vw, (min-width: 1024px) 35vw, calc(100vw - 48px)",
 } as const;
 
 /**
- * The same five slots' aspect ratios, for the `object-cover` crop `SIZES` cannot
+ * The same six slots' aspect ratios, for the `object-cover` crop `SIZES` cannot
  * see. Each mirrors the `aspect-[...]` classes on its own `ImageReveal`, widest
  * breakpoint first. Bands 1 and 2 share `SIZES.wide` but not their ratios —
  * band 1 is 3:2 until `lg`, band 2 is 16:9 throughout — which is why these are
- * five entries and not four.
+ * six entries and not five.
  */
 export const BOXES = {
   /** Band 1's `dawn`: `aspect-[3/2]`, then `lg:aspect-[16/9]`. */
@@ -55,11 +58,10 @@ export const BOXES = {
   inlayWide: 1,
   /** `aspect-[3/4]`. */
   inlayTall: 3 / 4,
-  /** `aspect-[4/5]`, then `lg:aspect-[3/4]`. */
-  sticky: [
-    [1024, 3 / 4],
-    [0, 4 / 5],
-  ],
+  /** `aspect-[7/3]` at every width — `pool-daylight-forest` is a 2.28:1 letterbox. */
+  aside: 7 / 3,
+  /** `aspect-[4/5]` at every width — only the column it sits in changes. */
+  sticky: 4 / 5,
 } as const;
 
 /**
@@ -75,7 +77,9 @@ export const BOXES = {
  *    sunrise with the tiger on the track laid over its corner.
  * 2. "Then the day slows right down" — the half most lodges leave out, set large
  *    beside the hammocks, which are the only photograph in the whole library that
- *    says *rest* (`content/chapters.ts` says so in as many words).
+ *    says *rest* (`content/chapters.ts` says so in as many words), with the pool
+ *    in daylight under the line itself. That column held one display sentence and
+ *    nothing else, and it is half the width of the chapter.
  * 3. The six experiences, as a numbered index beside the boardwalk.
  *
  * The small photograph in bands 1 and 2 is absolutely positioned and therefore
@@ -87,10 +91,19 @@ export const BOXES = {
  * six-item index and the photograph holds. `position: sticky`, not
  * `StickyScene` — nothing here needs a section taller than its own content, and
  * that component is the one thing left on the page that could give it one.
+ *
+ * It grew from `col-span-4` to five columns, and to six from `xl`, on 5 Aug
+ * 2026. Six short entries with air between them cannot fill 1440px on their own
+ * — those screens measured 57-60% empty against non-negotiable #8's 45% — so
+ * what carries them is the photograph, and at four columns it was 411px wide.
+ * The split stays 5/7 between 1024 and 1280, where the index's two columns are
+ * narrow enough already; only the width that appears above 1280 is reallocated.
+ * The photograph is then the taller of the two on a wide desktop, so the pin has
+ * travel at the narrow end of `lg` and none at the wide end.
  */
 export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; surface?: boolean }) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as SplitFeatureCopy;
-  const [dawn, boardwalk, tigerTrack, canopy, hammocks] = chapter.media;
+  const [dawn, boardwalk, tigerTrack, canopy, hammocks, pool] = chapter.media;
 
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
@@ -130,7 +143,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 a border in the page's own paper, so the smaller one reads as
                 laid on top rather than collaged into the larger. */}
             <div
-              className="absolute bottom-0 left-[-6%] w-[42%] p-2 lg:w-[34%] lg:p-3"
+              className="absolute bottom-0 left-[-6%] w-[42%] p-2 lg:w-[38%] lg:p-3"
               style={{ backgroundColor: "var(--bg)" }}
             >
               <ImageReveal className="block aspect-square w-full" delay={0.15}>
@@ -147,7 +160,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
         </div>
 
         {/* Band 2 — imagery left, copy right. */}
-        <div className="mt-16 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:items-center lg:gap-x-14">
+        <div className="mt-14 grid gap-12 lg:mt-16 lg:grid-cols-12 lg:items-center lg:gap-x-14">
           <div className="relative order-2 -ml-6 pb-[20%] md:-ml-12 lg:order-1 lg:col-span-7 lg:-ml-[9vw] lg:pb-[13%]">
             <Parallax strength={0.07}>
               <ImageReveal className="block aspect-[16/9] w-full">
@@ -189,15 +202,31 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 </p>
               </div>
             </Reveal>
+            {/* The line and the thing it describes. A letterbox rather than a
+                second full frame: it belongs to the sentence above it, and a
+                square here would compete with the hammocks across the gutter. */}
+            <div className="mt-9">
+              <Parallax strength={0.05}>
+                <ImageReveal className="block aspect-[7/3] w-full" delay={0.1}>
+                  <Photo
+                    id={pool}
+                    sizes={SIZES.aside}
+                    box={BOXES.aside}
+                    pictureClassName="block h-full w-full"
+                    className="h-full w-full object-cover"
+                  />
+                </ImageReveal>
+              </Parallax>
+            </div>
           </div>
         </div>
 
         {/* Band 3 — the index of experiences, imagery left again. */}
-        <div className="mt-16 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-x-14">
-          <div className="lg:col-span-4">
+        <div className="mt-14 grid gap-12 lg:mt-16 lg:grid-cols-12 lg:gap-x-14">
+          <div className="lg:col-span-5 xl:col-span-6">
             <div className="lg:sticky lg:top-16">
               <Parallax strength={0.05}>
-                <ImageReveal className="block aspect-[4/5] w-full lg:aspect-[3/4]">
+                <ImageReveal className="block aspect-[4/5] w-full">
                   <Photo
                     id={boardwalk}
                     sizes={SIZES.sticky}
@@ -210,14 +239,14 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
             </div>
           </div>
 
-          <ol className="grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:col-span-8 lg:gap-y-12">
+          <ol className="grid gap-x-10 gap-y-9 sm:grid-cols-2 lg:col-span-7 lg:gap-y-9 xl:col-span-6">
             {copy.experiences.map((experience, i) => (
               // `Reveal` renders a `<div>`, so it goes inside the `<li>` — a
               // `<div>` between `<ol>` and `<li>` is invalid markup, and the
               // browser's recovery from it is to reparent the list items.
               <li key={experience.title} className="border-t" style={{ borderColor: "var(--accent)" }}>
                 <Reveal delay={0.05 * (i % 2)}>
-                  <div className="pt-5">
+                  <div className="pt-4">
                     <p
                       className="font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.24em]"
                       style={{ color: "var(--accent-text)" }}

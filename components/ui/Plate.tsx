@@ -19,6 +19,7 @@ export function Plate({
   caption,
   plate,
   sizes,
+  frame,
   priority = false,
 }: {
   id: MediaId;
@@ -31,6 +32,16 @@ export function Plate({
    * caller. See `ui/Photo.tsx` on why a missing `sizes` is a 1440px download.
    */
   sizes?: string;
+  /**
+   * A common box for every plate in the grid, when the grid has decided its
+   * plates must match. Absent, the photograph keeps its own shape and its own
+   * height, which is right for a grid whose plates already agree.
+   *
+   * `className` is the ratio as a `tall:` Tailwind class and `ratio` is the same
+   * number for `sizes` (see `ui/Photo.tsx` on `box`); they are one object rather
+   * than two props so a change to one cannot ship without the other.
+   */
+  frame?: { readonly className: string; readonly ratio: number };
   priority?: boolean;
 }) {
   return (
@@ -40,7 +51,12 @@ export function Plate({
           id={id}
           priority={priority}
           sizes={sizes}
-          pictureClassName="block"
+          // Deliberately unconditional, while the frame it describes is `tall:`
+          // only. `CoverBox` speaks in viewport *widths* and this threshold is a
+          // height, so the honest options are to over-state the box or to leave
+          // short viewports under-served; `ui/Photo.tsx` says which way to round.
+          box={frame?.ratio}
+          pictureClassName={`block${frame ? ` w-full ${frame.className}` : ""}`}
           // `short:` (a viewport-height media variant, app/globals.css) caps a
           // plate's rendered height at short viewports (landscape phones)
           // instead of letting it hold its full width-derived height — a
@@ -48,8 +64,11 @@ export function Plate({
           // section that has one, and at short heights that height alone can
           // overflow the section around it. `w-auto` keeps the aspect ratio
           // intact; `mx-auto` recentres the now-narrower image under its
-          // full-width caption.
-          className="block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto"
+          // full-width caption. `tall:` is the exact complement, so the framed
+          // and unframed rules below can never both apply.
+          className={`block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto${
+            frame ? " tall:h-full tall:object-cover" : ""
+          }`}
         />
         {caption && (
           <figcaption

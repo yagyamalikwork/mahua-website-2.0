@@ -7,7 +7,7 @@ import {
   SIZES as INTRO_SIZES,
 } from "@/components/sections/ChapterIntro";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
-import { PLATE_SIZES } from "@/components/sections/PlateGrid";
+import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
   BOXES as TESTIMONIAL_BOXES,
@@ -120,9 +120,20 @@ const LIVE_SLOTS: readonly Slot[] = [
   { name: "SplitFeature.wide (band 2)", sizes: SPLIT_SIZES.wide, box: SPLIT_BOXES.wide },
   { name: "SplitFeature.inlayWide", sizes: SPLIT_SIZES.inlayWide, box: SPLIT_BOXES.inlayWide },
   { name: "SplitFeature.inlayTall", sizes: SPLIT_SIZES.inlayTall, box: SPLIT_BOXES.inlayTall },
+  { name: "SplitFeature.aside", sizes: SPLIT_SIZES.aside, box: SPLIT_BOXES.aside },
   { name: "SplitFeature.sticky", sizes: SPLIT_SIZES.sticky, box: SPLIT_BOXES.sticky },
-  // A plate is `h-auto`, so nothing is cropped and there is no box to describe.
-  ...Object.entries(PLATE_SIZES).map(([k, v]) => ({ name: `PlateGrid.${k}-up`, sizes: v })),
+  // An unframed plate is `h-auto`, so nothing is cropped and there is no box to
+  // describe. A grid whose plates disagree about their shape imposes one on all
+  // of them, and then there is — every frame against every plate width, since
+  // which frame a grid picks depends on the photographs it happens to carry.
+  ...Object.entries(PLATE_SIZES).flatMap(([k, v]) => [
+    { name: `PlateGrid.${k}-up`, sizes: v },
+    ...Object.entries(PLATE_FRAME).map(([f, frame]) => ({
+      name: `PlateGrid.${k}-up framed ${f}`,
+      sizes: v,
+      box: frame.ratio as CoverBox,
+    })),
+  ]),
   ...(["wide", "tall"] as const).map((k) => ({
     name: `Testimonials.${k}`,
     sizes: TESTIMONIAL_SIZES[k],
@@ -139,7 +150,10 @@ describe("the sizes the page actually serves", () => {
     // the number is changed on purpose. The companion test below — which reads
     // the components off disk — is what stops a NEW component being forgotten
     // entirely; this one stops the table being edited carelessly.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(16);
+    // 17 since 5 Aug 2026: `SplitFeature.aside`, the pool laid under band 2's
+    // display line (`docs/reviews/2026-08-05-density/`). The plate frames added
+    // in the same change reuse `PLATE_SIZES`' strings and so add no distinct one.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(17);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

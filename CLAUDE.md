@@ -78,9 +78,20 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    the thing it was being compared to. 45% is the midpoint the client picked between the two, and the page
    as a whole already sits inside it.
 
-   Three chapters are still over and are owed work: **`field-days` 51.1%**, **`details` 58%**,
-   **`lantern-hour` 46.7%**. Measure with `node scripts/measure_page.mjs`; the per-chapter table lives in
-   `docs/reviews/2026-08-03-chapters/density.json`. Do not lower the rule again to make a chapter pass.
+   **All twelve chapters are inside it as of 5 Aug 2026.** The three that were over were fixed by taking
+   width and height back rather than by adding filler: `details` 58% → **42.1%** (a shared plate frame,
+   imposed only where a grid's photographs disagree about their shape), `field-days` 51.1% → **41.6%** (the
+   reserve photograph off the bench, and the thin band recomposed), `lantern-hour` 46.7% → **36.6%** (100px
+   of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
+   53.8% of the average screen, up from 49.7%.
+
+   The five emptiest screens on the page belonged to **no chapter at all** — they were the joins, where one
+   section's bottom padding met the next one's top, 192px of stacked cream appearing in nobody's score.
+   That is now 160px. If a future chapter drifts over, look there before looking at the chapter.
+
+   Measure with `node scripts/measure_density.mjs` against a production build; the per-chapter table is
+   written to `docs/reviews/2026-08-03-chapters/density.json`. Do not lower the rule again to make a
+   chapter pass.
 9. **Alternate the rhythm.** Never two consecutive text-only screens — a full-bleed photograph or an
    image-led block must sit between them. Enforced mechanically by a test on `content/chapters.ts`, not by
    good intentions.

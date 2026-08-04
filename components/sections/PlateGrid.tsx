@@ -26,8 +26,73 @@ type PlateGridCopy = {
 export const PLATE_SIZES: Record<number, string> = {
   2: "(min-width: 1600px) 736px, (min-width: 640px) 50vw, calc(100vw - 48px)",
   3: "(min-width: 1600px) 480px, (min-width: 1024px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
-  4: "(min-width: 1600px) 352px, (min-width: 1280px) 25vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
+  // 4-up runs a tighter gutter than the other two (see `COLUMN_GAP`), so its
+  // plates are wider than the 40px-gutter arithmetic would give: 360px inside
+  // the 1504px container at 1600, not 352.
+  4: "(min-width: 1600px) 360px, (min-width: 1280px) 26vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
 };
+
+/**
+ * The gutter, per column count.
+ *
+ * Four plates across a 1344px container is the one arrangement where the gutter
+ * is a material share of the row: at `gap-x-10` each plate is 306px wide and the
+ * four of them cover 85% of a 1440px screen, and the *details* chapter measured
+ * 58% empty largely because that is all the width its photography was allowed to
+ * claim (CLAUDE.md non-negotiable #8; `docs/reviews/2026-08-05-density/`). Two
+ * and three plates have room to breathe and keep the wider gutter.
+ */
+const COLUMN_GAP: Record<number, string> = {
+  2: "gap-x-8 lg:gap-x-10",
+  3: "gap-x-8 lg:gap-x-10",
+  4: "gap-x-5 lg:gap-x-6",
+};
+
+/**
+ * The common box a grid imposes when its plates disagree about their shape.
+ *
+ * A field-guide plate matches its neighbours — that is what makes a row of them
+ * read as one board rather than as four photographs that happened to land near
+ * each other. *Details* carried a 2:3 portrait, a 2:3 portrait, a square and a
+ * 3:2 landscape, staggered, and the row ended in a ragged shelf with the bottom
+ * right of the screen empty. It is a density argument and a design argument at
+ * the same time, which is the only kind worth acting on.
+ *
+ * **The frame is `tall:` only**, and `short:` is its exact complement, so on a
+ * landscape phone the plate keeps the auto height `ui/Plate.tsx` caps there
+ * rather than fighting it. See `app/globals.css`.
+ *
+ * The portrait box is 5:8 rather than the 2:3 of the photographs that ask for
+ * it, and that extra height is the difference between *details* measuring 45.7%
+ * empty and 42%: four plates across a 1440px screen can only ever cover 88% of
+ * its width, so their height is the one variable left. 5:8 is as tall as
+ * `petal-bowl-map` (700px, the narrowest source on the page) can be drawn
+ * without being served under its own box.
+ */
+export const PLATE_FRAME = {
+  portrait: { className: "tall:aspect-[5/8]", ratio: 5 / 8 },
+  square: { className: "tall:aspect-square", ratio: 1 },
+  landscape: { className: "tall:aspect-[3/2]", ratio: 3 / 2 },
+} as const;
+
+/**
+ * The box, if any, for a set of plates.
+ *
+ * Grids whose plates already agree — *forest*'s three portraits, *rooms*' four
+ * landscapes — get none, and so cannot be changed by this at all. Where they
+ * disagree the majority shape wins, and a tie goes to the portrait: it is the
+ * taller box, and height is what a plate row is short of.
+ */
+export function plateFrame(
+  orientations: readonly ("landscape" | "portrait" | "square")[],
+): (typeof PLATE_FRAME)[keyof typeof PLATE_FRAME] | undefined {
+  if (new Set(orientations).size <= 1) return undefined;
+  const count = (o: (typeof orientations)[number]) => orientations.filter((x) => x === o).length;
+  const ranked = (["portrait", "square", "landscape"] as const)
+    .map((o) => ({ o, n: count(o) }))
+    .sort((a, b) => b.n - a.n);
+  return PLATE_FRAME[ranked[0].o];
+}
 
 /**
  * Numbered, captioned plates in the field-guide idiom — the guidelines' own move
@@ -53,8 +118,10 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as PlateGridCopy;
   const { plates } = copy;
 
-  const landscapes = plates.filter((p) => media(p.mediaId).orientation === "landscape").length;
+  const orientations = plates.map((p) => media(p.mediaId).orientation);
+  const landscapes = orientations.filter((o) => o === "landscape").length;
   const columns = landscapes > plates.length / 2 ? 2 : plates.length;
+  const frame = plateFrame(orientations);
 
   const columnClass =
     columns === 2
@@ -90,7 +157,7 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
         </div>
 
         <div
-          className={`mt-14 grid grid-cols-1 gap-x-8 gap-y-12 md:mt-16 lg:gap-x-10 ${columnClass}`}
+          className={`mt-10 grid grid-cols-1 gap-y-12 md:mt-12 ${COLUMN_GAP[columns] ?? COLUMN_GAP[2]} ${columnClass}`}
         >
           {plates.map((plate, i) => (
             <div
@@ -106,6 +173,7 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
                 plate={plate.plate}
                 caption={plate.caption}
                 sizes={plateSizes}
+                frame={frame}
               />
             </div>
           ))}

@@ -75,7 +75,19 @@ export function BrandMark({ className }: { className?: string }) {
        * pill have taken theirs, and 0.14em tracking was enough on its own to
        * push the whole page into horizontal scroll.
        */}
-      <span className="whitespace-nowrap tracking-[0.02em] min-[360px]:tracking-[0.08em] min-[400px]:tracking-[0.14em] sm:tracking-[0.24em] md:tracking-[0.3em]">
+      {/*
+       * `data-contrast` is the hook `scripts/check_contrast_over_photos.mjs`
+       * finds this by. It used to be found structurally, as `header > div > p`,
+       * and when this lockup replaced the plain wordmark the selector matched
+       * nothing — the rig reported "not visible" and counted it as neither a
+       * pass nor a failure, so cream type over a photograph went unchecked and
+       * CI stayed green. An attribute the markup has to keep on purpose cannot
+       * drift the same way.
+       */}
+      <span
+        data-contrast="brand-wordmark"
+        className="whitespace-nowrap tracking-[0.02em] min-[360px]:tracking-[0.08em] min-[400px]:tracking-[0.14em] sm:tracking-[0.24em] md:tracking-[0.3em]"
+      >
         {HOME.nav.brand}
       </span>
     </span>
