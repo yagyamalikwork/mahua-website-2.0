@@ -4,15 +4,21 @@
 
 **Goal:** Give the page the scroll behaviour of [thesujanlife.com](https://thesujanlife.com/) — a fixed
 header that gains a cream background and the brand's own brown as you leave the hero, and a slight,
-slow rise on everything as it enters — **and come out lighter than we went in** by building it the way the
-reference actually builds it.
+slow rise on everything as it enters, and its signature pinned collage — **without putting a tween library
+in the critical path** of a page already over its mobile budget.
 
-**Architecture:** The reference was measured, not guessed (5 Aug 2026, `docs/reviews/2026-08-05-sujan-scroll/`).
-It uses **Lenis and CSS transitions. It does not use GSAP.** We carry GSAP (71 KB) and ScrollTrigger (44 KB)
-to do what it does with a class and an `IntersectionObserver`. So this plan replaces our five GSAP-driven
-primitives with one CSS entrance engine, removes both libraries, and spends the room that buys on the
-effects the client asked for. Mobile LCP is currently ~4.8s against a 2.5s budget; this is the larger of the
-two levers costed in `docs/reviews/2026-08-04-task-8-lcp/`.
+**Architecture:** Simple entrances move to CSS — one `IntersectionObserver` and a transition, which is
+lighter and simpler than a tween per element. **GSAP stays**, lazy-loaded, for the work that genuinely needs
+it: animation scrubbed frame-by-frame against scroll position, which CSS cannot drive with reliable support
+today. Every scrubbed effect on this page is below the fold, so deferring the library keeps first paint
+clean. Mobile LCP is ~4.8s against a 2.5s budget.
+
+> **This paragraph replaced a wrong one on 5 Aug 2026, before Task 2.** The plan originally argued that the
+> reference uses no GSAP and that deleting ours would pay for the whole plan. That was a false measurement —
+> the probe searched the page's HTML for a string that a bundled copy never contains. The reference loads
+> **87.9 KB of GSAP, ScrollTrigger, SplitText and Lenis**, with 17 `scrub` call sites. The client's own
+> analysis said so and was right. See `docs/reviews/2026-08-05-sujan-scroll/`. Task 1's CSS entrance engine
+> survives the correction on its own merits; Task 3's "remove GSAP" does not and is retired.
 
 **Tech Stack:** Next.js 16 · TypeScript · Tailwind 4 · Lenis · `IntersectionObserver` · CSS transitions · Vitest · Playwright
 
@@ -23,7 +29,8 @@ two levers costed in `docs/reviews/2026-08-04-task-8-lcp/`.
 | Header | `position: fixed`, 77px tall. **Transparent at the top**; gains `background: #F6F3EF` once past the hero. Nav text stays dark throughout — it never inverts, because the bar gains a background instead |
 | Entrance | `translateY` of **14.1px** and **17.9px** on live elements, plus a scale of **1.0013**. `transition: all` |
 | "3D" | **There is none.** `perspective: none` on every element; no `perspective()` anywhere in their CSS. What reads as dimensional is a short rise, a whisper of scale, and a slow ease |
-| Libraries | Lenis ✓ · Swiper (one carousel) ✓ · **GSAP ✗** · ScrollTrigger ✗ · AOS ✗ · Locomotive ✗ |
+| Libraries | **GSAP ✓ · ScrollTrigger ✓ (17 `scrub` sites) · SplitText ✓ · Lenis ✓** in one 87.9 KB bundle, plus Swiper 8 for the card row. 174.1 KB of JS in total |
+| Signature effect | A headline **pinned** while archive photographs float past it left and right at different speeds — scrubbed, and the most elaborate thing on their page |
 
 ## Client direction, 5 August 2026
 
@@ -57,8 +64,9 @@ Every task inherits these. Exact values, copied verbatim.
 - **Contrast:** body ≥ 4.5:1, large display over photographs ≥ 3:1, checked by
   `scripts/check_contrast_over_photos.mjs`. A target that cannot be found is a **failure**, not a skip.
 - **Budgets beat effects.** Initial page transfer < 1.5 MB (initial load, not whole scroll — client ruled
-  4 Aug). Largest image < 200 KB. **This plan must not increase JavaScript weight; it is expected to reduce
-  it by ~115 KB of library.**
+  4 Aug). Largest image < 200 KB. **This plan must not increase JavaScript in the first load.** GSAP stays but moves behind a dynamic
+  import; entrances are CSS. The reference spends 174 KB of JS in total, so the goal is not to beat it on
+  library count but to keep the critical path clean.
 - **Do not check the hero with Lighthouse's LCP** — Chrome resolves this page's LCP to a paragraph.
   `scripts/measure_page.mjs` reports the hero's own `responseEnd`. Single runs vary 2,462–4,140 ms on an
   unchanged build; **medians of 5 only.**
@@ -78,12 +86,13 @@ Every task inherits these. Exact values, copied verbatim.
 | `components/motion/Enter.tsx` | **New** — replaces `Reveal`. A rise-and-settle wrapper |
 | `components/motion/ImageReveal.tsx` | *Rewritten* — same mask, CSS instead of GSAP |
 | `components/motion/SplitLines.tsx` | *Rewritten* — same per-line stagger, CSS instead of GSAP |
-| `components/motion/Parallax.tsx` | *Rewritten* — subscribes to one shared loop instead of ScrollTrigger |
-| `components/motion/SmoothScroll.tsx` | *Modified* — owns the rAF loop and a `subscribe` channel; no GSAP ticker |
+| `components/motion/Parallax.tsx` | *Modified* — keeps ScrollTrigger (it scrubs), but imports it dynamically |
+| `components/motion/SmoothScroll.tsx` | *Modified* — GSAP behind a dynamic import, out of the first load |
+| `components/motion/PinnedCollage.tsx` | **New** — the reference's signature effect, on `StickyScene` |
 | `components/motion/Reveal.tsx` | **Deleted** — `Enter` replaces it |
 | `components/ui/SiteHeader.tsx` | *Modified* — fixed, and swaps state on scroll |
 | `components/ui/BrandMark.tsx` | *Modified* — wordmark takes the brand brown in the scrolled state |
-| `package.json` | *Modified* — `gsap` removed |
+| `content/chapters.ts`, `app/page.tsx` | *Modified* — `rooted` dispatches to `PinnedCollage` |
 
 ---
 
@@ -406,7 +415,98 @@ git add -A && git commit -m "feat: replace Reveal with the CSS entrance, and por
 
 ---
 
-### Task 3: Port `SplitLines` and `Parallax`, and remove GSAP
+### Task 3: Port `SplitLines`, and defer GSAP instead of deleting it
+
+> **Rewritten 5 Aug 2026.** This task used to remove GSAP entirely, on a measurement of the reference that
+> turned out to be wrong. GSAP stays. What changes is *when it loads* and *what it is allowed to be
+> responsible for*: entrances are CSS, scrubbing is GSAP, and the library no longer sits in the critical
+> path of a page whose scrubbed effects are all below the fold.
+
+**Files:**
+- Modify: `components/motion/SplitLines.tsx`, `components/motion/SmoothScroll.tsx`,
+  `components/motion/Parallax.tsx`, `components/motion/primitives.test.tsx`
+
+**Interfaces:**
+- Consumes: `ENTER`, `useInView`
+- Produces: `SplitLines` and `Parallax` keep their existing signatures exactly — no call site changes.
+  `SmoothScroll` keeps `lock`/`unlock` and gains nothing.
+
+**What moves to CSS:** `SplitLines`. Its per-line stagger is an entrance, not a scrub — each line rises once
+and stops. It becomes `useInView` plus a `--enter-delay` per line, and keeps both rules that were hard-won:
+lines are measured **after layout** so the stagger follows real wrapping, and a headline already on screen at
+mount is left **entirely alone** (the 4 Aug flicker fix).
+
+**What stays on GSAP:** `Parallax`, mounted in ten places, is scroll-scrubbed by definition — it maps scroll
+position to a transform continuously. That is ScrollTrigger's job and CSS has no reliable equivalent.
+
+**What changes about loading:** GSAP and ScrollTrigger move behind a dynamic `import()`, triggered when the
+first scrubbed element is within a screen of the viewport. Until then the page ships none of it. `Parallax`
+renders its children untransformed while the library is in flight, which is also exactly its reduced-motion
+state — so the fallback is one already-tested code path, not a new one.
+
+- [ ] **Step 1: Extend the primitives test**
+
+```tsx
+  it("gives each line a later delay than the one above it", () => {
+    withReducedMotion(false);
+    placeBelowTheFold();
+    const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    const delays = [...container.querySelectorAll<HTMLElement>("[data-line-inner]")].map((e) =>
+      Number((e.style.getPropertyValue("--enter-delay") || "0s").replace("s", "")),
+    );
+    expect(delays.length).toBeGreaterThan(0);
+    expect(delays).toEqual([...delays].sort((a, b) => a - b));
+    expect(Math.max(...delays)).toBeGreaterThan(0);
+  });
+
+  it("keeps GSAP out of everything that is only an entrance", () => {
+    // The budget rule this task exists to enforce: a tween library may only be
+    // imported by something that scrubs. An entrance that reaches for GSAP is
+    // 115 KB paying for a transition CSS already does.
+    const dir = path.join(process.cwd(), "components", "motion");
+    const mayScrub = new Set(["Parallax.tsx", "SmoothScroll.tsx", "PinnedCollage.tsx"]);
+    for (const f of readdirSync(dir).filter((n) => /\.tsx?$/.test(n) && !n.includes(".test."))) {
+      if (mayScrub.has(f)) continue;
+      expect(readFileSync(path.join(dir, f), "utf8"), `${f} imports gsap but does not scrub`)
+        .not.toMatch(/from "gsap/);
+    }
+  });
+
+  it("does not put GSAP in the first load", async () => {
+    // Every scrubbed effect on this page is below the fold, so the library has
+    // no business blocking first paint. A static import puts it there.
+    for (const f of ["Parallax.tsx", "SmoothScroll.tsx"]) {
+      const src = readFileSync(path.join(process.cwd(), "components", "motion", f), "utf8");
+      expect(src, `${f} imports gsap statically`).not.toMatch(/^import .* from "gsap/m);
+    }
+  });
+```
+
+- [ ] **Step 2: Run it and watch it fail**
+
+Run: `npx vitest run components/motion/primitives.test.tsx` → FAIL on all three.
+
+- [ ] **Step 3: Rewrite `SplitLines` on `useInView` and per-line `--enter-delay`**
+
+- [ ] **Step 4: Move GSAP behind a dynamic import in `Parallax` and `SmoothScroll`**
+
+- [ ] **Step 5: Verify and commit**
+
+Run: `npx tsc --noEmit && npm test && npm run build && npm run lint`
+Report first-load JS before and after — that is the number this task is judged on.
+
+```bash
+git add -A && git commit -m "perf: keep GSAP for scrubbing only, and out of the first load"
+```
+
+---
+
+### Task 3b (superseded heading — see Task 3 above)
+
+The original text of this task follows for the record of what was planned before the correction, and is
+**not to be implemented**:
+
+### ~~Task 3: Port `SplitLines` and `Parallax`, and remove GSAP~~
 
 **Files:**
 - Modify: `components/motion/SplitLines.tsx`, `components/motion/Parallax.tsx`,
@@ -480,6 +580,84 @@ Report the change in built JS weight — this is the number the plan is judged o
 
 ```bash
 git add -A && git commit -m "perf: build the scroll effects the way the reference does, and drop GSAP"
+```
+
+---
+
+### Task 3c: The pinned collage — the reference's signature effect
+
+**Added 5 Aug 2026** at the client's choice, from their own analysis of the reference:
+
+> *"The centre text stays **frozen in place** for a long stretch of scrolling, while old family and wildlife
+> photographs float up past it on the left and right sides, each moving at slightly different speeds. It
+> feels like a memory album drifting by around a still headline."*
+
+**Files:**
+- Create: `components/motion/PinnedCollage.tsx`
+- Modify: `content/chapters.ts`, `content/home.ts`, `app/page.tsx`, `lib/sizes.test.ts`
+
+**Interfaces:**
+- Consumes: `StickyScene`, `STICKY_SCREENS_MAX`, `PARALLAX_MAX`, `media`, dynamic GSAP/ScrollTrigger
+- Produces: `<PinnedCollage chapter={Chapter} />`
+
+**This is the one chapter that earns a pin.** `StickyScene` already exists and is already clamped to three
+screens — it was built in Plan 3 Task 5 and has never been used, precisely because the rule was *"use it
+only where the content genuinely advances through the pin; a pinned scene that just sits there is a
+paid-for empty screen."* A headline held still while photographs drift past it at different speeds is that
+content advancing.
+
+**Which chapter:** `rooted` — *02 · Rooted like the mahua*. It is the page's memory chapter (the tree, the
+Gond, the potters of Pachdhar), it already carries three photographs, and it is a `chapterIntro`, the kind
+whose whole composition is floating marginal imagery. It is the only chapter where this reads as meaning
+rather than as decoration.
+
+**Density:** a pin reserves scroll that belongs to no chapter, and `scripts/measure_density.mjs` scores
+per chapter. Non-negotiable #8 is 45%. **Measure this chapter before and after** and report both; if the
+pin pushes `rooted` over, shorten the pin rather than the rule.
+
+- [ ] **Step 1: Write the failing test**
+
+```tsx
+  it("never pins for longer than the clamp allows", () => {
+    // A pin is the one construct left that can size a section from a number
+    // rather than from its content — the thing that made the rejected build
+    // sparse. STICKY_SCREENS_MAX exists for this and must bind here too.
+    render(<PinnedCollage chapter={chapter("rooted")} />);
+    const scene = document.querySelector<HTMLElement>(".sticky-scene");
+    const screens = Number(scene?.style.getPropertyValue("--sticky-screens"));
+    expect(screens).toBeGreaterThanOrEqual(1);
+    expect(screens).toBeLessThanOrEqual(STICKY_SCREENS_MAX);
+  });
+
+  it("renders every photograph and the headline with no JavaScript", () => {
+    const html = renderToStaticMarkup(<PinnedCollage chapter={chapter("rooted")} />);
+    for (const id of chapter("rooted").media) expect(html).toContain(id);
+    expect(html).not.toMatch(/opacity:\s*0|visibility:\s*hidden/);
+  });
+
+  it("drifts each photograph at its own rate, all within the parallax cap", () => {
+    // "Each moving at slightly different speeds" is the effect. Identical rates
+    // read as one sliding sheet; anything past the cap is movement rather than
+    // depth (spec section 4.3 law 3).
+    const rates = COLLAGE_RATES;
+    expect(new Set(rates).size, "every photograph drifts at the same rate").toBe(rates.length);
+    for (const r of rates) expect(Math.abs(r)).toBeLessThanOrEqual(PARALLAX_MAX);
+  });
+```
+
+- [ ] **Step 2: Run it and watch it fail**
+
+- [ ] **Step 3: Build `PinnedCollage`** — `StickyScene` for the pin, the headline centred and still, the
+  chapter's photographs drifting at `COLLAGE_RATES`, scrubbed with the dynamically-imported ScrollTrigger.
+  Under reduced motion it renders as the ordinary `chapterIntro` composition: no pin, no drift, no reserved
+  scroll.
+
+- [ ] **Step 4: Dispatch `rooted` to it in `app/page.tsx`**
+
+- [ ] **Step 5: Verify, measure density before and after, and commit**
+
+```bash
+git add -A && git commit -m "feat: pin the mahua chapter and drift its photographs past it"
 ```
 
 ---

@@ -34,17 +34,30 @@ Building literal 3D would not match it.
 
 ## Libraries
 
+> **CORRECTED 5 Aug 2026, same day.** The first version of this file said the reference does not use GSAP,
+> and Plan 4 was built on that claim. **It was wrong.** The probe searched `document.documentElement.outerHTML`
+> for the string `gsap` — which a bundled, tree-shaken copy never appears in; only the bundle's filename
+> does. `window.gsap` is also `undefined`, because the bundle is an ES module that exposes nothing globally,
+> so the false negative looked confirmed twice over. The client's own analysis said GSAP, and the client was
+> right. **Seventh instance of this project's recurring defect: a check that confirmed a mechanism instead of
+> an outcome.** The correct test is to read the bytes that actually load.
+
+Measured by intercepting every JS response and reading the bundle:
+
 | | |
 |---|---|
-| Lenis | **yes** — we already use it |
-| Swiper | yes, for one camp carousel |
-| **GSAP** | **no** |
-| ScrollTrigger | no |
-| AOS / Locomotive / `data-scroll` | no |
+| `sujan-e.vercel.app/main.js` | **87.9 KB transferred, 251.5 KB unpacked** — a custom bundle |
+| **GSAP** | **yes** — 65 `registerPlugin` hits, 48 `_gsap` internals, 182 `.to(`/`timeline(` calls |
+| **ScrollTrigger** | **yes** — and **17 `scrub` hits**, so effects are scroll-linked frame by frame |
+| **SplitText** | yes |
+| **Lenis** | yes — 29 hits |
+| Swiper 8 | yes, 39.7 KB, for the card row |
+| **Total JS** | **174.1 KB across 30 files** |
 
-The reference achieves all of the above with CSS transitions and Lenis. We carry **GSAP 71.2 KB +
-ScrollTrigger 43.5 KB** to do the same work. That is the single largest weight lever on the page and the
-reason Plan 4 is expected to make the site faster rather than slower.
+So the reference spends about as much on animation as we do. The comparison that matters is not "do they use
+a tween library" but "what is each library paying for". GSAP earns its place there on the **scrubbed** work —
+the pinned section, the text fill, the video magnify — none of which CSS can drive from scroll position with
+reliable support today. Simple entrances do not need it, which is why Plan 4 still builds those in CSS.
 
 ## Reproduce
 
