@@ -301,12 +301,18 @@ describe("the JavaScript budget", () => {
     }
   });
 
-  it("does not put GSAP in the first load", () => {
-    // Every scrubbed effect on this page is below the fold, so the library has
-    // no business blocking first paint. A static import puts it there.
-    // `scrub.ts` is in the list because it is where the dynamic import lives:
-    // if the deferral is ever "simplified" back to a static import, this is the
-    // file it would happen in.
+  it("has no static gsap import — a smoke check, NOT the guarantee", () => {
+    // **Read this before trusting it.** This greps the source for a static
+    // import. That is a *mechanism*, and the mechanism being right does not mean
+    // the bytes are. Widening `whenNear`'s `rootMargin` in `scrub.ts` to `4000%`
+    // — a plausible "prefetch a little earlier" edit — puts both GSAP chunks
+    // back into the first load while this test, `tsc`, `build` and `lint` all
+    // stay green. A reviewer demonstrated exactly that on 5 Aug 2026.
+    //
+    // **The guarantee is `scripts/measure_js_budget.mjs`**, which loads the real
+    // page, samples what the browser transferred before any scroll, and exits 1
+    // if a GSAP-carrying chunk is among it. Keep this test for the fast, free
+    // catch of the obvious regression; do not let it stand in for the rig.
     for (const f of ["Parallax.tsx", "SmoothScroll.tsx", "scrub.ts"]) {
       expect(motionSource(f), `${f} imports gsap statically`).not.toMatch(/^import .* from "gsap/m);
     }

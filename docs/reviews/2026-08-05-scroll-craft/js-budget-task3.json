@@ -1,5 +1,8 @@
 {
-  "measuredAt": "2026-08-04T22:19:05.645Z",
+  "measuredAt": "2026-08-04T22:44:41.367Z",
+  "budget": {
+    "maxUntouchedKB": 175
+  },
   "firstLoad": {
     "raw": 655399,
     "gz": 194466,
@@ -76,8 +79,8 @@
       "decodedKB": 530,
       "names": [
         "/_next/static/chunks/1jq4o6yq14o4c.js",
-        "/_next/static/chunks/1de9myc15dqxx.js",
         "/_next/static/chunks/25o46h8mdjlrg.js",
+        "/_next/static/chunks/1de9myc15dqxx.js",
         "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
         "/_next/static/chunks/1d4xv0wq9d0ov.js",
         "/_next/static/chunks/158myu8e_yme3.js",
@@ -90,8 +93,8 @@
       "decodedKB": 641,
       "names": [
         "/_next/static/chunks/1jq4o6yq14o4c.js",
-        "/_next/static/chunks/1de9myc15dqxx.js",
         "/_next/static/chunks/25o46h8mdjlrg.js",
+        "/_next/static/chunks/1de9myc15dqxx.js",
         "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
         "/_next/static/chunks/1d4xv0wq9d0ov.js",
         "/_next/static/chunks/158myu8e_yme3.js",
@@ -104,5 +107,7 @@
       "/_next/static/chunks/3dewhjypacr5m.js",
       "/_next/static/chunks/1is0gg5e6lopl.js"
     ]
-  }
+  },
+  "failures": [],
+  "verdict": "pass"
 }

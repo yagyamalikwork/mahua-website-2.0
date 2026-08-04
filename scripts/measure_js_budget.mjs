@@ -18,11 +18,24 @@
 //      `await import(...)` would be this project's recurring defect again —
 //      confirming a mechanism was configured rather than that bytes moved.
 //
+// **This rig asserts. It exits 1 when the property is broken**, like every other
+// check in `scripts/`. It printed the truth and exited 0 until 5 Aug 2026, which
+// made it a report rather than a guard — and the reviewer proved that mattered:
+// widening `whenNear`'s `rootMargin` in `components/motion/scrub.ts` to `4000%`,
+// a plausible "prefetch a little earlier" edit rather than sabotage, put both
+// GSAP chunks back into the untouched load (153 KB / 7 files -> 198 KB / 9) with
+// `tsc`, 191 unit tests, `build` and `lint` all green. The unit test in
+// `components/motion/primitives.test.tsx` cannot see that: it greps the sources
+// for a static `import ... from "gsap"`, which is a mechanism, and the mechanism
+// was still configured correctly. **The bytes are the deliverable, so the bytes
+// are what fails here.**
+//
 // Run (with `npm run build` done, and `npx next start -p 3100` up for the live half):
 //   node scripts/measure_js_budget.mjs --port 3100
-//   node scripts/measure_js_budget.mjs            # static half only
+//   node scripts/measure_js_budget.mjs --static-only   # deliberately partial
 //
-// Flags: --port, --url, --out, --width, --height, --scroll.
+// Flags: --port, --url, --out, --width, --height, --scroll, --max-untouched-kb,
+//        --static-only.
 
 import { readFile, readdir, stat, mkdir, writeFile } from "node:fs/promises";
 import { gzipSync, brotliCompressSync } from "node:zlib";
@@ -33,6 +46,7 @@ const flag = (n, d) => {
   const i = args.indexOf(`--${n}`);
   return i >= 0 && args[i + 1] ? args[i + 1] : d;
 };
+const has = (n) => args.includes(`--${n}`);
 
 const ROOT = process.cwd();
 const PORT = flag("port", null);
@@ -41,6 +55,19 @@ const OUT = flag("out", null);
 const WIDTH = Number(flag("width", "1440"));
 const HEIGHT = Number(flag("height", "900"));
 const SCROLL_TO = Number(flag("scroll", "1400"));
+const STATIC_ONLY = has("static-only");
+/**
+ * The ceiling on JavaScript transferred before the visitor scrolls.
+ *
+ * 175 KB against a measured 153 KB, so ~22 KB of headroom. Deliberately tighter
+ * than either GSAP chunk (17.1 KB and 26.7 KB gzipped): the named-chunk rule
+ * below catches GSAP specifically, and this catches *anything else* of that size
+ * arriving on the critical path. Raise it only with a reason, and record the
+ * reason — it is a budget, not a reading.
+ */
+const MAX_UNTOUCHED_KB = Number(flag("max-untouched-kb", "175"));
+
+const failures = [];
 
 const kb = (n) => (n === null ? "    n/a" : (n / 1024).toFixed(1).padStart(7));
 
@@ -105,7 +132,21 @@ for (const c of gsapChunks)
 
 // ------------------------------------------------------------------ live half
 
+for (const c of gsapChunks)
+  if (c.inFirstLoad)
+    failures.push(
+      `${c.name} carries GSAP and the document references it directly — ${(c.gz / 1024).toFixed(1)} KB gz of tween library in the first load`,
+    );
+
+// ------------------------------------------------------------------ live half
+
 let live = null;
+if (!PAGE_URL && !STATIC_ONLY) {
+  failures.push(
+    "the live half did not run: pass --port (with `npx next start` up), or --static-only to say you meant it. " +
+      "The static half cannot see a dynamic import firing at load, which is the failure this rig exists for.",
+  );
+}
 if (PAGE_URL) {
   const { chromium } = await import("playwright");
   const browser = await chromium.launch();
@@ -149,14 +190,53 @@ if (PAGE_URL) {
   console.log(
     `Fetched only once the visitor scrolled: ${live.loadedOnlyOnScroll.length ? live.loadedOnlyOnScroll.join(", ") : "nothing"}`,
   );
+
+  // --- the assertions, on the bytes rather than on the source ---------------
+
+  // 1. No chunk carrying GSAP may be fetched before the visitor scrolls. Named,
+  //    so the message says which file and how big, not just that a number moved.
+  for (const c of gsapChunks) {
+    if (!untouched.names.some((n) => n.includes(c.name))) continue;
+    failures.push(
+      `${c.name} (${(c.raw / 1024).toFixed(1)} KB raw, ${(c.gz / 1024).toFixed(1)} KB gz) carries GSAP and was ` +
+        `fetched at ${WIDTH}x${HEIGHT} before the visitor scrolled — the deferral is gone`,
+    );
+  }
+
+  // 2. And the total, so the same win cannot be spent on something that is not
+  //    GSAP. This is the number the task was judged on.
+  if (untouched.transferKB > MAX_UNTOUCHED_KB) {
+    failures.push(
+      `${untouched.transferKB} KB of JavaScript transferred before any scroll at ${WIDTH}x${HEIGHT}, ` +
+        `over the ${MAX_UNTOUCHED_KB} KB budget`,
+    );
+  }
+
+  // 3. The failure mode of rule 1 taken to its conclusion: deleting the scrub
+  //    satisfies "no GSAP before scroll" perfectly. Parallax is mounted in ten
+  //    places, so the library has to arrive on scroll — `check_entrances.mjs`
+  //    proves it then *moves* something; this only proves it arrives.
+  if (gsapChunks.length > 0 && live.loadedOnlyOnScroll.length === 0) {
+    failures.push(
+      "nothing at all was fetched on scroll — GSAP is not deferred, it is unreachable, " +
+        "and every scrubbed effect on the page is dead",
+    );
+  }
 }
+
+const verdict = failures.length === 0 ? "pass" : "fail";
+console.log(`\n${verdict.toUpperCase()}`);
+for (const f of failures) console.log(`  - ${f}`);
 
 if (OUT) {
   await mkdir(path.dirname(OUT), { recursive: true });
   await writeFile(
     OUT,
-    `${JSON.stringify({ measuredAt: new Date().toISOString(), firstLoad, gsapChunks, live }, null, 2)}\n`,
+    `${JSON.stringify({ measuredAt: new Date().toISOString(), budget: { maxUntouchedKB: MAX_UNTOUCHED_KB }, firstLoad, gsapChunks, live, failures, verdict }, null, 2)}\n`,
     "utf8",
   );
   console.log(`\n-> ${OUT}`);
 }
+
+// Last statement in the file, so it cannot be skipped by an early return above.
+process.exitCode = failures.length === 0 ? 0 : 1;
