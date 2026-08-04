@@ -29,10 +29,17 @@ import { HOME } from "@/content/home";
 export function SiteHeader({ ctaHref }: { ctaHref: string }) {
   return (
     <header className="pointer-events-none absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-5 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
+      {/*
+       * The base gap and padding are tighter than they look like they should be
+       * because a 320px phone has to fit "Menu", the brand lockup and the "Plan
+       * your stay" pill on one row. At `gap-3 px-5` the lockup ran 7px past the
+       * pill and pushed the whole page into horizontal scroll. Everything from
+       * `sm` up gets the roomier spacing back.
+       */}
+      <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
         <ChapterMenu />
 
-        <BrandMark className="justify-self-center text-[13px] sm:text-[15px] md:text-[17px]" />
+        <BrandMark className="justify-self-center" />
 
         <div className="pointer-events-auto justify-self-end">
           <PillButton href={ctaHref}>{HOME.nav.cta}</PillButton>

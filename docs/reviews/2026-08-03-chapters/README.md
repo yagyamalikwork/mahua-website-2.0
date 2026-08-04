@@ -8,6 +8,13 @@ than an assurance. Everything here was produced against the **production build**
 Where a number is uncomfortable it is here anyway. Two of the four answers are qualified, one budget fails,
 and the empty-space rule in `CLAUDE.md` turns out to be a rule the reference site itself would fail.
 
+> **Resolved 5 Aug 2026 — the rule moved, the page did not.** Shown these figures, the client set the
+> threshold at the midpoint between their original 30% and the reference's 58.1%: **non-negotiable #8 is
+> now 45%.** The page's 42.9% mean already sits inside it. Everything below still reads against the old
+> 30% figure — that is the record of how the decision was reached, and is left as it was written. What
+> changed as a result: **three chapters are still over and are owed work** — `field-days` 51.1%,
+> `details` 58%, `lantern-hour` 46.7% — instead of the eight that failed at 30%.
+
 ---
 
 ## The short answers

@@ -66,9 +66,21 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 7. **Gold is decorative only.** `gold` (`#BB8F2E`) is for rules, ornaments, the emblem — it measures
    ~2.5:1 on cream and must never carry text. `goldText` (`#7A5C18`) is the legible sibling; use it for any
    text or link that would otherwise sit in gold. Guarded by `lib/palette.test.ts`.
-8. **Every screen must carry weight.** No section may render more than ~30% empty space at 1440×900. If a
-   section cannot be filled, it is cut or merged — not padded. This is the direct fix for the client's
+8. **Every screen must carry weight.** No section may render more than **45%** empty space at 1440×900. If
+   a section cannot be filled, it is cut or merged — not padded. This is the direct fix for the client's
    "too much empty space" complaint.
+
+   **The figure was 30% until 4 Aug 2026, and 30% was wrong.** It was set by intuition before anything had
+   been measured. When Task 8 finally measured it, the same rig pointed at
+   [thesujanlife.com](https://thesujanlife.com/) — the reference the client chose — scored it **58.1% mean
+   empty, failing on 38 of its 45 screens**, against our own **42.9%**. The rule was stricter than the
+   benchmark it existed to chase, and it failed 8 of our 12 chapters while the page was already denser than
+   the thing it was being compared to. 45% is the midpoint the client picked between the two, and the page
+   as a whole already sits inside it.
+
+   Three chapters are still over and are owed work: **`field-days` 51.1%**, **`details` 58%**,
+   **`lantern-hour` 46.7%**. Measure with `node scripts/measure_page.mjs`; the per-chapter table lives in
+   `docs/reviews/2026-08-03-chapters/density.json`. Do not lower the rule again to make a chapter pass.
 9. **Alternate the rhythm.** Never two consecutive text-only screens — a full-bleed photograph or an
    image-led block must sit between them. Enforced mechanically by a test on `content/chapters.ts`, not by
    good intentions.
