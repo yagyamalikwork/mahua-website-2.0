@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Grain } from "@/components/motion/Grain";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { ENTER } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -30,6 +31,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // The only dark value on the page, and only ever laid over a
           // photograph — scrims, and the fill of a pill that sits on one.
           "--overlay": PALETTE.overlay,
+          // The entrance, on the same terms as the colour: written once from
+          // lib/motion.ts so `app/globals.css` and the tests that guard these
+          // numbers read the same source. `--enter-delay` is deliberately
+          // absent — it is per-element, set by whatever is staggering a group,
+          // and the CSS falls back to 0s.
+          "--enter-rise": ENTER.rise,
+          "--enter-scale": String(ENTER.scale),
+          "--enter-duration": `${ENTER.duration}s`,
+          "--enter-ease": ENTER.ease,
         } as React.CSSProperties
       }
     >

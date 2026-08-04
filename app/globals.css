@@ -63,11 +63,62 @@ body {
   height: 100vh;
 }
 
+/*
+ * The entrance. `data-enter` carries the state returned by
+ * `components/motion/useInView.ts`, and **its absence is the at-rest state** —
+ * so markup that never meets JavaScript is simply visible, which is the
+ * arrangement every motion primitive here uses. `data-enter="rest"` is equally
+ * safe: no rule under the bare attribute selector hides anything.
+ *
+ * The `--enter-*` values are written onto <html> by `app/layout.tsx` from
+ * ENTER in `lib/motion.ts`, so the numbers cannot drift from the tests that
+ * guard them. Deliberately unlayered: Tailwind's utilities live in @layer, and
+ * unlayered rules beat layered ones, so a `translate-*` or `opacity-*` class on
+ * the same element cannot strand an entrance half-staged.
+ */
+[data-enter] {
+  transition:
+    opacity var(--enter-duration) var(--enter-ease),
+    transform var(--enter-duration) var(--enter-ease);
+  transition-delay: var(--enter-delay, 0s);
+}
+
+/*
+ * Staging is instant, on purpose. A transition is taken from the state being
+ * moved *to*, so declaring none here makes rest -> pending a jump and leaves
+ * pending -> in animated. Without this, every below-the-fold element on the
+ * page would spend 0.9s compositing a fade-out nobody can see — a real cost on
+ * the Indian mobile hardware this page is budgeted for, and a flicker for
+ * anyone who scrolls hard in the first second.
+ */
+[data-enter="pending"] {
+  transition: none;
+  opacity: 0;
+  transform: translate3d(0, var(--enter-rise), 0) scale(var(--enter-scale));
+}
+
+[data-enter="in"] {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  /*
+   * A still state, not a fast one. The hook already declines to stage anything
+   * under reduced motion, so this is the second line: were a `pending` ever
+   * written — by a stale attribute, or a visitor changing the setting
+   * mid-session — it must not leave anything invisible.
+   */
+  [data-enter] {
+    transition: none;
+    transform: none;
+    opacity: 1;
   }
 
   /*

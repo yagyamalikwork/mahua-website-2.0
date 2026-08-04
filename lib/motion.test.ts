@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   DURATION,
   EASE,
+  ENTER,
   IMAGE_FROM,
   PARALLAX_MAX,
   REVEAL_FROM,
@@ -20,11 +21,18 @@ describe("the motion laws (spec section 4.3)", () => {
     expect(PARALLAX_MAX).toBeLessThanOrEqual(0.15);
   });
 
-  it("reveals things by developing them, not sliding them", () => {
+  it("still develops the legacy reveal rather than sliding it", () => {
+    // This replaces "reveals things by developing them, not sliding them",
+    // which also forbade a `y`. That clause retired on 5 Aug 2026 when the
+    // client asked for the reference site's 16px rise — the reasoning is in
+    // ./motion.ts beside ENTER. What survives is the half the law was really
+    // protecting: a vertical settle develops, a lateral slide flies in.
+    //
+    // REVEAL_FROM outlives its own scheduled deletion by one task, because
+    // `components/motion/Reveal.tsx` still imports it. Delete the two together.
     expect(REVEAL_FROM.scale).toBeGreaterThanOrEqual(0.94);
     expect(REVEAL_FROM.scale).toBeLessThan(1);
     expect(REVEAL_FROM).not.toHaveProperty("x");
-    expect(REVEAL_FROM).not.toHaveProperty("y");
   });
 
   it("turns the logo slowly enough to be almost imperceptible", () => {
@@ -66,5 +74,52 @@ describe("the motion laws (spec section 4.3)", () => {
     for (const [name, ease] of Object.entries(EASE)) {
       expect(banned.test(ease), `EASE.${name} = "${ease}" overshoots`).toBe(false);
     }
+  });
+});
+
+describe("the entrance vocabulary (ENTER)", () => {
+  it("rises by the amount the reference site actually rises", () => {
+    // Measured on thesujanlife.com, 5 Aug 2026: live elements sat at
+    // translateY 14.1px and 17.9px. 16px is between them. This is the whole of
+    // the "3D raise" — the reference has `perspective: none` everywhere.
+    const px = Number(ENTER.rise.replace("px", ""));
+    expect(px).toBeGreaterThanOrEqual(12);
+    expect(px).toBeLessThanOrEqual(20);
+  });
+
+  it("scales by a whisper, never a zoom", () => {
+    // The reference measured 1.0013. Anything the eye can name as a zoom is
+    // the gimmick spec section 4.3 law 2 exists to forbid.
+    expect(ENTER.scale).toBeGreaterThan(0.98);
+    expect(ENTER.scale).toBeLessThan(1);
+  });
+
+  it("never slides laterally", () => {
+    // The law that survives: a vertical settle is developing, a horizontal
+    // one is flying in. `rise` is the only offset this vocabulary has.
+    expect(Object.keys(ENTER)).not.toContain("x");
+    expect(ENTER.rise).toMatch(/^\d+px$/);
+  });
+
+  it("decelerates and never overshoots", () => {
+    // A cubic-bezier whose second control point sits at or above y=1 comes to
+    // rest from above — a bounce by another name.
+    const m = ENTER.ease.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+    expect(m, `ENTER.ease must be a cubic-bezier, got ${ENTER.ease}`).not.toBeNull();
+    expect(Number(m![4])).toBeLessThanOrEqual(1);
+  });
+
+  it("staggers slowly enough to read as one movement", () => {
+    expect(ENTER.stagger).toBeGreaterThan(0.04);
+    expect(ENTER.stagger).toBeLessThan(0.15);
+  });
+
+  it("holds the entrance inside the same duration range as every other reveal", () => {
+    // ENTER.duration is a second dial for the same law DURATION.reveal is
+    // guarded by ("keeps reveals between 800ms and 1400ms"). Two dials for one
+    // law is exactly how a page ends up with one entrance that feels expensive
+    // and another that feels cheap.
+    expect(ENTER.duration).toBeGreaterThanOrEqual(0.8);
+    expect(ENTER.duration).toBeLessThanOrEqual(1.4);
   });
 });
