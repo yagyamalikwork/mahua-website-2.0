@@ -1,5 +1,5 @@
+import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
-import { Reveal } from "@/components/motion/Reveal";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
@@ -65,7 +65,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
       <div>
-        <Reveal>
+        <Enter>
           <div className="flex flex-col items-center text-center">
             {chapter.number && chapter.label && (
               <ChapterMark number={chapter.number} label={chapter.label} align="centre" />
@@ -78,7 +78,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
               {copy.intro}
             </p>
           </div>
-        </Reveal>
+        </Enter>
 
         <div className="mt-16 grid gap-16 md:mt-20 lg:grid-cols-2 lg:gap-x-14">
           {copy.lodges.map((lodge, i) => {
@@ -116,7 +116,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                   </div>
                 </div>
 
-                <Reveal delay={0.08}>
+                <Enter delay={0.08}>
                   <div className="mt-8">
                     <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.8rem,3vw,2.5rem)] font-light leading-tight text-[color:var(--text)]">
                       {lodge.name}
@@ -154,7 +154,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                       {lodge.cta}
                     </a>
                   </div>
-                </Reveal>
+                </Enter>
               </article>
             );
           })}

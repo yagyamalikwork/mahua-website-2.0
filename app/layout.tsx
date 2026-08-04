@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Grain } from "@/components/motion/Grain";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
-import { ENTER } from "@/lib/motion";
+import { DURATION, ENTER, IMAGE_FROM } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -40,6 +40,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--enter-scale": String(ENTER.scale),
           "--enter-duration": `${ENTER.duration}s`,
           "--enter-ease": ENTER.ease,
+          // A photograph's arrival, on the same terms. The mask wipes for
+          // `imageMask` while the image itself settles down out of `IMAGE_FROM`
+          // over the longer `revealSlow` — the pairing `ImageReveal` has always
+          // used, now expressed in CSS instead of a GSAP timeline.
+          "--image-from-scale": String(IMAGE_FROM.scale),
+          "--image-mask-duration": `${DURATION.imageMask}s`,
+          "--image-settle-duration": `${DURATION.revealSlow}s`,
         } as React.CSSProperties
       }
     >

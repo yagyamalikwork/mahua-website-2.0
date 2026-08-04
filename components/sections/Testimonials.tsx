@@ -1,6 +1,6 @@
+import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Parallax } from "@/components/motion/Parallax";
-import { Reveal } from "@/components/motion/Reveal";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
@@ -59,7 +59,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
       <div>
-        <Reveal>
+        <Enter>
           <div className="flex flex-col items-center text-center">
             <TwoToneHeading heading={copy.heading} align="centre" className="max-w-[16ch]" />
             <p
@@ -69,7 +69,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
               {copy.body[0]}
             </p>
           </div>
-        </Reveal>
+        </Enter>
 
         <div className="mt-14 grid gap-6 md:mt-16 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-7">
@@ -103,7 +103,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
         <ul className="mt-16 grid gap-x-10 gap-y-12 md:mt-20 md:grid-cols-3">
           {copy.quotes.map((quote, i) => (
             <li key={quote.name} className="border-t" style={{ borderColor: "var(--accent)" }}>
-              <Reveal delay={0.06 * i}>
+              <Enter delay={0.06 * i}>
                 <figure className="pt-6">
                   <blockquote className="font-[family-name:var(--font-display)] text-[1.35rem] leading-[1.4] font-light text-[color:var(--text)] md:text-[1.5rem]">
                     {quote.quote}
@@ -121,7 +121,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
                     <span style={{ color: "var(--dim)" }}>{quote.year}</span>
                   </figcaption>
                 </figure>
-              </Reveal>
+              </Enter>
             </li>
           ))}
         </ul>

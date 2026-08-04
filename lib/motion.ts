@@ -3,7 +3,7 @@
  *
  * The motion laws (spec section 4.3):
  *   1. Nothing bounces — everything decelerates and stops.
- *   2. Things develop, they do not fly in — fade up from 96% scale, never a lateral slide.
+ *   2. Things develop, they do not fly in — a settle, never a lateral slide.
  *      Narrowed 5 Aug 2026 to permit a short vertical rise. See ENTER below.
  *   3. Depth, not movement — parallax caps at 15%.
  *   4. If you notice the animation, it is too fast.
@@ -30,13 +30,6 @@ export const EASE = {
 export const PARALLAX_MAX = 0.15;
 
 /**
- * The GSAP-era reveal state. **Superseded by ENTER below**, and scheduled for
- * deletion alongside `components/motion/Reveal.tsx`, which is its only consumer.
- * It survives this commit only because removing it would not compile.
- */
-export const REVEAL_FROM = { opacity: 0, scale: 0.96 } as const;
-
-/**
  * The entrance vocabulary, taken from the reference site rather than invented.
  *
  * Measured on thesujanlife.com on 5 Aug 2026: live elements sat at translateY
@@ -46,9 +39,9 @@ export const REVEAL_FROM = { opacity: 0, scale: 0.96 } as const;
  * and building literal 3D would look wrong beside the thing it is copying.
  *
  * `rise` narrows spec section 4.3 law 2 rather than breaking it. The law says
- * things develop and never fly in, and `REVEAL_FROM` enforced that by having no
- * offset at all. A 16px vertical settle is developing. A lateral slide is still
- * flying in, and `ENTER` has no `x` for one.
+ * things develop and never fly in, and the retired `REVEAL_FROM` enforced that
+ * by having no offset at all. A 16px vertical settle is developing. A lateral
+ * slide is still flying in, and `ENTER` has no `x` for one.
  *
  * These are CSS values, not GSAP ones — `app/layout.tsx` writes them onto
  * `<html>` as `--enter-*` custom properties so the numbers live here and only
@@ -68,7 +61,12 @@ export const ENTER = {
 /**
  * A photograph settles *down* to rest from slightly oversize. Scaling up on
  * entry reads as a zoom-in gimmick; settling down reads as the image coming to
- * rest. Law 2 binds here exactly as it binds `REVEAL_FROM` — no `x`, no `y`.
+ * rest. Law 2 binds here exactly as it binds `ENTER` — no `x`, no `y`.
+ *
+ * A CSS value like `ENTER`'s: `app/layout.tsx` writes it onto <html> as
+ * `--image-from-scale`, alongside `--image-mask-duration` (`DURATION.imageMask`)
+ * and `--image-settle-duration` (`DURATION.revealSlow`), and `app/globals.css`
+ * reads all three back. The number lives here and only here.
  */
 export const IMAGE_FROM = { scale: 1.08 } as const;
 

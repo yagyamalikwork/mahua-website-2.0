@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/motion/Reveal";
+import { Enter } from "@/components/motion/Enter";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Plate } from "@/components/ui/Plate";
@@ -138,22 +138,22 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
     <ChapterSurface id={chapter.id} surface={surface}>
       <div>
         <div className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-          <Reveal>
+          <Enter>
             <div>
               {chapter.number && chapter.label && (
                 <ChapterMark number={chapter.number} label={chapter.label} />
               )}
               <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[16ch]" />
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
+          </Enter>
+          <Enter delay={0.08}>
             <p
               className="max-w-[58ch] font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.72] md:text-lg"
               style={{ color: "var(--dim)" }}
             >
               {copy.intro}
             </p>
-          </Reveal>
+          </Enter>
         </div>
 
         <div

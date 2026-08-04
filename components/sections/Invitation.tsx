@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/motion/Reveal";
+import { Enter } from "@/components/motion/Enter";
 import { FullBleed } from "@/components/ui/FullBleed";
 import { PillButton } from "@/components/ui/PillButton";
 import { Scrim } from "@/components/ui/Scrim";
@@ -52,7 +52,7 @@ export function Invitation({ chapter }: { chapter: Chapter }) {
         <Scrim flat={0.54} centre={0.46} />
       </div>
 
-      <Reveal>
+      <Enter>
         <div className="flex w-full max-w-[60ch] flex-col items-center text-center">
           <TwoToneHeading
             heading={copy.heading}
@@ -82,7 +82,7 @@ export function Invitation({ chapter }: { chapter: Chapter }) {
             </PillButton>
           </div>
         </div>
-      </Reveal>
+      </Enter>
     </section>
   );
 }

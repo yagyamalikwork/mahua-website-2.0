@@ -1,13 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  DURATION,
-  EASE,
-  ENTER,
-  IMAGE_FROM,
-  PARALLAX_MAX,
-  REVEAL_FROM,
-  STICKY_SCREENS_MAX,
-} from "./motion";
+import { DURATION, EASE, ENTER, IMAGE_FROM, PARALLAX_MAX, STICKY_SCREENS_MAX } from "./motion";
 
 describe("the motion laws (spec section 4.3)", () => {
   it("keeps reveals between 800ms and 1400ms", () => {
@@ -21,19 +13,12 @@ describe("the motion laws (spec section 4.3)", () => {
     expect(PARALLAX_MAX).toBeLessThanOrEqual(0.15);
   });
 
-  it("still develops the legacy reveal rather than sliding it", () => {
-    // This replaces "reveals things by developing them, not sliding them",
-    // which also forbade a `y`. That clause retired on 5 Aug 2026 when the
-    // client asked for the reference site's 16px rise — the reasoning is in
-    // ./motion.ts beside ENTER. What survives is the half the law was really
-    // protecting: a vertical settle develops, a lateral slide flies in.
-    //
-    // REVEAL_FROM outlives its own scheduled deletion by one task, because
-    // `components/motion/Reveal.tsx` still imports it. Delete the two together.
-    expect(REVEAL_FROM.scale).toBeGreaterThanOrEqual(0.94);
-    expect(REVEAL_FROM.scale).toBeLessThan(1);
-    expect(REVEAL_FROM).not.toHaveProperty("x");
-  });
+  // "still develops the legacy reveal rather than sliding it" lived here until
+  // 5 Aug 2026 and went with `REVEAL_FROM` and `components/motion/Reveal.tsx`,
+  // which was its only consumer. Law 2 is not unguarded by the deletion: the
+  // two remaining entrance vocabularies are checked for a lateral offset by
+  // "never slides a photograph in laterally either" below and by "never slides
+  // laterally" in the ENTER block.
 
   it("turns the logo slowly enough to be almost imperceptible", () => {
     expect(DURATION.logoRotation).toBeGreaterThanOrEqual(60);

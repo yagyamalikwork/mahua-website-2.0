@@ -1,0 +1,745 @@
+{
+  "url": "http://localhost:3101/",
+  "measuredAt": "2026-08-04T21:21:29.825Z",
+  "desktop": {
+    "label": "desktop",
+    "viewport": "1440x900",
+    "reducedMotion": false,
+    "atRest": {
+      "staged": 29,
+      "stagedImages": 29,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "attributed": 29,
+      "invisible": 29,
+      "displaced": 29,
+      "maskCover": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 58,
+    "settlings": 58,
+    "peakMaskCover": 1,
+    "peakStagedAtOnce": 57,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedInView": 0,
+      "settled": 29,
+      "settledImages": 29,
+      "attributed": 29,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 139,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 12,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "forest",
+        "words": 97,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 190,
+        "hidden": 0,
+        "photographs": 6,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooms",
+        "words": 111,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "after-dark",
+        "words": 11,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lantern-hour",
+        "words": 106,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "details",
+        "words": 88,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "guests",
+        "words": 102,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 78,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "phone": {
+    "label": "phone",
+    "viewport": "390x844",
+    "reducedMotion": false,
+    "atRest": {
+      "staged": 29,
+      "stagedImages": 29,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "attributed": 29,
+      "invisible": 29,
+      "displaced": 29,
+      "maskCover": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 58,
+    "settlings": 58,
+    "peakMaskCover": 1,
+    "peakStagedAtOnce": 57,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedInView": 0,
+      "settled": 29,
+      "settledImages": 29,
+      "attributed": 29,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 139,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 12,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "forest",
+        "words": 97,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 190,
+        "hidden": 0,
+        "photographs": 6,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooms",
+        "words": 111,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "after-dark",
+        "words": 11,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lantern-hour",
+        "words": 106,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "details",
+        "words": 88,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "guests",
+        "words": 102,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 78,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "reducedMotion": {
+    "label": "reduced-motion",
+    "viewport": "1440x900",
+    "reducedMotion": true,
+    "atRest": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "attributed": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 0,
+    "settlings": 0,
+    "peakMaskCover": 0,
+    "peakStagedAtOnce": 0,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "attributed": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 139,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 12,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "forest",
+        "words": 97,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 190,
+        "hidden": 0,
+        "photographs": 6,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooms",
+        "words": 111,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "after-dark",
+        "words": 11,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lantern-hour",
+        "words": 106,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "details",
+        "words": 88,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "guests",
+        "words": 102,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 78,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "hero": {
+    "id": "arrival",
+    "state": null,
+    "maskCover": 0,
+    "imageScale": "none",
+    "imageVisible": 1,
+    "imageComplete": true
+  },
+  "noScript": [
+    {
+      "viewport": "1440x900",
+      "enterAttributes": 0,
+      "chapters": [
+        {
+          "id": "arrival",
+          "words": 20,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lodges",
+          "words": 139,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "why-you-came",
+          "words": 12,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooted",
+          "words": 144,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "forest",
+          "words": 97,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "field-days",
+          "words": 190,
+          "hidden": 0,
+          "photographs": 6,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooms",
+          "words": 111,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "after-dark",
+          "words": 11,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lantern-hour",
+          "words": 106,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "details",
+          "words": 88,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "guests",
+          "words": 102,
+          "hidden": 0,
+          "photographs": 2,
+          "maskedOver": 0
+        },
+        {
+          "id": "invitation",
+          "words": 78,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "enterAttributes": 0,
+      "chapters": [
+        {
+          "id": "arrival",
+          "words": 20,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lodges",
+          "words": 139,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "why-you-came",
+          "words": 12,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooted",
+          "words": 144,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "forest",
+          "words": 97,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "field-days",
+          "words": 190,
+          "hidden": 0,
+          "photographs": 6,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooms",
+          "words": 111,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "after-dark",
+          "words": 11,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lantern-hour",
+          "words": 106,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "details",
+          "words": 88,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "guests",
+          "words": 102,
+          "hidden": 0,
+          "photographs": 2,
+          "maskedOver": 0
+        },
+        {
+          "id": "invitation",
+          "words": 78,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

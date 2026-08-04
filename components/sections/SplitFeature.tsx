@@ -1,6 +1,6 @@
+import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Parallax } from "@/components/motion/Parallax";
-import { Reveal } from "@/components/motion/Reveal";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
@@ -111,7 +111,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
         {/* Band 1 — copy left, imagery right. */}
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-14">
           <div className="lg:col-span-5">
-            <Reveal>
+            <Enter>
               <div>
                 {chapter.number && chapter.label && (
                   <ChapterMark number={chapter.number} label={chapter.label} />
@@ -124,7 +124,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                   {copy.body[0]}
                 </p>
               </div>
-            </Reveal>
+            </Enter>
           </div>
 
           <div className="relative -mr-6 pb-[22%] md:-mr-12 lg:col-span-7 lg:-mr-[9vw] lg:pb-[12%]">
@@ -190,7 +190,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
           </div>
 
           <div className="order-1 lg:order-2 lg:col-span-5">
-            <Reveal>
+            <Enter>
               <div>
                 <span
                   aria-hidden="true"
@@ -201,7 +201,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                   {copy.body[1]}
                 </p>
               </div>
-            </Reveal>
+            </Enter>
             {/* The line and the thing it describes. A letterbox rather than a
                 second full frame: it belongs to the sentence above it, and a
                 square here would compete with the hammocks across the gutter. */}
@@ -241,11 +241,11 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
 
           <ol className="grid gap-x-10 gap-y-9 sm:grid-cols-2 lg:col-span-7 lg:gap-y-9 xl:col-span-6">
             {copy.experiences.map((experience, i) => (
-              // `Reveal` renders a `<div>`, so it goes inside the `<li>` — a
+              // `Enter` renders a `<div>`, so it goes inside the `<li>` — a
               // `<div>` between `<ol>` and `<li>` is invalid markup, and the
               // browser's recovery from it is to reparent the list items.
               <li key={experience.title} className="border-t" style={{ borderColor: "var(--accent)" }}>
-                <Reveal delay={0.05 * (i % 2)}>
+                <Enter delay={0.05 * (i % 2)}>
                   <div className="pt-4">
                     <p
                       className="font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.24em]"
@@ -263,7 +263,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                       {experience.body}
                     </p>
                   </div>
-                </Reveal>
+                </Enter>
               </li>
             ))}
           </ol>

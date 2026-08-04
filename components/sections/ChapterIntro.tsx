@@ -1,6 +1,6 @@
+import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Parallax } from "@/components/motion/Parallax";
-import { Reveal } from "@/components/motion/Reveal";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
@@ -144,7 +144,7 @@ export function ChapterIntro({
           {/* The chapter itself. Vertically centred against the taller flank so
               its slack reads as air beside photographs, not as a hole below it. */}
           <div className="lg:col-start-2 lg:row-start-1 lg:self-center lg:px-6">
-            <Reveal>
+            <Enter>
               <div className="flex flex-col items-center">
                 {chapter.number && chapter.label && (
                   <ChapterMark number={chapter.number} label={chapter.label} align="centre" />
@@ -160,11 +160,11 @@ export function ChapterIntro({
                   style={{ backgroundColor: "var(--accent)" }}
                 />
               </div>
-            </Reveal>
+            </Enter>
 
             <div className="mx-auto mt-8 max-w-[56ch] space-y-5">
               {copy.body.map((paragraph, i) => (
-                <Reveal key={i} delay={0.06 * i}>
+                <Enter key={i} delay={0.06 * i}>
                   <p
                     className={`font-[family-name:var(--font-body)] leading-[1.72] ${
                       i === 0 ? "text-[1.15rem] md:text-[1.22rem]" : "text-[1.02rem] md:text-lg"
@@ -173,7 +173,7 @@ export function ChapterIntro({
                   >
                     {paragraph}
                   </p>
-                </Reveal>
+                </Enter>
               ))}
             </div>
           </div>

@@ -102,6 +102,62 @@ body {
   transform: none;
 }
 
+/*
+ * A photograph arriving — `components/motion/ImageReveal.tsx`, on the same
+ * engine and the same fail-safe terms. `data-image-enter` is a separate
+ * attribute from `data-enter` because the two move different things: an
+ * entrance fades and rises the element it is written on, a photograph holds
+ * still while a mask wipes up off it and the image behind settles down to rest.
+ *
+ * **The at-rest state is the mask's own `scale-y-0` class, not a rule here.**
+ * That is the no-JS guarantee: with no script there is no `data-image-enter`,
+ * nothing below matches, and the collapsed mask leaves the photograph visible.
+ *
+ * **`scale`, and never `transform`, in every rule below.** Tailwind v4 compiles
+ * `scale-y-0` to the `scale` property, so `scale` is the one that has to be
+ * overridden — a `transform` would compose with it rather than replace it, and
+ * the mask would sit collapsed through its own wipe. Writing both, belt and
+ * braces, is worse than writing the wrong one: Lightning CSS merges a
+ * `transform` and a `scale` in the same rule into a single `transform`, and the
+ * override that survives minification is then the one that does nothing. That
+ * shipped for the length of one build on 5 Aug 2026 and was caught by measuring
+ * the mask's rendered height in `scripts/check_entrances.mjs`; no unit test can
+ * see it, because it only exists after the minifier has run.
+ *
+ * Direct-child selectors on purpose: `LodgeCards` and `SplitFeature` both lay a
+ * second photograph over a first, and a descendant selector would drive the
+ * inlay's mask from the outer frame's state.
+ */
+[data-image-enter] > [data-image-mask] {
+  transform-origin: top;
+  transition: scale var(--image-mask-duration) var(--enter-ease);
+  transition-delay: var(--image-delay, 0s);
+}
+
+[data-image-enter] > [data-image-inner] {
+  transition: scale var(--image-settle-duration) var(--enter-ease);
+  transition-delay: var(--image-delay, 0s);
+}
+
+/* Staged instantly, for the reason given above [data-enter="pending"]. */
+[data-image-enter="pending"] > [data-image-mask] {
+  transition: none;
+  scale: 1 1;
+}
+
+[data-image-enter="pending"] > [data-image-inner] {
+  transition: none;
+  scale: var(--image-from-scale);
+}
+
+[data-image-enter="in"] > [data-image-mask] {
+  scale: 1 0;
+}
+
+[data-image-enter="in"] > [data-image-inner] {
+  scale: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -119,6 +175,23 @@ body {
     transition: none;
     transform: none;
     opacity: 1;
+  }
+
+  /*
+   * The same second line for a photograph: the mask back to collapsed and the
+   * image back to its own size, whatever state was written. A stranded
+   * `data-image-enter="pending"` here would be a cream panel where a photograph
+   * should be — the exact failure the collapsed-at-rest markup exists to
+   * prevent, arriving by a different route.
+   */
+  [data-image-enter] > [data-image-mask] {
+    transition: none;
+    scale: 1 0;
+  }
+
+  [data-image-enter] > [data-image-inner] {
+    transition: none;
+    scale: 1;
   }
 
   /*
