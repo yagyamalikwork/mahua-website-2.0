@@ -1,0 +1,146 @@
+{
+  "measuredAt": "2026-08-04T00:35:02.737Z",
+  "url": "http://localhost:3100/",
+  "scrollLock": [
+    {
+      "viewport": 1440,
+      "reducedMotion": false,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    },
+    {
+      "viewport": 390,
+      "reducedMotion": false,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    },
+    {
+      "viewport": 1440,
+      "reducedMotion": true,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    },
+    {
+      "viewport": 390,
+      "reducedMotion": true,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    }
+  ],
+  "menu": {
+    "390": {
+      "open": {
+        "links": 7,
+        "labels": [
+          "01The Lodges",
+          "02Rooted like the mahua",
+          "03The Forest",
+          "04Days in the Field",
+          "05The Rooms",
+          "06The Lantern Hour",
+          "07Details"
+        ],
+        "ariaExpanded": "true",
+        "focusedOnOpen": "Close",
+        "role": "dialog",
+        "modal": "true"
+      },
+      "afterEscape": {
+        "ariaExpanded": "false",
+        "focusReturnedToTrigger": true,
+        "panelInert": true
+      },
+      "keyboardTarget": "#rooted",
+      "navigated": {
+        "hash": "#rooted",
+        "scrollY": 3619,
+        "panelInert": true,
+        "sectionTopFromViewport": 0
+      }
+    },
+    "1440": {
+      "open": {
+        "links": 7,
+        "labels": [
+          "01The Lodges",
+          "02Rooted like the mahua",
+          "03The Forest",
+          "04Days in the Field",
+          "05The Rooms",
+          "06The Lantern Hour",
+          "07Details"
+        ],
+        "ariaExpanded": "true",
+        "focusedOnOpen": "Close",
+        "role": "dialog",
+        "modal": "true"
+      },
+      "afterEscape": {
+        "ariaExpanded": "false",
+        "focusReturnedToTrigger": true,
+        "panelInert": true
+      },
+      "keyboardTarget": "#rooted",
+      "navigated": {
+        "hash": "#rooted",
+        "scrollY": 3278,
+        "panelInert": true,
+        "sectionTopFromViewport": 0
+      }
+    }
+  },
+  "overflow": [
+    {
+      "width": 390,
+      "anyHorizontal": false,
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    {
+      "width": 1440,
+      "anyHorizontal": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    }
+  ]
+}

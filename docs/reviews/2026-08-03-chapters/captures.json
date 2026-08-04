@@ -1,0 +1,299 @@
+{
+  "measuredAt": "2026-08-04T00:45:06.747Z",
+  "url": "http://localhost:3100/",
+  "widths": {
+    "1440": [
+      "w1440-00-arrival.webp",
+      "w1440-01-lodges.webp",
+      "w1440-02-why-you-came.webp",
+      "w1440-03-rooted.webp",
+      "w1440-04-forest.webp",
+      "w1440-05-field-days.webp",
+      "w1440-06-rooms.webp",
+      "w1440-07-after-dark.webp",
+      "w1440-08-lantern-hour.webp",
+      "w1440-09-details.webp",
+      "w1440-10-guests.webp",
+      "w1440-11-invitation.webp"
+    ]
+  },
+  "midReveal": [
+    {
+      "id": "forest",
+      "frames": [
+        {
+          "file": "motion-forest-a-entering.webp",
+          "landedShortBy": 460,
+          "msAfterLanding": 120,
+          "scrollY": 3839,
+          "masksCovering": [
+            0.719,
+            0.719,
+            1,
+            1,
+            1
+          ],
+          "linesDisplaced": [
+            44.9,
+            44.9,
+            60.2,
+            60.2,
+            60.2,
+            60.2,
+            67,
+            67,
+            67
+          ],
+          "linesOnScreen": 9
+        },
+        {
+          "file": "motion-forest-b-halfway.webp",
+          "landedShortBy": 240,
+          "msAfterLanding": 200,
+          "scrollY": 4059,
+          "masksCovering": [
+            0.548,
+            0.548,
+            0.548
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 9
+        },
+        {
+          "file": "motion-forest-c-arrived.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 280,
+          "scrollY": 4259,
+          "masksCovering": [
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 9
+        },
+        {
+          "file": "motion-forest-d-settled.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 1800,
+          "scrollY": 4259,
+          "masksCovering": [
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 9
+        }
+      ]
+    },
+    {
+      "id": "rooms",
+      "frames": [
+        {
+          "file": "motion-rooms-a-entering.webp",
+          "landedShortBy": 460,
+          "msAfterLanding": 120,
+          "scrollY": 7154,
+          "masksCovering": [
+            0.729,
+            1,
+            1
+          ],
+          "linesDisplaced": [
+            45.6,
+            45.6,
+            45.6,
+            61.1,
+            61.1,
+            61.1
+          ],
+          "linesOnScreen": 6
+        },
+        {
+          "file": "motion-rooms-b-halfway.webp",
+          "landedShortBy": 240,
+          "msAfterLanding": 200,
+          "scrollY": 7374,
+          "masksCovering": [
+            0.579,
+            0.579
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 6
+        },
+        {
+          "file": "motion-rooms-c-arrived.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 280,
+          "scrollY": 7574,
+          "masksCovering": [
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 6
+        },
+        {
+          "file": "motion-rooms-d-settled.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 1800,
+          "scrollY": 7574,
+          "masksCovering": [
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 6
+        }
+      ]
+    },
+    {
+      "id": "guests",
+      "frames": [
+        {
+          "file": "motion-guests-a-entering.webp",
+          "landedShortBy": 460,
+          "msAfterLanding": 120,
+          "scrollY": 11613,
+          "masksCovering": [
+            0.703,
+            0.703,
+            0.703,
+            0.703,
+            1,
+            1
+          ],
+          "linesDisplaced": [
+            43.6,
+            43.6,
+            43.6
+          ],
+          "linesOnScreen": 3
+        },
+        {
+          "file": "motion-guests-b-halfway.webp",
+          "landedShortBy": 240,
+          "msAfterLanding": 200,
+          "scrollY": 11833,
+          "masksCovering": [
+            0.579,
+            0.579
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 3
+        },
+        {
+          "file": "motion-guests-c-arrived.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 280,
+          "scrollY": 12033,
+          "masksCovering": [
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 3
+        },
+        {
+          "file": "motion-guests-d-settled.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 1800,
+          "scrollY": 12033,
+          "masksCovering": [
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 3
+        }
+      ]
+    }
+  ],
+  "reducedMotion": [
+    {
+      "id": "arrival",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 1
+    },
+    {
+      "id": "lodges",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 4,
+      "textVisible": 4
+    },
+    {
+      "id": "why-you-came",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 1
+    },
+    {
+      "id": "rooted",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 6
+    },
+    {
+      "id": "forest",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 4
+    },
+    {
+      "id": "field-days",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 4
+    },
+    {
+      "id": "rooms",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 6
+    },
+    {
+      "id": "after-dark",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 1
+    },
+    {
+      "id": "lantern-hour",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 5
+    },
+    {
+      "id": "details",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 4,
+      "textVisible": 7
+    },
+    {
+      "id": "guests",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 2,
+      "textVisible": 2
+    },
+    {
+      "id": "invitation",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 3
+    }
+  ]
+}
