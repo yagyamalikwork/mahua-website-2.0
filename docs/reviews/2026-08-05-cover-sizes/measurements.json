@@ -1,0 +1,273 @@
+{
+  "measuredAt": "2026-08-04T08:03:10.475Z",
+  "note": "Every figure here was taken in one session on one machine. c524bc6 measured 3,196 ms median mobile LCP in an earlier session and 4,057 ms here on the identical build — which is why before and after were re-measured together rather than compared across sessions.",
+  "lighthouseMobile": {
+    "before": {
+      "runs": [
+        {
+          "run": 1,
+          "score": 83,
+          "fcp": 1587,
+          "lcp": 4099,
+          "tbt": 177
+        },
+        {
+          "run": 2,
+          "score": 85,
+          "fcp": 960,
+          "lcp": 4057,
+          "tbt": 161
+        },
+        {
+          "run": 3,
+          "score": 93,
+          "fcp": 931,
+          "lcp": 2881,
+          "tbt": 176
+        },
+        {
+          "run": 4,
+          "score": 88,
+          "fcp": 996,
+          "lcp": 3682,
+          "tbt": 157
+        },
+        {
+          "run": 5,
+          "score": 84,
+          "fcp": 954,
+          "lcp": 4078,
+          "tbt": 175
+        }
+      ],
+      "medianLcpMs": 4057,
+      "medianScore": 85
+    },
+    "after": {
+      "runs": [
+        {
+          "run": 1,
+          "score": 80,
+          "fcp": 957,
+          "lcp": 4742,
+          "tbt": 199
+        },
+        {
+          "run": 2,
+          "score": 79,
+          "fcp": 963,
+          "lcp": 4812,
+          "tbt": 215
+        },
+        {
+          "run": 3,
+          "score": 0,
+          "fcp": null,
+          "lcp": null,
+          "tbt": null,
+          "note": "run crashed: EPERM on Chrome temp dir; excluded"
+        },
+        {
+          "run": 4,
+          "score": 80,
+          "fcp": 961,
+          "lcp": 4815,
+          "tbt": 167
+        },
+        {
+          "run": 5,
+          "score": 79,
+          "fcp": 948,
+          "lcp": 4807,
+          "tbt": 203
+        }
+      ],
+      "medianLcpMs": 4812,
+      "medianScore": 80
+    }
+  },
+  "firstFold": {
+    "before@1.75": [
+      {
+        "firstFoldKB": 534,
+        "visuallyCompleteMs": 2071,
+        "hero": "/media/reception-path-dusk-768.avif",
+        "heroKB": 65.4,
+        "heroEndMs": 2041
+      },
+      {
+        "firstFoldKB": 534,
+        "visuallyCompleteMs": 2081,
+        "hero": "/media/reception-path-dusk-768.avif",
+        "heroKB": 65.4,
+        "heroEndMs": 2057
+      },
+      {
+        "firstFoldKB": 534,
+        "visuallyCompleteMs": 2093,
+        "hero": "/media/reception-path-dusk-768.avif",
+        "heroKB": 65.4,
+        "heroEndMs": 2069
+      }
+    ],
+    "after@1.75": [
+      {
+        "firstFoldKB": 701,
+        "visuallyCompleteMs": 3908,
+        "hero": "/media/reception-path-dusk-1440.avif",
+        "heroKB": 191.5,
+        "heroEndMs": 3840
+      },
+      {
+        "firstFoldKB": 701,
+        "visuallyCompleteMs": 3944,
+        "hero": "/media/reception-path-dusk-1440.avif",
+        "heroKB": 191.5,
+        "heroEndMs": 3839
+      },
+      {
+        "firstFoldKB": 701,
+        "visuallyCompleteMs": 4025,
+        "hero": "/media/reception-path-dusk-1440.avif",
+        "heroKB": 191.5,
+        "heroEndMs": 3879
+      }
+    ],
+    "before@3": [
+      {
+        "firstFoldKB": 601,
+        "visuallyCompleteMs": 3036,
+        "hero": "/media/reception-path-dusk-960.avif",
+        "heroKB": 98.3,
+        "heroEndMs": 2976
+      },
+      {
+        "firstFoldKB": 601,
+        "visuallyCompleteMs": 3029,
+        "hero": "/media/reception-path-dusk-960.avif",
+        "heroKB": 98.3,
+        "heroEndMs": 2985
+      },
+      {
+        "firstFoldKB": 601,
+        "visuallyCompleteMs": 3111,
+        "hero": "/media/reception-path-dusk-960.avif",
+        "heroKB": 98.3,
+        "heroEndMs": 2985
+      }
+    ],
+    "after@3": [
+      {
+        "firstFoldKB": 738,
+        "visuallyCompleteMs": 4164,
+        "hero": "/media/reception-path-dusk-1440.avif",
+        "heroKB": 191.5,
+        "heroEndMs": 4016
+      },
+      {
+        "firstFoldKB": 738,
+        "visuallyCompleteMs": 4153,
+        "hero": "/media/reception-path-dusk-1440.avif",
+        "heroKB": 191.5,
+        "heroEndMs": 4033
+      },
+      {
+        "firstFoldKB": 738,
+        "visuallyCompleteMs": 4222,
+        "hero": "/media/reception-path-dusk-1440.avif",
+        "heroKB": 191.5,
+        "heroEndMs": 4047
+      }
+    ]
+  },
+  "heroTierSweep": [
+    {
+      "tier": 960,
+      "dpr": 1.75,
+      "heroFile": "960.avif",
+      "heroKB": 98.3,
+      "heroEndMs": 2962,
+      "firstFoldKB": 608,
+      "visuallyCompleteMs": 3129,
+      "lcpMs": 1200,
+      "fcpMs": 1200
+    },
+    {
+      "tier": 960,
+      "dpr": 3,
+      "heroFile": "1200.avif",
+      "heroKB": 141.8,
+      "heroEndMs": 3735,
+      "firstFoldKB": 688,
+      "visuallyCompleteMs": 3773,
+      "lcpMs": 1240,
+      "fcpMs": 1240
+    },
+    {
+      "tier": 1200,
+      "dpr": 1.75,
+      "heroFile": "1200.avif",
+      "heroKB": 141.8,
+      "heroEndMs": 3520,
+      "firstFoldKB": 651,
+      "visuallyCompleteMs": 3818,
+      "lcpMs": 1408,
+      "fcpMs": 1408
+    },
+    {
+      "tier": 1200,
+      "dpr": 3,
+      "heroFile": "1440.avif",
+      "heroKB": 191.5,
+      "heroEndMs": 4013,
+      "firstFoldKB": 738,
+      "visuallyCompleteMs": 4130,
+      "lcpMs": 1324,
+      "fcpMs": 1324
+    },
+    {
+      "tier": "honest",
+      "dpr": 1.75,
+      "heroFile": "1440.avif",
+      "heroKB": 191.5,
+      "heroEndMs": 3826,
+      "firstFoldKB": 701,
+      "visuallyCompleteMs": 3952,
+      "lcpMs": 1364,
+      "fcpMs": 1364
+    },
+    {
+      "tier": "honest",
+      "dpr": 3,
+      "heroFile": "1440.avif",
+      "heroKB": 191.5,
+      "heroEndMs": 4027,
+      "firstFoldKB": 738,
+      "visuallyCompleteMs": 4073,
+      "lcpMs": 1128,
+      "fcpMs": 1128
+    }
+  ],
+  "heroTierSharpness": [
+    {
+      "tier": 640,
+      "file": "/media/reception-path-dusk-640.avif",
+      "laplacian": 168.3
+    },
+    {
+      "tier": 960,
+      "file": "/media/reception-path-dusk-960.avif",
+      "laplacian": 385.9
+    },
+    {
+      "tier": 1200,
+      "file": "/media/reception-path-dusk-1200.avif",
+      "laplacian": 577.8
+    },
+    {
+      "tier": "honest",
+      "file": "/media/reception-path-dusk-1440.avif",
+      "laplacian": 776.3
+    }
+  ]
+}

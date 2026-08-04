@@ -23,7 +23,7 @@ type PlateGridCopy = {
  * width they need. Measured off `ChapterSurface`'s container (`max-w-[1600px]`,
  * `px-6` / `md:px-12`) and this grid's `gap-x-8` / `lg:gap-x-10`, rounded up.
  */
-const PLATE_SIZES: Record<number, string> = {
+export const PLATE_SIZES: Record<number, string> = {
   2: "(min-width: 1600px) 736px, (min-width: 640px) 50vw, calc(100vw - 48px)",
   3: "(min-width: 1600px) 480px, (min-width: 1024px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
   4: "(min-width: 1600px) 352px, (min-width: 1280px) 25vw, (min-width: 640px) 50vw, calc(100vw - 48px)",

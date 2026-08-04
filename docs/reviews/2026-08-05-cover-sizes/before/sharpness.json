@@ -1,0 +1,26 @@
+{
+  "measuredAt": "2026-08-04T07:12:54.276Z",
+  "url": "http://localhost:3100/",
+  "dpr": 1,
+  "results": [
+    {
+      "crop": "hero-reception-path",
+      "laplacianVariance": 73.7,
+      "served": [
+        "/media/reception-path-dusk-400.avif",
+        "/media/tiger-golden-grass-400.avif"
+      ]
+    },
+    {
+      "crop": "tiger-face",
+      "laplacianVariance": 35.1,
+      "served": [
+        "/media/reception-path-dusk-400.avif",
+        "/media/tiger-golden-grass-400.avif",
+        "/media/lantern-bridge-dusk-400.avif",
+        "/media/tiger-pair-profile-400.avif",
+        "/media/leopard-on-rock-400.avif"
+      ]
+    }
+  ]
+}

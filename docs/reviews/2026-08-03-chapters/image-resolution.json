@@ -1,75 +1,550 @@
 {
-  "measuredAt": "2026-08-04T00:34:47.940Z",
+  "measuredAt": "2026-08-04T07:44:22.218Z",
   "url": "http://localhost:3100/",
+  "densityCap": 2,
   "results": [
     {
       "viewport": "390x844@1x",
       "images": 32,
       "softestServed": {
-        "file": "/media/reception-path-dusk-400.avif",
-        "fileWidth": 400,
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
         "widestOffered": 1440,
+        "objectFit": "cover",
         "cssWidth": 390,
-        "needed": 390,
-        "ratio": 1.03,
-        "atLibraryCeiling": false
+        "drawnWidth": 1617,
+        "needed": 1617,
+        "ratio": 0.89,
+        "ratioAtDeviceDensity": 0.89,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.89,
+        "median": 1.17,
+        "best": 2.72
       },
       "understatedSizes": [],
-      "atLibraryCeiling": []
+      "atLibraryCeiling": [
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "needed": 1617,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "needed": 1614,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1616,
+          "ratio": 0.89
+        }
+      ],
+      "all": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1266,
+          "needed": 1266,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/bungalow-exterior-palms-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 343,
+          "needed": 343,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/mahua-vann-room-400.avif",
+          "cssWidth": 141,
+          "drawnWidth": 158,
+          "needed": 158,
+          "ratio": 2.53
+        },
+        {
+          "file": "/media/mahua-tola-pool-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 385,
+          "needed": 385,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/mahua-tola-suite-400.avif",
+          "cssWidth": 141,
+          "drawnWidth": 159,
+          "needed": 159,
+          "ratio": 2.52
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1617,
+          "needed": 1617,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/potters-hands-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 368,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/forest-shrine-incense-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 366,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-640.avif",
+          "cssWidth": 280,
+          "drawnWidth": 528,
+          "needed": 528,
+          "ratio": 1.21
+        },
+        {
+          "file": "/media/tiger-pair-profile-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/leopard-on-rock-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/melanistic-leopard-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/guide-sunrise-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 368,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/tiger-crossing-track-400.avif",
+          "cssWidth": 138,
+          "drawnWidth": 147,
+          "needed": 147,
+          "ratio": 2.72
+        },
+        {
+          "file": "/media/hammocks-shade-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 368,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/forest-trail-canopy-400.avif",
+          "cssWidth": 130,
+          "drawnWidth": 262,
+          "needed": 262,
+          "ratio": 1.53
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 643,
+          "needed": 643,
+          "ratio": 1.19
+        },
+        {
+          "file": "/media/room-open-to-bamboo-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/suite-tiger-painting-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/room-hanging-chair-view-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/hanging-chair-forest-deck-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1614,
+          "needed": 1614,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/bonfire-circle-night-640.avif",
+          "cssWidth": 366,
+          "drawnWidth": 435,
+          "needed": 435,
+          "ratio": 1.47
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 368,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/petal-table-night-768.avif",
+          "cssWidth": 280,
+          "drawnWidth": 623,
+          "needed": 623,
+          "ratio": 1.23
+        },
+        {
+          "file": "/media/petal-bowl-map-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/veranda-through-leaves-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/lily-pond-fountain-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/geese-garden-pond-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/lawn-picnic-golden-hour-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 344,
+          "needed": 344,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/garden-path-lodge-640.avif",
+          "cssWidth": 342,
+          "drawnWidth": 571,
+          "needed": 571,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1616,
+          "needed": 1616,
+          "ratio": 0.89
+        }
+      ]
     },
     {
       "viewport": "390x844@3x",
       "images": 32,
       "softestServed": {
-        "file": "/media/potters-hands-700.avif",
-        "fileWidth": 700,
-        "widestOffered": 700,
-        "cssWidth": 366,
-        "needed": 1098,
-        "ratio": 0.64,
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 390,
+        "drawnWidth": 1617,
+        "needed": 3234,
+        "ratio": 0.45,
+        "ratioAtDeviceDensity": 0.3,
         "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.3,
+        "median": 0.75,
+        "best": 0.9
       },
       "understatedSizes": [],
       "atLibraryCeiling": [
         {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 2532,
+          "ratio": 0.57
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "needed": 3234,
+          "ratio": 0.45
+        },
+        {
           "file": "/media/potters-hands-700.avif",
-          "needed": 1098,
-          "ratio": 0.64
+          "needed": 735,
+          "ratio": 0.95
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
-          "needed": 1098,
-          "ratio": 0.64
+          "needed": 732,
+          "ratio": 0.96
         },
         {
-          "file": "/media/tiger-pair-profile-900.avif",
-          "needed": 1026,
-          "ratio": 0.88
+          "file": "/media/lodge-facade-night-1440.avif",
+          "needed": 3226,
+          "ratio": 0.45
         },
         {
-          "file": "/media/leopard-on-rock-900.avif",
-          "needed": 1026,
-          "ratio": 0.88
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 3231,
+          "ratio": 0.45
+        }
+      ],
+      "all": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1266,
+          "needed": 2532,
+          "ratio": 0.57
         },
         {
-          "file": "/media/melanistic-leopard-900.avif",
-          "needed": 1026,
-          "ratio": 0.88
+          "file": "/media/bungalow-exterior-palms-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 343,
+          "needed": 685,
+          "ratio": 1.12
         },
         {
-          "file": "/media/guide-sunrise-1000.avif",
-          "needed": 1098,
-          "ratio": 0.91
+          "file": "/media/mahua-vann-room-400.avif",
+          "cssWidth": 141,
+          "drawnWidth": 159,
+          "needed": 318,
+          "ratio": 1.26
         },
         {
-          "file": "/media/sound-healing-1000.avif",
-          "needed": 1098,
-          "ratio": 0.91
+          "file": "/media/mahua-tola-pool-960.avif",
+          "cssWidth": 342,
+          "drawnWidth": 385,
+          "needed": 769,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/mahua-tola-suite-400.avif",
+          "cssWidth": 141,
+          "drawnWidth": 160,
+          "needed": 321,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1617,
+          "needed": 3234,
+          "ratio": 0.45
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 735,
+          "ratio": 0.95
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 732,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-1200.avif",
+          "cssWidth": 280,
+          "drawnWidth": 527,
+          "needed": 1053,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/tiger-pair-profile-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/leopard-on-rock-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/melanistic-leopard-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/guide-sunrise-768.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 735,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/tiger-crossing-track-400.avif",
+          "cssWidth": 138,
+          "drawnWidth": 147,
+          "needed": 295,
+          "ratio": 1.36
+        },
+        {
+          "file": "/media/hammocks-shade-768.avif",
+          "cssWidth": 366,
+          "drawnWidth": 367,
+          "needed": 734,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/forest-trail-canopy-640.avif",
+          "cssWidth": 130,
+          "drawnWidth": 261,
+          "needed": 522,
+          "ratio": 1.23
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-1440.avif",
+          "cssWidth": 342,
+          "drawnWidth": 641,
+          "needed": 1282,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/room-open-to-bamboo-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/suite-tiger-painting-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/room-hanging-chair-view-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/hanging-chair-forest-deck-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1613,
+          "needed": 3226,
+          "ratio": 0.45
+        },
+        {
+          "file": "/media/bonfire-circle-night-960.avif",
+          "cssWidth": 366,
+          "drawnWidth": 435,
+          "needed": 871,
+          "ratio": 1.1
+        },
+        {
+          "file": "/media/sound-healing-768.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 735,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/petal-table-night-1440.avif",
+          "cssWidth": 280,
+          "drawnWidth": 623,
+          "needed": 1247,
+          "ratio": 1.15
         },
         {
           "file": "/media/petal-bowl-map-700.avif",
-          "needed": 1026,
-          "ratio": 0.68
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.02
+        },
+        {
+          "file": "/media/veranda-through-leaves-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/lily-pond-fountain-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/geese-garden-pond-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/lawn-picnic-golden-hour-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/garden-path-lodge-1200.avif",
+          "cssWidth": 342,
+          "drawnWidth": 571,
+          "needed": 1141,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1616,
+          "needed": 3231,
+          "ratio": 0.45
         }
       ]
     },
@@ -77,25 +552,279 @@
       "viewport": "768x1024@1x",
       "images": 32,
       "softestServed": {
-        "file": "/media/potters-hands-700.avif",
-        "fileWidth": 700,
-        "widestOffered": 700,
-        "cssWidth": 720,
-        "needed": 720,
-        "ratio": 0.97,
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 768,
+        "drawnWidth": 1963,
+        "needed": 1963,
+        "ratio": 0.73,
+        "ratioAtDeviceDensity": 0.73,
         "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.73,
+        "median": 1.21,
+        "best": 1.69
       },
       "understatedSizes": [],
       "atLibraryCeiling": [
         {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "needed": 1963,
+          "ratio": 0.73
+        },
+        {
           "file": "/media/potters-hands-700.avif",
-          "needed": 720,
+          "needed": 722,
           "ratio": 0.97
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
           "needed": 720,
           "ratio": 0.97
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "needed": 1959,
+          "ratio": 0.74
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1961,
+          "ratio": 0.73
+        }
+      ],
+      "all": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1536,
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
+          "file": "/media/bungalow-exterior-palms-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/mahua-vann-room-400.avif",
+          "cssWidth": 293,
+          "drawnWidth": 330,
+          "needed": 330,
+          "ratio": 1.21
+        },
+        {
+          "file": "/media/mahua-tola-pool-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 756,
+          "needed": 756,
+          "ratio": 1.02
+        },
+        {
+          "file": "/media/mahua-tola-suite-400.avif",
+          "cssWidth": 293,
+          "drawnWidth": 330,
+          "needed": 330,
+          "ratio": 1.21
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1963,
+          "needed": 1963,
+          "ratio": 0.73
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "cssWidth": 720,
+          "drawnWidth": 722,
+          "needed": 722,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "cssWidth": 720,
+          "drawnWidth": 720,
+          "needed": 720,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-1200.avif",
+          "cssWidth": 551,
+          "drawnWidth": 1035,
+          "needed": 1035,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/tiger-pair-profile-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/leopard-on-rock-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/melanistic-leopard-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/guide-sunrise-768.avif",
+          "cssWidth": 720,
+          "drawnWidth": 721,
+          "needed": 721,
+          "ratio": 1.07
+        },
+        {
+          "file": "/media/tiger-crossing-track-400.avif",
+          "cssWidth": 286,
+          "drawnWidth": 305,
+          "needed": 305,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/hammocks-shade-768.avif",
+          "cssWidth": 720,
+          "drawnWidth": 721,
+          "needed": 721,
+          "ratio": 1.07
+        },
+        {
+          "file": "/media/forest-trail-canopy-640.avif",
+          "cssWidth": 272,
+          "drawnWidth": 545,
+          "needed": 545,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-1440.avif",
+          "cssWidth": 672,
+          "drawnWidth": 1260,
+          "needed": 1260,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/room-open-to-bamboo-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/suite-tiger-painting-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/room-hanging-chair-view-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/hanging-chair-forest-deck-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1959,
+          "needed": 1959,
+          "ratio": 0.74
+        },
+        {
+          "file": "/media/bonfire-circle-night-960.avif",
+          "cssWidth": 720,
+          "drawnWidth": 854,
+          "needed": 854,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/sound-healing-768.avif",
+          "cssWidth": 720,
+          "drawnWidth": 722,
+          "needed": 722,
+          "ratio": 1.06
+        },
+        {
+          "file": "/media/petal-table-night-1440.avif",
+          "cssWidth": 551,
+          "drawnWidth": 1225,
+          "needed": 1225,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/petal-bowl-map-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/veranda-through-leaves-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/lily-pond-fountain-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/geese-garden-pond-400.avif",
+          "cssWidth": 320,
+          "drawnWidth": 320,
+          "needed": 320,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/lawn-picnic-golden-hour-640.avif",
+          "cssWidth": 379,
+          "drawnWidth": 379,
+          "needed": 379,
+          "ratio": 1.69
+        },
+        {
+          "file": "/media/garden-path-lodge-640.avif",
+          "cssWidth": 261,
+          "drawnWidth": 436,
+          "needed": 436,
+          "ratio": 1.47
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1961,
+          "needed": 1961,
+          "ratio": 0.73
         }
       ]
     },
@@ -103,28 +832,291 @@
       "viewport": "1440x900@1x",
       "images": 32,
       "softestServed": {
-        "file": "/media/reception-path-dusk-1440.avif",
-        "fileWidth": 1440,
-        "widestOffered": 1440,
-        "cssWidth": 1440,
-        "needed": 1440,
-        "ratio": 1,
+        "file": "/media/potters-hands-700.avif",
+        "fileWidth": 700,
+        "widestOffered": 700,
+        "objectFit": "cover",
+        "cssWidth": 540,
+        "drawnWidth": 1044,
+        "needed": 1044,
+        "ratio": 0.67,
+        "ratioAtDeviceDensity": 0.67,
         "atLibraryCeiling": true
       },
+      "deviceDensity": {
+        "worst": 0.67,
+        "median": 1.2,
+        "best": 1.52
+      },
       "understatedSizes": [],
-      "atLibraryCeiling": []
+      "atLibraryCeiling": [
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "needed": 1726,
+          "ratio": 0.83
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "needed": 1044,
+          "ratio": 0.67
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "needed": 1722,
+          "ratio": 0.84
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1724,
+          "ratio": 0.84
+        }
+      ],
+      "all": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1440,
+          "needed": 1440,
+          "ratio": 1
+        },
+        {
+          "file": "/media/bungalow-exterior-palms-768.avif",
+          "cssWidth": 644,
+          "drawnWidth": 645,
+          "needed": 645,
+          "ratio": 1.19
+        },
+        {
+          "file": "/media/mahua-vann-room-400.avif",
+          "cssWidth": 272,
+          "drawnWidth": 305,
+          "needed": 305,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/mahua-tola-pool-768.avif",
+          "cssWidth": 644,
+          "drawnWidth": 725,
+          "needed": 725,
+          "ratio": 1.06
+        },
+        {
+          "file": "/media/mahua-tola-suite-400.avif",
+          "cssWidth": 272,
+          "drawnWidth": 306,
+          "needed": 306,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1726,
+          "needed": 1726,
+          "ratio": 0.83
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "cssWidth": 540,
+          "drawnWidth": 1044,
+          "needed": 1044,
+          "ratio": 0.67
+        },
+        {
+          "file": "/media/forest-shrine-incense-640.avif",
+          "cssWidth": 512,
+          "drawnWidth": 512,
+          "needed": 512,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-768.avif",
+          "cssWidth": 358,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/tiger-pair-profile-640.avif",
+          "cssWidth": 421,
+          "drawnWidth": 421,
+          "needed": 421,
+          "ratio": 1.52
+        },
+        {
+          "file": "/media/leopard-on-rock-640.avif",
+          "cssWidth": 421,
+          "drawnWidth": 421,
+          "needed": 421,
+          "ratio": 1.52
+        },
+        {
+          "file": "/media/melanistic-leopard-640.avif",
+          "cssWidth": 421,
+          "drawnWidth": 421,
+          "needed": 421,
+          "ratio": 1.52
+        },
+        {
+          "file": "/media/guide-sunrise-960.avif",
+          "cssWidth": 890,
+          "drawnWidth": 890,
+          "needed": 890,
+          "ratio": 1.08
+        },
+        {
+          "file": "/media/tiger-crossing-track-400.avif",
+          "cssWidth": 279,
+          "drawnWidth": 297,
+          "needed": 297,
+          "ratio": 1.35
+        },
+        {
+          "file": "/media/hammocks-shade-960.avif",
+          "cssWidth": 890,
+          "drawnWidth": 891,
+          "needed": 891,
+          "ratio": 1.08
+        },
+        {
+          "file": "/media/forest-trail-canopy-640.avif",
+          "cssWidth": 261,
+          "drawnWidth": 522,
+          "needed": 522,
+          "ratio": 1.23
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-960.avif",
+          "cssWidth": 411,
+          "drawnWidth": 822,
+          "needed": 822,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/room-open-to-bamboo-768.avif",
+          "cssWidth": 652,
+          "drawnWidth": 652,
+          "needed": 652,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/suite-tiger-painting-768.avif",
+          "cssWidth": 652,
+          "drawnWidth": 652,
+          "needed": 652,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/room-hanging-chair-view-768.avif",
+          "cssWidth": 652,
+          "drawnWidth": 652,
+          "needed": 652,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/hanging-chair-forest-deck-768.avif",
+          "cssWidth": 652,
+          "drawnWidth": 652,
+          "needed": 652,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1722,
+          "needed": 1722,
+          "ratio": 0.84
+        },
+        {
+          "file": "/media/bonfire-circle-night-1440.avif",
+          "cssWidth": 540,
+          "drawnWidth": 1236,
+          "needed": 1236,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/sound-healing-640.avif",
+          "cssWidth": 512,
+          "drawnWidth": 513,
+          "needed": 513,
+          "ratio": 1.25
+        },
+        {
+          "file": "/media/petal-table-night-960.avif",
+          "cssWidth": 358,
+          "drawnWidth": 797,
+          "needed": 797,
+          "ratio": 1.2
+        },
+        {
+          "file": "/media/petal-bowl-map-400.avif",
+          "cssWidth": 306,
+          "drawnWidth": 306,
+          "needed": 306,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/veranda-through-leaves-400.avif",
+          "cssWidth": 306,
+          "drawnWidth": 306,
+          "needed": 306,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/lily-pond-fountain-400.avif",
+          "cssWidth": 306,
+          "drawnWidth": 306,
+          "needed": 306,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/geese-garden-pond-400.avif",
+          "cssWidth": 306,
+          "drawnWidth": 306,
+          "needed": 306,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/lawn-picnic-golden-hour-960.avif",
+          "cssWidth": 771,
+          "drawnWidth": 772,
+          "needed": 772,
+          "ratio": 1.24
+        },
+        {
+          "file": "/media/garden-path-lodge-1200.avif",
+          "cssWidth": 541,
+          "drawnWidth": 903,
+          "needed": 903,
+          "ratio": 1.33
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1724,
+          "needed": 1724,
+          "ratio": 0.84
+        }
+      ]
     },
     {
       "viewport": "1920x1080@1x",
       "images": 32,
       "softestServed": {
-        "file": "/media/reception-path-dusk-1440.avif",
-        "fileWidth": 1440,
-        "widestOffered": 1440,
-        "cssWidth": 1920,
-        "needed": 1920,
-        "ratio": 0.75,
+        "file": "/media/potters-hands-700.avif",
+        "fileWidth": 700,
+        "widestOffered": 700,
+        "objectFit": "cover",
+        "cssWidth": 647,
+        "drawnWidth": 1250,
+        "needed": 1250,
+        "ratio": 0.56,
+        "ratioAtDeviceDensity": 0.56,
         "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.56,
+        "median": 1.16,
+        "best": 1.58
       },
       "understatedSizes": [],
       "atLibraryCeiling": [
@@ -135,8 +1127,13 @@
         },
         {
           "file": "/media/tiger-golden-grass-1440.avif",
-          "needed": 1920,
-          "ratio": 0.75
+          "needed": 2070,
+          "ratio": 0.7
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "needed": 1250,
+          "ratio": 0.56
         },
         {
           "file": "/media/guide-sunrise-1000.avif",
@@ -145,13 +1142,244 @@
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
+          "needed": 2067,
+          "ratio": 0.7
+        },
+        {
+          "file": "/media/bonfire-circle-night-1440.avif",
+          "needed": 1480,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 2068,
+          "ratio": 0.7
+        }
+      ],
+      "all": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 1920,
           "needed": 1920,
           "ratio": 0.75
         },
         {
+          "file": "/media/bungalow-exterior-palms-768.avif",
+          "cssWidth": 724,
+          "drawnWidth": 724,
+          "needed": 724,
+          "ratio": 1.06
+        },
+        {
+          "file": "/media/mahua-vann-room-400.avif",
+          "cssWidth": 309,
+          "drawnWidth": 348,
+          "needed": 348,
+          "ratio": 1.15
+        },
+        {
+          "file": "/media/mahua-tola-pool-960.avif",
+          "cssWidth": 724,
+          "drawnWidth": 815,
+          "needed": 815,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/mahua-tola-suite-400.avif",
+          "cssWidth": 309,
+          "drawnWidth": 349,
+          "needed": 349,
+          "ratio": 1.15
+        },
+        {
+          "file": "/media/tiger-golden-grass-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 2070,
+          "needed": 2070,
+          "ratio": 0.7
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "cssWidth": 647,
+          "drawnWidth": 1250,
+          "needed": 1250,
+          "ratio": 0.56
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "cssWidth": 609,
+          "drawnWidth": 609,
+          "needed": 609,
+          "ratio": 1.15
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-1200.avif",
+          "cssWidth": 426,
+          "drawnWidth": 801,
+          "needed": 801,
+          "ratio": 1.5
+        },
+        {
+          "file": "/media/tiger-pair-profile-640.avif",
+          "cssWidth": 475,
+          "drawnWidth": 475,
+          "needed": 475,
+          "ratio": 1.35
+        },
+        {
+          "file": "/media/leopard-on-rock-640.avif",
+          "cssWidth": 475,
+          "drawnWidth": 475,
+          "needed": 475,
+          "ratio": 1.35
+        },
+        {
+          "file": "/media/melanistic-leopard-640.avif",
+          "cssWidth": 475,
+          "drawnWidth": 475,
+          "needed": 475,
+          "ratio": 1.35
+        },
+        {
+          "file": "/media/guide-sunrise-1000.avif",
+          "cssWidth": 1027,
+          "drawnWidth": 1027,
+          "needed": 1027,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/tiger-crossing-track-541.avif",
+          "cssWidth": 325,
+          "drawnWidth": 346,
+          "needed": 346,
+          "ratio": 1.56
+        },
+        {
+          "file": "/media/hammocks-shade-1440.avif",
+          "cssWidth": 1027,
+          "drawnWidth": 1028,
+          "needed": 1028,
+          "ratio": 1.4
+        },
+        {
+          "file": "/media/forest-trail-canopy-960.avif",
+          "cssWidth": 305,
+          "drawnWidth": 609,
+          "needed": 609,
+          "ratio": 1.58
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-1200.avif",
+          "cssWidth": 464,
+          "drawnWidth": 929,
+          "needed": 929,
+          "ratio": 1.29
+        },
+        {
+          "file": "/media/room-open-to-bamboo-768.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/suite-tiger-painting-768.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/room-hanging-chair-view-768.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/hanging-chair-forest-deck-768.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/lodge-facade-night-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 2067,
+          "needed": 2067,
+          "ratio": 0.7
+        },
+        {
+          "file": "/media/bonfire-circle-night-1440.avif",
+          "cssWidth": 647,
+          "drawnWidth": 1480,
+          "needed": 1480,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/sound-healing-768.avif",
+          "cssWidth": 609,
+          "drawnWidth": 610,
+          "needed": 610,
+          "ratio": 1.26
+        },
+        {
+          "file": "/media/petal-table-night-1200.avif",
+          "cssWidth": 426,
+          "drawnWidth": 948,
+          "needed": 948,
+          "ratio": 1.27
+        },
+        {
+          "file": "/media/petal-bowl-map-400.avif",
+          "cssWidth": 346,
+          "drawnWidth": 346,
+          "needed": 346,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/veranda-through-leaves-400.avif",
+          "cssWidth": 346,
+          "drawnWidth": 346,
+          "needed": 346,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/lily-pond-fountain-400.avif",
+          "cssWidth": 346,
+          "drawnWidth": 346,
+          "needed": 346,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/geese-garden-pond-400.avif",
+          "cssWidth": 346,
+          "drawnWidth": 346,
+          "needed": 346,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/lawn-picnic-golden-hour-1200.avif",
+          "cssWidth": 864,
+          "drawnWidth": 864,
+          "needed": 864,
+          "ratio": 1.39
+        },
+        {
+          "file": "/media/garden-path-lodge-1440.avif",
+          "cssWidth": 608,
+          "drawnWidth": 1013,
+          "needed": 1013,
+          "ratio": 1.42
+        },
+        {
           "file": "/media/birding-cairn-dusk-1440.avif",
-          "needed": 1920,
-          "ratio": 0.75
+          "cssWidth": 1920,
+          "drawnWidth": 2068,
+          "needed": 2068,
+          "ratio": 0.7
         }
       ]
     }

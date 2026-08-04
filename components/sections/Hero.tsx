@@ -1,12 +1,11 @@
 import { preload } from "react-dom";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { SplitLines } from "@/components/motion/SplitLines";
-import { Photo } from "@/components/ui/Photo";
+import { Photo, servedSizes } from "@/components/ui/Photo";
 import { Scrim } from "@/components/ui/Scrim";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey } from "@/content/home";
 import { media } from "@/lib/media";
-import { capDensity } from "@/lib/sizes";
 
 type HeroCopy = {
   readonly headline: string;
@@ -14,8 +13,14 @@ type HeroCopy = {
   readonly scrollCue: string;
 };
 
-/** The hero's `sizes`, written once and used by both the preload and the `<img>`. */
-const HERO_SIZES = "100vw";
+/**
+ * The hero's box: the full viewport, `min-h-[100svh]` with the photograph
+ * `absolute inset-0` inside it. `100vw` is its width; `HERO_BOX` is its height,
+ * and the two together are what `lib/sizes.ts` turns into the width the browser
+ * actually draws. Used by both the preload and the `<img>`, through one call.
+ */
+export const HERO_SIZES = "100vw";
+export const HERO_BOX = { viewportHeightVh: 100 } as const;
 
 /**
  * The photograph fills the viewport; the headline sits bottom-left in cream
@@ -69,7 +74,7 @@ export function Hero({ chapter }: { chapter: Chapter }) {
     as: "image",
     type: "image/avif",
     imageSrcSet: heroImage.sources.map((s) => `${s.avif} ${s.width}w`).join(", "),
-    imageSizes: capDensity(HERO_SIZES),
+    imageSizes: servedSizes(chapter.media[0], HERO_SIZES, HERO_BOX),
     fetchPriority: "high",
   });
 
@@ -86,9 +91,11 @@ export function Hero({ chapter }: { chapter: Chapter }) {
             decorative
             priority
             // The one photograph on the page that genuinely is the viewport, and
-            // the only one whose arrival the visitor sits and waits for. At 390px
-            // this now resolves to the 400w tier rather than the 1440w file.
+            // the only one whose arrival the visitor sits and waits for. It is
+            // also the one whose tier is a deliberate trade rather than an
+            // arithmetic result — see the note on `HERO_SIZES`.
             sizes={HERO_SIZES}
+            box={HERO_BOX}
             pictureClassName="block h-full w-full"
             className="h-full w-full object-cover"
           />

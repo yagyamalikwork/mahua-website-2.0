@@ -23,6 +23,12 @@ import { PARALLAX_MAX } from "@/lib/motion";
  * relative to `heightVh` (not a bare `100`) so the inequality still holds for
  * any container height, not just a full viewport.
  */
+/**
+ * The box's width. Its *height* is `oversizeVh` and varies with `heightVh`, so
+ * it is passed as `box` at the call site rather than baked in here.
+ */
+export const FULL_BLEED_SIZES = "100vw";
+
 export function FullBleed({
   id,
   heightVh = 100,
@@ -42,9 +48,14 @@ export function FullBleed({
           id={id}
           decorative
           priority={priority}
-          // Edge to edge by definition. The only photographs on the page for
-          // which `100vw` is the honest answer rather than the lazy one.
-          sizes="100vw"
+          // Edge to edge, so the *box* is 100vw — and `100vw` alone was the
+          // wrong answer for four days, because the box is not what gets drawn.
+          // This picture is `oversizeVh` tall and `object-cover`, so on a
+          // portrait phone a 3:2 frame is scaled until its height covers ~1,077
+          // px and is drawn 1,617 px wide inside a 390 px box. `box` is what
+          // lets `lib/sizes.ts` ask for that rather than for 390.
+          sizes={FULL_BLEED_SIZES}
+          box={{ viewportHeightVh: oversizeVh }}
           pictureClassName="block w-full"
           pictureStyle={{
             height: `${oversizeVh}vh`,

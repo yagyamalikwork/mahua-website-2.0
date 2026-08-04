@@ -12,8 +12,31 @@
 // density, whatever that costs. Measuring that at DPR 3 for the first time (see
 // lib/sizes.ts) put 595 KB of photographs on the first screen and the hero's
 // `responseEnd` at 4,730 ms on Slow 4G. `lib/sizes.ts` now caps the density this
-// site pays for at `DENSITY_CAP`, so the standard here is
-// `clientWidth x min(devicePixelRatio, DENSITY_CAP)`.
+// site pays for at `DENSITY_CAP`, so the standard is
+// `<pixels the browser has to paint> x min(devicePixelRatio, DENSITY_CAP)`.
+//
+// ## And what "the pixels it has to fill" means since 5 Aug 2026
+//
+// **`clientWidth` is not it, and this rig said it was for two days.** The header
+// below argues at length that `naturalWidth` is an artefact of the `srcset`
+// density correction — that is true and still true — and then quietly
+// substituted a second artefact. `object-fit: cover` scales the photograph until
+// it covers *both* axes and crops the overflow, so an image wider than its box
+// is drawn far wider than the box and only the middle of it is visible. The
+// browser still has to decode and paint every one of those pixels, and softness
+// in the visible middle is exactly as visible as softness anywhere else.
+//
+// On a 390x844 phone the four full-screen photographs are 3:2 in a box roughly
+// 0.36:1, so they are drawn 1,266-1,617 CSS px wide inside a 390 px box. This rig
+// scored them 1.03 and reported `understatedSizes: 0` at all five viewports while
+// the hero was being served 0.32 source pixels per CSS pixel. Every committed
+// artefact it produced said the page was clean.
+//
+// So the drawn width is now computed from the box **and** the photograph's own
+// intrinsic aspect ratio under the element's real `object-fit`, read off
+// `getComputedStyle`. The intrinsic ratio survives the density correction that
+// ruins `naturalWidth` — both dimensions are divided by the same number — so
+// `naturalWidth / naturalHeight` is safe to use even though neither alone is.
 //
 // That is a restatement, not a relaxation, and the distinction matters:
 //
@@ -25,6 +48,9 @@
 //     reported for every photograph alongside the ratio being enforced, so what
 //     a 3x screen gives up is a number in the artefact rather than a claim in a
 //     commit message.
+//   - It was run against the broken commit before it was trusted to pass — the
+//     standard `scripts/check_menu.mjs` set on this project. See
+//     `docs/reviews/2026-08-05-cover-sizes/`.
 //
 // Run (with `npx next start -p 3100` already up):
 //   node scripts/check_image_resolution.mjs --out docs/reviews/2026-08-04-task-7/image-resolution.json
@@ -64,26 +90,57 @@ const VIEWPORTS = [
   { width: 1920, height: 1080, dpr: 1 },
 ];
 
-// `img.naturalWidth` is useless here: once an image is chosen from a `srcset`
-// with `w` descriptors, the HTML spec has the browser correct the intrinsic
-// dimensions by the selected candidate's density, so `naturalWidth` comes back
-// equal to the CSS layout width for *every* image and every ratio is exactly
-// 1.00. The first version of this rig did that and reported a page-wide 0.33 at
-// DPR 3 that was an artefact, not a photograph. The chosen file's real width is
-// read off its own filename instead — the pipeline names every derivative
-// `<id>-<width>.<ext>` — and the widest candidate offered is read off the
-// `<source>`'s srcset, so a shortfall can be attributed to the right cause.
+// `img.naturalWidth` is useless as an absolute here: once an image is chosen from
+// a `srcset` with `w` descriptors, the HTML spec has the browser correct the
+// intrinsic dimensions by the selected candidate's density, so `naturalWidth`
+// comes back equal to the CSS layout width for *every* image and every ratio is
+// exactly 1.00. The first version of this rig did that and reported a page-wide
+// 0.33 at DPR 3 that was an artefact, not a photograph. The chosen file's real
+// width is read off its own filename instead — the pipeline names every
+// derivative `<id>-<width>.<ext>` — and the widest candidate offered is read off
+// the `<source>`'s srcset, so a shortfall can be attributed to the right cause.
+//
+// The intrinsic *ratio* is a different matter and is trustworthy: the correction
+// divides both dimensions by the same density, so `naturalWidth / naturalHeight`
+// is exact. It falls back to the `width`/`height` attributes, which this site's
+// `<img>` always carries from the manifest, for a page that does not.
 const report = (cap) => `(() => {
   const CAP = ${cap};
   const widthOf = (url) => {
     const m = /-(\\d+)\\.(?:avif|webp|jpg)$/.exec(new URL(url, location.href).pathname);
     return m ? Number(m[1]) : null;
   };
+
+  // How wide the photograph is actually painted, which is not the box whenever
+  // \`object-fit\` crops or letterboxes it. A 3:2 frame in a 0.36:1 full-screen box
+  // under \`cover\` is drawn 4.1x the box's width; the browser decodes all of it.
+  const drawnWidth = (img, ratio, fit) => {
+    const boxW = img.clientWidth;
+    const boxH = img.clientHeight;
+    if (!boxW) return 0;
+    if (!ratio || !boxH) return boxW;
+    if (fit === "cover") return Math.max(boxW, boxH * ratio);
+    if (fit === "contain") return Math.min(boxW, boxH * ratio);
+    if (fit === "none") return img.naturalWidth || boxW;
+    if (fit === "scale-down") return Math.min(img.naturalWidth || boxW, Math.min(boxW, boxH * ratio));
+    return boxW; // fill — stretched to the box, so the box is the answer
+  };
+
   const out = [];
   for (const img of document.querySelectorAll("img")) {
     if (!img.currentSrc) continue;
     const dpr = window.devicePixelRatio;
-    const needed = Math.round(img.clientWidth * Math.min(dpr, CAP));
+    const attrW = Number(img.getAttribute("width")) || 0;
+    const attrH = Number(img.getAttribute("height")) || 0;
+    const ratio =
+      img.naturalWidth && img.naturalHeight
+        ? img.naturalWidth / img.naturalHeight
+        : attrW && attrH
+          ? attrW / attrH
+          : 0;
+    const fit = getComputedStyle(img).objectFit || "fill";
+    const drawn = drawnWidth(img, ratio, fit);
+    const needed = Math.round(drawn * Math.min(dpr, CAP));
     if (needed === 0) continue;
     const fileWidth = widthOf(img.currentSrc);
     if (!fileWidth) continue;
@@ -98,12 +155,16 @@ const report = (cap) => `(() => {
       file: new URL(img.currentSrc).pathname,
       fileWidth,
       widestOffered: widest,
+      objectFit: fit,
       cssWidth: Math.round(img.clientWidth),
+      // The number this rig got wrong until 5 Aug 2026. Kept beside \`cssWidth\`
+      // deliberately: where the two differ, the difference is the crop.
+      drawnWidth: Math.round(drawn),
       needed,
       ratio: Number((fileWidth / needed).toFixed(2)),
       // What this screen would have got with no cap. Not enforced; reported so
       // the price of the cap is visible in the artefact.
-      ratioAtDeviceDensity: Number((fileWidth / (img.clientWidth * dpr)).toFixed(2)),
+      ratioAtDeviceDensity: Number((fileWidth / (drawn * dpr)).toFixed(2)),
       // True when nothing wider exists for this photograph — the shortfall is
       // the image library's ceiling, not an under-stated \`sizes\`.
       atLibraryCeiling: fileWidth >= widest,
@@ -160,6 +221,16 @@ async function main() {
       },
       understatedSizes: understated,
       atLibraryCeiling: ceiling.map((c) => ({ file: c.file, needed: c.needed, ratio: c.ratio })),
+      // Every photograph, not only the failures. `docs/shot-list.md` quotes
+      // "what this frame needs at 390 on a DPR-3 phone" at a photographer who is
+      // being paid on those numbers, and it had been quoting the box.
+      all: images.map((i) => ({
+        file: i.file,
+        cssWidth: i.cssWidth,
+        drawnWidth: i.drawnWidth,
+        needed: i.needed,
+        ratio: i.ratio,
+      })),
     });
     console.log(
       `${vp.width}x${vp.height}@${vp.dpr}x — ${images.length} images, ` +

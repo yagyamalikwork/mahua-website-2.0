@@ -22,13 +22,25 @@ type LodgesCopy = {
  * `(container - 56px) / 2` from 1024px up, and the whole container beneath that.
  * Rounded up, never down.
  */
-const SIZES = {
+export const SIZES = {
   /** The 4:3 photograph that fills the card. */
   primary:
     "(min-width: 1600px) 724px, (min-width: 1024px) calc((100vw - 152px) / 2), (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)",
   /** The second laid over its corner: `w-[46%]` of the card, less its cream border. */
   secondary:
     "(min-width: 1600px) 310px, (min-width: 1024px) calc((100vw - 152px) * 0.23), (min-width: 768px) calc((100vw - 96px) * 0.46), calc((100vw - 48px) * 0.46)",
+} as const;
+
+/**
+ * Both frames are `aspect-[4/3]` with `object-cover`, and the four photographs
+ * here are 4:3, 3:2 and 16:9 — so the wider ones are drawn up to a third past
+ * their box's edge. `sizes` describes the box; this describes the crop.
+ */
+export const BOXES = {
+  /** `aspect-[4/3]`. */
+  primary: 4 / 3,
+  /** `aspect-[4/3]`. */
+  secondary: 4 / 3,
 } as const;
 
 /**
@@ -81,6 +93,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                     <Photo
                       id={primary}
                       sizes={SIZES.primary}
+                      box={BOXES.primary}
                       pictureClassName="block h-full w-full"
                       className="h-full w-full object-cover"
                     />
@@ -95,6 +108,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                       <Photo
                         id={secondary}
                         sizes={SIZES.secondary}
+                        box={BOXES.secondary}
                         pictureClassName="block h-full w-full"
                         className="h-full w-full object-cover"
                       />

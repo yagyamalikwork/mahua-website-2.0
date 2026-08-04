@@ -19,9 +19,22 @@ type GuestsCopy = {
  * the wide one is `col-span-7` (~54vw) and the tall one `col-span-5` (~38vw);
  * both stack full-width below that. Rounded up.
  */
-const SIZES = {
+export const SIZES = {
   wide: "(min-width: 768px) 58vw, calc(100vw - 48px)",
   tall: "(min-width: 768px) 41vw, calc(100vw - 48px)",
+} as const;
+
+/**
+ * The pair's box ratios, for the `object-cover` crop. Both photographs this
+ * chapter carries are landscape and the tall slot is 4:5, so that one is drawn
+ * nearly twice its box's width — `garden-path-lodge` was 903 px out of a 640
+ * file at 1440x900 before this existed.
+ */
+export const BOXES = {
+  /** `aspect-[3/2]`. */
+  wide: 3 / 2,
+  /** `aspect-[4/5]`. */
+  tall: 4 / 5,
 } as const;
 
 /**
@@ -65,6 +78,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
                 <Photo
                   id={wide}
                   sizes={SIZES.wide}
+                  box={BOXES.wide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -77,6 +91,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
                 <Photo
                   id={tall}
                   sizes={SIZES.tall}
+                  box={BOXES.tall}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />

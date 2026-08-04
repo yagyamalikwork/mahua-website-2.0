@@ -22,7 +22,7 @@ type IntroCopy = {
  * grows again by the 13vw / 11vw it reaches past the viewport edge. Rounded up to
  * whole vw, because over-stating costs a tier and under-stating ships softness.
  */
-const SIZES = {
+export const SIZES = {
   /** The single flank: ~28% of content + a 13vw bleed. */
   solo: "(min-width: 1024px) 42vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
   /** The upper of the pair: ~28% of content + an 11vw bleed. */
@@ -30,6 +30,28 @@ const SIZES = {
   /** The lower of the pair: 70% of that column on desktop, 82% below it. */
   pairLower:
     "(min-width: 1024px) 28vw, (min-width: 768px) calc((100vw - 72px) * 0.82), calc((100vw - 24px) * 0.82)",
+} as const;
+
+/**
+ * The three slots' aspect ratios — the other half of `SIZES`, and the reason
+ * `bonfire-circle-night` was drawn 1,236 px wide at 1440x900 out of a 640 file.
+ *
+ * These are fixed-ratio boxes with `object-cover` (see the note below on why),
+ * and the two chapters that use this layout carry 16:9 and 3:2 frames, so a
+ * landscape photograph in the `lg:aspect-[7/9]` portrait slot is drawn nearly
+ * twice its box's width. Each list mirrors the `aspect-[...]` classes on the
+ * `ImageReveal` below it, widest breakpoint first.
+ */
+export const BOXES = {
+  /** `aspect-[3/2]`, then `lg:aspect-[7/9]`. */
+  solo: [
+    [1024, 7 / 9],
+    [0, 3 / 2],
+  ],
+  /** `aspect-[3/2]` at every width. */
+  pairTop: 3 / 2,
+  /** `aspect-[4/5]` at every width. */
+  pairLower: 4 / 5,
 } as const;
 
 /**
@@ -104,6 +126,7 @@ export function ChapterIntro({
                   <Photo
                     id={solo}
                     sizes={SIZES.solo}
+                    box={BOXES.solo}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />
@@ -157,6 +180,7 @@ export function ChapterIntro({
                   <Photo
                     id={pairTop}
                     sizes={SIZES.pairTop}
+                    box={BOXES.pairTop}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />
@@ -169,6 +193,7 @@ export function ChapterIntro({
                   <Photo
                     id={pairLower}
                     sizes={SIZES.pairLower}
+                    box={BOXES.pairLower}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />

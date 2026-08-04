@@ -22,20 +22,38 @@ sources we hold.
 | *life at the lodge* | 13 | 8 | 0 | **No portraits at all**, and almost nobody in shot |
 | *details* | 5 | 1 | 2 | Thinnest category; carries the emptiest chapter on the page |
 
-**Six sources cannot fill their box on a modern phone.** At 390px and DPR 3 the browser wants a 1026–1098px
-file and the library's widest is what it is:
+**Eight sources cannot fill the space they are drawn into.** *Corrected 5 August 2026 — the figures in the
+first version of this document were roughly a third of the truth, in the client's disfavour.* They were
+derived from each photograph's **box**, and every photograph on this page is cropped to fill its box
+(`object-fit: cover`): a wide frame in a tall slot is scaled until its *height* covers, so it is drawn far
+wider than the box and the sides are cut off. The browser has to supply all of that width. Full-screen
+photographs on a portrait phone are the extreme case — a 3:2 frame in a 390 × 844 window is drawn about
+1,600 px wide, not 390.
 
-| Photograph | Widest we hold | Wanted at 390 @3x | Shortfall |
-|---|---|---|---|
-| `tiger-crossing-track` | **541px** | 1098 | worst on the page |
-| `potters-hands` | 700 | 1098 | 0.64 |
-| `petal-bowl-map` | 700 | 1026 | 0.68 |
-| `forest-shrine-incense` | 700 | 1098 | 0.64 |
-| `tiger-pair-profile`, `leopard-on-rock`, `melanistic-leopard` | 900 | 1026 | 0.88 |
-| `guide-sunrise`, `sound-healing` | 1000 | 1098 | 0.91 |
+Re-derived with the corrected rig (`scripts/check_image_resolution.mjs`, every figure in
+`docs/reviews/2026-08-03-chapters/image-resolution.json` under `all`):
 
-Nothing is being served smaller than it could be — `sizes` is correct at every width, verified in
-`docs/reviews/2026-08-03-chapters/image-resolution.json`. These are simply the largest files that exist.
+| Photograph | Widest we hold | Drawn | Needs | Have / need | Worst at |
+|---|---|---|---|---|---|
+| `tiger-golden-grass` | 1440 | 1,617 | **3,234** | **0.45** | 390 @3x |
+| `birding-cairn-dusk` | 1440 | 1,616 | **3,231** | **0.45** | 390 @3x |
+| `lodge-facade-night` | 1440 | 1,613 | **3,226** | **0.45** | 390 @3x |
+| `potters-hands` | **700** | 1,250 | 1,250 | 0.56 | 1920 |
+| `reception-path-dusk` (the hero) | 1440 | 1,266 | **2,532** | 0.57 | 390 @3x |
+| `forest-shrine-incense` | **700** | 366 | 732 | 0.96 | 390 @3x |
+| `bonfire-circle-night` | 1440 | 1,480 | 1,480 | 0.97 | 1920 |
+| `guide-sunrise` | 1000 | 1,027 | 1,027 | 0.97 | 1920 |
+
+"Needs" is what the site asks for, which is twice the drawn width on a dense screen and no more — the site
+deliberately caps itself at 2× rather than a handset's full 3× (`lib/sizes.ts`). **What the handset could
+actually use is half as much again:** 4,851 px for the three full-screen frames and 3,798 px for the hero.
+
+`tiger-crossing-track` at 541px, named in the first version as the worst on the page, is not on this list —
+it sits in a small square inlay and is adequate there. It still deserves reshooting for the reason given
+under shot 2: a 541px source is one layout change away from being embarrassing.
+
+Nothing is being served smaller than the files we hold — `sizes` is correct at every width, re-verified
+against the corrected rig. These are simply the largest files that exist.
 
 ---
 
@@ -94,22 +112,30 @@ Nothing is being served smaller than it could be — `sizes` is correct at every
 
 *Fills* `details` — the **emptiest chapter on the page at 58% empty**, and the thinnest category in the
 library (5 images, only 1 of them full-bleed-eligible). Its three best frames (`potters-hands`,
-`petal-bowl-map`, `forest-shrine-incense`) are all **700px** and all soft on a modern phone.
+`petal-bowl-map`, `forest-shrine-incense`) are all **700px**. `potters-hands` is the second-worst shortfall
+in the library — it is drawn 1,250 px wide at 1920 and we hold 700 (0.56); the other two are marginal on a
+dense phone.
 
 Reshoot those three subjects properly, plus two new ones: the hand-inked leaf the welcome is written on, and
 a naturalist's field notebook open on a page. Close, shallow depth of field, natural light. **Portrait,
 ≥2400px.** Half a day.
 
-### 6. One landscape at 3000px+ for the hero
+### 6. One landscape at 3500px+ for the hero — no longer optional in the same way
 
-*Fills* the top of the page. `reception-path-dusk` is 1440px, which is the widest file we hold and 0.75 of
-what a 1920px monitor wants. The pipeline deliberately stops at 1440 because a 1920 tier cannot be encoded
-under the 200 KB budget (`scripts/build_images.mjs`) — so a wider *source* only helps if it is a simpler
-frame that compresses well: open sky, water, mist, a clean horizon. Dense foliage will not make the budget
-at any width.
+*Fills* the top of the page. `reception-path-dusk` is 1440px, and **the hero is drawn 1,266 px wide on a
+390 px phone and 1,920 px wide on a 1920 monitor**, so the widest file we hold is 0.57 of what a handset
+asks for and 0.75 of what a desktop asks for. It is the one photograph every visitor waits for, and it is
+the softest thing on the first screen.
 
-If a frame like that comes out of the shoot, it goes to the hero. If it does not, `reception-path-dusk`
-stays and nothing is lost.
+The constraint that makes this hard is not the source, it is the budget: `reception-path-dusk-1440.avif` is
+already **195.8 KB against the 200 KB per-image cap** (CLAUDE.md non-negotiable #6), which is why the
+pipeline stops at 1440 for this frame. A wider *source* therefore only helps if it is a **simpler frame that
+compresses well** — open sky, water, mist, a clean horizon, an uncluttered veranda. Dense foliage at dusk,
+which is what we have, will not make the budget at any width.
+
+So: shoot the hero as a **compressible** frame at ≥3500px, not merely a large one. If a frame like that
+comes out of the shoot, it goes to the hero and the first screen gets both sharper and lighter. If it does
+not, `reception-path-dusk` stays and nothing is lost.
 
 ---
 
@@ -117,8 +143,12 @@ stays and nothing is lost.
 
 - **Deliver RAW plus full-resolution JPEG.** Everything the site serves is generated from the source by
   `scripts/build_images.mjs`; we downscale, never upscale.
-- **Minimum 2400px on the long edge** for anything meant to run wide, 2000px for anything meant to run in a
-  column. Below 1400px an image can never go full-bleed on this site.
+- **Minimum 3500px on the long edge for anything meant to run full-screen**, 2400px for anything meant to
+  run wide inside the page, 2000px for anything meant to run in a column. *Raised from 2400px on 5 August
+  2026:* a full-screen photograph on a portrait phone is drawn about 1,600 CSS px wide and a dense handset
+  can use three device pixels for each of them, so the honest requirement there is ~4,800px and 3500 is the
+  point past which the 200 KB encode budget binds first anyway. Below 1400px an image can never go
+  full-bleed on this site at all.
 - **Shoot both orientations of every set-up.** The layout uses portrait plates and landscape bands in
   alternation, and the library's shortage of portraits (0 of 13 in *life at the lodge*) is why one chapter
   reads as a row of thumbnails.

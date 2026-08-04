@@ -23,7 +23,7 @@ type SplitFeatureCopy = {
  * (~62vw at 1440), the small one laid over it is 34% / 32% of that, and band 3's
  * sticky photograph is `col-span-4` (~29vw). Rounded up.
  */
-const SIZES = {
+export const SIZES = {
   /** `dawn` and `hammocks` — col-span-7 plus a 9vw bleed. */
   wide: "(min-width: 1024px) 63vw, (min-width: 768px) calc(100vw - 48px), calc(100vw - 24px)",
   /** `tigerTrack` — laid over band 1 at 34% of the photograph beneath it. */
@@ -34,6 +34,32 @@ const SIZES = {
     "(min-width: 1024px) 21vw, (min-width: 768px) calc((100vw - 48px) * 0.4), calc((100vw - 24px) * 0.4)",
   /** `boardwalk` — the sticky col-span-4 beside the index. */
   sticky: "(min-width: 1024px) 30vw, calc(100vw - 48px)",
+} as const;
+
+/**
+ * The same five slots' aspect ratios, for the `object-cover` crop `SIZES` cannot
+ * see. Each mirrors the `aspect-[...]` classes on its own `ImageReveal`, widest
+ * breakpoint first. Bands 1 and 2 share `SIZES.wide` but not their ratios —
+ * band 1 is 3:2 until `lg`, band 2 is 16:9 throughout — which is why these are
+ * five entries and not four.
+ */
+export const BOXES = {
+  /** Band 1's `dawn`: `aspect-[3/2]`, then `lg:aspect-[16/9]`. */
+  wideStacked: [
+    [1024, 16 / 9],
+    [0, 3 / 2],
+  ],
+  /** Band 2's `hammocks`: `aspect-[16/9]` at every width. */
+  wide: 16 / 9,
+  /** `aspect-square`. */
+  inlayWide: 1,
+  /** `aspect-[3/4]`. */
+  inlayTall: 3 / 4,
+  /** `aspect-[4/5]`, then `lg:aspect-[3/4]`. */
+  sticky: [
+    [1024, 3 / 4],
+    [0, 4 / 5],
+  ],
 } as const;
 
 /**
@@ -94,6 +120,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 <Photo
                   id={dawn}
                   sizes={SIZES.wide}
+                  box={BOXES.wideStacked}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -110,6 +137,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 <Photo
                   id={tigerTrack}
                   sizes={SIZES.inlayWide}
+                  box={BOXES.inlayWide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -126,6 +154,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 <Photo
                   id={hammocks}
                   sizes={SIZES.wide}
+                  box={BOXES.wide}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -139,6 +168,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 <Photo
                   id={canopy}
                   sizes={SIZES.inlayTall}
+                  box={BOXES.inlayTall}
                   pictureClassName="block h-full w-full"
                   className="h-full w-full object-cover"
                 />
@@ -171,6 +201,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                   <Photo
                     id={boardwalk}
                     sizes={SIZES.sticky}
+                    box={BOXES.sticky}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />

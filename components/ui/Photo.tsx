@@ -1,5 +1,19 @@
 import { media, type MediaId } from "@/lib/media";
-import { capDensity } from "@/lib/sizes";
+import { capDensity, type CoverBox, coverSizes } from "@/lib/sizes";
+
+/**
+ * The `sizes` string this component will actually emit for a photograph.
+ *
+ * Exported because `Hero` preloads its photograph and the preload's `imageSizes`
+ * **must** be byte-identical to what the `<picture>` emits, or the browser
+ * fetches a candidate the `<picture>` then declines and the page pays for the
+ * hero twice. One function, called by both, is the only version of that promise
+ * that cannot drift.
+ */
+export function servedSizes(id: MediaId, sizes: string, box?: CoverBox): string {
+  const entry = media(id);
+  return capDensity(coverSizes(sizes, box, entry.width / entry.height));
+}
 
 /**
  * The page's one `<picture>`.
@@ -44,13 +58,28 @@ import { capDensity } from "@/lib/sizes";
  * `100vw` is the default only because it is the safe answer — it is right for the
  * three full-bleed screens and wasteful everywhere else.
  *
+ * ## `box` is the other half of `sizes`, and it is not optional where it applies
+ *
+ * `sizes` describes the element's box. Where the photograph is `object-cover`
+ * inside a box of a different shape — which is every call site on this page
+ * except `Plate` — the browser draws it *wider than the box* and crops the
+ * sides, so the box is not what has to be sharp. `box` states the box's aspect
+ * ratio; `lib/sizes.ts` does the arithmetic from that and the photograph's own.
+ *
+ * Written as a box measurement alone, this page served a 390px phone a 400-wide
+ * file for a hero it then drew 1,266 px wide. Omit `box` only where nothing is
+ * cropped (`Plate`, which is `h-auto`). `scripts/check_image_resolution.mjs`
+ * fails the run on the real page if a photograph is served under its drawn
+ * width — that check, not this comment, is the guard.
+ *
  * ## What the caller writes is not quite what ships
  *
- * Every `sizes` here goes through `lib/sizes.ts`'s `capDensity` first, which
- * prepends entries that hold screens denser than 2x to roughly 2x. Callers still
- * describe their own box honestly and only their own box; the density trade is
- * made in one place, with the measurements that justify it, rather than smuggled
- * into eight components' `sizes` strings where nobody could see it.
+ * Every `sizes` here goes through `lib/sizes.ts` — `coverSizes` for the crop,
+ * then `capDensity`, which prepends entries that hold screens denser than 2x to
+ * roughly 2x. Callers still describe their own box honestly and only their own
+ * box; both trades are made in one place, with the measurements that justify
+ * them, rather than smuggled into eight components' `sizes` strings where nobody
+ * could see them.
  */
 export function Photo({
   id,
@@ -59,6 +88,7 @@ export function Photo({
   pictureClassName,
   pictureStyle,
   sizes = "100vw",
+  box,
   priority = false,
   decorative = false,
 }: {
@@ -74,13 +104,19 @@ export function Photo({
    * Round up, never down. See the note above.
    */
   sizes?: string;
+  /**
+   * The aspect ratio of the box `sizes` describes, so `object-cover`'s crop can
+   * be accounted for. Required wherever the `<img>` is `object-cover`; omit it
+   * only where the photograph is drawn at its box's width. See the note above.
+   */
+  box?: CoverBox;
   /** Above the fold: eager, high priority, no async decode. */
   priority?: boolean;
   /** No accessible name — the photograph is backdrop, not content. */
   decorative?: boolean;
 }) {
   const entry = media(id);
-  const served = capDensity(sizes);
+  const served = servedSizes(id, sizes, box);
 
   const srcSet = (format: "avif" | "webp") =>
     entry.sources.map((s) => `${s[format]} ${s.width}w`).join(", ");

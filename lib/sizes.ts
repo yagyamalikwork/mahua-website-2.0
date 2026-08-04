@@ -67,10 +67,11 @@ export const DENSITY_CAP = 2;
  *
  * Listed densest-first, because the first matching entry wins.
  */
-const BUCKETS: readonly { readonly minResolution: string; readonly factor: number }[] = [
-  { minResolution: "3.5x", factor: 0.5 },
-  { minResolution: "2.5x", factor: 2 / 3 },
-];
+export const DENSITY_BUCKETS: readonly { readonly minResolution: string; readonly factor: number }[] =
+  [
+    { minResolution: "3.5x", factor: 0.5 },
+    { minResolution: "2.5x", factor: 2 / 3 },
+  ];
 
 /**
  * Splits a `sizes` list on its top-level commas. Commas inside `calc()` are not
@@ -78,8 +79,12 @@ const BUCKETS: readonly { readonly minResolution: string; readonly factor: numbe
  * `clamp()` do, and a naive `split(",")` would quietly corrupt them into two
  * broken entries that the browser drops, leaving the photograph at 100vw and
  * nobody any the wiser.
+ *
+ * Exported for `sizes.test.ts`, which needs to count an output list's entries
+ * and previously carried its own regex approximation of this — a second,
+ * *different* splitter inside the test guarding the first one.
  */
-function splitTopLevel(list: string): string[] {
+export function splitTopLevel(list: string): string[] {
   const out: string[] = [];
   let depth = 0;
   let start = 0;
@@ -153,7 +158,6 @@ function splitEntry(entry: string): { condition: string | null; value: string } 
         }
       }
     }
-    i += combinator.length + j + 2;
     rest = rest.slice(j).trim();
   }
 
@@ -187,7 +191,7 @@ export function capDensity(sizes: string): string {
   if (entries.length === 0) throw new Error("sizes: empty");
 
   const capped: string[] = [];
-  for (const bucket of BUCKETS) {
+  for (const bucket of DENSITY_BUCKETS) {
     for (const { condition, value } of entries) {
       const resolution = `(min-resolution: ${bucket.minResolution})`;
       capped.push(
@@ -196,4 +200,147 @@ export function capDensity(sizes: string): string {
     }
   }
   return [...capped, sizes.trim()].join(", ");
+}
+
+/* ------------------------------------------------------------------------- *
+ * `object-fit: cover`, and the pixels it draws that are not in the box
+ * ------------------------------------------------------------------------- */
+
+/**
+ * `sizes` describes the element's **box**. Almost every photograph on this page
+ * is `object-fit: cover` inside a box of a different shape, and `cover` scales
+ * the picture until it covers *both* axes, then crops the overflow. So a 3:2
+ * photograph in a portrait box is drawn far wider than the box, and the browser
+ * decodes, scales and paints every one of those pixels — the visible middle of
+ * them at whatever resolution the file it fetched can supply.
+ *
+ * Written as a box measurement, `sizes="100vw"` on the four full-screen
+ * photographs asked a 390x844 phone for a 400-wide file to fill a picture the
+ * browser then drew 1,266-1,622 CSS px wide: **0.25-0.32 source pixels per CSS
+ * pixel**, which is a visible smear, not a rounding error. Fixed 5 Aug 2026; the
+ * measurements are in `docs/reviews/2026-08-05-cover-sizes/`.
+ *
+ * The multiplier is exact and needs no judgement:
+ *
+ *     drawn width = max(box width, box height x image aspect ratio)
+ *                 = box width x max(1, image aspect / box aspect)
+ *
+ * so all this file needs is the box's aspect ratio, which is written in the CSS
+ * beside the `sizes` string, and the photograph's own, which `media()` already
+ * carries. Nothing is hand-tuned per image.
+ */
+export type CoverBox =
+  /** One aspect ratio (width / height) at every viewport width. */
+  | number
+  /**
+   * A ratio that changes at breakpoints, as `[minWidth, ratio]` ordered
+   * widest-first with a final `[0, ratio]` — the same shape, and the same order,
+   * as the `sizes` list beside it and the `lg:aspect-[7/9]` class above it.
+   */
+  | readonly (readonly [minWidth: number, ratio: number])[]
+  /**
+   * The box is the full viewport width and `heightVh` vh tall — the hero and the
+   * three full-bleed screens. Its aspect ratio is therefore the *viewport's*,
+   * divided by `heightVh / 100`, and it cannot be known at build time; the
+   * returned list carries `(max-aspect-ratio: ...)` conditions instead.
+   */
+  | { readonly viewportHeightVh: number };
+
+/**
+ * Aspect-ratio buckets for a viewport-sized box, listed narrowest-first because
+ * the first matching `sizes` entry wins and the conditions nest — anything that
+ * matches `(max-aspect-ratio: 1/2)` also matches every looser bucket below it.
+ *
+ * Each bucket is costed at its own **floor**, the worst case inside it, so no
+ * viewport in the bucket is ever under-served. `0.4` is the floor of the bottom
+ * bucket and of the ladder: the tallest shipping phone aspect is about 0.43
+ * (21:9), and the usual 19.5:9 is 0.46, so 0.4 is below every real device
+ * without being so low that the over-statement costs a tier.
+ */
+const VIEWPORT_ASPECT_BUCKETS: readonly { readonly upper: string | null; readonly floor: number }[] =
+  [
+    { upper: "1/2", floor: 0.4 },
+    { upper: "2/3", floor: 0.5 },
+    { upper: "1/1", floor: 2 / 3 },
+    { upper: "3/2", floor: 1 },
+    { upper: null, floor: 1.5 },
+  ];
+
+/** The `(min-width: Npx)` a `sizes` entry's condition turns on, or 0 for the default. */
+function minWidthOf(condition: string | null): number {
+  if (!condition) return 0;
+  const m = /\(\s*min-width:\s*([\d.]+)px\s*\)/.exec(condition);
+  if (!m) {
+    throw new Error(
+      `sizes: cover scaling can only read a (min-width: Npx) condition, got ${JSON.stringify(condition)}`,
+    );
+  }
+  return Number(m[1]);
+}
+
+/** `120%` of `value`, or `value` itself when the crop draws nothing extra. */
+function grow(value: string, factor: number): string {
+  return factor <= 1.005 ? value : scale(value, factor);
+}
+
+function viewportCoverSizes(imageAspect: number, heightVh: number): string {
+  const boxHeightInViewports = heightVh / 100;
+  const entries = VIEWPORT_ASPECT_BUCKETS.map((bucket) => {
+    const factor = Math.max(1, (imageAspect * boxHeightInViewports) / bucket.floor);
+    return { upper: bucket.upper, value: `${Math.round(factor * 1000) / 10}vw` };
+  });
+
+  // Collapse a bucket into the looser one below it when they ask for the same
+  // width — safe precisely because the conditions nest, so anything that would
+  // have matched the dropped entry matches its successor. Portrait photographs
+  // in a viewport box are never cropped horizontally and would otherwise emit
+  // five identical `100vw` entries.
+  const kept = entries.filter((e, i) => i === entries.length - 1 || e.value !== entries[i + 1].value);
+  return kept.map((e) => (e.upper ? `(max-aspect-ratio: ${e.upper}) ${e.value}` : e.value)).join(", ");
+}
+
+/**
+ * Rewrites a `sizes` list that describes a **box** into one that describes the
+ * **pixels drawn inside it** under `object-fit: cover`.
+ *
+ * Each entry is scaled by the worst (largest) crop factor that can apply over
+ * the range of viewport widths that entry covers, so a box whose ratio changes
+ * at a breakpoint the width list does not share is still never under-served.
+ *
+ * `imageAspect` is the photograph's own width / height. Callers pass their box
+ * and nothing else; no call site multiplies anything by hand.
+ */
+export function coverSizes(sizes: string, box: CoverBox | undefined, imageAspect: number): string {
+  if (box === undefined) return sizes;
+  if (!(imageAspect > 0)) throw new Error(`sizes: image aspect must be positive, got ${imageAspect}`);
+
+  if (typeof box === "object" && !Array.isArray(box)) {
+    return viewportCoverSizes(imageAspect, (box as { viewportHeightVh: number }).viewportHeightVh);
+  }
+
+  const ratios = (typeof box === "number" ? [[0, box] as const] : box) as readonly (readonly [
+    number,
+    number,
+  ])[];
+  if (ratios.length === 0) throw new Error("sizes: cover box has no ratios");
+
+  const entries = splitTopLevel(sizes).map(splitEntry);
+  const out = entries.map(({ condition, value }, i) => {
+    // First match wins, so this entry owns [its own min-width, the previous
+    // entry's min-width).
+    const lo = minWidthOf(condition);
+    const hi = i === 0 ? Number.POSITIVE_INFINITY : minWidthOf(entries[i - 1].condition);
+
+    let worst = Number.POSITIVE_INFINITY;
+    for (let r = 0; r < ratios.length; r++) {
+      const rLo = ratios[r][0];
+      const rHi = r === 0 ? Number.POSITIVE_INFINITY : ratios[r - 1][0];
+      if (rLo < hi && lo < rHi) worst = Math.min(worst, ratios[r][1]);
+    }
+    if (!Number.isFinite(worst)) throw new Error(`sizes: no box ratio covers widths ${lo}-${hi}`);
+
+    return `${condition ? `${condition} ` : ""}${grow(value, Math.max(1, imageAspect / worst))}`;
+  });
+
+  return out.join(", ");
 }
