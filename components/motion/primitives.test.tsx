@@ -6,8 +6,11 @@ import path from "node:path";
 import { act, cleanup, render } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { PARALLAX_MAX, STICKY_SCREENS_MAX } from "@/lib/motion";
+import { chapter } from "@/content/chapters";
 import { Enter } from "./Enter";
 import { ImageReveal } from "./ImageReveal";
+import { COLLAGE_RATES, COLLAGE_SCREENS, PinnedCollage } from "./PinnedCollage";
 import { SplitLines } from "./SplitLines";
 import { StickyScene } from "./StickyScene";
 
@@ -22,9 +25,16 @@ import { StickyScene } from "./StickyScene";
 
 const HEADLINE = "A legacy of conservation woven through generations";
 
-function withReducedMotion(reduce: boolean) {
+/**
+ * jsdom's own `matchMedia` answers `false` to every query it is ever asked,
+ * which is a fine default for reduced motion and useless for anything that
+ * decides on viewport size — `CollageStage` asks two questions, not one, and a
+ * stub that can only answer the first would let its pin tests pass by the pin
+ * never being on.
+ */
+function withMedia({ reducedMotion = false, pinnable = false } = {}) {
   vi.stubGlobal("matchMedia", (query: string) => ({
-    matches: reduce && query.includes("prefers-reduced-motion"),
+    matches: query.includes("prefers-reduced-motion") ? reducedMotion : pinnable,
     media: query,
     onchange: null,
     addListener: vi.fn(),
@@ -33,6 +43,10 @@ function withReducedMotion(reduce: boolean) {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }));
+}
+
+function withReducedMotion(reduce: boolean) {
+  withMedia({ reducedMotion: reduce });
 }
 
 /** Text as a reader would see it, with the per-word boxes flattened back out. */
@@ -487,5 +501,116 @@ describe("StickyScene", () => {
       const html = renderToStaticMarkup(<StickyScene screens={asked}>scene</StickyScene>);
       expect(html, `asked for ${asked} screens`).toContain(`--sticky-screens:${expected}`);
     }
+  });
+});
+
+describe("PinnedCollage", () => {
+  const ROOTED = chapter("rooted");
+  const HEADING = "Rooted like the mahua";
+
+  /** The scene, if there is one. `null` means nothing was pinned. */
+  const sceneIn = (container: HTMLElement) =>
+    container.querySelector<HTMLElement>(".sticky-scene");
+
+  it("never pins for longer than the clamp allows", () => {
+    // A pin is the one construct left that can size a section from a number
+    // rather than from its content — the thing that made the rejected build
+    // sparse. STICKY_SCREENS_MAX exists for this and must bind here too.
+    withMedia({ pinnable: true });
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    const screens = Number(sceneIn(container)?.style.getPropertyValue("--sticky-screens"));
+    expect(screens).toBeGreaterThanOrEqual(1);
+    expect(screens).toBeLessThanOrEqual(STICKY_SCREENS_MAX);
+    expect(screens, "the component asked for a number the clamp then changed").toBe(
+      COLLAGE_SCREENS,
+    );
+  });
+
+  it("renders every photograph and the headline with no JavaScript", () => {
+    // Server markup is what a visitor gets before hydration, and all a visitor
+    // with JavaScript disabled will ever get.
+    const html = renderToStaticMarkup(<PinnedCollage chapter={ROOTED} />);
+    for (const id of ROOTED.media) expect(html, `${id} is missing`).toContain(id);
+    expect(html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ")).toContain(HEADING);
+    expect(html, "nothing may be hidden in markup that script has to undo").not.toMatch(
+      /opacity:\s*0|visibility:\s*hidden|display:\s*none/,
+    );
+  });
+
+  it("reserves no scroll at all with no JavaScript", () => {
+    // The other half of the rule above, and the one that costs screens rather
+    // than pixels: `position: sticky` is pure CSS and would pin perfectly well
+    // without a line of script — over a composition that, with no script, can
+    // never move. That is two paid-for empty screens, which is the exact thing
+    // `StickyScene` was written not to be.
+    const html = renderToStaticMarkup(<PinnedCollage chapter={ROOTED} />);
+    expect(html, "the server markup pinned a scene nothing can advance").not.toContain(
+      "sticky-scene",
+    );
+  });
+
+  it("drifts each photograph at its own rate, all within the parallax cap", () => {
+    // "Each moving at slightly different speeds" is the effect. Identical rates
+    // read as one sliding sheet; anything past the cap is movement rather than
+    // depth (spec section 4.3 law 3).
+    const rates = COLLAGE_RATES;
+    expect(new Set(rates).size, "every photograph drifts at the same rate").toBe(rates.length);
+    for (const r of rates) expect(Math.abs(r)).toBeLessThanOrEqual(PARALLAX_MAX);
+  });
+
+  it("puts one rate on each photograph, where a browser can read it back", () => {
+    // `COLLAGE_RATES` being three different numbers is worth nothing if the
+    // markup hands the same one to all three, or hands them to nothing at all.
+    // The attribute is also what `scripts/check_pinned_collage.mjs` finds these
+    // elements by in a real browser, so this is the unit half of a measurement
+    // that finishes there.
+    withMedia({ pinnable: true });
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    const written = [...container.querySelectorAll<HTMLElement>("[data-drift]")].map((el) =>
+      Number(el.dataset.drift),
+    );
+    expect(written).toEqual([...COLLAGE_RATES]);
+  });
+
+  it("removes the pin *and* the scroll it reserved under reduced motion", () => {
+    // Not "the photographs hold still". A visitor who asked for less motion must
+    // not have to travel through two empty screens to reach the next chapter, so
+    // there must be no scene in the document at all — not a scene left in place
+    // for CSS to flatten afterwards.
+    withMedia({ reducedMotion: true, pinnable: true });
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    expect(sceneIn(container)).toBeNull();
+    expect(container.querySelectorAll("[data-drift]")).toHaveLength(0);
+    // And the chapter is all still there.
+    for (const id of ROOTED.media) expect(container.innerHTML).toContain(id);
+  });
+
+  it("does not pin a viewport the frozen composition would not fit", () => {
+    // The scene is exactly one screen and does not scroll inside itself, so a
+    // narrow or short window would have the chapter paint over the one below it.
+    withMedia({ pinnable: false });
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    expect(sceneIn(container)).toBeNull();
+    expect(container.innerHTML, "the chapter vanished with the pin").toContain(ROOTED.media[0]);
+  });
+
+  it("does not pin on a browser with no IntersectionObserver", () => {
+    // `whenNear` is how the tween library is fetched, and it declines without an
+    // observer — so a pin here would hold a still composition for three screens.
+    withMedia({ pinnable: true });
+    vi.stubGlobal("IntersectionObserver", undefined);
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    expect(sceneIn(container)).toBeNull();
+  });
+
+  it("keeps the chapter's own photographs and heading inside the pin", () => {
+    // The pinned tree is a second composition, written out by hand, and the way
+    // it goes wrong is quietly: one photograph dropped to make the arithmetic
+    // fit a screen. Same three, same heading, pinned or not.
+    withMedia({ pinnable: true });
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    expect(sceneIn(container)).not.toBeNull();
+    for (const id of ROOTED.media) expect(container.innerHTML, `${id} is missing`).toContain(id);
+    expect(visibleText(container)).toContain(HEADING);
   });
 });

@@ -42,6 +42,15 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    it reads expensive because it holds back. Nothing bounces. If you notice the animation, it is too fast.
 5. **The tiger arrives, performs, then dozes** (Plan 4, not yet built). It is not a permanent fixture —
    permanent peripheral motion contradicts #2 and #4.
+
+   **`rooted` is the page's one pinned scene** (Plan 4 Task 3c) and the only place `StickyScene` is mounted.
+   The rule it was written under still binds anything else that reaches for it: use it only where the content
+   genuinely advances through the pin. There, a chapter is held still while three photographs rise past it at
+   three rates — measured at 0px of headline movement over 1,720px of scroll, and 207/147/86px of drift. The
+   pin is **server-rendered off**, because `position: sticky` would pin perfectly well with no JavaScript over
+   a composition that, with no JavaScript, can never move — two paid-for empty screens. Script may only switch
+   it on, and only above `(min-width: 1440px) and (min-height: 860px)`, where the frozen chapter fits one
+   screen. Re-derive any of it with `node scripts/check_pinned_collage.mjs`.
 6. **Budgets beat effects.** Largest image < 200 KB; **initial page transfer < 1.5 MB**; hero photograph
    on screen in < 2.5s on simulated 4G. Most traffic is Indian mobile. If a beautiful effect cannot hit
    budget, the effect loses.
@@ -88,6 +97,13 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    the thing it was being compared to. 45% is the midpoint the client picked between the two, and the page
    as a whole already sits inside it.
 
+   **`rooted` is 40.2% since the pinned collage landed**, up from 35.3%, and that 4.9 points is the price of
+   the effect: at the two ends of the drift its flanks have moved ±104px from centre and leave a band of
+   cream at one edge. It is inside the rule with 4.8 points to spare. The page mean moved 39% → 39.7% and
+   imagery per screen 2.08 → 1.87, both because the page grew 1.9 screens without gaining a photograph —
+   which is what a pin costs. If it ever needs winning back, the lever is `COLLAGE_RATES`, not the pin
+   length: the mean is set by the composition, not by how many screens of it there are.
+
    **All twelve chapters are inside it as of 5 Aug 2026.** The three that were over were fixed by taking
    width and height back rather than by adding filler: `details` 58% → **42.1%** (a shared plate frame,
    imposed only where a grid's photographs disagree about their shape), `field-days` 51.1% → **41.6%** (the
@@ -124,6 +140,13 @@ are imported:
 | `lib/palette.ts` | The fixed cream palette (`PALETTE`) |
 | `lib/motion.ts` | Every duration and easing |
 | `content/home.ts` | Every word on the page |
+
+**A client component's `import`s are what ship to the browser; its `children` are not.** `PinnedCollage` is a
+server component that hands two finished compositions to the client one that picks between them, because
+importing `ui/Photo.tsx` from a `"use client"` file would drag all thirty-four entries of
+`lib/media-manifest.ts` — each with a base64 blur URI — into the first load. Passing rendered children keeps
+it on the server. Anything that needs a browser decision over server-rendered markup should do the same, and
+`npm run verify:budget` is what proves it did.
 
 Each chapter section component (`components/sections/`, Plan 3 Task 7) is self-contained and never reaches
 into another. `content/chapters.ts` is the page's spine — twelve chapters, 32 distinct photographs, and the
@@ -170,11 +193,20 @@ rhythm rule. The sequence lives there, not in `app/page.tsx`, and `content/chapt
 ## Commands
 
 ```bash
-npm run dev      # local dev server
-npm test         # vitest
-npm run build    # production build — must pass before any commit claiming completion
+npm run dev             # local dev server
+npm test                # vitest
+npm run build           # production build — must pass before any commit claiming completion
 npm run lint
+npm run verify:budget   # the JS budget guard, end to end — see below
 ```
+
+**`npm run verify:budget` is not optional before a commit that touches motion.** It builds, starts a
+server, runs `scripts/measure_js_budget.mjs` against it, kills the server and propagates the exit code —
+because that rig needs a build plus a running server, cannot join `npm test`, and this repo has no CI, so
+its real failure mode was somebody forgetting the three manual steps. It **refuses to measure a server it
+did not start**: a stale `next start` on the port would otherwise be measured silently, reporting the
+JavaScript of a build that no longer exists. `-- --no-build` reuses `.next`; `-- --port N` moves it;
+anything else is passed to the rig (`--width 390`, `--max-untouched-kb`, `--out`).
 
 The browser measurements. **Every committed number in `docs/reviews/` comes from one of these** — they live
 in `scripts/` precisely so nobody has to trust a figure they cannot re-derive:
@@ -186,6 +218,10 @@ npm run build && npx next start -p 3100          # then, against the production 
 node scripts/measure_page.mjs                    # transfer, hero responseEnd on Slow 4G, motion, overflow
 node scripts/check_contrast_over_photos.mjs      # worst-pixel contrast for type laid over a photograph
 node scripts/check_image_resolution.mjs          # is any photograph served below its own box
+node scripts/measure_density.mjs                 # empty space per chapter, against non-negotiable #8
+node scripts/check_entrances.mjs                 # did each entrance stage and settle, and the parallax move
+node scripts/check_pinned_collage.mjs            # is `rooted`'s headline frozen and are its photographs drifting apart
+node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 ```
 
 Reference material (already run; rerun only to refresh):

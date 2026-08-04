@@ -15,6 +15,10 @@ const MIN_MEDIA = {
   // The reference's signature move is two or three photographs floating at the
   // margins around centred text. With fewer it is just a text screen.
   chapterIntro: 3,
+  // The same composition, pinned. If anything the floor is higher here — a
+  // pinned scene with one photograph in it is two screens of scroll spent on
+  // nothing — but three is what the layout is built for.
+  pinnedCollage: 3,
   splitFeature: 2,
   plateGrid: 3,
   lodgeCards: 2,

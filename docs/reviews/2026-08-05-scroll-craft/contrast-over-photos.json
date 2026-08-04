@@ -1,0 +1,446 @@
+{
+  "measuredAt": "2026-08-04T23:40:44.262Z",
+  "url": "http://localhost:3100/",
+  "widths": {
+    "390": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "worst": 7.35,
+        "brightest": [
+          69,
+          76,
+          66
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "worst": 6.44,
+        "brightest": [
+          78,
+          84,
+          76
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "worst": 4.01,
+        "brightest": [
+          122,
+          114,
+          73
+        ],
+        "boxes": 7,
+        "pass": true
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "worst": 4.77,
+        "brightest": [
+          120,
+          98,
+          74
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "worst": 8.95,
+        "brightest": [
+          66,
+          61,
+          48
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "quote · why-you-came",
+        "min": 3,
+        "worst": 3.83,
+        "brightest": [
+          117,
+          118,
+          100
+        ],
+        "boxes": 12,
+        "pass": true
+      },
+      {
+        "name": "quote · after-dark",
+        "min": 3,
+        "worst": 4.97,
+        "brightest": [
+          103,
+          101,
+          57
+        ],
+        "boxes": 11,
+        "pass": true
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "worst": 4.9,
+        "brightest": [
+          95,
+          102,
+          94
+        ],
+        "boxes": 10,
+        "pass": true
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "worst": 4.91,
+        "brightest": [
+          99,
+          102,
+          78
+        ],
+        "boxes": 2,
+        "pass": true
+      }
+    ],
+    "768": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "worst": 6.87,
+        "brightest": [
+          74,
+          80,
+          71
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "worst": 5.78,
+        "brightest": [
+          85,
+          91,
+          83
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "worst": 5.71,
+        "brightest": [
+          93,
+          90,
+          80
+        ],
+        "boxes": 7,
+        "pass": true
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "worst": 5.68,
+        "brightest": [
+          103,
+          88,
+          70
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "worst": 8.37,
+        "brightest": [
+          63,
+          67,
+          58
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "quote · why-you-came",
+        "min": 3,
+        "worst": 4,
+        "brightest": [
+          115,
+          115,
+          95
+        ],
+        "boxes": 12,
+        "pass": true
+      },
+      {
+        "name": "quote · after-dark",
+        "min": 3,
+        "worst": 4.98,
+        "brightest": [
+          102,
+          101,
+          59
+        ],
+        "boxes": 11,
+        "pass": true
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "worst": 5.24,
+        "brightest": [
+          91,
+          98,
+          82
+        ],
+        "boxes": 10,
+        "pass": true
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "worst": 4.94,
+        "brightest": [
+          97,
+          101,
+          91
+        ],
+        "boxes": 2,
+        "pass": true
+      }
+    ],
+    "1440": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "worst": 7.12,
+        "brightest": [
+          71,
+          78,
+          68
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "worst": 5.36,
+        "brightest": [
+          90,
+          96,
+          85
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "worst": 3.16,
+        "brightest": [
+          145,
+          128,
+          107
+        ],
+        "boxes": 7,
+        "pass": true
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "worst": 7.93,
+        "brightest": [
+          68,
+          70,
+          62
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "worst": 9.52,
+        "brightest": [
+          54,
+          59,
+          48
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "quote · why-you-came",
+        "min": 3,
+        "worst": 4.04,
+        "brightest": [
+          115,
+          114,
+          96
+        ],
+        "boxes": 12,
+        "pass": true
+      },
+      {
+        "name": "quote · after-dark",
+        "min": 3,
+        "worst": 3.91,
+        "brightest": [
+          121,
+          116,
+          87
+        ],
+        "boxes": 11,
+        "pass": true
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "worst": 4.95,
+        "brightest": [
+          95,
+          101,
+          94
+        ],
+        "boxes": 10,
+        "pass": true
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "worst": 5.28,
+        "brightest": [
+          92,
+          98,
+          70
+        ],
+        "boxes": 2,
+        "pass": true
+      }
+    ],
+    "1920": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "worst": 7.6,
+        "brightest": [
+          67,
+          74,
+          62
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "worst": 5.43,
+        "brightest": [
+          89,
+          95,
+          88
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "worst": 3.43,
+        "brightest": [
+          123,
+          127,
+          100
+        ],
+        "boxes": 7,
+        "pass": true
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "worst": 7.45,
+        "brightest": [
+          72,
+          74,
+          66
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "worst": 9.03,
+        "brightest": [
+          59,
+          62,
+          52
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "quote · why-you-came",
+        "min": 3,
+        "worst": 3.9,
+        "brightest": [
+          115,
+          117,
+          100
+        ],
+        "boxes": 12,
+        "pass": true
+      },
+      {
+        "name": "quote · after-dark",
+        "min": 3,
+        "worst": 4.24,
+        "brightest": [
+          121,
+          110,
+          53
+        ],
+        "boxes": 11,
+        "pass": true
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "worst": 5.1,
+        "brightest": [
+          93,
+          99,
+          92
+        ],
+        "boxes": 10,
+        "pass": true
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "worst": 5.29,
+        "brightest": [
+          90,
+          97,
+          88
+        ],
+        "boxes": 2,
+        "pass": true
+      }
+    ]
+  }
+}

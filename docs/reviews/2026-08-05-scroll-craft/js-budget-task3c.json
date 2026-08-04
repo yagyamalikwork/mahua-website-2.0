@@ -1,0 +1,113 @@
+{
+  "measuredAt": "2026-08-04T23:36:17.190Z",
+  "budget": {
+    "maxUntouchedKB": 175
+  },
+  "firstLoad": {
+    "raw": 657003,
+    "gz": 194936,
+    "br": 168387,
+    "files": [
+      {
+        "src": "/_next/static/chunks/1de9myc15dqxx.js",
+        "raw": 201058,
+        "gz": 50514,
+        "br": 42711
+      },
+      {
+        "src": "/_next/static/chunks/25o46h8mdjlrg.js",
+        "raw": 227538,
+        "gz": 71012,
+        "br": 60679
+      },
+      {
+        "src": "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+        "raw": 10547,
+        "gz": 4136,
+        "br": 3723
+      },
+      {
+        "src": "/_next/static/chunks/1d4xv0wq9d0ov.js",
+        "raw": 19485,
+        "gz": 5789,
+        "br": 5190
+      },
+      {
+        "src": "/_next/static/chunks/158myu8e_yme3.js",
+        "raw": 57909,
+        "gz": 13828,
+        "br": 12086
+      },
+      {
+        "src": "/_next/static/chunks/1wkuvnb84_e_n.js",
+        "raw": 10398,
+        "gz": 3931,
+        "br": 3490
+      },
+      {
+        "src": "/_next/static/chunks/0cz1d0mv5g_q7.js",
+        "raw": 112594,
+        "gz": 39627,
+        "br": 35158
+      },
+      {
+        "src": "/_next/static/chunks/1jq4o6yq14o4c.js",
+        "raw": 17474,
+        "gz": 6099,
+        "br": 5350
+      }
+    ]
+  },
+  "gsapChunks": [
+    {
+      "name": "1is0gg5e6lopl.js",
+      "raw": 43374,
+      "gz": 17488,
+      "inFirstLoad": false
+    },
+    {
+      "name": "3dewhjypacr5m.js",
+      "raw": 70637,
+      "gz": 27333,
+      "inFirstLoad": false
+    }
+  ],
+  "live": {
+    "untouched": {
+      "files": 7,
+      "transferKB": 154,
+      "decodedKB": 532,
+      "names": [
+        "/_next/static/chunks/1jq4o6yq14o4c.js",
+        "/_next/static/chunks/1de9myc15dqxx.js",
+        "/_next/static/chunks/25o46h8mdjlrg.js",
+        "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+        "/_next/static/chunks/1d4xv0wq9d0ov.js",
+        "/_next/static/chunks/158myu8e_yme3.js",
+        "/_next/static/chunks/1wkuvnb84_e_n.js"
+      ]
+    },
+    "afterScroll": {
+      "files": 9,
+      "transferKB": 198,
+      "decodedKB": 643,
+      "names": [
+        "/_next/static/chunks/1jq4o6yq14o4c.js",
+        "/_next/static/chunks/1de9myc15dqxx.js",
+        "/_next/static/chunks/25o46h8mdjlrg.js",
+        "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+        "/_next/static/chunks/1d4xv0wq9d0ov.js",
+        "/_next/static/chunks/158myu8e_yme3.js",
+        "/_next/static/chunks/1wkuvnb84_e_n.js",
+        "/_next/static/chunks/3dewhjypacr5m.js",
+        "/_next/static/chunks/1is0gg5e6lopl.js"
+      ]
+    },
+    "loadedOnlyOnScroll": [
+      "/_next/static/chunks/3dewhjypacr5m.js",
+      "/_next/static/chunks/1is0gg5e6lopl.js"
+    ]
+  },
+  "failures": [],
+  "verdict": "pass"
+}

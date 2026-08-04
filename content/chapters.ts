@@ -18,6 +18,15 @@ export type ChapterKind =
   | "hero"
   | "fullBleedQuote"
   | "chapterIntro"
+  /**
+   * `chapterIntro`'s composition, held still while its photographs drift past —
+   * the reference site's signature effect, and the only pinned scene on the
+   * page. Below the viewport `components/motion/CollageStage.tsx` pins at, and
+   * for any visitor who has asked for less motion, it renders as an ordinary
+   * `chapterIntro` and reserves no extra scroll, so it is quiet in exactly the
+   * same way and the rhythm rule counts it the same way.
+   */
+  | "pinnedCollage"
   | "splitFeature"
   | "plateGrid"
   | "lodgeCards"
@@ -92,12 +101,21 @@ const CHAPTER_LIST = [
   {
     // The mahua tree, the Gond, building in the vernacular, the potters of
     // Pachdhar. Three images floating at the margins, cropped by the viewport
-    // edge — the reference's signature move.
+    // edge — the reference's signature move. The page's memory chapter, and so
+    // the one chapter that earns a pin: on a wide enough screen the text is held
+    // still while these three rise past it at three different speeds.
+    //
+    // Order is [tall flank, upper of the pair, lower of the pair], and it is a
+    // resolution decision, not a taste one. `lantern-bridge-dusk` is the only
+    // one of the three with a 1300px file; the other two are 700px, so they go
+    // where the crop is shallow and it takes the one deep slot. Reordered 5 Aug
+    // 2026 — with `potters-hands` in the tall slot it was being drawn 1,141px
+    // wide from a 700px file at 1440, i.e. 0.61 source pixels per CSS pixel.
     id: "rooted",
     number: "02",
     label: "Rooted like the mahua",
-    kind: "chapterIntro",
-    media: ["potters-hands", "forest-shrine-incense", "lantern-bridge-dusk"],
+    kind: "pinnedCollage",
+    media: ["lantern-bridge-dusk", "forest-shrine-incense", "potters-hands"],
   },
   {
     // Three portraits, one orientation — a plate grid reads as a field guide

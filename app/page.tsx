@@ -1,3 +1,4 @@
+import { PinnedCollage } from "@/components/motion/PinnedCollage";
 import { ChapterIntro } from "@/components/sections/ChapterIntro";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
@@ -26,6 +27,11 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  * - **Which margin each `chapterIntro` floats its images at.** Both instances
  *   using the same composition would read as a template, and a section cannot
  *   know it is the second of its kind. The page counts them and alternates.
+ *   `pinnedCollage` is counted among them: it *is* that composition, held still,
+ *   and it renders as an ordinary `chapterIntro` at every viewport it does not
+ *   pin at — so leaving it out of the count would flip `lantern-hour`'s
+ *   composition on every screen in the world as a side effect of pinning
+ *   `rooted` on some of them.
  * - **How heavy each full-bleed quote's scrim is.** It is a property of the
  *   photograph, not of the layout: `tiger-golden-grass` is a bright midday frame
  *   and `lodge-facade-night` is already lit for night. Both figures below were
@@ -46,10 +52,14 @@ const QUOTE_SCRIM: Record<string, ScrimStrength> = {
 const CREAM_KINDS: readonly ChapterKind[] = [
   "lodgeCards",
   "chapterIntro",
+  "pinnedCollage",
   "plateGrid",
   "splitFeature",
   "testimonials",
 ];
+
+/** The kinds that share `ChapterIntro`'s composition, pinned or not. */
+const INTRO_KINDS: readonly ChapterKind[] = ["chapterIntro", "pinnedCollage"];
 
 type Position = {
   /** Index among the `chapterIntro` chapters, for the mirrored composition. */
@@ -77,6 +87,15 @@ function renderChapter(chapter: Chapter, at: Position) {
     case "chapterIntro":
       return (
         <ChapterIntro
+          key={chapter.id}
+          chapter={chapter}
+          mirrored={at.intro % 2 === 1}
+          surface={at.surface}
+        />
+      );
+    case "pinnedCollage":
+      return (
+        <PinnedCollage
           key={chapter.id}
           chapter={chapter}
           mirrored={at.intro % 2 === 1}
@@ -112,7 +131,7 @@ export default function Home() {
       <main>
         {CHAPTERS.map((chapter) =>
           renderChapter(chapter, {
-            intro: chapter.kind === "chapterIntro" ? intro++ : 0,
+            intro: INTRO_KINDS.includes(chapter.kind) ? intro++ : 0,
             surface: CREAM_KINDS.includes(chapter.kind) ? cream++ % 2 === 1 : false,
           }),
         )}

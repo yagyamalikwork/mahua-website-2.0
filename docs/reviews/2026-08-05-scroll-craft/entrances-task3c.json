@@ -1,0 +1,1165 @@
+{
+  "url": "http://localhost:3100/",
+  "measuredAt": "2026-08-04T23:37:57.727Z",
+  "desktop": {
+    "label": "desktop",
+    "viewport": "1440x900",
+    "reducedMotion": false,
+    "atRest": {
+      "staged": 29,
+      "stagedImages": 29,
+      "stagedHeadlines": 11,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 29,
+      "displacedWords": 73,
+      "peakWordOffset": 83.696,
+      "invisible": 29,
+      "displaced": 29,
+      "maskCover": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 69,
+    "settlings": 69,
+    "headlineStagings": 11,
+    "headlineSettlings": 11,
+    "peakMaskCover": 1,
+    "peakWordOffset": 83.816,
+    "peakStagedAtOnce": 67,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 29,
+      "settledImages": 29,
+      "settledHeadlines": 11,
+      "attributed": 29,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "leftDisplacedWords": 0,
+    "lineStagger": [
+      {
+        "text": "The wild and the calm, held together",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Two forests, known deeply",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The forest at its most alive, and you at y",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Rooted like the mahua",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Three hundred birds, and the cats you came",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "The day the forest keeps",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Rooms with the forest left in",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "By the time you come back, the lanterns ar",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The other half of the day",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The small things, which are the whole thin",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Known by name",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Two forests are expecting you",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      }
+    ],
+    "staggerFaults": [],
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 139,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 12,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "forest",
+        "words": 97,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 190,
+        "hidden": 0,
+        "photographs": 6,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooms",
+        "words": 111,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "after-dark",
+        "words": 11,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lantern-hour",
+        "words": 106,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "details",
+        "words": 88,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "guests",
+        "words": 102,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 78,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "phone": {
+    "label": "phone",
+    "viewport": "390x844",
+    "reducedMotion": false,
+    "atRest": {
+      "staged": 29,
+      "stagedImages": 29,
+      "stagedHeadlines": 11,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 29,
+      "displacedWords": 73,
+      "peakWordOffset": 45.652,
+      "invisible": 29,
+      "displaced": 29,
+      "maskCover": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 69,
+    "settlings": 69,
+    "headlineStagings": 11,
+    "headlineSettlings": 11,
+    "peakMaskCover": 1,
+    "peakWordOffset": 45.718,
+    "peakStagedAtOnce": 67,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 29,
+      "settledImages": 29,
+      "settledHeadlines": 11,
+      "attributed": 29,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "leftDisplacedWords": 0,
+    "lineStagger": [
+      {
+        "text": "The wild and the calm, held together",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Two forests, known deeply",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The forest at its most alive, and you at y",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Rooted like the mahua",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Three hundred birds, and the cats you came",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "The day the forest keeps",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Rooms with the forest left in",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "By the time you come back, the lanterns ar",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The other half of the day",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The small things, which are the whole thin",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Known by name",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Two forests are expecting you",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      }
+    ],
+    "staggerFaults": [],
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 139,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 12,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "forest",
+        "words": 97,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 190,
+        "hidden": 0,
+        "photographs": 6,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooms",
+        "words": 111,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "after-dark",
+        "words": 11,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lantern-hour",
+        "words": 106,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "details",
+        "words": 88,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "guests",
+        "words": 102,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 78,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "reducedMotion": {
+    "label": "reduced-motion",
+    "viewport": "1440x900",
+    "reducedMotion": true,
+    "atRest": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 0,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 0,
+    "settlings": 0,
+    "headlineStagings": 0,
+    "headlineSettlings": 0,
+    "peakMaskCover": 0,
+    "peakWordOffset": 0,
+    "peakStagedAtOnce": 0,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 0,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "leftDisplacedWords": 0,
+    "lineStagger": [
+      {
+        "text": "The wild and the calm, held together",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Two forests, known deeply",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The forest at its most alive, and you at y",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Rooted like the mahua",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Three hundred birds, and the cats you came",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "The day the forest keeps",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Rooms with the forest left in",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "By the time you come back, the lanterns ar",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The other half of the day",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The small things, which are the whole thin",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Known by name",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Two forests are expecting you",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      }
+    ],
+    "staggerFaults": [],
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 139,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 12,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "forest",
+        "words": 97,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 190,
+        "hidden": 0,
+        "photographs": 6,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooms",
+        "words": 111,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "after-dark",
+        "words": 11,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lantern-hour",
+        "words": 106,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "details",
+        "words": 88,
+        "hidden": 0,
+        "photographs": 4,
+        "maskedOver": 0
+      },
+      {
+        "id": "guests",
+        "words": 102,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 78,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "hero": {
+    "id": "arrival",
+    "state": null,
+    "maskCover": 0,
+    "imageScale": "none",
+    "imageVisible": 1,
+    "imageComplete": true,
+    "headlineState": null,
+    "headlineWordOffset": 0
+  },
+  "parallax": {
+    "reducedMotion": false,
+    "elements": 12,
+    "moved": 1,
+    "strongest": 0.059
+  },
+  "parallaxReducedMotion": {
+    "reducedMotion": true,
+    "elements": 15,
+    "moved": 0,
+    "strongest": 0
+  },
+  "noScript": [
+    {
+      "viewport": "1440x900",
+      "enterAttributes": 0,
+      "chapters": [
+        {
+          "id": "arrival",
+          "words": 20,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lodges",
+          "words": 139,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "why-you-came",
+          "words": 12,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooted",
+          "words": 144,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "forest",
+          "words": 97,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "field-days",
+          "words": 190,
+          "hidden": 0,
+          "photographs": 6,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooms",
+          "words": 111,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "after-dark",
+          "words": 11,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lantern-hour",
+          "words": 106,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "details",
+          "words": 88,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "guests",
+          "words": 102,
+          "hidden": 0,
+          "photographs": 2,
+          "maskedOver": 0
+        },
+        {
+          "id": "invitation",
+          "words": 78,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "enterAttributes": 0,
+      "chapters": [
+        {
+          "id": "arrival",
+          "words": 20,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lodges",
+          "words": 139,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "why-you-came",
+          "words": 12,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooted",
+          "words": 144,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "forest",
+          "words": 97,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "field-days",
+          "words": 190,
+          "hidden": 0,
+          "photographs": 6,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooms",
+          "words": 111,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "after-dark",
+          "words": 11,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lantern-hour",
+          "words": 106,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "details",
+          "words": 88,
+          "hidden": 0,
+          "photographs": 4,
+          "maskedOver": 0
+        },
+        {
+          "id": "guests",
+          "words": 102,
+          "hidden": 0,
+          "photographs": 2,
+          "maskedOver": 0
+        },
+        {
+          "id": "invitation",
+          "words": 78,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

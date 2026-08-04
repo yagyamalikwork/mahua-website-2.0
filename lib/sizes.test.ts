@@ -13,6 +13,10 @@ import {
   BOXES as TESTIMONIAL_BOXES,
   SIZES as TESTIMONIAL_SIZES,
 } from "@/components/sections/Testimonials";
+import {
+  BOXES as COLLAGE_BOXES,
+  SIZES as COLLAGE_SIZES,
+} from "@/components/motion/PinnedCollage";
 import { EMBLEM_SIZES } from "@/components/ui/BrandMark";
 import { FULL_BLEED_SIZES } from "@/components/ui/FullBleed";
 import { MEDIA } from "./media";
@@ -111,6 +115,16 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: INTRO_SIZES[k],
     box: INTRO_BOXES[k] as CoverBox,
   })),
+  // Same three widths as `ChapterIntro` — the same columns, laid out the same
+  // way — but shallower boxes, so the crop factor and therefore the file served
+  // are different. Sharing a `sizes` string does not share a `sizes` *outcome*,
+  // which is why these three are their own slots and not a comment saying "as
+  // above".
+  ...(["solo", "pairTop", "pairLower"] as const).map((k) => ({
+    name: `PinnedCollage.${k}`,
+    sizes: COLLAGE_SIZES[k],
+    box: COLLAGE_BOXES[k] as CoverBox,
+  })),
   ...(["primary", "secondary"] as const).map((k) => ({
     name: `LodgeCards.${k}`,
     sizes: LODGE_SIZES[k],
@@ -153,6 +167,11 @@ describe("the sizes the page actually serves", () => {
     // 17 since 5 Aug 2026: `SplitFeature.aside`, the pool laid under band 2's
     // display line (`docs/reviews/2026-08-05-density/`). The plate frames added
     // in the same change reuse `PLATE_SIZES`' strings and so add no distinct one.
+    // `PinnedCollage`'s three slots, added the same day, are three more entries
+    // in the table and no more distinct strings: it lays its photographs out in
+    // the same three columns at the same widths as `ChapterIntro`, so it reaches
+    // for the same three strings deliberately. It is still worth its own rows —
+    // its boxes differ, and every assertion below runs per slot, not per string.
     expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(17);
   });
 
@@ -297,6 +316,7 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/SplitFeature.tsx", declared: SPLIT_BOXES },
     { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
+    { file: "components/motion/PinnedCollage.tsx", declared: COLLAGE_BOXES },
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(
