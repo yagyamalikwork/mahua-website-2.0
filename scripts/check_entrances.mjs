@@ -41,10 +41,23 @@ const URL = flag("url", `http://localhost:${flag("port", "3100")}/`);
 const OUT = flag("out", "docs/reviews/2026-08-05-scroll-craft/entrances.json");
 const SHOTS = path.dirname(OUT);
 
+// Extended for Plan 4 Task 3, which moved the headline reveal off GSAP and onto
+// the same CSS engine. Two things the rig could not see before and now must:
+//
+//   - **the per-line stagger**, checked against where each headline *really*
+//     wraps at that viewport. Words are grouped by their rendered top edge, and
+//     every word on one line must carry the same `--enter-delay` while each line
+//     below carries a later one. A stagger computed from an assumed line count
+//     passes every unit test and is wrong at every width but one.
+//   - **parallax**, which is the one effect GSAP is still here for. Measured as
+//     a change in rendered position between two scroll offsets, because the
+//     library now arrives by dynamic import and "it moved" is the only evidence
+//     that the import fired at all.
+
 /** Every state change the page really went through, in order. */
 const RECORD_STATES = () => {
   window.__enterLog = [];
-  const attrs = ["data-enter", "data-image-enter"];
+  const attrs = ["data-enter", "data-image-enter", "data-lines-enter"];
   const start = () => {
     const observer = new MutationObserver((mutations) => {
       for (const m of mutations) {
@@ -99,19 +112,39 @@ const SNAPSHOT = () => {
     return r.bottom > 0 && r.top < innerHeight;
   };
 
+  /**
+   * How far each word is currently displaced inside its own mask, in pixels,
+   * measured off rendered boxes. The mask does not move; the span inside it
+   * does. 0 is a word at rest; anything else is a word mid-reveal or stuck.
+   */
+  const lineOffsets = [...document.querySelectorAll("[data-word]")]
+    .map((word) => {
+      const inner = word.querySelector("[data-line-inner]");
+      if (!inner) return 0;
+      return round(inner.getBoundingClientRect().top - word.getBoundingClientRect().top);
+    })
+    .filter((n) => Math.abs(n) > 0.5);
+
   return {
     staged: document.querySelectorAll('[data-enter="pending"]').length,
     stagedImages: document.querySelectorAll('[data-image-enter="pending"]').length,
+    stagedHeadlines: document.querySelectorAll('[data-lines-enter="pending"]').length,
     /**
      * Staged *while the visitor can see it* — the flicker, and the only staging
      * that is ever wrong. Everything below the fold is supposed to be staged.
      */
     stagedInView: [
-      ...document.querySelectorAll('[data-enter="pending"], [data-image-enter="pending"]'),
+      ...document.querySelectorAll(
+        '[data-enter="pending"], [data-image-enter="pending"], [data-lines-enter="pending"]',
+      ),
     ].filter(onScreen).length,
     settled: document.querySelectorAll('[data-enter="in"]').length,
     settledImages: document.querySelectorAll('[data-image-enter="in"]').length,
+    settledHeadlines: document.querySelectorAll('[data-lines-enter="in"]').length,
     attributed: entering.length,
+    /** Words displaced right now, and by how much at the extreme. */
+    displacedWords: lineOffsets.length,
+    peakWordOffset: lineOffsets.length ? Math.max(...lineOffsets.map(Math.abs)) : 0,
     /**
      * Anything a visitor cannot read. The number that must end at zero.
      *
@@ -132,6 +165,55 @@ const SNAPSHOT = () => {
     }),
   };
 };
+
+/**
+ * Does every headline's stagger follow the wrap the browser actually produced?
+ *
+ * Words are grouped by their rendered top edge — that *is* the real wrapping at
+ * this viewport, not a count anybody assumed. Then two things have to hold for
+ * the effect to be a per-line stagger rather than a per-word one or a single
+ * lump: every word on a line shares one delay, and each line's delay is later
+ * than the line above it.
+ */
+const LINE_STAGGER = () =>
+  [...document.querySelectorAll("h1, h2, h3, p")]
+    .filter((el) => el.querySelector("[data-word]"))
+    .map((el) => {
+      const lines = new Map();
+      for (const word of el.querySelectorAll("[data-word]")) {
+        const top = Math.round(word.getBoundingClientRect().top);
+        const inner = word.querySelector("[data-line-inner]");
+        const delay = (getComputedStyle(inner).getPropertyValue("--enter-delay") || "0s").trim();
+        if (!lines.has(top)) lines.set(top, new Set());
+        lines.get(top).add(delay);
+      }
+      const tops = [...lines.keys()].sort((a, b) => a - b);
+      const delays = tops.map((t) => [...lines.get(t)]);
+      const seconds = delays.map((d) => Number((d[0] || "0s").replace("s", "")));
+      return {
+        text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 42),
+        wrappedInto: tops.length,
+        /** A line whose words do not agree on a delay is a per-word stagger. */
+        splitLines: delays.filter((d) => d.length > 1).length,
+        /** Delays must climb line by line, never repeat or go backwards. */
+        risesLineByLine: seconds.every((s, i) => i === 0 || s > seconds[i - 1]),
+        delays: seconds,
+      };
+    });
+
+/**
+ * Did the parallax actually move?
+ *
+ * GSAP now arrives by dynamic import, so this is also the only proof the import
+ * fired. Read each parallaxed element's rendered offset from the top of the
+ * document at two scroll positions: with no parallax the two differ by exactly
+ * the distance scrolled, so anything else is the drift.
+ */
+const PARALLAX_AT = () =>
+  [...document.querySelectorAll("[data-parallax]")].map((el) => {
+    const r = el.getBoundingClientRect();
+    return { top: Math.round(r.top + scrollY), height: Math.round(r.height) };
+  });
 
 /** Every chapter, and how much text it is actually rendering. */
 const CHAPTER_TEXT = () =>
@@ -180,11 +262,13 @@ async function scrollThrough(browser, { width, height, reducedMotion, label }) {
 
   let peakStaged = 0;
   let peakMaskCover = 0;
+  let peakWordOffset = 0;
   let shotTaken = false;
   await wheelTo(page, turns, async () => {
     const now = await page.evaluate(SNAPSHOT);
-    peakStaged = Math.max(peakStaged, now.staged + now.stagedImages);
+    peakStaged = Math.max(peakStaged, now.staged + now.stagedImages + now.stagedHeadlines);
     peakMaskCover = Math.max(peakMaskCover, ...now.maskCover);
+    peakWordOffset = Math.max(peakWordOffset, now.peakWordOffset);
     // One frame caught mid-entrance, so the movement can be looked at and not
     // only counted.
     if (!shotTaken && now.staged > 0) {
@@ -194,6 +278,7 @@ async function scrollThrough(browser, { width, height, reducedMotion, label }) {
   });
 
   const afterScroll = await page.evaluate(SNAPSHOT);
+  const lineStagger = await page.evaluate(LINE_STAGGER);
   const chapters = await page.evaluate(CHAPTER_TEXT);
   const log = await page.evaluate(() => window.__enterLog ?? []);
   await shot(page, `${label}-foot-of-page`);
@@ -211,14 +296,56 @@ async function scrollThrough(browser, { width, height, reducedMotion, label }) {
     /** Did entrances ever actually play? `pending` -> `in`, counted from the log. */
     stagings: log.filter((e) => e.to === "pending").length,
     settlings: log.filter((e) => e.to === "in").length,
+    headlineStagings: log.filter((e) => e.attr === "data-lines-enter" && e.to === "pending").length,
+    headlineSettlings: log.filter((e) => e.attr === "data-lines-enter" && e.to === "in").length,
     /** Was a mask ever actually drawn over its photograph? */
     peakMaskCover,
+    /** Was a word ever actually pushed out of its own box? */
+    peakWordOffset,
     peakStagedAtOnce: peakStaged,
     afterScroll,
-    leftStaged: afterScroll.staged + afterScroll.stagedImages,
+    leftStaged: afterScroll.staged + afterScroll.stagedImages + afterScroll.stagedHeadlines,
     leftInvisible: afterScroll.invisible,
     leftMasked: afterScroll.maskCover.filter((c) => c > 0.05).length,
+    /** Words still sitting outside their mask once everything has settled. */
+    leftDisplacedWords: afterScroll.displacedWords,
+    lineStagger,
+    /** Headlines whose stagger does not follow the wrap the browser produced. */
+    staggerFaults: lineStagger.filter((h) => h.wrappedInto > 1 && (h.splitLines > 0 || !h.risesLineByLine)),
     chapters,
+  };
+}
+
+/**
+ * Does the parallax still move, now that GSAP arrives by dynamic import?
+ *
+ * Two scroll positions, both chosen so the elements are on screen, and the
+ * document-space position of every `[data-parallax]` read at each. An element
+ * with no parallax sits at the same document position at both. This is the
+ * outcome; whether an `import()` resolved is not.
+ */
+async function checkParallax(browser, { reducedMotion = false } = {}) {
+  const { context, page } = await open(browser, { width: 1440, height: 900, reducedMotion });
+  await page.evaluate(() => window.scrollTo(0, 2200));
+  await page.waitForTimeout(1500);
+  const first = await page.evaluate(PARALLAX_AT);
+  await page.evaluate(() => window.scrollTo(0, 3000));
+  await page.waitForTimeout(1500);
+  const second = await page.evaluate(PARALLAX_AT);
+  await context.close();
+
+  const moved = first
+    .map((a, i) => ({ shift: Math.abs((second[i]?.top ?? a.top) - a.top), height: a.height }))
+    .filter((m) => m.shift > 1);
+
+  return {
+    reducedMotion,
+    elements: first.length,
+    moved: moved.length,
+    /** As a fraction of the element's own height — spec section 4.3 caps at 0.15. */
+    strongest: moved.length
+      ? Math.max(...moved.map((m) => Math.round((m.shift / Math.max(m.height, 1)) * 1000) / 1000))
+      : 0,
   };
 }
 
@@ -231,6 +358,9 @@ async function checkHero(browser) {
     const mask = frame?.querySelector("[data-image-mask]");
     const img = frame?.querySelector("img");
     const box = frame?.getBoundingClientRect();
+    const headline = section.querySelector("h1");
+    const word = headline?.querySelector("[data-word]");
+    const inner = word?.querySelector("[data-line-inner]");
     return {
       id: section.id,
       // `null` is the whole point: the hero is never handed to the observer, so
@@ -240,6 +370,15 @@ async function checkHero(browser) {
       imageScale: img ? getComputedStyle(img.parentElement).scale : null,
       imageVisible: img ? Number(getComputedStyle(img).opacity) : null,
       imageComplete: img ? img.complete : null,
+      // The headline is on screen at mount, so it must be left alone for the
+      // same reason: it is the flicker, and it would put a 1s transition on the
+      // LCP clock. Both the state and the rendered offset, because either one
+      // alone could be the wrong half of the story.
+      headlineState: headline?.getAttribute("data-lines-enter") ?? null,
+      headlineWordOffset:
+        inner && word
+          ? Math.round(inner.getBoundingClientRect().top - word.getBoundingClientRect().top)
+          : null,
     };
   });
   await shot(page, "hero-at-load");
@@ -286,6 +425,8 @@ const report = {
     label: "reduced-motion",
   }),
   hero: await checkHero(browser),
+  parallax: await checkParallax(browser),
+  parallaxReducedMotion: await checkParallax(browser, { reducedMotion: true }),
   noScript: [
     await checkNoScript(browser, { width: 1440, height: 900 }),
     await checkNoScript(browser, { width: 390, height: 844 }),
@@ -312,6 +453,25 @@ for (const run of runs) {
     failures.push(
       `${run.label}: a mask never covered more than ${run.peakMaskCover} of its frame — the wipe is a no-op`,
     );
+  if (run.headlineStagings === 0) failures.push(`${run.label}: no headline reveal ever played`);
+  if (run.headlineSettlings < run.headlineStagings)
+    failures.push(
+      `${run.label}: ${run.headlineStagings - run.headlineSettlings} headlines staged and never settled`,
+    );
+  if (run.peakWordOffset < 10)
+    failures.push(
+      `${run.label}: no word ever moved more than ${run.peakWordOffset}px inside its mask — the line reveal is a no-op`,
+    );
+  if (run.leftDisplacedWords > 0)
+    failures.push(`${run.label}: ${run.leftDisplacedWords} words left outside their own mask`);
+  for (const h of run.staggerFaults)
+    failures.push(
+      `${run.label}: "${h.text}" wrapped into ${h.wrappedInto} lines but its delays are ${JSON.stringify(h.delays)}`,
+    );
+  if (!run.lineStagger.some((h) => h.wrappedInto > 1))
+    failures.push(
+      `${run.label}: no headline wrapped, so the per-line stagger was never exercised at this width`,
+    );
   for (const c of run.chapters) {
     if (c.hidden > 0) failures.push(`${run.label}/${c.id}: ${c.hidden} text nodes left invisible`);
     if (c.maskedOver > 0)
@@ -324,8 +484,25 @@ if (report.reducedMotion.stagings > 0)
 if (report.reducedMotion.afterScroll.invisible > 0)
   failures.push("reduced motion: something was left invisible");
 
+if (report.reducedMotion.afterScroll.displacedWords > 0)
+  failures.push("reduced motion: a word was left outside its own mask");
+
 if (report.hero.state !== null) failures.push(`hero: was staged (${report.hero.state})`);
 if (report.hero.maskCover > 0.05) failures.push(`hero: a mask covered ${report.hero.maskCover}`);
+if (report.hero.headlineState !== null)
+  failures.push(`hero: the headline was staged (${report.hero.headlineState})`);
+if (report.hero.headlineWordOffset !== 0)
+  failures.push(`hero: the headline is displaced by ${report.hero.headlineWordOffset}px`);
+
+if (report.parallax.elements === 0) failures.push("parallax: nothing on the page is parallaxed");
+if (report.parallax.moved === 0)
+  failures.push("parallax: no parallaxed element moved — the deferred GSAP import never arrived");
+if (report.parallax.strongest > 0.16)
+  failures.push(`parallax: drifted ${report.parallax.strongest} of an element's height, past the cap`);
+if (report.parallaxReducedMotion.moved > 0)
+  failures.push(
+    `reduced motion: ${report.parallaxReducedMotion.moved} elements were still parallaxed`,
+  );
 
 for (const run of report.noScript) {
   if (run.enterAttributes > 0)
@@ -349,8 +526,20 @@ for (const run of runs.concat(report.reducedMotion)) {
     `${run.label.padEnd(15)} staged ${String(run.stagings).padStart(3)}  settled ${String(run.settlings).padStart(3)}  ` +
       `left staged ${run.leftStaged}  left invisible ${run.leftInvisible}  peak mask cover ${run.peakMaskCover}`,
   );
+  console.log(
+    `${"".padEnd(15)} headlines staged ${String(run.headlineStagings).padStart(3)}  settled ${String(run.headlineSettlings).padStart(3)}  ` +
+      `peak word offset ${run.peakWordOffset}px  wrapped headlines ${run.lineStagger.filter((h) => h.wrappedInto > 1).length}/${run.lineStagger.length}  ` +
+      `stagger faults ${run.staggerFaults.length}`,
+  );
 }
-console.log(`hero            state=${report.hero.state} maskCover=${report.hero.maskCover}`);
+console.log(
+  `hero            state=${report.hero.state} maskCover=${report.hero.maskCover} ` +
+    `headline=${report.hero.headlineState} headlineOffset=${report.hero.headlineWordOffset}px`,
+);
+console.log(
+  `parallax        ${report.parallax.moved}/${report.parallax.elements} moved, strongest ${report.parallax.strongest} of height  ` +
+    `| reduced motion ${report.parallaxReducedMotion.moved}/${report.parallaxReducedMotion.elements} moved`,
+);
 for (const run of report.noScript)
   console.log(
     `no-js ${run.viewport.padEnd(10)} entrance attributes ${run.enterAttributes}  ` +

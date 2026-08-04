@@ -22,22 +22,29 @@ import { useInView } from "./useInView";
  * `delay` is a transition delay, not a second animation: a group staggers by
  * giving each of its members a larger one, and they all still move at the same
  * speed.
+ *
+ * **It takes no `className`, on purpose.** The staged state is a `transform`,
+ * and Tailwind v4 compiles `translate-*`, `scale-*` and `rotate-*` to the
+ * `translate`, `scale` and `rotate` properties — which *compose* with
+ * `transform` rather than replace it. `<Enter className="scale-95">` would
+ * settle to 1 × 0.95 and stay there permanently, and no amount of specificity
+ * would fix it, because the two declarations never meet in the cascade. The
+ * same trap shipped once already in the other direction, on the photograph mask
+ * (see `app/globals.css`). This is a motion wrapper and nothing else: put the
+ * classes on the element inside it, where they cannot reach the transform.
  */
 export function Enter({
   children,
   delay = 0,
-  className,
 }: {
   children: React.ReactNode;
   delay?: number;
-  className?: string;
 }) {
   const { ref, state } = useInView<HTMLDivElement>();
 
   return (
     <div
       ref={ref}
-      className={className}
       // Omitted rather than written as "rest", so the attribute's presence
       // always means script is driving this element.
       {...(state === "rest" ? {} : { "data-enter": state })}

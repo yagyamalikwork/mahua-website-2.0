@@ -60,6 +60,17 @@ describe("the motion laws (spec section 4.3)", () => {
       expect(banned.test(ease), `EASE.${name} = "${ease}" overshoots`).toBe(false);
     }
   });
+
+  it("keeps one entrance curve for the whole page", () => {
+    // `EASE.settle` (power2.out) was `SplitLines`' entrance curve while every
+    // other entrance used `ENTER.ease`. A quarter of the way through, the two
+    // have travelled ~76% and ~58% — a headline and the photograph beside it
+    // arriving on visibly different curves, which is the opposite of restraint
+    // (CLAUDE.md non-negotiable #4). `EASE` is now for scrubbed work only, and a
+    // scrub that eases twice reads as lag, so `none` is the only member.
+    expect(EASE).not.toHaveProperty("settle");
+    expect(Object.values(EASE), "an entrance curve crept back into EASE").toEqual(["none"]);
+  });
 });
 
 describe("the entrance vocabulary (ENTER)", () => {

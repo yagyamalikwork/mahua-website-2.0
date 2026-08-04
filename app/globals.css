@@ -72,9 +72,19 @@ body {
  *
  * The `--enter-*` values are written onto <html> by `app/layout.tsx` from
  * ENTER in `lib/motion.ts`, so the numbers cannot drift from the tests that
- * guard them. Deliberately unlayered: Tailwind's utilities live in @layer, and
- * unlayered rules beat layered ones, so a `translate-*` or `opacity-*` class on
- * the same element cannot strand an entrance half-staged.
+ * guard them.
+ *
+ * Deliberately unlayered: Tailwind's utilities live in @layer and unlayered
+ * rules beat layered ones, so an `opacity-*` class on the same element cannot
+ * strand an entrance half-staged. **That protection is per property, and it is
+ * not a general one.** Tailwind v4 compiles `translate-y-*` and `scale-*` to the
+ * `translate` and `scale` properties, which *compose* with `transform` rather
+ * than replace it — `<div data-enter class="scale-95">` would settle to
+ * 1 × 0.95 and stay there for good, and winning the cascade would not help
+ * because the two never meet in it. This comment claimed the opposite until
+ * 5 Aug 2026. `Enter` therefore accepts no `className` at all; see the note
+ * there, and the note on the image rules below for the same trap in the
+ * direction it actually shipped.
  */
 [data-enter] {
   transition:
@@ -100,6 +110,44 @@ body {
 [data-enter="in"] {
   opacity: 1;
   transform: none;
+}
+
+/*
+ * A headline arriving line by line — `components/motion/SplitLines.tsx`, on the
+ * same engine and the same fail-safe terms. Each word is its own
+ * `overflow-hidden` box; the span inside it drops below that box and rises back,
+ * and the words on one visual line share a `--enter-delay` so the headline
+ * arrives a line at a time.
+ *
+ * **The at-rest state is the absence of the attribute**, exactly as for
+ * `[data-enter]`: with no script the words sit where the type sets them and the
+ * headline reads normally. The delays are per line and can only be known after
+ * layout, so they are written by the component onto each `[data-line-inner]`,
+ * which is also why they override any `--enter-delay` inherited from an
+ * ancestor `Enter`.
+ *
+ * **`translate`, and never `transform`.** Consistent with the image rules below
+ * and for the same reason: it is the property Tailwind's own utilities compile
+ * to, so it is the one an override has to be written in. It is alone in its
+ * rule, so there is no sibling for the minifier to merge it with.
+ *
+ * A descendant selector, not a direct child: the inner spans are grandchildren
+ * of the heading. Nothing nests a headline inside a headline.
+ */
+[data-lines-enter] [data-line-inner] {
+  transition: translate var(--lines-duration) var(--enter-ease);
+  transition-delay: var(--enter-delay, 0s);
+}
+
+/* Staged instantly, for the reason given above [data-enter="pending"]. 115% and
+   not 100% because the mask has to clear the descenders it is padded for. */
+[data-lines-enter="pending"] [data-line-inner] {
+  transition: none;
+  translate: 0 115%;
+}
+
+[data-lines-enter="in"] [data-line-inner] {
+  translate: none;
 }
 
 /*
@@ -175,6 +223,16 @@ body {
     transition: none;
     transform: none;
     opacity: 1;
+  }
+
+  /*
+   * The same second line for a headline: every word back in its own box,
+   * whatever state was written. A stranded `data-lines-enter="pending"` here
+   * would be a heading of empty boxes.
+   */
+  [data-lines-enter] [data-line-inner] {
+    transition: none;
+    translate: none;
   }
 
   /*

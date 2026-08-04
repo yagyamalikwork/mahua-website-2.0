@@ -1,24 +1,45 @@
 "use client";
 
-import { Fragment, useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { DURATION, EASE, prefersReducedMotion } from "@/lib/motion";
+import { Fragment, useEffect } from "react";
+import { DURATION } from "@/lib/motion";
+import { useInView } from "./useInView";
 
 /**
  * A headline whose lines rise from behind a mask, staggered.
  *
  * The words are separate boxes in the server-rendered markup and are **at rest,
- * fully visible, before any JavaScript runs**. GSAP only ever moves them *down*
- * out of view and back; if the script never loads, throws, or is disabled, the
- * headline reads normally. The reverse arrangement — hidden in the markup and
- * revealed by script — is how a headline ends up permanently invisible behind a
- * mask that never lifts, and `components/motion/primitives.test.tsx` exists to
- * keep it that way.
+ * fully visible, before any JavaScript runs**. Script only ever moves them *down*
+ * out of view and back; if it never loads, throws, or is disabled, the headline
+ * reads normally. The reverse arrangement — hidden in the markup and revealed by
+ * script — is how a headline ends up permanently invisible behind a mask that
+ * never lifts, and `components/motion/primitives.test.tsx` exists to keep it
+ * that way.
  *
  * The stagger is per *visual line*, measured after layout, not per word. Per
  * word reads as a typewriter; per line reads as one movement, which is the
- * reference's effect.
+ * reference's effect. Where a headline wraps depends on the viewport, so the
+ * lines are read off `offsetTop` at mount rather than assumed from a count.
+ *
+ * **This used to be a GSAP timeline and is now two custom properties and a
+ * transition** (`app/globals.css`). Nothing about the effect changed; what
+ * changed is that an entrance no longer drags a 115 KB tween library into the
+ * first load. The state machine is `useInView`'s — the same one `Enter` and
+ * `ImageReveal` use — so a headline already on screen at mount is left entirely
+ * alone, which is the 4 Aug flicker fix and also what keeps the hero headline
+ * off the LCP clock.
+ *
+ * **On rising twice.** Six sections wrap a `TwoToneHeading` in an `<Enter>`, so
+ * the headline sits inside a block that rises 16px of its own. That is kept, and
+ * it is what the reference does too: it ships SplitText for per-line reveals
+ * *and* shows 14–18px block translates on the same text. What was wrong was that
+ * ours were two unrelated movements — `power2.out` over 1.0s fired at
+ * ScrollTrigger's `top 85%`, laid over `cubic-bezier(0.22, 1, 0.36, 1)` over
+ * 0.9s fired at `rootMargin: -12%`. Both now come from the same `useInView` with
+ * the same margin and share `--enter-ease`, so they compose into one settle
+ * instead of racing. The alternative — exempting the headline from its
+ * ancestor's transform — is only possible with a counter-transform that has to
+ * cancel exactly on every frame, and this project has been burned eight times by
+ * exactly that kind of mechanism.
  */
 export function SplitLines({
   children,
@@ -52,7 +73,7 @@ export function SplitLines({
    */
   dimColour?: string;
 }) {
-  const ref = useRef<HTMLElement | null>(null);
+  const { ref, state } = useInView<HTMLElement>();
 
   useEffect(() => {
     const el = ref.current;
@@ -60,58 +81,30 @@ export function SplitLines({
     const inners = Array.from(el.querySelectorAll<HTMLElement>("[data-line-inner]"));
     if (inners.length === 0) return;
 
-    if (prefersReducedMotion()) {
-      // The markup is already at rest, so there is nothing to reveal — only
-      // anything a previous run might have left on the elements to clear.
-      gsap.set(inners, { clearProps: "transform" });
-      return;
-    }
-    gsap.registerPlugin(ScrollTrigger);
-
     // Words sharing a top edge are one line. Measured here rather than assumed,
-    // because where a headline wraps depends on the viewport.
+    // because where a headline wraps depends on the viewport: the same words are
+    // one line at 1440 and three on a phone, and a stagger built from an assumed
+    // line count is wrong at every width but the one it was written for.
+    //
+    // Written unconditionally, including for a headline that will never be
+    // staged. A delay is inert until something transitions, and branching on
+    // `state` here would mean the delays landed in the same commit as the
+    // staging rather than before it.
     let line = -1;
     let lastTop = Number.NEGATIVE_INFINITY;
-    const lineOf = Array.from(el.querySelectorAll<HTMLElement>("[data-word]")).map((w) => {
-      if (w.offsetTop > lastTop + 1) {
+    Array.from(el.querySelectorAll<HTMLElement>("[data-word]")).forEach((word, i) => {
+      if (word.offsetTop > lastTop + 1) {
         line += 1;
-        lastTop = w.offsetTop;
+        lastTop = word.offsetTop;
       }
-      return line;
+      // Rounded because 2 × 0.09 is 0.18000000000000002 in binary floating
+      // point, and there is no reason to ship that into a stylesheet. The unit
+      // is not optional: `transition-delay: 0.18` is invalid, CSS drops it, and
+      // the whole headline would arrive at once with nothing to show for it.
+      const seconds = Math.round((delay + line * DURATION.lineStagger) * 1000) / 1000;
+      inners[i]?.style.setProperty("--enter-delay", `${seconds}s`);
     });
-
-    // A headline already on screen at hydration has nothing left to reveal — the
-    // markup painted it at rest. Animating it anyway means dropping settled text
-    // out of view and lifting it back, which a Playwright capture of this very
-    // component measured as a real flicker: transform "none" at first sample,
-    // translated 28px 300ms later. So leave it alone.
-    //
-    // Headlines the visitor scrolls to have no such problem: their "from" state
-    // is applied while they are still below the fold, where nobody can see it.
-    // That is every headline on the page bar the hero — and skipping the hero
-    // keeps it off the LCP clock for free (CLAUDE.md non-negotiable #6).
-    if (el.getBoundingClientRect().top < window.innerHeight) return;
-
-    const tween = gsap.fromTo(
-      inners,
-      { yPercent: 115 },
-      {
-        yPercent: 0,
-        delay,
-        duration: slow ? DURATION.revealSlow : DURATION.reveal,
-        ease: EASE.settle,
-        stagger: (i: number) => (lineOf[i] ?? 0) * DURATION.lineStagger,
-        scrollTrigger: { trigger: el, start: "top 85%", once: true },
-      },
-    );
-
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-      // Whatever the tween was mid-way through, leave the words readable.
-      gsap.set(inners, { clearProps: "transform" });
-    };
-  }, [children, delay, slow]);
+  }, [children, delay, ref]);
 
   const words = splitWords(children, dim);
 
@@ -121,6 +114,16 @@ export function SplitLines({
         ref.current = node;
       }}
       className={className}
+      // Omitted rather than written as "rest", so the attribute's presence
+      // always means script is driving this headline. Its own attribute rather
+      // than `data-enter`, because that one would add the block rise and fade on
+      // top of the per-line reveal — a third movement on one headline.
+      {...(state === "rest" ? {} : { "data-lines-enter": state })}
+      style={
+        slow
+          ? ({ "--lines-duration": "var(--lines-slow-duration)" } as React.CSSProperties)
+          : undefined
+      }
     >
       {words.map(({ word, dimmed }, i) => (
         <Fragment key={`${i}-${word}`}>

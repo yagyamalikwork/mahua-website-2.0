@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "@/lib/motion";
 
 /**
@@ -38,25 +36,37 @@ export function useScrollControl(): ScrollControl | null {
  * and some visitors disable it for vestibular reasons. `lock`/`unlock` still work in
  * that case — there is no Lenis to stop, and the CSS rule alone *is* a real lock
  * there, precisely because native scrolling is what is running.
+ *
+ * **This component is in `app/layout.tsx`, so everything it imports is first-load
+ * JS.** It used to import GSAP for two things: `gsap.ticker` to drive Lenis's
+ * frame loop, and `lenis.on("scroll", ScrollTrigger.update)` to sync the two.
+ * The first is a `requestAnimationFrame` — GSAP's ticker is one too. The second
+ * is unnecessary because Lenis scrolls the real document, so the browser emits
+ * ordinary `scroll` events and ScrollTrigger's own listener already sees them;
+ * the recipe exists to save ScrollTrigger a frame, and a frame is not visible on
+ * a drift capped at 15%. Between them they were putting 115 KB of tween library
+ * in front of first paint for a page whose every scrubbed effect is below the
+ * fold. GSAP now loads from `components/motion/scrub.ts`, on demand.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
   const previousOverflow = useRef<string | null>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
     if (prefersReducedMotion()) return;
 
     const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
     lenisRef.current = lenis;
-    lenis.on("scroll", ScrollTrigger.update);
 
-    const raf = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
+    // `requestAnimationFrame` hands milliseconds, which is the unit `raf` wants.
+    // GSAP's ticker handed seconds, hence the `* 1000` that used to be here.
+    let frame = requestAnimationFrame(function tick(time: number) {
+      lenis.raf(time);
+      frame = requestAnimationFrame(tick);
+    });
 
     return () => {
-      gsap.ticker.remove(raf);
+      cancelAnimationFrame(frame);
       lenis.destroy();
       lenisRef.current = null;
     };

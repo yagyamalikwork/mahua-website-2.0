@@ -21,9 +21,22 @@ export const DURATION = {
   logoRotation: 75,
 } as const;
 
-/** GSAP easing strings. Deceleration only — no overshoot family is permitted. */
+/**
+ * GSAP easing strings. Deceleration only — no overshoot family is permitted.
+ *
+ * **Only for what GSAP still drives, which is scrubbing.** `settle`
+ * (`power2.out`) lived here until 5 Aug 2026 and was the entrance curve for
+ * `SplitLines`, while every other entrance used `ENTER.ease` in CSS. That is two
+ * easings for one idea: at a quarter of the way through, `power2.out` has
+ * travelled ~76% and `ENTER.ease` ~58%, so a headline and the photograph beside
+ * it arrived on visibly different curves. Restraint is a requirement (CLAUDE.md
+ * non-negotiable #4) and one page gets one entrance curve, so `settle` is gone
+ * rather than merely unused — an unused export is an invitation.
+ *
+ * `drift` is `none` because a scrubbed effect is already eased by the scroll
+ * itself; easing it twice is what makes parallax feel like it is lagging.
+ */
 export const EASE = {
-  settle: "power2.out",
   drift: "none",
 } as const;
 
@@ -54,7 +67,12 @@ export const ENTER = {
   duration: 0.9,
   /** Seconds between successive items in a group. */
   stagger: 0.08,
-  /** Decelerating, no overshoot — the CSS equivalent of `EASE.settle`. */
+  /**
+   * Decelerating, no overshoot. **The page's one entrance curve** — every
+   * entrance there is reads it through `--enter-ease`: the block settle, the
+   * photograph mask and settle, and the headline's per-line rise. See the note
+   * on `EASE` for why there is no second one.
+   */
   ease: "cubic-bezier(0.22, 1, 0.36, 1)",
 } as const;
 

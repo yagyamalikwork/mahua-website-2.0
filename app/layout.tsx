@@ -47,6 +47,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--image-from-scale": String(IMAGE_FROM.scale),
           "--image-mask-duration": `${DURATION.imageMask}s`,
           "--image-settle-duration": `${DURATION.revealSlow}s`,
+          // A headline arriving line by line. Two values because `SplitLines`
+          // has a `slow` variant for the quote laid over a full-bleed
+          // photograph, which is longer on screen and reads better unhurried;
+          // the component swaps between them rather than carrying a number.
+          "--lines-duration": `${DURATION.reveal}s`,
+          "--lines-slow-duration": `${DURATION.revealSlow}s`,
         } as React.CSSProperties
       }
     >

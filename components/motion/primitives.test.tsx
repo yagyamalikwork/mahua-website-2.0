@@ -1,6 +1,8 @@
 /* Plain <img> is deliberate here — next/image renders a wrapper and its own
    loader, which would put a layer between the test and the thing being tested. */
 /* eslint-disable @next/next/no-img-element */
+import { readFileSync, readdirSync } from "node:fs";
+import path from "node:path";
 import { act, cleanup, render } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -50,6 +52,33 @@ function placeBelowTheFold() {
     toJSON: () => rect,
   } as DOMRect);
 }
+
+/**
+ * Make the headline wrap.
+ *
+ * jsdom lays nothing out, so every word reports `offsetTop` 0 and a headline
+ * measures as a single line — which would let "each line is later than the one
+ * above it" pass against a component that never staggered anything, because
+ * there would only ever be one line and one delay of zero. So give the words a
+ * real wrap: a new line every `perLine` words, in document order.
+ *
+ * Derived from each word's index rather than from a call counter, so it stays
+ * correct however many times the component reads it.
+ */
+function wrapEvery(perLine: number) {
+  vi.spyOn(HTMLElement.prototype, "offsetTop", "get").mockImplementation(function (
+    this: HTMLElement,
+  ) {
+    if (!this.hasAttribute("data-word")) return 0;
+    const words = [...(this.closest("h1, h2, h3, p")?.querySelectorAll("[data-word]") ?? [])];
+    const index = words.indexOf(this);
+    return index < 0 ? 0 : Math.floor(index / perLine) * 60;
+  });
+}
+
+/** Source of a motion component, for the two budget rules below. */
+const MOTION_DIR = path.join(process.cwd(), "components", "motion");
+const motionSource = (file: string) => readFileSync(path.join(MOTION_DIR, file), "utf8");
 
 /**
  * jsdom ships no `IntersectionObserver`, and `useInView` deliberately leaves the
@@ -127,50 +156,126 @@ describe("SplitLines", () => {
     // flicker. There is nothing to reveal, so nothing should move.
     withReducedMotion(false);
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    look(false);
     const heading = container.querySelector("h2");
 
     expect(heading).not.toBeNull();
     expect(visibleText(heading as HTMLElement)).toBe(HEADLINE);
-    for (const inner of container.querySelectorAll<HTMLElement>("[data-line-inner]")) {
-      expect(inner.style.transform, "an on-screen headline was displaced anyway").toBe("");
-      expect(inner.style.opacity, "a word was faded out and never faded back").not.toBe("0");
-    }
+    expect(
+      heading?.getAttribute("data-lines-enter"),
+      "an on-screen headline was staged anyway",
+    ).toBeNull();
   });
 
-  it("does hide the words when the headline is still below the fold", () => {
-    // The other half of the rule above: if nothing is ever displaced, the
-    // reveal is not happening at all and the two tests below prove nothing.
+  it("does stage the words when the headline is still below the fold", () => {
+    // The other half of the rule above: if nothing is ever staged, the
+    // reveal is not happening at all and the tests below prove nothing.
     withReducedMotion(false);
     placeBelowTheFold();
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
-    const displaced = [...container.querySelectorAll<HTMLElement>("[data-line-inner]")].filter(
-      (i) => i.style.transform !== "",
-    );
-    expect(displaced.length, "no word was staged for its reveal").toBeGreaterThan(0);
+    look(false);
+    expect(
+      container.querySelector("h2")?.getAttribute("data-lines-enter"),
+      "no word was staged for its reveal",
+    ).toBe("pending");
+  });
+
+  it("settles the headline it staged, rather than leaving it behind its mask", () => {
+    withReducedMotion(false);
+    placeBelowTheFold();
+    const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    look(false);
+    look(true);
+    expect(container.querySelector("h2")?.getAttribute("data-lines-enter")).toBe("in");
   });
 
   it("leaves the words untransformed when the visitor asked for less motion", () => {
     withReducedMotion(true);
-    // Below the fold on purpose: on screen, the component skips the tween for an
-    // unrelated reason, and this test would pass without reduced motion doing
-    // any work at all.
+    // Below the fold on purpose: on screen, the component skips the reveal for
+    // an unrelated reason, and this test would pass without reduced motion
+    // doing any work at all.
     placeBelowTheFold();
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    look(false);
 
-    for (const inner of container.querySelectorAll<HTMLElement>("[data-line-inner]")) {
-      expect(inner.style.transform, "reduced motion must be a still state, not a slow one").toBe("");
-    }
+    expect(
+      container.querySelector("h2")?.getAttribute("data-lines-enter"),
+      "reduced motion must be a still state, not a slow one",
+    ).toBeNull();
     expect(visibleText(container.querySelector("h2") as HTMLElement)).toBe(HEADLINE);
   });
 
-  it("puts the words back if it is unmounted mid-animation", () => {
+  it("never writes a displacement of its own, so an unmount cannot strand a word", () => {
+    // This replaces "puts the words back if it is unmounted mid-animation".
+    // That test guarded a real hazard of the GSAP version: a killed tween could
+    // leave inline transforms on the words. The movement is now CSS keyed off
+    // an attribute, so the only thing that could strand a word is the component
+    // writing a displacement inline — which is the property worth guarding.
+    // The one inline style it may write is the per-line delay.
     withReducedMotion(false);
     placeBelowTheFold();
-    const { container, unmount } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
-    const inners = [...container.querySelectorAll<HTMLElement>("[data-line-inner]")];
-    unmount();
-    for (const inner of inners) {
-      expect(inner.style.transform, "a killed tween left a word displaced").toBe("");
+    wrapEvery(3);
+    const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    look(false);
+
+    for (const inner of container.querySelectorAll<HTMLElement>("[data-line-inner]")) {
+      expect(
+        inner.getAttribute("style") ?? "",
+        "a word carries an inline displacement no unmount would clear",
+      ).not.toMatch(/transform|translate\s*:|scale|opacity|visibility|display/);
+    }
+  });
+
+  it("gives each line a later delay than the one above it", () => {
+    withReducedMotion(false);
+    placeBelowTheFold();
+    // Without a wrap there is one line, one delay of zero, and nothing to sort.
+    wrapEvery(3);
+    const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    const delays = [...container.querySelectorAll<HTMLElement>("[data-line-inner]")].map((e) =>
+      Number((e.style.getPropertyValue("--enter-delay") || "0s").replace("s", "")),
+    );
+    expect(delays.length).toBeGreaterThan(0);
+    expect(delays).toEqual([...delays].sort((a, b) => a - b));
+    expect(Math.max(...delays)).toBeGreaterThan(0);
+  });
+
+  it("measures the delays off where the headline really wraps", () => {
+    // The hard-won half of the rule above. A stagger computed from an assumed
+    // line count is a stagger that is wrong at every viewport but one: the same
+    // headline is three lines on a phone and one on a desktop. Same headline,
+    // two wraps, two different sets of delays — so the measurement is real.
+    withReducedMotion(false);
+    placeBelowTheFold();
+
+    wrapEvery(2);
+    const narrow = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    const narrowDelays = [
+      ...narrow.container.querySelectorAll<HTMLElement>("[data-line-inner]"),
+    ].map((e) => e.style.getPropertyValue("--enter-delay"));
+    cleanup();
+
+    wrapEvery(4);
+    const wide = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    const wideDelays = [...wide.container.querySelectorAll<HTMLElement>("[data-line-inner]")].map(
+      (e) => e.style.getPropertyValue("--enter-delay"),
+    );
+
+    expect(new Set(narrowDelays).size, "a two-word wrap produced one line").toBeGreaterThan(
+      new Set(wideDelays).size,
+    );
+  });
+
+  it("carries every delay with a unit on it", () => {
+    // `--enter-delay: 0.09` with no unit is an invalid `transition-delay`, which
+    // CSS drops silently — the whole headline would then arrive at once and
+    // every assertion above would still pass.
+    withReducedMotion(false);
+    placeBelowTheFold();
+    wrapEvery(3);
+    const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    for (const inner of container.querySelectorAll<HTMLElement>("[data-line-inner]")) {
+      expect(inner.style.getPropertyValue("--enter-delay")).toMatch(/^\d+(\.\d+)?s$/);
     }
   });
 
@@ -179,6 +284,40 @@ describe("SplitLines", () => {
     const { container } = render(<SplitLines as="p">{HEADLINE}</SplitLines>);
     expect(container.querySelector("p")).not.toBeNull();
     expect(container.querySelector("h2")).toBeNull();
+  });
+});
+
+describe("the JavaScript budget", () => {
+  it("keeps GSAP out of everything that is only an entrance", () => {
+    // The budget rule this task exists to enforce: a tween library may only be
+    // imported by something that scrubs. An entrance that reaches for GSAP is
+    // 115 KB paying for a transition CSS already does.
+    const mayScrub = new Set(["Parallax.tsx", "SmoothScroll.tsx", "PinnedCollage.tsx"]);
+    for (const f of readdirSync(MOTION_DIR).filter(
+      (n) => /\.tsx?$/.test(n) && !n.includes(".test."),
+    )) {
+      if (mayScrub.has(f)) continue;
+      expect(motionSource(f), `${f} imports gsap but does not scrub`).not.toMatch(/from "gsap/);
+    }
+  });
+
+  it("does not put GSAP in the first load", () => {
+    // Every scrubbed effect on this page is below the fold, so the library has
+    // no business blocking first paint. A static import puts it there.
+    // `scrub.ts` is in the list because it is where the dynamic import lives:
+    // if the deferral is ever "simplified" back to a static import, this is the
+    // file it would happen in.
+    for (const f of ["Parallax.tsx", "SmoothScroll.tsx", "scrub.ts"]) {
+      expect(motionSource(f), `${f} imports gsap statically`).not.toMatch(/^import .* from "gsap/m);
+    }
+  });
+
+  it("still loads GSAP somewhere, or the scrubbing is gone rather than deferred", () => {
+    // The failure mode of the test above, taken to its conclusion: deleting the
+    // import passes it. Parallax is mounted in ten places and has to keep
+    // moving, so the library must still be reachable — dynamically.
+    expect(motionSource("scrub.ts")).toMatch(/import\("gsap"\)/);
+    expect(motionSource("scrub.ts")).toMatch(/import\("gsap\/ScrollTrigger"\)/);
   });
 });
 
