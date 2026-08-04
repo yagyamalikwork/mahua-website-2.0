@@ -133,7 +133,7 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
 
 ## Assets
 
-- **`Mahua property logos/`** — client-supplied vector logos, added 3 Aug. `Mahua Resorts.svg` is genuine
+- **`Mahua-property-logos/`** — client-supplied vector logos, added 3 Aug. `Mahua-Resorts.svg` is genuine
   artwork: **340 paths, 0 embedded rasters, 439 groups, viewBox 0 0 500 500**. Per-property marks for Vann
   and Tola, plus EPS/PDF/PNG and a 3D render. **This removes the need to reconstruct the emblem** for the
   planned counter-rotation animation (petals clockwise, leaves anticlockwise) — real petal and leaf groups

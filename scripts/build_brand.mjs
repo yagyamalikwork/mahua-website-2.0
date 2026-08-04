@@ -2,7 +2,7 @@
 //
 // Run: node scripts/build_brand.mjs
 //
-// The supplied artwork (`Mahua property logos/Mahua Resorts/Mahua Resorts.svg`)
+// The supplied artwork (`Mahua-property-logos/Mahua-Resorts/Mahua-Resorts.svg`)
 // is a 127 KB, 340-path, 14-colour Illustrator export of the *whole* lockup —
 // the mahua flower above "MAHUA" above "RESORTS". Three problems make it wrong
 // to drop straight into the header:
@@ -28,7 +28,7 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = path.join(ROOT, "Mahua property logos", "Mahua Resorts", "Mahua Resorts.svg");
+const SRC = path.join(ROOT, "Mahua-property-logos", "Mahua-Resorts", "Mahua-Resorts.svg");
 const OUT_DIR = path.join(ROOT, "public", "brand");
 const WIDTHS = [80, 120, 160];
 
