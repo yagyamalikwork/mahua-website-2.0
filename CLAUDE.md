@@ -53,8 +53,14 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    | | Initial load | Whole page scrolled |
    |---|---|---|
-   | 390px | **399 KB** ✓ | 799 KB |
-   | 1440px | **763 KB** ✓ | 1,966 KB |
+   | 390px | **613 KB** ✓ | 1,502 KB |
+   | 1440px | **730 KB** ✓ | 2,307 KB |
+
+   **These rose on 5 Aug and the rise was bought deliberately.** The table read 399/763 KB until the client
+   chose the sharp hero: `sizes` now hands a 390px phone the 1440-wide hero (192 KB) rather than the
+   400-wide one (21 KB), because at 400 the photograph was drawn at a third of the resolution it needed and
+   shipped visibly blurred. Initial load still passes at both widths. Do not "restore" the old figures by
+   reverting that — it is one line in `components/sections/Hero.tsx`, and it brings the blur back.
 
    **Desktop whole-scroll sits above 1.5 MB and is accepted under this reading.** Do not "fix" it by
    cutting photographs — density is why this plan exists (non-negotiable #8), and the client has already
@@ -62,7 +68,11 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    **Do not check the < 2.5s with Lighthouse's LCP.** Chrome resolves this page's LCP to a paragraph, not
    to the hero photograph, so LCP read 1.4s on 4 Aug while the hero itself was landing at 4.9s on a
-   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — currently 940 ms.
+   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 3,616 ms at
+   DPR 1, against the 2,500 ms budget.** It fails, knowingly: the sharp hero costs the time, and the two
+   levers costed in `docs/reviews/2026-08-04-task-8-lcp/` (deferring the animation library, self-hosting
+   subsetted fonts) are still unspent. Plan 4 spends the first. **Medians of five runs only** — single runs
+   on this page vary 2,462-4,140 ms on a byte-identical build.
 7. **Gold is decorative only.** `gold` (`#BB8F2E`) is for rules, ornaments, the emblem — it measures
    ~2.5:1 on cream and must never carry text. `goldText` (`#7A5C18`) is the legible sibling; use it for any
    text or link that would otherwise sit in gold. Guarded by `lib/palette.test.ts`.
