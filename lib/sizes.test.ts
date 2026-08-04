@@ -13,6 +13,7 @@ import {
   BOXES as TESTIMONIAL_BOXES,
   SIZES as TESTIMONIAL_SIZES,
 } from "@/components/sections/Testimonials";
+import { EMBLEM_SIZES } from "@/components/ui/BrandMark";
 import { FULL_BLEED_SIZES } from "@/components/ui/FullBleed";
 import { MEDIA } from "./media";
 import {
@@ -101,6 +102,10 @@ const LIVE_SLOTS: readonly Slot[] = [
   // `FullBleed`'s box height varies with `heightVh`; every use on the page is
   // 100, which oversizes to ~127.6vh for the parallax buffer.
   { name: "FullBleed", sizes: FULL_BLEED_SIZES, box: { viewportHeightVh: 127.6 } },
+  // The header emblem. No `box`: it is `object-fit` nothing — a transparent mark
+  // drawn at its own aspect inside an auto-width slot, so the box IS the drawn
+  // content and there is no cover crop to correct for.
+  { name: "BrandMark", sizes: EMBLEM_SIZES },
   ...(["solo", "pairTop", "pairLower"] as const).map((k) => ({
     name: `ChapterIntro.${k}`,
     sizes: INTRO_SIZES[k],
@@ -126,8 +131,15 @@ const LIVE_SLOTS: readonly Slot[] = [
 ];
 
 describe("the sizes the page actually serves", () => {
-  it("covers all fifteen, not the eight that were copied here", () => {
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(15);
+  it("covers every distinct sizes string on the page", () => {
+    // A deliberate tripwire, not a fact worth asserting for its own sake. This
+    // list started as eight of the fifteen strings actually in use, and the
+    // seven it missed would each have thrown at request time rather than failed
+    // in CI. Adding a slot must be a decision, so adding one fails here until
+    // the number is changed on purpose. The companion test below — which reads
+    // the components off disk — is what stops a NEW component being forgotten
+    // entirely; this one stops the table being edited carelessly.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(16);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

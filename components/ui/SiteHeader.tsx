@@ -1,10 +1,11 @@
+import { BrandMark } from "@/components/ui/BrandMark";
 import { ChapterMenu } from "@/components/ui/ChapterMenu";
 import { PillButton } from "@/components/ui/PillButton";
 import { HOME } from "@/content/home";
 
 /**
- * Menu left, wordmark centred, pill right — the reference's three-item header,
- * and nothing else.
+ * Menu left, the brand lockup centred, pill right — the reference's three-item
+ * header, and nothing else.
  *
  * It overlays the hero but is not part of it, so it lives here and is composed by
  * `app/page.tsx` rather than nested inside `Hero`. It is absolutely positioned
@@ -31,9 +32,7 @@ export function SiteHeader({ ctaHref }: { ctaHref: string }) {
       <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-5 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
         <ChapterMenu />
 
-        <p className="justify-self-center text-center font-[family-name:var(--font-display)] text-sm font-light uppercase tracking-[0.16em] text-[color:var(--bg)] sm:text-lg sm:tracking-[0.26em] md:text-2xl md:tracking-[0.3em]">
-          {HOME.nav.brand}
-        </p>
+        <BrandMark className="justify-self-center text-[13px] sm:text-[15px] md:text-[17px]" />
 
         <div className="pointer-events-auto justify-self-end">
           <PillButton href={ctaHref}>{HOME.nav.cta}</PillButton>
