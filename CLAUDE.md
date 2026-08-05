@@ -5,9 +5,12 @@ Replaces a monotone WordPress template site. Concept: **a dense, image-led journ
 throughout, in the layout language of [thesujanlife.com](https://thesujanlife.com/), rendered in a
 hand-drawn field-guide idiom.
 
-> **Read these three, in order, before doing any work:**
+> **Read these four, in order, before doing any work:**
+> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the fourteen-instance defect
+>    pattern, and the things that look broken and are not.** Distilled from the per-task ledgers, which are
+>    git-ignored and do not survive a clone. Read it before relitigating anything.
 > 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
->    said, and what is still owed. **Start here.**
+>    said, and what is still owed. **Start here for state.**
 > 2. [`docs/superpowers/plans/2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md)
 >    — the most recent plan, complete. Its predecessor,
 >    [`2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md),
@@ -272,6 +275,14 @@ python scripts/extract_docx.py         # plain text of the strategy documents
 ```
 
 ## Verification
+
+**If nothing animates, check the operating system before the code.** Windows *Settings → Accessibility →
+Visual effects → Animation effects*, off, makes Chrome report `prefers-reduced-motion: reduce`, and this page
+then deliberately switches off every entrance, the emblem turn and the pin. It looks exactly like a broken
+build and it caught the client out on 5 Aug. Same code, same server: **37 staged entrances and a pinned
+collage with the setting on; 0 and unpinned with it off.** Related: the pin needs 1440px of *layout*
+viewport, so a 1440px window with a classic scrollbar silently shows the unpinned version — **demo above
+1500px**.
 
 Do not claim work is done without showing it — **verify by running the page, not by asserting it works.**
 Run the real page, screenshot at 390 / 768 / 1440 / 1920 px. Automated tests cannot judge whether a page

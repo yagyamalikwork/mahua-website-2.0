@@ -15,7 +15,28 @@ cleared. **Plan 5 is next: the leaf cursor and the ink tiger**, moved out of Pla
 | 4 · [The scroll craft](superpowers/plans/2026-08-05-scroll-craft.md) | ✅ seven tasks, five fix rounds. Fixed header, CSS entrances, pinned collage, emblem turn, GSAP out of the critical path |
 | 5 · The signature characters | ⬜ **next** — leaf cursor, ink tiger |
 
+**Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
+nothing parked and nothing owed from Plan 4 beyond the deferred minors in
+[`DECISIONS.md`](DECISIONS.md) §6. The client tested the build on 5 Aug and it works.
+
+**Two things Plan 5 inherits and must respect:**
+
+- **Non-negotiable #5** — the tiger *arrives, performs, then dozes*. It is not a permanent fixture;
+  permanent peripheral motion contradicts "seduce, not convert" and "restraint is a requirement".
+- **The critical path is clean and must stay clean.** Plan 4 took first-load JS from 750.6 to 642.7 KB by
+  moving GSAP behind a dynamic import, and `npm run verify:budget` **fails on the bytes** if that stops
+  being true. A cursor that follows the pointer and a tiger that walks are both scrub-shaped work — they
+  belong behind the same deferred import, not in the first load.
+
 **219 tests.** `/` is twelve chapters and 34 photographs over ~17 screens at 1440×900.
+
+## Where the durable record lives
+
+**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the fourteen-instance
+catalogue of this project's recurring defect, why the hero's budget is unreachable, and the things that look
+broken and are not. It exists because the per-task ledgers at `.superpowers/sdd/*/progress.md` are
+**git-ignored** — 335 lines across four plans that would not survive a fresh clone. Anything learned that
+outlives a task belongs there, not only in a ledger.
 
 ## Two decisions sitting with the client
 
