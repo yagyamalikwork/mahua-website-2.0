@@ -1,0 +1,277 @@
+{
+  "label": "font preload dropped, fonts kept · mobile 390@3x",
+  "arm": "no-font-preload",
+  "url": "http://localhost:3212/",
+  "viewport": "390x844",
+  "dpr": 3,
+  "throttled": true,
+  "runs": 5,
+  "medians": {
+    "lcpMs": 1356,
+    "fcpMs": 1356,
+    "heroResponseEndMs": 3750,
+    "fontLastMs": 2833,
+    "fontKB": 110.1,
+    "jsKB": 154.1,
+    "totalKB": 673.3
+  },
+  "lcpRangeMs": [
+    960,
+    1728
+  ],
+  "lcpElements": [
+    "P \"Two family-run lodges at the gates of Pench and Tadoba.\""
+  ],
+  "all": [
+    {
+      "fcpMs": 1728,
+      "lcpAll": [
+        {
+          "ms": 1728,
+          "tag": "P",
+          "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+          "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+          "url": null,
+          "size": 15435
+        }
+      ],
+      "lcp": {
+        "ms": 1728,
+        "tag": "P",
+        "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+        "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+        "url": null,
+        "size": 15435
+      },
+      "heroMs": 4261,
+      "heroKB": 191.5,
+      "heroFile": "/media/reception-path-dusk-1440.avif",
+      "fontCount": 3,
+      "fontKB": 110.1,
+      "fontLastMs": 3184,
+      "fontFiles": [
+        {
+          "f": "01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "ms": 2931
+        },
+        {
+          "f": "115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "ms": 3184
+        },
+        {
+          "f": "cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "ms": 2650
+        }
+      ],
+      "jsCount": 7,
+      "jsKB": 154.1,
+      "jsLastMs": 2171,
+      "totalKB": 673.3,
+      "requests": 19,
+      "abortedRequests": 3
+    },
+    {
+      "fcpMs": 1336,
+      "lcpAll": [
+        {
+          "ms": 1336,
+          "tag": "P",
+          "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+          "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+          "url": null,
+          "size": 15435
+        }
+      ],
+      "lcp": {
+        "ms": 1336,
+        "tag": "P",
+        "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+        "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+        "url": null,
+        "size": 15435
+      },
+      "heroMs": 3750,
+      "heroKB": 191.5,
+      "heroFile": "/media/reception-path-dusk-1440.avif",
+      "fontCount": 3,
+      "fontKB": 110.1,
+      "fontLastMs": 2818,
+      "fontFiles": [
+        {
+          "f": "01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "ms": 2548
+        },
+        {
+          "f": "115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "ms": 2818
+        },
+        {
+          "f": "cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "ms": 2230
+        }
+      ],
+      "jsCount": 7,
+      "jsKB": 154.1,
+      "jsLastMs": 1489,
+      "totalKB": 673.3,
+      "requests": 19,
+      "abortedRequests": 3
+    },
+    {
+      "fcpMs": 1356,
+      "lcpAll": [
+        {
+          "ms": 1356,
+          "tag": "P",
+          "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+          "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+          "url": null,
+          "size": 15435
+        }
+      ],
+      "lcp": {
+        "ms": 1356,
+        "tag": "P",
+        "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+        "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+        "url": null,
+        "size": 15435
+      },
+      "heroMs": 3779,
+      "heroKB": 191.5,
+      "heroFile": "/media/reception-path-dusk-1440.avif",
+      "fontCount": 3,
+      "fontKB": 110.1,
+      "fontLastMs": 2833,
+      "fontFiles": [
+        {
+          "f": "01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "ms": 2566
+        },
+        {
+          "f": "115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "ms": 2833
+        },
+        {
+          "f": "cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "ms": 2248
+        }
+      ],
+      "jsCount": 7,
+      "jsKB": 154.1,
+      "jsLastMs": 1513,
+      "totalKB": 673.3,
+      "requests": 19,
+      "abortedRequests": 3
+    },
+    {
+      "fcpMs": 1412,
+      "lcpAll": [
+        {
+          "ms": 1412,
+          "tag": "P",
+          "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+          "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+          "url": null,
+          "size": 15435
+        }
+      ],
+      "lcp": {
+        "ms": 1412,
+        "tag": "P",
+        "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+        "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+        "url": null,
+        "size": 15435
+      },
+      "heroMs": 3749,
+      "heroKB": 191.5,
+      "heroFile": "/media/reception-path-dusk-1440.avif",
+      "fontCount": 3,
+      "fontKB": 110.1,
+      "fontLastMs": 2886,
+      "fontFiles": [
+        {
+          "f": "01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "ms": 2634
+        },
+        {
+          "f": "115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "ms": 2886
+        },
+        {
+          "f": "cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "ms": 2318
+        }
+      ],
+      "jsCount": 7,
+      "jsKB": 154.1,
+      "jsLastMs": 1498,
+      "totalKB": 673.3,
+      "requests": 19,
+      "abortedRequests": 3
+    },
+    {
+      "fcpMs": 960,
+      "lcpAll": [
+        {
+          "ms": 960,
+          "tag": "P",
+          "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+          "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+          "url": null,
+          "size": 15435
+        }
+      ],
+      "lcp": {
+        "ms": 960,
+        "tag": "P",
+        "cls": "mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-",
+        "text": "Two family-run lodges at the gates of Pench and Tadoba.",
+        "url": null,
+        "size": 15435
+      },
+      "heroMs": 3743,
+      "heroKB": 191.5,
+      "heroFile": "/media/reception-path-dusk-1440.avif",
+      "fontCount": 3,
+      "fontKB": 110.1,
+      "fontLastMs": 2456,
+      "fontFiles": [
+        {
+          "f": "01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2",
+          "kb": 37.2,
+          "ms": 2186
+        },
+        {
+          "f": "115e7a2565b70400-s.p.1vgtwd90zpq_8.woff2",
+          "kb": 47.3,
+          "ms": 2456
+        },
+        {
+          "f": "cc014fcb166cf364-s.p.2cu9iw-l3ih8o.woff2",
+          "kb": 25.6,
+          "ms": 1928
+        }
+      ],
+      "jsCount": 7,
+      "jsKB": 154.1,
+      "jsLastMs": 1989,
+      "totalKB": 673.3,
+      "requests": 19,
+      "abortedRequests": 3
+    }
+  ]
+}

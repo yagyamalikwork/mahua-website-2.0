@@ -1,6 +1,6 @@
 {
-  "url": "http://localhost:3104/",
-  "measuredAt": "2026-08-05T03:42:02.753Z",
+  "url": "http://localhost:3210/",
+  "measuredAt": "2026-08-05T04:27:36.993Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
@@ -57,7 +57,7 @@
     "headlineStagings": 11,
     "headlineSettlings": 11,
     "peakMaskCover": 1,
-    "peakWordOffset": 83.852,
+    "peakWordOffset": 83.816,
     "peakStagedAtOnce": 67,
     "afterScroll": {
       "staged": 0,
@@ -371,7 +371,7 @@
     "headlineStagings": 11,
     "headlineSettlings": 11,
     "peakMaskCover": 1,
-    "peakWordOffset": 45.718,
+    "peakWordOffset": 45.675,
     "peakStagedAtOnce": 67,
     "afterScroll": {
       "staged": 0,

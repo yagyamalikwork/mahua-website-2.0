@@ -62,8 +62,12 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    | | Initial load | Whole page scrolled |
    |---|---|---|
-   | 390px | **613 KB** ✓ | 1,502 KB |
-   | 1440px | **730 KB** ✓ | 2,307 KB |
+   | 390px | **574 KB** ✓ | 1,501 KB |
+   | 1440px | **698 KB** ✓ | 2,320 KB |
+
+   Both initial figures fell on 5 Aug (from 613 and 730 KB) when Plan 4 took the tween library out of the
+   first load — see `docs/reviews/2026-08-05-scroll-craft/`. At DPR 3 the same page is 673 KB and 960 KB
+   initial, still inside budget.
 
    **These rose on 5 Aug and the rise was bought deliberately.** The table read 399/763 KB until the client
    chose the sharp hero: `sizes` now hands a 390px phone the 1440-wide hero (192 KB) rather than the
@@ -77,11 +81,22 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    **Do not check the < 2.5s with Lighthouse's LCP.** Chrome resolves this page's LCP to a paragraph, not
    to the hero photograph, so LCP read 1.4s on 4 Aug while the hero itself was landing at 4.9s on a
-   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 3,616 ms at
-   DPR 1, against the 2,500 ms budget.** It fails, knowingly: the sharp hero costs the time, and the two
-   levers costed in `docs/reviews/2026-08-04-task-8-lcp/` (deferring the animation library, self-hosting
-   subsetted fonts) are still unspent. Plan 4 spends the first. **Medians of five runs only** — single runs
-   on this page vary 2,462-4,140 ms on a byte-identical build.
+   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 3,419 ms at
+   DPR 1 and 3,922 ms at DPR 3, against the 2,500 ms budget.** It fails, knowingly: the sharp hero costs
+   the time. **Medians of five runs only** — single runs on this page vary 2,462-4,140 ms on a
+   byte-identical build; `scripts/measure_lcp_arms.mjs --runs 5` is the instrument for that.
+
+   **No lever left on the table closes this gap, and that is now measured rather than assumed** (Task 6,
+   5 Aug, `docs/reviews/2026-08-05-scroll-craft/`). Rebuilding with GSAP back in the critical path moved
+   mobile LCP by **0 ms** — 1,488 ms either way — and the hero by 213 ms. Blocking *every* font byte buys
+   the hero 565 ms, but the lever actually available is subsetting (~43 of the 110 KB loaded), worth about
+   215 ms; dropping the fonts' `rel=preload` buys 172 ms and delays the web font by 1.2s. **Each lever is
+   worth ~200 ms and the gap is ~1,400 ms.** The hero is 192 KB sitting behind ~460 KB of first-screen
+   bytes on a ~200 KB/s link — it is bandwidth-bound. Closing it needs a smaller hero or a smaller first
+   screen, which is the client's call, not an engineering one.
+
+   **LCP is text on this page, every time.** Across 35 measured loads LCP equalled FCP exactly and resolved
+   to a paragraph on mobile and to the `<h1>` on desktop — never once to a photograph.
 7. **Gold is decorative only.** `gold` (`#BB8F2E`) is for rules, ornaments, the emblem — it measures
    ~2.5:1 on cream and must never carry text. `goldText` (`#7A5C18`) is the legible sibling; use it for any
    text or link that would otherwise sit in gold. Guarded by `lib/palette.test.ts`.
@@ -236,7 +251,13 @@ node scripts/check_entrances.mjs                 # did each entrance stage and s
 node scripts/check_pinned_collage.mjs            # is `rooted`'s headline frozen and are its photographs drifting apart
 node scripts/check_header.mjs                    # the header that stays: both states at 320-1920, reduced motion, no-JS
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
+node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
+node scripts/capture_motion_filmstrips.mjs       # filmstrips with the measured transform under each frame
 ```
+
+**`measure_lcp_arms.mjs` is the one to reach for on any arrival question**, because `measure_page.mjs`
+runs each figure once and single runs on this page vary by 1.7s. It does not replace it: transfer, motion,
+reduced motion and overflow still come from `measure_page.mjs`.
 
 Reference material (already run; rerun only to refresh):
 

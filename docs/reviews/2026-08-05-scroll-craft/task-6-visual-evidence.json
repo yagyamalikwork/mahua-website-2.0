@@ -1,0 +1,1424 @@
+{
+  "capturedAt": "2026-08-05T04:56:55.679Z",
+  "url": "http://localhost:3210/",
+  "sections": {
+    "header": [
+      {
+        "width": 320,
+        "top": {
+          "position": "fixed",
+          "background": "rgba(0, 0, 0, 0)",
+          "barTop": 0,
+          "barHeight": 75,
+          "scrolled": false
+        },
+        "scrolled": {
+          "position": "fixed",
+          "background": "rgb(241, 233, 215)",
+          "barTop": 0,
+          "barHeight": 75,
+          "scrolled": true,
+          "wordmarkColour": "rgb(127, 92, 36)",
+          "firstUnderBar": "DIV.absolute inset-0 -z-10",
+          "overflow": false,
+          "scrollWidth": 320,
+          "clientWidth": 320
+        }
+      },
+      {
+        "width": 390,
+        "top": {
+          "position": "fixed",
+          "background": "rgba(0, 0, 0, 0)",
+          "barTop": 0,
+          "barHeight": 75,
+          "scrolled": false
+        },
+        "scrolled": {
+          "position": "fixed",
+          "background": "rgb(241, 233, 215)",
+          "barTop": 0,
+          "barHeight": 75,
+          "scrolled": true,
+          "wordmarkColour": "rgb(127, 92, 36)",
+          "firstUnderBar": "DIV.absolute inset-0 -z-10",
+          "overflow": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      {
+        "width": 768,
+        "top": {
+          "position": "fixed",
+          "background": "rgba(0, 0, 0, 0)",
+          "barTop": 0,
+          "barHeight": 107,
+          "scrolled": false
+        },
+        "scrolled": {
+          "position": "fixed",
+          "background": "rgb(241, 233, 215)",
+          "barTop": 0,
+          "barHeight": 107,
+          "scrolled": true,
+          "wordmarkColour": "rgb(127, 92, 36)",
+          "firstUnderBar": "P.mt-6 max-w-[52ch] font-[family-name:var(",
+          "overflow": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        }
+      },
+      {
+        "width": 1440,
+        "top": {
+          "position": "fixed",
+          "background": "rgba(0, 0, 0, 0)",
+          "barTop": 0,
+          "barHeight": 107,
+          "scrolled": false
+        },
+        "scrolled": {
+          "position": "fixed",
+          "background": "rgb(241, 233, 215)",
+          "barTop": 0,
+          "barHeight": 107,
+          "scrolled": true,
+          "wordmarkColour": "rgb(127, 92, 36)",
+          "firstUnderBar": "DIV.absolute inset-0 -z-10",
+          "overflow": false,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      },
+      {
+        "width": 1920,
+        "top": {
+          "position": "fixed",
+          "background": "rgba(0, 0, 0, 0)",
+          "barTop": 0,
+          "barHeight": 107,
+          "scrolled": false
+        },
+        "scrolled": {
+          "position": "fixed",
+          "background": "rgb(241, 233, 215)",
+          "barTop": 0,
+          "barHeight": 107,
+          "scrolled": true,
+          "wordmarkColour": "rgb(127, 92, 36)",
+          "firstUnderBar": "DIV.absolute inset-0 -z-10",
+          "overflow": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        }
+      }
+    ],
+    "wordmark": {
+      "darkestRenderedPixel": "#7F5C24",
+      "rgb": [
+        127,
+        92,
+        36
+      ],
+      "expected": "#7F5C24",
+      "matches": true
+    },
+    "entrances": [
+      {
+        "chapter": "forest",
+        "width": 1440,
+        "framesCaptured": 8,
+        "sampleCount": 91,
+        "distinctLineTranslates": 56,
+        "distinctBlockOpacities": 50,
+        "firstSample": {
+          "lineTranslate": "0px 115%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+          "blockOpacity": "0",
+          "blockState": "in",
+          "maskScale": "1",
+          "t": 0
+        },
+        "midSample": {
+          "lineTranslate": "0px 2.93368%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.999912, 0, 0, 0.999912, 0, 0.235326)",
+          "blockOpacity": "0.985292",
+          "blockState": "in",
+          "maskScale": "1 0.0535637",
+          "t": 593
+        },
+        "lastSample": {
+          "lineTranslate": "none",
+          "lineState": "in",
+          "blockTransform": "none",
+          "blockOpacity": "1",
+          "blockState": "in",
+          "maskScale": "1 0",
+          "t": 1616
+        },
+        "trace": [
+          {
+            "lineTranslate": "0px 115%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+            "blockOpacity": "0",
+            "blockState": "in",
+            "maskScale": "1",
+            "t": 0
+          },
+          {
+            "lineTranslate": "0px 90.2776%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.995423, 0, 0, 0.995423, 0, 12.205)",
+            "blockOpacity": "0.237186",
+            "blockState": "in",
+            "maskScale": "1 0.81901",
+            "t": 93
+          },
+          {
+            "lineTranslate": "0px 56.7338%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.997293, 0, 0, 0.997293, 0, 7.21912)",
+            "blockOpacity": "0.548805",
+            "blockState": "in",
+            "maskScale": "1 0.562122",
+            "t": 180
+          },
+          {
+            "lineTranslate": "0px 33.6625%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.9985, 0, 0, 0.9985, 0, 3.99971)",
+            "blockOpacity": "0.750018",
+            "blockState": "in",
+            "maskScale": "1 0.36891",
+            "t": 264
+          },
+          {
+            "lineTranslate": "0px 19.2998%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.9992, 0, 0, 0.9992, 0, 2.13273)",
+            "blockOpacity": "0.866704",
+            "blockState": "in",
+            "maskScale": "1 0.235154",
+            "t": 334
+          },
+          {
+            "lineTranslate": "0px 12.1152%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999529, 0, 0, 0.999529, 0, 1.25549)",
+            "blockOpacity": "0.921532",
+            "blockState": "in",
+            "maskScale": "1 0.161519",
+            "t": 409
+          },
+          {
+            "lineTranslate": "0px 7.44301%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999732, 0, 0, 0.999732, 0, 0.715535)",
+            "blockOpacity": "0.955279",
+            "blockState": "in",
+            "maskScale": "1 0.109577",
+            "t": 466
+          },
+          {
+            "lineTranslate": "0px 3.88174%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999876, 0, 0, 0.999876, 0, 0.330951)",
+            "blockOpacity": "0.979316",
+            "blockState": "in",
+            "maskScale": "1 0.0661423",
+            "t": 559
+          },
+          {
+            "lineTranslate": "0px 2.18829%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999939, 0, 0, 0.999939, 0, 0.163445)",
+            "blockOpacity": "0.989785",
+            "blockState": "in",
+            "maskScale": "1 0.0431509",
+            "t": 627
+          },
+          {
+            "lineTranslate": "0px 1.15221%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999973, 0, 0, 0.999973, 0, 0.071189)",
+            "blockOpacity": "0.995551",
+            "blockState": "in",
+            "maskScale": "1 0.027389",
+            "t": 692
+          },
+          {
+            "lineTranslate": "0px 0.445055%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999993, 0, 0, 0.999993, 0, 0.0183609)",
+            "blockOpacity": "0.998852",
+            "blockState": "in",
+            "maskScale": "1 0.0147112",
+            "t": 778
+          },
+          {
+            "lineTranslate": "0px 0.169731%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999999, 0, 0, 0.999999, 0, 0.00357632)",
+            "blockOpacity": "0.999776",
+            "blockState": "in",
+            "maskScale": "1 0.0084144",
+            "t": 844
+          },
+          {
+            "lineTranslate": "0px 0.0457357%",
+            "lineState": "in",
+            "blockTransform": "matrix(1, 0, 0, 1, 0, 0.000120032)",
+            "blockOpacity": "0.999992",
+            "blockState": "in",
+            "maskScale": "1 0.00444757",
+            "t": 911
+          },
+          {
+            "lineTranslate": "0px 0.00216342%",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.00168862",
+            "t": 990
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.000615758",
+            "t": 1060
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.000147113",
+            "t": 1123
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 1.07723e-05",
+            "t": 1186
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1250
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1317
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1384
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1450
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1517
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1582
+          }
+        ]
+      },
+      {
+        "chapter": "rooms",
+        "width": 1440,
+        "framesCaptured": 8,
+        "sampleCount": 87,
+        "distinctLineTranslates": 51,
+        "distinctBlockOpacities": 44,
+        "firstSample": {
+          "lineTranslate": "0px 115%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+          "blockOpacity": "0",
+          "blockState": "in",
+          "maskScale": "1",
+          "t": 0
+        },
+        "midSample": {
+          "lineTranslate": "0px 1.87792%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.99995, 0, 0, 0.99995, 0, 0.134668)",
+          "blockOpacity": "0.991583",
+          "blockState": "in",
+          "maskScale": "1 0.0386262",
+          "t": 615
+        },
+        "lastSample": {
+          "lineTranslate": "none",
+          "lineState": "in",
+          "blockTransform": "none",
+          "blockOpacity": "1",
+          "blockState": "in",
+          "maskScale": "1 0",
+          "t": 1615
+        },
+        "trace": [
+          {
+            "lineTranslate": "0px 115%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+            "blockOpacity": "0",
+            "blockState": "in",
+            "maskScale": "1",
+            "t": 0
+          },
+          {
+            "lineTranslate": "0px 90.2869%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.995423, 0, 0, 0.995423, 0, 12.2064)",
+            "blockOpacity": "0.237098",
+            "blockState": "in",
+            "maskScale": "1 0.819079",
+            "t": 79
+          },
+          {
+            "lineTranslate": "0px 56.7067%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.997294, 0, 0, 0.997294, 0, 7.21521)",
+            "blockOpacity": "0.549049",
+            "blockState": "in",
+            "maskScale": "1 0.561905",
+            "t": 164
+          },
+          {
+            "lineTranslate": "0px 30.2042%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.998673, 0, 0, 0.998673, 0, 3.53874)",
+            "blockOpacity": "0.778829",
+            "blockState": "in",
+            "maskScale": "1 0.337944",
+            "t": 261
+          },
+          {
+            "lineTranslate": "0px 17.2081%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999298, 0, 0, 0.999298, 0, 1.87261)",
+            "blockOpacity": "0.882962",
+            "blockState": "in",
+            "maskScale": "1 0.214315",
+            "t": 347
+          },
+          {
+            "lineTranslate": "0px 8.4301%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.99969, 0, 0, 0.99969, 0, 0.826948)",
+            "blockOpacity": "0.948316",
+            "blockState": "in",
+            "maskScale": "1 0.12092",
+            "t": 446
+          },
+          {
+            "lineTranslate": "0px 4.43865%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999854, 0, 0, 0.999854, 0, 0.388794)",
+            "blockOpacity": "0.9757",
+            "blockState": "in",
+            "maskScale": "1 0.073275",
+            "t": 527
+          },
+          {
+            "lineTranslate": "0px 2.53789%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999926, 0, 0, 0.999926, 0, 0.196725)",
+            "blockOpacity": "0.987705",
+            "blockState": "in",
+            "maskScale": "1 0.0481047",
+            "t": 598
+          },
+          {
+            "lineTranslate": "0px 0.967542%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999979, 0, 0, 0.999979, 0, 0.0562178)",
+            "blockOpacity": "0.996486",
+            "blockState": "in",
+            "maskScale": "1 0.0243151",
+            "t": 693
+          },
+          {
+            "lineTranslate": "0px 0.444599%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999993, 0, 0, 0.999993, 0, 0.0183321)",
+            "blockOpacity": "0.998854",
+            "blockState": "in",
+            "maskScale": "1 0.0147019",
+            "t": 763
+          },
+          {
+            "lineTranslate": "0px 0.169786%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999999, 0, 0, 0.999999, 0, 0.00357857)",
+            "blockOpacity": "0.999776",
+            "blockState": "in",
+            "maskScale": "1 0.00841589",
+            "t": 831
+          },
+          {
+            "lineTranslate": "0px 0.0184742%",
+            "lineState": "in",
+            "blockTransform": "matrix(1, 0, 0, 1, 0, 1.20792e-13)",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.00310697",
+            "t": 917
+          },
+          {
+            "lineTranslate": "0px 0.000627153%",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.00134509",
+            "t": 992
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.000453752",
+            "t": 1063
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 9.09428e-05",
+            "t": 1131
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 3.13409e-06",
+            "t": 1197
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1263
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1329
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1382
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1451
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1515
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1583
+          }
+        ]
+      },
+      {
+        "chapter": "guests",
+        "width": 1440,
+        "framesCaptured": 8,
+        "sampleCount": 76,
+        "distinctLineTranslates": 45,
+        "distinctBlockOpacities": 39,
+        "firstSample": {
+          "lineTranslate": "0px 115%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+          "blockOpacity": "0",
+          "blockState": "in",
+          "maskScale": "1",
+          "t": 0
+        },
+        "midSample": {
+          "lineTranslate": "0px 2.93333%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.999912, 0, 0, 0.999912, 0, 0.235291)",
+          "blockOpacity": "0.985294",
+          "blockState": "in",
+          "maskScale": "1 0.0535589",
+          "t": 691
+        },
+        "lastSample": {
+          "lineTranslate": "none",
+          "lineState": "in",
+          "blockTransform": "none",
+          "blockOpacity": "1",
+          "blockState": "in",
+          "maskScale": "1 0",
+          "t": 1606
+        },
+        "trace": [
+          {
+            "lineTranslate": "0px 115%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+            "blockOpacity": "0",
+            "blockState": "in",
+            "maskScale": "1",
+            "t": 0
+          },
+          {
+            "lineTranslate": "0px 106.417%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.994497, 0, 0, 0.994497, 0, 14.6757)",
+            "blockOpacity": "0.0827673",
+            "blockState": "in",
+            "maskScale": "1 0.93762",
+            "t": 165
+          },
+          {
+            "lineTranslate": "0px 56.7291%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.997293, 0, 0, 0.997293, 0, 7.21843)",
+            "blockOpacity": "0.548848",
+            "blockState": "in",
+            "maskScale": "1 0.562084",
+            "t": 273
+          },
+          {
+            "lineTranslate": "0px 30.1975%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.998673, 0, 0, 0.998673, 0, 3.53785)",
+            "blockOpacity": "0.778885",
+            "blockState": "in",
+            "maskScale": "1 0.337883",
+            "t": 373
+          },
+          {
+            "lineTranslate": "0px 15.3309%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999384, 0, 0, 0.999384, 0, 1.64229)",
+            "blockOpacity": "0.897357",
+            "blockState": "in",
+            "maskScale": "1 0.195224",
+            "t": 475
+          },
+          {
+            "lineTranslate": "0px 8.43422%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.99969, 0, 0, 0.99969, 0, 0.827416)",
+            "blockOpacity": "0.948286",
+            "blockState": "in",
+            "maskScale": "1 0.120967",
+            "t": 567
+          },
+          {
+            "lineTranslate": "0px 3.8813%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999876, 0, 0, 0.999876, 0, 0.330905)",
+            "blockOpacity": "0.979318",
+            "blockState": "in",
+            "maskScale": "1 0.0661365",
+            "t": 655
+          },
+          {
+            "lineTranslate": "0px 1.60329%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999959, 0, 0, 0.999959, 0, 0.109928)",
+            "blockOpacity": "0.99313",
+            "blockState": "in",
+            "maskScale": "1 0.0344999",
+            "t": 768
+          },
+          {
+            "lineTranslate": "0px 0.547457%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999991, 0, 0, 0.999991, 0, 0.0250657)",
+            "blockOpacity": "0.998433",
+            "blockState": "in",
+            "maskScale": "1 0.0167467",
+            "t": 855
+          },
+          {
+            "lineTranslate": "0px 0.169971%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999999, 0, 0, 0.999999, 0, 0.00358601)",
+            "blockOpacity": "0.999776",
+            "blockState": "in",
+            "maskScale": "1 0.00842084",
+            "t": 953
+          },
+          {
+            "lineTranslate": "0px 0.0299937%",
+            "lineState": "in",
+            "blockTransform": "matrix(1, 0, 0, 1, 0, 1.47758e-05)",
+            "blockOpacity": "0.999999",
+            "blockState": "in",
+            "maskScale": "1 0.00373324",
+            "t": 1022
+          },
+          {
+            "lineTranslate": "0px 0.00216157%",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.0016883",
+            "t": 1101
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.00061453",
+            "t": 1170
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.000147058",
+            "t": 1234
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 1.07631e-05",
+            "t": 1301
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1369
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1434
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1498
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1554
+          }
+        ]
+      },
+      {
+        "chapter": "forest",
+        "width": 390,
+        "framesCaptured": 8,
+        "sampleCount": 84,
+        "distinctLineTranslates": 62,
+        "distinctBlockOpacities": 55,
+        "firstSample": {
+          "lineTranslate": "0px 115%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+          "blockOpacity": "0",
+          "blockState": "in",
+          "maskScale": "1",
+          "t": 0
+        },
+        "midSample": {
+          "lineTranslate": "0px 6.56691%",
+          "lineState": "in",
+          "blockTransform": "matrix(0.999768, 0, 0, 0.999768, 0, 0.618133)",
+          "blockOpacity": "0.961367",
+          "blockState": "in",
+          "maskScale": "1 0.0992992",
+          "t": 465
+        },
+        "lastSample": {
+          "lineTranslate": "none",
+          "lineState": "in",
+          "blockTransform": "none",
+          "blockOpacity": "1",
+          "blockState": "in",
+          "maskScale": "1 0",
+          "t": 1382
+        },
+        "trace": [
+          {
+            "lineTranslate": "0px 115%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.994, 0, 0, 0.994, 0, 16)",
+            "blockOpacity": "0",
+            "blockState": "in",
+            "maskScale": "1",
+            "t": 0
+          },
+          {
+            "lineTranslate": "0px 90.2925%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.995422, 0, 0, 0.995422, 0, 12.2073)",
+            "blockOpacity": "0.237045",
+            "blockState": "in",
+            "maskScale": "1 0.81912",
+            "t": 64
+          },
+          {
+            "lineTranslate": "0px 62.5837%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.996975, 0, 0, 0.996975, 0, 8.06785)",
+            "blockOpacity": "0.49576",
+            "blockState": "in",
+            "maskScale": "1 0.608426",
+            "t": 132
+          },
+          {
+            "lineTranslate": "0px 41.686%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.99809, 0, 0, 0.99809, 0, 5.09294)",
+            "blockOpacity": "0.681692",
+            "blockState": "in",
+            "maskScale": "1 0.438436",
+            "t": 198
+          },
+          {
+            "lineTranslate": "0px 27.0309%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.998829, 0, 0, 0.998829, 0, 3.12173)",
+            "blockOpacity": "0.804892",
+            "blockState": "in",
+            "maskScale": "1 0.308905",
+            "t": 265
+          },
+          {
+            "lineTranslate": "0px 17.2095%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999298, 0, 0, 0.999298, 0, 1.87279)",
+            "blockOpacity": "0.882951",
+            "blockState": "in",
+            "maskScale": "1 0.21433",
+            "t": 331
+          },
+          {
+            "lineTranslate": "0px 10.7509%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999589, 0, 0, 0.999589, 0, 1.09477)",
+            "blockOpacity": "0.931577",
+            "blockState": "in",
+            "maskScale": "1 0.14677",
+            "t": 397
+          },
+          {
+            "lineTranslate": "0px 6.56691%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999768, 0, 0, 0.999768, 0, 0.618133)",
+            "blockOpacity": "0.961367",
+            "blockState": "in",
+            "maskScale": "1 0.0992992",
+            "t": 465
+          },
+          {
+            "lineTranslate": "0px 3.87958%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999876, 0, 0, 0.999876, 0, 0.330729)",
+            "blockOpacity": "0.979329",
+            "blockState": "in",
+            "maskScale": "1 0.0661143",
+            "t": 532
+          },
+          {
+            "lineTranslate": "0px 2.18892%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999939, 0, 0, 0.999939, 0, 0.163505)",
+            "blockOpacity": "0.989781",
+            "blockState": "in",
+            "maskScale": "1 0.04316",
+            "t": 598
+          },
+          {
+            "lineTranslate": "0px 1.15258%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999973, 0, 0, 0.999973, 0, 0.0712203)",
+            "blockOpacity": "0.995549",
+            "blockState": "in",
+            "maskScale": "1 0.0273952",
+            "t": 665
+          },
+          {
+            "lineTranslate": "0px 0.548431%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999991, 0, 0, 0.999991, 0, 0.0251316)",
+            "blockOpacity": "0.998429",
+            "blockState": "in",
+            "maskScale": "1 0.0167656",
+            "t": 732
+          },
+          {
+            "lineTranslate": "0px 0.221372%",
+            "lineState": "in",
+            "blockTransform": "matrix(0.999998, 0, 0, 0.999998, 0, 0.00583328)",
+            "blockOpacity": "0.999635",
+            "blockState": "in",
+            "maskScale": "1 0.0097416",
+            "t": 797
+          },
+          {
+            "lineTranslate": "0px 0.066732%",
+            "lineState": "in",
+            "blockTransform": "matrix(1, 0, 0, 1, 0, 0.000416647)",
+            "blockOpacity": "0.999974",
+            "blockState": "in",
+            "maskScale": "1 0.00526699",
+            "t": 865
+          },
+          {
+            "lineTranslate": "0px 0.0104914%",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.00256504",
+            "t": 931
+          },
+          {
+            "lineTranslate": "0px 7.78873e-05%",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.00105686",
+            "t": 998
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0.000324455",
+            "t": 1065
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 5.18471e-05",
+            "t": 1131
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 3.90595e-07",
+            "t": 1197
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1264
+          },
+          {
+            "lineTranslate": "none",
+            "lineState": "in",
+            "blockTransform": "none",
+            "blockOpacity": "1",
+            "blockState": "in",
+            "maskScale": "1 0",
+            "t": 1331
+          }
+        ]
+      }
+    ],
+    "stagger": [
+      {
+        "chapter": "lodges",
+        "text": "Two forests, known deeply",
+        "delays": [
+          "0s",
+          "0s",
+          "0s",
+          "0.09s"
+        ]
+      },
+      {
+        "chapter": "why-you-came",
+        "text": "The forest at its most alive, and you at your most rested.",
+        "delays": [
+          "0s",
+          "0s",
+          "0s",
+          "0s",
+          "0s",
+          "0s",
+          "0.09s",
+          "0.09s",
+          "0.09s",
+          "0.09s",
+          "0.09s",
+          "0.18s"
+        ]
+      },
+      {
+        "chapter": "rooted",
+        "text": "Rooted like the mahua",
+        "delays": [
+          "0s",
+          "0s",
+          "0s",
+          "0.09s"
+        ]
+      },
+      {
+        "chapter": "forest",
+        "text": "Three hundred birds, and the cats you came for",
+        "delays": [
+          "0s",
+          "0s",
+          "0.09s",
+          "0.09s",
+          "0.09s",
+          "0.09s",
+          "0.18s",
+          "0.18s",
+          "0.18s"
+        ]
+      },
+      {
+        "chapter": "field-days",
+        "text": "The day the forest keeps",
+        "delays": [
+          "0s",
+          "0s",
+          "0s",
+          "0.09s",
+          "0.09s"
+        ]
+      },
+      {
+        "chapter": "rooms",
+        "text": "Rooms with the forest left in",
+        "delays": [
+          "0s",
+          "0s",
+          "0s",
+          "0.09s",
+          "0.09s",
+          "0.09s"
+        ]
+      }
+    ],
+    "emblem": {
+      "samples": 293,
+      "distinctTransformsWhileTurning": 131,
+      "distinctTransformsAfter3s": 1,
+      "finalTransform": "matrix(1, 0, 0, 1, 0, 0)",
+      "iterationCount": "1",
+      "angleRange": [
+        -174,
+        180
+      ],
+      "trace": [
+        {
+          "t": 161,
+          "transform": "matrix(-1, 0, 0, -1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 325,
+          "transform": "matrix(-0.842323, -0.538973, 0.538973, -0.842323, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 453,
+          "transform": "matrix(-0.334171, -0.942512, 0.942512, -0.334171, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 586,
+          "transform": "matrix(0.192134, -0.981369, 0.981369, 0.192134, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 719,
+          "transform": "matrix(0.564665, -0.82532, 0.82532, 0.564665, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 853,
+          "transform": "matrix(0.78172, -0.623629, 0.623629, 0.78172, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 986,
+          "transform": "matrix(0.895495, -0.445071, 0.445071, 0.895495, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1120,
+          "transform": "matrix(0.951757, -0.306852, 0.306852, 0.951757, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1252,
+          "transform": "matrix(0.978504, -0.206227, 0.206227, 0.978504, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1385,
+          "transform": "matrix(0.990826, -0.135141, 0.135141, 0.990826, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1519,
+          "transform": "matrix(0.996298, -0.0859646, 0.0859646, 0.996298, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1652,
+          "transform": "matrix(0.998615, -0.0526099, 0.0526099, 0.998615, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1786,
+          "transform": "matrix(0.999532, -0.030589, 0.030589, 0.999532, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 1919,
+          "transform": "matrix(0.999863, -0.0165395, 0.0165395, 0.999863, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2052,
+          "transform": "matrix(0.999968, -0.0080497, 0.0080497, 0.999968, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2187,
+          "transform": "matrix(0.999994, -0.00331824, 0.00331824, 0.999994, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2319,
+          "transform": "matrix(0.999999, -0.00101953, 0.00101953, 0.999999, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2452,
+          "transform": "matrix(1, -0.000162343, 0.000162343, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2585,
+          "transform": "matrix(1, -1.21838e-06, 1.21838e-06, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2719,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2852,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 2985,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3119,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3252,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3385,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3519,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3652,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3785,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 3919,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        },
+        {
+          "t": 4052,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animationName": "emblem-turn",
+          "iterations": "1"
+        }
+      ]
+    },
+    "stillStates": {
+      "reduced-390": {
+        "sections": 12,
+        "words": 1104,
+        "stagedEnter": 0,
+        "stagedLines": 0,
+        "stagedImages": 0,
+        "invisibleElements": 0,
+        "masksStillCoveringPhoto": 0,
+        "displacedWords": 0,
+        "pinnedScene": false,
+        "docHeight": 20453,
+        "headerLegible": "fixed"
+      },
+      "reduced-1440": {
+        "sections": 12,
+        "words": 1104,
+        "stagedEnter": 0,
+        "stagedLines": 0,
+        "stagedImages": 0,
+        "invisibleElements": 0,
+        "masksStillCoveringPhoto": 0,
+        "displacedWords": 0,
+        "pinnedScene": false,
+        "docHeight": 14694,
+        "headerLegible": "fixed"
+      },
+      "nojs-390": {
+        "sections": 12,
+        "words": 1104,
+        "stagedEnter": 0,
+        "stagedLines": 0,
+        "stagedImages": 0,
+        "invisibleElements": 0,
+        "masksStillCoveringPhoto": 0,
+        "displacedWords": 0,
+        "pinnedScene": false,
+        "docHeight": 20453,
+        "headerLegible": "absolute"
+      },
+      "nojs-1440": {
+        "sections": 12,
+        "words": 1104,
+        "stagedEnter": 0,
+        "stagedLines": 0,
+        "stagedImages": 0,
+        "invisibleElements": 0,
+        "masksStillCoveringPhoto": 0,
+        "displacedWords": 0,
+        "pinnedScene": false,
+        "docHeight": 14694,
+        "headerLegible": "absolute"
+      },
+      "control": {
+        "pendingImages": 29,
+        "masksStillCoveringPhoto": 29,
+        "note": "Motion on, script on, page untouched. Below-fold photographs are staged, so masks ARE covering. Both numbers must be > 0 or the zeroes above mean nothing.",
+        "metricIsAlive": true
+      }
+    },
+    "overflow": [
+      {
+        "width": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "at": 0,
+        "horizontalScroll": false
+      },
+      {
+        "width": 390,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "at": 0,
+        "horizontalScroll": false
+      },
+      {
+        "width": 768,
+        "scrollWidth": 768,
+        "clientWidth": 768,
+        "at": 0,
+        "horizontalScroll": false
+      },
+      {
+        "width": 1440,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "at": 0,
+        "horizontalScroll": false
+      },
+      {
+        "width": 1920,
+        "scrollWidth": 1920,
+        "clientWidth": 1920,
+        "at": 0,
+        "horizontalScroll": false
+      }
+    ],
+    "collage": {
+      "band": {
+        "top": 3326,
+        "height": 1800
+      },
+      "frames": [
+        "scrollY 3326  photograph tops 148 / 128 / 524",
+        "scrollY 3664  photograph tops 97 / 92 / 504",
+        "scrollY 4001  photograph tops 47 / 57 / 484",
+        "scrollY 4339  photograph tops -100 / -80 / 357",
+        "scrollY 4676  photograph tops -437 / -417 / 20"
+      ]
+    }
+  }
+}
