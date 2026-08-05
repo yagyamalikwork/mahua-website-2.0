@@ -124,10 +124,17 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    Measure with `node scripts/measure_density.mjs` against a production build; the per-chapter table is
    written to `docs/reviews/2026-08-03-chapters/density.json`. Do not lower the rule again to make a
    chapter pass.
-9. **Alternate the rhythm.** Never two consecutive text-only screens — a full-bleed photograph or an
+9. **A pin must earn its scroll, and its drift budget is spent.** `rooted` is the only pinned chapter and
+   holds for one screen. The leading photograph drifts at exactly `PARALLAX_MAX`, so **a further shortening
+   must drop the pin, not shrink it** — less scroll would mean less drift, and the cap cannot rise.
+   Measured 5 Aug: the pin costs 793px and 0.10 images per screen, and buys the page's only moment of
+   stillness in 17 screens. At three screens it was indefensible; at two it is roughly break-even. If it is
+   ever asked to do more, the lever is **more photographs in `rooted`**, not a longer hold — the effect the
+   client asked for needs images entering and leaving, and three cannot produce that at any rate.
+10. **Alternate the rhythm.** Never two consecutive text-only screens — a full-bleed photograph or an
    image-led block must sit between them. Enforced mechanically by a test on `content/chapters.ts`, not by
    good intentions.
-10. **Only images ≥ 1400px wide may go full-bleed.** Narrower images tiled edge-to-edge is exactly the
+11. **Only images ≥ 1400px wide may go full-bleed.** Narrower images tiled edge-to-edge is exactly the
     "resemblance to a template, not the reference" complaint. `lib/media.ts` marks each entry
     `fullBleedSafe`; below 1400px it must be `false`.
 
