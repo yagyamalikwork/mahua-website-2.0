@@ -37,12 +37,26 @@ describe("the extracted leaf", () => {
     expect(span / vw).toBeGreaterThan(0.7);
   });
 
-  it("carries a body and at least one vein", () => {
-    // A leaf with no veins is a blob. If the vein selection ever collapses, this
-    // is what says so — the render still looks like *something*, which is why a
-    // count is worth asserting.
-    expect(LEAF_PATHS.filter((p) => !p.vein).length).toBeGreaterThanOrEqual(1);
-    expect(LEAF_PATHS.filter((p) => p.vein).length).toBeGreaterThanOrEqual(1);
+  it("has exactly one blade, exactly one stem, and some veins", () => {
+    // One blade because two would paint over each other; one stem because the
+    // stem is the thing the cursor hangs the leaf by, and a second would be a
+    // second anchor point. Veins are a bonus at 24px but they are what makes it
+    // read at 2x and 3x, which is most laptops.
+    expect(LEAF_PATHS.filter((p) => p.role === "blade")).toHaveLength(1);
+    expect(LEAF_PATHS.filter((p) => p.role === "stem")).toHaveLength(1);
+    expect(LEAF_PATHS.filter((p) => p.role === "vein").length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("starts its stem in the corner the pointer sits in", () => {
+    // `LeafCursor` puts the element's own origin at the pointer and does no
+    // offset arithmetic, so the stem's first point *is* the anchor. A leaf drawn
+    // centred in its box would hang off the pointer by half its own width, and
+    // every follow-accuracy check in the browser rig would be measuring the wrong
+    // thing while passing.
+    const stem = LEAF_PATHS.find((p) => p.role === "stem")!;
+    const [x, y] = stem.d.slice(1).split(/[ ,]/).slice(0, 2).map(Number);
+    expect(x).toBeLessThan(vx + vw * 0.15);
+    expect(y).toBeLessThan(vy + vh * 0.15);
   });
 
   it("holds real path data, not a placeholder", () => {

@@ -46,8 +46,15 @@
 export type LeafPath = {
   /** The `d` attribute. */
   d: string;
-  /** Veins and the stem are stroked over the body, which is filled. */
-  vein: boolean;
+  /**
+   * What the path is, because each is painted differently.
+   *
+   * `blade` is filled; `stem` and `vein` are stroked. They are three roles rather
+   * than a `vein: boolean` because the stem lies *outside* the blade and the veins
+   * lie *on* it, so they cannot take the same colour: veins have to contrast with
+   * the blade they sit on, and the stem has to contrast with the page.
+   */
+  role: "blade" | "stem" | "vein";
 };
 
 export const LEAF_VIEWBOX = "0 0 100 100";
@@ -56,7 +63,7 @@ export const LEAF_PATHS: readonly LeafPath[] = [
   // The petiole. Drawn first so the filled blade lands on top of where the two
   // meet and the join needs no mitring. Short: a long stem pulls the blade away
   // from the pointer and the leaf stops reading as attached to it.
-  { d: "M5 5 C 12 11, 22 21, 31 30", vein: true },
+  { d: "M5 5 C 12 11, 22 21, 31 30", role: "stem" },
   // The blade: two cubics either side of the stem-to-tip axis, bulging equally.
   //
   // Half-width is 15 units against an 88-unit axis — a width-to-length ratio of
@@ -64,9 +71,9 @@ export const LEAF_PATHS: readonly LeafPath[] = [
   // attempt was half that and read as a feather. Control points sit at a third and
   // two thirds along the axis, offset by 4/3 of the half-width, because a cubic
   // only reaches three quarters of the way to its controls.
-  { d: "M31 30 C 37 65, 57 86, 92 93 C 86 58, 66 37, 31 30 Z", vein: false },
+  { d: "M31 30 C 37 65, 57 86, 92 93 C 86 58, 66 37, 31 30 Z", role: "blade" },
   // The midrib, on the same axis, stopping a shade inside the tip.
-  { d: "M34 34 C 48 50, 68 72, 86 88", vein: true },
+  { d: "M34 34 C 48 50, 68 72, 86 88", role: "vein" },
   // Three side veins on the lower flank, and only that flank: at cursor size a
   // full pinnate network fills in to a smudge, and an asymmetric leaf reads as one
   // caught at an angle rather than as a mistake.
@@ -74,7 +81,7 @@ export const LEAF_PATHS: readonly LeafPath[] = [
   // Each ends at ~80% of the blade's half-width at that point, angled toward the
   // tip. They ran past the outline entirely in the first version — a vein outside
   // its own leaf, which no test would have caught and one glance did.
-  { d: "M48 48 Q 44 51, 44 56", vein: true },
-  { d: "M60 60 Q 56 65, 54 71", vein: true },
-  { d: "M72 73 Q 69 78, 67 82", vein: true },
+  { d: "M48 48 Q 44 51, 44 56", role: "vein" },
+  { d: "M60 60 Q 56 65, 54 71", role: "vein" },
+  { d: "M72 73 Q 69 78, 67 82", role: "vein" },
 ];

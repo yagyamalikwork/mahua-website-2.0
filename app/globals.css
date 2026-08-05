@@ -266,6 +266,30 @@ button:focus-visible .rule-in::after {
   transform: scaleX(1);
 }
 
+/*
+ * The leaf that follows the pointer — `components/signature/leaf-cursor/`.
+ *
+ * Only its *colour* lives here. The travel is written frame by frame in the
+ * component, because it answers the pointer rather than the page, and a CSS
+ * transition on the same transform would fight the easing and smear the lag.
+ *
+ * Here so the two values stay in `lib/palette.ts` with every other colour on the
+ * page, and so the leaf warming to gold and the rule sliding in underneath it are
+ * one response written in one language. Gold carries no text here, which is
+ * exactly what non-negotiable #7 reserves it for.
+ *
+ * `data-over` is written by the component from a `pointerover` test, not by
+ * `:hover` — the leaf has `pointer-events: none`, so it is never itself hovered
+ * and could not know any other way.
+ */
+[data-leaf-cursor] {
+  color: var(--text);
+}
+
+[data-leaf-cursor][data-over="true"] {
+  color: var(--accent);
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);

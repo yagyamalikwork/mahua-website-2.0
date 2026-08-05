@@ -98,6 +98,37 @@ export const EASE = {
 export const PARALLAX_MAX = 0.15;
 
 /**
+ * The leaf that follows the pointer.
+ *
+ * `follow` and `swing` are **per-frame easing factors, not seconds**: each frame
+ * the leaf closes that fraction of the distance (or angle) still between it and
+ * its target. That is what produces a lag which is large while the hand is moving
+ * and gone the instant it stops — a fixed duration would keep the leaf drifting
+ * after you had already arrived, which is the behaviour that makes a trailing
+ * cursor feel broken rather than weightless.
+ *
+ * `maxLagPx` is a correctness cap, not a taste one. The leaf *replaces* the
+ * arrow, so how far it may trail is how far the only visible cursor may sit from
+ * the point that would actually be clicked.
+ *
+ * Law 4 does not apply here for the same reason it does not apply to the sliding
+ * rule: this is an answer to the visitor's own hand, not something arriving
+ * unbidden. It is meant to be noticed. It is still bound by law 1 — `swing`
+ * eases toward the target and never past it, so the leaf cannot wag.
+ */
+export const CURSOR = {
+  /** CSS pixels, fixed. A cursor has one size at every zoom and every breakpoint. */
+  sizePx: 24,
+  follow: 0.22,
+  swing: 0.12,
+  maxLagPx: 12,
+  /** How much the leaf lifts over something interactive. */
+  hoverScale: 1.15,
+  /** Seconds. Matches `DURATION.ruleIn`, so the lift and the rule beneath it read as one response. */
+  hoverDuration: 0.4,
+} as const;
+
+/**
  * The entrance vocabulary, taken from the reference site rather than invented.
  *
  * Measured on thesujanlife.com on 5 Aug 2026: live elements sat at translateY

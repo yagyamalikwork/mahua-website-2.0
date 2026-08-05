@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Grain } from "@/components/motion/Grain";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { DURATION, ENTER, IMAGE_FROM } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
@@ -72,6 +73,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${display.variable} ${label.variable} ${body.variable}`}>
         <SmoothScroll>
           <Grain />
+          {/*
+           * The leaf cursor, and this line is the whole of it. Delete it and the
+           * feature is gone, bytes included — see the note in
+           * `components/signature/leaf-cursor/index.tsx`, and the test beside it
+           * that fails if anything else ever imports from that directory.
+           */}
+          <LeafCursorMount />
           {children}
         </SmoothScroll>
       </body>
