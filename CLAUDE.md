@@ -8,8 +8,11 @@ hand-drawn field-guide idiom.
 > **Read these three, in order, before doing any work:**
 > 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
 >    said, and what is still owed. **Start here.**
-> 2. [`docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md)
->    — the current plan. Overrides the original spec where they conflict.
+> 2. [`docs/superpowers/plans/2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md)
+>    — the most recent plan, complete. Its predecessor,
+>    [`2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md),
+>    is also complete and still describes the page's structure. Both override the original spec where they
+>    conflict with it.
 > 3. [`docs/reference-sujan-layout.md`](docs/reference-sujan-layout.md) — the layout language the client
 >    asked us to follow, analysed from the live reference site.
 >
@@ -21,12 +24,12 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | Plan 3, the chapters rebuild, on `feat/chapters-rebuild`. **Tasks 1–7 done.** Day-arc retired, live copy harvested, image library 14 → 34, chapter sequence defined, scroll primitives built and measured, copy written, **and the page built and composed**. Task 7 reviewed and **fix round 1 landed** — responsive images, a real chapter menu, two new palette guards. Task 8 is next. |
-| **Working mode** | Solo through Tasks 4–6; Task 7 got the full implementer/reviewer treatment and one fix round. Agreed with the client 3 Aug. |
+| **Phase** | **Plan 4, the scroll craft, complete** — on `feat/chapters-rebuild`, reviewed whole-branch and cleared to show the client. Plan 3 finished before it. A fixed header that gains cream and the brand's brown, CSS entrances measured off the reference, a pinned collage on *02 · Rooted like the mahua*, the emblem turning once, and **GSAP moved out of the critical path**. Plan 5 is next: the leaf cursor and the ink tiger. |
+| **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/`. Twelve chapters, 32 photographs, 16 screens at 1440×900. |
-| **Tests** | 69, all green. `npm test` must stay green before any commit claiming completion. |
-| **Evidence** | `docs/reviews/2026-08-04-task-7/` — every chapter screenshotted at 390/768/1440/1920, plus measured contrast, transfer and motion figures. **Regenerate any of it** with `scripts/measure_page.mjs`, `scripts/check_contrast_over_photos.mjs` and `scripts/check_image_resolution.mjs` against a running production build. |
+| **See it** | `npm run dev` → `/`. Twelve chapters, 34 photographs, ~17 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it. |
+| **Tests** | **219**, all green. `npm test` must stay green before any commit claiming completion. |
+| **Evidence** | `docs/reviews/2026-08-05-scroll-craft/` (Plan 4) and `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
 

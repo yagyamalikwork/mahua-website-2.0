@@ -1,76 +1,84 @@
-# Project state — 4 August 2026
+# Project state — 5 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
 ## Where we are
 
-**Branch `feat/chapters-rebuild`.** Executing
-[`docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`](superpowers/plans/2026-08-03-rebuild-chapters-layout.md)
-— the rebuild after the client rejected the previous build.
+**Branch `feat/chapters-rebuild`.** **Plan 3 and Plan 4 are both complete**, each reviewed whole-branch and
+cleared. **Plan 5 is next: the leaf cursor and the ink tiger**, moved out of Plan 4 at the client's choice on
+5 Aug.
 
-| Task | State |
+| Plan | State |
 |---|---|
-| 1 · Retire the day-arc | ✅ 996 lines removed |
-| 2 · Harvest the live site's copy | ✅ `reference/site-copy.md` |
-| 3 · Expand the image library | ✅ 14 → 35 images |
-| 4 · The chapter sequence | ✅ 12 chapters, 32 distinct images |
-| 5 · Scroll choreography | ✅ measured in a browser, see `docs/reviews/2026-08-04-motion/` |
-| 6 · The copy | ✅ see `docs/copy-provenance.md` |
-| 7 · Build the sections | ✅ built, reviewed, **fix round 1 landed** — see below |
-| 8 · Verify against the complaints | ⬜ **next** |
+| 3 · [The chapters rebuild](superpowers/plans/2026-08-03-rebuild-chapters-layout.md) | ✅ eight tasks. Day-arc retired, copy harvested, library 14 → 34, twelve chapters, motion primitives, copy, the page, and the verification pass |
+| 4 · [The scroll craft](superpowers/plans/2026-08-05-scroll-craft.md) | ✅ seven tasks, five fix rounds. Fixed header, CSS entrances, pinned collage, emblem turn, GSAP out of the critical path |
+| 5 · The signature characters | ⬜ **next** — leaf cursor, ink tiger |
 
-69 tests. **`/` is the real page**: twelve chapters, eight section components, 32 photographs.
+**219 tests.** `/` is twelve chapters and 34 photographs over ~17 screens at 1440×900.
 
-**Task 7 (4 Aug).** Eight components under `components/sections/`, one per `ChapterKind`; `app/page.tsx` maps
-`CHAPTERS` and dispatches on `kind` through an exhaustive switch, so adding a kind without a component is a
-compile error. Full record in `.superpowers/sdd/2026-08-03-rebuild-chapters-layout/task-7-report.md`.
-Reviewed independently: spec ✅, quality approved, one Important finding and four Minor.
+## Two decisions sitting with the client
 
-**Fix round 1 (4 Aug)** cleared all five:
+Neither blocks Plan 5. Both were measured rather than argued, and both are recorded here because they exist
+nowhere else a future session will look.
 
-- **Responsive images, and they were the Important one.** The pipeline had always encoded several widths
-  per photograph, but the manifest recorded only the largest, so every `<img>` on the page pointed at it —
-  a 390px phone downloaded the 1440-wide hero. On Slow 4G (1.6 Mbps / 150 ms RTT / 4x CPU) that hero
-  arrived at **4,954 ms** against CLAUDE.md #6's 2.5s, and **Chrome hid it**: LCP resolved to a paragraph
-  at 1,536 ms, so both the budget check and a Lighthouse run would have passed. The manifest now carries
-  every tier, `ui/Photo.tsx` emits a real `srcset`, and every call site passes a `sizes` describing its own
-  layout. Hero **4,954 → 940 ms**. Whole-page transfer **3,386 → 799 KB at 390** (now inside the 1.5 MB
-  budget on mobile) and **→ 1,966 KB at 1440**.
-- The dead "MENU" button now opens `components/ui/ChapterMenu.tsx` — the seven numbered chapters, read from
-  `content/chapters.ts` so it cannot fall out of step with the page.
-- `dim` on `paperDeep` and the pill's `overlay`-on-`gold` label are now guarded by `lib/palette.test.ts`.
-  Both were live and unchecked.
+**1. The hero photograph misses its 2,500 ms budget and no available lever closes the gap.** It lands at
+**3,419 ms** on Slow 4G. Task 6 measured every lever by rebuilding and A/B-ing rather than reasoning:
 
-**The measurement rigs are in `scripts/` now, not in a scratchpad.** `measure_page.mjs` (transfer, hero
-`responseEnd`, motion, reduced motion, horizontal overflow), `check_contrast_over_photos.mjs` (worst-pixel
-contrast for every run of type laid over a photograph) and `check_image_resolution.mjs` (is any photograph
-served below its own box). This is a direct fix: the committed `verification.json` had drifted from the
-report because the rig that wrote it no longer existed. Every number in `docs/reviews/2026-08-04-task-7/`
-can now be re-derived with one command. The four `contrast-{390,768,1440,1920}.json` and `measurements.json`
-files are the original build's record and predate the rigs; `contrast-over-photos.json` supersedes the four
-and reproduces them.
+| Lever | Worth |
+|---|---|
+| Deferring GSAP (**spent by Plan 4**) | 213 ms on the hero, **0 ms on LCP** |
+| Subsetting the fonts (unspent) | ~215 ms |
+| Dropping the fonts' `rel=preload` (uncosted until now) | 172 ms |
 
-**The motion vocabulary (Task 5).** `ImageReveal` (a mask wipes up off a photograph while it settles from
-1.08 scale), `SplitLines` (headline lines rise from behind a mask, staggered per *visual* line, measured
-after layout) and `StickyScene` (plain CSS `position: sticky`, clamped to three screens). All three are
-**fail-safe by construction**: the server markup is the at-rest state, and script only ever moves things
-out of view in order to bring them back — so no JavaScript, a thrown error, or reduced motion all leave the
-page readable. Captured and measured in Chromium; see the review folder, which also records the one real
-defect found (a flicker on headlines already on screen at load) and two false alarms worth not repeating.
+**Each lever is worth about 200 ms and the gap is about 1,400 ms.** The hero is 192 KB queued behind roughly
+460 KB on a 200 KB/s link — it is bandwidth-bound. Closing it needs **a smaller hero or a smaller first
+screen**, which is a design decision, not an optimisation. Note the client chose the sharp hero deliberately
+on 5 Aug, knowing it cost time, because at the smaller tier it shipped visibly blurred.
 
-**The spine (Task 4).** `content/chapters.ts` holds twelve chapters carrying **32 of the 34 curated
-photographs**, none repeated, all four guideline categories present. Two are held in reserve
-(`bonfire-dinner`, `pool-daylight-forest`). Two editorial calls worth knowing:
-the hero is the **lantern-lit arrival**, not a tiger — every wildlife lodge in central India opens on a
-tiger and almost none can open on that light, so the tiger is spent at full viewport two chapters later;
-and **05 · The Rooms** is new, because the rejected build had no rooms chapter at all on a site selling
-rooms. There is no village chapter: the library has one potter photograph and nothing else, so Pachdhar
-folds into *02 · Rooted like the mahua* rather than being faked. That gap belongs on the shot list.
+**2. The pinned collage half-delivers, and the lever is photographs, not motion.** The client asked for the
+reference's "memory album drifting by". What ships is a headline held still — 0px over 840px of scroll —
+while three photographs drift 126/89/50px. The review's judgement: *"Nothing enters and nothing leaves. The
+album never turns a page."* It is structural: three photographs cannot produce that effect at any rate inside
+`PARALLAX_MAX`. The client already shortened the pin once to stop it costing image density. **If it is ever
+asked to do more, the lever is more photographs in `rooted`** — and the library has exactly one image spare.
 
-**Agreed working mode (Option C, 3 Aug):** proceed solo through Tasks 4–6, then **stop before Task 7** so the
-page build — where design judgement matters most — gets the full implementer/reviewer treatment. Usage
-limits have renewed, so subagents are available.
+## Do not read Chrome's LCP as the hero's arrival
+
+Confirmed across **35 runs** in Task 6: LCP resolved to **text every single time** — a paragraph on mobile,
+the `<h1>` on desktop — and never once to a photograph. Mobile LCP reads 1,488 ms while the hero itself
+lands at 3,419 ms. `scripts/measure_page.mjs` reports the hero's own `responseEnd`; that is the number that
+means anything here. **Medians of five** — an unchanged build has produced LCP anywhere from 2,462 to
+4,140 ms.
+
+Unexamined anomaly worth a look one day: the **desktop** hero (4,107 ms) is *slower* than the mobile one.
+
+## What Plan 4 built, and what it cost
+
+| | Before | After |
+|---|---|---|
+| First-load JS | 750.6 KB raw / 232.2 gz | **642.7 / 190.7** (−14.4% / −17.9%) |
+| Initial transfer 390 / 1440 | 613 / 730 KB | **574 / 698 KB** |
+| Page mean empty · images per screen | 39.0% · 2.08 | 39.3% · 1.98 |
+
+GSAP is no longer in the critical path — it loads in two chunks only once the visitor scrolls, and
+`npm run verify:budget` fails on the **bytes** if that ever stops being true. Simple entrances are CSS and
+one `IntersectionObserver`; GSAP is kept for scrub-linked work, which is what the reference uses it for too.
+
+**Demo above 1500px.** The pin needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic
+scrollbar will not fire the signature effect at all.
+
+## The measurement rigs, and why they can be trusted
+
+Ten rigs in `scripts/`, every one of them asserting. They earned that in Plan 4: the parallax check was found
+to be **blind to 11 of 12 elements** — its two fixed sample offsets fell inside exactly one element's range —
+and the proof of the repair was to run the *old* rig against a build with two deliberately-killed parallaxes
+and watch it report "1/12 moved, PASS".
+
+**Fourteen defects on this project have been one shape: a check that confirmed a mechanism was configured
+rather than that behaviour changed.** Four of them surfaced inside Plan 4, including three that an
+implementer found in its own instruments before reporting. When adding a guard here, run it against the
+broken state first — that is the house standard, not a nicety.
 
 ## The two builds that came before
 
