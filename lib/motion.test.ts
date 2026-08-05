@@ -20,8 +20,17 @@ describe("the motion laws (spec section 4.3)", () => {
   // "never slides a photograph in laterally either" below and by "never slides
   // laterally" in the ENTER block.
 
-  it("turns the logo slowly enough to be almost imperceptible", () => {
-    expect(DURATION.logoRotation).toBeGreaterThanOrEqual(60);
+  it("turns the emblem once, slowly, and never on a loop", () => {
+    // `logoRotation: 75` — one revolution every seventy-five seconds, forever —
+    // was replaced on 5 Aug 2026 when the client narrowed the idea to "once on
+    // load, then still". This guards the shape that actually ships: long enough
+    // that the turn is felt rather than seen (law 4), short enough that it is
+    // over before a visitor could start scrolling and find the mark still
+    // moving. A permanent loop cannot be expressed by this token at all, which
+    // is the point — the CSS that reads it declares one iteration.
+    expect(DURATION.emblemTurn).toBeGreaterThanOrEqual(1.5);
+    expect(DURATION.emblemTurn).toBeLessThanOrEqual(4);
+    expect(DURATION, "a permanent logo spin crept back in").not.toHaveProperty("logoRotation");
   });
 
   it("keeps the image mask within the reveal range", () => {

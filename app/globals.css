@@ -124,6 +124,37 @@ html {
   color: var(--header-wordmark, var(--bg));
 }
 
+/*
+ * The emblem turns once as the page arrives, and then it is still.
+ *
+ * The client's standing idea, narrowed by them on 5 Aug 2026 to "once on load,
+ * then still" — which is also what CLAUDE.md non-negotiable #5 says about the
+ * tiger, and for the same reason: permanent peripheral motion contradicts
+ * "seduce, not convert".
+ *
+ * CSS and no JavaScript, so it costs nothing and runs for a visitor who has none.
+ * `both` fills the animation at each end, so the mark is at rest at 0deg from the
+ * final frame onward rather than snapping back — "not mid-turn" is the state it
+ * has to end in, and `1` is the iteration count that makes it a turn and not a
+ * spin.
+ *
+ * `transform`, safely: the emblem is an `<img>` carrying no Tailwind utility that
+ * compiles to `transform`, `translate`, `scale` or `rotate`, so there is nothing
+ * for this to compose with and nothing for the minifier to merge it into. That is
+ * a claim about the built stylesheet and it was read there, not assumed.
+ */
+@keyframes emblem-turn {
+  from {
+    transform: rotate(-180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.emblem-turn {
+  animation: emblem-turn var(--emblem-turn-duration) var(--enter-ease) 1 both;
+}
 
 body {
   background-color: var(--bg);
@@ -333,6 +364,24 @@ body {
   [data-image-enter] > [data-image-inner] {
     transition: none;
     scale: 1;
+  }
+
+  /*
+   * The emblem does not turn. Not a fast turn — none.
+   *
+   * **This is the second line and it is measured to be the second line.**
+   * Deleting it and rebuilding leaves `scripts/check_header.mjs` passing, because
+   * the `*` rule above crushes the animation to 0.001ms and `both` then holds the
+   * mark at its final frame, which is upright. Recorded rather than quietly kept:
+   * a rule nobody can make fail is either dead or a backstop, and this one is a
+   * backstop. It is worth having because the `*` rule guarantees *speed*, not
+   * *angle* — anything that later gave `.emblem-turn` its own duration, or a
+   * keyframe set that does not end at 0deg, would leave a visitor who asked for
+   * less motion looking at a permanently tilted logo, and this rule means there
+   * is no animation there to end anywhere.
+   */
+  .emblem-turn {
+    animation: none;
   }
 
   /*

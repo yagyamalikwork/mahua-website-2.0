@@ -18,7 +18,22 @@ export const DURATION = {
   /** Delay between successive lines of a headline, not between words. */
   lineStagger: 0.09,
   stagger: 0.06,
-  logoRotation: 75,
+  /**
+   * One half-turn of the brand emblem as the page arrives, and then it is still.
+   *
+   * `logoRotation: 75` lived here until 5 Aug 2026 — seventy-five *seconds* per
+   * revolution, from a permanent slow spin nobody built and its test asserting
+   * only that it stayed above sixty. The client narrowed the idea that day to
+   * "once on load, then still", which is also what CLAUDE.md non-negotiable #5
+   * already says about the tiger: permanent peripheral motion contradicts
+   * "seduce, not convert". A dead token whose guard describes the opposite
+   * behaviour from the one that ships is worse than no token, so it went the way
+   * `EASE.settle` went rather than being left as an invitation.
+   *
+   * Long, because it must not read as a spin. `app/layout.tsx` writes it out as
+   * `--emblem-turn-duration` and `app/globals.css` reads it back.
+   */
+  emblemTurn: 2.4,
 } as const;
 
 /**

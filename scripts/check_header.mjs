@@ -236,6 +236,25 @@ for (const { w, h } of VIEWPORTS) {
   await context.close();
 }
 
+// ---- the emblem turns once and then is still
+{
+  console.log(`\n--- the emblem ---`);
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(URL, { waitUntil: "commit" });
+  await page.waitForTimeout(600);
+  const early = await page.evaluate(() => getComputedStyle(document.querySelector("[data-site-header] img")).transform);
+  await page.waitForTimeout(3200);
+  const late = await page.evaluate(() => getComputedStyle(document.querySelector("[data-site-header] img")).transform);
+  report.emblem = { early, late };
+  const still = (t) => t === "none" || t === "matrix(1, 0, 0, 1, 0, 0)";
+  if (still(early)) fail(`the emblem never turned (${early} at ~600ms)`);
+  else ok(`turning at ~600ms: ${early}`);
+  if (!still(late)) fail(`the emblem is still turning at ~3.8s (${late}) — this is a turn, not a spin`);
+  else ok(`upright and still at ~3.8s`);
+  await context.close();
+}
+
 // ---- reduced motion: a still state, not a fast one
 {
   console.log(`\n--- reduced motion ---`);
@@ -243,13 +262,17 @@ for (const { w, h } of VIEWPORTS) {
   const page = await context.newPage();
   await page.goto(URL, { waitUntil: "commit" });
   await page.waitForTimeout(400);
+  const emblem = await page.evaluate(() => getComputedStyle(document.querySelector("[data-site-header] img")).transform);
+  if (!(emblem === "none" || emblem === "matrix(1, 0, 0, 1, 0, 0)")) fail(`reduced motion: the emblem is turning (${emblem})`);
+  else ok(`the emblem does not turn`);
+
   await page.waitForTimeout(1500);
   const before = await page.evaluate(PROBE);
   await page.evaluate(AT_QUOTE);
   // Deliberately far shorter than ENTER.duration: the change must already be over.
   await page.waitForTimeout(120);
   const after = await page.evaluate(PROBE);
-  report.reducedMotion = { top: before, scrolled: after };
+  report.reducedMotion = { emblem, top: before, scrolled: after };
   if (before.position !== "fixed") fail(`reduced motion: the header stopped following (${before.position})`);
   else ok(`the header still follows — following is not motion`);
   if (after.background !== css(PALETTE.paper)) fail(`reduced motion: the bar is ${after.background} 120ms in — it is animating`);
@@ -268,12 +291,14 @@ for (const { w, h } of VIEWPORTS) {
   await page.waitForTimeout(3500);
   const probe = (report.noJs = await page.$eval("[data-site-header]", (el) => {
     const word = el.querySelector("[data-header-tint='wordmark']");
+    const img = el.querySelector("img");
     return {
       position: getComputedStyle(el).position,
       background: getComputedStyle(el).backgroundColor,
       scrolled: el.hasAttribute("data-scrolled"),
       wordmark: getComputedStyle(word).color,
       text: word.textContent,
+      emblem: getComputedStyle(img).transform,
       scrollPaddingTop: getComputedStyle(document.documentElement).scrollPaddingTop,
     };
   }));
@@ -285,6 +310,8 @@ for (const { w, h } of VIEWPORTS) {
   else ok(`cream type over the photograph`);
   if (!probe.text?.trim()) fail(`no-JS: the wordmark is empty`);
   else ok(`the wordmark reads "${probe.text}"`);
+  if (!(probe.emblem === "none" || probe.emblem === "matrix(1, 0, 0, 1, 0, 0)")) fail(`no-JS: the emblem is stuck mid-turn (${probe.emblem})`);
+  else ok(`the emblem finished its turn without script`);
   if (probe.scrollPaddingTop !== "0px") fail(`no-JS: anchors are offset by ${probe.scrollPaddingTop} for a bar that overlays nothing`);
   else ok(`anchors are not offset`);
   await context.close();

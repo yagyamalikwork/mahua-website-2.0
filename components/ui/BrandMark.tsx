@@ -73,7 +73,15 @@ export function BrandMark({ className }: { className?: string }) {
           height={EMBLEM.height}
           decoding="async"
           fetchPriority="low"
-          className="h-[1.75em] w-auto shrink-0"
+          /*
+           * `emblem-turn` is the half-turn the mark makes once as the page
+           * arrives — keyframes and the reduced-motion still state both in
+           * `app/globals.css`, duration from `DURATION.emblemTurn`. It is on the
+           * `<img>` and not the `<picture>` because the `<picture>` is the flex
+           * item whose width the row is fighting over, and a rotation is a
+           * transform on a box the layout has already decided.
+           */
+          className="emblem-turn h-[1.75em] w-auto shrink-0"
         />
       </picture>
 

@@ -58,6 +58,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // the component swaps between them rather than carrying a number.
           "--lines-duration": `${DURATION.reveal}s`,
           "--lines-slow-duration": `${DURATION.revealSlow}s`,
+          // The emblem's single half-turn as the page arrives. Same terms again:
+          // the number lives in `lib/motion.ts`, the keyframes in
+          // `app/globals.css`, and neither can drift from the other.
+          "--emblem-turn-duration": `${DURATION.emblemTurn}s`,
         } as React.CSSProperties
       }
     >
