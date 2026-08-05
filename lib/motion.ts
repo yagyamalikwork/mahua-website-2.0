@@ -15,9 +15,39 @@ export const DURATION = {
   revealSlow: 1.4,
   /** A mask wiping upward off a photograph as it enters. */
   imageMask: 1.2,
+  /**
+   * The delay before a smaller photograph laid over the corner of a larger one
+   * begins its own entrance: `SplitFeature`'s tiger-track and canopy inlays,
+   * `LodgeCards`' secondary photograph. Long enough that the primary photograph
+   * has visibly started settling before the one sitting on top of it follows —
+   * `imageMask` (1.2s) is most of that photograph's own wipe, so 0.15s reads as
+   * "just after", not "at the same time".
+   */
+  imageInlayDelay: 0.15,
+  /**
+   * The delay before `SplitFeature`'s pool letterbox follows the display
+   * sentence above it. Its own value rather than `imageInlayDelay`'s, because it
+   * is not an inlay (see that token) — there is no second photograph underneath
+   * it to wait on, only the paragraph's own `Enter` above it in the same column,
+   * so the gap reads shorter.
+   */
+  imageAsideDelay: 0.1,
   /** Delay between successive lines of a headline, not between words. */
   lineStagger: 0.09,
+  /**
+   * Delay between successive items in a stacked group, multiplied by index so
+   * item *n* enters `stagger * n` after the first: `ChapterIntro` and
+   * `PinnedCollage`'s body paragraphs, `Testimonials`' guest quotes.
+   */
   stagger: 0.06,
+  /**
+   * The same idea as `stagger`, at a shorter interval, for `SplitFeature`'s
+   * experience index. That list runs two columns from `sm:grid-cols-2`, so
+   * `i % 2` only ever staggers a visual pair sitting side by side rather than a
+   * run down one column — a smaller gap is what keeps the pair reading as one
+   * movement instead of two.
+   */
+  columnStagger: 0.05,
   /**
    * One half-turn of the brand emblem as the page arrives, and then it is still.
    *
@@ -80,7 +110,11 @@ export const ENTER = {
   scale: 0.994,
   /** Seconds. Slow enough that the movement is felt rather than seen. */
   duration: 0.9,
-  /** Seconds between successive items in a group. */
+  /**
+   * Seconds between successive items in a group — `PlateGrid`'s intro
+   * paragraph following its heading, `LodgeCards`' fact block following its
+   * photographs.
+   */
   stagger: 0.08,
   /**
    * Decelerating, no overshoot. **The page's one entrance curve** — every

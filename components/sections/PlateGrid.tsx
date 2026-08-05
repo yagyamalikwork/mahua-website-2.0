@@ -6,6 +6,7 @@ import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type PlateCopy, type TwoTone } from "@/content/home";
 import { media } from "@/lib/media";
+import { ENTER } from "@/lib/motion";
 
 type PlateGridCopy = {
   readonly heading: TwoTone;
@@ -146,7 +147,7 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
               <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[16ch]" />
             </div>
           </Enter>
-          <Enter delay={0.08}>
+          <Enter delay={ENTER.stagger}>
             <p
               className="max-w-[58ch] font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.72] md:text-lg"
               style={{ color: "var(--dim)" }}

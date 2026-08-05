@@ -43,6 +43,27 @@ describe("the motion laws (spec section 4.3)", () => {
     expect(DURATION.lineStagger).toBeLessThan(0.15);
   });
 
+  it("staggers stacked paragraphs and quotes slowly enough to read as one movement", () => {
+    expect(DURATION.stagger).toBeGreaterThan(0.02);
+    expect(DURATION.stagger).toBeLessThan(0.15);
+  });
+
+  it("keeps the two-column stagger shorter than the stacked one", () => {
+    // Distinct on purpose — see the comment on `columnStagger`. This guards
+    // against a future edit quietly collapsing the two intervals into one,
+    // which would be exactly the kind of flattening that changes how a section
+    // feels without anyone deciding it should.
+    expect(DURATION.columnStagger).toBeGreaterThan(0.02);
+    expect(DURATION.columnStagger).toBeLessThan(DURATION.stagger);
+  });
+
+  it("delays a following photograph behind the thing it follows, and keeps the inlay and the aside distinct", () => {
+    expect(DURATION.imageInlayDelay).toBeGreaterThan(0);
+    expect(DURATION.imageInlayDelay).toBeLessThan(DURATION.imageMask);
+    expect(DURATION.imageAsideDelay).toBeGreaterThan(0);
+    expect(DURATION.imageAsideDelay).toBeLessThan(DURATION.imageInlayDelay);
+  });
+
   it("settles images downward in scale, never upward", () => {
     expect(IMAGE_FROM.scale).toBeGreaterThan(1);
     expect(IMAGE_FROM.scale).toBeLessThanOrEqual(1.12);

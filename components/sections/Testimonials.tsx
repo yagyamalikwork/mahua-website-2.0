@@ -6,6 +6,7 @@ import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type GuestQuote, type TwoTone } from "@/content/home";
+import { DURATION } from "@/lib/motion";
 
 type GuestsCopy = {
   readonly heading: TwoTone;
@@ -103,7 +104,7 @@ export function Testimonials({ chapter, surface = false }: { chapter: Chapter; s
         <ul className="mt-16 grid gap-x-10 gap-y-12 md:mt-20 md:grid-cols-3">
           {copy.quotes.map((quote, i) => (
             <li key={quote.name} className="border-t" style={{ borderColor: "var(--accent)" }}>
-              <Enter delay={0.06 * i}>
+              <Enter delay={DURATION.stagger * i}>
                 <figure className="pt-6">
                   <blockquote className="font-[family-name:var(--font-display)] text-[1.35rem] leading-[1.4] font-light text-[color:var(--text)] md:text-[1.5rem]">
                     {quote.quote}

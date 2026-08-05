@@ -9,6 +9,7 @@ import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type TwoTone } from "@/content/home";
+import { DURATION } from "@/lib/motion";
 
 type IntroCopy = {
   readonly heading: TwoTone;
@@ -266,7 +267,7 @@ export function PinnedCollage({
                */}
               <div className="mx-auto mt-8 max-w-[56ch] space-y-4">
                 {copy.body.map((paragraph, i) => (
-                  <Enter key={i} delay={0.06 * i}>
+                  <Enter key={i} delay={DURATION.stagger * i}>
                     <p
                       className="font-[family-name:var(--font-body)] text-[1.02rem] leading-[1.65]"
                       style={{ color: i === 0 ? "var(--text)" : "var(--dim)" }}

@@ -1,10 +1,20 @@
-// Task 6 — the pictures a non-technical reader can check.
+// Task 6 — the pictures a non-technical reader can check, and one real check.
 //
 // The brief's standing rule: "a still frame that could pass for no animation
 // proves nothing". So every motion capture here is a FILMSTRIP with the
 // measured transform printed beside each frame — the picture and the number
 // come from the same instant, and a dead animation produces a strip of
 // identical frames with identical numbers.
+//
+// **Most of this script is a capture, not a check** — it writes filmstrips and
+// a JSON trace for a human to look at, and most of `findings` asserts nothing.
+// Real motion coverage lives in `check_entrances.mjs` (`peakWordOffset` /
+// `peakMaskCover`) and `check_header.mjs` (the emblem). The one exception is
+// `entrance()`'s distinct-value floor below: it existed as a comment — "a dead
+// animation produces one distinct value here" — with no assertion behind it
+// until 5 Aug 2026, so a dead entrance on any of the four sampled chapters
+// would still exit 0. That was the same defect shape as fourteen others on
+// this project: a check that reads like a gate and gates nothing.
 //
 // Flags: --port --out
 
@@ -23,6 +33,8 @@ const URL = flag("url", `http://localhost:${PORT}/`);
 const OUT = flag("out", "docs/reviews/2026-08-05-scroll-craft");
 
 const findings = { capturedAt: new Date().toISOString(), url: URL, sections: {} };
+// Populated only by `entrance()`'s distinct-value floor — see the header note.
+const failures = [];
 const write = async (name, buf) => {
   await mkdir(OUT, { recursive: true });
   await sharp(buf).webp({ quality: 82 }).toFile(path.join(OUT, name));
@@ -270,7 +282,7 @@ async function entrance(browser, chapterId, width = 1440, height = 900) {
     Math.round(width / 2),
   );
 
-  return {
+  const result = {
     chapter: chapterId,
     width,
     framesCaptured: frames.length,
@@ -283,6 +295,29 @@ async function entrance(browser, chapterId, width = 1440, height = 900) {
     lastSample: samples[samples.length - 1] ?? null,
     trace: samples.filter((_, i) => i % 4 === 0).slice(0, 24),
   };
+
+  // The one assertion in this script — see the header note. A working
+  // transition sampled at up to 200 rAF ticks across ~1.6s of real motion
+  // produces dozens of distinct values; 5 is comfortably below that and
+  // comfortably above what a transition-free snap can produce (1-2 values:
+  // the staged state, then the settled one). `sampleCount === 0` means the
+  // observer never reported "in" at all — the entrance never triggered — and
+  // is caught the same way, because zero samples yields zero distinct values.
+  const DISTINCT_FLOOR = 5;
+  if (result.distinctLineTranslates <= DISTINCT_FLOOR) {
+    failures.push(
+      `${chapterId}@${width}w: only ${result.distinctLineTranslates} distinct line-translate value(s) across ` +
+        `${result.sampleCount} samples — the headline entrance looks dead`,
+    );
+  }
+  if (result.distinctBlockOpacities <= DISTINCT_FLOOR) {
+    failures.push(
+      `${chapterId}@${width}w: only ${result.distinctBlockOpacities} distinct block-opacity value(s) across ` +
+        `${result.sampleCount} samples — the block entrance looks dead`,
+    );
+  }
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -572,9 +607,20 @@ async function capture(browser) {
   console.log("overflow…");      await overflow(browser);
   console.log("collage…");       await collageMidMove(browser);
 
+  findings.failures = failures;
   await mkdir(OUT, { recursive: true });
   await writeFile(path.join(OUT, "task-6-visual-evidence.json"), `${JSON.stringify(findings, null, 2)}\n`, "utf8");
   console.log("Wrote", path.join(OUT, "task-6-visual-evidence.json"));
+
+  // The one point in this script where exit code means anything — see the
+  // header note. Everything above is a capture; this is the check.
+  if (failures.length > 0) {
+    console.error(`\n${failures.length} FAILURE(S):`);
+    for (const f of failures) console.error(`  - ${f}`);
+    process.exitCode = 1;
+  } else {
+    console.log("\nEntrance motion: every sampled chapter cleared the distinct-value floor.");
+  }
 }
 
 main().catch((e) => { console.error(e); process.exitCode = 1; });

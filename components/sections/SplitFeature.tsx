@@ -7,6 +7,7 @@ import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type ExperienceCopy, type TwoTone } from "@/content/home";
+import { DURATION } from "@/lib/motion";
 
 type SplitFeatureCopy = {
   readonly heading: TwoTone;
@@ -146,7 +147,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               className="absolute bottom-0 left-[-6%] w-[42%] p-2 lg:w-[38%] lg:p-3"
               style={{ backgroundColor: "var(--bg)" }}
             >
-              <ImageReveal className="block aspect-square w-full" delay={0.15}>
+              <ImageReveal className="block aspect-square w-full" delay={DURATION.imageInlayDelay}>
                 <Photo
                   id={tigerTrack}
                   sizes={SIZES.inlayWide}
@@ -177,7 +178,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               className="absolute right-[-6%] bottom-0 w-[40%] p-2 lg:w-[32%] lg:p-3"
               style={{ backgroundColor: "var(--bg)" }}
             >
-              <ImageReveal className="block aspect-[3/4] w-full" delay={0.15}>
+              <ImageReveal className="block aspect-[3/4] w-full" delay={DURATION.imageInlayDelay}>
                 <Photo
                   id={canopy}
                   sizes={SIZES.inlayTall}
@@ -207,7 +208,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
                 square here would compete with the hammocks across the gutter. */}
             <div className="mt-9">
               <Parallax strength={0.05}>
-                <ImageReveal className="block aspect-[7/3] w-full" delay={0.1}>
+                <ImageReveal className="block aspect-[7/3] w-full" delay={DURATION.imageAsideDelay}>
                   <Photo
                     id={pool}
                     sizes={SIZES.aside}
@@ -245,7 +246,7 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
               // `<div>` between `<ol>` and `<li>` is invalid markup, and the
               // browser's recovery from it is to reparent the list items.
               <li key={experience.title} className="border-t" style={{ borderColor: "var(--accent)" }}>
-                <Enter delay={0.05 * (i % 2)}>
+                <Enter delay={DURATION.columnStagger * (i % 2)}>
                   <div className="pt-4">
                     <p
                       className="font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.24em]"

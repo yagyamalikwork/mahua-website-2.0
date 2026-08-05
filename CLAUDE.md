@@ -255,7 +255,7 @@ node scripts/check_pinned_collage.mjs            # is `rooted`'s headline frozen
 node scripts/check_header.mjs                    # the header that stays: both states at 320-1920, reduced motion, no-JS
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
-node scripts/capture_motion_filmstrips.mjs       # filmstrips with the measured transform under each frame
+node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples
 ```
 
 **`measure_lcp_arms.mjs` is the one to reach for on any arrival question**, because `measure_page.mjs`

@@ -6,6 +6,7 @@ import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type LodgeCopy, type TwoTone } from "@/content/home";
+import { DURATION, ENTER } from "@/lib/motion";
 
 type LodgesCopy = {
   readonly heading: TwoTone;
@@ -104,7 +105,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                     }`}
                     style={{ backgroundColor: "var(--bg)" }}
                   >
-                    <ImageReveal className="block aspect-[4/3] w-full" delay={0.15}>
+                    <ImageReveal className="block aspect-[4/3] w-full" delay={DURATION.imageInlayDelay}>
                       <Photo
                         id={secondary}
                         sizes={SIZES.secondary}
@@ -116,7 +117,7 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                   </div>
                 </div>
 
-                <Enter delay={0.08}>
+                <Enter delay={ENTER.stagger}>
                   <div className="mt-8">
                     <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.8rem,3vw,2.5rem)] font-light leading-tight text-[color:var(--text)]">
                       {lodge.name}

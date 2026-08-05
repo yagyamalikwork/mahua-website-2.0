@@ -130,7 +130,7 @@ if (gsapChunks.length === 0) console.log("  none");
 for (const c of gsapChunks)
   console.log(`  ${kb(c.raw)} KB raw ${kb(c.gz)} KB gz  ${c.name}  ${c.inFirstLoad ? "IN THE FIRST LOAD" : "(lazy)"}`);
 
-// ------------------------------------------------------------------ live half
+// ---------------------------------------------------------------- static half
 
 for (const c of gsapChunks)
   if (c.inFirstLoad)
