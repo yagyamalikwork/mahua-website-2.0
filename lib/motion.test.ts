@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DURATION, EASE, ENTER, IMAGE_FROM, PARALLAX_MAX, STICKY_SCREENS_MAX } from "./motion";
+import { DURATION, EASE, ENTER, IMAGE_FROM, LIVING, PARALLAX_MAX, STICKY_SCREENS_MAX } from "./motion";
 
 describe("the motion laws (spec section 4.3)", () => {
   it("keeps reveals between 800ms and 1400ms", () => {
@@ -104,6 +104,25 @@ describe("the motion laws (spec section 4.3)", () => {
     // waves the drawing looked finished halfway through, because ordering by
     // stroke length puts all the visual weight in the first waves.
     expect(DURATION.tigerInkStagger).toBeGreaterThan(DURATION.tigerInk);
+  });
+
+  it("gives the tiger's two movements beats that cannot sync into a pulse", () => {
+    // Two things on the same beat read as a mechanism; on unrelated beats they
+    // read as an animal. Asserted rather than eyeballed, because an edit that
+    // made one a multiple of the other would produce a pulse nobody would think
+    // to look for.
+    const ratio = Math.max(LIVING.breath, LIVING.blink) / Math.min(LIVING.breath, LIVING.blink);
+    expect(Math.abs(ratio - Math.round(ratio))).toBeGreaterThan(0.08);
+  });
+
+  it("lives long enough to be seen, then dozes", () => {
+    // Every cycle must fit inside the phase, or a part would be cut off
+    // mid-movement when the eyes close.
+    expect(LIVING.phase).toBeGreaterThan(LIVING.breath * 3);
+    expect(LIVING.phase).toBeGreaterThan(LIVING.blink * 3);
+    // And it must end. A living phase with no end is the permanent peripheral
+    // motion non-negotiable #5 exists to forbid.
+    expect(LIVING.phase).toBeLessThanOrEqual(60);
   });
 
   it("nothing bounces", () => {

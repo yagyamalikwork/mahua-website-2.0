@@ -318,6 +318,79 @@ button:focus-visible .rule-in::after {
   stroke-dashoffset: 0;
 }
 
+/*
+ * The living phase: the tiger breathes, blinks a few times, and then closes its
+ * eyes for good. It arrives, performs, then dozes — non-negotiable #5 — and
+ * nothing is left running afterwards.
+ *
+ * **No JavaScript timer anywhere.** Each animation runs a whole number of cycles
+ * and fills forwards; the doze is one more animation delayed past all of them.
+ * When it ends, it ends.
+ *
+ * Two things move and only two, and that is the artwork's doing. The client's
+ * drawing has no visible tail in this pose and its ears are strokes continuous
+ * with the skull, so the breath goes on the whole animal — where it cannot pull a
+ * line away from the one it joins — and the blink goes on the eyes, which are the
+ * one part that is genuinely separable.
+ */
+@keyframes tiger-breath {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.008); }
+}
+
+/* Squashes to a closed lid and opens again. The long flat start is why a cat at
+   rest reads as calm rather than twitchy: almost all of the cycle is open. */
+@keyframes tiger-blink {
+  0%, 88%, 100% { transform: scaleY(1); }
+  93% { transform: scaleY(0.06); }
+}
+
+@keyframes tiger-doze {
+  to { transform: scaleY(0.06); }
+}
+
+[data-ink-tiger] {
+  /* From the feet, so a breath lifts the back and never the ground line. */
+  transform-origin: 50% 100%;
+  animation: tiger-breath var(--living-breath) ease-in-out var(--living-breath-count) both;
+}
+
+/*
+ * `transform-origin` in **viewBox units, not `fill-box`**, and that is the whole
+ * trick. The eyes are thirteen separate strokes; with `fill-box` each would
+ * squash about its own middle and a single eye would come apart. The default
+ * `transform-box: view-box` means one percentage resolves to the same point for
+ * every one of them, so they close together toward a line across both eyes.
+ * `--eye-x` / `--eye-y` are measured from the artwork's own ink by
+ * `scripts/build_tiger.mjs`.
+ */
+[data-ink-tiger] [data-part="eye"] {
+  transform-origin: var(--eye-x) var(--eye-y);
+  animation:
+    tiger-blink var(--living-blink) ease-in-out var(--living-blink-count) both,
+    tiger-doze 0.5s ease-in-out var(--living-phase) 1 both;
+}
+
+/*
+ * **Nothing lives while the ink is still arriving.** `--ink-total` is the whole
+ * drawing's length, written by the component from its own wave count, so the
+ * breath starts as the last stroke lands rather than under it.
+ */
+[data-ink="in"] [data-ink-tiger],
+[data-ink="in"] [data-ink-tiger] [data-part="eye"] {
+  animation-delay: var(--ink-total);
+}
+
+[data-ink="in"] [data-ink-tiger] [data-part="eye"] {
+  animation-delay: var(--ink-total), calc(var(--ink-total) + var(--living-phase));
+}
+
+/* Staged offscreen and not yet drawn: it is not alive either. */
+[data-ink="pending"] [data-ink-tiger],
+[data-ink="pending"] [data-ink-tiger] [data-part="eye"] {
+  animation: none;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
@@ -568,6 +641,20 @@ body {
   [data-ink] [data-ink-tiger] path {
     transition: none;
     stroke-dashoffset: 0;
+  }
+
+  /*
+   * Present and still — not dozing, and not blinking fast.
+   *
+   * **This is a second line and it is load-bearing**, unlike the emblem's. The
+   * `*` rule above crushes `animation-duration` but leaves `animation-delay`
+   * alone, so without this the eyes would sit open for twenty-four seconds and
+   * then snap shut: motion arriving late rather than motion removed.
+   */
+  [data-ink-tiger],
+  [data-ink-tiger] [data-part="eye"] {
+    animation: none;
+    transform: none;
   }
 
   /*

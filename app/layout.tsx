@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Grain } from "@/components/motion/Grain";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
-import { DURATION, ENTER, IMAGE_FROM } from "@/lib/motion";
+import { DURATION, ENTER, IMAGE_FROM, LIVING } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -71,6 +71,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // `lib/motion.ts`, the transition lives in `app/globals.css`, and the
           // per-stroke delay is written by the component from its wave index.
           "--ink-duration": `${DURATION.tigerInk}s`,
+          // The living phase. The counts are whole cycles that fit inside the
+          // phase, computed here so no part is cut off mid-movement when the eyes
+          // close — and so the numbers stay in `lib/motion.ts` rather than being
+          // written twice.
+          "--living-breath": `${LIVING.breath}s`,
+          "--living-breath-count": String(Math.floor(LIVING.phase / LIVING.breath)),
+          "--living-blink": `${LIVING.blink}s`,
+          "--living-blink-count": String(Math.floor(LIVING.phase / LIVING.blink)),
+          "--living-phase": `${LIVING.phase}s`,
         } as React.CSSProperties
       }
     >

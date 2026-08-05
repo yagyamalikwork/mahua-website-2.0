@@ -162,6 +162,34 @@ export const CURSOR = {
 } as const;
 
 /**
+ * The ink tiger's living phase — seconds per cycle, and how long it lives before
+ * it dozes.
+ *
+ * **Only two things move, and that is the artwork's doing rather than a choice.**
+ * The client's drawing has no visible tail in this pose, and its ears are strokes
+ * continuous with the skull, so rotating them would drag lines away from the ones
+ * they join. What is left is a blink — the eyes are separable — and a breath
+ * applied to the whole drawing at once, where it cannot break a join.
+ *
+ * **The two periods must not be simple multiples of one another.** Two movements
+ * landing on a common beat read as a mechanism; on unrelated beats they read as
+ * an animal. `motion.test.ts` holds them apart.
+ *
+ * `phase` is why this can doze with **no JavaScript timer**: each part runs a
+ * whole number of cycles and fills forwards, and the eyes take a final animation
+ * delayed past all of them. It arrives, performs, then dozes — non-negotiable #5,
+ * and the reason nothing is left running in the background afterwards.
+ */
+export const LIVING = {
+  /** A slow, shallow rise and fall of the whole animal. */
+  breath: 4.3,
+  /** Long between blinks. A cat at rest blinks rarely, and often not at all. */
+  blink: 5.9,
+  /** Seconds of living before the eyes close for good. */
+  phase: 24,
+} as const;
+
+/**
  * The entrance vocabulary, taken from the reference site rather than invented.
  *
  * Measured on thesujanlife.com on 5 Aug 2026: live elements sat at translateY

@@ -1,6 +1,6 @@
 import { InkStage } from "@/components/motion/InkStage";
 import { DURATION } from "@/lib/motion";
-import { TIGER_PATHS, TIGER_VIEWBOX } from "@/lib/tiger-art";
+import { TIGER_EYE_ORIGIN, TIGER_PATHS, TIGER_VIEWBOX, TIGER_WAVES } from "@/lib/tiger-art";
 
 /**
  * A field-guide tiger that draws itself onto the page.
@@ -55,6 +55,20 @@ export function InkTiger() {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
+        style={
+          {
+            /*
+             * How long the whole drawing takes: the last wave's delay plus its own
+             * stroke. `app/globals.css` holds the living phase back by this, so
+             * the breath begins as the final stroke lands rather than underneath
+             * it. Derived from the wave count so it cannot drift from the artwork.
+             */
+            "--ink-total": `${(TIGER_WAVES - 1) * DURATION.tigerInkStagger + DURATION.tigerInk}s`,
+            /* The point both eyes close toward — measured from the ink itself. */
+            "--eye-x": `${TIGER_EYE_ORIGIN.x}%`,
+            "--eye-y": `${TIGER_EYE_ORIGIN.y}%`,
+          } as React.CSSProperties
+        }
         /*
          * Three sizes, because the hole it sits in has three sizes.
          *
