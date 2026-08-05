@@ -31,7 +31,7 @@
 //   node scripts/check_pinned_collage.mjs
 //   node scripts/check_pinned_collage.mjs --out docs/reviews/<date>/collage.json
 
-import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 import sharp from "sharp";
@@ -198,6 +198,67 @@ const noJs = await (async () => {
   return { ...metrics, ...readable };
 })();
 
+/**
+ * The chunks carrying GSAP, matched on the library's own internals rather than
+ * on a filename — the chunk names are content hashes, and a bundled copy never
+ * contains the string "gsap" in its module path. Same technique, and the same
+ * `_gsap` marker, as `scripts/measure_js_budget.mjs`.
+ */
+async function gsapChunkNames() {
+  const dir = path.join(process.cwd(), ".next/static/chunks");
+  const found = [];
+  for (const name of await readdir(dir)) {
+    if (!name.endsWith(".js")) continue;
+    const text = await readFile(path.join(dir, name), "utf8").catch(() => "");
+    if (/_gsap\b/.test(text)) found.push(name);
+  }
+  return found;
+}
+
+/**
+ * The failure this rig exists for second: **the tween library never arrives.**
+ *
+ * A flaky connection, a blocked CDN, an aborted fetch on a slow phone — and
+ * `scrub.ts` memoises the rejected promise, so there is no second attempt. If
+ * the scene stays pinned through that, the visitor scrolls 1.9 screens of a
+ * composition in which nothing whatsoever moves: the paid-for empty screen that
+ * `StickyScene`'s own comment forbids and that this entire task exists to earn
+ * its way out of.
+ *
+ * So the chunks are aborted at the network, the page is scrolled to within a
+ * screen of the chapter (which is what makes `whenNear` attempt the import at
+ * all), and the *rendered height of the section* is what is read back. Not
+ * whether a catch block ran.
+ */
+const gsapBlocked = await (async () => {
+  const names = await gsapChunkNames().catch(() => null);
+  if (!names || names.length === 0) {
+    return { ran: false, reason: "no .next/static/chunks carrying GSAP — is this a local build?" };
+  }
+  const ctx = await browser.newContext({ viewport: { width: WIDTH, height: HEIGHT } });
+  const page = await ctx.newPage();
+  let blocked = 0;
+  await page.route("**/*.js", (route) => {
+    const file = new global.URL(route.request().url()).pathname.split("/").pop();
+    if (!names.includes(file)) return route.continue();
+    blocked++;
+    return route.abort("failed");
+  });
+  await page.goto(URL, { waitUntil: "load", timeout: 120_000 });
+  await page.waitForTimeout(2000);
+  // Within one screen of the scene is where `whenNear` fires and the import is
+  // attempted — and therefore where it fails.
+  const top = await page.evaluate((id) => {
+    const s = document.getElementById(id);
+    return Math.round(s.getBoundingClientRect().top + window.scrollY);
+  }, CHAPTER);
+  await page.evaluate((y) => window.scrollTo(0, y), Math.max(0, top - HEIGHT));
+  await page.waitForTimeout(2500);
+  const metrics = await page.evaluate(SECTION_METRICS, CHAPTER);
+  await ctx.close();
+  return { ran: true, chunks: names.length, blocked, ...metrics };
+})();
+
 // A narrow window must not pin either — the frozen composition does not fit one.
 const narrow = await (async () => {
   const { context: c, page: p } = await open(browser, { width: 1280 });
@@ -272,6 +333,29 @@ for (const [name, m] of [
   }
 }
 
+// A pin whose scrub never loaded is a pin holding a still composition.
+if (!gsapBlocked.ran) {
+  failures.push(`the blocked-GSAP check did not run: ${gsapBlocked.reason}`);
+} else {
+  if (gsapBlocked.blocked === 0) {
+    failures.push(
+      "the blocked-GSAP check aborted no requests — the page never asked for the library, so the check proved nothing",
+    );
+  }
+  if (gsapBlocked.hasScene) {
+    failures.push(
+      `GSAP blocked: the scene is still pinned and #${CHAPTER} is ${gsapBlocked.height}px tall — ` +
+        "1.9 screens of a composition in which nothing can move, and `scrub.ts` memoises the rejected " +
+        "promise so it will never retry",
+    );
+  }
+  if (gsapBlocked.height >= pinned.height - HEIGHT) {
+    failures.push(
+      `GSAP blocked: #${CHAPTER} is still ${gsapBlocked.height}px against ${pinned.height}px pinned — the reserved scroll survived a failure that makes it worthless`,
+    );
+  }
+}
+
 if (noJs.photographs < 3 || noJs.painted < 3) {
   failures.push(
     `no JavaScript: ${noJs.painted}/${noJs.photographs} photographs painted in #${CHAPTER}, expected 3`,
@@ -300,6 +384,7 @@ const report = {
   afterRelease,
   reduced,
   noJs,
+  gsapBlocked,
   narrow,
   failures,
   verdict: failures.length === 0 ? "pass" : "fail",
@@ -316,6 +401,9 @@ console.log(
   `headline held within ${headingRange}px while ${scrollTravelled}px of page scrolled beneath it`,
 );
 for (const t of travels) console.log(`  rate ${t.rate}  drifted ${t.travelPx}px  ${t.rose ? "up" : "DOWN"}`);
+console.log(
+  `GSAP blocked (${gsapBlocked.blocked ?? 0} chunk requests aborted): ${gsapBlocked.height}px / scene ${gsapBlocked.hasScene}`,
+);
 console.log(
   `reduced motion ${reduced.height}px / scene ${reduced.hasScene} | ` +
     `no-JS ${noJs.height}px / ${noJs.painted} photographs / ${noJs.words} words | ` +

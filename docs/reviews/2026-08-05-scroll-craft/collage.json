@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-04T23:47:25.822Z",
+  "measuredAt": "2026-08-05T00:13:32.624Z",
   "url": "http://localhost:3100/",
   "chapter": "rooted",
   "viewport": "1440x900",
@@ -98,6 +98,17 @@
     "words": 139,
     "photographs": 3,
     "painted": 3
+  },
+  "gsapBlocked": {
+    "ran": true,
+    "chunks": 2,
+    "blocked": 2,
+    "top": 3246,
+    "height": 1167,
+    "documentHeight": 14694,
+    "screens": 1.3,
+    "hasScene": false,
+    "drifters": 0
   },
   "narrow": {
     "top": 3162,

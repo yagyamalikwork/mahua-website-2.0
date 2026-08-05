@@ -11,6 +11,7 @@ import { chapter } from "@/content/chapters";
 import { Enter } from "./Enter";
 import { ImageReveal } from "./ImageReveal";
 import { COLLAGE_RATES, COLLAGE_SCREENS, PinnedCollage } from "./PinnedCollage";
+import * as scrub from "./scrub";
 import { SplitLines } from "./SplitLines";
 import { StickyScene } from "./StickyScene";
 
@@ -592,6 +593,31 @@ describe("PinnedCollage", () => {
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
     expect(sceneIn(container)).toBeNull();
     expect(container.innerHTML, "the chapter vanished with the pin").toContain(ROOTED.media[0]);
+  });
+
+  it("gives the reserved scroll back when the tween library fails to load", async () => {
+    // The Important finding on this task's review. `scrub.ts` memoises its
+    // rejected promise, so a chunk that fails once has failed for the visit —
+    // and a pin that survives that is 1.9 screens of a composition in which
+    // nothing can move. The browser half of this aborts both GSAP chunks at the
+    // network and reads the section's height back
+    // (`scripts/check_pinned_collage.mjs`); this is the fast half.
+    withMedia({ pinnable: true });
+    vi.spyOn(scrub, "loadScrubTools").mockRejectedValue(new Error("chunk failed"));
+
+    const { container } = render(<PinnedCollage chapter={ROOTED} />);
+    expect(sceneIn(container), "the scene was never pinned, so this proves nothing").not.toBeNull();
+
+    // `whenNear` fires on the observer's first look, which is what attempts the
+    // import; the rejection then has to settle before React re-renders.
+    look(true);
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(sceneIn(container), "a failed scrub left the scene pinned").toBeNull();
+    // And the chapter is still all there, on the ordinary composition.
+    for (const id of ROOTED.media) expect(container.innerHTML).toContain(id);
   });
 
   it("does not pin on a browser with no IntersectionObserver", () => {

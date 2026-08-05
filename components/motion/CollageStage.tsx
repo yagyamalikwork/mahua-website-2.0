@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { EASE, PARALLAX_MAX, prefersReducedMotion } from "@/lib/motion";
 import { loadScrubTools, whenNear } from "./scrub";
 
@@ -41,6 +41,17 @@ import { loadScrubTools, whenNear } from "./scrub";
  *     would hold a still composition for three screens. Same still state as
  *     reduced motion, which is a code path already exercised rather than a new
  *     one.
+ *   - **the tween library never arriving.** A flaky connection, a blocked CDN,
+ *     an aborted fetch on a slow phone — and `scrub.ts` memoises the rejected
+ *     promise, so there is no second attempt for the rest of the visit. A pin
+ *     that survives that is 1.9 screens of a composition in which nothing
+ *     whatsoever moves, which is the paid-for empty screen this whole task
+ *     exists to earn its way out of. So the failure un-pins, landing on the same
+ *     still composition reduced motion and no-JS already produce. **A `catch`
+ *     that only logged was the Important finding on this task's review**, and
+ *     the state is checked by aborting both GSAP chunks at the network in
+ *     `scripts/check_pinned_collage.mjs` and reading the section's height back —
+ *     not by asserting that a catch block ran.
  *   - **a viewport the frozen composition does not fit.** The scene is exactly
  *     100vh and does not scroll inside itself; a chapter that overflows its own
  *     pin would paint over the chapter beneath it. `PIN_QUERY` is the measured
@@ -102,7 +113,14 @@ export function CollageStage({
   /** The same chapter, unpinned. Rendered on the server and everywhere else. */
   flowing: React.ReactNode;
 }) {
-  const pinned = useSyncExternalStore(subscribe, pinWanted, neverOnTheServer);
+  const wantsPin = useSyncExternalStore(subscribe, pinWanted, neverOnTheServer);
+  /**
+   * Sticky, and deliberately one-way. `loadScrubTools` memoises its promise, so
+   * once the chunk has failed it has failed for the rest of the visit — there is
+   * nothing to retry and no state worth returning to.
+   */
+  const [scrubFailed, setScrubFailed] = useState(false);
+  const pinned = wantsPin && !scrubFailed;
   const host = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -179,11 +197,18 @@ export function CollageStage({
             gsap.set(drifters, { clearProps: "transform" });
           };
         })
-        // A chunk that never arrives costs the page its drift and nothing else.
-        // The scene stays pinned with the composition still — which is the one
-        // case where the pin is not earning its scroll, and is why this promise
-        // is the only thing between here and that state being permanent.
-        .catch(() => {});
+        // A chunk that never arrives takes the pin with it. Anything thrown
+        // while building the tweens lands here too, and means the same thing:
+        // nothing is going to advance through this pin, so the scroll it
+        // reserves is not earned and must be given back.
+        //
+        // The state change is inside the callback rather than in the effect
+        // body, which is what `react-hooks/set-state-in-effect` asks for and
+        // also simply where it belongs — this is a failure arriving, not a
+        // decision the effect could have made when it ran.
+        .catch(() => {
+          if (!unmounted) setScrubFailed(true);
+        });
     });
 
     return () => {
