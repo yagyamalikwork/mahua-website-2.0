@@ -1,18 +1,21 @@
 {
-  "measuredAt": "2026-08-05T00:13:32.624Z",
+  "measuredAt": "2026-08-05T00:25:50.696Z",
   "url": "http://localhost:3100/",
   "chapter": "rooted",
   "viewport": "1440x900",
   "method": "Viewport-space positions of the chapter's heading and of every [data-drift] photograph, read at five scroll offsets across the pinned band of a real browser. Frozen is a range of <=2px while the page scrolls under it; drift is the range of each photograph's own positions over the same offsets. Reduced motion, no-JS and a narrow window are compared on the section's rendered height, not on whether an attribute is present.",
   "pinned": {
     "top": 3246,
-    "height": 2860,
-    "documentHeight": 16387,
-    "screens": 3.18,
+    "height": 1960,
+    "documentHeight": 15487,
+    "screens": 2.18,
     "hasScene": true,
+    "reservedScroll": 900,
+    "sceneTop": 3326,
+    "sceneHeight": 1800,
     "drifters": 3
   },
-  "scrollTravelled": 1720,
+  "scrollTravelled": 840,
   "heading": {
     "tops": [
       175,
@@ -25,57 +28,57 @@
   },
   "travels": [
     {
-      "rate": 0.12,
-      "travelPx": 207,
+      "rate": 0.15,
+      "travelPx": 126,
       "rose": true,
       "tops": [
-        184,
-        132,
+        144,
+        112,
         81,
-        29,
-        -23
+        49,
+        18
       ]
     },
     {
-      "rate": 0.085,
-      "travelPx": 147,
+      "rate": 0.105,
+      "travelPx": 89,
       "rose": true,
       "tops": [
-        154,
-        117,
+        125,
+        103,
         81,
-        44,
-        7
+        59,
+        36
       ]
     },
     {
-      "rate": 0.05,
-      "travelPx": 86,
+      "rate": 0.06,
+      "travelPx": 50,
       "rose": true,
       "tops": [
-        540,
-        519,
+        522,
+        510,
         497,
-        476,
-        454
+        485,
+        472
       ]
     }
   ],
   "afterRelease": {
-    "scrollY": 7006,
+    "scrollY": 6106,
     "heading": -1705,
     "photographs": [
       {
-        "rate": 0.12,
-        "top": -1907
+        "rate": 0.15,
+        "top": -1867
       },
       {
-        "rate": 0.085,
-        "top": -1876
+        "rate": 0.105,
+        "top": -1847
       },
       {
-        "rate": 0.05,
-        "top": -1428
+        "rate": 0.06,
+        "top": -1410
       }
     ]
   },
@@ -85,6 +88,9 @@
     "documentHeight": 14695,
     "screens": 1.3,
     "hasScene": false,
+    "reservedScroll": 0,
+    "sceneTop": null,
+    "sceneHeight": 0,
     "drifters": 0
   },
   "noJs": {
@@ -93,6 +99,9 @@
     "documentHeight": 14694,
     "screens": 1.3,
     "hasScene": false,
+    "reservedScroll": 0,
+    "sceneTop": null,
+    "sceneHeight": 0,
     "drifters": 0,
     "heading": "Rooted like the mahua",
     "words": 139,
@@ -108,6 +117,9 @@
     "documentHeight": 14694,
     "screens": 1.3,
     "hasScene": false,
+    "reservedScroll": 0,
+    "sceneTop": null,
+    "sceneHeight": 0,
     "drifters": 0
   },
   "narrow": {
@@ -116,6 +128,9 @@
     "documentHeight": 13780,
     "screens": 1.16,
     "hasScene": false,
+    "reservedScroll": 0,
+    "sceneTop": null,
+    "sceneHeight": 0,
     "drifters": 0
   },
   "failures": [],

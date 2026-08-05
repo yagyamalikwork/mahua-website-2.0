@@ -31,20 +31,20 @@ import { loadScrubTools, whenNear } from "./scrub";
  * cost a visitor screens of nothing:
  *
  *   - **reduced motion.** Not merely "the photographs hold still": the pin and
- *     the 2 screens of scroll it reserves both disappear, because a visitor who
+ *     the screen of scroll it reserves both disappear, because a visitor who
  *     asked for less motion must not have to travel through empty screens to
  *     reach the next chapter. `app/globals.css` says the same thing a second
  *     time for `.sticky-scene` itself; this is the first line, and it is the one
  *     that also stops GSAP being fetched.
  *   - **no `IntersectionObserver`.** `whenNear` is how the tween library is
  *     fetched at all, and it declines on a browser without one — so the pin
- *     would hold a still composition for three screens. Same still state as
+ *     would hold a still composition for the whole pin. Same still state as
  *     reduced motion, which is a code path already exercised rather than a new
  *     one.
  *   - **the tween library never arriving.** A flaky connection, a blocked CDN,
  *     an aborted fetch on a slow phone — and `scrub.ts` memoises the rejected
  *     promise, so there is no second attempt for the rest of the visit. A pin
- *     that survives that is 1.9 screens of a composition in which nothing
+ *     that survives that is a screen of a composition in which nothing
  *     whatsoever moves, which is the paid-for empty screen this whole task
  *     exists to earn its way out of. So the failure un-pins, landing on the same
  *     still composition reduced motion and no-JS already produce. **A `catch`

@@ -46,7 +46,7 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    **`rooted` is the page's one pinned scene** (Plan 4 Task 3c) and the only place `StickyScene` is mounted.
    The rule it was written under still binds anything else that reaches for it: use it only where the content
    genuinely advances through the pin. There, a chapter is held still while three photographs rise past it at
-   three rates — measured at 0px of headline movement over 1,720px of scroll, and 207/147/86px of drift. The
+   three rates — measured at 0px of headline movement over 840px of scroll, and 126/89/50px of drift. The
    pin is **server-rendered off**, because `position: sticky` would pin perfectly well with no JavaScript over
    a composition that, with no JavaScript, can never move — two paid-for empty screens. Script may only switch
    it on, and only above `(min-width: 1440px) and (min-height: 860px)`, where the frozen chapter fits one
@@ -97,12 +97,18 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    the thing it was being compared to. 45% is the midpoint the client picked between the two, and the page
    as a whole already sits inside it.
 
-   **`rooted` is 40.2% since the pinned collage landed**, up from 35.3%, and that 4.9 points is the price of
-   the effect: at the two ends of the drift its flanks have moved ±104px from centre and leave a band of
-   cream at one edge. It is inside the rule with 4.8 points to spare. The page mean moved 39% → 39.7% and
-   imagery per screen 2.08 → 1.87, both because the page grew 1.9 screens without gaining a photograph —
-   which is what a pin costs. If it ever needs winning back, the lever is `COLLAGE_RATES`, not the pin
-   length: the mean is set by the composition, not by how many screens of it there are.
+   **`rooted` is 40% since the pinned collage landed**, up from 35.3%, and that ~4.7 points is the price of
+   the effect: at the two ends of the drift its flanks have moved ±67px from centre and leave a band of
+   cream at one edge. It is inside the rule with 5 points to spare.
+
+   **The pin was three screens for one day and the client shortened it to two on 5 Aug 2026.** A pin buys
+   scroll and this one adds no photographs, so at three screens the page-wide figure the client actually
+   cares about went the wrong way: imagery per screen 2.08 → 1.87, and the join below `rooted` 61.7% →
+   64.9% empty. Shortening bought most of it back — **1.98 photographs per screen, page mean 39.5%, the join
+   63.5%** — and cost `rooted` itself nothing (40.2% → 40%, worst 42.3% → 40.8%). The lesson is in that last
+   pair: a chapter's *mean* is set by its composition, not by how many screens of it there are, so the pin
+   length is a page-density lever and not a chapter-density one. Look at images-per-screen, not at the
+   chapter, when judging whether a pin is worth its scroll.
 
    **All twelve chapters are inside it as of 5 Aug 2026.** The three that were over were fixed by taking
    width and height back rather than by adding filler: `details` 58% → **42.1%** (a shared plate frame,

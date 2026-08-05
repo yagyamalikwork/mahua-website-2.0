@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-05T00:14:39.592Z",
+  "measuredAt": "2026-08-05T00:35:46.456Z",
   "budget": {
     "maxUntouchedKB": 175
   },
@@ -82,9 +82,9 @@
         "/_next/static/chunks/1de9myc15dqxx.js",
         "/_next/static/chunks/25o46h8mdjlrg.js",
         "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+        "/_next/static/chunks/3uag1nnnheyhh.js",
         "/_next/static/chunks/1d4xv0wq9d0ov.js",
-        "/_next/static/chunks/158myu8e_yme3.js",
-        "/_next/static/chunks/3uag1nnnheyhh.js"
+        "/_next/static/chunks/158myu8e_yme3.js"
       ]
     },
     "afterScroll": {
@@ -96,9 +96,9 @@
         "/_next/static/chunks/1de9myc15dqxx.js",
         "/_next/static/chunks/25o46h8mdjlrg.js",
         "/_next/static/chunks/turbopack-2quxopabd8wyd.js",
+        "/_next/static/chunks/3uag1nnnheyhh.js",
         "/_next/static/chunks/1d4xv0wq9d0ov.js",
         "/_next/static/chunks/158myu8e_yme3.js",
-        "/_next/static/chunks/3uag1nnnheyhh.js",
         "/_next/static/chunks/3dewhjypacr5m.js",
         "/_next/static/chunks/1is0gg5e6lopl.js"
       ]

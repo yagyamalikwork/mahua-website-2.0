@@ -9,7 +9,6 @@ import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type TwoTone } from "@/content/home";
-import { STICKY_SCREENS_MAX } from "@/lib/motion";
 
 type IntroCopy = {
   readonly heading: TwoTone;
@@ -17,14 +16,24 @@ type IntroCopy = {
 };
 
 /**
- * Screens of scroll the scene occupies, its own included — so two of them are
+ * Screens of scroll the scene occupies, its own included — so **one** of them is
  * spent with the chapter held still and the photographs rising past it.
+ *
+ * **It was `STICKY_SCREENS_MAX` (three) until the client ruled on 5 Aug 2026,
+ * and three was too many.** A pin buys scroll and this one adds no photographs,
+ * so at three screens `rooted` spent ~1.9 extra screens showing the same three
+ * images: page-wide imagery fell from 2.08 photographs per screen to 1.87, and
+ * the join below it went from 61.7% to 64.9% empty. Against the client's very
+ * first complaint — too few images — the pin was spending scroll to *reduce*
+ * image density. Given the choice of shortening it, keeping it, feeding it more
+ * photographs or dropping it, they chose to shorten: hold the headline, keep the
+ * drift, stop buying scroll we cannot fill.
  *
  * `StickyScene` clamps this to `STICKY_SCREENS_MAX` whatever is written here;
  * the constant is exported so the test can assert against the clamp rather than
  * against a number copied out of this file.
  */
-export const COLLAGE_SCREENS = STICKY_SCREENS_MAX;
+export const COLLAGE_SCREENS = 2;
 
 /**
  * How far each photograph drifts, as a fraction of the scroll the pin reserves.
@@ -35,14 +44,22 @@ export const COLLAGE_SCREENS = STICKY_SCREENS_MAX;
  * to match `chapter.media` — the tall flank, then the upper and lower halves of
  * the pair.
  *
- * The largest is the nearest and so the fastest. All three sit under
+ * The largest is the nearest and so the fastest. All three sit at or under
  * `PARALLAX_MAX`, which spec section 4.3 law 3 sets at 15%: past that a
  * photograph is moving rather than sitting at a depth, and CLAUDE.md
- * non-negotiable #4 is that if you notice the animation it is too fast. At
- * 1440x900 the pin reserves 1,800px, so the three travel 216px, 153px and 90px
- * from end to end — far enough apart to be read as three distances.
+ * non-negotiable #4 is that if you notice the animation it is too fast.
+ *
+ * **These were 0.12 / 0.085 / 0.05 while the pin was three screens.** Halving
+ * the pin halves the scroll these are a fraction *of*, so holding them would
+ * have halved the travel with them — 104px, 74px and 43px, which is a twitch
+ * rather than a drift. Raised to keep the effect the length of the pin bought:
+ * at 1440x900 the pin now reserves 900px, so the three travel 135px, 95px and
+ * 54px end to end, still ~40px apart and still read as three distances. The
+ * leader sits exactly on the cap, which is the ceiling and not a target — there
+ * is no room left here, and a shorter pin than this one would have to accept a
+ * smaller drift rather than a larger rate.
  */
-export const COLLAGE_RATES = [0.12, 0.085, 0.05] as const;
+export const COLLAGE_RATES = [0.15, 0.105, 0.06] as const;
 
 /**
  * The three flanking photographs' real widths, for `srcset` (see `ui/Photo.tsx`).

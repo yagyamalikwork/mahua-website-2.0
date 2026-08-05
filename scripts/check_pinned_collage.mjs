@@ -22,7 +22,7 @@
 //      screen, or the chapter is stuck to the viewport for the rest of the page.
 //   4. **Reduced motion reserves nothing.** The chapter's height is compared
 //      against the same page with the pin on: it must be shorter by roughly the
-//      two screens the pin reserved, not merely still.
+//      scroll the pin reserved, not merely still.
 //   5. **No JavaScript is readable.** Rendered text and painted photographs in a
 //      context with `javaScriptEnabled: false` — not the server markup inspected
 //      from outside — plus the same height check as (4).
@@ -67,17 +67,36 @@ async function open(browser, { reducedMotion = false, javaScript = true, width =
   return { context, page };
 }
 
-/** Where the section starts and how tall it is, in document space. */
+/**
+ * Where the section starts, how tall it is, and — separately — where its pinned
+ * scene starts and how tall *it* is, all in document space.
+ *
+ * The scene is reported in its own right because the section is taller than it
+ * by the chapter's vertical padding, and the pinned band is a property of the
+ * scene alone: sticky takes hold when the scene's top reaches the top of the
+ * screen and lets go when its bottom reaches the bottom. Deriving the band from
+ * the section instead means sampling outside it by however much padding happens
+ * to be, and everything on screen moves with the page out there. That is not
+ * hypothetical — it is what this rig did until the pin was shortened on 5 Aug
+ * 2026, at which point the margin it allowed for exceeded the padding and it
+ * reported a perfectly frozen headline as having moved 40px.
+ */
 const SECTION_METRICS = (id) => {
   const section = document.getElementById(id);
   if (!section) return null;
   const box = section.getBoundingClientRect();
+  const scene = section.querySelector(".sticky-scene");
+  const sceneBox = scene?.getBoundingClientRect();
   return {
     top: Math.round(box.top + window.scrollY),
     height: Math.round(box.height),
     documentHeight: document.documentElement.scrollHeight,
     screens: Number((box.height / window.innerHeight).toFixed(2)),
-    hasScene: Boolean(section.querySelector(".sticky-scene")),
+    hasScene: Boolean(scene),
+    /** The scroll the pin reserves: everything past the one screen it shows. */
+    reservedScroll: sceneBox ? Math.round(sceneBox.height - window.innerHeight) : 0,
+    sceneTop: sceneBox ? Math.round(sceneBox.top + window.scrollY) : null,
+    sceneHeight: sceneBox ? Math.round(sceneBox.height) : 0,
     drifters: section.querySelectorAll("[data-drift]").length,
   };
 };
@@ -122,14 +141,16 @@ const pinned = await page.evaluate(SECTION_METRICS, CHAPTER);
 if (!pinned) throw new Error(`no #${CHAPTER} on the page — the rig is broken, not the page`);
 
 /**
- * Where the pin holds. `top` is where the section starts; the scene's own top is
- * one section padding lower, and the pin runs for the scene's height less one
- * screen. Sampled at the two ends and three points between, because a single
- * pair of readings cannot tell a frozen headline from one that happens to be in
- * the same place at both.
+ * Where the pin holds — read off the scene itself, not off the section, and with
+ * a margin small enough to stay inside a one-screen pin. Sticky takes hold when
+ * the scene's top reaches the top of the screen and lets go `reservedScroll`
+ * later. Sampled at the two ends and three points between, because a single pair
+ * of readings cannot tell a frozen headline from one that happens to be in the
+ * same place at both.
  */
-const pinStart = pinned.top + 120;
-const pinEnd = pinned.top + pinned.height - HEIGHT - 120;
+const BAND_MARGIN = 30;
+const pinStart = pinned.sceneTop + BAND_MARGIN;
+const pinEnd = pinned.sceneTop + pinned.reservedScroll - BAND_MARGIN;
 const samples = [];
 for (let i = 0; i <= 4; i++) {
   samples.push(await readAt(page, Math.round(pinStart + ((pinEnd - pinStart) * i) / 4), CHAPTER));
@@ -220,7 +241,7 @@ async function gsapChunkNames() {
  *
  * A flaky connection, a blocked CDN, an aborted fetch on a slow phone — and
  * `scrub.ts` memoises the rejected promise, so there is no second attempt. If
- * the scene stays pinned through that, the visitor scrolls 1.9 screens of a
+ * the scene stays pinned through that, the visitor scrolls a whole screen of a
  * composition in which nothing whatsoever moves: the paid-for empty screen that
  * `StickyScene`'s own comment forbids and that this entire task exists to earn
  * its way out of.
@@ -279,10 +300,17 @@ if (headingRange > FROZEN_TOLERANCE) {
     `the headline moved ${headingRange}px in the viewport across ${scrollTravelled}px of scroll — it is not frozen`,
   );
 }
-// The other half: "frozen" is only a finding if the page really scrolled under it.
-if (scrollTravelled < HEIGHT) {
+// The other half: "frozen" is only a finding if the page really scrolled under
+// it. Stated as a share of the scroll the pin reserves rather than as a screen,
+// because the pin's length is a design decision that has already changed once —
+// it was three screens until the client shortened it on 5 Aug 2026, and a fixed
+// one-screen floor would have failed a perfectly good two-screen pin for the
+// arithmetic reason that this rig leaves a margin at each end of the band.
+const reservedScroll = pinned.reservedScroll;
+if (scrollTravelled < reservedScroll * 0.6) {
   failures.push(
-    `only ${scrollTravelled}px of scroll happened inside the pin — the headline held still because nothing moved`,
+    `only ${scrollTravelled}px of scroll happened inside the pin, which reserves ${reservedScroll}px — ` +
+      "the headline held still because nothing moved",
   );
 }
 
@@ -326,9 +354,16 @@ for (const [name, m] of [
   ["1280px wide", narrow],
 ]) {
   if (m.hasScene) failures.push(`${name}: the scene is still pinned`);
-  if (m.height >= pinned.height - HEIGHT) {
+  // Stated as a share of the scroll the pin reserves, not as "within one screen
+  // of the pinned height". The unpinned composition is not the pinned one, so
+  // the two heights never differ by exactly the reservation — what has to be
+  // true is that most of it is gone. The absolute form was right for a
+  // three-screen pin and wrong for the two-screen one the client asked for.
+  if (pinned.height - m.height < reservedScroll * 0.6) {
     failures.push(
-      `${name}: #${CHAPTER} is still ${m.height}px tall against ${pinned.height}px pinned — the reserved scroll is still there, so a visitor travels through empty screens`,
+      `${name}: #${CHAPTER} is ${m.height}px tall against ${pinned.height}px pinned, only ` +
+        `${pinned.height - m.height}px shorter — the pin reserves ${reservedScroll}px and most of it ` +
+        "is still there, so a visitor travels through empty screens",
     );
   }
 }
@@ -345,13 +380,14 @@ if (!gsapBlocked.ran) {
   if (gsapBlocked.hasScene) {
     failures.push(
       `GSAP blocked: the scene is still pinned and #${CHAPTER} is ${gsapBlocked.height}px tall — ` +
-        "1.9 screens of a composition in which nothing can move, and `scrub.ts` memoises the rejected " +
+        "a screen of a composition in which nothing can move, and `scrub.ts` memoises the rejected " +
         "promise so it will never retry",
     );
   }
-  if (gsapBlocked.height >= pinned.height - HEIGHT) {
+  if (pinned.height - gsapBlocked.height < reservedScroll * 0.6) {
     failures.push(
-      `GSAP blocked: #${CHAPTER} is still ${gsapBlocked.height}px against ${pinned.height}px pinned — the reserved scroll survived a failure that makes it worthless`,
+      `GSAP blocked: #${CHAPTER} is ${gsapBlocked.height}px against ${pinned.height}px pinned — the ` +
+        `${reservedScroll}px the pin reserves survived a failure that makes it worthless`,
     );
   }
 }
@@ -395,7 +431,8 @@ await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
 console.log(
   `#${CHAPTER} at ${WIDTH}x${HEIGHT}: ${pinned.screens} screens tall, ` +
-    `${pinned.hasScene ? "pinned" : "NOT pinned"}, ${pinned.drifters} drifting photographs`,
+    `${pinned.hasScene ? "pinned" : "NOT pinned"} over ${pinned.reservedScroll}px of reserved scroll, ` +
+    `${pinned.drifters} drifting photographs`,
 );
 console.log(
   `headline held within ${headingRange}px while ${scrollTravelled}px of page scrolled beneath it`,
