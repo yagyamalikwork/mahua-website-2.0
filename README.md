@@ -36,18 +36,44 @@ Library (unit tests) · ESLint · Vercel · Sanity (later)
 
 ## Running it
 
+**This is a Node.js project, not a Python one.** There is no `pip install` that will start it — the
+installer is `npm`. The only prerequisite is **Node.js 20.9 or newer** ([download it
+here](https://nodejs.org/)); `.nvmrc` pins 24 for anyone using `nvm`. Nothing else needs installing, and
+the repository carries no environment variables or secrets, so a fresh machine needs exactly this:
+
 ```bash
-npm install       # install dependencies
+git clone <this repo>
+cd website-mahua2.0
+npm ci            # install the exact dependency versions from package-lock.json
 npm run dev       # start the dev server at http://localhost:3000
-npm test          # run the test suite (vitest)
-npm run build     # production build
-npm run lint      # eslint
 ```
 
-Once the dev server is running:
+Use `npm ci` rather than `npm install` on a new machine — it installs the exact versions recorded in
+`package-lock.json`, so every computer runs the same build. `npm install` is for when you are deliberately
+adding or updating a dependency.
 
-- `/` is currently a placeholder heading. The chaptered page it becomes is built out in
-  `docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md`, Task 7.
+The rest of the commands:
+
+```bash
+npm test          # run the test suite (vitest) — currently 222 tests, all green
+npm run build     # production build
+npm run lint      # eslint
+npm run verify:budget   # the JS budget guard, end to end
+```
+
+Once the dev server is running, `/` is the finished home page — twelve chapters, 34 photographs, roughly
+17 screens at 1440×900.
+
+> **Demo it above 1500px.** The pinned collage on chapter *02 · Rooted like the mahua* needs at least
+> 1440px of **layout** viewport, so a Windows laptop at 1440px with a classic scrollbar will fall just
+> short and quietly show the unpinned version instead.
+
+### The Python scripts
+
+`requirements.txt` covers only the reference-harvesting scripts in `scripts/` (see
+[Reference material](#reference-material) below) — **it does not install the website.** Those five scripts
+use nothing but the Python standard library, so `requirements.txt` is deliberately empty and needs no
+`pip install` at all. Any Python 3.9+ will run them.
 
 ## Reference material
 

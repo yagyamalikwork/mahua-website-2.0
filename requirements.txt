@@ -1,0 +1,41 @@
+# Mahua Resorts — Website 2.0
+# Python requirements for the reference-material scripts in scripts/.
+#
+# ─────────────────────────────────────────────────────────────────────────────
+# THIS FILE DOES NOT INSTALL OR RUN THE WEBSITE.
+#
+# The website is a Next.js (React) application. It runs on Node.js, not on
+# Python, so there is no pip command that can start it. The two commands that
+# actually run it on any computer are:
+#
+#     npm install       # install the website's dependencies
+#     npm run dev       # start it at http://localhost:3000
+#
+# Requires Node.js 20.9 or newer (see package.json → engines, and .nvmrc).
+# See README.md → "Running it" for the full setup.
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# What this file IS for:
+#
+# The five Python scripts in scripts/ are one-off harvesting tools. They pulled
+# the reference material in reference/ out of the client's live WordPress site
+# and the prior HTML mockups. They are not part of running, testing or building
+# the site, and you do not need them to see the page.
+#
+#     python scripts/crawl_site.py           # live site: pages + their imagery
+#     python scripts/fetch_wp_media.py       # WordPress media library, via its API
+#     python scripts/extract_mockup_imgs.py  # photographs inside the old HTML mockups
+#     python scripts/extract_site_copy.py    # the live site's copy, as plain text
+#     python scripts/extract_docx.py         # plain text of the strategy documents
+#
+# Every one of them imports only the Python standard library — json, os, re,
+# ssl, urllib, zipfile, base64, hashlib, collections, html, html.parser. There
+# are deliberately no third-party packages to install, which is why the
+# dependency list below is empty.
+#
+# Requires: Python 3.9 or newer. Verified against Python 3.13.6, on which all
+# five scripts compile clean with nothing installed.
+#
+# `pip install -r requirements.txt` will succeed and install nothing. That is
+# the correct result, not a failure. Please don't add packages here to make the
+# file look busier — anything added would be unused.
