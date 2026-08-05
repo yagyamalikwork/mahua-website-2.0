@@ -31,10 +31,25 @@ describe("the leaf cursor stays removable", () => {
    * screenshot.
    */
   it("is imported by exactly one file outside its own directory", () => {
+    /**
+     * Matches an actual import, not a mention.
+     *
+     * This grepped for the bare path at first, and `scripts/check_leaf_cursor.mjs`
+     * tripped it — on its *output filename*,
+     * `docs/reviews/2026-08-05-signature/leaf-cursor.json`, which happens to
+     * contain the same substring. A false positive is the cheap failure here; the
+     * expensive one is the same weakness in the other direction, where a real
+     * importer hides because it spelled the path differently. Requiring the path
+     * to sit inside a `from "…"` or `import("…")` is both narrower and stricter
+     * than a substring, because it is the syntax that actually creates a
+     * dependency.
+     */
+    const IMPORTS = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*)["'][^"']*signature\/leaf-cursor/;
+
     const importers = sourceFiles("components")
       .concat(sourceFiles("app"), sourceFiles("lib"), sourceFiles("scripts"))
       .filter((f) => !f.startsWith(DIR))
-      .filter((f) => readFileSync(path.join(ROOT, f), "utf8").includes("signature/leaf-cursor"));
+      .filter((f) => IMPORTS.test(readFileSync(path.join(ROOT, f), "utf8")));
 
     expect(importers).toEqual(["app/layout.tsx"]);
   });
