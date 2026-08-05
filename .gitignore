@@ -46,3 +46,7 @@ reference/wp-pages/
 
 # Client-supplied source video — 25 MB, kept locally, frames harvested into public/media
 reference/video/
+
+# Python bytecode from the reference-harvesting scripts
+__pycache__/
+*.pyc
