@@ -114,7 +114,20 @@ export function ChapterMenu() {
         aria-expanded={open}
         aria-controls="chapter-menu"
         onClick={() => setOpen((wasOpen) => !wasOpen)}
-        className="pointer-events-auto justify-self-start font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] text-[color:var(--bg)] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
+        /*
+         * The trigger is the only part of this component that lives in the
+         * header's own bar, so it is the only part that changes colour with it:
+         * cream over the hero's photograph, `ink` once the bar is cream.
+         * `--header-ink` is set by `app/globals.css` from the header's state and
+         * falls back to cream, which is what a `ChapterMenu` rendered anywhere
+         * else — or before script has decided anything — would get.
+         * `data-header-tint` is what carries both the colour and its transition.
+         *
+         * The focus ring takes the same value. A cream ring on a cream bar is a
+         * focus indicator that exists in the markup and not on the screen.
+         */
+        data-header-tint="ink"
+        className="pointer-events-auto justify-self-start font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
       >
         {HOME.nav.menu}
       </button>

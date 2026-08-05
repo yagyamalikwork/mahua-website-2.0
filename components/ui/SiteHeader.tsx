@@ -1,6 +1,8 @@
 import { BrandMark } from "@/components/ui/BrandMark";
 import { ChapterMenu } from "@/components/ui/ChapterMenu";
 import { PillButton } from "@/components/ui/PillButton";
+import { StickyHeader } from "@/components/ui/StickyHeader";
+import { CHAPTERS } from "@/content/chapters";
 import { HOME } from "@/content/home";
 
 /**
@@ -8,12 +10,25 @@ import { HOME } from "@/content/home";
  * header, and nothing else.
  *
  * It overlays the hero but is not part of it, so it lives here and is composed by
- * `app/page.tsx` rather than nested inside `Hero`. It is absolutely positioned
- * rather than fixed: cream type over a photograph is only legible while there is
- * a photograph under it, and a header that followed the visitor down onto the
- * cream page would have to invert its own colours mid-scroll. That is a real
- * feature with real failure modes and no copy written for it, so the header
- * scrolls away with the hero it belongs to.
+ * `app/page.tsx` rather than nested inside `Hero`.
+ *
+ * **It follows the visitor down the page**, at the client's request on 5 Aug
+ * 2026 and after the objection that used to sit in this comment was tested
+ * against the reference rather than reasoned about. That objection was: cream
+ * type over a photograph is only legible while there is a photograph under it,
+ * so a header that followed the visitor onto the cream page would have to invert
+ * its own colours mid-scroll, which is a real feature with real failure modes.
+ * The reference answers it — `thesujanlife.com` is `fixed` from the first pixel,
+ * transparent at the top, and cream-backed past the hero, **with nav type that
+ * never changes colour at all** (`docs/reviews/2026-08-05-sujan-scroll/`). A bar
+ * earns its legibility by gaining a background. The colour change on top of that
+ * is the client's own ask — the wordmark arrives in the brand's brown once there
+ * is cream under it — and it is a nicety the background already covers for, not
+ * the mechanism the header depends on.
+ *
+ * `StickyHeader` owns the state, the `position`, and the fail-safe that keeps
+ * the header where it used to be whenever it cannot know which state it is in.
+ * Everything below it here is static markup and stays on the server.
  *
  * A three-column grid, not a flex row: `1fr auto 1fr` centres the wordmark on the
  * *container* rather than in the gap left over between two items of unequal
@@ -23,12 +38,16 @@ import { HOME } from "@/content/home";
  * **The menu used to be inert** — a `<button>` labelled "Menu" that did nothing,
  * in the most prominent position on the page. It now opens `ChapterMenu`, which
  * lists the seven numbered chapters of `content/chapters.ts` and goes to them.
- * That component is the only client component in the header; everything else
- * here is static markup and stays on the server.
  */
 export function SiteHeader({ ctaHref }: { ctaHref: string }) {
+  // Found by kind rather than by index. The hero is the chapter the bar is
+  // transparent over, and "the first chapter" is a coincidence of the current
+  // spine rather than a property of it.
+  const hero = CHAPTERS.find((chapter) => chapter.kind === "hero");
+  if (!hero) throw new Error("The page has no hero chapter for the header to watch.");
+
   return (
-    <header className="pointer-events-none absolute inset-x-0 top-0 z-40">
+    <StickyHeader heroId={hero.id}>
       {/*
        * The base gap and padding are tighter than they look like they should be
        * because a 320px phone has to fit "Menu", the brand lockup and the "Plan
@@ -41,10 +60,20 @@ export function SiteHeader({ ctaHref }: { ctaHref: string }) {
 
         <BrandMark className="justify-self-center" />
 
-        <div className="pointer-events-auto justify-self-end">
+        {/*
+         * `data-contrast` is the hook `scripts/check_contrast_over_photos.mjs`
+         * finds the pill by, and it is on the wrapper because the pill itself is
+         * `PillButton`, which is used in three places and must not carry a hook
+         * that means "the one in the header". Selecting it structurally is what
+         * this project has already been burned by twice — `header > div > p` for
+         * the wordmark, and `header a[href^='#']`, which would also have matched
+         * the seven chapter links inside `ChapterMenu`'s panel, since the panel
+         * is a child of this header and keeps its layout boxes while closed.
+         */}
+        <div data-contrast="header-pill" className="pointer-events-auto justify-self-end">
           <PillButton href={ctaHref}>{HOME.nav.cta}</PillButton>
         </div>
       </div>
-    </header>
+    </StickyHeader>
   );
 }

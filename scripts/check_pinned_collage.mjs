@@ -75,11 +75,21 @@ async function open(browser, { reducedMotion = false, javaScript = true, width =
  * by the chapter's vertical padding, and the pinned band is a property of the
  * scene alone: sticky takes hold when the scene's top reaches the top of the
  * screen and lets go when its bottom reaches the bottom. Deriving the band from
- * the section instead means sampling outside it by however much padding happens
- * to be, and everything on screen moves with the page out there. That is not
- * hypothetical — it is what this rig did until the pin was shortened on 5 Aug
- * 2026, at which point the margin it allowed for exceeded the padding and it
- * reported a perfectly frozen headline as having moved 40px.
+ * the section instead means guessing at that padding with a fixed margin, and
+ * everything on screen moves with the page outside the band.
+ *
+ * **This is a correctness change and not a bug fix, and the difference matters.**
+ * The version of this comment written on 5 Aug 2026 claimed the old
+ * section-derived band had reported a perfectly frozen headline as having moved
+ * 40px. That is not reproducible and it is not true: with the pin at two screens
+ * the old band worked out wholly *inside* the pin and read 0px, which is why the
+ * shortening landed green. The old band was right by luck — a fixed margin that
+ * happened to exceed the padding — and the pin was already the one construct on
+ * this page whose height a number sets rather than its content. Reading the
+ * scene's own top and reserved scroll makes the band the thing it is supposed to
+ * be at any pin length, which is the whole justification; the band it produces
+ * today is 840px against the old 820px, so it is also strictly stricter. A false
+ * rationale in a comment misleads the next reader worse than no comment at all.
  */
 const SECTION_METRICS = (id) => {
   const section = document.getElementById(id);

@@ -40,7 +40,90 @@
 html {
   /* Lenis drives scrolling; native smooth scrolling would fight it. */
   scroll-behavior: auto;
+  /*
+   * The offset a fragment link has to leave for the header that now stays at the
+   * top of the page. `components/ui/StickyHeader.tsx` measures the bar and writes
+   * the property; `ChapterMenu`'s seven `href="#id"` links land under it without
+   * this, because the browser scrolls a target to y=0 and y=0 is behind the bar.
+   *
+   * **The fallback is `0px` and it is load-bearing**, not a formality. The
+   * property is only ever written while the header is actually following, so a
+   * page with no JavaScript — where the header scrolls away with the hero and
+   * nothing overlays anything — offsets its anchors by nothing, which is right.
+   */
+  scroll-padding-top: var(--header-height, 0px);
 }
+
+/*
+ * The header that stays — `components/ui/StickyHeader.tsx`, and the same
+ * fail-safe grammar as `[data-enter]`: **the absence of `data-scrolled` is the
+ * resting state**, so markup that script never reaches is the transparent bar
+ * with cream type that this page has always had over its hero.
+ *
+ * Two custom properties rather than two sets of colour rules, because the
+ * elements that take them are laid out by Tailwind classes in three different
+ * components and the colour is the only thing that changes. They are ordinary
+ * inherited properties, so `var()` substitution happens at computed-value time
+ * and the `color` a child computes really does change — which is why the
+ * transition below is on `color` and lands, where a transition on the custom
+ * property itself would do nothing at all without `@property`.
+ *
+ * `background-color` and `border-bottom-color`, never the `background` or
+ * `border` shorthands. Nothing sets a `bg-*` or `border-*` utility on this
+ * element today, but the shorthand is the form a future utility would silently
+ * compose with or be merged into, and this file already carries one scar from
+ * exactly that (see the note above the image rules).
+ */
+[data-site-header] {
+  --header-ink: var(--bg);
+  --header-wordmark: var(--bg);
+  background-color: transparent;
+  /*
+   * Declared transparent rather than absent so the bar is the same height in
+   * both states. A border that appears would move every item in the row by a
+   * pixel at the moment the colour changes, which is the sort of thing nobody
+   * can name and everybody can see.
+   */
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--enter-duration) var(--enter-ease),
+    border-bottom-color var(--enter-duration) var(--enter-ease);
+}
+
+[data-site-header][data-scrolled] {
+  --header-ink: var(--text);
+  /* The client's own brown, and only ever here. See `lib/palette.ts`. */
+  --header-wordmark: var(--brand);
+  background-color: var(--bg);
+  /* Decorative, and gold's actual job — CLAUDE.md non-negotiable #7. */
+  border-bottom-color: var(--accent);
+}
+
+/*
+ * An attribute, not a structural selector. `header button`, `header span` would
+ * reach into `ChapterMenu`'s panel — which is a child of the header and is cream
+ * type on the dark overlay in both states — and the wordmark being found as
+ * `header > div > p` is precisely how the contrast rig came to measure nothing
+ * for a whole task (see `components/ui/BrandMark.tsx`).
+ */
+[data-header-tint] {
+  transition: color var(--enter-duration) var(--enter-ease);
+}
+
+/*
+ * Both carry the cream fallback the header itself declares, so an element
+ * wearing one of these hooks outside a `[data-site-header]` — a future footer
+ * lockup, a Storybook-style harness, a test — is cream rather than whatever it
+ * happened to inherit.
+ */
+[data-header-tint="ink"] {
+  color: var(--header-ink, var(--bg));
+}
+
+[data-header-tint="wordmark"] {
+  color: var(--header-wordmark, var(--bg));
+}
+
 
 body {
   background-color: var(--bg);
@@ -251,6 +334,17 @@ body {
     transition: none;
     scale: 1;
   }
+
+  /*
+   * The header still follows and still changes state — following is not motion,
+   * and a visitor who asked for less of it needs a legible bar just as much as
+   * anyone. What goes is the crossfade: the `*` rule flattens it, so the bar and
+   * its type arrive in their scrolled colours instantly instead of over 0.9s.
+   * A still state, not a fast one, exactly as everywhere else in this block.
+   *
+   * There is nothing to restate here. It is written down because the absence of
+   * a rule in this block usually means an oversight, and here it is a decision.
+   */
 
   /*
    * No pin — and, just as importantly, none of the scroll it reserved. Leaving

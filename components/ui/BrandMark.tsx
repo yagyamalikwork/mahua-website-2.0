@@ -15,9 +15,17 @@ import { HOME } from "@/content/home";
  *   (3.2-8.0 KB). Shipping the source SVG would have spent a sixth of the
  *   first-fold budget on one 40px mark.
  * - **The words are set live**, in the display serif the header used before the
- *   logo existed. The artwork's brown (`#7F5C24`) is unreadable over the hero
- *   photograph; live type takes the cream the photograph needs, stays crisp at
- *   any size, and is selectable and searchable.
+ *   logo existed. The artwork's brown is unreadable over the hero photograph —
+ *   1.42:1 against the brightest pixel the contrast rig has ever found under
+ *   this lockup — so live type takes the cream the photograph needs, stays crisp
+ *   at any size, and is selectable and searchable.
+ *
+ *   **It takes the brown back the moment the bar is cream.** That is the client's
+ *   5 Aug request and the reason `PALETTE.brand` exists: the objection was never
+ *   to the colour, it was to the colour over a photograph, and past the hero
+ *   there is no photograph. `--header-wordmark` is set by
+ *   `app/globals.css` from the header's own state, so nothing here knows which
+ *   state it is in and no colour is written in this file.
  *
  * Horizontal rather than stacked, at the client's direction: flower, then name,
  * on one line. Everything is sized in `em` from the wordmark, so the whole
@@ -37,7 +45,7 @@ export function BrandMark({ className }: { className?: string }) {
 
   return (
     <span
-      className={`flex items-center gap-[0.45em] font-[family-name:var(--font-display)] text-[10px] font-light uppercase leading-none text-[color:var(--bg)] min-[360px]:text-[11px] min-[400px]:text-[13px] sm:gap-[0.5em] sm:text-lg md:text-2xl ${className ?? ""}`}
+      className={`flex items-center gap-[0.45em] font-[family-name:var(--font-display)] text-[10px] font-light uppercase leading-none min-[360px]:text-[11px] min-[400px]:text-[13px] sm:gap-[0.5em] sm:text-lg md:text-2xl ${className ?? ""}`}
     >
       {/*
        * `shrink-0` belongs here, not on the `<img>`. The flex item is the
@@ -84,8 +92,15 @@ export function BrandMark({ className }: { className?: string }) {
        * CI stayed green. An attribute the markup has to keep on purpose cannot
        * drift the same way.
        */}
+      {/*
+       * `data-header-tint` is the other hook, and it is an attribute for the same
+       * reason: it is what `app/globals.css` gives the colour transition to, and
+       * a structural selector would have to reach past `ChapterMenu`'s panel,
+       * which is also inside the header and is cream in both states.
+       */}
       <span
         data-contrast="brand-wordmark"
+        data-header-tint="wordmark"
         className="whitespace-nowrap tracking-[0.02em] min-[360px]:tracking-[0.08em] min-[400px]:tracking-[0.14em] sm:tracking-[0.24em] md:tracking-[0.3em]"
       >
         {HOME.nav.brand}

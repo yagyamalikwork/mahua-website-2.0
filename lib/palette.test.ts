@@ -47,6 +47,23 @@ describe("PALETTE", () => {
     expect(contrastRatio(PALETTE.overlay, PALETTE.gold)).toBeGreaterThanOrEqual(4.5);
   });
 
+  it("keeps the brand brown legible on both paper surfaces", () => {
+    // The wordmark colour from the client's own logo, sampled from the vector
+    // rather than eyedropped from a screenshot. It is the header's scrolled
+    // state, so it is body-weight type on cream and takes the 4.5:1 floor.
+    expect(contrastRatio(PALETTE.brand, PALETTE.paper)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(PALETTE.brand, PALETTE.paperDeep)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("keeps the brand's brown and our gold text colour apart", () => {
+    // They look alike and they are not the same decision. `goldText` is ours,
+    // invented so a gold-*looking* link stays legible; `brand` is the client's
+    // own ink, lifted off their vector, and the header wears it because it is
+    // theirs. Collapsing the two would silently repaint the wordmark in a colour
+    // the brand never chose — and nothing else here would object.
+    expect(PALETTE.brand).not.toBe(PALETTE.goldText);
+  });
+
   it("keeps gold decorative — it is not required to pass as text", () => {
     // `gold` is for rules, ornaments and the emblem. `goldText` is the legible
     // sibling. Asserting gold passes would be wrong; asserting the pair differ

@@ -28,6 +28,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--dim": PALETTE.dim,
           "--accent": PALETTE.gold,
           "--accent-text": PALETTE.goldText,
+          // The client's own wordmark brown. It appears in exactly one place —
+          // the header's lockup, once the bar has gained a cream background to
+          // sit on — and it is written here rather than in the header so that
+          // `lib/palette.ts` stays the only file that knows a colour.
+          "--brand": PALETTE.brand,
           // The only dark value on the page, and only ever laid over a
           // photograph — scrims, and the fill of a pill that sits on one.
           "--overlay": PALETTE.overlay,

@@ -52,12 +52,21 @@ export const COLLAGE_SCREENS = 2;
  * **These were 0.12 / 0.085 / 0.05 while the pin was three screens.** Halving
  * the pin halves the scroll these are a fraction *of*, so holding them would
  * have halved the travel with them — 104px, 74px and 43px, which is a twitch
- * rather than a drift. Raised to keep the effect the length of the pin bought:
- * at 1440x900 the pin now reserves 900px, so the three travel 135px, 95px and
- * 54px end to end, still ~40px apart and still read as three distances. The
- * leader sits exactly on the cap, which is the ceiling and not a target — there
- * is no room left here, and a shorter pin than this one would have to accept a
- * smaller drift rather than a larger rate.
+ * rather than a drift. Raised to keep the effect the length of the pin bought.
+ *
+ * **Two sets of travel figures are correct, and they are not the same number.**
+ * At 1440x900 the pin reserves 900px, so in *theory* the three travel 135px, 95px
+ * and 54px end to end — reserved scroll times rate, which is the arithmetic this
+ * file is responsible for. What `scripts/check_pinned_collage.mjs` and CLAUDE.md
+ * record is **126 / 89 / 50px**, because the rig samples the pinned band between
+ * the first and last offsets it can safely read and that band is 840px, not the
+ * full 900. The rig's figures are the measured ones and are the ones to quote;
+ * these are what the rates mean. Either way the three stay ~40px apart and still
+ * read as three distances.
+ *
+ * The leader sits exactly on the cap, which is the ceiling and not a target —
+ * there is no room left here, and a shorter pin than this one would have to
+ * accept a smaller drift rather than a larger rate.
  */
 export const COLLAGE_RATES = [0.15, 0.105, 0.06] as const;
 

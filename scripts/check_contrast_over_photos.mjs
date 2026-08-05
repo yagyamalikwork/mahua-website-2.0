@@ -38,14 +38,33 @@ const WIDTHS = flag("widths", "390,768,1440,1920").split(",").map(Number);
 
 /** The type colour over every photograph on the page — cream, not white. */
 const CREAM = [0xf1, 0xe9, 0xd7];
+/** `PALETTE.ink` — the header's menu label once the bar has gone cream. */
+const INK = [0x31, 0x40, 0x2c];
+/** `PALETTE.brand` — the client's own wordmark brown, on the cream bar only. */
+const BRAND = [0x7f, 0x5c, 0x24];
+/** `PALETTE.overlay` — the pill's label, on gold, in both header states. */
+const OVERLAY = [0x23, 0x2b, 0x21];
 
 const luminance = (rgb) =>
   rgb
     .map((c) => (c / 255 <= 0.03928 ? c / 255 / 12.92 : Math.pow((c / 255 + 0.055) / 1.055, 2.4)))
     .reduce((n, v, i) => n + v * [0.2126, 0.7152, 0.0722][i], 0);
 
-const ratio = (rgb) => {
-  const [hi, lo] = [luminance(rgb), luminance(CREAM)].sort((a, b) => b - a);
+/**
+ * The contrast one background pixel gives one type colour.
+ *
+ * `text` defaults to cream because that is what every run measured before 5 Aug
+ * 2026: cream is the only colour type takes over a photograph. The header's
+ * scrolled state broke that assumption — the menu is `ink`, the wordmark is
+ * `brand` — and a rig that assumed cream would have reported the *opposite* of
+ * the truth there, scoring a dark-on-cream run by how bright its background was.
+ *
+ * The worst-pixel search below is unchanged and needs no direction: it takes the
+ * minimum ratio over every pixel in the crop, which finds the brightest pixel
+ * under cream type and the darkest one under dark type, without being told which.
+ */
+const ratio = (rgb, text = CREAM) => {
+  const [hi, lo] = [luminance(rgb), luminance(text)].sort((a, b) => b - a);
   return Number(((hi + 0.05) / (lo + 0.05)).toFixed(2));
 };
 
@@ -53,6 +72,28 @@ const ratio = (rgb) => {
  * `min` is 3.0 for display type (WCAG large text) and 4.5 for body and links.
  * `container` is what gets its text hidden — hiding only the run itself would
  * leave its neighbours in the crop and measure cream against cream.
+ *
+ * `text` is the colour the type is set in, defaulting to cream.
+ *
+ * `hide` is how the container's type is taken out of the frame, and the default
+ * is `visibility`. `color` exists for a run whose own element carries the
+ * background being measured: the pill is a solid gold `<a>` with its label
+ * inside it, and `visibility: hidden` on that `<a>` takes the gold with it and
+ * measures whatever is behind the pill instead of the pill.
+ *
+ * **The pill's runs target the label's `<span>`, not the `<a>`.** The `<a>` is
+ * `rounded-full`, so its own rectangle includes four corners that are not gold
+ * at all — over the hero photograph the darkest pixel in that rectangle was
+ * [36,43,29] and this run reported 1.00:1 for a pill that measures 4.92:1
+ * wherever a letter actually sits. The rectangle to crop is the one the glyphs
+ * are in. See `components/ui/PillButton.tsx`.
+ *
+ * **The header is measured in both of its states** (5 Aug 2026, when it became
+ * `fixed`). The scrolled runs sit at `#why-you-came`, which is deliberate and not
+ * arbitrary: it is a full-bleed photograph, so the header is over an image there.
+ * If the cream bar ever failed to arrive, these runs would be measuring dark type
+ * on a photograph and would fail loudly. Parked over a cream chapter they would
+ * pass whether the bar was there or not, which is a check that cannot fail.
  */
 const RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='chapter-menu']" },
@@ -67,9 +108,43 @@ const RUNS = [
     // "not visible", which this script used to treat as neither pass nor fail.
     sel: '[data-contrast="brand-wordmark"]',
   },
+  {
+    name: "header · pill",
+    min: 4.5,
+    at: "#arrival",
+    container: "header",
+    sel: "[data-contrast='header-pill'] a span",
+    text: OVERLAY,
+    hide: "color",
+  },
   { name: "hero · headline", min: 3, at: "#arrival", container: "#arrival", sel: "#arrival h1 [data-word]" },
   { name: "hero · sub", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival > div > p" },
   { name: "hero · scroll cue", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival div.flex > span:nth-child(2)" },
+  {
+    name: "header scrolled · menu",
+    min: 4.5,
+    at: "#why-you-came",
+    container: "header",
+    sel: "[aria-controls='chapter-menu']",
+    text: INK,
+  },
+  {
+    name: "header scrolled · wordmark",
+    min: 4.5,
+    at: "#why-you-came",
+    container: "header",
+    sel: '[data-contrast="brand-wordmark"]',
+    text: BRAND,
+  },
+  {
+    name: "header scrolled · pill",
+    min: 4.5,
+    at: "#why-you-came",
+    container: "header",
+    sel: "[data-contrast='header-pill'] a span",
+    text: OVERLAY,
+    hide: "color",
+  },
   { name: "quote · why-you-came", min: 3, at: "#why-you-came", container: "#why-you-came", sel: "#why-you-came [data-word]" },
   { name: "quote · after-dark", min: 3, at: "#after-dark", container: "#after-dark", sel: "#after-dark [data-word]" },
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
@@ -100,21 +175,38 @@ async function measure(page, run) {
   );
   if (boxes.length === 0) return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
 
-  await page.evaluate(({ container }) => {
+  await page.evaluate(({ container, hide }) => {
     // `button` matters: the header's own run *is* a button, and leaving it
     // visible measures its cream label against cream and reports 1.06:1.
     const tags = ["h1", "h2", "p", "span", "a", "cite", "button"];
     for (const e of document.querySelectorAll(tags.map((t) => `${container} ${t}`).join(", "))) {
-      e.style.visibility = "hidden";
+      // The exact inline style, kept so it can be put back exactly. Clearing the
+      // properties this script sets is not the same thing: `PillButton` carries
+      // its own inline `color`, and a blanket `style.color = ""` afterwards
+      // *deleted* it — the pill went on being measured with a label colour it
+      // does not have, in every run after the first.
+      e.dataset.rigStyle = e.getAttribute("style") ?? "";
+      // `visibility: hidden` takes the element's own background with it, which
+      // is right for type laid over a photograph and wrong for type laid on a
+      // solid pill. `color: transparent` removes the glyphs and leaves the fill.
+      if (hide === "color") e.style.color = "transparent";
+      else e.style.visibility = "hidden";
     }
-  }, { container: run.container });
+  }, { container: run.container, hide: run.hide ?? "visibility" });
   await page.waitForTimeout(150);
   const shot = await page.screenshot();
   await page.evaluate(() => {
-    for (const e of document.querySelectorAll("[style*='visibility']")) e.style.visibility = "";
+    for (const e of document.querySelectorAll("[data-rig-style]")) {
+      const original = e.dataset.rigStyle;
+      if (original) e.setAttribute("style", original);
+      else e.removeAttribute("style");
+      delete e.dataset.rigStyle;
+    }
   });
 
+  const text = run.text ?? CREAM;
   let worst = Number.POSITIVE_INFINITY;
+  /** The pixel that gave `worst` — brightest under cream type, darkest under dark. */
   let brightest = [0, 0, 0];
   for (const b of boxes) {
     const { data, info } = await sharp(shot)
@@ -123,14 +215,22 @@ async function measure(page, run) {
       .toBuffer({ resolveWithObject: true });
     for (let i = 0; i < data.length; i += info.channels) {
       const px = [data[i], data[i + 1], data[i + 2]];
-      const r = ratio(px);
+      const r = ratio(px, text);
       if (r < worst) {
         worst = r;
         brightest = px;
       }
     }
   }
-  return { name: run.name, min: run.min, worst, brightest, boxes: boxes.length, pass: worst >= run.min };
+  return {
+    name: run.name,
+    min: run.min,
+    text: `#${text.map((c) => c.toString(16).padStart(2, "0")).join("")}`,
+    worst,
+    brightest,
+    boxes: boxes.length,
+    pass: worst >= run.min,
+  };
 }
 
 async function main() {

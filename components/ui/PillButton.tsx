@@ -57,7 +57,20 @@ export function PillButton({
       ].join(" ")}
       style={{ backgroundColor: "var(--accent)", color: "var(--overlay)" }}
     >
-      {children}
+      {/*
+       * The label has its own box so it can be measured.
+       * `scripts/check_contrast_over_photos.mjs` crops to a run's rectangle and
+       * reads the worst pixel behind it, and the `<a>`'s own rectangle is the
+       * wrong rectangle: `rounded-full` means its corners are not gold at all,
+       * they are whatever is behind the pill. Over the hero photograph that put
+       * the crop's darkest pixel at [36,43,29] and reported 1.00:1 for a pill
+       * that is in fact 4.92:1 everywhere a letter actually sits.
+       *
+       * A `<span>` around the text is inert — it inherits everything, changes no
+       * layout inside an `inline-block` — and it gives all three pills on the
+       * page a glyph band that can be cropped to.
+       */}
+      <span>{children}</span>
     </a>
   );
 }
