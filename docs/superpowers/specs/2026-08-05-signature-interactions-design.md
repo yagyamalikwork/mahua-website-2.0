@@ -66,7 +66,14 @@ A hairline that grows from the left edge to the full width of a link's label whe
 
 ### Behaviour
 
-- **Grows from the left**, in gold, 1px, sitting on the text's baseline gap.
+- **Grows from the left**, 1px, sitting on the text's baseline gap, in **`currentColor`** — it always
+  matches the text it underlines.
+
+  *Amended while planning.* This said "in gold". Gold measures ~2.5:1 on cream, and the menu trigger spends
+  the first screen sitting over the hero photograph, where a 1px gold hairline disappears. `currentColor` is
+  legible on cream, on the menu's dark overlay and over a photograph with no per-surface special-casing —
+  and on `LodgeCards`, whose links are already `--accent-text`, it still reads gold. Non-negotiable #7
+  permits gold for rules; it does not require it.
 - **Retracts to the left** when the pointer leaves — it does not vanish, and it does not retract to the
   right. The same edge is the origin in both directions.
 - **Fires on `:focus-visible` as well as `:hover`.** An affordance only mouse users get is not an
