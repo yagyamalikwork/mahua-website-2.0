@@ -127,7 +127,14 @@ export function ChapterMenu() {
          * focus indicator that exists in the markup and not on the screen.
          */
         data-header-tint="ink"
-        className="pointer-events-auto justify-self-start font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
+        /*
+         * `hover:opacity-80` became `rule-in` on 5 Aug 2026. Two hover responses
+         * on one element is the busy reading the reference site avoids; the rule
+         * is now the hover. It inherits `--header-ink` through `currentColor`, so
+         * it is cream over the hero photograph and ink once the bar is cream —
+         * which is why the rule is `currentColor` and not gold.
+         */
+        className="rule-in pointer-events-auto justify-self-start font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
       >
         {HOME.nav.menu}
       </button>
@@ -153,7 +160,7 @@ export function ChapterMenu() {
               ref={closeRef}
               type="button"
               onClick={close}
-              className="font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] text-[color:var(--bg)] hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
+              className="rule-in font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] text-[color:var(--bg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
             >
               {HOME.nav.menuClose}
             </button>
@@ -169,7 +176,7 @@ export function ChapterMenu() {
                   <a
                     href={`#${chapter.id}`}
                     onClick={close}
-                    className="flex items-baseline gap-5 py-4 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] md:gap-8 md:py-5 short:py-2.5"
+                    className="flex items-baseline gap-5 py-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] md:gap-8 md:py-5 short:py-2.5"
                   >
                     <span
                       className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.24em] md:text-xs"
@@ -177,7 +184,14 @@ export function ChapterMenu() {
                     >
                       {chapter.number}
                     </span>
-                    <span className="font-[family-name:var(--font-display)] text-[clamp(1.5rem,4.4vw,3rem)] font-light leading-[1.1] text-[color:var(--bg)] short:text-[clamp(1.2rem,3vw,1.8rem)]">
+                    {/*
+                     * The rule goes under the label, not under the whole row —
+                     * the number beside it is a marker, not part of the chapter's
+                     * name, and a hairline running under both would read as a
+                     * table rule. The `<a>` is still the hover target; the CSS
+                     * reaches in with `a:hover .rule-in::after`.
+                     */}
+                    <span className="rule-in font-[family-name:var(--font-display)] text-[clamp(1.5rem,4.4vw,3rem)] font-light leading-[1.1] text-[color:var(--bg)] short:text-[clamp(1.2rem,3vw,1.8rem)]">
                       {chapter.label}
                     </span>
                   </a>

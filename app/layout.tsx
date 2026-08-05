@@ -62,6 +62,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // the number lives in `lib/motion.ts`, the keyframes in
           // `app/globals.css`, and neither can drift from the other.
           "--emblem-turn-duration": `${DURATION.emblemTurn}s`,
+          // The hairline that slides in under a link, on the same terms as
+          // everything above it: the number lives in `lib/motion.ts`, the rule
+          // lives in `app/globals.css`, and neither can drift from the other.
+          "--rule-in-duration": `${DURATION.ruleIn}s`,
         } as React.CSSProperties
       }
     >

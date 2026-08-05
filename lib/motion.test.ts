@@ -84,6 +84,17 @@ describe("the motion laws (spec section 4.3)", () => {
     expect(STICKY_SCREENS_MAX).toBeLessThanOrEqual(3);
   });
 
+  it("answers a hover faster than anything arrives on its own", () => {
+    // A hover is an answer to something the visitor just did; an entrance arrives
+    // by itself and may be unhurried. An answer that takes as long as an arrival
+    // reads as lag rather than as restraint, which is law 4 pointing the other
+    // way for once — this is the one movement on the page that may be noticed,
+    // because being noticed is its entire job.
+    expect(DURATION.ruleIn).toBeGreaterThan(0.2);
+    expect(DURATION.ruleIn).toBeLessThan(0.5);
+    expect(DURATION.ruleIn).toBeLessThan(ENTER.duration);
+  });
+
   it("nothing bounces", () => {
     const banned = /(elastic|bounce|back)/i;
     for (const [name, ease] of Object.entries(EASE)) {

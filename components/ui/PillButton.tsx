@@ -32,6 +32,19 @@ export function PillButton({
   return (
     <a
       href={href}
+      /*
+       * The one interactive thing on the page that does not take the sliding
+       * rule: this is a filled gold shape, and a hairline inside it reads as a
+       * rendering fault rather than as an affordance.
+       *
+       * An explicit opt-out in the markup, not an exclusion list inside
+       * `scripts/check_rule_in.mjs`. A list living in a script drifts from the
+       * markup silently, which is exactly how the contrast rig came to measure
+       * nothing for a whole task — see `components/ui/BrandMark.tsx`. Here the
+       * rig demands that every link carry the rule *or* this attribute, so a new
+       * link that has neither fails, and one that opts out has said so on purpose.
+       */
+      data-rule="none"
       {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
       className={[
         "inline-block rounded-full font-[family-name:var(--font-label)] uppercase",

@@ -49,6 +49,16 @@ export const DURATION = {
    */
   columnStagger: 0.05,
   /**
+   * The hairline sliding in under a link on hover or focus.
+   *
+   * Shorter than `ENTER.duration` on purpose, and the only movement on the page
+   * allowed to be quicker than an entrance. Law 4 — "if you notice the animation,
+   * it is too fast" — is about things arriving unbidden. This one is an *answer*
+   * to something the visitor just did, and an answer that takes as long as an
+   * arrival reads as lag. Being noticed is its whole job.
+   */
+  ruleIn: 0.4,
+  /**
    * One half-turn of the brand emblem as the page arrives, and then it is still.
    *
    * `logoRotation: 75` lived here until 5 Aug 2026 — seventy-five *seconds* per

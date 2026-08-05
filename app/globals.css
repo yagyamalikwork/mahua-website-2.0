@@ -187,6 +187,85 @@ html {
   animation: emblem-turn var(--emblem-turn-duration) var(--enter-ease) 1 both;
 }
 
+/*
+ * The hairline that slides in under a link on hover or focus — the reference
+ * site's affordance, and the client's 5 Aug request.
+ *
+ * **`currentColor`, not gold.** The spec said gold and the spec was wrong on one
+ * surface: gold is ~2.5:1 on cream, and the menu trigger spends the first screen
+ * sitting over the hero photograph, where a 1px gold hairline is invisible.
+ * Matching the text means one rule is legible on cream, on the menu's dark
+ * overlay and over a photograph, with no per-surface special-casing — and on
+ * `LodgeCards`, whose links are already `--accent-text`, it still reads gold.
+ * Non-negotiable #7 permits gold for rules; it does not require it.
+ *
+ * **`transform` is safe here specifically because these are pseudo-elements.**
+ * Tailwind's `scale-*` utilities compile to the `scale` property and would
+ * compose with a `transform` rather than replace it — the trap documented above
+ * the image rules, which shipped once as masks that silently never wiped. A
+ * utility can only reach a pseudo-element through an `after:`/`before:` variant,
+ * and nothing on this page uses one. `scripts/check_rule_in.mjs` measures the
+ * rendered matrix rather than trusting that, because this is precisely the claim
+ * that was wrong last time.
+ *
+ * `left: 0; right: 0` rather than a width, so the rule is always exactly as wide
+ * as its own box and never has to know how long the label is.
+ */
+.rule-in {
+  position: relative;
+}
+
+.rule-in::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.28em;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--rule-in-duration) var(--enter-ease);
+  pointer-events: none;
+}
+
+/*
+ * The resting hairline, for a link that already read as a link before this
+ * existed — `LodgeCards`' two, which carried a permanent gold border. Replacing
+ * that with a hover-only rule would have taken an affordance away from a visitor
+ * who never hovers. At 35% the full-strength rule sliding over it reads as
+ * filling in rather than as appearing from nothing.
+ */
+.rule-in--rest::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.28em;
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/*
+ * Focus as well as hover: an affordance only pointer users get is not an
+ * affordance. `:focus-visible` rather than `:focus` so a mouse click does not
+ * leave a rule stranded under whatever was last pressed.
+ *
+ * The descendant selectors are for the menu's chapter links, where the hover
+ * target is the whole `<a>` row and the rule belongs under the label alone — the
+ * number beside it is a marker, not part of the chapter's name.
+ */
+.rule-in:hover::after,
+.rule-in:focus-visible::after,
+a:hover .rule-in::after,
+a:focus-visible .rule-in::after,
+button:hover .rule-in::after,
+button:focus-visible .rule-in::after {
+  transform: scaleX(1);
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
@@ -424,6 +503,22 @@ body {
    *
    * There is nothing to restate here. It is written down because the absence of
    * a rule in this block usually means an oversight, and here it is a decision.
+   */
+
+  /*
+   * The sliding rule keeps its travel crushed by the `*` rule above and nothing
+   * else, and that is a decision rather than an omission.
+   *
+   * Everything else in this block is a *still state* replacing a fast one,
+   * because a stranded `pending` would leave something invisible. The rule has no
+   * such state: its resting form is "not drawn yet" and its active form is "drawn",
+   * and a visitor who asked for less motion still needs to know what is a link.
+   * So it appears and disappears instantly and stays exactly as informative. The
+   * only thing removed is the travel, which is all that was ever the motion.
+   *
+   * `scripts/check_rule_in.mjs` asserts this — reduced motion must reach scaleX 1
+   * with no transition running — rather than leaving it to be inferred from the
+   * absence of a rule here.
    */
 
   /*

@@ -1,0 +1,45 @@
+{
+  "measuredAt": "2026-08-05T10:29:53.464Z",
+  "url": "http://localhost:3100/",
+  "ruleInDuration": 0.4,
+  "coverage": {
+    "total": 13,
+    "uncovered": [
+      "<a> \"Plan your stay\"",
+      "<a> \"Plan your stay\""
+    ]
+  },
+  "rest": 0,
+  "travel": null,
+  "complete": 0,
+  "keyboard": {
+    "focused": "chapter-menu",
+    "scaleX": 0
+  },
+  "reducedMotion": {
+    "scaleX": 0,
+    "running": false
+  },
+  "surfaces": [
+    {
+      "where": "cream",
+      "rule": "rgb(122, 92, 24)",
+      "behind": "rgb(241, 233, 215)",
+      "delta": 0.7002708032945816
+    },
+    {
+      "where": "menu overlay",
+      "rule": "rgb(241, 233, 215)",
+      "behind": "rgb(35, 43, 33)",
+      "delta": 0.7969001147812491
+    }
+  ],
+  "failures": [
+    "2 of 13 links/controls carry neither `rule-in` nor `data-rule`: <a> \"Plan your stay\", <a> \"Plan your stay\"",
+    "hovering started no transform transition on the rule's ::after — it snaps",
+    "the rule never completed (scaleX 0.000)",
+    "keyboard focus did not draw the rule (scaleX 0.000)",
+    "under reduced motion the rule did not appear (scaleX 0.000)"
+  ],
+  "verdict": "fail"
+}

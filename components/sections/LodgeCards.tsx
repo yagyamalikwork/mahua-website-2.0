@@ -149,8 +149,17 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                       href={lodge.href}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="mt-7 inline-block border-b pb-1 font-[family-name:var(--font-label)] text-[0.7rem] uppercase tracking-[0.22em] hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
-                      style={{ color: "var(--accent-text)", borderColor: "var(--accent)" }}
+                      /*
+                       * `border-b` became the rule's resting line on 5 Aug 2026.
+                       * The border was permanent and gold, so a gold rule sliding
+                       * over it would have had nothing to show; `rule-in--rest`
+                       * draws the same hairline at 35% of the link's own colour
+                       * and the full-strength one fills it in on hover. The
+                       * at-rest affordance survives, which matters for a visitor
+                       * who never hovers at all.
+                       */
+                      className="rule-in rule-in--rest mt-7 inline-block pb-1 font-[family-name:var(--font-label)] text-[0.7rem] uppercase tracking-[0.22em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+                      style={{ color: "var(--accent-text)" }}
                     >
                       {lodge.cta}
                     </a>

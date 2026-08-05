@@ -1,0 +1,40 @@
+{
+  "measuredAt": "2026-08-05T10:32:04.993Z",
+  "url": "http://localhost:3100/",
+  "ruleInDuration": 0.4,
+  "coverage": {
+    "total": 13,
+    "uncovered": []
+  },
+  "rest": 0,
+  "travel": {
+    "durationMs": 400,
+    "atFifteenPercent": 0.554011,
+    "atFiftyFivePercent": 0.974493
+  },
+  "complete": 1,
+  "keyboard": {
+    "focused": "chapter-menu",
+    "scaleX": 1
+  },
+  "reducedMotion": {
+    "scaleX": 1,
+    "running": false
+  },
+  "surfaces": [
+    {
+      "where": "cream",
+      "rule": "rgb(122, 92, 24)",
+      "behind": "rgb(241, 233, 215)",
+      "delta": 0.7002708032945816
+    },
+    {
+      "where": "menu overlay",
+      "rule": "rgb(241, 233, 215)",
+      "behind": "rgb(35, 43, 33)",
+      "delta": 0.7969001147812491
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}
