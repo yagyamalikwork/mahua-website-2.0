@@ -102,13 +102,33 @@ export const BOXES = {
  * The photograph is then the taller of the two on a wide desktop, so the pin has
  * travel at the narrow end of `lg` and none at the wide end.
  */
-export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; surface?: boolean }) {
+export function SplitFeature({
+  chapter,
+  surface = false,
+  footer,
+}: {
+  chapter: Chapter;
+  surface?: boolean;
+  /**
+   * Rendered at the foot of the section, on its own ground line. `field-days`
+   * passes the ink tiger; nothing else uses it.
+   *
+   * A slot rather than a `chapter.id` check inside this component. Every chapter
+   * section here is self-contained and never reaches into another, and *which*
+   * chapter carries the tiger is a decision belonging to the page's spine — where
+   * the density figures that chose it can be seen next to the chapters they
+   * describe.
+   */
+  footer?: React.ReactNode;
+}) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as SplitFeatureCopy;
   const [dawn, boardwalk, tigerTrack, canopy, hammocks, pool] = chapter.media;
 
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
-      <div>
+      {/* `relative` so a `footer` can be anchored into band 3's existing empty
+          column rather than adding a band of its own — see the note there. */}
+      <div className="relative">
         {/* Band 1 — copy left, imagery right. */}
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-14">
           <div className="lg:col-span-5">
@@ -269,6 +289,37 @@ export function SplitFeature({ chapter, surface = false }: { chapter: Chapter; s
             ))}
           </ol>
         </div>
+
+        {/*
+         * **Absolutely positioned from `lg`, so it contributes no height.**
+         *
+         * In flow it added ~250px of new band that was almost entirely cream, and
+         * the measurement was unambiguous: `field-days` went from 41.5% to 44.4%
+         * mean empty and its worst screen from 52.4% to 63.9%. It bought scroll
+         * without filling anything — the exact failure non-negotiable #9 records
+         * against the pinned collage.
+         *
+         * Band 3's row is as tall as the sticky photograph beside it, so the index
+         * column already ends in a deep band of empty paper. Anchoring the drawing
+         * into that existing space is what fills a screen instead of adding one,
+         * and it is the same device the inlay photographs above use for the same
+         * reason.
+         *
+         * Below `lg` the bands stack and there is no spare column to sit in, so it
+         * stays in flow — on a phone the chapter is dense already and the tiger is
+         * scaled by width rather than height.
+         */}
+        {/* `-bottom-16` against the section's own `lg:py-20`: the drawing sits
+            inside that 80px of padding with 16px of air beneath it. At the full
+            -20 its lowest stroke landed exactly on the boundary between the two
+            cream surfaces, which reads as a collision rather than a choice — the
+            artwork is cropped tight to its ink, so its box edge *is* its lowest
+            line. */}
+        {footer && (
+          <div className="mt-12 flex justify-center lg:pointer-events-none lg:absolute lg:right-0 lg:-bottom-16 lg:mt-0 lg:justify-end">
+            {footer}
+          </div>
+        )}
       </div>
     </ChapterSurface>
   );

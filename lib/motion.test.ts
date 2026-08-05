@@ -95,6 +95,17 @@ describe("the motion laws (spec section 4.3)", () => {
     expect(DURATION.ruleIn).toBeLessThan(ENTER.duration);
   });
 
+  it("inks the tiger slowly, and in waves that do not overlap", () => {
+    // Slow enough to be watched — this is the one thing on the page meant to be
+    // seen happening rather than found already arrived.
+    expect(DURATION.tigerInk).toBeGreaterThanOrEqual(0.6);
+    expect(DURATION.tigerInk).toBeLessThanOrEqual(1.4);
+    // And separated, which is the fix for a measured problem: with overlapping
+    // waves the drawing looked finished halfway through, because ordering by
+    // stroke length puts all the visual weight in the first waves.
+    expect(DURATION.tigerInkStagger).toBeGreaterThan(DURATION.tigerInk);
+  });
+
   it("nothing bounces", () => {
     const banned = /(elastic|bounce|back)/i;
     for (const [name, ease] of Object.entries(EASE)) {

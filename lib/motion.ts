@@ -59,6 +59,29 @@ export const DURATION = {
    */
   ruleIn: 0.4,
   /**
+   * One stroke of the ink tiger drawing itself.
+   *
+   * Longer than an entrance, because this is the one thing on the page a visitor
+   * is meant to *watch happen* rather than to find already arrived. Law 4 — "if
+   * you notice the animation, it is too fast" — is about things slipping in
+   * unbidden; a drawing being made is the opposite proposition.
+   */
+  tigerInk: 0.9,
+  /**
+   * The gap between one wave of strokes and the next.
+   *
+   * **Longer than `tigerInk`, so the waves do not overlap**, and that is measured
+   * rather than assumed. Ordering the ink by stroke length front-loads the
+   * picture: the long strokes carry nearly all the visual weight, so with
+   * overlapping waves the tiger looked finished at the halfway frame and the last
+   * waves added nothing anyone would see. Worse, the early frames showed dozens of
+   * short strokes each part-drawn at once, which reads as speckle rather than as a
+   * hand working. Separating the waves makes the drawing arrive in groups you can
+   * follow, and leaves the face — the shortest strokes, and the last wave — to
+   * land visibly at the end. See `docs/reviews/2026-08-05-signature/tiger-ink-*`.
+   */
+  tigerInkStagger: 1.05,
+  /**
    * One half-turn of the brand emblem as the page arrives, and then it is still.
    *
    * `logoRotation: 75` lived here until 5 Aug 2026 — seventy-five *seconds* per

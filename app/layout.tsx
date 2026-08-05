@@ -67,6 +67,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // everything above it: the number lives in `lib/motion.ts`, the rule
           // lives in `app/globals.css`, and neither can drift from the other.
           "--rule-in-duration": `${DURATION.ruleIn}s`,
+          // The tiger drawing itself. Same terms again: the numbers live in
+          // `lib/motion.ts`, the transition lives in `app/globals.css`, and the
+          // per-stroke delay is written by the component from its wave index.
+          "--ink-duration": `${DURATION.tigerInk}s`,
         } as React.CSSProperties
       }
     >

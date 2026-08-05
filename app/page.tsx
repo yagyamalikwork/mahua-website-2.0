@@ -1,4 +1,5 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
+import { InkTiger } from "@/components/signature/InkTiger";
 import { ChapterIntro } from "@/components/sections/ChapterIntro";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
@@ -105,7 +106,28 @@ function renderChapter(chapter: Chapter, at: Position) {
     case "plateGrid":
       return <PlateGrid key={chapter.id} chapter={chapter} surface={at.surface} />;
     case "splitFeature":
-      return <SplitFeature key={chapter.id} chapter={chapter} surface={at.surface} />;
+      return (
+        <SplitFeature
+          key={chapter.id}
+          chapter={chapter}
+          surface={at.surface}
+          /*
+           * The tiger goes here, and the choice was measured rather than felt.
+           *
+           * `field-days` owns the emptiest screen on the page that belongs to an
+           * actual chapter — 52.4% against non-negotiable #8's 45% ceiling — and
+           * the join below it is the third emptiest screen anywhere at 61%. It is
+           * also the chapter about going out to look for animals, so a
+           * naturalist's sketch at the foot of a field-day account is the page's
+           * own idiom rather than an ornament.
+           *
+           * And it costs no scroll. That is the lesson the pinned collage taught
+           * on 5 Aug: a scene that buys scroll without adding imagery moves the
+           * page-wide density figure the wrong way (non-negotiable #9).
+           */
+          footer={chapter.id === "field-days" ? <InkTiger /> : undefined}
+        />
+      );
     case "testimonials":
       return <Testimonials key={chapter.id} chapter={chapter} surface={at.surface} />;
     case "invitation":

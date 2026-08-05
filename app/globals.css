@@ -290,6 +290,34 @@ button:focus-visible .rule-in::after {
   filter: sepia(1) saturate(2.6) hue-rotate(-6deg) brightness(1.02);
 }
 
+/*
+ * The ink tiger drawing itself — `components/signature/InkTiger.tsx`, on the same
+ * fail-safe grammar as every other motion primitive here: **the absence of
+ * `data-ink` is the drawn state.** With no script there is no attribute, nothing
+ * below matches, `stroke-dashoffset` keeps its initial 0, and the tiger is simply
+ * there. There is no state in which it waits invisibly for JavaScript that never
+ * came.
+ *
+ * `stroke-dasharray: 1` pairs with the `pathLength="1"` the component sets on
+ * every path. That is what lets one rule draw 162 strokes of wildly different
+ * lengths at the same rate, with no measurement anywhere.
+ */
+[data-ink-tiger] path {
+  stroke-dasharray: 1;
+  transition: stroke-dashoffset var(--ink-duration) var(--enter-ease);
+  transition-delay: var(--ink-delay, 0s);
+}
+
+/* Staged instantly, for the reason given above [data-enter="pending"]. */
+[data-ink="pending"] [data-ink-tiger] path {
+  transition: none;
+  stroke-dashoffset: 1;
+}
+
+[data-ink="in"] [data-ink-tiger] path {
+  stroke-dashoffset: 0;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
@@ -528,6 +556,19 @@ body {
    * There is nothing to restate here. It is written down because the absence of
    * a rule in this block usually means an oversight, and here it is a decision.
    */
+
+  /*
+   * The tiger is drawn, and it does not draw.
+   *
+   * A still state, not a fast one — and a second line, exactly like the entrance
+   * rules above: were a `pending` ever stranded here, by a stale attribute or a
+   * visitor changing the setting mid-session, it would be an empty patch of cream
+   * where the animal should be.
+   */
+  [data-ink] [data-ink-tiger] path {
+    transition: none;
+    stroke-dashoffset: 0;
+  }
 
   /*
    * The sliding rule keeps its travel crushed by the `*` rule above and nothing
