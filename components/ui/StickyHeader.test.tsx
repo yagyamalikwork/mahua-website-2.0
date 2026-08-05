@@ -170,10 +170,28 @@ describe("StickyHeader", () => {
     // **This asserts that the gate is deferred, not that it is deferred by
     // enough.** jsdom never paints, so collapsing the component's two frames to
     // one still passes here — verified by doing it. The frame count is a browser
-    // question and `scripts/check_header.mjs`'s mid-page reload owns it: with a
-    // single frame it measures the bar at 31% cream and the wordmark at
-    // rgb(206,189,160) 320ms into a reload, and fails. What is guarded here is
-    // that the attribute exists, starts absent, and arrives later.
+    // question and `scripts/check_header.mjs`'s mid-page reload owns it. What is
+    // guarded here is that the attribute exists, starts absent, and arrives later.
+    //
+    // That rig records the bar's computed colour on **every animation frame from
+    // the moment `data-scrolled` appears**, so its finding is the whole fade
+    // rather than one sample. Measured 5 Aug 2026, sixty frames per run:
+    //
+    // | build | runs | frames mid-fade | `data-settled` on frame |
+    // |---|---|---|---|
+    // | as shipped | 6 | **0 of 60, every run** | 1 or 2, never 0 |
+    // | no gate at all | 5 | 55-56 of 60, every run | 0 |
+    // | one frame instead of two | 5 | 56 of 60 on **one run of five** | 0 once, 1 otherwise |
+    //
+    // The middle row is what the gate buys, and it is what that rig proves. The
+    // last row is why the frame count is not provable the same way: **a single
+    // rAF is intermittently correct, not reliably wrong** — React commits
+    // `data-settled` into the same paint as `data-scrolled` only when its
+    // scheduler happens to flush between the two, about one load in five here
+    // and one in three for the reviewer who first raised it. So the second frame
+    // removes a race rather than a certainty, and no outcome check can be red
+    // every run against it. Do not read a green run on a one-frame build as
+    // evidence that one frame is enough.
     await act(async () => {
       await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
       await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));

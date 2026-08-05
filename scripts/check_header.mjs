@@ -101,6 +101,83 @@ const AT_QUOTE = () => {
 };
 
 /**
+ * Every frame the bar paints from the moment it first becomes `scrolled`.
+ *
+ * A reload part-way down the page — a restored scroll position, a refresh, a
+ * back-navigation — renders `static`, then learns from the observer that it is
+ * `scrolled`. Animating that is 0.9s of a cream background fading in *over a
+ * cream chapter* while the type crossfades out of cream, with nothing beneath to
+ * carry either end. `StickyHeader`'s double `requestAnimationFrame` is what
+ * prevents it; `data-settled`, and so the transition, must not exist yet when
+ * the colour changes.
+ *
+ * **This is installed before the page's own scripts and anchored to the DOM
+ * change, not to a wall clock, and that is the entire point.** The check it
+ * replaces sampled once at a fixed +320ms after `commit` and treated "the bar is
+ * not scrolled yet" as a pass — so whether it caught anything depended on
+ * whether hydration happened to land inside its window. Offered as proof that a
+ * single frame is not enough, it reproduced the failure 1 run in 3 on the same
+ * build and the same port. A guard that is red only sometimes teaches whoever
+ * sees it red to shrug and re-run.
+ *
+ * Anchored to the event there is no race left. The `MutationObserver` fires in
+ * the microtask after React commits `data-scrolled`, before any paint; the
+ * samples then run one per animation frame, which is exactly where a live
+ * transition would be interpolating. With the gate working there is no
+ * transition when the colour changes, so *every* frame is the finished colour.
+ * With one frame instead of two, `data-scrolled` and `data-settled` land in the
+ * same paint and the first frames are a blend.
+ *
+ * `getComputedStyle` is not read inside the observer callback: at that instant a
+ * style recalculation returns the after-change value whether or not a transition
+ * is about to run, and it would report the fixed and broken builds identically.
+ */
+const RECORD_FIRST_STATE = () => {
+  const FRAMES = 60;
+  const state = {
+    sawScrolled: false,
+    scrolledAt: null,
+    scrollY: null,
+    settledOnFrame: null,
+    samples: [],
+  };
+  window.__headerFirstState = state;
+
+  const observer = new MutationObserver(() => {
+    const bar = document.querySelector("[data-site-header][data-scrolled]");
+    if (!bar || state.sawScrolled) return;
+    state.sawScrolled = true;
+    state.scrolledAt = Math.round(performance.now());
+    state.scrollY = Math.round(window.scrollY);
+    observer.disconnect();
+
+    const word = bar.querySelector("[data-header-tint='wordmark']");
+    let frame = 0;
+    const tick = () => {
+      if (bar.hasAttribute("data-settled") && state.settledOnFrame === null)
+        state.settledOnFrame = frame;
+      state.samples.push({
+        frame,
+        t: Math.round(performance.now() - state.scrolledAt),
+        background: getComputedStyle(bar).backgroundColor,
+        wordmark: word ? getComputedStyle(word).color : null,
+      });
+      if (++frame < FRAMES) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  // `document` itself, with `subtree`. This runs at document start, before the
+  // header exists and before `document.documentElement` does — observing the
+  // latter throws here, which silently killed the whole recorder on the first
+  // attempt and made a genuinely broken build fail for the wrong reason.
+  observer.observe(document, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["data-scrolled"],
+  });
+};
+
+/**
  * The darkest pixel in a box.
  *
  * `Grain` lays fractal noise over the entire page at 3% with `mix-blend-hard-light`,
@@ -395,32 +472,49 @@ for (const { w, h } of VIEWPORTS) {
 {
   console.log(`\n--- reloading mid-page ---`);
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await context.addInitScript(RECORD_FIRST_STATE);
   const page = await context.newPage();
   await page.goto(`${URL}#why-you-came`, { waitUntil: "commit" });
-  // Sampled well inside ENTER.duration (0.9s). If the bar is animating into its
-  // scrolled state here, it is doing it over a cream chapter with the type
-  // crossfading out of cream — nothing under it to carry either end.
-  await page.waitForTimeout(320);
-  const early = await page.evaluate(() => {
-    const bar = document.querySelector("[data-site-header]");
-    if (!bar) return null;
-    const cs = getComputedStyle(bar);
-    const word = bar.querySelector("[data-header-tint='wordmark']");
-    return {
-      scrolled: bar.hasAttribute("data-scrolled"),
-      background: cs.backgroundColor,
-      wordmark: word && getComputedStyle(word).color,
-      scrollY: Math.round(window.scrollY),
-    };
-  });
-  report.midScrollReload = early;
-  console.log(`   at +320ms, scrollY ${early?.scrollY}: ${JSON.stringify(early)}`);
-  if (!early?.scrolled) {
-    ok(`the bar had not reached its scrolled state yet — nothing to fade`);
-  } else if (early.background !== css(PALETTE.paper) || early.wordmark !== css(PALETTE.brand)) {
-    fail(`a mid-page reload is animating into its state: bar ${early.background}, wordmark ${early.wordmark} at +320ms`);
+
+  // Wait for the *event*, not for a clock. This check used to sample at a fixed
+  // +320ms and report "nothing to fade" whenever hydration had not got there
+  // yet — a pass that measured nothing, and the reason a re-reviewer could
+  // reproduce its FAIL against the exact cited mutation only 1 run in 3.
+  const arrived = await page
+    .waitForFunction(() => window.__headerFirstState?.sawScrolled === true, null, { timeout: 15000 })
+    .then(() => true)
+    .catch(() => false);
+  // ~60 frames of samples at ~16ms, well past the 0.9s the crossfade would take.
+  await page.waitForTimeout(1400);
+
+  const record = await page.evaluate(() => window.__headerFirstState ?? null);
+  report.midScrollReload = record;
+
+  if (!arrived || !record?.sawScrolled) {
+    // Previously the silent pass. A mid-page reload that never reaches the
+    // scrolled state is cream type on a cream chapter, which is the whole
+    // failure this block exists for.
+    fail(`a mid-page reload never reached the scrolled state at all (scrollY ${record?.scrollY})`);
   } else {
-    ok(`arrived already-scrolled (${early.background}, ${early.wordmark}) — no crossfade over cream`);
+    const paper = css(PALETTE.paper);
+    const brand = css(PALETTE.brand);
+    const partial = record.samples.filter((s) => s.background !== paper || s.wordmark !== brand);
+    console.log(
+      `   data-scrolled at +${record.scrolledAt}ms (scrollY ${record.scrollY}), ` +
+        `data-settled ${record.settledOnFrame === null ? "not within the run" : `on frame ${record.settledOnFrame}`}, ` +
+        `${record.samples.length} frames sampled, ${partial.length} of them mid-fade`,
+    );
+    if (partial.length > 0) {
+      const worst = partial[0];
+      fail(
+        `a mid-page reload animated into its first state: ${partial.length} of ${record.samples.length} frames were mid-fade, ` +
+          `the first on frame ${worst.frame} (+${worst.t}ms) at bar ${worst.background}, wordmark ${worst.wordmark}`,
+      );
+    } else {
+      ok(
+        `all ${record.samples.length} frames from the first painted state onward are exactly ${paper} / ${brand} — no crossfade over cream`,
+      );
+    }
   }
   await context.close();
 }

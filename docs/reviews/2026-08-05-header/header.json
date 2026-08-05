@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-05T02:31:26.657Z",
-  "url": "http://localhost:3158/",
+  "measuredAt": "2026-08-05T03:32:29.403Z",
+  "url": "http://localhost:3104/",
   "viewports": {
     "320x800": {
       "top": {
@@ -172,7 +172,7 @@
             "height": 34.390625
           }
         },
-        "emblemTransform": "matrix(1, -2.8275e-14, 2.8275e-14, 1, 0, 0)",
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
         "scrollPaddingTop": "75px",
         "docScrollWidth": 390,
         "innerWidth": 390,
@@ -305,7 +305,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, -1.51229e-07, 1.51229e-07, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -1.02187e-13, 1.02187e-13, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 768,
         "innerWidth": 768,
@@ -438,7 +438,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, -1.98421e-15, 1.98421e-15, 1, 0, 0)",
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1440,
         "innerWidth": 1440,
@@ -571,7 +571,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -1.22091e-06, 1.22091e-06, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1920,
         "innerWidth": 1920,
@@ -669,7 +669,7 @@
     }
   },
   "emblem": {
-    "early": "matrix(0.191996, -0.981396, 0.981396, 0.191996, 0, 0)",
+    "early": "matrix(0.192065, -0.981382, 0.981382, 0.192065, 0, 0)",
     "late": "matrix(1, 0, 0, 1, 0, 0)"
   },
   "reducedMotion": {
@@ -783,9 +783,371 @@
     "navigated": false
   },
   "midScrollReload": {
-    "scrolled": true,
-    "background": "rgb(241, 233, 215)",
-    "wordmark": "rgb(127, 92, 36)",
-    "scrollY": 2346
+    "sawScrolled": true,
+    "scrolledAt": 284,
+    "scrollY": 2346,
+    "settledOnFrame": 2,
+    "samples": [
+      {
+        "frame": 0,
+        "t": 5,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 1,
+        "t": 32,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 2,
+        "t": 34,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 3,
+        "t": 52,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 4,
+        "t": 72,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 5,
+        "t": 80,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 6,
+        "t": 98,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 7,
+        "t": 114,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 8,
+        "t": 131,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 9,
+        "t": 147,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 10,
+        "t": 165,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 11,
+        "t": 180,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 12,
+        "t": 197,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 13,
+        "t": 214,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 14,
+        "t": 231,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 15,
+        "t": 247,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 16,
+        "t": 264,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 17,
+        "t": 280,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 18,
+        "t": 297,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 19,
+        "t": 315,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 20,
+        "t": 331,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 21,
+        "t": 347,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 22,
+        "t": 364,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 23,
+        "t": 381,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 24,
+        "t": 398,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 25,
+        "t": 414,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 26,
+        "t": 430,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 27,
+        "t": 447,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 28,
+        "t": 464,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 29,
+        "t": 480,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 30,
+        "t": 498,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 31,
+        "t": 514,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 32,
+        "t": 530,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 33,
+        "t": 548,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 34,
+        "t": 564,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 35,
+        "t": 580,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 36,
+        "t": 597,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 37,
+        "t": 613,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 38,
+        "t": 631,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 39,
+        "t": 648,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 40,
+        "t": 664,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 41,
+        "t": 681,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 42,
+        "t": 697,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 43,
+        "t": 714,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 44,
+        "t": 730,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 45,
+        "t": 748,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 46,
+        "t": 765,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 47,
+        "t": 781,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 48,
+        "t": 797,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 49,
+        "t": 814,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 50,
+        "t": 830,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 51,
+        "t": 848,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 52,
+        "t": 864,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 53,
+        "t": 880,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 54,
+        "t": 897,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 55,
+        "t": 914,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 56,
+        "t": 931,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 57,
+        "t": 948,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 58,
+        "t": 964,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 59,
+        "t": 981,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      }
+    ]
   }
 }

@@ -232,7 +232,7 @@ node scripts/measure_page.mjs                    # transfer, hero responseEnd on
 node scripts/check_contrast_over_photos.mjs      # worst-pixel contrast for type laid over a photograph
 node scripts/check_image_resolution.mjs          # is any photograph served below its own box
 node scripts/measure_density.mjs                 # empty space per chapter, against non-negotiable #8
-node scripts/check_entrances.mjs                 # did each entrance stage and settle, and the parallax move
+node scripts/check_entrances.mjs                 # did each entrance stage and settle, and did EVERY parallax move
 node scripts/check_pinned_collage.mjs            # is `rooted`'s headline frozen and are its photographs drifting apart
 node scripts/check_header.mjs                    # the header that stays: both states at 320-1920, reduced motion, no-JS
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`

@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-05T00:25:50.696Z",
-  "url": "http://localhost:3100/",
+  "measuredAt": "2026-08-05T03:37:03.715Z",
+  "url": "http://localhost:3104/",
   "chapter": "rooted",
   "viewport": "1440x900",
   "method": "Viewport-space positions of the chapter's heading and of every [data-drift] photograph, read at five scroll offsets across the pinned band of a real browser. Frozen is a range of <=2px while the page scrolls under it; drift is the range of each photograph's own positions over the same offsets. Reduced motion, no-JS and a narrow window are compared on the section's rendered height, not on whether an attribute is present.",

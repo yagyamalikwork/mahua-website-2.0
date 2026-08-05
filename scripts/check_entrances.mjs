@@ -40,6 +40,12 @@ const flag = (n, d) => {
 const URL = flag("url", `http://localhost:${flag("port", "3100")}/`);
 const OUT = flag("out", "docs/reviews/2026-08-05-scroll-craft/entrances.json");
 const SHOTS = path.dirname(OUT);
+/**
+ * The one chapter `scripts/check_pinned_collage.mjs` measures `[data-drift]` in
+ * — its own `--chapter` default. Kept here so the seam between the two rigs is
+ * asserted rather than assumed; see `DRIFT_ELEMENTS` below.
+ */
+const DRIFT_CHAPTER = flag("drift-chapter", "rooted");
 
 // Extended for Plan 4 Task 3, which moved the headline reveal off GSAP and onto
 // the same CSS engine. Two things the rig could not see before and now must:
@@ -52,7 +58,16 @@ const SHOTS = path.dirname(OUT);
 //   - **parallax**, which is the one effect GSAP is still here for. Measured as
 //     a change in rendered position between two scroll offsets, because the
 //     library now arrives by dynamic import and "it moved" is the only evidence
-//     that the import fired at all.
+//     that the import fired at all. The offsets are derived from **each
+//     element's own position and height**, and **every** `[data-parallax]` must
+//     move — see `checkParallax` for what the two fixed offsets and the "fail if
+//     nothing moved" rule they replaced had quietly stopped covering.
+//
+// `[data-drift]` — the pinned collage's photographs — is deliberately *not*
+// measured here; `scripts/check_pinned_collage.mjs` owns it, and the reason is
+// on `DRIFT_ELEMENTS`. What this rig does guard is the seam: that rig scopes
+// itself to one chapter, so a drift element added anywhere else would be
+// measured by nobody, and the check below names it.
 
 /** Every state change the page really went through, in order. */
 const RECORD_STATES = () => {
@@ -212,8 +227,70 @@ const LINE_STAGGER = () =>
 const PARALLAX_AT = () =>
   [...document.querySelectorAll("[data-parallax]")].map((el) => {
     const r = el.getBoundingClientRect();
-    return { top: Math.round(r.top + scrollY), height: Math.round(r.height) };
+    return { top: Math.round(r.top + scrollY), viewportTop: Math.round(r.top) };
   });
+
+/**
+ * Where each parallaxed element sits in the document *ignoring its parallax*,
+ * plus enough of a name to say which one failed.
+ *
+ * The translate GSAP has written is subtracted, so the anchor is the element's
+ * layout position and does not depend on when it happens to be read. **This is
+ * the only place in this file that looks at a transform, and it is used to
+ * choose where to sample — never as evidence that anything moved.** The evidence
+ * is `PARALLAX_AT`, two rendered positions.
+ *
+ * The name is the chapter it lives in, its ordinal within that chapter, and the
+ * photograph it wraps, because "1 of 12 moved" is not a finding anybody can act
+ * on. A rig that cannot say *which* element died is a rig that will be re-run
+ * rather than believed.
+ */
+const PARALLAX_ANCHORS = () =>
+  [...document.querySelectorAll("[data-parallax]")].map((el, index) => {
+    const r = el.getBoundingClientRect();
+    const t = getComputedStyle(el).transform;
+    const ty = t && t !== "none" ? new DOMMatrixReadOnly(t).m42 : 0;
+    const section = el.closest("section");
+    const siblings = [...(section?.querySelectorAll("[data-parallax]") ?? [])];
+    const img = el.querySelector("img");
+    let photograph = null;
+    if (img) {
+      const raw = img.currentSrc || img.src;
+      // Next's optimiser serves `/_next/image?url=...&w=...`; the real filename
+      // is inside the query, and it is the only part worth printing.
+      const inner = new URL(raw, location.href).searchParams.get("url");
+      photograph = decodeURIComponent(inner ?? raw).split("/").pop();
+    }
+    return {
+      index,
+      section: section?.id ?? null,
+      label: `${section?.id ?? "no-chapter"}[${siblings.indexOf(el)}]${photograph ? ` ${photograph}` : ""}`,
+      layoutTop: Math.round(r.top + scrollY - ty),
+      height: Math.round(r.height),
+    };
+  });
+
+/**
+ * Where `[data-drift]` elements are — a boundary check, not a movement one.
+ *
+ * **This rig does not measure drift, and that is deliberate.** The pinned
+ * collage is a different mechanism: its photographs are scrubbed against a
+ * `position: sticky` scene, so the meaningful reading is a viewport-space
+ * position across the pin, not a document-space one either side of it — and it
+ * only runs above `(min-width: 1440px) and (min-height: 860px)`, which two of
+ * this file's three viewports are not. `scripts/check_pinned_collage.mjs` owns
+ * them and measures exactly that.
+ *
+ * What is checked here is the seam between the two rigs, so nothing can fall
+ * down it: that rig scopes itself to one chapter, so a `[data-drift]` element
+ * added anywhere else would be measured by nobody. This reports which chapters
+ * they are in; the assertion below names any outside the one that is covered.
+ */
+const DRIFT_ELEMENTS = () =>
+  [...document.querySelectorAll("[data-drift]")].map((el) => ({
+    section: el.closest("section")?.id ?? null,
+    rate: el.getAttribute("data-drift"),
+  }));
 
 /** Every chapter, and how much text it is actually rendering. */
 const CHAPTER_TEXT = () =>
@@ -317,35 +394,144 @@ async function scrollThrough(browser, { width, height, reducedMotion, label }) {
 }
 
 /**
- * Does the parallax still move, now that GSAP arrives by dynamic import?
+ * How far along its own scrub each element is sampled.
  *
- * Two scroll positions, both chosen so the elements are on screen, and the
- * document-space position of every `[data-parallax]` read at each. An element
- * with no parallax sits at the same document position at both. This is the
- * outcome; whether an `import()` resolved is not.
+ * `Parallax` runs its tween from `start: "top bottom"` to `end: "bottom top"` —
+ * from the scroll at which the element's top reaches the foot of the screen to
+ * the scroll at which its bottom leaves the head of it. 0.2 and 0.8 of that
+ * range put both readings comfortably on screen at every element's own size,
+ * and leave 60% of the travel between them.
+ */
+const SAMPLE_AT = [0.2, 0.8];
+
+/**
+ * The least an element may move between its two offsets and still count.
+ *
+ * The travel is linear (`EASE.drift` is `none`), so 60% of the range moves the
+ * weakest element on the page — strength 0.05 on a ~400px photograph — about
+ * 12px. Two pixels is therefore a floor for rounding and Lenis's sub-pixel
+ * settle, not a threshold anything real sits near.
+ */
+const MIN_PARALLAX_SHIFT = 2;
+
+async function scrollTo(page, y, settle = 700) {
+  await page.evaluate((to) => window.scrollTo(0, to), y);
+  await page.waitForTimeout(settle);
+}
+
+/**
+ * Does the parallax still move — **every parallaxed element, not merely one?**
+ *
+ * Two scroll positions per element, derived from that element's own position and
+ * height, and the document-space position of every `[data-parallax]` read at
+ * each. An element with no parallax sits at the same document position at both.
+ * This is the outcome; whether an `import()` resolved is not.
+ *
+ * **Both halves of that sentence are a repair, made 5 Aug 2026.** This rig used
+ * to read two fixed document offsets, 2200 and 3000px, and pass if *anything*
+ * moved. Both parts had quietly stopped working:
+ *
+ *   - the two offsets were chosen when the chapters above them were shorter. As
+ *     the page grew they slid off three of the elements they were meant to
+ *     cover, and off ten of the twelve that exist now — an offset that is not
+ *     inside an element's scrub range reads it as perfectly still, which is
+ *     correct and tells you nothing;
+ *   - "fail if nothing moved" meant eleven of twelve could be dead and the rig
+ *     would still print a pass. It reported `parallax 1/12 moved` for two tasks
+ *     and nobody could act on it, which is what a rule like that produces.
+ *
+ * So the offsets are now per element and the floor is every element. Anything
+ * that does not move is named.
  */
 async function checkParallax(browser, { reducedMotion = false } = {}) {
   const { context, page } = await open(browser, { width: 1440, height: 900, reducedMotion });
-  await page.evaluate(() => window.scrollTo(0, 2200));
-  await page.waitForTimeout(1500);
-  const first = await page.evaluate(PARALLAX_AT);
-  await page.evaluate(() => window.scrollTo(0, 3000));
-  await page.waitForTimeout(1500);
-  const second = await page.evaluate(PARALLAX_AT);
+
+  const viewport = await page.evaluate(() => innerHeight);
+  const maxScroll = await page.evaluate(() =>
+    Math.max(0, document.documentElement.scrollHeight - innerHeight),
+  );
+
+  // One pass down the page before anything is measured. `whenNear` does not
+  // fetch GSAP until an element is within a screen and ScrollTrigger only
+  // scrubs what it has created, so an element that has never been approached
+  // would read as "did not move" for a reason that has nothing to do with the
+  // effect. The pass also settles every lazy photograph, which is what makes
+  // the anchors below the page's final layout rather than an early guess.
+  for (let y = 0; y < maxScroll; y += Math.round(viewport * 0.75)) {
+    await page.evaluate((to) => window.scrollTo(0, to), y);
+    await page.waitForTimeout(140);
+  }
+  await scrollTo(page, maxScroll);
+  await scrollTo(page, 0);
+
+  const drift = await page.evaluate(DRIFT_ELEMENTS);
+  const anchors = await page.evaluate(PARALLAX_ANCHORS);
+
+  const planned = anchors.map((a) => {
+    const enters = a.layoutTop - viewport;
+    const leaves = a.layoutTop + a.height;
+    const at = SAMPLE_AT.map((p) =>
+      Math.min(maxScroll, Math.max(0, Math.round(enters + p * (leaves - enters)))),
+    );
+    return { ...a, enters, leaves, at };
+  });
+
+  // One monotonic pass down the union of every element's offsets, reading all
+  // of them at each stop. Twelve elements do not need twenty-four page loads,
+  // and scrolling downward throughout is what a visitor does.
+  const stops = [...new Set(planned.flatMap((e) => e.at))].sort((a, b) => a - b);
+  const readings = new Map();
+  for (const y of stops) {
+    await scrollTo(page, y);
+    readings.set(y, await page.evaluate(PARALLAX_AT));
+  }
   await context.close();
 
-  const moved = first
-    .map((a, i) => ({ shift: Math.abs((second[i]?.top ?? a.top) - a.top), height: a.height }))
-    .filter((m) => m.shift > 1);
+  const measured = planned.map((e) => {
+    const [y1, y2] = e.at;
+    const first = readings.get(y1)[e.index];
+    const second = readings.get(y2)[e.index];
+    const shift = Math.abs(second.top - first.top);
+    return {
+      label: e.label,
+      section: e.section,
+      layoutTop: e.layoutTop,
+      height: e.height,
+      /**
+       * The scroll positions between which this element scrubs at all — the
+       * whole reason two global offsets could not work. Kept in the report so
+       * the coverage of any *other* choice of offsets can be re-derived from
+       * committed evidence rather than re-argued.
+       */
+      scrubsBetween: [e.enters, e.leaves],
+      at: e.at,
+      shift,
+      /** As a fraction of the element's own height — spec section 4.3 caps at 0.15. */
+      ofHeight: Math.round((shift / Math.max(e.height, 1)) * 1000) / 1000,
+      /**
+       * Both offsets landed on the same scroll position, so nothing was
+       * actually compared. The old rig did this silently for ten elements; here
+       * it is a failure in its own right, because a rig that cannot reach an
+       * element must say so rather than score it as still.
+       */
+      unsampled: y1 === y2,
+    };
+  });
+
+  const moved = measured.filter((m) => !m.unsampled && m.shift >= MIN_PARALLAX_SHIFT);
 
   return {
     reducedMotion,
-    elements: first.length,
+    elements: measured.length,
     moved: moved.length,
-    /** As a fraction of the element's own height — spec section 4.3 caps at 0.15. */
-    strongest: moved.length
-      ? Math.max(...moved.map((m) => Math.round((m.shift / Math.max(m.height, 1)) * 1000) / 1000))
-      : 0,
+    sampledAt: SAMPLE_AT,
+    strongest: moved.length ? Math.max(...moved.map((m) => m.ofHeight)) : 0,
+    weakest: moved.length ? Math.min(...moved.map((m) => m.ofHeight)) : 0,
+    /** Named, because "1 of 12" is not something anybody can act on. */
+    still: measured.filter((m) => !m.unsampled && m.shift < MIN_PARALLAX_SHIFT),
+    unreachable: measured.filter((m) => m.unsampled),
+    measured,
+    drift,
   };
 }
 
@@ -495,13 +681,27 @@ if (report.hero.headlineWordOffset !== 0)
   failures.push(`hero: the headline is displaced by ${report.hero.headlineWordOffset}px`);
 
 if (report.parallax.elements === 0) failures.push("parallax: nothing on the page is parallaxed");
-if (report.parallax.moved === 0)
-  failures.push("parallax: no parallaxed element moved — the deferred GSAP import never arrived");
+// **Every element, named.** The old rule was "fail if nothing moved", which one
+// surviving element satisfied while eleven could be dead.
+for (const e of report.parallax.still)
+  failures.push(
+    `parallax: ${e.label} did not move — ${e.shift}px between ${e.at[0]} and ${e.at[1]}px of scroll, on a ${e.height}px box`,
+  );
+for (const e of report.parallax.unreachable)
+  failures.push(
+    `parallax: ${e.label} could not be sampled at all — both of its offsets clamp to ${e.at[0]}px, so this rig does not cover it`,
+  );
 if (report.parallax.strongest > 0.16)
   failures.push(`parallax: drifted ${report.parallax.strongest} of an element's height, past the cap`);
-if (report.parallaxReducedMotion.moved > 0)
+for (const e of report.parallaxReducedMotion.measured.filter((m) => m.shift >= MIN_PARALLAX_SHIFT))
+  failures.push(`reduced motion: ${e.label} was still parallaxed — it moved ${e.shift}px`);
+
+// The seam with `scripts/check_pinned_collage.mjs`, which measures `[data-drift]`
+// and scopes itself to one chapter. A drift element anywhere else is measured by
+// nobody, and this is the only place that would notice.
+for (const d of report.parallax.drift.filter((d) => d.section !== DRIFT_CHAPTER))
   failures.push(
-    `reduced motion: ${report.parallaxReducedMotion.moved} elements were still parallaxed`,
+    `drift: a [data-drift="${d.rate}"] element sits in #${d.section}, but check_pinned_collage.mjs only measures #${DRIFT_CHAPTER} — nothing measures this one`,
   );
 
 for (const run of report.noScript) {
@@ -537,8 +737,20 @@ console.log(
     `headline=${report.hero.headlineState} headlineOffset=${report.hero.headlineWordOffset}px`,
 );
 console.log(
-  `parallax        ${report.parallax.moved}/${report.parallax.elements} moved, strongest ${report.parallax.strongest} of height  ` +
+  `parallax        ${report.parallax.moved}/${report.parallax.elements} moved (every one must), ` +
+    `drift ${report.parallax.weakest}-${report.parallax.strongest} of height, cap 0.15  ` +
     `| reduced motion ${report.parallaxReducedMotion.moved}/${report.parallaxReducedMotion.elements} moved`,
+);
+for (const e of report.parallax.measured)
+  console.log(
+    `                ${e.unsampled ? "UNREACHABLE" : e.shift >= MIN_PARALLAX_SHIFT ? "moved      " : "STILL      "} ` +
+      `${String(e.shift).padStart(4)}px (${String(e.ofHeight).padEnd(5)} of ${String(e.height).padStart(4)}px)  ` +
+      `at ${e.at[0]}/${e.at[1]}px  ${e.label}`,
+  );
+console.log(
+  `drift           ${report.parallax.drift.length} [data-drift] elements, all in ` +
+    `${[...new Set(report.parallax.drift.map((d) => `#${d.section}`))].join(", ") || "(none)"} ` +
+    `— measured by check_pinned_collage.mjs, not here`,
 );
 for (const run of report.noScript)
   console.log(

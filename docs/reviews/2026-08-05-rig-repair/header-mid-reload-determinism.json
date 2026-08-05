@@ -1,0 +1,239 @@
+{
+  "what": "scripts/check_header.mjs, the mid-page-reload block, run repeatedly against three builds.",
+  "method": "Sampling is anchored to the MutationObserver that sees data-scrolled appear, then one sample per animation frame for 60 frames. No wall-clock window, so no run can pass by arriving before or after a fixed sample.",
+  "builds": {
+    "shipped": "HEAD — the double requestAnimationFrame gate",
+    "noGate": "useState(true) for the settled flag — the transition is live for the first painted state. The defect the gate exists to prevent.",
+    "singleFrame": "the two rAFs collapsed to one"
+  },
+  "shipped": [
+    {
+      "run": 1,
+      "scrolledAtMs": 279,
+      "settledOnFrame": 2,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 2,
+      "scrolledAtMs": 278,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 3,
+      "scrolledAtMs": 259,
+      "settledOnFrame": 2,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 4,
+      "scrolledAtMs": 268,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 5,
+      "scrolledAtMs": 271,
+      "settledOnFrame": 2,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 6,
+      "scrolledAtMs": 274,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    }
+  ],
+  "noGate": [
+    {
+      "run": 1,
+      "scrolledAtMs": 270,
+      "settledOnFrame": 0,
+      "framesSampled": 60,
+      "framesMidFade": 56,
+      "verdict": "FAIL",
+      "firstMidFadeFrame": {
+        "frame": 0,
+        "t": 5,
+        "background": "rgba(0, 0, 0, 0)",
+        "wordmark": "rgb(241, 233, 215)"
+      }
+    },
+    {
+      "run": 2,
+      "scrolledAtMs": 269,
+      "settledOnFrame": 0,
+      "framesSampled": 60,
+      "framesMidFade": 55,
+      "verdict": "FAIL",
+      "firstMidFadeFrame": {
+        "frame": 0,
+        "t": 32,
+        "background": "rgba(0, 0, 0, 0)",
+        "wordmark": "rgb(241, 233, 215)"
+      }
+    },
+    {
+      "run": 3,
+      "scrolledAtMs": 281,
+      "settledOnFrame": 0,
+      "framesSampled": 60,
+      "framesMidFade": 56,
+      "verdict": "FAIL",
+      "firstMidFadeFrame": {
+        "frame": 0,
+        "t": 4,
+        "background": "rgba(0, 0, 0, 0)",
+        "wordmark": "rgb(241, 233, 215)"
+      }
+    },
+    {
+      "run": 4,
+      "scrolledAtMs": 268,
+      "settledOnFrame": 0,
+      "framesSampled": 60,
+      "framesMidFade": 55,
+      "verdict": "FAIL",
+      "firstMidFadeFrame": {
+        "frame": 0,
+        "t": 6,
+        "background": "rgba(0, 0, 0, 0)",
+        "wordmark": "rgb(241, 233, 215)"
+      }
+    },
+    {
+      "run": 5,
+      "scrolledAtMs": 273,
+      "settledOnFrame": 0,
+      "framesSampled": 60,
+      "framesMidFade": 56,
+      "verdict": "FAIL",
+      "firstMidFadeFrame": {
+        "frame": 0,
+        "t": 28,
+        "background": "rgba(0, 0, 0, 0)",
+        "wordmark": "rgb(241, 233, 215)"
+      }
+    }
+  ],
+  "singleFrame": [
+    {
+      "run": 1,
+      "scrolledAtMs": 271,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 2,
+      "scrolledAtMs": 276,
+      "settledOnFrame": 0,
+      "framesSampled": 60,
+      "framesMidFade": 56,
+      "verdict": "FAIL",
+      "firstMidFadeFrame": {
+        "frame": 0,
+        "t": 27,
+        "background": "rgba(0, 0, 0, 0)",
+        "wordmark": "rgb(241, 233, 215)"
+      }
+    },
+    {
+      "run": 3,
+      "scrolledAtMs": 255,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 4,
+      "scrolledAtMs": 262,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    },
+    {
+      "run": 5,
+      "scrolledAtMs": 262,
+      "settledOnFrame": 1,
+      "framesSampled": 60,
+      "framesMidFade": 0,
+      "verdict": "PASS",
+      "firstMidFadeFrame": null
+    }
+  ],
+  "fadeCurveOnTheNoGateBuild": [
+    {
+      "frame": 0,
+      "t": 5,
+      "background": "rgba(0, 0, 0, 0)",
+      "wordmark": "rgb(241, 233, 215)"
+    },
+    {
+      "frame": 5,
+      "t": 86,
+      "background": "rgba(241, 233, 215, 0.24)",
+      "wordmark": "rgb(214, 200, 173)"
+    },
+    {
+      "frame": 10,
+      "t": 161,
+      "background": "rgba(241, 233, 215, 0.55)",
+      "wordmark": "rgb(178, 156, 117)"
+    },
+    {
+      "frame": 20,
+      "t": 328,
+      "background": "rgba(241, 233, 215, 0.867)",
+      "wordmark": "rgb(142, 111, 60)"
+    },
+    {
+      "frame": 30,
+      "t": 496,
+      "background": "rgba(241, 233, 215, 0.97)",
+      "wordmark": "rgb(131, 97, 42)"
+    },
+    {
+      "frame": 40,
+      "t": 662,
+      "background": "rgba(241, 233, 215, 0.996)",
+      "wordmark": "rgb(128, 93, 37)"
+    },
+    {
+      "frame": 50,
+      "t": 829,
+      "background": "rgba(241, 233, 215, 1)",
+      "wordmark": "rgb(127, 92, 36)"
+    },
+    {
+      "frame": 56,
+      "t": 928,
+      "background": "rgb(241, 233, 215)",
+      "wordmark": "rgb(127, 92, 36)"
+    }
+  ]
+}

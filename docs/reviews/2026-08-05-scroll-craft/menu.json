@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-04T23:42:09.700Z",
-  "url": "http://localhost:3100/",
+  "measuredAt": "2026-08-05T03:35:20.554Z",
+  "url": "http://localhost:3104/",
   "scrollLock": [
     {
       "viewport": 1440,
@@ -93,9 +93,9 @@
       "keyboardTarget": "#rooted",
       "navigated": {
         "hash": "#rooted",
-        "scrollY": 3603,
+        "scrollY": 3528,
         "panelInert": true,
-        "sectionTopFromViewport": 0
+        "sectionTopFromViewport": 75
       }
     },
     "1440": {
@@ -123,9 +123,9 @@
       "keyboardTarget": "#rooted",
       "navigated": {
         "hash": "#rooted",
-        "scrollY": 3246,
+        "scrollY": 3139,
         "panelInert": true,
-        "sectionTopFromViewport": 0
+        "sectionTopFromViewport": 107
       }
     }
   },

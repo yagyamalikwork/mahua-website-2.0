@@ -1,11 +1,12 @@
 {
-  "measuredAt": "2026-08-04T23:40:44.262Z",
-  "url": "http://localhost:3100/",
+  "measuredAt": "2026-08-05T03:37:10.525Z",
+  "url": "http://localhost:3104/",
   "widths": {
     "390": [
       {
         "name": "header · menu",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 7.35,
         "brightest": [
           69,
@@ -18,6 +19,7 @@
       {
         "name": "header · wordmark",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 6.44,
         "brightest": [
           78,
@@ -28,8 +30,22 @@
         "pass": true
       },
       {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "hero · headline",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4.01,
         "brightest": [
           122,
@@ -42,6 +58,7 @@
       {
         "name": "hero · sub",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 4.77,
         "brightest": [
           120,
@@ -54,6 +71,7 @@
       {
         "name": "hero · scroll cue",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 8.95,
         "brightest": [
           66,
@@ -64,8 +82,48 @@
         "pass": true
       },
       {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.58,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · why-you-came",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 3.83,
         "brightest": [
           117,
@@ -78,6 +136,7 @@
       {
         "name": "quote · after-dark",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4.97,
         "brightest": [
           103,
@@ -90,6 +149,7 @@
       {
         "name": "invitation · heading",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4.9,
         "brightest": [
           95,
@@ -102,6 +162,7 @@
       {
         "name": "invitation · body",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 4.91,
         "brightest": [
           99,
@@ -116,6 +177,7 @@
       {
         "name": "header · menu",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 6.87,
         "brightest": [
           74,
@@ -128,6 +190,7 @@
       {
         "name": "header · wordmark",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 5.78,
         "brightest": [
           85,
@@ -138,8 +201,22 @@
         "pass": true
       },
       {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "hero · headline",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 5.71,
         "brightest": [
           93,
@@ -152,6 +229,7 @@
       {
         "name": "hero · sub",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 5.68,
         "brightest": [
           103,
@@ -164,6 +242,7 @@
       {
         "name": "hero · scroll cue",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 8.37,
         "brightest": [
           63,
@@ -174,8 +253,48 @@
         "pass": true
       },
       {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.9,
+        "brightest": [
+          238,
+          230,
+          212
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · why-you-came",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4,
         "brightest": [
           115,
@@ -188,6 +307,7 @@
       {
         "name": "quote · after-dark",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4.98,
         "brightest": [
           102,
@@ -200,6 +320,7 @@
       {
         "name": "invitation · heading",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 5.24,
         "brightest": [
           91,
@@ -212,6 +333,7 @@
       {
         "name": "invitation · body",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 4.94,
         "brightest": [
           97,
@@ -226,6 +348,7 @@
       {
         "name": "header · menu",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 7.12,
         "brightest": [
           71,
@@ -238,6 +361,7 @@
       {
         "name": "header · wordmark",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 5.36,
         "brightest": [
           90,
@@ -248,8 +372,22 @@
         "pass": true
       },
       {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "hero · headline",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 3.16,
         "brightest": [
           145,
@@ -262,6 +400,7 @@
       {
         "name": "hero · sub",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 7.93,
         "brightest": [
           68,
@@ -274,6 +413,7 @@
       {
         "name": "hero · scroll cue",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 9.52,
         "brightest": [
           54,
@@ -284,8 +424,48 @@
         "pass": true
       },
       {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.9,
+        "brightest": [
+          238,
+          230,
+          212
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · why-you-came",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4.04,
         "brightest": [
           115,
@@ -298,11 +478,12 @@
       {
         "name": "quote · after-dark",
         "min": 3,
-        "worst": 3.91,
+        "text": "#f1e9d7",
+        "worst": 4.14,
         "brightest": [
-          121,
-          116,
-          87
+          117,
+          112,
+          82
         ],
         "boxes": 11,
         "pass": true
@@ -310,6 +491,7 @@
       {
         "name": "invitation · heading",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 4.95,
         "brightest": [
           95,
@@ -322,11 +504,12 @@
       {
         "name": "invitation · body",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 5.28,
         "brightest": [
           92,
           98,
-          70
+          69
         ],
         "boxes": 2,
         "pass": true
@@ -336,6 +519,7 @@
       {
         "name": "header · menu",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 7.6,
         "brightest": [
           67,
@@ -348,6 +532,7 @@
       {
         "name": "header · wordmark",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 5.43,
         "brightest": [
           89,
@@ -358,8 +543,22 @@
         "pass": true
       },
       {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "hero · headline",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 3.43,
         "brightest": [
           123,
@@ -372,6 +571,7 @@
       {
         "name": "hero · sub",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 7.45,
         "brightest": [
           72,
@@ -384,6 +584,7 @@
       {
         "name": "hero · scroll cue",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 9.03,
         "brightest": [
           59,
@@ -394,8 +595,48 @@
         "pass": true
       },
       {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · why-you-came",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 3.9,
         "brightest": [
           115,
@@ -408,11 +649,12 @@
       {
         "name": "quote · after-dark",
         "min": 3,
-        "worst": 4.24,
+        "text": "#f1e9d7",
+        "worst": 4.28,
         "brightest": [
-          121,
+          114,
           110,
-          53
+          81
         ],
         "boxes": 11,
         "pass": true
@@ -420,6 +662,7 @@
       {
         "name": "invitation · heading",
         "min": 3,
+        "text": "#f1e9d7",
         "worst": 5.1,
         "brightest": [
           93,
@@ -432,6 +675,7 @@
       {
         "name": "invitation · body",
         "min": 4.5,
+        "text": "#f1e9d7",
         "worst": 5.29,
         "brightest": [
           90,

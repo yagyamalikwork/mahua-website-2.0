@@ -1,6 +1,6 @@
 {
-  "url": "http://localhost:3104/",
-  "measuredAt": "2026-08-05T03:42:02.753Z",
+  "url": "http://localhost:3101/",
+  "measuredAt": "2026-08-05T03:15:00.869Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
@@ -969,25 +969,45 @@
   "parallax": {
     "reducedMotion": false,
     "elements": 12,
-    "moved": 12,
+    "moved": 10,
     "sampledAt": [
       0.2,
       0.8
     ],
     "strongest": 0.091,
-    "weakest": 0.03,
-    "still": [],
+    "weakest": 0.035,
+    "still": [
+      {
+        "label": "field-days[2] pool-daylight-forest-640.avif",
+        "section": "field-days",
+        "height": 226,
+        "at": [
+          6725,
+          7401
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
+        "section": "field-days",
+        "height": 805,
+        "at": [
+          7200,
+          8223
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      }
+    ],
     "unreachable": [],
     "measured": [
       {
         "label": "why-you-came[0] tiger-golden-grass-1440.avif",
         "section": "why-you-came",
-        "layoutTop": 2346,
         "height": 1149,
-        "scrubsBetween": [
-          1446,
-          3495
-        ],
         "at": [
           1856,
           3085
@@ -999,12 +1019,7 @@
       {
         "label": "field-days[0] guide-sunrise-960.avif",
         "section": "field-days",
-        "layoutTop": 6439,
         "height": 501,
-        "scrubsBetween": [
-          5539,
-          6940
-        ],
         "at": [
           5819,
           6660
@@ -1016,12 +1031,7 @@
       {
         "label": "field-days[1] hammocks-shade-960.avif",
         "section": "field-days",
-        "layoutTop": 7095,
         "height": 501,
-        "scrubsBetween": [
-          6195,
-          7596
-        ],
         "at": [
           6475,
           7316
@@ -1033,46 +1043,31 @@
       {
         "label": "field-days[2] pool-daylight-forest-640.avif",
         "section": "field-days",
-        "layoutTop": 7400,
         "height": 226,
-        "scrubsBetween": [
-          6500,
-          7626
-        ],
         "at": [
           6725,
           7401
         ],
-        "shift": 7,
-        "ofHeight": 0.031,
+        "shift": 0,
+        "ofHeight": 0,
         "unsampled": false
       },
       {
         "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
         "section": "field-days",
-        "layoutTop": 7759,
         "height": 805,
-        "scrubsBetween": [
-          6859,
-          8564
-        ],
         "at": [
           7200,
           8223
         ],
-        "shift": 24,
-        "ofHeight": 0.03,
+        "shift": 0,
+        "ofHeight": 0,
         "unsampled": false
       },
       {
         "label": "after-dark[0] lodge-facade-night-1440.avif",
         "section": "after-dark",
-        "layoutTop": 10080,
         "height": 1149,
-        "scrubsBetween": [
-          9180,
-          11229
-        ],
         "at": [
           9590,
           10819
@@ -1084,12 +1079,7 @@
       {
         "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
         "section": "lantern-hour",
-        "layoutTop": 11060,
         "height": 760,
-        "scrubsBetween": [
-          10160,
-          11820
-        ],
         "at": [
           10492,
           11488
@@ -1101,12 +1091,7 @@
       {
         "label": "lantern-hour[1] sound-healing-640.avif",
         "section": "lantern-hour",
-        "layoutTop": 11060,
         "height": 375,
-        "scrubsBetween": [
-          10160,
-          11435
-        ],
         "at": [
           10415,
           11180
@@ -1118,12 +1103,7 @@
       {
         "label": "lantern-hour[2] petal-table-night-1200.avif",
         "section": "lantern-hour",
-        "layoutTop": 11463,
         "height": 604,
-        "scrubsBetween": [
-          10563,
-          12067
-        ],
         "at": [
           10864,
           11766
@@ -1135,12 +1115,7 @@
       {
         "label": "guests[0] lawn-picnic-golden-hour-960.avif",
         "section": "guests",
-        "layoutTop": 13525,
         "height": 514,
-        "scrubsBetween": [
-          12625,
-          14039
-        ],
         "at": [
           12908,
           13756
@@ -1152,12 +1127,7 @@
       {
         "label": "guests[1] garden-path-lodge-1200.avif",
         "section": "guests",
-        "layoutTop": 13589,
         "height": 677,
-        "scrubsBetween": [
-          12689,
-          14266
-        ],
         "at": [
           13004,
           13951
@@ -1169,12 +1139,7 @@
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 14587,
         "height": 1149,
-        "scrubsBetween": [
-          13687,
-          15736
-        ],
         "at": [
           14097,
           14587
@@ -1213,12 +1178,7 @@
       {
         "label": "why-you-came[0] tiger-golden-grass-1440.avif",
         "section": "why-you-came",
-        "layoutTop": 2346,
         "height": 1149,
-        "scrubsBetween": [
-          1446,
-          3495
-        ],
         "at": [
           1856,
           3085
@@ -1230,12 +1190,7 @@
       {
         "label": "rooted[0] lantern-bridge-dusk-1200.avif",
         "section": "rooted",
-        "layoutTop": 3326,
         "height": 760,
-        "scrubsBetween": [
-          2426,
-          4086
-        ],
         "at": [
           2758,
           3754
@@ -1247,12 +1202,7 @@
       {
         "label": "rooted[1] forest-shrine-incense-640.avif",
         "section": "rooted",
-        "layoutTop": 3326,
         "height": 375,
-        "scrubsBetween": [
-          2426,
-          3701
-        ],
         "at": [
           2681,
           3446
@@ -1264,12 +1214,7 @@
       {
         "label": "rooted[2] potters-hands-700.avif",
         "section": "rooted",
-        "layoutTop": 3729,
         "height": 604,
-        "scrubsBetween": [
-          2829,
-          4333
-        ],
         "at": [
           3130,
           4032
@@ -1281,12 +1226,7 @@
       {
         "label": "field-days[0] guide-sunrise-960.avif",
         "section": "field-days",
-        "layoutTop": 5646,
         "height": 501,
-        "scrubsBetween": [
-          4746,
-          6147
-        ],
         "at": [
           5026,
           5867
@@ -1298,12 +1238,7 @@
       {
         "label": "field-days[1] hammocks-shade-960.avif",
         "section": "field-days",
-        "layoutTop": 6302,
         "height": 501,
-        "scrubsBetween": [
-          5402,
-          6803
-        ],
         "at": [
           5682,
           6523
@@ -1315,12 +1250,7 @@
       {
         "label": "field-days[2] pool-daylight-forest-640.avif",
         "section": "field-days",
-        "layoutTop": 6607,
         "height": 226,
-        "scrubsBetween": [
-          5707,
-          6833
-        ],
         "at": [
           5932,
           6608
@@ -1332,12 +1262,7 @@
       {
         "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
         "section": "field-days",
-        "layoutTop": 6966,
         "height": 805,
-        "scrubsBetween": [
-          6066,
-          7771
-        ],
         "at": [
           6407,
           7430
@@ -1349,12 +1274,7 @@
       {
         "label": "after-dark[0] lodge-facade-night-1440.avif",
         "section": "after-dark",
-        "layoutTop": 9287,
         "height": 1149,
-        "scrubsBetween": [
-          8387,
-          10436
-        ],
         "at": [
           8797,
           10026
@@ -1366,12 +1286,7 @@
       {
         "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
         "section": "lantern-hour",
-        "layoutTop": 10267,
         "height": 760,
-        "scrubsBetween": [
-          9367,
-          11027
-        ],
         "at": [
           9699,
           10695
@@ -1383,12 +1298,7 @@
       {
         "label": "lantern-hour[1] sound-healing-640.avif",
         "section": "lantern-hour",
-        "layoutTop": 10267,
         "height": 375,
-        "scrubsBetween": [
-          9367,
-          10642
-        ],
         "at": [
           9622,
           10387
@@ -1400,12 +1310,7 @@
       {
         "label": "lantern-hour[2] petal-table-night-1200.avif",
         "section": "lantern-hour",
-        "layoutTop": 10670,
         "height": 604,
-        "scrubsBetween": [
-          9770,
-          11274
-        ],
         "at": [
           10071,
           10973
@@ -1417,12 +1322,7 @@
       {
         "label": "guests[0] lawn-picnic-golden-hour-960.avif",
         "section": "guests",
-        "layoutTop": 12733,
         "height": 514,
-        "scrubsBetween": [
-          11833,
-          13247
-        ],
         "at": [
           12116,
           12964
@@ -1434,12 +1334,7 @@
       {
         "label": "guests[1] garden-path-lodge-1200.avif",
         "section": "guests",
-        "layoutTop": 12797,
         "height": 677,
-        "scrubsBetween": [
-          11897,
-          13474
-        ],
         "at": [
           12212,
           13159
@@ -1451,12 +1346,7 @@
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 13794,
         "height": 1149,
-        "scrubsBetween": [
-          12894,
-          14943
-        ],
         "at": [
           13304,
           13795
@@ -1471,12 +1361,7 @@
       {
         "label": "why-you-came[0] tiger-golden-grass-1440.avif",
         "section": "why-you-came",
-        "layoutTop": 2346,
         "height": 1149,
-        "scrubsBetween": [
-          1446,
-          3495
-        ],
         "at": [
           1856,
           3085
@@ -1488,12 +1373,7 @@
       {
         "label": "rooted[0] lantern-bridge-dusk-1200.avif",
         "section": "rooted",
-        "layoutTop": 3326,
         "height": 760,
-        "scrubsBetween": [
-          2426,
-          4086
-        ],
         "at": [
           2758,
           3754
@@ -1505,12 +1385,7 @@
       {
         "label": "rooted[1] forest-shrine-incense-640.avif",
         "section": "rooted",
-        "layoutTop": 3326,
         "height": 375,
-        "scrubsBetween": [
-          2426,
-          3701
-        ],
         "at": [
           2681,
           3446
@@ -1522,12 +1397,7 @@
       {
         "label": "rooted[2] potters-hands-700.avif",
         "section": "rooted",
-        "layoutTop": 3729,
         "height": 604,
-        "scrubsBetween": [
-          2829,
-          4333
-        ],
         "at": [
           3130,
           4032
@@ -1539,12 +1409,7 @@
       {
         "label": "field-days[0] guide-sunrise-960.avif",
         "section": "field-days",
-        "layoutTop": 5646,
         "height": 501,
-        "scrubsBetween": [
-          4746,
-          6147
-        ],
         "at": [
           5026,
           5867
@@ -1556,12 +1421,7 @@
       {
         "label": "field-days[1] hammocks-shade-960.avif",
         "section": "field-days",
-        "layoutTop": 6302,
         "height": 501,
-        "scrubsBetween": [
-          5402,
-          6803
-        ],
         "at": [
           5682,
           6523
@@ -1573,12 +1433,7 @@
       {
         "label": "field-days[2] pool-daylight-forest-640.avif",
         "section": "field-days",
-        "layoutTop": 6607,
         "height": 226,
-        "scrubsBetween": [
-          5707,
-          6833
-        ],
         "at": [
           5932,
           6608
@@ -1590,12 +1445,7 @@
       {
         "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
         "section": "field-days",
-        "layoutTop": 6966,
         "height": 805,
-        "scrubsBetween": [
-          6066,
-          7771
-        ],
         "at": [
           6407,
           7430
@@ -1607,12 +1457,7 @@
       {
         "label": "after-dark[0] lodge-facade-night-1440.avif",
         "section": "after-dark",
-        "layoutTop": 9287,
         "height": 1149,
-        "scrubsBetween": [
-          8387,
-          10436
-        ],
         "at": [
           8797,
           10026
@@ -1624,12 +1469,7 @@
       {
         "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
         "section": "lantern-hour",
-        "layoutTop": 10267,
         "height": 760,
-        "scrubsBetween": [
-          9367,
-          11027
-        ],
         "at": [
           9699,
           10695
@@ -1641,12 +1481,7 @@
       {
         "label": "lantern-hour[1] sound-healing-640.avif",
         "section": "lantern-hour",
-        "layoutTop": 10267,
         "height": 375,
-        "scrubsBetween": [
-          9367,
-          10642
-        ],
         "at": [
           9622,
           10387
@@ -1658,12 +1493,7 @@
       {
         "label": "lantern-hour[2] petal-table-night-1200.avif",
         "section": "lantern-hour",
-        "layoutTop": 10670,
         "height": 604,
-        "scrubsBetween": [
-          9770,
-          11274
-        ],
         "at": [
           10071,
           10973
@@ -1675,12 +1505,7 @@
       {
         "label": "guests[0] lawn-picnic-golden-hour-960.avif",
         "section": "guests",
-        "layoutTop": 12733,
         "height": 514,
-        "scrubsBetween": [
-          11833,
-          13247
-        ],
         "at": [
           12116,
           12964
@@ -1692,12 +1517,7 @@
       {
         "label": "guests[1] garden-path-lodge-1200.avif",
         "section": "guests",
-        "layoutTop": 12797,
         "height": 677,
-        "scrubsBetween": [
-          11897,
-          13474
-        ],
         "at": [
           12212,
           13159
@@ -1709,12 +1529,7 @@
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 13794,
         "height": 1149,
-        "scrubsBetween": [
-          12894,
-          14943
-        ],
         "at": [
           13304,
           13795
@@ -1908,6 +1723,9 @@
       ]
     }
   ],
-  "failures": [],
-  "verdict": "pass"
+  "failures": [
+    "parallax: field-days[2] pool-daylight-forest-640.avif did not move — 0px between 6725 and 7401px of scroll, on a 226px box",
+    "parallax: field-days[3] forest-boardwalk-daylight-1440.avif did not move — 0px between 7200 and 8223px of scroll, on a 805px box"
+  ],
+  "verdict": "fail"
 }

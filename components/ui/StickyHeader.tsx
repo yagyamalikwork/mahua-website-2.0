@@ -141,11 +141,19 @@ export function StickyHeader({
         // visitor scrolling back up must get the transparent bar again.
         for (const entry of entries) setState(entry.isIntersecting ? "top" : "scrolled");
 
-        // Two frames, and both are needed. One would let React commit
-        // `data-scrolled` and `data-settled` into the same paint, and a computed
-        // colour that changes in the same step that turns its transition on
-        // animates exactly as if there were no gate. The frame in between is what
-        // gets the first state painted, un-transitioned, before anything can move.
+        // Two frames, and both are needed. One lets React commit `data-scrolled`
+        // and `data-settled` into the same paint whenever its scheduler happens
+        // to flush between the rAF callback and the paint, and a computed colour
+        // that changes in the same step that turns its transition on animates
+        // exactly as if there were no gate. The frame in between is what gets the
+        // first state painted, un-transitioned, before anything can move.
+        //
+        // **It removes a race, not a certainty**, which is why it cannot be
+        // proved by one run: measured 5 Aug 2026 over five reloads apiece, a
+        // single frame painted the full 0.9s crossfade on one of them and none
+        // on the other four, while the shipped two-frame version painted zero
+        // mid-fade frames in six runs of sixty samples. See the table on
+        // `StickyHeader.test.tsx`'s "never animates into the first state" case.
         if (frames === 0) {
           frames = requestAnimationFrame(() => {
             frames = requestAnimationFrame(() => setSettled(true));
