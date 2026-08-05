@@ -111,6 +111,16 @@ export const PARALLAX_MAX = 0.15;
  * arrow, so how far it may trail is how far the only visible cursor may sit from
  * the point that would actually be clicked.
  *
+ * **It bounds the leaf against the last pointer position the loop was given, not
+ * against where the hand is now** — and the difference matters when reading any
+ * measurement of it. Between one frame and the next the hand keeps moving, so the
+ * visible gap during a fast flick is this clamp *plus* a frame of the pointer's
+ * own travel. Measured on 5 Aug 2026: a flick covering 86.7px per frame showed a
+ * 98.7px gap, which is 12 + 86.7 exactly, and the frame the pointer stopped read
+ * 12.0. No cursor can do better — the operating system's own arrow is a frame
+ * behind the hand too. `scripts/check_leaf_cursor.mjs` subtracts the travel
+ * before comparing, having first asserted the opposite and been wrong.
+ *
  * Law 4 does not apply here for the same reason it does not apply to the sliding
  * rule: this is an answer to the visitor's own hand, not something arriving
  * unbidden. It is meant to be noticed. It is still bound by law 1 — `swing`

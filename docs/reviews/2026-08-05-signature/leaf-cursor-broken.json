@@ -1,0 +1,79 @@
+{
+  "measuredAt": "2026-08-05T17:34:43.516Z",
+  "url": "http://localhost:3100/",
+  "cursor": {
+    "sizePx": 28,
+    "follow": 0.22,
+    "swing": 0.12,
+    "maxLagPx": 12,
+    "hoverScale": 1.15,
+    "hoverDuration": 0.4
+  },
+  "tip": {
+    "x": 0.46799999999999997,
+    "y": 0.14
+  },
+  "present": {
+    "cursorBeforeFirstMove": "auto",
+    "cursorAfter": "none",
+    "width": 26,
+    "height": 28,
+    "src": "leaf-26.webp"
+  },
+  "follow": {
+    "samplesWhileMoving": 20,
+    "worstErrorPx": 291.75,
+    "pointerTravelThatFramePx": 0,
+    "excessOverTravelPx": 291.75,
+    "clampPx": 12,
+    "restErrorPx": 0,
+    "maxSwingDeg": 0,
+    "restSwingDeg": 0
+  },
+  "loop": {
+    "baselineFramesPerSecond": 61,
+    "framesPerSecondAfterResting": 120
+  },
+  "warm": {
+    "overProse": {
+      "filter": "none",
+      "over": "false"
+    },
+    "overLink": {
+      "filter": "sepia(1) saturate(2.6) hue-rotate(-6deg) brightness(1.02)",
+      "over": "true"
+    }
+  },
+  "textField": {
+    "focused": {
+      "visibility": "hidden",
+      "cursor": "auto"
+    },
+    "blurred": {
+      "visibility": "visible",
+      "cursor": "none"
+    }
+  },
+  "reducedMotion": {
+    "leaf": false,
+    "cursor": "auto"
+  },
+  "coarsePointer": {
+    "fineRendersLeaf": true,
+    "phoneRendersLeaf": false,
+    "phoneLeafImages": [],
+    "fineLeafImages": [
+      "leaf-26.webp"
+    ],
+    "chunksOnlyOnDesktop": [
+      "3u5ofh2msiy0c.js"
+    ],
+    "savedKB": 1.2
+  },
+  "failures": [
+    "the leaf trailed 291.7px while the pointer covered 0.0px that frame — 291.7px of its own lag, past the 12px clamp",
+    "the leaf barely rotated during a fast move (0.0 degrees) — it is riding rigidly",
+    "the loop is still running with the pointer at rest: 120 frames/s against a 61 frames/s baseline"
+  ],
+  "verdict": "fail"
+}

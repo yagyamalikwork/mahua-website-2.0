@@ -1,0 +1,75 @@
+{
+  "measuredAt": "2026-08-05T17:35:43.382Z",
+  "url": "http://localhost:3100/",
+  "cursor": {
+    "sizePx": 28,
+    "follow": 0.22,
+    "swing": 0.12,
+    "maxLagPx": 12,
+    "hoverScale": 1.15,
+    "hoverDuration": 0.4
+  },
+  "tip": {
+    "x": 0.46799999999999997,
+    "y": 0.14
+  },
+  "present": {
+    "cursorBeforeFirstMove": "auto",
+    "cursorAfter": "none",
+    "width": 26,
+    "height": 28,
+    "src": "leaf-26.webp"
+  },
+  "follow": {
+    "samplesWhileMoving": 20,
+    "worstErrorPx": 12,
+    "pointerTravelThatFramePx": 0,
+    "excessOverTravelPx": 12,
+    "clampPx": 12,
+    "restErrorPx": 0,
+    "maxSwingDeg": 25.1,
+    "restSwingDeg": 0.1
+  },
+  "loop": {
+    "baselineFramesPerSecond": 60,
+    "framesPerSecondAfterResting": 60
+  },
+  "warm": {
+    "overProse": {
+      "filter": "none",
+      "over": "false"
+    },
+    "overLink": {
+      "filter": "sepia(1) saturate(2.6) hue-rotate(-6deg) brightness(1.02)",
+      "over": "true"
+    }
+  },
+  "textField": {
+    "focused": {
+      "visibility": "hidden",
+      "cursor": "auto"
+    },
+    "blurred": {
+      "visibility": "visible",
+      "cursor": "none"
+    }
+  },
+  "reducedMotion": {
+    "leaf": false,
+    "cursor": "auto"
+  },
+  "coarsePointer": {
+    "fineRendersLeaf": true,
+    "phoneRendersLeaf": false,
+    "phoneLeafImages": [],
+    "fineLeafImages": [
+      "leaf-26.webp"
+    ],
+    "chunksOnlyOnDesktop": [
+      "3tw_m4oyoud09.js"
+    ],
+    "savedKB": 1.2
+  },
+  "failures": [],
+  "verdict": "pass"
+}
