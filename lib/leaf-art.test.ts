@@ -1,89 +1,63 @@
+import { statSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { LEAF_PATHS, LEAF_VIEWBOX } from "./leaf-art";
+import { LEAF } from "./leaf-art";
+import { CURSOR } from "./motion";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
- * The leaf that follows the pointer, extracted from the client's own logo by
- * `scripts/build_leaf.mjs`.
+ * The client's hand-drawn leaf, as worn by the cursor.
  *
- * These hold the extraction to a *well-formed* result. Not one of them can tell
- * you whether the shape reads as a leaf at 24px — that is judged by eye against
- * `docs/reviews/2026-08-05-signature/leaf-24.png`, and if it fails, this file is
- * replaced by hand with a drawn mahua leaf keeping the same two exports. Every
- * assertion below applies just as well to a hand-drawn replacement.
+ * These hold any replacement artwork to the guarantees the cursor depends on.
+ * None of them can tell you whether the drawing is *good* — that is judged by
+ * eye against `docs/reviews/2026-08-05-signature/supplied-leaf-{cream,dark}.png`,
+ * which show it at 28, 56 and 84px on both surfaces the page has.
  */
-describe("the extracted leaf", () => {
-  const [vx, vy, vw, vh] = LEAF_VIEWBOX.trim().split(/\s+/).map(Number);
-
-  it("is framed square", () => {
-    // The cursor swings the leaf about its stem. A non-square box would make the
-    // mark shear as it rotates, because the two axes would scale differently.
-    expect(vw).toBe(vh);
-    expect(vw).toBeGreaterThan(0);
-  });
-
-  it("fills its own frame", () => {
-    // A leaf adrift in a mostly-empty viewBox renders as a speck: the cursor
-    // sizes the *box* to 24px, so anything the art does not fill is thrown away.
-    //
-    // This replaced an assertion that the viewBox was not at the origin, which was
-    // over-fitted to the extraction it was written against — the drawn leaf that
-    // shipped uses `0 0 100 100` and would have failed it for no reason. What
-    // actually matters is coverage, and it is the same question either way: does
-    // the drawing use the frame it asks for.
-    const nums = LEAF_PATHS.flatMap((p) => p.d.match(/-?\d+(?:\.\d+)?/g)!.map(Number));
-    const xs = nums.filter((_, i) => i % 2 === 0);
-    const ys = nums.filter((_, i) => i % 2 === 1);
-    const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
-    expect(span / vw).toBeGreaterThan(0.7);
-  });
-
-  it("has exactly one blade, exactly one stem, and some veins", () => {
-    // One blade because two would paint over each other; one stem because the
-    // stem is the thing the cursor hangs the leaf by, and a second would be a
-    // second anchor point. Veins are a bonus at 24px but they are what makes it
-    // read at 2x and 3x, which is most laptops.
-    expect(LEAF_PATHS.filter((p) => p.role === "blade")).toHaveLength(1);
-    expect(LEAF_PATHS.filter((p) => p.role === "stem")).toHaveLength(1);
-    expect(LEAF_PATHS.filter((p) => p.role === "vein").length).toBeGreaterThanOrEqual(2);
-  });
-
-  it("starts its stem in the corner the pointer sits in", () => {
-    // `LeafCursor` puts the element's own origin at the pointer and does no
-    // offset arithmetic, so the stem's first point *is* the anchor. A leaf drawn
-    // centred in its box would hang off the pointer by half its own width, and
-    // every follow-accuracy check in the browser rig would be measuring the wrong
-    // thing while passing.
-    const stem = LEAF_PATHS.find((p) => p.role === "stem")!;
-    const [x, y] = stem.d.slice(1).split(/[ ,]/).slice(0, 2).map(Number);
-    expect(x).toBeLessThan(vx + vw * 0.15);
-    expect(y).toBeLessThan(vy + vh * 0.15);
-  });
-
-  it("holds real path data, not a placeholder", () => {
-    for (const p of LEAF_PATHS) {
-      expect(p.d.length).toBeGreaterThan(20);
-      expect(p.d).toMatch(/^[Mm]/);
+describe("the leaf the cursor wears", () => {
+  it("ships every width it advertises", () => {
+    // A width in `srcset` with no file behind it is a broken image at exactly one
+    // screen density — invisible on the machine of whoever last touched it.
+    for (const w of LEAF.widths) {
+      const file = path.join(ROOT, "public", "brand", `leaf-${w}.webp`);
+      expect(() => statSync(file), `public/brand/leaf-${w}.webp is missing`).not.toThrow();
+      expect(statSync(file).size).toBeGreaterThan(200);
     }
   });
 
-  it("stays small enough to inline", () => {
-    // It ships inside a JavaScript chunk, and the whole emblem raster it comes
-    // from is 3.2-8.0 KB. A cursor must not cost more than the mark it was cut
-    // out of.
-    const bytes = LEAF_PATHS.reduce((n, p) => n + p.d.length, 0);
-    expect(bytes).toBeLessThan(4000);
+  it("carries enough resolution for a 2x screen", () => {
+    // The cursor is gated on a fine pointer, so 3x phones never see it, but a
+    // retina laptop is the common case and drawing 28px from a 28px file would
+    // be visibly soft. This is the same failure that shipped a blurred hero in
+    // August — a `sizes`/resolution mismatch that no test could see.
+    expect(Math.max(...LEAF.widths)).toBeGreaterThanOrEqual(CURSOR.sizePx * 2);
   });
 
-  it("sits inside its own viewBox", () => {
-    // Every path's first move must land inside the frame. A path outside it is
-    // invisible at runtime and visible in no test but this one.
-    for (const p of LEAF_PATHS) {
-      const [x, y] = p.d.slice(1).split(/[ ,]/).slice(0, 2).map(Number);
-      expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
-      expect(x).toBeGreaterThanOrEqual(vx - 1);
-      expect(x).toBeLessThanOrEqual(vx + vw + 1);
-      expect(y).toBeGreaterThanOrEqual(vy - 1);
-      expect(y).toBeLessThanOrEqual(vy + vh + 1);
+  it("puts the pointer on the leaf's tip, not in the middle of it", () => {
+    // The component positions the image by its own box and offsets by this
+    // fraction, so the hotspot *is* the anchor. A hotspot near the centre would
+    // hang the leaf's whole body over whatever is being pointed at, and every
+    // follow-accuracy check in the browser rig would still pass while measuring
+    // the wrong point.
+    expect(LEAF.hotspot.x).toBeLessThan(0.25);
+    expect(LEAF.hotspot.y).toBeLessThan(0.25);
+  });
+
+  it("keeps a portrait aspect, so the leaf hangs rather than lies down", () => {
+    expect(LEAF.height).toBeGreaterThan(LEAF.width);
+    // And a plausible one. A leaf far longer than it is wide is the blade of
+    // grass an earlier attempt at this shipped.
+    expect(LEAF.width / LEAF.height).toBeGreaterThan(0.5);
+  });
+
+  it("stays light enough to be free", () => {
+    // It counts against the initial page transfer, not the JavaScript budget,
+    // and there is room — but a cursor has no business being heavier than the
+    // brand emblem in the header, which is 3.2-8.0 KB.
+    for (const w of LEAF.widths) {
+      const file = path.join(ROOT, "public", "brand", `leaf-${w}.webp`);
+      expect(statSync(file).size).toBeLessThan(12_000);
     }
   });
 });

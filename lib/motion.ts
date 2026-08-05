@@ -118,7 +118,7 @@ export const PARALLAX_MAX = 0.15;
  */
 export const CURSOR = {
   /** CSS pixels, fixed. A cursor has one size at every zoom and every breakpoint. */
-  sizePx: 24,
+  sizePx: 28,
   follow: 0.22,
   swing: 0.12,
   maxLagPx: 12,

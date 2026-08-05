@@ -1,42 +1,45 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { LEAF_PATHS, LEAF_VIEWBOX } from "@/lib/leaf-art";
+import { LEAF } from "@/lib/leaf-art";
 import { CURSOR } from "@/lib/motion";
-import { PALETTE } from "@/lib/palette";
 
 /**
- * A mahua leaf hanging from the pointer, in place of the arrow.
+ * The client's hand-drawn mahua leaf, hanging from the pointer in place of the
+ * arrow.
  *
  * ## The three things that make it a leaf and not a sticker
  *
- * 1. **The stem tip is the pointer.** `lib/leaf-art.ts` puts the petiole at the
- *    top-left of a square viewBox, so the element's own origin goes at the
- *    pointer and the blade falls down and to the right — over nothing you are
- *    about to click, and with no offset arithmetic to get wrong.
+ * 1. **The leaf's tip is the pointer.** `LEAF.hotspot` is the apex, measured from
+ *    the artwork's own ink by `scripts/build_leaf.mjs`, and the image is offset by
+ *    that fraction so the tip lands exactly where a click would — the same
+ *    arrangement an arrow cursor has, where the point is the hotspot and the body
+ *    trails behind it.
  * 2. **It lags, and the lag dies.** Position eases by `CURSOR.follow` of the
- *    remaining distance each frame, so the leaf trails while the hand moves and
- *    is exactly on the point within a few frames of it stopping. The trail is
- *    clamped to `CURSOR.maxLagPx`, because the leaf is the only visible cursor
- *    and it may not sit further than that from where a click would land.
+ *    remaining distance each frame, so the leaf trails while the hand moves and is
+ *    on the point within a few frames of it stopping. The trail is clamped to
+ *    `CURSOR.maxLagPx`, because this is the *only* visible cursor and it may not
+ *    sit further than that from where a click would land.
  * 3. **The angle carries its own inertia**, easing at the slower `CURSOR.swing`,
  *    so the blade swings behind the direction of travel and settles without
- *    overshooting. A leaf locked rigidly to the pointer reads as a sticker; this
- *    is the whole difference.
+ *    overshooting. It rotates about the tip, so the body swings beneath the
+ *    pointer like something hanging from it. That weave is the whole difference
+ *    between a leaf and a sticker, and it is what the client asked to keep when
+ *    the artwork changed.
  *
  * ## Why none of this touches React state
  *
  * Pointer moves arrive faster than 60Hz. A `setState` per move would re-render
- * this component hundreds of times a second and make the page's own scroll
- * animations stutter. Everything lives in refs and one `requestAnimationFrame`
- * loop writing `el.style.transform` directly. React renders this once.
+ * hundreds of times a second and make the page's own scroll animations stutter.
+ * Everything lives in refs and one `requestAnimationFrame` loop writing
+ * `el.style.transform` directly. React renders this once.
  *
  * **The loop stops itself.** Once the leaf has arrived and stopped swinging it
  * schedules no further frame, and the next `pointermove` starts it again. A
- * decorative loop running forever is invisible on a desktop and a real battery
- * cost on a laptop, and nothing about the page looks different when it regresses
- * — which is why `scripts/check_leaf_cursor.mjs` counts frames rather than
- * trusting this comment.
+ * decorative loop running forever is invisible on a desktop and a real cost on a
+ * laptop battery, and nothing about the page looks different when it regresses —
+ * which is why `scripts/check_leaf_cursor.mjs` counts frames rather than trusting
+ * this comment.
  *
  * ## Safety
  *
@@ -46,20 +49,20 @@ import { PALETTE } from "@/lib/palette";
  * server-rendered off: script may take something away only once it has proved it
  * can put something back.
  *
- * `transform` is written directly and this element carries no Tailwind utility
- * at all — no `scale-*`, no `translate-*` — so there is nothing for it to compose
+ * `transform` is written directly and this element carries no Tailwind utility at
+ * all — no `scale-*`, no `translate-*` — so there is nothing for it to compose
  * with. See the note above the image rules in `app/globals.css` for what happens
  * when that is not true.
  */
 export function LeafCursor() {
-  const ref = useRef<SVGSVGElement>(null);
+  const ref = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const target = { x: -100, y: -100 };
-    const at = { x: -100, y: -100 };
+    const target = { x: -200, y: -200 };
+    const at = { x: -200, y: -200 };
     let angle = 0;
     let angleTo = 0;
     let scale = 1;
@@ -67,9 +70,15 @@ export function LeafCursor() {
     let frame = 0;
     let seen = false;
 
+    // The tip sits at the pointer, so the image is drawn up and left by wherever
+    // the tip is inside its own box. Read once — it cannot change without a
+    // reload, and it is a fraction of a size this component fixes.
+    const offsetX = LEAF.hotspot.x * LEAF.drawnWidth;
+    const offsetY = LEAF.hotspot.y * CURSOR.sizePx;
+
     const draw = () => {
       el.style.transform =
-        `translate3d(${at.x.toFixed(2)}px, ${at.y.toFixed(2)}px, 0) ` +
+        `translate3d(${(at.x - offsetX).toFixed(2)}px, ${(at.y - offsetY).toFixed(2)}px, 0) ` +
         `rotate(${angle.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
     };
 
@@ -145,8 +154,8 @@ export function LeafCursor() {
     // Typing is the one time the leaf is in the way: an I-beam says where the
     // caret will land and a leaf does not.
     const onFocusIn = (event: FocusEvent) => {
-      const el2 = event.target as Element | null;
-      if (el2?.matches?.('input, textarea, [contenteditable="true"]')) {
+      const focused = event.target as Element | null;
+      if (focused?.matches?.('input, textarea, [contenteditable="true"]')) {
         el.style.visibility = "hidden";
         document.documentElement.style.cursor = "";
       }
@@ -158,8 +167,12 @@ export function LeafCursor() {
 
     // Leaving the document entirely — out of the window, or into a devtools pane
     // — parks the leaf rather than freezing it mid-flight at the edge.
-    const onLeave = () => { el.style.opacity = "0"; };
-    const onEnter = () => { if (seen) el.style.opacity = "1"; };
+    const onLeave = () => {
+      el.style.opacity = "0";
+    };
+    const onEnter = () => {
+      if (seen) el.style.opacity = "1";
+    };
 
     document.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerover", onOver, { passive: true });
@@ -182,13 +195,40 @@ export function LeafCursor() {
   }, []);
 
   return (
-    <svg
+    /*
+     * A plain `<img>`, not `next/image`. This is a fixed-size decorative mark with
+     * one job and two encoded widths; the loader would add a query-string round
+     * trip and a wrapper element for a 2.5 KB file that must be on screen the
+     * instant the pointer moves.
+     */
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       ref={ref}
       data-leaf-cursor
+      alt=""
       aria-hidden="true"
-      viewBox={LEAF_VIEWBOX}
-      width={CURSOR.sizePx}
+      src={`/brand/leaf-${LEAF.fallback}.webp`}
+      /*
+       * Density descriptors, and deliberately **not** a `sizes` attribute.
+       *
+       * `sizes` exists to tell the browser how large an image will be *when that
+       * depends on layout*. A cursor is the same size at every breakpoint, so the
+       * only open question is screen density, and `1x`/`2x`/`3x` answers exactly
+       * that with nothing to get wrong. `w` descriptors here would have required a
+       * `sizes` expression, and `lib/sizes.test.ts` rightly refused to let one
+       * exist unchecked — but the round-trip guarantees it enforces are all about
+       * viewport expressions this image does not have.
+       *
+       * `scripts/build_leaf.mjs` encodes at exact multiples of `LEAF.drawnWidth`,
+       * so each descriptor is honest rather than approximate.
+       */
+      srcSet={LEAF.widths
+        .map((w, i) => `/brand/leaf-${w}.webp ${i + 1}x`)
+        .join(", ")}
+      width={LEAF.drawnWidth}
       height={CURSOR.sizePx}
+      decoding="async"
+      fetchPriority="low"
       style={{
         position: "fixed",
         left: 0,
@@ -197,69 +237,14 @@ export function LeafCursor() {
         zIndex: 100,
         pointerEvents: "none",
         opacity: 0,
+        // The rotation pivots on the tip, so the leaf swings beneath the pointer
+        // rather than about its own middle.
+        transformOrigin: `${LEAF.hotspot.x * 100}% ${LEAF.hotspot.y * 100}%`,
         // The lift and the warming to gold. The travel itself is written frame by
         // frame in the loop above and must not be transitioned — a transition on
         // `transform` here would fight the easing and turn the lag into a smear.
-        transition: `opacity ${CURSOR.hoverDuration}s ease-out, color ${CURSOR.hoverDuration}s ease-out`,
+        transition: `opacity ${CURSOR.hoverDuration}s ease-out, filter ${CURSOR.hoverDuration}s ease-out`,
       }}
-    >
-      {/*
-       * The halo, and it is not decoration — it is what lets one leaf be legible
-       * on every surface this page has.
-       *
-       * The blade is ink. On cream that reads perfectly and on `ChapterMenu`'s
-       * overlay (#232B21) it is very nearly invisible, which for the *only*
-       * visible cursor is a usability failure rather than an aesthetic one — the
-       * menu is exactly where a visitor is aiming at links. Drawing the whole leaf
-       * first in paper, stroked wide, puts a cream edge around every part of it.
-       * On cream the halo blends into the page and disappears; on anything dark it
-       * becomes the drawing. Nothing has to know which surface it is over.
-       */}
-      {LEAF_PATHS.map((p, i) => (
-        <path
-          key={`halo-${i}`}
-          d={p.d}
-          fill={p.role === "blade" ? PALETTE.paper : "none"}
-          stroke={PALETTE.paper}
-          strokeWidth={6}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      ))}
-
-      {/*
-       * `currentColor` on the blade and the stem, so the CSS in `app/globals.css`
-       * can warm the whole leaf to gold over a link with one property, and the
-       * colour stays in `lib/palette.ts` where every colour on this page lives.
-       */}
-      {LEAF_PATHS.filter((p) => p.role === "blade").map((p, i) => (
-        <path key={`blade-${i}`} d={p.d} fill="currentColor" />
-      ))}
-      {LEAF_PATHS.filter((p) => p.role === "stem").map((p, i) => (
-        <path
-          key={`stem-${i}`}
-          d={p.d}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2.8}
-          strokeLinecap="round"
-        />
-      ))}
-      {/*
-       * Veins are paper, because they sit *on* the blade and have to contrast with
-       * it rather than with the page.
-       */}
-      {LEAF_PATHS.filter((p) => p.role === "vein").map((p, i) => (
-        <path
-          key={`vein-${i}`}
-          d={p.d}
-          fill="none"
-          stroke={PALETTE.paper}
-          strokeWidth={2.2}
-          strokeLinecap="round"
-          opacity={0.5}
-        />
-      ))}
-    </svg>
+    />
   );
 }

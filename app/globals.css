@@ -269,25 +269,25 @@ button:focus-visible .rule-in::after {
 /*
  * The leaf that follows the pointer — `components/signature/leaf-cursor/`.
  *
- * Only its *colour* lives here. The travel is written frame by frame in the
+ * Only the *warm state* lives here. The travel is written frame by frame in the
  * component, because it answers the pointer rather than the page, and a CSS
  * transition on the same transform would fight the easing and smear the lag.
  *
- * Here so the two values stay in `lib/palette.ts` with every other colour on the
- * page, and so the leaf warming to gold and the rule sliding in underneath it are
- * one response written in one language. Gold carries no text here, which is
- * exactly what non-negotiable #7 reserves it for.
+ * **A filter, not a second image.** The leaf is the client's own hand-drawn
+ * artwork (5 Aug 2026), so it is a photograph as far as the browser is concerned
+ * and cannot take `currentColor` the way the drawn SVG it replaced could. A
+ * gold-tinted twin would be a second 2.5 KB file and a second request; this chain
+ * was measured against `PALETTE.gold` in the browser and lands on it closely
+ * enough that nothing is gained by shipping one. It also keeps the drawing's own
+ * shading, which a flat tint flattens, and it animates — a tinted twin would have
+ * to be crossfaded.
  *
  * `data-over` is written by the component from a `pointerover` test, not by
  * `:hover` — the leaf has `pointer-events: none`, so it is never itself hovered
  * and could not know any other way.
  */
-[data-leaf-cursor] {
-  color: var(--text);
-}
-
 [data-leaf-cursor][data-over="true"] {
-  color: var(--accent);
+  filter: sepia(1) saturate(2.6) hue-rotate(-6deg) brightness(1.02);
 }
 
 body {

@@ -1,0 +1,145 @@
+// Encode the client's hand-drawn leaf for the cursor that follows the pointer.
+//
+// Run: node scripts/build_leaf.mjs
+//
+// Source: `reference/client-art/hand-drawn-leaf.png`, supplied by the client on
+// 5 Aug 2026 — a 230x230 PNG with a clean alpha channel.
+//
+// This replaced a drawn SVG leaf, which had itself replaced one extracted from
+// the client's logo. The logo's leaves are real vector paths and the extraction
+// was clean, but they are stylised to be read eight at a time in a ring — short,
+// wide, symmetrical, with neither stem nor point, because in the lockup both are
+// hidden under the petals. At 24px that is a green blob. The evidence for all
+// three is kept side by side in `docs/reviews/2026-08-05-signature/`.
+//
+// Three things this derives rather than assumes:
+//
+//   1. **The trim.** The supplied file has transparent margins, and a cursor
+//      positioned by its own box must have the artwork flush to that box or the
+//      pointer sits in empty space beside the leaf.
+//   2. **The hotspot** — the apex, found as the centre of ink in the topmost
+//      inked row. That is the point placed at the pointer, exactly as an arrow
+//      cursor's tip is. Hard-coding it would silently drift the moment the
+//      artwork is redrawn.
+//   3. **The intrinsic size**, so `lib/leaf-art.ts` and the markup cannot
+//      disagree about the aspect ratio.
+//
+// There is no gold variant. The warm state is a CSS filter in `app/globals.css`
+// — measured against `PALETTE.gold` and close enough to it that a second file
+// would be 2.5 KB and a second request for nothing.
+
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import sharp from "sharp";
+import { CURSOR } from "../lib/motion.ts";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const SRC = path.join(ROOT, "reference", "client-art", "hand-drawn-leaf.png");
+const OUT_DIR = path.join(ROOT, "public", "brand");
+const ART = path.join(ROOT, "lib", "leaf-art.ts");
+
+/**
+ * Screen densities to cover. 3x is included even though the cursor never runs on
+ * a phone: a 3x *laptop* is unusual but real, and the file is under 6 KB.
+ */
+const DENSITIES = [1, 2, 3];
+
+const trimmed = await sharp(SRC).trim({ threshold: 10 }).png().toBuffer();
+const { width, height } = await sharp(trimmed).metadata();
+
+/**
+ * The width the cursor actually draws at, derived from the height in
+ * `lib/motion.ts` and this artwork's own aspect — so the encoded files are exact
+ * multiples of the drawn size and the markup can use plain `1x`/`2x`/`3x`
+ * descriptors.
+ *
+ * This is the alternative to a `sizes` attribute, and it is the right one here:
+ * `sizes` exists to tell the browser how big an image will be *when that depends
+ * on layout*. A cursor is the same size at every breakpoint, so the only question
+ * left is density, and that is exactly what an `x` descriptor answers. It also
+ * keeps this out of `lib/sizes.ts`, whose round-trip guarantees are all about
+ * viewport expressions this image does not have.
+ */
+const DRAWN_WIDTH = Math.round(CURSOR.sizePx * (width / height));
+const WIDTHS = DENSITIES.map((d) => DRAWN_WIDTH * d);
+
+// --- The apex, from the artwork's own ink. ---------------------------------
+const { data, info } = await sharp(trimmed).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+let hotspot = null;
+for (let y = 0; y < info.height && !hotspot; y++) {
+  const xs = [];
+  for (let x = 0; x < info.width; x++) {
+    if (data[(y * info.width + x) * info.channels + 3] > 40) xs.push(x);
+  }
+  // Two pixels, so a single stray dot cannot be mistaken for the tip.
+  if (xs.length >= 2) {
+    hotspot = { x: (Math.min(...xs) + Math.max(...xs)) / 2 / info.width, y: y / info.height };
+  }
+}
+if (!hotspot) throw new Error("Found no ink in the leaf at all — is the source still a leaf on transparency?");
+
+// --- Encode. ---------------------------------------------------------------
+await mkdir(OUT_DIR, { recursive: true });
+
+// Clear stale sizes first. Changing WIDTHS otherwise leaves old files on disk,
+// where they look current and get committed — the trap `build_images.mjs` and
+// `build_brand.mjs` both had to grow a cleanup pass for.
+const expected = new Set(WIDTHS.map((w) => `leaf-${w}.webp`));
+for (const f of await readdir(OUT_DIR)) {
+  if (f.startsWith("leaf-") && !expected.has(f)) {
+    await rm(path.join(OUT_DIR, f));
+    console.log(`removed stale ${f}`);
+  }
+}
+
+for (const w of WIDTHS) {
+  const out = path.join(OUT_DIR, `leaf-${w}.webp`);
+  const buf = await sharp(trimmed).resize(w, null, { fit: "inside" }).webp({ quality: 88 }).toBuffer();
+  await writeFile(out, buf);
+  console.log(`leaf-${w}.webp  ${(buf.length / 1024).toFixed(1)} KB`);
+}
+
+// --- Emit the module the component reads. ----------------------------------
+const round = (n) => Math.round(n * 1000) / 1000;
+await writeFile(
+  ART,
+  `// GENERATED by scripts/build_leaf.mjs — do not edit by hand.
+//
+// The client's hand-drawn mahua leaf, as worn by the cursor. Source artwork is
+// \`reference/client-art/hand-drawn-leaf.png\`; the encoded files are
+// \`public/brand/leaf-*.webp\`.
+//
+// **This is the swap point.** A new drawing means dropping a new PNG over the
+// source and re-running the script. Nothing else changes: the component reads
+// only what is below, and \`lib/leaf-art.test.ts\` holds any replacement to the
+// same guarantees.
+
+export const LEAF = {
+  /**
+   * Encoded widths, one per screen density, as exact multiples of the width the
+   * cursor draws at. The component pairs them with \`1x\`/\`2x\`/\`3x\` descriptors —
+   * see the build script for why this is not a \`sizes\` attribute.
+   */
+  widths: [${WIDTHS.join(", ")}] as const,
+  /** The one \`src\` a browser without \`srcset\` support would take. */
+  fallback: ${WIDTHS[0]},
+  /** The CSS width the cursor draws at; its height is \`CURSOR.sizePx\`. */
+  drawnWidth: ${DRAWN_WIDTH},
+  /** Intrinsic size of the trimmed artwork, so nothing can disagree about its aspect. */
+  width: ${width},
+  height: ${height},
+  /**
+   * The leaf's apex, as a fraction of the drawn box — the point that sits exactly
+   * on the pointer, as an arrow cursor's tip does. Measured from the artwork's own
+   * ink, not chosen.
+   */
+  hotspot: { x: ${round(hotspot.x)}, y: ${round(hotspot.y)} },
+} as const;
+`,
+  "utf8",
+);
+
+console.log(
+  `\ntrimmed to ${width}x${height}, hotspot ${round(hotspot.x)}, ${round(hotspot.y)}\n-> lib/leaf-art.ts`,
+);
