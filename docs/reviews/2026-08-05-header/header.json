@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-05T01:54:59.690Z",
-  "url": "http://localhost:3137/",
+  "measuredAt": "2026-08-05T01:58:13.184Z",
+  "url": "http://localhost:3141/",
   "viewports": {
     "320x800": {
       "top": {
@@ -39,7 +39,7 @@
             "height": 34.390625
           }
         },
-        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -7.44079e-15, 7.44079e-15, 1, 0, 0)",
         "scrollPaddingTop": "75px",
         "docScrollWidth": 320,
         "innerWidth": 320,
@@ -172,7 +172,7 @@
             "height": 34.390625
           }
         },
-        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -1.24013e-14, 1.24013e-14, 1, 0, 0)",
         "scrollPaddingTop": "75px",
         "docScrollWidth": 390,
         "innerWidth": 390,
@@ -571,7 +571,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, -1.54298e-07, 1.54298e-07, 1, 0, 0)",
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1920,
         "innerWidth": 1920,
@@ -669,7 +669,7 @@
     }
   },
   "emblem": {
-    "early": "matrix(0.192102, -0.981375, 0.981375, 0.192102, 0, 0)",
+    "early": "matrix(0.191951, -0.981405, 0.981405, 0.191951, 0, 0)",
     "late": "matrix(1, 0, 0, 1, 0, 0)"
   },
   "reducedMotion": {
