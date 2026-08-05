@@ -302,9 +302,23 @@ button:focus-visible .rule-in::after {
  * every path. That is what lets one rule draw 162 strokes of wildly different
  * lengths at the same rate, with no measurement anywhere.
  */
+/*
+ * **Per stroke, not per wave.** `--ink-delay` and `--ink-dur` are both written by
+ * the component on each path: its own place in the queue, and its own time to be
+ * drawn, taken from how long the line actually is.
+ *
+ * Bucketing the strokes into eight waves drew twenty at once and then left
+ * nothing drawing at all for ~0.15s, eight times over — measured frame by frame,
+ * and visible immediately as a stutter. `--ink-duration` is the fallback for a
+ * path that somehow arrives without its own.
+ *
+ * `ease-out` rather than the page's entrance curve: a drawn line should leave the
+ * nib quickly and settle, and `--enter-ease` is so front-loaded that a short mark
+ * appeared to snap.
+ */
 [data-ink-tiger] path {
   stroke-dasharray: 1;
-  transition: stroke-dashoffset var(--ink-duration) var(--enter-ease);
+  transition: stroke-dashoffset var(--ink-dur, var(--ink-duration)) ease-out;
   transition-delay: var(--ink-delay, 0s);
 }
 

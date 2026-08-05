@@ -40,8 +40,6 @@ const SRC = path.join(ROOT, "Tiger-illustrations", "lying-tiger.svg");
 const OUT = path.join(ROOT, "lib", "tiger-art.ts");
 const HIGHLIGHT = process.argv.includes("--highlight");
 
-/** How many waves the drawing arrives in. */
-const WAVES = 8;
 /** Decimal places kept. One is a tenth of a unit on a ~760-unit canvas. */
 const DP = 1;
 
@@ -125,8 +123,19 @@ for (const p of raw) {
 }
 
 // --- 4. Ink order, longest stroke first. -----------------------------------
+//
+// **Per stroke, not in waves.** Bucketing 162 strokes into eight waves drew
+// twenty at a time with dead air between the groups, which reads as a stutter
+// rather than as a hand. Each stroke now gets its own place in the queue and its
+// own duration, taken from how long the line actually is.
 const byLength = [...raw].sort((a, b) => b.length - a.length);
-byLength.forEach((p, i) => { p.ink = Math.min(WAVES - 1, Math.floor((i / byLength.length) * WAVES)); });
+const longest = byLength[0].length;
+byLength.forEach((p, i) => {
+  p.ink = i;
+  // Normalised against the longest stroke, so the component can scale a duration
+  // without knowing anything about this artwork's units.
+  p.len = Math.round((p.length / longest) * 1000) / 1000;
+});
 
 // --- 5. The eyes. ----------------------------------------------------------
 const inRegion = (b, r) =>
@@ -135,7 +144,7 @@ const eyes = raw.filter((p) => p.length <= EYE_MAX_LENGTH && EYE_REGIONS.some((r
 for (const e of eyes) {
   e.part = "eye";
   // A part must have finished arriving before it is asked to move.
-  e.ink = Math.min(e.ink, WAVES - 2);
+  // (order is already set; nothing to hold back now that strokes are individual)
 }
 if (eyes.length === 0) {
   throw new Error(
@@ -176,7 +185,7 @@ if (HIGHLIGHT) {
 const entries = raw
   .slice()
   .sort((a, b) => a.ink - b.ink || b.length - a.length)
-  .map((p) => `  { d: "${p.d}", w: ${p.width}, ink: ${p.ink}${p.part ? `, part: "${p.part}"` : ""} },`);
+  .map((p) => `  { d: "${p.d}", w: ${p.width}, ink: ${p.ink}, len: ${p.len}${p.part ? `, part: "${p.part}"` : ""} },`);
 
 const bytes = raw.reduce((n, p) => n + p.d.length, 0);
 
@@ -193,10 +202,14 @@ await writeFile(
 // drawn. A filled outline — which most vector line art is — could only fade or be
 // wiped.
 //
-// \`ink\` is the wave a stroke belongs to, derived from its length: the longest
-// strokes define the animal and the shortest are its markings, so longest-first
-// is both the order a hand works in and a rule that needs no judgement about
-// which line is which.
+// \`ink\` is a stroke's **place in the queue**, derived from its length: the
+// longest strokes define the animal and the shortest are its markings, so
+// longest-first is both the order a hand works in and a rule that needs no
+// judgement about which line is which.
+//
+// \`len\` is that length normalised against the longest stroke, so a component can
+// give a long line longer to draw than a short mark without knowing anything
+// about this artwork's units.
 //
 // \`w\` is the artist's own stroke weight, kept. It is what stops the drawing
 // reading as a diagram.
@@ -211,16 +224,18 @@ export type TigerPath = {
   d: string;
   /** The artist's own stroke weight, in viewBox units. */
   w: number;
-  /** Which wave of the drawing this belongs to, 0-based. */
+  /** This stroke's place in the drawing order, 0-based. Longest first. */
   ink: number;
+  /** Its length as a fraction of the longest stroke, for a proportional duration. */
+  len: number;
   /** Set only on the parts that move; matches a keyframe in \`app/globals.css\`. */
   part?: TigerPart;
 };
 
 export const TIGER_VIEWBOX = "0 0 ${W} ${H}";
 
-/** The waves the drawing arrives in, longest strokes first. */
-export const TIGER_WAVES = ${WAVES};
+/** How many strokes the drawing is made of. */
+export const TIGER_STROKES = ${raw.length};
 
 /**
  * The centre of the eyes' combined ink, as percentages of the viewBox.
@@ -240,7 +255,7 @@ ${entries.join("\n")}
 );
 
 console.log(
-  `${raw.length} paths | viewBox 0 0 ${W} ${H} | ${WAVES} waves | ${eyes.length} eye path(s)\n` +
+  `${raw.length} paths | viewBox 0 0 ${W} ${H} | ${eyes.length} eye path(s)\n` +
     `path data ${(bytes / 1024).toFixed(1)} KB (was ${(svg.length / 1024).toFixed(1)} KB of SVG)\n` +
     `-> lib/tiger-art.ts`,
 );

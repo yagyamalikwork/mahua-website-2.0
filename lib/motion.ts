@@ -59,28 +59,34 @@ export const DURATION = {
    */
   ruleIn: 0.4,
   /**
-   * One stroke of the ink tiger drawing itself.
+   * How long the **longest** stroke of the ink tiger takes to draw.
    *
-   * Longer than an entrance, because this is the one thing on the page a visitor
-   * is meant to *watch happen* rather than to find already arrived. Law 4 — "if
-   * you notice the animation, it is too fast" — is about things slipping in
-   * unbidden; a drawing being made is the opposite proposition.
+   * Shorter strokes take proportionally less, down to `tigerInkFloor`, because a
+   * hand spends longer on a long line than on a short mark. With one duration for
+   * all 162 strokes a five-unit dot took exactly as long as the animal's spine,
+   * which is the opposite of how drawing works.
+   *
+   * This is the one thing on the page a visitor is meant to *watch happen* rather
+   * than find already arrived, so law 4 does not bind it.
    */
-  tigerInk: 0.9,
+  tigerInk: 0.7,
+  /** The shortest any single stroke may take, so a small mark is still seen being made. */
+  tigerInkFloor: 0.18,
   /**
-   * The gap between one wave of strokes and the next.
+   * The gap between one stroke starting and the next — **per stroke, not per
+   * wave**, and much smaller than `tigerInk` so that strokes overlap continuously.
    *
-   * **Longer than `tigerInk`, so the waves do not overlap**, and that is measured
-   * rather than assumed. Ordering the ink by stroke length front-loads the
-   * picture: the long strokes carry nearly all the visual weight, so with
-   * overlapping waves the tiger looked finished at the halfway frame and the last
-   * waves added nothing anyone would see. Worse, the early frames showed dozens of
-   * short strokes each part-drawn at once, which reads as speckle rather than as a
-   * hand working. Separating the waves makes the drawing arrive in groups you can
-   * follow, and leaves the face — the shortest strokes, and the last wave — to
-   * land visibly at the end. See `docs/reviews/2026-08-05-signature/tiger-ink-*`.
+   * It was 1.05s against a 0.9s duration, in eight waves of twenty. Measured frame
+   * by frame, that drew twenty strokes at once, then left **nothing drawing at all
+   * for ~0.15s**, eight times over — a stop-start stutter the client saw
+   * immediately and described as jittery. The frame rate was never the problem:
+   * two frames over 32ms in the whole eight seconds.
+   *
+   * At this value roughly ten strokes are mid-draw at any moment and there is
+   * never a dead frame, which is what reads as a hand working rather than as
+   * batches materialising.
    */
-  tigerInkStagger: 1.05,
+  tigerInkStagger: 0.045,
   /**
    * One half-turn of the brand emblem as the page arrives, and then it is still.
    *

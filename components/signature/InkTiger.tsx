@@ -1,6 +1,17 @@
 import { InkStage } from "@/components/motion/InkStage";
 import { DURATION } from "@/lib/motion";
-import { TIGER_EYE_ORIGIN, TIGER_PATHS, TIGER_VIEWBOX, TIGER_WAVES } from "@/lib/tiger-art";
+import { TIGER_EYE_ORIGIN, TIGER_PATHS, TIGER_STROKES, TIGER_VIEWBOX } from "@/lib/tiger-art";
+
+/**
+ * How long a single stroke takes, from how long the line actually is.
+ *
+ * A hand spends longer on a long line than on a short mark. With one duration for
+ * all 162 strokes a five-unit dot took exactly as long as the animal's spine,
+ * which is the opposite of how drawing works — and it is half of why the first
+ * version read as mechanical.
+ */
+const strokeDuration = (len: number) =>
+  DURATION.tigerInkFloor + (DURATION.tigerInk - DURATION.tigerInkFloor) * len;
 
 /**
  * A field-guide tiger that draws itself onto the page.
@@ -63,7 +74,7 @@ export function InkTiger() {
              * the breath begins as the final stroke lands rather than underneath
              * it. Derived from the wave count so it cannot drift from the artwork.
              */
-            "--ink-total": `${(TIGER_WAVES - 1) * DURATION.tigerInkStagger + DURATION.tigerInk}s`,
+            "--ink-total": `${((TIGER_STROKES - 1) * DURATION.tigerInkStagger + DURATION.tigerInk).toFixed(2)}s`,
             /* The point both eyes close toward — measured from the ink itself. */
             "--eye-x": `${TIGER_EYE_ORIGIN.x}%`,
             "--eye-y": `${TIGER_EYE_ORIGIN.y}%`,
@@ -88,7 +99,13 @@ export function InkTiger() {
             strokeWidth={p.w}
             pathLength={1}
             {...(p.part ? { "data-part": p.part } : {})}
-            style={{ "--ink-delay": `${p.ink * DURATION.tigerInkStagger}s` } as React.CSSProperties}
+            style={
+              {
+                /* Its own place in the queue, and its own time to be drawn. */
+                "--ink-delay": `${(p.ink * DURATION.tigerInkStagger).toFixed(3)}s`,
+                "--ink-dur": `${strokeDuration(p.len).toFixed(3)}s`,
+              } as React.CSSProperties
+            }
           />
         ))}
       </svg>

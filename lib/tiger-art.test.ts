@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { TIGER_EYE_ORIGIN, TIGER_PATHS, TIGER_VIEWBOX, TIGER_WAVES } from "./tiger-art";
+import { DURATION } from "./motion";
+import { TIGER_EYE_ORIGIN, TIGER_PATHS, TIGER_STROKES, TIGER_VIEWBOX } from "./tiger-art";
 
 /**
  * The ink tiger's artwork, generated from the client's licensed vector by
@@ -23,40 +24,55 @@ describe("the ink tiger's artwork", () => {
     expect(w / h).toBeGreaterThan(1.4);
   });
 
-  it("uses every wave, contiguously, starting at zero", () => {
-    // A gap is a silent pause mid-draw; a missing zero delays the whole thing.
-    // Both look like the drawing is broken and neither throws.
-    const waves = [...new Set(TIGER_PATHS.map((p) => p.ink))].sort((a, b) => a - b);
-    expect(waves[0]).toBe(0);
-    expect(waves).toHaveLength(TIGER_WAVES);
-    waves.forEach((v, i) => expect(v).toBe(i));
+  it("gives every stroke its own place in the queue, with no gaps", () => {
+    // **Per stroke, not in waves.** Eight waves of twenty drew batches with dead
+    // air between them, which reads as a stutter rather than as a hand. A gap or
+    // a duplicate here would put two strokes on the same instant, which is that
+    // defect returning one pair at a time.
+    const order = TIGER_PATHS.map((p) => p.ink).sort((a, b) => a - b);
+    expect(order).toHaveLength(TIGER_STROKES);
+    order.forEach((v, i) => expect(v).toBe(i));
   });
 
-  it("draws its longest strokes first", () => {
+  it("draws its longest strokes first, and gives them longer to draw", () => {
     // The order is the whole effect: the lines that define the animal, then its
     // markings. An outline arriving after its own stripes reads as assembly.
-    // Length is approximated from the control polygon, exactly as the build does.
-    const length = (d: string) => {
-      const n = d.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
-      let total = 0;
-      for (let i = 2; i < n.length - 1; i += 2) total += Math.hypot(n[i] - n[i - 2], n[i + 1] - n[i - 1]);
-      return total;
-    };
-    const mean = (wave: number) => {
-      const inWave = TIGER_PATHS.filter((p) => p.ink === wave);
-      return inWave.reduce((n, p) => n + length(p.d), 0) / inWave.length;
-    };
-    expect(mean(0)).toBeGreaterThan(mean(TIGER_WAVES - 1) * 3);
+    const byOrder = [...TIGER_PATHS].sort((a, b) => a.ink - b.ink);
+    expect(byOrder[0].len).toBe(1);
+    expect(byOrder[byOrder.length - 1].len).toBeLessThan(0.2);
+    // Monotonic: each stroke is no longer than the one before it.
+    for (let i = 1; i < byOrder.length; i++) {
+      expect(byOrder[i].len).toBeLessThanOrEqual(byOrder[i - 1].len);
+    }
+    // And `len` is a real fraction, since the component scales a duration by it.
+    for (const p of TIGER_PATHS) {
+      expect(p.len).toBeGreaterThan(0);
+      expect(p.len).toBeLessThanOrEqual(1);
+    }
   });
 
-  it("has eyes, and they finish arriving before they are asked to move", () => {
-    const eyes = TIGER_PATHS.filter((p) => p.part === "eye");
+  it("has eyes at all", () => {
     // Zero would ship a tiger that never blinks while every other test passed —
     // the build throws on it too, because a region that selects nothing is the
     // most likely thing to go wrong when the artwork is replaced.
-    expect(eyes.length).toBeGreaterThanOrEqual(2);
-    // And they must not still be inking when the blink starts.
-    expect(Math.max(...eyes.map((p) => p.ink))).toBeLessThan(TIGER_WAVES - 1);
+    expect(TIGER_PATHS.filter((p) => p.part === "eye").length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("finishes every stroke before the living phase is allowed to begin", () => {
+    // `InkTiger` writes `--ink-total` and `app/globals.css` holds the breath and
+    // the blink back by it. If any stroke were still arriving after that, a part
+    // would start moving while it was being drawn — which looks like a glitch and
+    // which no browser check would attribute to the arithmetic here.
+    const inkTotal = (TIGER_STROKES - 1) * DURATION.tigerInkStagger + DURATION.tigerInk;
+    const duration = (len: number) =>
+      DURATION.tigerInkFloor + (DURATION.tigerInk - DURATION.tigerInkFloor) * len;
+
+    for (const p of TIGER_PATHS) {
+      const finishes = p.ink * DURATION.tigerInkStagger + duration(p.len);
+      expect(finishes, `stroke ${p.ink} still drawing at ${finishes.toFixed(2)}s`).toBeLessThanOrEqual(
+        inkTotal + 0.001,
+      );
+    }
   });
 
   it("blinks about a point on the eyes themselves", () => {

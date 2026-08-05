@@ -95,15 +95,32 @@ describe("the motion laws (spec section 4.3)", () => {
     expect(DURATION.ruleIn).toBeLessThan(ENTER.duration);
   });
 
-  it("inks the tiger slowly, and in waves that do not overlap", () => {
+  it("inks the tiger as one continuous hand, never in batches", () => {
     // Slow enough to be watched — this is the one thing on the page meant to be
     // seen happening rather than found already arrived.
-    expect(DURATION.tigerInk).toBeGreaterThanOrEqual(0.6);
+    expect(DURATION.tigerInk).toBeGreaterThanOrEqual(0.4);
     expect(DURATION.tigerInk).toBeLessThanOrEqual(1.4);
-    // And separated, which is the fix for a measured problem: with overlapping
-    // waves the drawing looked finished halfway through, because ordering by
-    // stroke length puts all the visual weight in the first waves.
-    expect(DURATION.tigerInkStagger).toBeGreaterThan(DURATION.tigerInk);
+
+    // **The stagger must be far shorter than the stroke**, so strokes overlap and
+    // there is never a frame with nothing being drawn.
+    //
+    // This assertion previously demanded the opposite, and shipped the defect it
+    // was written to prevent. Separating the waves did fix the front-loading it
+    // targeted, but it left ~0.15s of dead air eight times over — measured frame
+    // by frame as twenty strokes drawing, then zero, then twenty more. The client
+    // called it jittery on sight.
+    expect(DURATION.tigerInkStagger).toBeLessThan(DURATION.tigerInk / 4);
+
+    // Roughly this many strokes are mid-draw at any moment. Below about four the
+    // drawing thins out into a queue; far above twenty it stops reading as
+    // individual lines at all.
+    const concurrent = DURATION.tigerInk / DURATION.tigerInkStagger;
+    expect(concurrent).toBeGreaterThan(4);
+    expect(concurrent).toBeLessThan(24);
+
+    // A short mark still has to be seen being made, not blinked into place.
+    expect(DURATION.tigerInkFloor).toBeGreaterThan(0.1);
+    expect(DURATION.tigerInkFloor).toBeLessThan(DURATION.tigerInk);
   });
 
   it("gives the tiger's two movements beats that cannot sync into a pulse", () => {
