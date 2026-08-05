@@ -150,6 +150,41 @@ describe("StickyHeader", () => {
     expect(barOf(container).hasAttribute("data-scrolled")).toBe(false);
   });
 
+  it("never animates into the first state it paints", async () => {
+    // A reload part-way down the page renders `static`, then learns from the
+    // observer that it is `scrolled`. Animating that is 0.9s of a cream bar
+    // fading in over a cream chapter while the type fades out of cream — the
+    // illegible window HERO_TAIL keeps over the photograph, arriving by a route
+    // no rootMargin can see. `app/globals.css` hangs both transitions off
+    // `data-settled`, so its absence is what makes the first state instant.
+    withHero();
+    const { container } = render(<Header />);
+
+    report(observers[0], false);
+    expect(barOf(container).hasAttribute("data-scrolled")).toBe(true);
+    expect(
+      barOf(container).hasAttribute("data-settled"),
+      "the transition was live for the very first state, so it faded into it",
+    ).toBe(false);
+
+    // **This asserts that the gate is deferred, not that it is deferred by
+    // enough.** jsdom never paints, so collapsing the component's two frames to
+    // one still passes here — verified by doing it. The frame count is a browser
+    // question and `scripts/check_header.mjs`'s mid-page reload owns it: with a
+    // single frame it measures the bar at 31% cream and the wordmark at
+    // rgb(206,189,160) 320ms into a reload, and fails. What is guarded here is
+    // that the attribute exists, starts absent, and arrives later.
+    await act(async () => {
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    expect(
+      barOf(container).hasAttribute("data-settled"),
+      "the transition never switched on, so no later change will ever animate",
+    ).toBe(true);
+  });
+
   it("stays where it was on a browser with no IntersectionObserver", () => {
     // The failure that matters is not "the bar does not follow" — it is a bar
     // that follows with no way of ever being told to change colour.

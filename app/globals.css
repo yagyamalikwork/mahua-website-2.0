@@ -85,6 +85,21 @@ html {
    * can name and everybody can see.
    */
   border-bottom: 1px solid transparent;
+}
+
+/*
+ * **The crossfade is gated on the bar having already painted a state once.**
+ *
+ * `data-settled` arrives two frames after the first observer callback, so the
+ * first state a visitor is shown is never animated into — it is simply the state.
+ * Without this, a reload at scrollY 6000 renders `static`, learns it is
+ * `scrolled`, and then spends 0.9s fading a cream background in *over a cream
+ * chapter* while the type crossfades out of cream — the "straight through
+ * invisible" window `HERO_TAIL` exists to prevent, arriving by the one route a
+ * `rootMargin` cannot reach. Measured before the gate: 44% cream at ~150ms,
+ * 100% at ~900ms, with nothing but paper underneath.
+ */
+[data-site-header][data-settled] {
   transition:
     background-color var(--enter-duration) var(--enter-ease),
     border-bottom-color var(--enter-duration) var(--enter-ease);
@@ -97,6 +112,21 @@ html {
   background-color: var(--bg);
   /* Decorative, and gold's actual job — CLAUDE.md non-negotiable #7. */
   border-bottom-color: var(--accent);
+  /*
+   * **An opaque bar must catch its own clicks.** While the bar is transparent it
+   * is `pointer-events-none` and a click goes to the photograph behind it, which
+   * is right — there is nothing there to hit. Once it is solid cream, the page
+   * beneath is *hidden*, and letting clicks through means clicking what looks
+   * like empty cream and being taken somewhere.
+   *
+   * Not hypothetical, and worse than "clickable but invisible": at 1440x900 with
+   * the bar at rgb(241,233,215), `LodgeCards`' "Discover Mahua Vann" sits at y=9
+   * under a 107px bar, and a click at (142,20) opened mahuaresorts.com in a new
+   * tab. Keyboard was always safe — focusing the same link scrolls it to y=492,
+   * `scroll-padding-top` doing its job — so this was pointer-only and invisible
+   * to every check that did not actually click.
+   */
+  pointer-events: auto;
 }
 
 /*
@@ -106,7 +136,8 @@ html {
  * `header > div > p` is precisely how the contrast rig came to measure nothing
  * for a whole task (see `components/ui/BrandMark.tsx`).
  */
-[data-header-tint] {
+/* Gated on `data-settled` for the reason given above the bar's own transition. */
+[data-site-header][data-settled] [data-header-tint] {
   transition: color var(--enter-duration) var(--enter-ease);
 }
 

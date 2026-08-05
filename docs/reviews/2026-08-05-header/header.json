@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-05T01:58:13.184Z",
-  "url": "http://localhost:3141/",
+  "measuredAt": "2026-08-05T02:31:26.657Z",
+  "url": "http://localhost:3158/",
   "viewports": {
     "320x800": {
       "top": {
@@ -39,7 +39,7 @@
             "height": 34.390625
           }
         },
-        "emblemTransform": "matrix(1, -7.44079e-15, 7.44079e-15, 1, 0, 0)",
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
         "scrollPaddingTop": "75px",
         "docScrollWidth": 320,
         "innerWidth": 320,
@@ -51,7 +51,7 @@
         "height": 75,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -94,7 +94,7 @@
         "height": 75,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -172,7 +172,7 @@
             "height": 34.390625
           }
         },
-        "emblemTransform": "matrix(1, -1.24013e-14, 1.24013e-14, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -2.8275e-14, 2.8275e-14, 1, 0, 0)",
         "scrollPaddingTop": "75px",
         "docScrollWidth": 390,
         "innerWidth": 390,
@@ -184,7 +184,7 @@
         "height": 75,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -227,7 +227,7 @@
         "height": 75,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -305,7 +305,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -1.51229e-07, 1.51229e-07, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 768,
         "innerWidth": 768,
@@ -317,7 +317,7 @@
         "height": 107,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -360,7 +360,7 @@
         "height": 107,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -438,7 +438,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "emblemTransform": "matrix(1, -1.98421e-15, 1.98421e-15, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1440,
         "innerWidth": 1440,
@@ -450,7 +450,7 @@
         "height": 107,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -493,7 +493,7 @@
         "height": 107,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -583,7 +583,7 @@
         "height": 107,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -626,7 +626,7 @@
         "height": 107,
         "background": "rgb(241, 233, 215)",
         "borderBottomColor": "rgb(187, 143, 46)",
-        "pointerEvents": "none",
+        "pointerEvents": "auto",
         "scrolled": true,
         "wordmark": {
           "colour": "rgb(127, 92, 36)",
@@ -669,7 +669,7 @@
     }
   },
   "emblem": {
-    "early": "matrix(0.191951, -0.981405, 0.981405, 0.191951, 0, 0)",
+    "early": "matrix(0.191996, -0.981396, 0.981396, 0.191996, 0, 0)",
     "late": "matrix(1, 0, 0, 1, 0, 0)"
   },
   "reducedMotion": {
@@ -722,7 +722,7 @@
       "height": 107,
       "background": "rgb(241, 233, 215)",
       "borderBottomColor": "rgb(187, 143, 46)",
-      "pointerEvents": "none",
+      "pointerEvents": "auto",
       "scrolled": true,
       "wordmark": {
         "colour": "rgb(127, 92, 36)",
@@ -769,7 +769,23 @@
     "scrollPaddingTop": "0px"
   },
   "clickThrough": {
-    "hit": "DIV",
-    "insideBar": false
+    "barHeight": 107,
+    "barBackground": "rgb(241, 233, 215)",
+    "linkText": "Discover Mahua Vann",
+    "linkHref": "https://mahuaresorts.com/resorts/mahua-vann/",
+    "linkTop": 9,
+    "point": {
+      "x": 142,
+      "y": 20
+    },
+    "hitIsTheLink": false,
+    "openedTab": null,
+    "navigated": false
+  },
+  "midScrollReload": {
+    "scrolled": true,
+    "background": "rgb(241, 233, 215)",
+    "wordmark": "rgb(127, 92, 36)",
+    "scrollY": 2346
   }
 }

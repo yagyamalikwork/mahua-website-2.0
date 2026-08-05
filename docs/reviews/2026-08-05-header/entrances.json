@@ -1,6 +1,6 @@
 {
-  "url": "http://localhost:3133/",
-  "measuredAt": "2026-08-05T01:48:31.638Z",
+  "url": "http://localhost:3158/",
+  "measuredAt": "2026-08-05T02:35:25.163Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
@@ -57,7 +57,7 @@
     "headlineStagings": 11,
     "headlineSettlings": 11,
     "peakMaskCover": 1,
-    "peakWordOffset": 83.778,
+    "peakWordOffset": 83.816,
     "peakStagedAtOnce": 67,
     "afterScroll": {
       "staged": 0,

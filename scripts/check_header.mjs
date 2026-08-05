@@ -189,6 +189,10 @@ for (const { w, h } of VIEWPORTS) {
   if (on.wordmark.colour !== css(PALETTE.brand)) fail(`${w}: wordmark computes ${on.wordmark.colour}, not ${PALETTE.brand}`);
   else ok(`wordmark computes ${css(PALETTE.brand)} = ${PALETTE.brand}`);
   if (on.menu.colour !== css(PALETTE.ink)) fail(`${w}: the menu computes ${on.menu.colour}, not ink`);
+  // The opaque half of the pair asserted in the top state above. A solid bar
+  // that lets clicks through hides the thing it hands them to.
+  if (on.pointerEvents !== "auto") fail(`${w}: the cream bar is ${on.pointerEvents}, so clicks pass through an opaque surface`);
+  else ok(`the cream bar catches its own clicks`);
 
   const drawn = (rows.wordmarkDarkestPixel = await darkestPixel(page, on.wordmark.box));
   const px = Number.parseFloat(on.wordmark.fontSize);
@@ -262,9 +266,19 @@ for (const { w, h } of VIEWPORTS) {
   const page = await context.newPage();
   await page.goto(URL, { waitUntil: "commit" });
   await page.waitForTimeout(400);
-  const emblem = await page.evaluate(() => getComputedStyle(document.querySelector("[data-site-header] img")).transform);
+  const still = await page.evaluate(() => {
+    const cs = getComputedStyle(document.querySelector("[data-site-header] img"));
+    return { transform: cs.transform, animationName: cs.animationName };
+  });
+  const emblem = still.transform;
   if (!(emblem === "none" || emblem === "matrix(1, 0, 0, 1, 0, 0)")) fail(`reduced motion: the emblem is turning (${emblem})`);
   else ok(`the emblem does not turn`);
+  // The transform above is the outcome; this is the rule that guarantees it for
+  // any future keyframe set. `animation-duration: .001ms !important` from the `*`
+  // rule would flatten a turn to nothing but would still leave an animation
+  // *running*, and its final frame would decide the resting angle.
+  if (still.animationName !== "none") fail(`reduced motion: the emblem still has an animation (${still.animationName})`);
+  else ok(`no animation on the emblem at all, so no final frame to rest at`);
 
   await page.waitForTimeout(1500);
   const before = await page.evaluate(PROBE);
@@ -317,22 +331,97 @@ for (const { w, h } of VIEWPORTS) {
   await context.close();
 }
 
-// ---- the bar must not become the thing that eats a click
+// ---- a click on the opaque bar must not reach the page it is hiding
 {
-  console.log(`\n--- clicks through the bar ---`);
+  console.log(`\n--- clicking where the cream bar covers a link ---`);
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
+  // `LodgeCards`' links leave the site, so the click is proved by the *attempt*
+  // rather than by letting it happen. Aborting also means this check cannot be
+  // fooled by a slow network into looking like nothing happened.
+  await context.route("https://mahuaresorts.com/**", (route) => route.abort());
   await page.goto(URL, { waitUntil: "load" });
-  await page.waitForTimeout(2000);
-  const beneath = (report.clickThrough = await page.evaluate(() => {
+  await page.waitForTimeout(2200);
+
+  // Park a real, outbound link inside the bar's band.
+  await page.evaluate(() => {
+    const link = document.querySelector("#lodges a[href]");
+    window.scrollTo(0, link.getBoundingClientRect().top + window.scrollY - 25);
+  });
+  await page.waitForTimeout(1400);
+
+  const covered = await page.evaluate(() => {
     const bar = document.querySelector("[data-site-header]");
     const box = bar.getBoundingClientRect();
-    // The centre of the bar's own empty space, between the menu and the lockup.
-    const hit = document.elementFromPoint(box.width * 0.25, box.height / 2);
-    return { hit: hit?.tagName ?? null, insideBar: bar.contains(hit) };
-  }));
-  if (beneath.insideBar) fail(`the bar is the hit target in its own empty space — it swallows clicks`);
-  else ok(`empty bar hands the click to the page beneath (<${beneath.hit?.toLowerCase()}>)`);
+    const found = [...document.querySelectorAll("#lodges a[href]")]
+      .map((a) => ({ a, r: a.getBoundingClientRect() }))
+      .find(({ r }) => r.top >= 0 && r.top < box.height);
+    if (!found) return null;
+    const hit = document.elementFromPoint(found.r.x + found.r.width / 2, found.r.y + found.r.height / 2);
+    return {
+      barHeight: Math.round(box.height),
+      barBackground: getComputedStyle(bar).backgroundColor,
+      linkText: found.a.textContent?.trim(),
+      linkHref: found.a.getAttribute("href"),
+      linkTop: Math.round(found.r.top),
+      point: { x: Math.round(found.r.x + found.r.width / 2), y: Math.round(found.r.y + found.r.height / 2) },
+      hitIsTheLink: found.a === hit || found.a.contains(hit),
+    };
+  });
+
+  // A check that cannot find a covered link is a check that passes by measuring
+  // nothing — the exact shape this project keeps being burned by.
+  if (!covered) {
+    fail(`no #lodges link could be placed under the bar, so nothing was actually clicked`);
+  } else {
+    let openedTab = null;
+    context.on("page", (p) => { openedTab = p.url() || "(blank)"; });
+    const before = page.url();
+    await page.mouse.click(covered.point.x, covered.point.y);
+    await page.waitForTimeout(1800);
+    const navigated = openedTab !== null || page.url() !== before;
+    report.clickThrough = { ...covered, openedTab, navigated };
+    console.log(`   "${covered.linkText}" -> ${covered.linkHref} at y=${covered.linkTop}, under a ${covered.barHeight}px ${covered.barBackground} bar`);
+    if (navigated) {
+      fail(`a click at (${covered.point.x},${covered.point.y}) on the opaque bar navigated to ${openedTab ?? page.url()}`);
+    } else {
+      ok(`a click at (${covered.point.x},${covered.point.y}) went nowhere`);
+    }
+  }
+  await context.close();
+}
+
+// ---- a reload part-way down must arrive already-scrolled, not fade into it
+{
+  console.log(`\n--- reloading mid-page ---`);
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(`${URL}#why-you-came`, { waitUntil: "commit" });
+  // Sampled well inside ENTER.duration (0.9s). If the bar is animating into its
+  // scrolled state here, it is doing it over a cream chapter with the type
+  // crossfading out of cream — nothing under it to carry either end.
+  await page.waitForTimeout(320);
+  const early = await page.evaluate(() => {
+    const bar = document.querySelector("[data-site-header]");
+    if (!bar) return null;
+    const cs = getComputedStyle(bar);
+    const word = bar.querySelector("[data-header-tint='wordmark']");
+    return {
+      scrolled: bar.hasAttribute("data-scrolled"),
+      background: cs.backgroundColor,
+      wordmark: word && getComputedStyle(word).color,
+      scrollY: Math.round(window.scrollY),
+    };
+  });
+  report.midScrollReload = early;
+  console.log(`   at +320ms, scrollY ${early?.scrollY}: ${JSON.stringify(early)}`);
+  if (!early?.scrolled) {
+    ok(`the bar had not reached its scrolled state yet — nothing to fade`);
+  } else if (early.background !== css(PALETTE.paper) || early.wordmark !== css(PALETTE.brand)) {
+    fail(`a mid-page reload is animating into its state: bar ${early.background}, wordmark ${early.wordmark} at +320ms`);
+  } else {
+    ok(`arrived already-scrolled (${early.background}, ${early.wordmark}) — no crossfade over cream`);
+  }
   await context.close();
 }
 

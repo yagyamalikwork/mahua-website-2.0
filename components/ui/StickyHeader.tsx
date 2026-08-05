@@ -105,6 +105,20 @@ export function StickyHeader({
 }) {
   const [state, setState] = useState<HeaderState>("static");
   const [bar, setBar] = useState<HTMLElement | null>(null);
+  /**
+   * Whether the bar has already painted a state, and so whether a change from
+   * here is a *change* worth animating.
+   *
+   * The first one never is. A visitor who reloads at scrollY 6000 — a restored
+   * scroll position, a refresh, a back-navigation — renders `static`, learns from
+   * the observer that it is `scrolled`, and without this would spend `ENTER.duration`
+   * fading a cream background in over a cream chapter while the type crossfades
+   * out of cream. That is the illegible window `HERO_TAIL` is calibrated to keep
+   * over the photograph, arriving by the one path a `rootMargin` cannot see:
+   * there is no scroll here, only a first paint. Measured before the gate: 44%
+   * cream at ~150ms, 100% at ~900ms, with nothing but paper underneath.
+   */
+  const [settled, setSettled] = useState(false);
 
   useEffect(() => {
     if (!bar) return;
@@ -116,6 +130,7 @@ export function StickyHeader({
     // that does not follow.
     if (!hero) return;
 
+    let frames = 0;
     const observer = new IntersectionObserver(
       (entries) => {
         // Every state change lives in the callback, which is what
@@ -125,6 +140,17 @@ export function StickyHeader({
         // learns every time afterwards. Never disconnected on first sight — a
         // visitor scrolling back up must get the transparent bar again.
         for (const entry of entries) setState(entry.isIntersecting ? "top" : "scrolled");
+
+        // Two frames, and both are needed. One would let React commit
+        // `data-scrolled` and `data-settled` into the same paint, and a computed
+        // colour that changes in the same step that turns its transition on
+        // animates exactly as if there were no gate. The frame in between is what
+        // gets the first state painted, un-transitioned, before anything can move.
+        if (frames === 0) {
+          frames = requestAnimationFrame(() => {
+            frames = requestAnimationFrame(() => setSettled(true));
+          });
+        }
       },
       { rootMargin: HERO_TAIL },
     );
@@ -160,6 +186,7 @@ export function StickyHeader({
     return () => {
       observer.disconnect();
       resize?.disconnect();
+      cancelAnimationFrame(frames);
       document.documentElement.style.removeProperty("--header-height");
     };
   }, [bar, heroId]);
@@ -174,10 +201,15 @@ export function StickyHeader({
       // state here exactly as it is for `data-enter`, so the rules in
       // `app/globals.css` describe the change and never the resting state.
       data-scrolled={state === "scrolled" ? "" : undefined}
-      // `pointer-events-none` survives becoming fixed, and the `pointer-events-auto`
-      // on the menu, the lockup's row and the pill is what makes those clickable.
-      // A bar that spans the top of every screen for the whole page must not be
-      // the thing that swallows a click meant for the page beneath it.
+      // Same grammar again: absent until the bar has painted a state, so the
+      // first one is never animated into. `app/globals.css` hangs both
+      // transitions off it.
+      data-settled={settled ? "" : undefined}
+      // `pointer-events-none` is the *transparent* bar's behaviour: there is
+      // nothing there, so a click belongs to the photograph behind it. The cream
+      // bar takes `pointer-events: auto` back in `app/globals.css`, because an
+      // opaque surface that lets clicks through means clicking what looks like
+      // empty cream and being taken somewhere — measured, not theorised.
       className={`pointer-events-none inset-x-0 top-0 z-40 ${
         state === "static" ? "absolute" : "fixed"
       }`}
