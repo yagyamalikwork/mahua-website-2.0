@@ -1,5 +1,5 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
-import { InkTiger } from "@/components/signature/InkTiger";
+import { TigerFilm } from "@/components/signature/TigerFilm";
 import { ChapterIntro } from "@/components/sections/ChapterIntro";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
@@ -112,20 +112,23 @@ function renderChapter(chapter: Chapter, at: Position) {
           chapter={chapter}
           surface={at.surface}
           /*
-           * The tiger goes here, and the choice was measured rather than felt.
+           * The tiger goes here — the chapter about going out to look for
+           * animals, and the one that owns the emptiest screen belonging to any
+           * chapter (52.4% against non-negotiable #8's 45% ceiling).
            *
-           * `field-days` owns the emptiest screen on the page that belongs to an
-           * actual chapter — 52.4% against non-negotiable #8's 45% ceiling — and
-           * the join below it is the third emptiest screen anywhere at 61%. It is
-           * also the chapter about going out to look for animals, so a
-           * naturalist's sketch at the foot of a field-day account is the page's
-           * own idiom rather than an ornament.
-           *
-           * And it costs no scroll. That is the lesson the pinned collage taught
-           * on 5 Aug: a scene that buys scroll without adding imagery moves the
-           * page-wide density figure the wrong way (non-negotiable #9).
+           * It was an ink drawing that inked itself in until 6 Aug 2026, when the
+           * client supplied this film. `components/signature/InkTiger.tsx` and its
+           * artwork are still here, tested, and one line from returning — see
+           * `docs/DECISIONS.md` for the trade that was made and what it cost.
            */
-          footer={chapter.id === "field-days" ? <InkTiger /> : undefined}
+          footer={
+            chapter.id === "field-days" ? (
+              /* Sized here rather than in the component, because how large the
+                 tiger should be is a question about this chapter's column and not
+                 about the film. 420px is sharp to DPR 2 against an 810px source. */
+              <TigerFilm className="block h-auto w-[240px] sm:w-[280px] lg:w-[300px]" />
+            ) : undefined
+          }
         />
       );
     case "testimonials":

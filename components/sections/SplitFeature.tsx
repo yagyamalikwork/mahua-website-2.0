@@ -309,14 +309,23 @@ export function SplitFeature({
          * stays in flow — on a phone the chapter is dense already and the tiger is
          * scaled by width rather than height.
          */}
-        {/* `-bottom-16` against the section's own `lg:py-20`: the drawing sits
-            inside that 80px of padding with 16px of air beneath it. At the full
-            -20 its lowest stroke landed exactly on the boundary between the two
-            cream surfaces, which reads as a collision rather than a choice — the
-            artwork is cropped tight to its ink, so its box edge *is* its lowest
-            line. */}
+        {/*
+         * The tiger sits at the foot of the chapter, right-aligned under the
+         * experience index.
+         *
+         * **In flow, unlike the ink drawing it replaced.** That one was a
+         * landscape sliver and could hide inside the section's own 80px of bottom
+         * padding, costing no height at all. This is a 3:4 portrait film; there is
+         * no hole of that shape anywhere in the chapter — the largest empty
+         * rectangle near the foot is 500x180 — so it takes a band of its own and
+         * the chapter grows. That cost is real and is recorded in
+         * `docs/DECISIONS.md`.
+         *
+         * `-mb-*` pulls it into the section's bottom padding so the band it adds
+         * is only as tall as the part of the film that is not already paid for.
+         */}
         {footer && (
-          <div className="mt-12 flex justify-center lg:pointer-events-none lg:absolute lg:right-0 lg:-bottom-16 lg:mt-0 lg:justify-end">
+          <div className="mt-10 -mb-6 flex justify-center lg:mt-2 lg:-mb-14 lg:justify-end">
             {footer}
           </div>
         )}

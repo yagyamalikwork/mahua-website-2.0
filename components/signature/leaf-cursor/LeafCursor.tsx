@@ -144,7 +144,10 @@ export function LeafCursor() {
     // this component only ever runs on a fine pointer anyway.
     const onOver = (event: PointerEvent) => {
       const over = (event.target as Element | null)?.closest?.(
-        'a[href], button, [role="button"], summary, label, [data-photo]',
+        // `[data-hoverable]` is the opt-in for things that answer a pointer
+        // without being links — the tiger film replays on hover, and the leaf
+        // warming over it is what makes that discoverable rather than hidden.
+        'a[href], button, [role="button"], summary, label, [data-photo], [data-hoverable]',
       );
       scaleTo = over ? CURSOR.hoverScale : 1;
       el.dataset.over = over ? "true" : "false";
