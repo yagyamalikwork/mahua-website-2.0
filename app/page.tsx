@@ -115,13 +115,16 @@ function renderChapter(chapter: Chapter, at: Position) {
               width={1080}
               height={1255}
               /*
-               * Large, and that is arithmetic rather than taste. The band this
-               * creates is as tall as the film, so a *bigger* film fills a
-               * proportionally larger share of it: at 380px the chapter went to
-               * 45.7% empty against the 45% ceiling, with the join below it at
-               * 81.2%. Widening it is what brings both back.
-               */
-              className="block h-auto w-[280px] sm:w-[420px] lg:w-[680px]"
+               * Small, and tucked into the section's own bottom padding — an
+               * accessory closing the chapter rather than a band of its own.
+               *
+               * It was 680px wide and centred in a new band until 7 Aug 2026.
+               * That read as a feature the chapter had not asked for, and it cost
+               * 823px of scroll. Measured at 1280 there are **24px** of slack
+               * below the prose and at 1024 the text column is taller than the
+               * photographs, so there is no large hole here to fill — only the
+               * 80px of padding, which is what this now sits in.
+               */              className="block h-auto w-[150px] sm:w-[180px] lg:w-[220px]"
             />
           }
         />

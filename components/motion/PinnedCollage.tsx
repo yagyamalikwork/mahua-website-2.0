@@ -326,7 +326,7 @@ export function PinnedCollage({
          * through it. `StickyScene` reserves its own scroll above; this sits below
          * that, hard against the surface change into `03 · The Forest`.
          */}
-        {footer && <div className="mt-6 flex justify-center lg:mt-8">{footer}</div>}
+        {footer && <div className="mt-6 -mb-8 flex justify-center lg:mt-4 lg:-mb-14">{footer}</div>}
       </ChapterSurface>
     </CollageStage>
   );
