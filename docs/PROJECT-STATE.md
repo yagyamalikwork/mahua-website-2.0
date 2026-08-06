@@ -5,19 +5,50 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 
 ## Where we are
 
-**Branch `feat/chapters-rebuild`.** **Plan 3 and Plan 4 are both complete**, each reviewed whole-branch and
-cleared. **Plan 5 is next: the leaf cursor and the ink tiger**, moved out of Plan 4 at the client's choice on
-5 Aug.
+**Branch `feat/chapters-rebuild`.** **Plans 3 and 4 are complete. Plan 5 is seven tasks of ten done** — the
+sliding rule, the leaf cursor and both films are on the page and verified.
 
 | Plan | State |
 |---|---|
 | 3 · [The chapters rebuild](superpowers/plans/2026-08-03-rebuild-chapters-layout.md) | ✅ eight tasks. Day-arc retired, copy harvested, library 14 → 34, twelve chapters, motion primitives, copy, the page, and the verification pass |
 | 4 · [The scroll craft](superpowers/plans/2026-08-05-scroll-craft.md) | ✅ seven tasks, five fix rounds. Fixed header, CSS entrances, pinned collage, emblem turn, GSAP out of the critical path |
-| 5 · The signature characters | ⬜ **next** — leaf cursor, ink tiger |
+| 5 · [The signature interactions](superpowers/plans/2026-08-05-signature-interactions.md) | 🟡 **tasks 1–7 done, 8–10 outstanding** |
+
+### Where Plan 5 actually got to
+
+The plan was written for a leaf cursor and a *hand-drawn* ink tiger. The tiger half of it was overtaken by
+events — read [`DECISIONS.md`](DECISIONS.md) §8 and §9 before touching any of it.
+
+| Task | State |
+|---|---|
+| 1 · The sliding rule | ✅ `currentColor` hairline under every link, on hover **and** focus. Coverage is a markup contract: every link carries `rule-in` or `data-rule="none"`. Rig: `scripts/check_rule_in.mjs` |
+| 2 · The leaf | ✅ The client's own hand-drawn PNG. Two earlier attempts (extracted from their logo, then drawn by me) are kept as evidence |
+| 3 · The leaf cursor | ✅ Follows, swings, warms to gold, stops its own loop. Removability enforced by test |
+| 4 · Cursor rig | ✅ `scripts/check_leaf_cursor.mjs`, seven checks, three watched failing first |
+| 5 · The ink tiger | ✅ built from the client's licensed vector — **then replaced by film.** Dormant, intact, one line from returning |
+| 6 · It inks itself in | ✅ built, now dormant with the component |
+| 7 · It lives, dozes, stirs | ✅ built, now dormant with the component |
+| — · The two films | ✅ **not in the plan.** Tiger closes `field-days`, potter closes `rooted`. `SignatureFilm` serves both |
+| 8 · The butterfly | ⬜ not started |
+| 9 · The tiger rig | ⬜ **needs rewriting for video.** The SVG-inking version in the plan is obsolete |
+| 10 · Verification + docs | ⬜ this document is part of it |
+
+**Immediate next job:** the client asked on 7 Aug to move the potter **up, closer to the text and images** —
+"it still feels pretty disconnected from the section." It currently sits in `rooted`'s bottom padding at
+220px. See `DECISIONS.md` §10 before moving it; the space in that chapter is not where it looks.
 
 **Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
 nothing parked and nothing owed from Plan 4 beyond the deferred minors in
 [`DECISIONS.md`](DECISIONS.md) §6. The client tested the build on 5 Aug and it works.
+
+**The current density figures**, measured 7 Aug with both films in place — every chapter inside
+non-negotiable #8's 45% ceiling:
+
+| | mean empty | note |
+|---|---|---|
+| `rooted` | **41.8%** | potter at 220px in the section's own bottom padding |
+| `field-days` | **44.6%** | tiger film at 300px |
+| page | **40.6%** | document 16,053px |
 
 **Two things Plan 5 inherits and must respect:**
 

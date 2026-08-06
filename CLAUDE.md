@@ -11,8 +11,11 @@ hand-drawn field-guide idiom.
 >    git-ignored and do not survive a clone. Read it before relitigating anything.
 > 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
 >    said, and what is still owed. **Start here for state.**
-> 2. [`docs/superpowers/plans/2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md)
->    — the most recent plan, complete. Its predecessor,
+> 2. [`docs/superpowers/plans/2026-08-05-signature-interactions.md`](docs/superpowers/plans/2026-08-05-signature-interactions.md)
+>    — the current plan, **tasks 1–7 of 10 done**. Its tiger half was overtaken by events: the client
+>    supplied film, so tasks 5–7 are built but dormant and task 9's rig must be rewritten for video. Read
+>    `docs/DECISIONS.md` §8–§10 alongside it or you will redo work that was expensive to learn.
+>    [`2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md) is complete, and its predecessor,
 >    [`2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md),
 >    is also complete and still describes the page's structure. Both override the original spec where they
 >    conflict with it.
@@ -27,12 +30,12 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | **Plan 4, the scroll craft, complete** — on `feat/chapters-rebuild`, reviewed whole-branch and cleared to show the client. Plan 3 finished before it. A fixed header that gains cream and the brand's brown, CSS entrances measured off the reference, a pinned collage on *02 · Rooted like the mahua*, the emblem turning once, and **GSAP moved out of the critical path**. Plan 5 is next: the leaf cursor and the ink tiger. |
+| **Phase** | **Plan 5, the signature interactions — tasks 1–7 of 10 done.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, and **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*. Both play once, hold their last frame, and replay on hover. Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§10 before touching the tiger, the films, or where a figure sits in a chapter** — that ground was covered expensively. |
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/`. Twelve chapters, 34 photographs, ~17 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it. |
-| **Tests** | **219**, all green. `npm test` must stay green before any commit claiming completion. |
-| **Evidence** | `docs/reviews/2026-08-05-scroll-craft/` (Plan 4) and `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
+| **See it** | `npm run dev` → `/`. Twelve chapters, 34 photographs, two films, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it. |
+| **Tests** | **248**, all green. `npm test` must stay green before any commit claiming completion. |
+| **Evidence** | `docs/reviews/2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
 
@@ -46,8 +49,15 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    and was right, and Plan 3's rejected-build review reconfirmed it.
 4. **Restraint is a requirement, not a preference.** Sujan is both the tone and the layout benchmark now —
    it reads expensive because it holds back. Nothing bounces. If you notice the animation, it is too fast.
-5. **The tiger arrives, performs, then dozes** (Plan 4, not yet built). It is not a permanent fixture —
-   permanent peripheral motion contradicts #2 and #4.
+5. **The tiger arrives, performs, then dozes.** It is not a permanent fixture — permanent peripheral motion
+   contradicts #2 and #4.
+
+   **Built 6–7 Aug, as film.** The client asked for a ten-second loop; a loop is exactly what this forbids,
+   and it decodes video for as long as a visitor reads. So both films **play once and hold their last
+   frame**, and **hover replays them** — a deliberate hover is the visitor asking, which is a different
+   thing from motion happening at them. Two guards stop hover becoming a loop by another name: it is ignored
+   while the film is still playing, and the pointer must *leave and return* before it can fire again. Every
+   piece of that is verified in a browser; see `docs/DECISIONS.md` §9.
 
    **`rooted` is the page's one pinned scene** (Plan 4 Task 3c) and the only place `StickyScene` is mounted.
    The rule it was written under still binds anything else that reaches for it: use it only where the content
@@ -256,6 +266,8 @@ node scripts/measure_density.mjs                 # empty space per chapter, agai
 node scripts/check_entrances.mjs                 # did each entrance stage and settle, and did EVERY parallax move
 node scripts/check_pinned_collage.mjs            # is `rooted`'s headline frozen and are its photographs drifting apart
 node scripts/check_header.mjs                    # the header that stays: both states at 320-1920, reduced motion, no-JS
+node scripts/check_rule_in.mjs                   # the hairline under links: coverage, travel, keyboard, both surfaces
+node scripts/check_leaf_cursor.mjs               # the leaf: follow, swing, gold, zero bytes on a phone, AND that its loop stops
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
 node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples
