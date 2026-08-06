@@ -78,12 +78,25 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    | | Initial load | Whole page scrolled |
    |---|---|---|
-   | 390px | **574 KB** ✓ | 1,501 KB |
-   | 1440px | **698 KB** ✓ | 2,320 KB |
+   | 390px | **683 KB** ✓ | 2,912 KB |
+   | 1440px | **807 KB** ✓ | 3,731 KB |
 
    Both initial figures fell on 5 Aug (from 613 and 730 KB) when Plan 4 took the tween library out of the
-   first load — see `docs/reviews/2026-08-05-scroll-craft/`. At DPR 3 the same page is 673 KB and 960 KB
-   initial, still inside budget.
+   first load — see `docs/reviews/2026-08-05-scroll-craft/`.
+
+   **This table was 574 / 698 KB initial and 1,501 / 2,320 KB whole until 7 Aug 2026, and it was stale, not
+   wrong.** Nobody re-measured after the two films landed. The whole-scroll figures roughly doubled because
+   a visitor who reaches the foot of the page now downloads both films; that sits under the same client
+   ruling as the rest of the below-the-fold weight.
+
+   **The 109 KB on the initial figures is one specific thing and it is not paid for.** `tiger-film-poster.webp`
+   (56 KB) and `potter-film-poster.webp` (47 KB) are fetched before the first screen at both widths, at
+   ~28 ms — ahead of everything the first screen actually shows. Both films are far below the fold, and
+   `preload="none"` does not defer a poster: there is no `loading="lazy"` for one. On a page whose hero is
+   bandwidth-bound and misses its budget by ~1,400 ms, that is ~103 KB of ~460 KB of first-screen bytes
+   spent on artwork nobody has scrolled to, and a bigger lever than any measured in Plan 4 Task 6. **Not yet
+   fixed — raised with the client 7 Aug.** The fix is to attach the poster only when the film is near, the
+   same way the film itself waits.
 
    **These rose on 5 Aug and the rise was bought deliberately.** The table read 399/763 KB until the client
    chose the sharp hero: `sizes` now hands a 390px phone the 1440-wide hero (192 KB) rather than the
@@ -128,9 +141,15 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    the thing it was being compared to. 45% is the midpoint the client picked between the two, and the page
    as a whole already sits inside it.
 
-   **`rooted` is 40% since the pinned collage landed**, up from 35.3%, and that ~4.7 points is the price of
-   the effect: at the two ends of the drift its flanks have moved ±67px from centre and leave a band of
-   cream at one edge. It is inside the rule with 5 points to spare.
+   **`rooted` is 39.7% mean and 44.5% worst as of 7 Aug 2026**, against 35.3% before the pinned collage
+   landed. That ~4.4 points is the price of the effect: at the two ends of the drift its flanks have moved
+   ±67px from centre and leave a band of cream at one edge.
+
+   **Its worst screen was 55.9% — over the ceiling — for as long as the potter sat where it was laid out**,
+   and moving the film up to 56px below the chapter's last paragraph is what brought that to 44.5%. The same
+   edit took the `rooted / forest` join, the emptiest place on the whole page, from **76.9% to 68.8%**.
+   Measured both ways on one build: `docs/reviews/2026-08-03-chapters/density.json` is the after, and the
+   before is re-derivable by reverting `PinnedCollage`'s footer margin. See `docs/DECISIONS.md` §10.
 
    **The pin was three screens for one day and the client shortened it to two on 5 Aug 2026.** A pin buys
    scroll and this one adds no photographs, so at three screens the page-wide figure the client actually
@@ -148,9 +167,15 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
    53.8% of the average screen, up from 49.7%.
 
+   **Current, measured 7 Aug 2026 on the build that carries both films: page mean 40.4%, worst screen 73.1%,
+   1.97 photographs per screen, imagery 51.7% of the average screen, and all twelve chapters inside 45%.**
+
    The five emptiest screens on the page belonged to **no chapter at all** — they were the joins, where one
    section's bottom padding met the next one's top, 192px of stacked cream appearing in nobody's score.
-   That is now 160px. If a future chapter drifts over, look there before looking at the chapter.
+   That is now 160px. If a future chapter drifts over, look there before looking at the chapter. **The
+   emptiest is now `field-days / rooms` at 73.1%**, which is the join the tiger closes; it has not been
+   examined the way `rooted`'s was, and its photographs drift 7-24px rather than the pin's 126, so do not
+   assume the cause is the same one without measuring it.
 
    Measure with `node scripts/measure_density.mjs` against a production build; the per-chapter table is
    written to `docs/reviews/2026-08-03-chapters/density.json`. Do not lower the rule again to make a
@@ -264,7 +289,7 @@ node scripts/check_contrast_over_photos.mjs      # worst-pixel contrast for type
 node scripts/check_image_resolution.mjs          # is any photograph served below its own box
 node scripts/measure_density.mjs                 # empty space per chapter, against non-negotiable #8
 node scripts/check_entrances.mjs                 # did each entrance stage and settle, and did EVERY parallax move
-node scripts/check_pinned_collage.mjs            # is `rooted`'s headline frozen and are its photographs drifting apart
+node scripts/check_pinned_collage.mjs            # `rooted`: headline frozen, photographs drifting apart, closing figure not stranded
 node scripts/check_header.mjs                    # the header that stays: both states at 320-1920, reduced motion, no-JS
 node scripts/check_rule_in.mjs                   # the hairline under links: coverage, travel, keyboard, both surfaces
 node scripts/check_leaf_cursor.mjs               # the leaf: follow, swing, gold, zero bytes on a phone, AND that its loop stops

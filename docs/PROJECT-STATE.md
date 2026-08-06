@@ -33,22 +33,32 @@ events — read [`DECISIONS.md`](DECISIONS.md) §8 and §9 before touching any o
 | 9 · The tiger rig | ⬜ **needs rewriting for video.** The SVG-inking version in the plan is obsolete |
 | 10 · Verification + docs | ⬜ this document is part of it |
 
-**Immediate next job:** the client asked on 7 Aug to move the potter **up, closer to the text and images** —
-"it still feels pretty disconnected from the section." It currently sits in `rooted`'s bottom padding at
-220px. See `DECISIONS.md` §10 before moving it; the space in that chapter is not where it looks.
+**Done 7 Aug:** the potter is up against the copy. The client's note — "it still feels pretty disconnected
+from the section" — turned out to be about the *drift*, not the margin: the pinned photographs are still
+displaced when the scene releases, so a figure laid out 16px below the composition was read 148px below the
+nearest photograph and 268px below the prose. `PinnedCollage`'s footer now pulls up by `50vh - C/2 - 56px`,
+holding the gap at **56px from 1440×860 to 2560×1440**, and `check_pinned_collage.mjs` asserts it. Full
+working in [`DECISIONS.md`](DECISIONS.md) §10.
+
+**Immediate next job:** Plan 5 task 8, the butterfly — unless the client would rather spend the time on the
+103 KB of film posters sitting in the initial load (§5, and CLAUDE.md non-negotiable #6). That is the larger
+win and it was raised with them the same day.
 
 **Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
 nothing parked and nothing owed from Plan 4 beyond the deferred minors in
 [`DECISIONS.md`](DECISIONS.md) §6. The client tested the build on 5 Aug and it works.
 
-**The current density figures**, measured 7 Aug with both films in place — every chapter inside
-non-negotiable #8's 45% ceiling:
+**The current density figures**, measured 7 Aug with both films in place and the potter moved — every
+chapter inside non-negotiable #8's 45% ceiling:
 
-| | mean empty | note |
-|---|---|---|
-| `rooted` | **41.8%** | potter at 220px in the section's own bottom padding |
-| `field-days` | **44.6%** | tiger film at 300px |
-| page | **40.6%** | document 16,053px |
+| | mean empty | worst screen | note |
+|---|---|---|---|
+| `rooted` | **39.7%** | 44.5% | potter 56px below the last paragraph; was 41.8% / **55.9%** before the move |
+| `field-days` | **44%** | 58% | tiger film at 300px |
+| page | **40.4%** | 73.1% | document 15,958px, 1.97 photographs per screen, 51.7% imagery |
+
+The page's emptiest screen is the `field-days / rooms` join at 73.1%. `rooted / forest` was 76.9% and is now
+**68.8%**, which the potter's move bought.
 
 **Two things Plan 5 inherits and must respect:**
 

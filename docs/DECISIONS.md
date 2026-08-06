@@ -212,6 +212,36 @@ over the chapter's real glyph and image boxes, which is worth rebuilding wheneve
 `scripts/measure_density.mjs` **does** count `<video>` as imagery (line 172), so these figures are real.
 `imagesPerScreen` counts only `<img>`, so it under-reports once films are on the page.
 
+### A figure below a pinned scene is not where the layout puts it — fourth lesson, 7 Aug 2026
+
+The potter was 16px below the composition in the markup and **148px below the nearest photograph and 268px
+below the last paragraph** by the time a visitor saw it, alone in a band of cream. The client's word was
+"disconnected", and every static measurement said the placement was fine.
+
+**The cause is the drift, and it does not stop when the pin does.** `CollageStage` scrubs each photograph
+from `+half` to `-half` of `reserved × rate`, so when `position: sticky` lets go the three are still
+displaced — measured **-81 / -57 / -32px at 1920×1080**, -64 / -45 / -26 at 1440×860. The composition has
+risen; the footer is not part of the scene and has not. What looks like a margin problem is a residue of the
+effect.
+
+**The room to pull it back into is `items-center`'s, and it is exactly `(H - C) / 2`** for screen height H
+and centre-column ink C — 252px at 1080, 212px at 1000, 162px at 900, 115px at 1440×860. The flanks fill the
+pinned screen and the centre column does not.
+
+So the margin is a formula, `50vh - C/2 - 56px`, which holds the gap at **56px from 1440×860 to 2560×1440**.
+Two fixed values were tried first and both were measured failing: 80px stranded it at 172px on a 1080 screen,
+and 192px put it 20px from the copy at 1000. C changes only at 1600, where `max-w-[1600px]` stops the
+container growing — hence two constants, 344 and 371.
+
+**What it bought:** `rooted` worst screen **55.9% → 44.5%** (from over the ceiling to inside it), mean
+41.8% → 39.7%, and the `rooted / forest` join — the emptiest place on the page — **76.9% → 68.8%**. Both
+figures measured on one build with only that margin differing.
+
+**It is guarded.** `scripts/check_pinned_collage.mjs` now scrolls to where the figure is read and asserts the
+gap to the last paragraph is 24-100px, plus that it overlaps no photograph. Run against the pre-change build
+first, it reports 151px and exits 1. It measures the gap a visitor sees, not the margin — a check of the
+margin would pass with the figure a screen adrift, which is defect shape #2 exactly.
+
 ---
 
 ## 5. Owed, and open
@@ -224,11 +254,20 @@ over the chapter's real glyph and image boxes, which is worth rebuilding wheneve
   live site's room list for Mahua Tola totals **twelve** while the brand record says fourteen.
 - **Plan 5, tasks 8–10.** The butterfly; the tiger's browser rig (**must be rewritten for video** — the
   SVG-inking version in the plan is obsolete); whole-page verification.
-- **Nudge the potter up**, closer to the text and images. Client, 7 Aug: "it still feels pretty disconnected
-  from the section."
 - **No browser rig covers the two films.** The rule and the cursor have `check_rule_in.mjs` and
   `check_leaf_cursor.mjs`; play-once, hold, hover-replay, the `darken` blend and the poster fail-safes are
   currently verified by hand only.
+- **The two film posters are 103 KB of the initial load and nobody has scrolled to them.**
+  `tiger-film-poster.webp` (56 KB) and `potter-film-poster.webp` (47 KB) are fetched at ~28 ms at both 390
+  and 1440, ahead of the first screen's own imagery. `preload="none"` does not defer a poster and there is
+  no `loading="lazy"` for one. Against a hero that is bandwidth-bound and ~1,400 ms over budget, this is a
+  larger lever than anything measured in Plan 4 Task 6 (§3). The fix is to attach `poster` only when the
+  film is near, the way the film itself already waits. **Raised with the client 7 Aug; not yet done.**
+- **`field-days / rooms` is now the page's emptiest join at 73.1%**, the one the tiger closes. It has not had
+  the treatment `rooted`'s join just had, and its photographs drift 7-24px rather than 126, so the cause is
+  probably not the same — measure before assuming.
+- **A lantern illustration arrived 7 Aug** (`Lantern-illustrations/lantern-final1.png`), unasked and
+  unplaced. `lantern-hour` is the obvious home. Nothing has been checked about it.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---

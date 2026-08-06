@@ -124,7 +124,13 @@ function renderChapter(chapter: Chapter, at: Position) {
                * below the prose and at 1024 the text column is taller than the
                * photographs, so there is no large hole here to fill — only the
                * 80px of padding, which is what this now sits in.
-               */              className="block h-auto w-[150px] sm:w-[180px] lg:w-[220px]"
+               *
+               * How far up it sits is `PinnedCollage`'s decision and not this
+               * one's, because the answer is different in the two branches: only
+               * the pinned composition leaves its photographs displaced when the
+               * scene lets go. See the note on the footer there.
+               */
+              className="block h-auto w-[150px] sm:w-[180px] lg:w-[220px]"
             />
           }
         />

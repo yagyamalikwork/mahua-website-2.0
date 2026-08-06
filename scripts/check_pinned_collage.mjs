@@ -195,6 +195,61 @@ const travels = pinned.drifters
 
 // Past the end of the scene the headline must be gone from the screen.
 const afterRelease = await readAt(page, pinned.top + pinned.height + HEIGHT, CHAPTER);
+
+/**
+ * Where the chapter's closing figure settles once the pin lets go.
+ *
+ * This exists because the answer is not in the layout. The three photographs are
+ * still displaced by the scrub when the scene releases — up to 15% of the
+ * reserved scroll — and the footer is not part of the scene, so it does not rise
+ * with them. Laid out 16px below the composition it was **148px** below the
+ * nearest photograph and 268px below the prose by the time anyone saw it, alone
+ * in a band of cream, and the client's word for that was "disconnected".
+ * `PinnedCollage` now pulls it up by `50vh - C/2 - 56px`.
+ *
+ * So the assertion is the gap a visitor actually sees, at the scroll position
+ * they see it from — not the margin, which is what a check of the mechanism
+ * would read and which would pass with the potter a screen adrift. Read against
+ * the *prose*, because the flanks move and the centre column does not: the gap
+ * to a photograph is a different number at every viewport by design, and the gap
+ * to the prose is the one that is supposed to be constant.
+ */
+const FOOTER_GAP = { min: 24, max: 100 };
+const footer = await (async () => {
+  const box = await page.evaluate((id) => {
+    const el = document.querySelector(`#${id} [data-signature-film]`);
+    return el ? Math.round(el.getBoundingClientRect().top + window.scrollY) : null;
+  }, CHAPTER);
+  if (box === null) return { present: false };
+
+  await page.evaluate((y) => window.scrollTo(0, y), Math.round(box - HEIGHT * 0.33));
+  await page.waitForTimeout(700);
+  return page.evaluate((id) => {
+    const section = document.getElementById(id);
+    const el = section.querySelector("[data-signature-film]");
+    const top = el.getBoundingClientRect().top;
+    const above = (nodes) =>
+      [...nodes]
+        .map((n) => n.getBoundingClientRect())
+        .filter((r) => r.height > 0 && r.bottom <= top + 1)
+        .map((r) => r.bottom);
+    const prose = above(section.querySelectorAll("p"));
+    const photos = above(section.querySelectorAll("img"));
+    // A horizontal overlap with a flank would be a collision rather than a
+    // composition, and the pull-up is what could cause one.
+    const box2 = el.getBoundingClientRect();
+    const collides = [...section.querySelectorAll("img")].some((img) => {
+      const r = img.getBoundingClientRect();
+      return r.bottom > box2.top && r.top < box2.bottom && r.right > box2.left && r.left < box2.right;
+    });
+    return {
+      present: true,
+      gapToProsePx: prose.length ? Math.round(top - Math.max(...prose)) : null,
+      gapToPhotographPx: photos.length ? Math.round(top - Math.max(...photos)) : null,
+      overlapsAPhotograph: collides,
+    };
+  }, CHAPTER);
+})();
 await context.close();
 
 // ----------------------------------------------------- reduced motion, no-JS
@@ -357,6 +412,28 @@ if (afterRelease.heading !== null && afterRelease.heading > -200 && afterRelease
   );
 }
 
+if (footer.present) {
+  if (footer.gapToProsePx === null) {
+    failures.push(
+      "the closing figure has no prose above it to measure against — the chapter's composition changed and this check is now blind",
+    );
+  } else if (footer.gapToProsePx > FOOTER_GAP.max) {
+    failures.push(
+      `the closing figure sits ${footer.gapToProsePx}px below the chapter's last paragraph, past the ` +
+        `${FOOTER_GAP.max}px this allows — the drift lifts the composition when the pin releases and ` +
+        "the figure has been left behind in the cream, which is what it looked like before 7 Aug 2026",
+    );
+  } else if (footer.gapToProsePx < FOOTER_GAP.min) {
+    failures.push(
+      `the closing figure sits ${footer.gapToProsePx}px below the chapter's last paragraph, inside the ` +
+        `${FOOTER_GAP.min}px floor — the pull-up has overshot and it is crowding the copy`,
+    );
+  }
+  if (footer.overlapsAPhotograph) {
+    failures.push("the closing figure overlaps one of the chapter's photographs");
+  }
+}
+
 // Reduced motion and no-JS must lose the pin AND the scroll it reserved.
 for (const [name, m] of [
   ["reduced motion", reduced],
@@ -428,6 +505,7 @@ const report = {
   heading: { tops: headingTops, rangePx: headingRange },
   travels,
   afterRelease,
+  footer: { ...footer, allowedGapPx: FOOTER_GAP },
   reduced,
   noJs,
   gsapBlocked,
@@ -448,6 +526,13 @@ console.log(
   `headline held within ${headingRange}px while ${scrollTravelled}px of page scrolled beneath it`,
 );
 for (const t of travels) console.log(`  rate ${t.rate}  drifted ${t.travelPx}px  ${t.rose ? "up" : "DOWN"}`);
+if (footer.present) {
+  console.log(
+    `closing figure ${footer.gapToProsePx}px below the last paragraph and ` +
+      `${footer.gapToPhotographPx}px below the nearest photograph ` +
+      `(allowed ${FOOTER_GAP.min}-${FOOTER_GAP.max}px to the prose)`,
+  );
+}
 console.log(
   `GSAP blocked (${gsapBlocked.blocked ?? 0} chunk requests aborted): ${gsapBlocked.height}px / scene ${gsapBlocked.hasScene}`,
 );

@@ -325,8 +325,60 @@ export function PinnedCollage({
          * After the pin releases, so it closes the chapter rather than travelling
          * through it. `StickyScene` reserves its own scroll above; this sits below
          * that, hard against the surface change into `03 · The Forest`.
+         *
+         * **The negative top margin is the drift's, not a taste decision, and it
+         * is why this differs from `ChapterIntro`'s `lg:mt-4`.** The three
+         * photographs are still displaced when the pin lets go — measured -81,
+         * -57 and -32px at 1920x1080 at the scroll position where the potter is
+         * actually read — and the footer is not part of the scene, so it does not
+         * rise with them. Laid out 16px below the composition, it was **148px**
+         * below the nearest photograph and 268px below the prose by the time
+         * anyone saw it, alone in a band of cream. The client's words for that
+         * were "it still feels pretty disconnected from the section".
+         *
+         * **The pull is a formula, not a number, because the space it cancels is
+         * `items-center`'s and scales with the screen.** The flanks fill the
+         * pinned screen and the centre column does not, so the room below the
+         * prose is half the surplus — `(H - C) / 2` exactly, for screen height H
+         * and centre-column ink C. Measured: 252px at 1080, 212px at 1000, 162px
+         * at 900, 115px at 1440x860. A fixed pull safe at the shortest screen the
+         * pin runs at therefore strands the potter on a tall one, and a fixed
+         * pull tuned for 1080 puts it through the last paragraph at 1000. Both
+         * were tried and both were measured doing exactly that.
+         *
+         * So: `50vh - C/2 - 56px`, which holds the gap at **56px at every screen
+         * the pin runs at**, from 1440x860 to 2560x1440. Verified 56px at
+         * 1920x1080, 1600x1000, 1600x900 and 1440x860.
+         *
+         * **C changes with width, and only at 1600.** `max-w-[1600px]` caps the
+         * container, so every viewport at or above 1600 lays the prose out at one
+         * width and C is 576px; at 1440 the column is 160px narrower, the copy
+         * wraps to C = 630px. Hence two constants — 344 = 576/2 + 56, and
+         * 371 = 630/2 + 56. Between 1440 and 1600 the container grows and the
+         * narrow constant over-states C, which loses up to 27px of the pull; that
+         * errs towards air rather than towards a collision, which is the only
+         * direction worth erring in here.
+         *
+         * C is *rendered* copy, so a paragraph added to this chapter shortens the
+         * gap by half a line and one removed lengthens it. That degrades gently
+         * and needs no edit until it is visible.
+         *
+         * `relative` is load-bearing: `.sticky-scene-inner` is `position: sticky`
+         * and so paints above non-positioned siblings whatever the DOM order, and
+         * this now overlaps its bottom by up to 196px. Positioning the footer too
+         * puts tree order back in charge. Nothing overlaps horizontally either
+         * way — the potter is 220px centred in the middle column, ~187px clear of
+         * both flanks — but that is a fact about today's widths, not a guarantee.
+         *
+         * All of it is safe *only* here. `CollageStage` shows this branch only
+         * where the pin is live, so there is no route on which this margin
+         * applies to a composition whose photographs never drifted.
          */}
-        {footer && <div className="mt-6 -mb-8 flex justify-center lg:mt-4 lg:-mb-14">{footer}</div>}
+        {footer && (
+          <div className="relative -mb-14 mt-[calc(371px-50vh)] flex justify-center min-[1600px]:mt-[calc(344px-50vh)]">
+            {footer}
+          </div>
+        )}
       </ChapterSurface>
     </CollageStage>
   );
