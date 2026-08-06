@@ -4,6 +4,28 @@
 > superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for
 > tracking.
 
+> ## ⚠ Status, 7 Aug 2026 — read this before following any task below
+>
+> **Tasks 1–7 are done. Tasks 5–7 were then overtaken by events and their output is dormant. Tasks 8–10 are
+> open, and task 9 as written is obsolete.** This plan is kept for its reasoning, not as a set of
+> instructions to follow literally. The record of what actually happened is
+> [`docs/DECISIONS.md`](../../DECISIONS.md) §7–§11 and [`docs/PROJECT-STATE.md`](../../PROJECT-STATE.md).
+>
+> | Task | State |
+> |---|---|
+> | 1 · The sliding rule | ✅ shipped. `check_rule_in.mjs` |
+> | 2 · Extract a leaf from the logo | ✅ **superseded.** The logo's leaves are stylised to be read eight at a time and are a blob at 24px; the client supplied a hand-drawn PNG instead. `build_leaf.mjs` |
+> | 3 · The leaf cursor | ✅ shipped, with the removability contract the client asked for |
+> | 4 · The leaf cursor's rig | ✅ shipped. `check_leaf_cursor.mjs` |
+> | 5 · The tiger drawing | ⚠️ **built, then replaced.** Three hand-drawn attempts failed; the client supplied a licensed vector, then film. `InkTiger.tsx` and `tiger-art.ts` are intact, tested, and unmounted |
+> | 6 · The tiger inks itself in | ⚠️ built, dormant with the component |
+> | 7 · It lives, dozes, stirs | ⚠️ built, dormant with the component |
+> | — · **The two films** | ✅ **not in this plan.** A tiger closing `04 · Days in the Field`, a potter closing `02 · Rooted like the mahua`. Play once, hold the last frame, replay on a deliberate hover. `DECISIONS.md` §9 |
+> | — · **The hanging lantern** | ✅ **not in this plan.** Client request, 7 Aug. Hangs out of `after-dark` into `06 · The Lantern Hour` and swings when pushed. `check_lantern.mjs`, `DECISIONS.md` §11 |
+> | 8 · The butterfly | ⬜ open. The client dropped two candidate overlay films on 7 Aug (`Butterfly-overlays/`); nothing about them has been checked |
+> | 9 · The tiger's browser rig | ⬜ **obsolete as written.** It measures an SVG inking itself. What is actually needed is a rig for the two *films* — play-once, hold, hover-replay, the `darken` blend, poster fail-safes. `check_lantern.mjs` is the closest model |
+> | 10 · Whole-page verification | ⬜ open |
+
 **Goal:** Ship the three signature interactions — a hairline that slides in under links, a mahua leaf that
 follows the pointer, and an ink tiger that draws itself and then dozes.
 
@@ -1385,6 +1407,15 @@ git commit -m "feat: the tiger breathes on four unrelated beats, then closes its
 
 ## Task 8: The butterfly
 
+> **⚠️ Written against the ink tiger, which is no longer on the page.** This task attaches a butterfly to
+> `InkTiger.tsx`, an unmounted component, and draws it as SVG paths in `lib/tiger-art.ts`. The client
+> supplied two candidate butterfly *films* on 7 Aug 2026 — `Butterfly-overlays/Butterflies-Overlay.mp4`
+> (1.9 MB) and `Butterflies-Overlay-bright.mp4` (5.2 MB) — and neither has been examined. Both are far
+> heavier than the two films already on the page, so the first questions are licence, background colour and
+> weight, in that order; see [[mahua-client-supplies-art]] reasoning in `DECISIONS.md` §9. The steps below
+> are still the right *shape* for an SVG butterfly if that is what it ends up being. Decide the medium
+> before following any of them.
+
 **Files:**
 - Modify: `lib/tiger-art.ts` (add `BUTTERFLY_PATHS`, `BUTTERFLY_VIEWBOX`, `BUTTERFLY_TRACK`)
 - Modify: `lib/tiger-art.test.ts`
@@ -1466,6 +1497,19 @@ git commit -m "feat: a butterfly wanders the tiger's clearing and lands twice"
 ---
 
 ## Task 9: The tiger's browser rig
+
+> **⚠️ Obsolete as written. Do not build this.** Every assertion below is about an SVG inking itself in —
+> `pathLength`, `stroke-dashoffset`, per-stroke stagger — and that tiger was replaced by film on 6 Aug 2026.
+> `InkTiger.tsx` is unmounted; a rig for it would guard nothing a visitor can see.
+>
+> **What is actually owed is a rig for the two films**, which are on the page and verified by hand only:
+> that each plays once and holds its last frame; that a deliberate hover replays it; that the two guards
+> against hover-becoming-a-loop hold (ignored while playing, and the pointer must leave and return); that
+> `mix-blend-mode: darken` erases the white ground on both creams; and that the poster carries the frame if
+> the video never loads. `scripts/check_lantern.mjs` is the closest model — in particular its use of a
+> **control** for any rate, and of a deliberately broken build before trusting a pass.
+>
+> Keep the pieces below only as a reference for the day the ink tiger is remounted.
 
 **Files:**
 - Create: `scripts/check_ink_tiger.mjs`

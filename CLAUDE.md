@@ -12,9 +12,12 @@ hand-drawn field-guide idiom.
 > 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
 >    said, and what is still owed. **Start here for state.**
 > 2. [`docs/superpowers/plans/2026-08-05-signature-interactions.md`](docs/superpowers/plans/2026-08-05-signature-interactions.md)
->    — the current plan, **tasks 1–7 of 10 done**. Its tiger half was overtaken by events: the client
->    supplied film, so tasks 5–7 are built but dormant and task 9's rig must be rewritten for video. Read
->    `docs/DECISIONS.md` §8–§10 alongside it or you will redo work that was expensive to learn.
+>    — the current plan, **tasks 1–7 of 10 done**, and it now opens with a status table saying which of its
+>    own tasks are still true. Its tiger half was overtaken by events: the client supplied film, so tasks
+>    5–7 are built but dormant, **task 9 is obsolete as written** (it measures an SVG inking itself; what is
+>    owed is a rig for the two films) and task 8 was written before the client supplied butterfly films.
+>    Two things on the page are in no plan at all — the films and the hanging lantern. Read
+>    `docs/DECISIONS.md` §8–§11 alongside it or you will redo work that was expensive to learn.
 >    [`2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md) is complete, and its predecessor,
 >    [`2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md),
 >    is also complete and still describes the page's structure. Both override the original spec where they
