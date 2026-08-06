@@ -30,12 +30,12 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | **Plan 5, the signature interactions — tasks 1–7 of 10 done.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, and **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*. Both play once, hold their last frame, and replay on hover. Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§10 before touching the tiger, the films, or where a figure sits in a chapter** — that ground was covered expensively. |
+| **Phase** | **Plan 5, the signature interactions — tasks 1–7 of 10 done, plus two things the plan never had.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — and **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§11 before touching the tiger, the films, the lantern, or where a figure sits in a chapter** — that ground was covered expensively. |
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/`. Twelve chapters, 34 photographs, two films, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it. |
-| **Tests** | **248**, all green. `npm test` must stay green before any commit claiming completion. |
-| **Evidence** | `docs/reviews/2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
+| **See it** | `npm run dev` → `/`. Twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. |
+| **Tests** | **276**, all green. `npm test` must stay green before any commit claiming completion. |
+| **Evidence** | `docs/reviews/2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
 
@@ -167,8 +167,16 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
    53.8% of the average screen, up from 49.7%.
 
-   **Current, measured 7 Aug 2026 on the build that carries both films: page mean 40.4%, worst screen 73.1%,
-   1.97 photographs per screen, imagery 51.7% of the average screen, and all twelve chapters inside 45%.**
+   **Current, measured 7 Aug 2026 on the build that carries both films and the lantern: page mean 40.4%,
+   worst screen 73.1%, 2.03 photographs per screen, imagery 51.7% of the average screen, and all twelve
+   chapters inside 45%.** `lantern-hour` is 36.5%, down 1.4 points when the lantern landed.
+
+   **`measure_density.mjs` was blind to anything with `pointer-events: none` until 7 Aug 2026.** It
+   hit-tests with `document.elementsFromPoint`, which does not return such elements, so the lantern — which
+   is deliberately click-through because it hangs over the chapter's copy — scored as bare paper while
+   appearing in the same report's image inventory. Two numbers from one instrument disagreeing is what gave
+   it away. The rig now switches those elements clickable for the duration of a sample and puts them back.
+   Fixed chrome (the grain, the leaf cursor) is still skipped: it belongs to no chapter.
 
    The five emptiest screens on the page belonged to **no chapter at all** — they were the joins, where one
    section's bottom padding met the next one's top, 192px of stacked cream appearing in nobody's score.
@@ -282,6 +290,7 @@ in `scripts/` precisely so nobody has to trust a figure they cannot re-derive:
 
 ```bash
 node scripts/build_images.mjs                    # re-encode public/media + lib/media-manifest.ts
+node scripts/build_lantern.mjs                   # cut the lantern's white ground to real alpha + lib/lantern-art.ts
 
 npm run build && npx next start -p 3100          # then, against the production build:
 node scripts/measure_page.mjs                    # transfer, hero responseEnd on Slow 4G, motion, overflow
@@ -293,6 +302,7 @@ node scripts/check_pinned_collage.mjs            # `rooted`: headline frozen, ph
 node scripts/check_header.mjs                    # the header that stays: both states at 320-1920, reduced motion, no-JS
 node scripts/check_rule_in.mjs                   # the hairline under links: coverage, travel, keyboard, both surfaces
 node scripts/check_leaf_cursor.mjs               # the leaf: follow, swing, gold, zero bytes on a phone, AND that its loop stops
+node scripts/check_lantern.mjs                   # the hanging lantern: where it hangs, that a push swings it, and that it stops
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
 node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples

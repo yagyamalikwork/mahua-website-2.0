@@ -91,10 +91,25 @@ export function ChapterIntro({
   mirrored = false,
   surface = false,
   footer,
+  hanging,
 }: {
   chapter: Chapter;
   mirrored?: boolean;
   surface?: boolean;
+  /**
+   * Hung from the section's top edge, over the composition rather than in it.
+   *
+   * `lantern-hour` passes the lantern here. It is a slot rather than a lookup by
+   * `chapter.id` for the same reason `footer` is: this component renders two
+   * different chapters and neither should have to know which one it is.
+   *
+   * **It contributes no height and takes no clicks.** The wrapper is absolute, so
+   * the chapter's own composition is laid out as though it were not there, and
+   * `pointer-events-none` reaches the whole subtree — an ornament suspended over a
+   * paragraph would otherwise eat the caret and the text selection across a band
+   * of it, which no screenshot would ever show.
+   */
+  hanging?: React.ReactNode;
   /**
    * Rendered last inside the section, below the copy and the collage.
    *
@@ -123,6 +138,21 @@ export function ChapterIntro({
 
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
+      {/*
+       * `-top-2` rather than `top-0`: the chain tucks a few pixels under the
+       * photograph above so it reads as hung from it, not butted against it.
+       * `ChapterSurface` clips only the x axis (`overflow-x-clip`), so this is
+       * free to cross the boundary — which is the whole idea.
+       *
+       * `z-10` puts it over the composition. It is below the header's 40 and the
+       * menu overlay's 50, so nothing that has to be clickable ends up behind an
+       * ornament.
+       */}
+      {hanging && (
+        <div className="pointer-events-none absolute -top-2 left-1/2 z-10 -translate-x-1/2">
+          {hanging}
+        </div>
+      )}
       <div>
         <div className="flex flex-col gap-14 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.3fr)_minmax(0,1.15fr)] lg:items-start lg:gap-x-10">
           {/*

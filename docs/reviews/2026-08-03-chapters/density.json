@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-08-06T21:36:03.912Z",
+  "measuredAt": "2026-08-06T23:20:11.058Z",
   "url": "http://localhost:3100/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
   "imagery": {
-    "distinctImages": 35,
-    "imgElements": 35,
+    "distinctImages": 36,
+    "imgElements": 36,
     "documentHeightPx": 15958,
     "screensOfScroll": 17.7,
-    "imagesPerScreen": 1.97,
+    "imagesPerScreen": 2.03,
     "ids": [
       {
         "id": "tiger-golden-grass",
@@ -166,6 +166,11 @@
         "area": 90740
       },
       {
+        "id": "lantern",
+        "instances": 1,
+        "area": 58200
+      },
+      {
         "id": "mahua-vann-room",
         "instances": 1,
         "area": 55583
@@ -189,13 +194,13 @@
   },
   "page": {
     "screens": 102,
-    "meanEmptyPercent": 40.4,
-    "medianEmptyPercent": 41.6,
+    "meanEmptyPercent": 40.1,
+    "medianEmptyPercent": 41.5,
     "bestEmptyPercent": 0.3,
     "worstEmptyPercent": 73.1,
     "worstAt": 8550,
     "overBudget": 39,
-    "meanImagePercent": 51.7,
+    "meanImagePercent": 51.9,
     "meanTypePercent": 8
   },
   "chapters": [
@@ -325,10 +330,10 @@
       "screensTall": 1.3,
       "wholeScreensAvailable": true,
       "screens": 2,
-      "meanEmptyPercent": 37.9,
-      "medianEmptyPercent": 41.7,
-      "bestEmptyPercent": 34.1,
-      "worstEmptyPercent": 41.7,
+      "meanEmptyPercent": 36.5,
+      "medianEmptyPercent": 41.2,
+      "bestEmptyPercent": 31.7,
+      "worstEmptyPercent": 41.2,
       "worstAt": 11700,
       "overBudget": 0,
       "passesMean": true,
@@ -433,8 +438,8 @@
       "at": 450,
       "occupied": 55.8,
       "empty": 44.2,
-      "imagePercent": 42.1,
-      "typePercent": 13.7
+      "imagePercent": 42.2,
+      "typePercent": 13.6
     },
     {
       "at": 600,
@@ -907,58 +912,58 @@
     },
     {
       "at": 10650,
-      "occupied": 91.2,
-      "empty": 8.8,
-      "imagePercent": 83.7,
+      "occupied": 92.8,
+      "empty": 7.2,
+      "imagePercent": 85.3,
       "typePercent": 7.5
     },
     {
       "at": 10800,
-      "occupied": 84.5,
-      "empty": 15.5,
-      "imagePercent": 77,
+      "occupied": 88.5,
+      "empty": 11.5,
+      "imagePercent": 81,
       "typePercent": 7.5
     },
     {
       "at": 10950,
-      "occupied": 80.1,
-      "empty": 19.9,
-      "imagePercent": 72.3,
+      "occupied": 84.7,
+      "empty": 15.3,
+      "imagePercent": 76.9,
       "typePercent": 7.8
     },
     {
       "at": 11100,
-      "occupied": 74.3,
-      "empty": 25.7,
-      "imagePercent": 70.1,
+      "occupied": 78.8,
+      "empty": 21.2,
+      "imagePercent": 74.6,
       "typePercent": 4.2
     },
     {
       "at": 11250,
-      "occupied": 69.4,
-      "empty": 30.6,
-      "imagePercent": 63.2,
+      "occupied": 73.9,
+      "empty": 26.1,
+      "imagePercent": 67.7,
       "typePercent": 6.2
     },
     {
       "at": 11400,
-      "occupied": 66.7,
-      "empty": 33.3,
-      "imagePercent": 57.4,
+      "occupied": 70.9,
+      "empty": 29.1,
+      "imagePercent": 61.6,
       "typePercent": 9.3
     },
     {
       "at": 11550,
-      "occupied": 65.9,
-      "empty": 34.1,
-      "imagePercent": 56.2,
+      "occupied": 68.3,
+      "empty": 31.7,
+      "imagePercent": 58.6,
       "typePercent": 9.7
     },
     {
       "at": 11700,
-      "occupied": 58.3,
-      "empty": 41.7,
-      "imagePercent": 48.9,
+      "occupied": 58.8,
+      "empty": 41.2,
+      "imagePercent": 49.4,
       "typePercent": 9.4
     },
     {

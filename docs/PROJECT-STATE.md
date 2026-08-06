@@ -40,9 +40,18 @@ nearest photograph and 268px below the prose. `PinnedCollage`'s footer now pulls
 holding the gap at **56px from 1440×860 to 2560×1440**, and `check_pinned_collage.mjs` asserts it. Full
 working in [`DECISIONS.md`](DECISIONS.md) §10.
 
-**Immediate next job:** Plan 5 task 8, the butterfly — unless the client would rather spend the time on the
-103 KB of film posters sitting in the initial load (§5, and CLAUDE.md non-negotiable #6). That is the larger
-win and it was raised with them the same day.
+**Also done 7 Aug:** the client's watercolour lantern hangs out of `after-dark` into `06 · The Lantern Hour`
+and swings when pushed — a damped pendulum that comes to rest on its own and stops its frame loop with it.
+Measured: peak 8.9–13.1°, six or seven crossings of vertical, settles at 0.00°, and the page's frame rate
+returns to its idle 130/s. It hangs at 200px from 1440 up, 128px from 1280, 168px below `lg` where it falls
+over the bonfire, and **is hidden between 1024 and 1279px** where the composition leaves it no room. Full
+working, including the two instruments that were wrong before the page was, in
+[`DECISIONS.md`](DECISIONS.md) §11.
+
+**Immediate next job:** Plan 5 task 8, the butterfly — the client dropped two candidate overlay films on
+7 Aug (`Butterfly-overlays/`, 1.9 MB and 5.2 MB) and nothing about them has been checked yet. Competing for
+the same time: the 103 KB of film posters sitting in the initial load (§5, and CLAUDE.md non-negotiable #6),
+which is the larger performance win and was raised with the client the same day.
 
 **Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
 nothing parked and nothing owed from Plan 4 beyond the deferred minors in
@@ -55,7 +64,12 @@ chapter inside non-negotiable #8's 45% ceiling:
 |---|---|---|---|
 | `rooted` | **39.7%** | 44.5% | potter 56px below the last paragraph; was 41.8% / **55.9%** before the move |
 | `field-days` | **44%** | 58% | tiger film at 300px |
-| page | **40.4%** | 73.1% | document 15,958px, 1.97 photographs per screen, 51.7% imagery |
+| `lantern-hour` | **36.5%** | 41.2% | lantern hung at 200px; was 37.9% / 41.7% |
+| page | **40.4%** | 73.1% | document 15,958px, 2.03 photographs per screen, 51.7% imagery |
+
+`measure_density.mjs` could not see the lantern at all until it was fixed on 7 Aug — `elementsFromPoint`
+skips `pointer-events: none`. Any future ornament that hangs over copy has the same problem; the rig now
+handles it, but the lesson is that an image can be on the page and absent from the measurement.
 
 The page's emptiest screen is the `field-days / rooms` join at 73.1%. `rooted / forest` was 76.9% and is now
 **68.8%**, which the potter's move bought.

@@ -121,6 +121,35 @@ function sampleScreen(cell) {
   const text = [];
   const textCache = new Map();
 
+  /**
+   * `document.elementsFromPoint` does not return elements with
+   * `pointer-events: none`, and this rig hit-tests with it — so anything drawn
+   * with pointer events off was scored as bare paper however much of the screen
+   * it covered.
+   *
+   * That was not hypothetical. The hanging lantern in `06 · The Lantern Hour` is
+   * `pointer-events: none` on purpose (it hangs over the chapter's copy and must
+   * not eat a click), and on 7 Aug 2026 it appeared in this rig's image
+   * *inventory* — 36 photographs, 2.03 per screen — while `lantern-hour`'s empty
+   * space came back byte-identical to the run before it existed. Two numbers from
+   * one instrument disagreeing is what gave it away.
+   *
+   * Switched on for the duration of the sample and put back afterwards.
+   * `pointer-events` has no effect on layout, so nothing measured here moves.
+   * Fixed-position chrome — the grain, the leaf cursor — is deliberately left
+   * alone: the loop below skips it anyway, because it belongs to no chapter.
+   */
+  const unclickable = [];
+  for (const el of document.querySelectorAll("img, video, svg, canvas")) {
+    const cs = getComputedStyle(el);
+    if (cs.pointerEvents !== "none" || cs.position === "fixed") continue;
+    unclickable.push([el, el.style.pointerEvents]);
+    el.style.pointerEvents = "auto";
+  }
+  const restore = () => {
+    for (const [el, was] of unclickable) el.style.pointerEvents = was;
+  };
+
   const alphaOf = (c) => {
     const m = /rgba?\(([^)]+)\)/.exec(c);
     if (!m) return 0;
@@ -195,6 +224,7 @@ function sampleScreen(cell) {
       else if (kind === 2) text.push(row * cols + col);
     }
   }
+  restore();
   // `scrollY` is read back rather than assumed: Lenis smooths the jump, so
   // `window.scrollTo` is a request and not an assignment.
   return { cols, rows, image, text, scrollY: Math.round(window.scrollY) };

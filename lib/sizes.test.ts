@@ -17,6 +17,7 @@ import {
   BOXES as COLLAGE_BOXES,
   SIZES as COLLAGE_SIZES,
 } from "@/components/motion/PinnedCollage";
+import { LANTERN_SIZES } from "@/components/signature/lantern/HangingLantern";
 import { EMBLEM_SIZES } from "@/components/ui/BrandMark";
 import { FULL_BLEED_SIZES } from "@/components/ui/FullBleed";
 import { MEDIA } from "./media";
@@ -110,6 +111,9 @@ const LIVE_SLOTS: readonly Slot[] = [
   // drawn at its own aspect inside an auto-width slot, so the box IS the drawn
   // content and there is no cover crop to correct for.
   { name: "BrandMark", sizes: EMBLEM_SIZES },
+  // No `box`: the lantern is drawn at its own aspect with no `object-fit: cover`
+  // frame around it, so there is no crop for `coverSizes` to widen.
+  { name: "HangingLantern", sizes: LANTERN_SIZES },
   ...(["solo", "pairTop", "pairLower"] as const).map((k) => ({
     name: `ChapterIntro.${k}`,
     sizes: INTRO_SIZES[k],
@@ -172,7 +176,9 @@ describe("the sizes the page actually serves", () => {
     // the same three columns at the same widths as `ChapterIntro`, so it reaches
     // for the same three strings deliberately. It is still worth its own rows —
     // its boxes differ, and every assertion below runs per slot, not per string.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(17);
+    // 18 since 7 Aug 2026: `HangingLantern`, the lantern hung out of `after-dark`
+    // into `06 · The Lantern Hour`.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(18);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

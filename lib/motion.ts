@@ -168,6 +168,74 @@ export const CURSOR = {
 } as const;
 
 /**
+ * The lantern that hangs out of `after-dark` into `06 · The Lantern Hour`, and
+ * swings when a visitor pushes it.
+ *
+ * **A pendulum is the one kind of peripheral motion this page is allowed**,
+ * because it is the one kind that ends. Non-negotiable #5 asks for a thing that
+ * arrives,
+ * performs and then dozes; a damped oscillator does precisely that without being
+ * told to, and its rest state is the same still hanging lantern the server
+ * renders. There is no timer and no loop to leave running — see the note on the
+ * component for how the frame loop kills itself.
+ *
+ * Simulated as a damped harmonic oscillator on the small-angle approximation,
+ * `θ'' = -k·θ - d·θ'`, integrated per frame against real elapsed time rather than
+ * per frame flat. A fixed step would swing at half speed on a 30Hz laptop and at
+ * double on a 120Hz display, and "the lantern swings faster on nicer hardware" is
+ * not a thing anyone would think to check.
+ *
+ * `stiffness` sets the period: `2π/√k` = **1.6s** here, which is about what a
+ * lantern hung on half a metre of chain actually does. Slower reads as
+ * underwater; faster reads as a nervous twitch.
+ *
+ * `damping` is `2ζ√k` for a damping ratio ζ of **0.14**, which settles it in
+ * about three and a half swings and roughly 6.7 seconds. That is the dial to
+ * turn if it feels too lively; larger stops it sooner.
+ *
+ * **ζ was 0.1 for one build and 0.1 was wrong**, and the reason is worth keeping.
+ * A real lantern on a chain swings far longer than this, so under-damping is the
+ * physically honest choice — but the amplitude envelope decays as `e^(-ζωt)`, and
+ * at 0.1 a 10-degree push takes **13.5 seconds** to fall under the rest threshold.
+ * That is thirteen seconds of frame loop and of peripheral movement in the corner
+ * of someone's eye, which is non-negotiable #4 lost on a technicality. Restraint
+ * beats accuracy here, as it does everywhere else on this page.
+ *
+ * `maxAngleDeg` is a hard clamp, not a target. It exists because `pushScale`
+ * turns pointer speed into angular velocity and a pointer can be flicked
+ * arbitrarily fast; without it a hard swipe would spin the lantern over its own
+ * chain, which is funny once and broken thereafter.
+ *
+ * `restDeg` / `restVel` are the thresholds the loop stops below. Both, not one:
+ * a pendulum passing through vertical at speed has an angle of zero and is not
+ * at rest, and stopping there would freeze it mid-swing. They are set as a
+ * matched pair — at an amplitude of `restDeg` the peak velocity of this
+ * oscillator is `restDeg × √k` = 0.98 deg/s, so `restVel` of 1.0 is the same
+ * moment expressed the other way and neither threshold is the one that always
+ * fires. 0.25 degrees moves the foot of a 200px lantern by 1.3px.
+ */
+export const LANTERN = {
+  /** Sets the period: 2π/√k seconds. 15.4 is a 1.6s swing. */
+  stiffness: 15.4,
+  /** 2ζ√k, for ζ = 0.14. Larger settles sooner. */
+  damping: 1.099,
+  /** Degrees. A clamp against a fast flick, not the amplitude to aim for. */
+  maxAngleDeg: 14,
+  /** Degrees of swing per pixel-per-second of pointer speed across the lantern. */
+  pushScale: 0.045,
+  /** Degrees below which, with `restVel` also met, the loop stops. */
+  restDeg: 0.25,
+  /** Degrees per second below which, with `restDeg` also met, the loop stops. */
+  restVel: 1,
+  /**
+   * Seconds. The longest step the integrator will take, so a backgrounded tab
+   * returning after a minute resumes rather than launching the lantern into its
+   * clamp with one enormous step.
+   */
+  maxStep: 0.05,
+} as const;
+
+/**
  * The ink tiger's living phase — seconds per cycle, and how long it lives before
  * it dozes.
  *

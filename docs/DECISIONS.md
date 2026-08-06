@@ -244,6 +244,76 @@ margin would pass with the figure a screen adrift, which is defect shape #2 exac
 
 ---
 
+## 11. The hanging lantern, and what it cost to hang it
+
+The client asked on 7 Aug 2026 for their watercolour lantern to hang out of the night photograph above
+`06 · The Lantern Hour`, over the chapter, and to swing when pushed. It does. Four things were learned.
+
+### The supplied PNG had no transparency, and every tool said it did
+
+2048×2048, four channels, `hasAlpha: true` — and **every pixel fully opaque, corners pure white.** Dropped
+on the page as-is it is a white square on cream. `lib/media.ts` never sees brand art, so nothing else in the
+pipeline would have caught it either. `scripts/build_lantern.mjs` cuts it: a flood fill **from the edges**,
+never a global "white is transparent" threshold, because the lantern has white highlights on its glass and
+inside the ring at the top of its chain that a global threshold punches holes through. It throws rather than
+shipping a white box if the fill stops finding a ground.
+
+**`mix-blend-mode: darken` was the obvious reuse and it was measured and rejected.** It is how both films'
+white backgrounds are erased (§9), but 9% of this artwork's pixels are brighter than the cream in some
+channel and nearly all of them are the flame. `darken` would have clamped exactly the part of the picture
+the lantern exists for.
+
+### A pendulum is the only peripheral motion this page allows, because it is the only one that ends
+
+Non-negotiable #4 forbids motion you notice; #5 requires arrive, perform, doze. A damped oscillator does all
+of it unmanaged, and its rest state is the still lantern the server renders. Integrated against **real
+elapsed time**, not one frame — a fixed step swings at half speed on a 30 Hz laptop and double on a 120 Hz
+display, and nobody thinks to check that.
+
+**ζ was 0.1 for one build and 0.1 was wrong.** A real lantern is under-damped, so it is the physically
+honest figure — but the envelope decays as `e^(-ζωt)` and at 0.1 a ten-degree push takes **13.5 seconds** to
+reach rest. Thirteen seconds of frame loop and of movement at the edge of someone's eye. ζ = 0.14 settles it
+in ~3.5 swings and 6.7s. Restraint beats accuracy here as everywhere else on this page.
+
+### It fits only where the composition leaves room, and that is not everywhere
+
+The lantern hangs into the space between the section's top edge and the first thing below it, and that space
+is `items-center`'s: `ChapterIntro` centres its prose against the flanking photographs, the flanks grow with
+width, so the prose starts lower the wider the window. Measured, and independent of viewport height:
+
+| width | 1024 | 1120 | 1280 | 1366 | 1440 | 1920 |
+|---|---|---|---|---|---|---|
+| room | 80px | 96px | 196px | 243px | 286px | 393px |
+
+So: 200px from 1440 up, 128px from 1280, 168px below `lg` where the layout stacks and it hangs over the
+bonfire instead — which is where it looks best of all. **1024–1279 has no answer and the lantern is hidden
+there.** The alternative measured that day was a lantern printed through the words "The other half of the
+day". If that band ever matters, the fix is to hang it over the bonfire flank as the stacked layout does.
+
+**Every width rule is a closed interval and that is load-bearing.** The first version mixed Tailwind's `md:`
+and `xl:` with an arbitrary `min-[1440px]:`, and Tailwind emitted the arbitrary rule *first* — so at 1920
+both matched, specificity tied, and `xl:w-[128px]` won on source order. The lantern shipped 128px wide where
+200 was meant, with every other check green. Disjoint rules cannot care how a framework sorts them.
+
+### The two instruments that were wrong before the page was
+
+- **`check_lantern.mjs` counted the wrong frames.** It patched `requestAnimationFrame` and reported 189
+  frames still running after the lantern slept — but Lenis drives the page's smooth scroll from rAF and
+  never stops. The fix is a control: measure the page's idle rate, the rate while swinging, and the rate
+  after rest, and assert the middle one is higher than the other two. Without the "is it higher while
+  swinging" half, the rest check would pass on a lantern with no loop at all.
+- **`measure_density.mjs` could not see it.** It hit-tests with `document.elementsFromPoint`, which does not
+  return `pointer-events: none` elements — and the lantern is click-through on purpose, because it hangs
+  over the copy and must not eat a caret. It appeared in the report's image inventory and contributed
+  nothing to coverage. Now switched clickable for the duration of a sample and put back. `lantern-hour`
+  37.9% → **36.5%**.
+
+Run against the broken state first, as always: with the stop condition removed the rig reports 184.7 frames/s
+against 129.3 idle and exits 1, on a lantern that *settled at −0.013 degrees* and looked perfect in a
+screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
+
+---
+
 ## 5. Owed, and open
 
 - **The targeted shot list** (`docs/shot-list.md`) — six source photographs top out at 541–1000px and cannot
@@ -266,8 +336,13 @@ margin would pass with the figure a screen adrift, which is defect shape #2 exac
 - **`field-days / rooms` is now the page's emptiest join at 73.1%**, the one the tiger closes. It has not had
   the treatment `rooted`'s join just had, and its photographs drift 7-24px rather than 126, so the cause is
   probably not the same — measure before assuming.
-- **A lantern illustration arrived 7 Aug** (`Lantern-illustrations/lantern-final1.png`), unasked and
-  unplaced. `lantern-hour` is the obvious home. Nothing has been checked about it.
+- **The lantern is hidden between 1024 and 1279px** — the composition leaves 80–196px there and the smallest
+  lantern worth drawing needs 179. See §11. The client knows; if that band matters the fix is to hang it
+  over the bonfire flank as the stacked layout already does.
+- **Butterfly artwork arrived 7 Aug**, unasked: `Butterfly-overlays/Butterflies-Overlay.mp4` (1.9 MB) and
+  `Butterflies-Overlay-bright.mp4` (5.2 MB). Plan 5 task 8 is the butterfly, so this is probably the
+  answer to it — but nothing has been checked: not the licence, not the background, not whether either is
+  small enough to serve. Both are far larger than the two films that are already on the page.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---

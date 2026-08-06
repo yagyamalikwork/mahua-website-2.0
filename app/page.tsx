@@ -1,4 +1,5 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
+import { HangingLantern } from "@/components/signature/lantern/HangingLantern";
 import { SignatureFilm } from "@/components/signature/SignatureFilm";
 import { ChapterIntro } from "@/components/sections/ChapterIntro";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
@@ -92,6 +93,24 @@ function renderChapter(chapter: Chapter, at: Position) {
           chapter={chapter}
           mirrored={at.intro % 2 === 1}
           surface={at.surface}
+          /*
+           * The lantern hangs out of `after-dark` — the night facade with its
+           * eaves lit — down into the chapter named for the hour it belongs to.
+           * The client asked for exactly this on 7 Aug 2026, and for it to swing
+           * when pushed.
+           *
+           * It goes here rather than inside the section because only the page
+           * knows that `after-dark` is what sits above this chapter. Move either
+           * of them in `content/chapters.ts` and the lantern is hanging from
+           * whatever arrives instead, which is a thing to notice rather than a
+           * thing to prevent — `content/chapters.test.ts` owns the sequence.
+           */
+          /* Unsized here, unlike the two films. How large the potter and the
+             tiger should be is a question about a chapter's column; how large
+             the lantern may be is a measured fit against the room the
+             composition leaves above its own heading, so it belongs with the
+             component as `LANTERN_FIT`. */
+          hanging={chapter.id === "lantern-hour" ? <HangingLantern /> : undefined}
         />
       );
     case "pinnedCollage":
