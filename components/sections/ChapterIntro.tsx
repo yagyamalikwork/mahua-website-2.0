@@ -90,10 +90,21 @@ export function ChapterIntro({
   chapter,
   mirrored = false,
   surface = false,
+  footer,
 }: {
   chapter: Chapter;
   mirrored?: boolean;
   surface?: boolean;
+  /**
+   * Rendered last inside the section, below the copy and the collage.
+   *
+   * `rooted` passes the potter's film here. It has to be a slot rather than a
+   * lookup by `chapter.id`, because this component is also the *unpinned* branch
+   * of `PinnedCollage` — both branches have to be able to carry it or the film
+   * would appear only above 1440px, which is exactly the kind of width-dependent
+   * absence nobody notices until a client opens a laptop.
+   */
+  footer?: React.ReactNode;
 }) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as IntroCopy;
   const [solo, pairTop, pairLower] = chapter.media;
@@ -210,6 +221,9 @@ export function ChapterIntro({
           </div>
         </div>
       </div>
+
+      {/* Closes the chapter, hard against the surface change below it. */}
+      {footer && <div className="mt-6 flex justify-center lg:mt-8">{footer}</div>}
     </ChapterSurface>
   );
 }

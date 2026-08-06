@@ -174,11 +174,22 @@ export function PinnedCollage({
   chapter,
   mirrored = false,
   surface = false,
+  footer,
 }: {
   chapter: Chapter;
   /** Which margin takes the single photograph. Passed through when unpinned. */
   mirrored?: boolean;
   surface?: boolean;
+  /**
+   * Rendered last inside the section, below the pinned scene once it releases.
+   *
+   * **It goes into both branches.** `CollageStage` shows the pinned composition
+   * above 1440px and `ChapterIntro` everywhere else, and a footer wired into only
+   * one of them would be a chapter that has a film on a desktop and none on a
+   * laptop — the exact width-dependent absence that made the pin itself look
+   * broken to the client on 5 Aug.
+   */
+  footer?: React.ReactNode;
 }) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as IntroCopy;
   const [solo, pairTop, pairLower] = chapter.media;
@@ -197,7 +208,9 @@ export function PinnedCollage({
 
   return (
     <CollageStage
-      flowing={<ChapterIntro chapter={chapter} mirrored={mirrored} surface={surface} />}
+      flowing={
+        <ChapterIntro chapter={chapter} mirrored={mirrored} surface={surface} footer={footer} />
+      }
     >
       <ChapterSurface id={chapter.id} surface={surface}>
         <StickyScene screens={COLLAGE_SCREENS}>
@@ -307,6 +320,13 @@ export function PinnedCollage({
             </div>
           </div>
         </StickyScene>
+
+        {/*
+         * After the pin releases, so it closes the chapter rather than travelling
+         * through it. `StickyScene` reserves its own scroll above; this sits below
+         * that, hard against the surface change into `03 · The Forest`.
+         */}
+        {footer && <div className="mt-6 flex justify-center lg:mt-8">{footer}</div>}
       </ChapterSurface>
     </CollageStage>
   );

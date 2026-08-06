@@ -4,12 +4,13 @@ import { useCallback, useEffect, useRef } from "react";
 import { prefersReducedMotion } from "@/lib/motion";
 
 /**
- * The tiger, as ten seconds of film that plays once and settles.
+ * A client-supplied animated illustration, as ten seconds of film that plays once
+ * and settles.
  *
- * Client-supplied illustration, animated: it sits with its back to us, turns to
- * look over its shoulder, and its tail moves — which is the one thing the ink
- * drawing could never do, because that artwork's tail is not visible and its ears
- * are strokes continuous with the skull.
+ * Two of them ship: the tiger at the foot of `04 · Days in the Field`, and the
+ * potter closing `02 · Rooted like the mahua`. Both are drawn on white, both run
+ * ten seconds, and both begin and end on the same pose — so the behaviour below
+ * is written once rather than twice.
  *
  * ## It plays once. It never loops.
  *
@@ -47,7 +48,15 @@ import { prefersReducedMotion } from "@/lib/motion";
  * against a cream of 233 — nine levels of margin, which is what makes this
  * survive video compression, where a background matched exactly would not.
  */
-export function TigerFilm({ className }: { className?: string }) {
+export function SignatureFilm({ src, poster, width, height, className }: {
+  /** The encoded MP4, under `public/media/`. */
+  src: string;
+  /** Its final frame, shown before it plays and wherever it never will. */
+  poster: string;
+  width: number;
+  height: number;
+  className?: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   /** True once the film has run to its end and is holding the last frame. */
   const finished = useRef(false);
@@ -106,14 +115,14 @@ export function TigerFilm({ className }: { className?: string }) {
        * discoverable rather than hidden.
        */
       data-hoverable
-      data-tiger-film
+      data-signature-film
       aria-hidden="true"
       muted
       playsInline
       preload="none"
-      poster="/media/tiger-film-poster.webp"
-      width={810}
-      height={1080}
+      poster={poster}
+      width={width}
+      height={height}
       onEnded={onEnded}
       onPointerEnter={() => {
         if (!armed.current || !finished.current || prefersReducedMotion()) return;
@@ -130,7 +139,7 @@ export function TigerFilm({ className }: { className?: string }) {
         mixBlendMode: "darken",
       }}
     >
-      <source src="/media/tiger-film.mp4" type="video/mp4" />
+      <source src={src} type="video/mp4" />
     </video>
   );
 }

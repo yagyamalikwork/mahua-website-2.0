@@ -1,5 +1,5 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
-import { TigerFilm } from "@/components/signature/TigerFilm";
+import { SignatureFilm } from "@/components/signature/SignatureFilm";
 import { ChapterIntro } from "@/components/sections/ChapterIntro";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
@@ -101,6 +101,29 @@ function renderChapter(chapter: Chapter, at: Position) {
           chapter={chapter}
           mirrored={at.intro % 2 === 1}
           surface={at.surface}
+          /*
+           * The potter closes this chapter. It is the one chapter whose copy
+           * already names them — the potters of Pachdhar, whose wheel this page
+           * invites you to take a turn at — and the join below it is one of the
+           * five emptiest screens on the page at 63.5%, so a figure here fills
+           * paper nobody was using rather than buying new paper to fill.
+           */
+          footer={
+            <SignatureFilm
+              src="/media/potter-film.mp4"
+              poster="/media/potter-film-poster.webp"
+              width={1080}
+              height={1255}
+              /*
+               * Large, and that is arithmetic rather than taste. The band this
+               * creates is as tall as the film, so a *bigger* film fills a
+               * proportionally larger share of it: at 380px the chapter went to
+               * 45.7% empty against the 45% ceiling, with the join below it at
+               * 81.2%. Widening it is what brings both back.
+               */
+              className="block h-auto w-[280px] sm:w-[420px] lg:w-[680px]"
+            />
+          }
         />
       );
     case "plateGrid":
@@ -126,7 +149,13 @@ function renderChapter(chapter: Chapter, at: Position) {
               /* Sized here rather than in the component, because how large the
                  tiger should be is a question about this chapter's column and not
                  about the film. 420px is sharp to DPR 2 against an 810px source. */
-              <TigerFilm className="block h-auto w-[240px] sm:w-[280px] lg:w-[300px]" />
+              <SignatureFilm
+                src="/media/tiger-film.mp4"
+                poster="/media/tiger-film-poster.webp"
+                width={810}
+                height={1080}
+                className="block h-auto w-[240px] sm:w-[280px] lg:w-[300px]"
+              />
             ) : undefined
           }
         />
