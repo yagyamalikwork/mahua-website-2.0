@@ -264,6 +264,49 @@ margin would pass with the figure a screen adrift, which is defect shape #2 exac
 
 ---
 
+## 13. The butterfly overlays, and why they cannot be used
+
+Checked 8 Aug 2026: `Butterfly-overlays/Butterflies-Overlay.mp4` (1.8 MB) and `-bright.mp4` (5.0 MB). Same
+footage, one graded brighter. **Neither can go on this page, and the reason is size before it is anything
+else.**
+
+| | |
+|---|---|
+| Background | **Chroma green, RGB (0, 175, 63)** — not white |
+| Frame | 1920×1080, 40s, 30fps, **with an AAC audio track** |
+| Butterflies | **six**, the largest **37×22px — 1.9% of frame width** |
+| Useful pixels | **0.110% of the frame.** The other 99.89% is green |
+
+**The size is decisive on its own.** Drawn at the tiger's 300px the largest butterfly would be **5.8px**. To
+reach even 60px the film would have to be laid out 3,160px wide — an upscale of a 1920 source, of which
+99.89% would be background needing removal. There is no crop that rescues it either: each butterfly
+travels across the frame, so a fixed crop does not follow one.
+
+**And the green cannot be erased the way the tiger's and potter's white is.** `mix-blend-mode: darken` takes
+the per-channel minimum, and green is darker than cream in every channel — `darken((0,175,63), (241,233,215))`
+is the green, untouched. `multiply` gives (0,160,53), also green. `screen` gives a pale green cast and blows
+the butterflies out. **No blend mode rescues a chroma key**; that trick works only for a ground *lighter*
+than the page (§9). Real transparency would mean VP9-with-alpha WebM for Chrome and Firefox plus
+HEVC-with-alpha for Safari, which ffmpeg cannot produce — two encodes and still a gap.
+
+No watermark was visible in the frames checked, and the blob scan found exactly six butterfly-shaped
+regions and nothing else. Licence was therefore not the blocker here; geometry was.
+
+**What would work, if a butterfly is still wanted.** Either:
+
+1. **A re-render to the specification that has worked twice** — one butterfly, filling most of the frame,
+   on flat white (so `darken` erases it), 4:5 at 1080px or more, ≤10s, 24-30fps, **no audio**, camera
+   static, starting and ending on the same pose so holding the last frame reads as deliberate. That is the
+   brief that produced the tiger and the potter on the first try.
+2. **Or drawn art rather than film**, which is what Plan 5 task 8 originally specified: a small butterfly
+   that crosses a path once when the chapter is reached, then settles. ~5 KB against 1.8 MB, and it can
+   stop, which continuous flight cannot.
+
+**Worth asking before either: the page now carries a tiger, a potter and a lantern.** A fourth figure is a
+restraint question (non-negotiable #4) before it is a technical one, and that is the client's call.
+
+---
+
 ## 12. The films' rig, and what each break proved
 
 `scripts/check_films.mjs`, 8 Aug 2026. The two films were the last signature interaction with **no
@@ -391,10 +434,10 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 - **The lantern is hidden between 1024 and 1279px** — the composition leaves 80–196px there and the smallest
   lantern worth drawing needs 179. See §11. The client knows; if that band matters the fix is to hang it
   over the bonfire flank as the stacked layout already does.
-- **Butterfly artwork arrived 7 Aug**, unasked: `Butterfly-overlays/Butterflies-Overlay.mp4` (1.9 MB) and
-  `Butterflies-Overlay-bright.mp4` (5.2 MB). Plan 5 task 8 is the butterfly, so this is probably the
-  answer to it — but nothing has been checked: not the licence, not the background, not whether either is
-  small enough to serve. Both are far larger than the two films that are already on the page.
+- **Plan 5 task 8, the butterfly, is the only task left and it is blocked on a decision.** The two overlay
+  films the client supplied on 7 Aug cannot be used — chroma green, and butterflies 1.9% of frame width;
+  see §13 for the measurements and for the two things that would work instead. Whether a *fourth* figure is
+  wanted at all is the prior question.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---

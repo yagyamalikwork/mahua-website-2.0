@@ -22,7 +22,7 @@
 > | 7 · It lives, dozes, stirs | ⚠️ built, dormant with the component |
 > | — · **The two films** | ✅ **not in this plan.** A tiger closing `04 · Days in the Field`, a potter closing `02 · Rooted like the mahua`. Play once, hold the last frame, replay on a deliberate hover. `DECISIONS.md` §9 |
 > | — · **The hanging lantern** | ✅ **not in this plan.** Client request, 7 Aug. Hangs out of `after-dark` into `06 · The Lantern Hour` and swings when pushed. `check_lantern.mjs`, `DECISIONS.md` §11 |
-> | 8 · The butterfly | ⬜ open. The client dropped two candidate overlay films on 7 Aug (`Butterfly-overlays/`); nothing about them has been checked |
+> | 8 · The butterfly | ⬜ **blocked on a client decision.** The two overlay films supplied 7 Aug cannot be used — chroma green, butterflies 1.9% of frame width. `DECISIONS.md` §13 |
 > | 9 · The tiger's browser rig | ✅ **done as `scripts/check_films.mjs`, 8 Aug** — a rig for the two *films*, not for the SVG the task below describes. The task's own steps were not built and should not be. `DECISIONS.md` §12 |
 > | 10 · Whole-page verification | ⬜ open |
 
@@ -1407,14 +1407,18 @@ git commit -m "feat: the tiger breathes on four unrelated beats, then closes its
 
 ## Task 8: The butterfly
 
-> **⚠️ Written against the ink tiger, which is no longer on the page.** This task attaches a butterfly to
-> `InkTiger.tsx`, an unmounted component, and draws it as SVG paths in `lib/tiger-art.ts`. The client
-> supplied two candidate butterfly *films* on 7 Aug 2026 — `Butterfly-overlays/Butterflies-Overlay.mp4`
-> (1.9 MB) and `Butterflies-Overlay-bright.mp4` (5.2 MB) — and neither has been examined. Both are far
-> heavier than the two films already on the page, so the first questions are licence, background colour and
-> weight, in that order; see [[mahua-client-supplies-art]] reasoning in `DECISIONS.md` §9. The steps below
-> are still the right *shape* for an SVG butterfly if that is what it ends up being. Decide the medium
-> before following any of them.
+> **⚠️ Written against the ink tiger, which is no longer on the page — but the drawn-art approach below is
+> now the leading candidate again.** This task attaches a butterfly to `InkTiger.tsx`, an unmounted
+> component, and draws it as SVG paths in `lib/tiger-art.ts`; both of those homes would have to move.
+>
+> The client's two butterfly *films*, supplied 7 Aug 2026, were measured on 8 Aug and **cannot be used**:
+> chroma green rather than white, so no blend mode erases the ground, and the butterflies are 1.9% of frame
+> width — 5.8px if drawn at the tiger's size. `DECISIONS.md` §13 has the numbers and the exact re-render
+> specification that would work instead.
+>
+> So the medium is open again: drawn art as below (~5 KB, and it can stop, which continuous flight cannot),
+> or a re-rendered film to the tiger's specification. **Blocked on the client** — and the prior question is
+> whether a fourth figure is wanted at all beside the tiger, the potter and the lantern.
 
 **Files:**
 - Modify: `lib/tiger-art.ts` (add `BUTTERFLY_PATHS`, `BUTTERFLY_VIEWBOX`, `BUTTERFLY_TRACK`)

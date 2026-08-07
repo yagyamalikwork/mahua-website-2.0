@@ -63,10 +63,14 @@ returns, and show no white rectangle (sampled as pixels, 1 level off the chapter
 and no-JS keep the still and never play. Failed against three deliberate breaks before it was trusted; see
 [`DECISIONS.md`](DECISIONS.md) §12, including the one assertion that is weaker than it looks.
 
-**Immediate next job:** Plan 5 task 8, the butterfly — the client dropped two candidate overlay films on
-7 Aug (`Butterfly-overlays/`, 1.9 MB and 5.2 MB) and nothing about them has been checked yet: not the
-licence, not the background, not whether either is small enough to serve. Then task 10, whole-page
-verification.
+**Checked 8 Aug: the two butterfly overlay films cannot be used.** Chroma green rather than white, so no
+blend mode can erase the ground; and the butterflies are 1.9% of frame width — 5.8px if the film were drawn
+at the tiger's size, with 99.89% of 1.8 MB being background. Measurements and the two routes that would
+work are in [`DECISIONS.md`](DECISIONS.md) §13. **Task 8 is now blocked on a client decision**, and the
+prior question is whether a fourth figure is wanted beside the tiger, the potter and the lantern at all.
+
+**Immediate next job:** task 10, whole-page verification — the last of Plan 5 that is not waiting on
+someone else.
 
 **Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
 nothing parked and nothing owed from Plan 4 beyond the deferred minors in
