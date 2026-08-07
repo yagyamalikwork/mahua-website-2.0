@@ -40,45 +40,11 @@ import { HOME } from "@/content/home";
  */
 export const EMBLEM_SIZES = "(min-width: 768px) 44px, 28px";
 
-export function BrandMark({
-  className,
-  standalone = false,
-}: {
-  className?: string;
-  /**
-   * This lockup is not the header's.
-   *
-   * Two of the attributes below are **header concerns, and they must be unique on
-   * the page**: `data-contrast="brand-wordmark"` declares "check my contrast over
-   * the photograph behind me", and `data-header-tint="wordmark"` declares "the
-   * header's scroll state owns my colour". Neither is true of a lockup standing on
-   * cream in the middle of a welcome screen.
-   *
-   * This exists because the welcome screen reused this component and quietly gave
-   * `scripts/check_contrast_over_photos.mjs` a second element to find. That rig
-   * queries `data-contrast` **globally** — `container` only scopes what it hides —
-   * so it measured the welcome's hidden wordmark against the hero photograph and
-   * reported the header failing at 1:1. The page was fine and the target was not
-   * the one anybody meant. An identity hook that is *supposed* to appear twice
-   * (`data-brand-wordmark`) is separate from the two that are not.
-   */
-  standalone?: boolean;
-}) {
+export function BrandMark({ className }: { className?: string }) {
   const base = `/brand/emblem`;
 
   return (
     <span
-      /*
-       * The hook the welcome screen resizes this by, and an attribute rather than
-       * a class for a reason that has already cost this project a build: the
-       * whole lockup is sized in `em` from the `text-*` utilities below, and a
-       * `text-*` passed in through `className` would collide with them at equal
-       * specificity, leaving Tailwind's emission order to decide. That is exactly
-       * how the lantern shipped 128px wide where 200 was meant (`DECISIONS.md`
-       * §11). `[data-welcome] [data-brand-lockup]` is two attribute selectors and
-       * wins outright.
-       */
-      data-brand-lockup
       className={`flex items-center gap-[0.45em] font-[family-name:var(--font-display)] text-[10px] font-light uppercase leading-none min-[360px]:text-[11px] min-[400px]:text-[13px] sm:gap-[0.5em] sm:text-lg md:text-2xl ${className ?? ""}`}
     >
       {/*
@@ -141,12 +107,8 @@ export function BrandMark({
        * which is also inside the header and is cream in both states.
        */}
       <span
-        {...(standalone
-          ? {}
-          : { "data-contrast": "brand-wordmark", "data-header-tint": "wordmark" })}
-        /* Identity, not a contract — this one is meant to appear wherever a
-           lockup does, and is what `scripts/check_welcome.mjs` finds the name by. */
-        data-brand-wordmark
+        data-contrast="brand-wordmark"
+        data-header-tint="wordmark"
         className="whitespace-nowrap tracking-[0.02em] min-[360px]:tracking-[0.08em] min-[400px]:tracking-[0.14em] sm:tracking-[0.24em] md:tracking-[0.3em]"
       >
         {HOME.nav.brand}

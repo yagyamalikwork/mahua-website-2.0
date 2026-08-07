@@ -1,67 +1,123 @@
-import { BrandMark } from "@/components/ui/BrandMark";
+import { WELCOME_LOGO as LOGO } from "@/lib/welcome-logo";
 
 /**
- * The welcome: the brand lockup on cream, the flower turning once, and then it
- * goes. The client's request, 8 Aug 2026 — "quick enough that it doesn't come as
- * too long of a break and gently welcoming".
+ * The two `sizes` strings, exported so `lib/sizes.test.ts` holds them to the same
+ * round-trip guarantee as every other one on the page.
  *
- * ## It has no JavaScript, and that is the whole design
+ * Each part is drawn at its own fraction of the whole logo, and those fractions
+ * come from the artwork — see `lib/welcome-logo.ts`. Written out rather than
+ * computed at module scope so the strings a reviewer reads are the strings the
+ * browser gets.
+ */
+export const WELCOME_FLOWER_SIZES = "(min-width: 768px) 162px, 110px";
+export const WELCOME_WORDMARK_SIZES = "(min-width: 768px) 280px, 190px";
+
+/**
+ * The welcome: the client's own stacked logo on cream, its flower turning once,
+ * and then it goes. Client request, 8 Aug 2026.
  *
- * A welcome screen that fails to leave is a site nobody can use, and every route
- * that could strand one runs through script: a chunk that never loads, a handler
- * that throws, a timer in a backgrounded tab. So there is none. The screen is
- * server-rendered and a CSS animation takes it away, which means the thing that
- * removes it is the same thing that drew it.
+ * ## It is the client's real logo, in two pieces
  *
- * **The base style is hidden, and only the animation's backwards fill makes it
- * visible.** That is not a detail — it is the direction the failure falls in.
- * With `animation-fill-mode: both` the `from` keyframe applies from the first
- * painted frame, so a visitor sees the welcome exactly as they would if it were
- * visible by default; but if the animation never runs at all, the base style
- * wins and they get the site with no welcome. The opposite arrangement — visible
- * in CSS, hidden by the animation — fails into a cream screen with a logo on it
- * and no way past. Every rule is in `app/globals.css` under `[data-welcome]`.
+ * **Not the header's lockup.** The header assembles a horizontal mark from the
+ * flower plus live type, because the client's brown is unreadable over the hero
+ * photograph (see `BrandMark`). None of that applies here: this is cream, there is
+ * no photograph, and the client asked for the actual logo — flower above MAHUA
+ * above RESORTS, as they drew it.
  *
- * `prefers-reduced-motion` therefore needs no special handling beyond
- * `animation: none`, which is what the rest of the page already does: with no
- * animation there is no welcome, which is the correct answer for someone who has
- * asked not to be shown movement.
+ * It arrives as two images because **the flower has to turn and the words must
+ * not**. `scripts/build_welcome_logo.mjs` finds the split by scanning the
+ * artwork's own bands of ink rather than by a hard-coded line, and records each
+ * part's box as a fraction of the whole. Laying them back out at those fractions
+ * reproduces the client's logo exactly; the only thing that differs is that one
+ * of the two can rotate.
  *
- * ## Why it sits below the leaf cursor
+ * The source is the `.png`, not the `.jpg` the client linked — same artwork in
+ * the same folder, but a JPEG cannot carry transparency and would put a white
+ * square on cream.
  *
- * `z-index: 90` — above the header (40) and the menu overlay (50), below the
- * leaf cursor (100). The cursor replaces the visitor's arrow outright once they
- * move the pointer, so covering it would leave a desktop visitor with no pointer
- * at all for the first second and a third of their visit.
+ * ## It still has no JavaScript
+ *
+ * Everything in the previous version holds and is the reason this is safe: the
+ * screen is server-rendered, a CSS animation takes it away, and **its base style
+ * is hidden** so that an animation which never runs means no welcome rather than
+ * a cream wall with no way past. Rules under `[data-welcome]` in
+ * `app/globals.css`; durations in `lib/motion.ts` as `WELCOME`.
  *
  * ## Bytes
  *
- * None. The flower is already in the first load for the header, at the same two
- * encoded widths, and the name is live type in a font the page has loaded
- * anyway. The welcome adds markup and no requests — which is the only reason it
- * can sit in front of a hero that is already 1,475 ms over its budget
- * (non-negotiable #6) without making that worse. `scripts/check_welcome.mjs`
- * measures that rather than assuming it.
+ * ~20 KB at 1x, and none of it in the first load: both parts are `loading="lazy"`
+ * — which is safe here *because* they are decorative and the screen fails towards
+ * being absent. The header's own flower is a different, smaller file and is
+ * untouched.
  */
 export function WelcomeScreen() {
+  const part = (
+    name: "flower" | "wordmark",
+    geo: { x: number; y: number; w: number; h: number; widths: readonly number[] },
+    sizes: string,
+    className: string,
+  ) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      key={name}
+      src={`/brand/welcome-${name}-${geo.widths[0]}.webp`}
+      srcSet={geo.widths.map((w) => `/brand/welcome-${name}-${w}.webp ${w}w`).join(", ")}
+      sizes={sizes}
+      alt=""
+      aria-hidden="true"
+      /*
+       * **Not `loading="lazy"` — but not for the reason you would guess, and the
+       * guess was measured and wrong.** These two are the only thing on the first
+       * screen a visitor sees, so deferring them is wrong on its face; the
+       * hypothesis was also that lazy images, requested only once layout is known,
+       * were landing mid-flight against the hero and stealing bandwidth from it.
+       * Medians of five, one build apart: **lazy 4,306 ms, eager 4,31x ms.** No
+       * difference. The welcome's cost to the hero is the bytes and the two
+       * requests themselves, not when they are asked for, and no arrangement of
+       * these attributes recovers it — see `docs/DECISIONS.md` §14.
+       *
+       * `fetchPriority="low"` stays: they must never outrank the hero's own
+       * preload.
+       */
+      decoding="async"
+      fetchPriority="low"
+      className={className}
+      style={{
+        position: "absolute",
+        left: `${geo.x * 100}%`,
+        top: `${geo.y * 100}%`,
+        width: `${geo.w * 100}%`,
+        height: `${geo.h * 100}%`,
+      }}
+    />
+  );
+
   return (
     <div
       data-welcome
       /*
-       * `aria-hidden`, and not focusable. It is a decorative curtain over content
-       * that is already in the DOM and already announced — a screen reader should
-       * be reading the page, not a logo that is on its way out.
+       * `aria-hidden`: a decorative curtain over content that is already in the
+       * DOM and already announced. A screen reader should be reading the page,
+       * not a logo on its way out.
        */
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 flex items-center justify-center bg-[color:var(--bg)]"
     >
-      {/*
-       * `standalone`: this lockup is not the header's, and must not carry the two
-       * hooks that say it is. See the prop's note — reusing them cost a build,
-       * because `check_contrast_over_photos.mjs` finds `data-contrast` globally
-       * and measured this one, hidden, against the hero photograph.
-       */}
-      <BrandMark standalone />
+      <div
+        data-welcome-logo
+        className="relative w-[190px] md:w-[280px]"
+        style={{ aspectRatio: `${LOGO.width} / ${LOGO.height}` }}
+      >
+        {/*
+         * `emblem-turn` is the header's own keyframe set, so the two can never
+         * describe different turns; only the duration differs, overridden under
+         * `[data-welcome]` in `app/globals.css`. It rotates about its own centre,
+         * which for an absolutely-positioned box is the default — the flower is
+         * a radial mark and has no other sensible pivot.
+         */}
+        {part("flower", LOGO.flower, WELCOME_FLOWER_SIZES, "emblem-turn")}
+        {part("wordmark", LOGO.wordmark, WELCOME_WORDMARK_SIZES, "")}
+      </div>
     </div>
   );
 }

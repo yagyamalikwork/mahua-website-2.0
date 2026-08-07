@@ -171,11 +171,19 @@ export const CURSOR = {
  * The welcome screen: the brand lockup on cream, the flower turning once, and
  * then it goes.
  *
- * **Seconds, and the whole thing is 1.35 of them.** The client asked for
- * something "quick enough that it doesn't come as too long of a break" — so the
- * emblem's turn here is `turn`, not `DURATION.emblemTurn`. The header's 2.4s
- * half-turn is right for a mark that arrives *alongside* the page; a screen that
- * stands in front of the page for 2.4s before it will even fade is a wall.
+ * **Seconds, and the whole thing is 2.1 of them.** The client asked first for
+ * something "quick enough that it doesn't come as too long of a break", and then
+ * on seeing it for "a few more milliseconds" — this is the second setting, chosen
+ * from three measured options on 8 Aug 2026. The turn here is `turn`, not
+ * `DURATION.emblemTurn`: the header's 2.4s half-turn is right for a mark that
+ * arrives *alongside* the page, and a screen that stands in front of it for 2.4s
+ * before it will even begin to fade is a wall.
+ *
+ * **There is room for this and it was measured.** The hero photograph lands at
+ * ~3,987 ms on Slow 4G (non-negotiable #6), and the welcome is gone well before
+ * it — so lengthening the greeting costs a visitor nothing they were not already
+ * waiting for. That headroom is the reason a longer welcome was offered at all,
+ * and it disappears the day the hero gets faster.
  *
  * **`hold` is a delay, not a keyframe percentage, and that is deliberate.** The
  * fade is one animation with `animation-delay: var(--welcome-hold)` and
@@ -192,11 +200,11 @@ export const CURSOR = {
  */
 export const WELCOME = {
   /** The flower's half-turn. Shorter than the header's, on purpose. */
-  turn: 0.85,
-  /** How long the screen stands before it begins to leave. Matches `turn`, so the fade starts as the flower settles. */
-  hold: 0.85,
+  turn: 1.2,
+  /** How long the screen stands before it begins to leave. A short beat past `turn`, so the logo is settled before it goes. */
+  hold: 1.45,
   /** The fade itself. */
-  fade: 0.5,
+  fade: 0.65,
 } as const;
 
 /**

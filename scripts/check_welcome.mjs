@@ -40,8 +40,18 @@ const URL = flag("url", `http://localhost:${flag("port", "3100")}/`);
 const OUT = flag("out", "docs/reviews/2026-08-08-welcome/welcome.json");
 const SHOTS = path.dirname(OUT);
 
-/** It must be gone by here, whatever the durations in `lib/motion.ts` say. */
-const MUST_BE_GONE_BY_MS = 3000;
+/**
+ * A **hang guard, not a design budget.** Whatever `WELCOME` in `lib/motion.ts`
+ * says, the screen must be gone by here on the page's own clock — which is the
+ * animation's length *plus* however long the page took to render it.
+ *
+ * 5s, not the animation's 2.1s: the point is to catch a welcome that never
+ * leaves, and setting it near the design duration would turn every future
+ * adjustment of the greeting into a red rig. It was 3s while the animation was
+ * 1.35s, and the client's own lengthening on 8 Aug tripped it at 3,210ms — which
+ * is the wrong thing for a check like this to have an opinion about.
+ */
+const MUST_BE_GONE_BY_MS = 5000;
 
 const failures = [];
 
@@ -84,39 +94,27 @@ const STATE = () => {
     gone: cs.visibility === "hidden" || Number(cs.opacity) === 0,
     coversViewport: r.width >= window.innerWidth - 1 && r.height >= window.innerHeight - 1,
     emblemAngle: angle,
-    lockupFontPx: Number.parseFloat(
-      getComputedStyle(el.querySelector("[data-brand-lockup]")).fontSize,
+    logoWidthPx: Math.round(
+      (el.querySelector("[data-welcome-logo]")?.getBoundingClientRect().width ?? 0),
     ),
     /**
-     * The brand *name*, against the screen it is standing on.
+     * The two halves of the client's logo, as painted.
      *
-     * This exists because the welcome shipped for one build with the name
-     * rendering cream on cream — `BrandMark`'s wordmark takes
-     * `var(--header-wordmark, var(--bg))` and that variable is defined only
-     * inside the header, so the fallback made it the background colour. The
-     * markup was correct, the element was there, its box was the right size, and
-     * every other assertion in this rig passed. A screenshot caught it.
+     * This began as a contrast check, because the welcome once used the header's
+     * lockup and shipped for one build with the name rendering cream on cream —
+     * markup correct, box the right size, every other assertion green, and only a
+     * screenshot caught it. The welcome now carries the client's own artwork
+     * instead, so the question is no longer contrast but **whether both parts
+     * actually decoded**: a `srcset` entry with no file behind it is a missing
+     * wordmark at exactly one screen density.
      */
     ...(() => {
-      const word = el.querySelector("[data-brand-wordmark]");
-      const rgb = (s) => (s.match(/\d+(\.\d+)?/g) ?? []).slice(0, 3).map(Number);
-      const lum = ([r, g, b]) => {
-        const f = (v) => {
-          const c = v / 255;
-          return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-        };
-        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
-      };
-      if (!word) return { wordmarkContrast: null, wordmarkText: null };
-      const fg = rgb(getComputedStyle(word).color);
-      const bg = rgb(getComputedStyle(el).backgroundColor);
-      if (fg.length < 3 || bg.length < 3) return { wordmarkContrast: null, wordmarkText: null };
-      const [a, b2] = [lum(fg), lum(bg)].sort((x, y) => y - x);
-      return {
-        wordmarkContrast: Number(((a + 0.05) / (b2 + 0.05)).toFixed(2)),
-        wordmarkText: (word.textContent ?? "").trim(),
-        wordmarkWidth: Math.round(word.getBoundingClientRect().width),
-      };
+      const flower = el.querySelector(".emblem-turn");
+      const imgs = [...el.querySelectorAll("img")];
+      const wordmark = imgs.find((i) => i !== flower) ?? null;
+      const drawn = (i) =>
+        i ? { painted: i.complete && i.naturalWidth > 0, src: (i.currentSrc || "").split("/").pop(), w: Math.round(i.getBoundingClientRect().width) } : null;
+      return { flowerImg: drawn(flower), wordmarkImg: drawn(wordmark) };
     })(),
     // The page's own content underneath, which must exist all along — the welcome
     // is a curtain over a rendered page, not a substitute for one.
@@ -137,10 +135,32 @@ const normal = await (async () => {
   const requests = [];
   page.on("request", (r) => requests.push(r.url()));
 
-  // `domcontentloaded`, not `commit`: with `commit` the document may still be
-  // streaming, and an element whose animation has not started yet reads as its
-  // base style — which for this one is hidden. See the note on `STATE`.
-  await page.goto(URL, { waitUntil: "domcontentloaded" });
+  /*
+   * **Warm the server, then start sampling at a defined moment.** Two failures
+   * this guards, both of which reported a perfectly working welcome as broken:
+   *
+   * 1. `waitUntil: "commit"` alone hands back while the document is still
+   *    streaming, and an element whose animation has not started yet reads as its
+   *    base style — which for this one is hidden.
+   * 2. `waitUntil: "domcontentloaded"` hands back *whenever the page is ready*,
+   *    and on the first navigation after `next start` that was **6,628 ms** —
+   *    long past the welcome's whole life. Every sample came back hidden and the
+   *    rig declared it had never welcomed anybody.
+   *
+   * So: one throwaway navigation to warm the server, then wait on the thing that
+   * actually matters — the animation existing on the element — which is neither
+   * earlier nor later than the moment there is something to measure.
+   */
+  await page.goto(URL, { waitUntil: "load" });
+  // Only the measured navigation counts. Leaving the warm-up's requests in made
+  // this report two emblem fetches where the page makes one.
+  requests.length = 0;
+  await page.goto(URL, { waitUntil: "commit" });
+  await page.waitForFunction(
+    () => (document.querySelector("[data-welcome]")?.getAnimations().length ?? 0) > 0,
+    undefined,
+    { timeout: 15000 },
+  );
 
   // Sample across its whole life, so "it faded" is a curve rather than two points.
   const timeline = [];
@@ -180,15 +200,21 @@ if (!normal.timeline[0].present) {
         "static logo on a cream screen is a delay rather than a greeting",
     );
   }
-  // The name, not just the flower. The client asked for the logo.
-  if (!normal.early.wordmarkText) {
-    failures.push("the welcome carries no brand wordmark — only the flower");
-  } else if ((normal.early.wordmarkContrast ?? 0) < 4.5) {
-    failures.push(
-      `the brand name is ${normal.early.wordmarkContrast}:1 against the welcome's own background — it is ` +
-        "invisible. This lockup is `standalone` and so takes no colour from the header's state; if no " +
-        "rule gives it one it inherits, and the screen shows a flower with a blank space beside it",
-    );
+  // Both halves of the logo, painted. The client asked for their logo, not a
+  // flower on its own.
+  for (const [what, got] of [
+    ["flower", normal.early.flowerImg],
+    ["wordmark", normal.early.wordmarkImg],
+  ]) {
+    if (!got) failures.push(`the welcome has no ${what} at all`);
+    else if (!got.painted) {
+      failures.push(
+        `the welcome's ${what} did not decode (${got.src ?? "no source"}) — a srcset entry with no file ` +
+          "behind it is a missing half of the logo at exactly one screen density",
+      );
+    } else if (got.w < 20) {
+      failures.push(`the welcome's ${what} is drawn ${got.w}px wide`);
+    }
   }
 }
 
@@ -205,14 +231,29 @@ if (!goneAt) {
   failures.push(`the welcome took ${goneAt.now}ms to leave, past the ${MUST_BE_GONE_BY_MS}ms ceiling`);
 }
 
-// 6: no requests of its own. The flower is the header's, already in the first load.
-const emblemRequests = normal.requests.filter((u) => /\/brand\/emblem/.test(u));
-report.emblemRequests = emblemRequests.length;
-if (emblemRequests.length > 1) {
+/*
+ * 6: what the welcome costs.
+ *
+ * It used to cost nothing, because it borrowed the header's flower and set the
+ * name in live type. The client asked on 8 Aug for their own stacked logo
+ * instead, so it now has two files of its own and they are **on the first
+ * screen** — a curtain that has to be there at once cannot be deferred. That is
+ * a real charge against non-negotiable #6 and it is recorded rather than waved
+ * through; the ceiling is a tripwire against somebody later pointing this at a
+ * full-resolution logo.
+ */
+const welcomeParts = normal.requests.filter((u) => /\/brand\/welcome-/.test(u));
+report.welcomeParts = welcomeParts.map((u) => u.split("/").pop());
+if (welcomeParts.length !== 2) {
   failures.push(
-    `${emblemRequests.length} separate emblem files were fetched — the welcome is meant to reuse the ` +
-      "header's, at the same encoded widths, and cost nothing",
+    `the welcome fetched ${welcomeParts.length} of its own image files, expected exactly 2 — the flower ` +
+      "and the wordmark, split from the client's logo",
   );
+}
+const headerEmblems = normal.requests.filter((u) => /\/brand\/emblem-/.test(u));
+report.headerEmblemRequests = headerEmblems.length;
+if (headerEmblems.length > 1) {
+  failures.push(`${headerEmblems.length} header emblem files were fetched, expected at most 1`);
 }
 
 // ------------------------------------- 4: every script blocked, and it still goes
@@ -254,7 +295,8 @@ const reduced = await (async () => {
     reducedMotion: "reduce",
   });
   const page = await context.newPage();
-  await page.goto(URL, { waitUntil: "domcontentloaded" });
+  await page.goto(URL, { waitUntil: "load" });
+  await page.goto(URL, { waitUntil: "commit" });
   const seen = [];
   for (let i = 0; i < 20; i++) {
     seen.push(await page.evaluate(STATE));
@@ -279,7 +321,13 @@ if (reduced.everVisibleCount > 0) {
 const narrow = await (async () => {
   const context = await browser.newContext({ viewport: { width: 320, height: 568 } });
   const page = await context.newPage();
-  await page.goto(URL, { waitUntil: "domcontentloaded" });
+  await page.goto(URL, { waitUntil: "load" });
+  await page.goto(URL, { waitUntil: "commit" });
+  await page.waitForFunction(
+    () => (document.querySelector("[data-welcome]")?.getAnimations().length ?? 0) > 0,
+    undefined,
+    { timeout: 15000 },
+  );
   const up = await page.evaluate(STATE);
   await page.screenshot({ path: path.join(SHOTS, "welcome-320-up.png") });
   await page.waitForTimeout(MUST_BE_GONE_BY_MS);
@@ -311,14 +359,17 @@ await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
 console.log(
   `first seen up at ${normal.early.now}ms: covers viewport ${normal.early.coversViewport}, ` +
-    `flower at ${normal.early.emblemAngle}deg, lockup ${normal.early.lockupFontPx}px`,
+    `logo ${normal.early.logoWidthPx}px, flower ${normal.early.flowerImg?.w}px at ` +
+    `${normal.early.emblemAngle}deg (${normal.early.flowerImg?.src}), ` +
+    `wordmark ${normal.early.wordmarkImg?.w}px (${normal.early.wordmarkImg?.src})`,
 );
 console.log(
   `turn: ${normal.timeline.filter((s) => s.present && !s.gone).map((s) => `${s.now}ms/${s.emblemAngle}deg`).join("  ")}`,
 );
 console.log(
   `last seen up ${report.lastSeenUpMs}ms, gone by ${report.goneAtMs}ms ` +
-    `(ceiling ${MUST_BE_GONE_BY_MS}ms), emblem files fetched: ${report.emblemRequests}`,
+    `(hang ceiling ${MUST_BE_GONE_BY_MS}ms) | welcome's own files: ${report.welcomeParts.join(", ")} | ` +
+    `header emblem fetches: ${report.headerEmblemRequests}`,
 );
 console.log(
   `no-JS: present ${noJs.present}, still visible after ${MUST_BE_GONE_BY_MS}ms: ${noJs.stillVisible} | ` +

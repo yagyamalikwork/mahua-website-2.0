@@ -290,40 +290,92 @@ Written visible-by-default and hidden-by-animation, that second row is a cream s
 no way past, on exactly the browsers least able to recover.
 
 `--welcome-hold` is an `animation-delay`, not a keyframe percentage, so both durations stay adjustable from
-`lib/motion.ts` alone. Measured: up from first paint, gone by **~2.3s** on the page's own clock.
+`lib/motion.ts` alone. **2.1s of animation** since the client asked for "a few more milliseconds" on 8 Aug
+and chose from three measured options; up from first paint, gone by **~2.4s** on the page's own clock.
+There is room for it: the hero lands at ~3,990 ms, so the greeting finishes before the site's first
+photograph either way — headroom that disappears the day the hero gets faster.
 
 **Reduced motion needs its own line and it is load-bearing.** The blanket `*` rule crushes
 `animation-duration`; it does not touch `animation-delay`, and this one is 0.85s. Without an explicit
 `animation: none` a visitor who asked for less motion would get a blank cream screen held for the full delay
 and *then* a 0.001ms fade — a wall with none of the gesture that justifies it.
 
-### It costs nothing, and that was measured rather than assumed
+### It is the client's own logo, split so the flower can turn
 
-The flower is already in the first load for the header at the same encoded widths, and the name is live
-type. Medians of five, one build with only the welcome differing:
+**Not the header's lockup**, which is a horizontal assembly of the flower plus live type built because the
+client's brown is unreadable over the hero photograph. None of that applies on a cream screen with no
+photograph, and on 8 Aug the client asked for the real thing: flower above MAHUA above RESORTS, as they
+drew it, with the flower doing the turn.
 
-| | Without | With |
+They pointed at `Mahua-property-logos/Mahua-Resorts/Mahua-Resorts.jpg`; the build reads the **`.png`** beside
+it — same artwork, same folder, but a JPEG cannot carry transparency and would put a white square on cream.
+Checked rather than assumed: 90.3% of that PNG's canvas is clear and its corners are at alpha 0, which is
+exactly the check the lantern's PNG failed (§11).
+
+`scripts/build_welcome_logo.mjs` splits it by **scanning the artwork's own bands of ink** — three of them,
+the flower and the two words — and records each part's box as a fraction of the whole. The component lays
+them back out at those fractions, so the result is the client's logo to the pixel and only one piece
+rotates. A redrawn logo re-splits itself; one that no longer separates fails loudly instead of shipping a
+wordmark with half a flower on it.
+
+### What it costs, measured rather than assumed
+
+The first version cost nothing — it borrowed the header's flower and set the name live. The client's own
+logo is two files of its own, and they are **on the first screen**: a curtain that must be there at once
+cannot be deferred. That is a real charge against non-negotiable #6:
+
+| | Header lockup | Client's logo |
 |---|---|---|
-| Hero photograph | 3,975 ms | **3,987 ms** |
-| LCP | 1,340 ms | **1,332 ms** |
-| Initial load, 390 / 1440 | 581 / 705 KB | **581 / 705 KB** |
+| Initial load, 390 / 1440 | 581 / 705 KB | **599 / 723 KB** |
+| Hero photograph (median of 5) | 3,987 ms | **4,308 ms** |
 
-+12 ms on the hero, inside the run-to-run spread of either arm. LCP still resolves to the same paragraph —
-the curtain does not capture it.
+**~320 ms, and it was not accepted without a fight.** Two things were tried and measured:
 
-### Two defects it introduced, both invisible in the numbers
+| | Hero |
+|---|---|
+| First encode, `quality: 90 / alphaQuality: 92`, 20.4 KB | 4,377 ms |
+| `quality: 86 / alphaQuality: 80`, 17.4 KB — visually identical at 2x drawn size | 4,306 ms |
+| The same, fetched eagerly instead of `loading="lazy"` | 4,308 ms |
 
-1. **The brand name rendered cream on cream.** `BrandMark`'s wordmark takes its colour from the header's
-   own state; standing anywhere else it has none. The welcome showed a flower, off centre, with an
-   invisible word beside it holding the space — and every assertion in the new rig passed. **A screenshot
-   caught it.** The rig now measures the rendered contrast of the name against the screen it stands on.
-2. **It gave `check_contrast_over_photos.mjs` a second target.** That rig queries `data-contrast`
-   **globally** — its `container` field only scopes what it *hides* — so it found the welcome's hidden
-   wordmark, measured it against the hero photograph, and reported the header failing at 1:1. The page was
-   fine. `BrandMark` now takes `standalone`, which drops the two hooks that are header contracts
-   (`data-contrast`, `data-header-tint`) and keeps `data-brand-wordmark`, which is identity and is
-   *supposed* to appear twice. **Reusing a component reuses its hooks; check whether any of them are
-   promises about being unique.**
+So the lighter encode recovered ~70 ms of the original 390 — **`alphaQuality` above ~90 pushes libwebp
+towards a lossless alpha plane and nearly doubled both files** — and *when* the files are asked for makes
+no difference at all. The hypothesis that lazy images were landing mid-flight against the hero and stealing
+its bandwidth was measured and is wrong. What remains is the bytes and the two requests themselves, and
+nothing in this component's gift removes them.
+
+`loading="lazy"` is gone anyway: it is wrong on its face for the only thing on the first screen, even
+though it costs nothing either way. `fetchPriority="low"` stays so they cannot outrank the hero's preload.
+`check_welcome.mjs` asserts there are exactly two of them — a tripwire against somebody later pointing this
+at a full-resolution logo.
+
+**The client has the figure and chose the logo.** If they would rather have the 320 ms back, reverting is
+one component: `WelcomeScreen` returning to `<BrandMark />` on cream, which cost nothing because it borrows
+the header's flower and sets the name in live type.
+
+### Three defects it introduced, none visible in the numbers
+
+1. **The brand name rendered cream on cream** (first version, header lockup). `BrandMark`'s wordmark takes
+   its colour from the header's own state; standing anywhere else it has none. The welcome showed a flower,
+   off centre, with an invisible word beside it holding the space — and every assertion in the rig passed.
+   **A screenshot caught it.** Moot now that the wordmark is artwork, but it is why the rig checks that both
+   halves of the logo actually *decoded*.
+2. **It gave `check_contrast_over_photos.mjs` a second target** (first version). That rig queries
+   `data-contrast` **globally** — its `container` field only scopes what it *hides* — so it found the
+   welcome's hidden wordmark, measured it against the hero photograph, and reported the header failing at
+   1:1 on a page that was fine. **Reusing a component reuses its hooks; check whether any of them are
+   promises about being unique.** Moot now that the welcome shares no component with the header.
+3. **The rig's own clock was wrong twice, and both times it called a working page broken.** First it
+   sampled from `waitUntil: "commit"` on the rig's clock, mid-stream, before the animation had started, and
+   read the base style — "already gone at 150ms". Then, switched to `domcontentloaded`, the first
+   navigation after `next start` took **6,628 ms** to resolve and every sample landed after the welcome had
+   finished — "never visible in any of 34 samples". It now warms the server with a throwaway navigation and
+   waits on `getAnimations().length > 0`, which is neither earlier nor later than the moment there is
+   something to measure.
+
+**And the ceiling was a design budget pretending to be a hang guard.** `MUST_BE_GONE_BY_MS` was 3s while
+the animation was 1.35s; the client's lengthening to 2.1s tripped it at 3,210ms on a page working exactly
+as asked. It is 5s now, and commented as what it is: a guard against a welcome that never leaves, which
+should have no opinion about how long the greeting is.
 
 ---
 

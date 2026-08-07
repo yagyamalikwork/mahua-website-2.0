@@ -19,6 +19,10 @@ import {
 } from "@/components/motion/PinnedCollage";
 import { LANTERN_SIZES } from "@/components/signature/lantern/HangingLantern";
 import { EMBLEM_SIZES } from "@/components/ui/BrandMark";
+import {
+  WELCOME_FLOWER_SIZES,
+  WELCOME_WORDMARK_SIZES,
+} from "@/components/ui/WelcomeScreen";
 import { FULL_BLEED_SIZES } from "@/components/ui/FullBleed";
 import { MEDIA } from "./media";
 import {
@@ -114,6 +118,10 @@ const LIVE_SLOTS: readonly Slot[] = [
   // No `box`: the lantern is drawn at its own aspect with no `object-fit: cover`
   // frame around it, so there is no crop for `coverSizes` to widen.
   { name: "HangingLantern", sizes: LANTERN_SIZES },
+  // The welcome's two halves of the client's logo. Also uncropped — each is laid
+  // out at its own fraction of the logo's box, at its own aspect.
+  { name: "WelcomeScreen.flower", sizes: WELCOME_FLOWER_SIZES },
+  { name: "WelcomeScreen.wordmark", sizes: WELCOME_WORDMARK_SIZES },
   ...(["solo", "pairTop", "pairLower"] as const).map((k) => ({
     name: `ChapterIntro.${k}`,
     sizes: INTRO_SIZES[k],
@@ -177,8 +185,9 @@ describe("the sizes the page actually serves", () => {
     // for the same three strings deliberately. It is still worth its own rows —
     // its boxes differ, and every assertion below runs per slot, not per string.
     // 18 since 7 Aug 2026: `HangingLantern`, the lantern hung out of `after-dark`
-    // into `06 · The Lantern Hour`.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(18);
+    // into `06 · The Lantern Hour`. 20 since 8 Aug: the welcome screen's two
+    // halves of the client's stacked logo, the flower and the wordmark.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(20);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

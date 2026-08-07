@@ -232,23 +232,6 @@ html {
   opacity: 0;
   visibility: hidden;
   animation: welcome-out var(--welcome-fade) var(--enter-ease) var(--welcome-hold) 1 both;
-  /*
-   * **The name was invisible without this line, and a screenshot is the only
-   * thing that caught it.**
-   *
-   * In the header, `BrandMark`'s wordmark takes `var(--header-wordmark, var(--bg))`
-   * and the header's own state sets that variable. This lockup is `standalone`, so
-   * it carries no `data-header-tint` and no rule gives it a colour at all — it
-   * inherited, and what it inherited was the page's default. The welcome showed a
-   * flower, off centre, with an invisible word beside it holding the space.
-   *
-   * The brown is the correct value by the client's own 5 Aug ruling: the objection
-   * was never to the colour, it was to the colour *over a photograph*, and there
-   * is no photograph here. `lib/palette.test.ts` guards it at 4.5:1 on both creams,
-   * and `scripts/check_welcome.mjs` measures the rendered result rather than
-   * trusting either.
-   */
-  color: var(--brand);
 }
 
 /*
@@ -260,21 +243,6 @@ html {
   animation-duration: var(--welcome-turn);
 }
 
-/*
- * The lockup, large and centred. An attribute selector because a `text-*`
- * utility passed through `className` would tie on specificity with the ones
- * `BrandMark` already carries and be settled by emission order — the trap that
- * shipped the lantern at the wrong size. See the note in `BrandMark`.
- */
-[data-welcome] [data-brand-lockup] {
-  font-size: 20px;
-}
-
-@media (min-width: 768px) {
-  [data-welcome] [data-brand-lockup] {
-    font-size: 34px;
-  }
-}
 
 /*
  * The hairline that slides in under a link on hover or focus — the reference

@@ -86,8 +86,8 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    | | Initial load | Whole page scrolled |
    |---|---|---|
-   | 390px | **581 KB** ✓ | 2,926 KB |
-   | 1440px | **705 KB** ✓ | 3,745 KB |
+   | 390px | **599 KB** ✓ | 2,945 KB |
+   | 1440px | **723 KB** ✓ | 3,763 KB |
 
    Both initial figures fell on 5 Aug (from 613 and 730 KB) when Plan 4 took the tween library out of the
    first load — see `docs/reviews/2026-08-05-scroll-craft/`.
@@ -124,8 +124,8 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    **Do not check the < 2.5s with Lighthouse's LCP.** Chrome resolves this page's LCP to a paragraph, not
    to the hero photograph, so LCP read 1.4s on 4 Aug while the hero itself was landing at 4.9s on a
-   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 3,975 ms
-   against the 2,500 ms budget**, median of five, range 3,964-3,984. It fails, knowingly: the sharp hero
+   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 4,308 ms
+   against the 2,500 ms budget**, median of five, range 4,308-4,325. It fails, knowingly: the sharp hero
    costs the time. **Medians of five runs only** — single runs on this page vary 2,462-4,140 ms on a
    byte-identical build; `scripts/measure_lcp_arms.mjs --runs 5 --port 3100` is the instrument for that,
    and it **defaults to port 3210**, so omitting `--port` fails on a connection refused that looks like a
@@ -135,6 +135,13 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    deferring the two films' stills bought the hero 537 ms** — 4,512 → 3,975, medians of five on one build
    with only that change differing, both ranges inside 60 ms. It was pure waste rather than a trade: a
    `<video poster>` is fetched immediately however far down the page it sits. See `docs/DECISIONS.md` §3.
+
+   **And ~320 ms of it went back on 8 Aug, deliberately, to the welcome screen** — 3,987 → 4,308 when the
+   client asked for their own stacked logo there in place of the header's assembled lockup. That is 17 KB
+   and two requests on the first screen. It was not accepted without a fight: a lighter encode recovered
+   ~70 ms of the original 390 and fetching eagerly rather than lazily recovered **nothing** (4,306 vs
+   4,308, medians of five). **The client has been told the figure**; if they would rather have the speed,
+   reverting is one component. `docs/DECISIONS.md` §14.
 
    **No lever left on the table closes what remains, and that is measured rather than assumed** (Task 6,
    5 Aug, `docs/reviews/2026-08-05-scroll-craft/`). Rebuilding with GSAP back in the critical path moved
