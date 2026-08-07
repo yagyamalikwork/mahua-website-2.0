@@ -1,0 +1,322 @@
+{
+  "measuredAt": "2026-08-07T19:53:23.835Z",
+  "url": "http://localhost:3100/",
+  "films": [
+    {
+      "chapter": "rooted",
+      "name": "potter",
+      "beforeReached": {
+        "stillVisible": true,
+        "filmVisible": false,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 0,
+        "duration": null,
+        "paused": true,
+        "ended": false,
+        "box": {
+          "x": 610,
+          "y": 5046,
+          "w": 220,
+          "h": 256
+        },
+        "onScreen": false
+      },
+      "whilePlaying": {
+        "stillVisible": false,
+        "filmVisible": true,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 2.43,
+        "duration": 10,
+        "paused": false,
+        "ended": false,
+        "box": {
+          "x": 610,
+          "y": 315,
+          "w": 220,
+          "h": 256
+        },
+        "onScreen": true
+      },
+      "hoverWhilePlaying": {
+        "beforeHover": 2.43,
+        "afterHover": 3.11
+      },
+      "afterItEnds": {
+        "stillVisible": false,
+        "filmVisible": true,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 10,
+        "duration": 10,
+        "paused": true,
+        "ended": true,
+        "box": {
+          "x": 610,
+          "y": 315,
+          "w": 220,
+          "h": 256
+        },
+        "onScreen": true,
+        "sampledTimes": [
+          10,
+          10,
+          10
+        ]
+      },
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 232,
+            "g": 222,
+            "b": 199
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 1
+      },
+      "hoverReplay": {
+        "from": 10,
+        "to": 0.85
+      },
+      "pointerParked": {
+        "paused": true,
+        "first": 10,
+        "second": 10
+      },
+      "leaveAndReturn": {
+        "from": 10,
+        "to": 0.86
+      }
+    },
+    {
+      "chapter": "field-days",
+      "name": "tiger",
+      "beforeReached": {
+        "stillVisible": true,
+        "filmVisible": false,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 0,
+        "duration": null,
+        "paused": true,
+        "ended": false,
+        "box": {
+          "x": 1092,
+          "y": 8692,
+          "w": 300,
+          "h": 400
+        },
+        "onScreen": false
+      },
+      "whilePlaying": {
+        "stillVisible": false,
+        "filmVisible": true,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 2.65,
+        "duration": 10,
+        "paused": false,
+        "ended": false,
+        "box": {
+          "x": 1092,
+          "y": 315,
+          "w": 300,
+          "h": 400
+        },
+        "onScreen": true
+      },
+      "hoverWhilePlaying": {
+        "beforeHover": 2.65,
+        "afterHover": 3.22
+      },
+      "afterItEnds": {
+        "stillVisible": false,
+        "filmVisible": true,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 10,
+        "duration": 10,
+        "paused": true,
+        "ended": true,
+        "box": {
+          "x": 1092,
+          "y": 315,
+          "w": 300,
+          "h": 400
+        },
+        "onScreen": true,
+        "sampledTimes": [
+          10,
+          10,
+          10
+        ]
+      },
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 232,
+            "g": 222,
+            "b": 199
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 1
+      },
+      "hoverReplay": {
+        "from": 10,
+        "to": 0.87
+      },
+      "pointerParked": {
+        "paused": true,
+        "first": 10,
+        "second": 10
+      },
+      "leaveAndReturn": {
+        "from": 10,
+        "to": 0.86
+      }
+    }
+  ],
+  "reducedMotion": [
+    {
+      "name": "potter",
+      "stillVisible": true,
+      "filmVisible": false,
+      "stillLazy": true,
+      "hasPosterAttribute": false,
+      "preload": "none",
+      "ariaHidden": "true",
+      "blend": {
+        "still": "darken",
+        "film": "darken"
+      },
+      "currentTime": 0,
+      "duration": null,
+      "paused": true,
+      "ended": false,
+      "box": {
+        "x": 610,
+        "y": 315,
+        "w": 220,
+        "h": 256
+      },
+      "onScreen": true
+    },
+    {
+      "name": "tiger",
+      "stillVisible": true,
+      "filmVisible": false,
+      "stillLazy": true,
+      "hasPosterAttribute": false,
+      "preload": "none",
+      "ariaHidden": "true",
+      "blend": {
+        "still": "darken",
+        "film": "darken"
+      },
+      "currentTime": 0,
+      "duration": null,
+      "paused": true,
+      "ended": false,
+      "box": {
+        "x": 1092,
+        "y": 315,
+        "w": 300,
+        "h": 400
+      },
+      "onScreen": true
+    }
+  ],
+  "noJs": [
+    {
+      "name": "potter",
+      "stillPresent": true
+    },
+    {
+      "name": "tiger",
+      "stillPresent": true
+    }
+  ],
+  "firstLoad": {
+    "stillsFetched": 0,
+    "videosFetched": 0
+  },
+  "failures": [],
+  "verdict": "pass"
+}

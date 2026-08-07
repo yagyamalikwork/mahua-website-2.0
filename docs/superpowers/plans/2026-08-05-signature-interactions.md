@@ -23,7 +23,7 @@
 > | — · **The two films** | ✅ **not in this plan.** A tiger closing `04 · Days in the Field`, a potter closing `02 · Rooted like the mahua`. Play once, hold the last frame, replay on a deliberate hover. `DECISIONS.md` §9 |
 > | — · **The hanging lantern** | ✅ **not in this plan.** Client request, 7 Aug. Hangs out of `after-dark` into `06 · The Lantern Hour` and swings when pushed. `check_lantern.mjs`, `DECISIONS.md` §11 |
 > | 8 · The butterfly | ⬜ open. The client dropped two candidate overlay films on 7 Aug (`Butterfly-overlays/`); nothing about them has been checked |
-> | 9 · The tiger's browser rig | ⬜ **obsolete as written.** It measures an SVG inking itself. What is actually needed is a rig for the two *films* — play-once, hold, hover-replay, the `darken` blend, poster fail-safes. `check_lantern.mjs` is the closest model |
+> | 9 · The tiger's browser rig | ✅ **done as `scripts/check_films.mjs`, 8 Aug** — a rig for the two *films*, not for the SVG the task below describes. The task's own steps were not built and should not be. `DECISIONS.md` §12 |
 > | 10 · Whole-page verification | ⬜ open |
 
 **Goal:** Ship the three signature interactions — a hairline that slides in under links, a mahua leaf that
@@ -1498,7 +1498,11 @@ git commit -m "feat: a butterfly wanders the tiger's clearing and lands twice"
 
 ## Task 9: The tiger's browser rig
 
-> **⚠️ Obsolete as written. Do not build this.** Every assertion below is about an SVG inking itself in —
+> **⚠️ Obsolete as written, and settled elsewhere. Do not build this.** The thing that was actually owed —
+> a rig for the two films — shipped on 8 Aug 2026 as `scripts/check_films.mjs`, which fails against a
+> looping film, a lost blend and a restored `poster` attribute. See `docs/DECISIONS.md` §12.
+>
+> Every assertion below is about an SVG inking itself in —
 > `pathLength`, `stroke-dashoffset`, per-stroke stagger — and that tiger was replaced by film on 6 Aug 2026.
 > `InkTiger.tsx` is unmounted; a rig for it would guard nothing a visitor can see.
 >

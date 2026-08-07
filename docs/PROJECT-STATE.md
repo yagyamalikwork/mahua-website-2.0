@@ -30,7 +30,7 @@ events — read [`DECISIONS.md`](DECISIONS.md) §8 and §9 before touching any o
 | 7 · It lives, dozes, stirs | ✅ built, now dormant with the component |
 | — · The two films | ✅ **not in the plan.** Tiger closes `field-days`, potter closes `rooted`. `SignatureFilm` serves both |
 | 8 · The butterfly | ⬜ not started |
-| 9 · The tiger rig | ⬜ **needs rewriting for video.** The SVG-inking version in the plan is obsolete |
+| 9 · The tiger rig | ✅ **rewritten for film**, 8 Aug. `scripts/check_films.mjs` — the plan's SVG-inking version was obsolete and was not built |
 | 10 · Verification + docs | ⬜ this document is part of it |
 
 **Done 7 Aug:** the potter is up against the copy. The client's note — "it still feels pretty disconnected
@@ -56,10 +56,17 @@ than a trade: a `<video poster>` is fetched immediately however far down the pag
 under the film; see [`DECISIONS.md`](DECISIONS.md) §3 and the notes in
 `components/signature/SignatureFilm.tsx`, three of which are load-bearing.
 
+**Done 8 Aug: Plan 5 task 9, rewritten for film.** `scripts/check_films.mjs` covers what the plan's
+SVG-inking version never could — both films play once, hold their last frame at 10.00s, replay on a
+deliberate hover, ignore a hover mid-play, stay put under a parked pointer, re-arm when it leaves and
+returns, and show no white rectangle (sampled as pixels, 1 level off the chapter's cream). Reduced motion
+and no-JS keep the still and never play. Failed against three deliberate breaks before it was trusted; see
+[`DECISIONS.md`](DECISIONS.md) §12, including the one assertion that is weaker than it looks.
+
 **Immediate next job:** Plan 5 task 8, the butterfly — the client dropped two candidate overlay films on
-7 Aug (`Butterfly-overlays/`, 1.9 MB and 5.2 MB) and nothing about them has been checked yet. Task 9 — a
-browser rig for the two films — is arguably more urgent: they are the only signature interaction on the page
-with no automated check at all, and the poster change touched exactly how they paint.
+7 Aug (`Butterfly-overlays/`, 1.9 MB and 5.2 MB) and nothing about them has been checked yet: not the
+licence, not the background, not whether either is small enough to serve. Then task 10, whole-page
+verification.
 
 **Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
 nothing parked and nothing owed from Plan 4 beyond the deferred minors in

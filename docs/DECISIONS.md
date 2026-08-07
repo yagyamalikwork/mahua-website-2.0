@@ -264,6 +264,36 @@ margin would pass with the figure a screen adrift, which is defect shape #2 exac
 
 ---
 
+## 12. The films' rig, and what each break proved
+
+`scripts/check_films.mjs`, 8 Aug 2026. The two films were the last signature interaction with **no
+automated check of any kind** — `npm test` reported 276 passing while nothing guarded whether either one
+ran, stopped, held its last frame, or showed its white background to a visitor. A unit test cannot watch a
+video play.
+
+Ten assertions, each about what a visitor gets. Three deliberate breaks first, before any pass was trusted:
+
+| Break | Caught by | What it read |
+|---|---|---|
+| `mix-blend-mode: darken` removed from the film | the **pixel** check | corners 44 and 55 levels off the chapter's cream — a white rectangle |
+| `loop` added | six assertions at once | "still running 4.44 → 5.14 → 5.85s after its own duration" |
+| `poster` attribute restored | the first-load check | "2 film stills fetched before anything scrolled" |
+
+**The pixel check is the one worth keeping in mind.** Reading `mixBlendMode` off the computed style would
+have passed on the broken build for one of the two films, because the *still* still carried it. Screenshot
+the film's own box, sample its four corners, compare them against the cream the chapter actually sits on:
+1 level out when it works, 44-55 when it does not. That is the only form of this check that cannot be
+satisfied by a declaration.
+
+**The `loop` break is why the rig samples position three times after the film ends** rather than once. A
+single reading catches a rewind but not a slow second pass.
+
+**And one assertion is weaker than it looks** — see §5. "With the pointer parked it does not replay" passed
+on a build with the `armed` guard deleted, because Chromium never re-fires `pointerenter` under a
+stationary cursor. Recorded rather than quietly relied upon.
+
+---
+
 ## 11. The hanging lantern, and what it cost to hang it
 
 The client asked on 7 Aug 2026 for their watercolour lantern to hang out of the night photograph above
@@ -344,9 +374,11 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   live site's room list for Mahua Tola totals **twelve** while the brand record says fourteen.
 - **Plan 5, tasks 8–10.** The butterfly; the tiger's browser rig (**must be rewritten for video** — the
   SVG-inking version in the plan is obsolete); whole-page verification.
-- **No browser rig covers the two films.** The rule and the cursor have `check_rule_in.mjs` and
-  `check_leaf_cursor.mjs`; play-once, hold, hover-replay, the `darken` blend and the poster fail-safes are
-  currently verified by hand only.
+- **One assertion in `check_films.mjs` is weaker than it looks.** "With the pointer parked it does not
+  replay again" passed unchanged on a build with the `armed` ref deleted: Chromium does not re-fire
+  `pointerenter` under a stationary pointer, so only the `finished` guard is ever reached there. It is a
+  real check on what a visitor gets — it caught a looping film outright — and it is **not** evidence that
+  both guards exist. Do not delete `armed` on the strength of it. Noted at the assertion itself too.
 - **The two film posters are 103 KB of the initial load and nobody has scrolled to them.**
   `tiger-film-poster.webp` (56 KB) and `potter-film-poster.webp` (47 KB) are fetched at ~28 ms at both 390
   and 1440, ahead of the first screen's own imagery. `preload="none"` does not defer a poster and there is
