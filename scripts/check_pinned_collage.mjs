@@ -238,7 +238,13 @@ const footer = await (async () => {
     // A horizontal overlap with a flank would be a collision rather than a
     // composition, and the pull-up is what could cause one.
     const box2 = el.getBoundingClientRect();
-    const collides = [...section.querySelectorAll("img")].some((img) => {
+    // `:not([data-signature-film-frame] img)` because a film's own still is an
+    // `<img>` inside its frame, and it occupies exactly the film's box. Counting
+    // it made this check report the figure colliding with itself the moment the
+    // poster attribute became a real image (7 Aug 2026).
+    const collides = [
+      ...section.querySelectorAll("img:not([data-signature-film-frame] img)"),
+    ].some((img) => {
       const r = img.getBoundingClientRect();
       return r.bottom > box2.top && r.top < box2.bottom && r.right > box2.left && r.left < box2.right;
     });
@@ -267,7 +273,12 @@ const noJs = await (async () => {
   const readable = await p.evaluate((id) => {
     const section = document.getElementById(id);
     const heading = section?.querySelector("h1, h2, h3");
-    const images = [...(section?.querySelectorAll("img") ?? [])];
+    // The chapter's own photographs, not a film's still — see the note on the
+    // collision check above. This asserted 3 and read 4 the moment the stills
+    // became real images.
+    const images = [
+      ...(section?.querySelectorAll("img:not([data-signature-film-frame] img)") ?? []),
+    ];
     return {
       heading: (heading?.textContent ?? "").replace(/\s+/g, " ").trim(),
       words: (section?.textContent ?? "").trim().split(/\s+/).length,

@@ -233,8 +233,20 @@ function sampleScreen(cell) {
 /** Every distinct photograph the page has rendered, keyed by media id. */
 function collectImages() {
   const ids = new Map();
+  /**
+   * A film's still is an `<img>` inside `[data-signature-film-frame]`, and it is
+   * not a photograph — it is the first frame of the film beside it, standing in
+   * until the video paints.
+   *
+   * Counting it would inflate two figures at once and neither would look wrong:
+   * `distinctImages` by two, and `imagesPerScreen` — the number the client's
+   * whole density complaint turns on — from 2.03 to 2.14, for no new imagery
+   * whatsoever. The films themselves are already counted where it matters, as
+   * `<video>`, by the coverage pass.
+   */
+  const isFilmStill = (el) => Boolean(el.closest("[data-signature-film-frame]"));
   for (const img of document.querySelectorAll("img")) {
-    if (!img.currentSrc) continue;
+    if (!img.currentSrc || isFilmStill(img)) continue;
     const file = new URL(img.currentSrc, location.href).pathname.split("/").pop();
     const id = file
       .replace(/-\d+\.(avif|webp|jpg|jpeg|png)$/i, "")
@@ -247,7 +259,7 @@ function collectImages() {
   }
   return {
     distinct: [...ids.values()].sort((a, b) => b.area - a.area),
-    imgElements: document.querySelectorAll("img").length,
+    imgElements: [...document.querySelectorAll("img")].filter((el) => !isFilmStill(el)).length,
     documentHeight: document.documentElement.scrollHeight,
   };
 }

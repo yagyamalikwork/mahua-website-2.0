@@ -48,10 +48,18 @@ over the bonfire, and **is hidden between 1024 and 1279px** where the compositio
 working, including the two instruments that were wrong before the page was, in
 [`DECISIONS.md`](DECISIONS.md) §11.
 
+**Also done 7 Aug: the two films' stills came out of the initial load, and it bought the hero 537 ms** —
+4,512 → 3,975 ms, medians of five on one build with only that change differing, both ranges inside 60 ms.
+That is more than every other lever ever measured on this page put together, and it was pure waste rather
+than a trade: a `<video poster>` is fetched immediately however far down the page it sits. Initial load
+684 → **581 KB** at 390px and 808 → **705 KB** at 1440px. The still is now an `<img loading="lazy">` layered
+under the film; see [`DECISIONS.md`](DECISIONS.md) §3 and the notes in
+`components/signature/SignatureFilm.tsx`, three of which are load-bearing.
+
 **Immediate next job:** Plan 5 task 8, the butterfly — the client dropped two candidate overlay films on
-7 Aug (`Butterfly-overlays/`, 1.9 MB and 5.2 MB) and nothing about them has been checked yet. Competing for
-the same time: the 103 KB of film posters sitting in the initial load (§5, and CLAUDE.md non-negotiable #6),
-which is the larger performance win and was raised with the client the same day.
+7 Aug (`Butterfly-overlays/`, 1.9 MB and 5.2 MB) and nothing about them has been checked yet. Task 9 — a
+browser rig for the two films — is arguably more urgent: they are the only signature interaction on the page
+with no automated check at all, and the poster change touched exactly how they paint.
 
 **Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
 nothing parked and nothing owed from Plan 4 beyond the deferred minors in
@@ -64,8 +72,8 @@ chapter inside non-negotiable #8's 45% ceiling:
 |---|---|---|---|
 | `rooted` | **39.7%** | 44.5% | potter 56px below the last paragraph; was 41.8% / **55.9%** before the move |
 | `field-days` | **44%** | 58% | tiger film at 300px |
-| `lantern-hour` | **36.5%** | 41.2% | lantern hung at 200px; was 37.9% / 41.7% |
-| page | **40.4%** | 73.1% | document 15,958px, 2.03 photographs per screen, 51.7% imagery |
+| `lantern-hour` | **36.4%** | 41% | lantern hung at 200px; was 37.9% / 41.7% |
+| page | **40.1%** | 73.4% | document 15,958px, 2.03 photographs per screen, 51.9% imagery |
 
 `measure_density.mjs` could not see the lantern at all until it was fixed on 7 Aug — `elementsFromPoint`
 skips `pointer-events: none`. Any future ornament that hangs over copy has the same problem; the rig now

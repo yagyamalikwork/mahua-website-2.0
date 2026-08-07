@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-06T21:48:15.282Z",
+  "measuredAt": "2026-08-07T09:22:27.872Z",
   "url": "http://localhost:3100/",
   "chapter": "rooted",
   "viewport": "1440x900",
@@ -135,7 +135,7 @@
   "narrow": {
     "top": 3161,
     "height": 1263,
-    "documentHeight": 14347,
+    "documentHeight": 14346,
     "screens": 1.4,
     "hasScene": false,
     "reservedScroll": 0,

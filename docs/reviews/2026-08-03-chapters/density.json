@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-08-06T23:20:11.058Z",
+  "measuredAt": "2026-08-07T09:39:27.939Z",
   "url": "http://localhost:3100/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
   "imagery": {
     "distinctImages": 36,
     "imgElements": 36,
-    "documentHeightPx": 15958,
+    "documentHeightPx": 15959,
     "screensOfScroll": 17.7,
     "imagesPerScreen": 2.03,
     "ids": [
@@ -195,9 +195,9 @@
   "page": {
     "screens": 102,
     "meanEmptyPercent": 40.1,
-    "medianEmptyPercent": 41.5,
+    "medianEmptyPercent": 41.3,
     "bestEmptyPercent": 0.3,
-    "worstEmptyPercent": 73.1,
+    "worstEmptyPercent": 73.4,
     "worstAt": 8550,
     "overBudget": 39,
     "meanImagePercent": 51.9,
@@ -271,9 +271,9 @@
       "wholeScreensAvailable": true,
       "screens": 2,
       "meanEmptyPercent": 35.5,
-      "medianEmptyPercent": 36.8,
+      "medianEmptyPercent": 36.7,
       "bestEmptyPercent": 34.2,
-      "worstEmptyPercent": 36.8,
+      "worstEmptyPercent": 36.7,
       "worstAt": 5550,
       "overBudget": 0,
       "passesMean": true,
@@ -285,10 +285,10 @@
       "screensTall": 2.93,
       "wholeScreensAvailable": true,
       "screens": 11,
-      "meanEmptyPercent": 44,
+      "meanEmptyPercent": 43.9,
       "medianEmptyPercent": 43.1,
       "bestEmptyPercent": 34.2,
-      "worstEmptyPercent": 58,
+      "worstEmptyPercent": 57.9,
       "worstAt": 8100,
       "overBudget": 4,
       "passesMean": true,
@@ -300,10 +300,10 @@
       "screensTall": 1.6,
       "wholeScreensAvailable": true,
       "screens": 4,
-      "meanEmptyPercent": 36.8,
+      "meanEmptyPercent": 36.9,
       "medianEmptyPercent": 37.8,
       "bestEmptyPercent": 26.8,
-      "worstEmptyPercent": 46.9,
+      "worstEmptyPercent": 47.2,
       "worstAt": 9150,
       "overBudget": 1,
       "passesMean": true,
@@ -330,10 +330,10 @@
       "screensTall": 1.3,
       "wholeScreensAvailable": true,
       "screens": 2,
-      "meanEmptyPercent": 36.5,
-      "medianEmptyPercent": 41.2,
+      "meanEmptyPercent": 36.4,
+      "medianEmptyPercent": 41,
       "bestEmptyPercent": 31.7,
-      "worstEmptyPercent": 41.2,
+      "worstEmptyPercent": 41,
       "worstAt": 11700,
       "overBudget": 0,
       "passesMean": true,
@@ -345,10 +345,10 @@
       "screensTall": 1.17,
       "wholeScreensAvailable": true,
       "screens": 1,
-      "meanEmptyPercent": 41.6,
-      "medianEmptyPercent": 41.6,
-      "bestEmptyPercent": 41.6,
-      "worstEmptyPercent": 41.6,
+      "meanEmptyPercent": 41.3,
+      "medianEmptyPercent": 41.3,
+      "bestEmptyPercent": 41.3,
+      "worstEmptyPercent": 41.3,
       "worstAt": 12750,
       "overBudget": 0,
       "passesMean": true,
@@ -360,8 +360,8 @@
       "screensTall": 1.54,
       "wholeScreensAvailable": true,
       "screens": 3,
-      "meanEmptyPercent": 40.8,
-      "medianEmptyPercent": 40.2,
+      "meanEmptyPercent": 40.7,
+      "medianEmptyPercent": 40,
       "bestEmptyPercent": 39.4,
       "worstEmptyPercent": 42.7,
       "worstAt": 14100,
@@ -379,7 +379,7 @@
       "medianEmptyPercent": 0.9,
       "bestEmptyPercent": 0.9,
       "worstEmptyPercent": 0.9,
-      "worstAt": 15058,
+      "worstAt": 15059,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -388,7 +388,7 @@
   "emptiestScreens": [
     {
       "at": 8550,
-      "empty": 73.1,
+      "empty": 73.4,
       "spans": "field-days / rooms"
     },
     {
@@ -398,17 +398,17 @@
     },
     {
       "at": 4800,
-      "empty": 68.8,
+      "empty": 68.7,
       "spans": "rooted / forest"
     },
     {
       "at": 4950,
-      "empty": 67.5,
+      "empty": 67.4,
       "spans": "rooted / forest"
     },
     {
       "at": 8700,
-      "empty": 66.4,
+      "empty": 66.7,
       "spans": "field-days / rooms"
     }
   ],
@@ -639,31 +639,31 @@
     },
     {
       "at": 4800,
-      "occupied": 31.2,
-      "empty": 68.8,
+      "occupied": 31.3,
+      "empty": 68.7,
       "imagePercent": 19.3,
-      "typePercent": 11.9
+      "typePercent": 12
     },
     {
       "at": 4950,
-      "occupied": 32.5,
-      "empty": 67.5,
+      "occupied": 32.6,
+      "empty": 67.4,
       "imagePercent": 22.8,
-      "typePercent": 9.7
+      "typePercent": 9.8
     },
     {
       "at": 5100,
-      "occupied": 42.4,
-      "empty": 57.6,
+      "occupied": 42.5,
+      "empty": 57.5,
       "imagePercent": 33.4,
-      "typePercent": 9
+      "typePercent": 9.1
     },
     {
       "at": 5250,
-      "occupied": 54.7,
-      "empty": 45.3,
+      "occupied": 54.8,
+      "empty": 45.2,
       "imagePercent": 45.7,
-      "typePercent": 9
+      "typePercent": 9.1
     },
     {
       "at": 5400,
@@ -674,45 +674,45 @@
     },
     {
       "at": 5550,
-      "occupied": 63.2,
-      "empty": 36.8,
-      "imagePercent": 58.1,
-      "typePercent": 5.1
+      "occupied": 63.3,
+      "empty": 36.7,
+      "imagePercent": 58.3,
+      "typePercent": 5
     },
     {
       "at": 5700,
-      "occupied": 61.1,
-      "empty": 38.9,
-      "imagePercent": 58.5,
-      "typePercent": 2.6
+      "occupied": 61,
+      "empty": 39,
+      "imagePercent": 58.6,
+      "typePercent": 2.4
     },
     {
       "at": 5850,
-      "occupied": 56.5,
-      "empty": 43.5,
-      "imagePercent": 53.6,
-      "typePercent": 2.9
+      "occupied": 56.4,
+      "empty": 43.6,
+      "imagePercent": 53.8,
+      "typePercent": 2.6
     },
     {
       "at": 6000,
       "occupied": 53.1,
       "empty": 46.9,
-      "imagePercent": 48,
-      "typePercent": 5.1
+      "imagePercent": 48.2,
+      "typePercent": 4.9
     },
     {
       "at": 6150,
       "occupied": 50.8,
       "empty": 49.2,
-      "imagePercent": 43.2,
-      "typePercent": 7.6
+      "imagePercent": 43.4,
+      "typePercent": 7.4
     },
     {
       "at": 6300,
-      "occupied": 42.2,
-      "empty": 57.8,
+      "occupied": 42.1,
+      "empty": 57.9,
       "imagePercent": 35.3,
-      "typePercent": 6.9
+      "typePercent": 6.8
     },
     {
       "at": 6450,
@@ -758,45 +758,45 @@
     },
     {
       "at": 7350,
-      "occupied": 61.1,
-      "empty": 38.9,
+      "occupied": 61.2,
+      "empty": 38.8,
       "imagePercent": 53,
-      "typePercent": 8.1
+      "typePercent": 8.2
     },
     {
       "at": 7500,
-      "occupied": 56.2,
-      "empty": 43.8,
+      "occupied": 56.3,
+      "empty": 43.7,
       "imagePercent": 50.2,
-      "typePercent": 6
+      "typePercent": 6.1
     },
     {
       "at": 7650,
-      "occupied": 51.3,
-      "empty": 48.7,
+      "occupied": 51.4,
+      "empty": 48.6,
       "imagePercent": 43.3,
-      "typePercent": 8
+      "typePercent": 8.1
     },
     {
       "at": 7800,
-      "occupied": 49,
-      "empty": 51,
+      "occupied": 49.1,
+      "empty": 50.9,
       "imagePercent": 40.2,
-      "typePercent": 8.8
+      "typePercent": 8.9
     },
     {
       "at": 7950,
-      "occupied": 47.6,
-      "empty": 52.4,
+      "occupied": 47.7,
+      "empty": 52.3,
       "imagePercent": 40,
-      "typePercent": 7.6
+      "typePercent": 7.7
     },
     {
       "at": 8100,
-      "occupied": 42,
-      "empty": 58,
+      "occupied": 42.1,
+      "empty": 57.9,
       "imagePercent": 36.1,
-      "typePercent": 5.9
+      "typePercent": 6
     },
     {
       "at": 8250,
@@ -814,44 +814,44 @@
     },
     {
       "at": 8550,
-      "occupied": 26.9,
-      "empty": 73.1,
-      "imagePercent": 19.2,
+      "occupied": 26.6,
+      "empty": 73.4,
+      "imagePercent": 18.9,
       "typePercent": 7.7
     },
     {
       "at": 8700,
-      "occupied": 33.6,
-      "empty": 66.4,
-      "imagePercent": 26.5,
+      "occupied": 33.3,
+      "empty": 66.7,
+      "imagePercent": 26.2,
       "typePercent": 7.1
     },
     {
       "at": 8850,
-      "occupied": 44.9,
-      "empty": 55.1,
-      "imagePercent": 37.8,
+      "occupied": 44.6,
+      "empty": 55.4,
+      "imagePercent": 37.5,
       "typePercent": 7.1
     },
     {
       "at": 9000,
-      "occupied": 49.9,
-      "empty": 50.1,
-      "imagePercent": 42.2,
+      "occupied": 49.6,
+      "empty": 50.4,
+      "imagePercent": 41.9,
       "typePercent": 7.7
     },
     {
       "at": 9150,
-      "occupied": 53.1,
-      "empty": 46.9,
-      "imagePercent": 44.9,
+      "occupied": 52.8,
+      "empty": 47.2,
+      "imagePercent": 44.6,
       "typePercent": 8.2
     },
     {
       "at": 9300,
-      "occupied": 64.4,
-      "empty": 35.6,
-      "imagePercent": 60.1,
+      "occupied": 64.1,
+      "empty": 35.9,
+      "imagePercent": 59.8,
       "typePercent": 4.3
     },
     {
@@ -947,9 +947,9 @@
     },
     {
       "at": 11400,
-      "occupied": 70.9,
-      "empty": 29.1,
-      "imagePercent": 61.6,
+      "occupied": 70.7,
+      "empty": 29.3,
+      "imagePercent": 61.4,
       "typePercent": 9.3
     },
     {
@@ -961,9 +961,9 @@
     },
     {
       "at": 11700,
-      "occupied": 58.8,
-      "empty": 41.2,
-      "imagePercent": 49.4,
+      "occupied": 59,
+      "empty": 41,
+      "imagePercent": 49.6,
       "typePercent": 9.4
     },
     {
@@ -996,9 +996,9 @@
     },
     {
       "at": 12450,
-      "occupied": 46.1,
-      "empty": 53.9,
-      "imagePercent": 39.2,
+      "occupied": 46.3,
+      "empty": 53.7,
+      "imagePercent": 39.4,
       "typePercent": 6.9
     },
     {
@@ -1010,52 +1010,52 @@
     },
     {
       "at": 12750,
-      "occupied": 58.4,
-      "empty": 41.6,
+      "occupied": 58.7,
+      "empty": 41.3,
       "imagePercent": 50.2,
-      "typePercent": 8.2
+      "typePercent": 8.5
     },
     {
       "at": 12900,
-      "occupied": 54.5,
-      "empty": 45.5,
+      "occupied": 54.7,
+      "empty": 45.3,
       "imagePercent": 50.1,
-      "typePercent": 4.4
+      "typePercent": 4.6
     },
     {
       "at": 13050,
-      "occupied": 49.4,
-      "empty": 50.6,
+      "occupied": 49.5,
+      "empty": 50.5,
       "imagePercent": 42.6,
-      "typePercent": 6.8
+      "typePercent": 6.9
     },
     {
       "at": 13200,
-      "occupied": 44.2,
-      "empty": 55.8,
+      "occupied": 44.3,
+      "empty": 55.7,
       "imagePercent": 37.4,
-      "typePercent": 6.8
+      "typePercent": 6.9
     },
     {
       "at": 13350,
-      "occupied": 44.4,
-      "empty": 55.6,
+      "occupied": 44.5,
+      "empty": 55.5,
       "imagePercent": 37.6,
-      "typePercent": 6.8
+      "typePercent": 6.9
     },
     {
       "at": 13500,
-      "occupied": 46.3,
-      "empty": 53.7,
+      "occupied": 46.4,
+      "empty": 53.6,
       "imagePercent": 40.2,
-      "typePercent": 6.1
+      "typePercent": 6.2
     },
     {
       "at": 13650,
-      "occupied": 56.4,
-      "empty": 43.6,
+      "occupied": 56.2,
+      "empty": 43.8,
       "imagePercent": 51.5,
-      "typePercent": 4.9
+      "typePercent": 4.7
     },
     {
       "at": 13800,
@@ -1066,9 +1066,9 @@
     },
     {
       "at": 13950,
-      "occupied": 59.8,
-      "empty": 40.2,
-      "imagePercent": 58.3,
+      "occupied": 60,
+      "empty": 40,
+      "imagePercent": 58.5,
       "typePercent": 1.5
     },
     {
@@ -1108,24 +1108,24 @@
     },
     {
       "at": 14850,
-      "occupied": 81.8,
-      "empty": 18.2,
+      "occupied": 81.7,
+      "empty": 18.3,
       "imagePercent": 67.9,
-      "typePercent": 13.9
+      "typePercent": 13.8
     },
     {
       "at": 15000,
-      "occupied": 93.3,
-      "empty": 6.7,
-      "imagePercent": 84,
+      "occupied": 93.4,
+      "empty": 6.6,
+      "imagePercent": 84.1,
       "typePercent": 9.3
     },
     {
-      "at": 15058,
+      "at": 15059,
       "occupied": 99.1,
       "empty": 0.9,
-      "imagePercent": 90.1,
-      "typePercent": 9
+      "imagePercent": 90.2,
+      "typePercent": 8.9
     }
   ]
 }

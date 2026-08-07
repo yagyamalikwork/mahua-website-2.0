@@ -78,23 +78,43 @@ behind a lock.
 
 ## 3. Why the hero misses its budget, and why no lever closes it
 
-The hero photograph lands at **~3,419 ms** on Slow 4G against a 2,500 ms budget. Task 6 measured every
-lever by rebuilding and A/B-ing rather than reasoning:
+The hero photograph lands at **3,975 ms** on Slow 4G against a 2,500 ms budget — median of five, range
+3,964-3,984. Every lever has been measured by rebuilding and A/B-ing rather than reasoned about:
 
 | Lever | Worth |
 |---|---|
-| Deferring GSAP (**spent**) | 213 ms on the hero, **0 ms on LCP** |
+| **Deferring the two film posters (spent, 7 Aug)** | **537 ms on the hero**, 103 KB off the initial load |
+| Deferring GSAP (spent, 5 Aug) | 213 ms on the hero, **0 ms on LCP** |
 | Subsetting the fonts (unspent) | ~215 ms |
 | Dropping the fonts' `rel=preload` (unspent) | ~172 ms |
 
-**Every lever is ~200 ms; the gap is ~1,400 ms.** The hero is 192 KB queued behind ~460 KB on a 200 KB/s
-link — it is **bandwidth-bound**. Closing it needs a smaller hero or a lighter first screen, which is a
-design decision, not an optimisation. The client has deferred it.
+**The posters were worth more than everything else put together, and they were pure waste.** A
+`<video poster="…">` is fetched immediately however far down the page it sits — `preload="none"` defers the
+video and does nothing for its poster, and there is no lazy equivalent. Two chapters several screens down
+were costing 103 KB of the ~460 KB first screen. Medians of five on one build with only that change
+differing: **hero 4,512 ms → 3,975 ms**, both ranges inside 60 ms. LCP is text and moved 1,272 → 1,340 ms,
+which is inside its own noise (988-1,436 across the ten runs) and means nothing either way. The fix is in
+`components/signature/SignatureFilm.tsx`; three things there are load-bearing and commented at the site.
 
-**Do not read Chrome's LCP as the hero's arrival.** Across **35 runs** it resolved to text every single time
-— a paragraph on mobile, the `<h1>` on desktop — never once to a photograph. Mobile LCP reads 1,488 ms while
-the hero lands at 3,419. Use `scripts/measure_page.mjs`, and **medians of five**: an unchanged build has
-produced LCP anywhere from 2,462 to 4,140 ms.
+**That is the exception that proves the rule, not a route to the budget.** Every *remaining* lever is
+~200 ms and the gap is still ~1,475 ms. The hero is 192 KB queued behind ~360 KB on a 200 KB/s link — it is
+**bandwidth-bound**. Closing it needs a smaller hero or a lighter first screen, which is a design decision,
+not an optimisation. The client has deferred it.
+
+*Worth checking before anything else is attempted:* both stills are encoded at their film's full
+resolution — `tiger-film-poster.webp` 810×1080 for a box drawn at 240-300 CSS px, `potter-film-poster.webp`
+1080×1256 for one drawn at 150-220. That is ~2.5x oversampled at DPR 1. It costs nothing before the fold
+any more, so it is no longer a hero question, but it is free weight for anyone who scrolls.
+
+**Do not read Chrome's LCP as the hero's arrival.** Across **45 runs** it resolved to text every single time
+— a paragraph on mobile, the `<h1>` on desktop — never once to a photograph. Mobile LCP reads ~1,300 ms
+while the hero lands at 3,975. Use `scripts/measure_page.mjs`, and **medians of five**: an unchanged build
+has produced LCP anywhere from 988 to 4,140 ms. The hero's own `responseEnd` is far steadier than LCP is —
+the ten runs on 7 Aug held to 60 ms within each arm — so a *hero* difference of a few hundred ms is real
+where the same difference in LCP is noise.
+
+**`measure_lcp_arms.mjs` defaults to port 3210, not 3100.** Pass `--port` or it fails on a connection
+refused that reads like a broken rig.
 
 *Unexamined:* the desktop hero (4,107 ms) is slower than the mobile one.
 

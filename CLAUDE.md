@@ -81,8 +81,8 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    | | Initial load | Whole page scrolled |
    |---|---|---|
-   | 390px | **683 KB** ✓ | 2,912 KB |
-   | 1440px | **807 KB** ✓ | 3,731 KB |
+   | 390px | **581 KB** ✓ | 2,926 KB |
+   | 1440px | **705 KB** ✓ | 3,745 KB |
 
    Both initial figures fell on 5 Aug (from 613 and 730 KB) when Plan 4 took the tween library out of the
    first load — see `docs/reviews/2026-08-05-scroll-craft/`.
@@ -92,14 +92,20 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    a visitor who reaches the foot of the page now downloads both films; that sits under the same client
    ruling as the rest of the below-the-fold weight.
 
-   **The 109 KB on the initial figures is one specific thing and it is not paid for.** `tiger-film-poster.webp`
-   (56 KB) and `potter-film-poster.webp` (47 KB) are fetched before the first screen at both widths, at
-   ~28 ms — ahead of everything the first screen actually shows. Both films are far below the fold, and
-   `preload="none"` does not defer a poster: there is no `loading="lazy"` for one. On a page whose hero is
-   bandwidth-bound and misses its budget by ~1,400 ms, that is ~103 KB of ~460 KB of first-screen bytes
-   spent on artwork nobody has scrolled to, and a bigger lever than any measured in Plan 4 Task 6. **Not yet
-   fixed — raised with the client 7 Aug.** The fix is to attach the poster only when the film is near, the
-   same way the film itself waits.
+   **The films' two stills came out of the initial load on 7 Aug, worth exactly 103 KB at both widths**
+   (684 → 581 and 808 → 705). They had been there because a `<video poster="…">` is fetched *immediately*
+   however far down the page it sits: `preload="none"` defers the video and does nothing for its poster, and
+   there is no lazy equivalent for one. Both were landing at ~28 ms, ahead of the first screen's own
+   imagery, for chapters several screens down — 103 KB of ~460 KB of first-screen bytes.
+
+   The fix is in `components/signature/SignatureFilm.tsx`: the still is now a real `<img loading="lazy">`
+   layered under the film rather than a `poster` attribute, so the browser defers it natively with no
+   JavaScript involved. **Do not "simplify" it back to a `poster`.** Three things there are load-bearing and
+   each is commented at the site: the still is the element *in flow* (a `preload="none"` video with no
+   poster has nothing to lay out), exactly one of the two is ever visible (both carry `mix-blend-mode:
+   darken`, and a still left under a playing film ghosts through it), and the film is server-rendered
+   `visibility: hidden` because what a browser paints for a frameless video is unspecified — an opaque black
+   box under `darken` would black out the whole frame.
 
    **These rose on 5 Aug and the rise was bought deliberately.** The table read 399/763 KB until the client
    chose the sharp hero: `sizes` now hands a 390px phone the 1440-wide hero (192 KB) rather than the
@@ -113,22 +119,31 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 
    **Do not check the < 2.5s with Lighthouse's LCP.** Chrome resolves this page's LCP to a paragraph, not
    to the hero photograph, so LCP read 1.4s on 4 Aug while the hero itself was landing at 4.9s on a
-   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 3,419 ms at
-   DPR 1 and 3,922 ms at DPR 3, against the 2,500 ms budget.** It fails, knowingly: the sharp hero costs
-   the time. **Medians of five runs only** — single runs on this page vary 2,462-4,140 ms on a
-   byte-identical build; `scripts/measure_lcp_arms.mjs --runs 5` is the instrument for that.
+   throttled link. `scripts/measure_page.mjs` reports the hero's own `responseEnd` — **currently 3,975 ms
+   against the 2,500 ms budget**, median of five, range 3,964-3,984. It fails, knowingly: the sharp hero
+   costs the time. **Medians of five runs only** — single runs on this page vary 2,462-4,140 ms on a
+   byte-identical build; `scripts/measure_lcp_arms.mjs --runs 5 --port 3100` is the instrument for that,
+   and it **defaults to port 3210**, so omitting `--port` fails on a connection refused that looks like a
+   broken rig.
 
-   **No lever left on the table closes this gap, and that is now measured rather than assumed** (Task 6,
+   **One lever turned out to be worth more than all the others together, and it was spent on 7 Aug:
+   deferring the two films' stills bought the hero 537 ms** — 4,512 → 3,975, medians of five on one build
+   with only that change differing, both ranges inside 60 ms. It was pure waste rather than a trade: a
+   `<video poster>` is fetched immediately however far down the page it sits. See `docs/DECISIONS.md` §3.
+
+   **No lever left on the table closes what remains, and that is measured rather than assumed** (Task 6,
    5 Aug, `docs/reviews/2026-08-05-scroll-craft/`). Rebuilding with GSAP back in the critical path moved
-   mobile LCP by **0 ms** — 1,488 ms either way — and the hero by 213 ms. Blocking *every* font byte buys
-   the hero 565 ms, but the lever actually available is subsetting (~43 of the 110 KB loaded), worth about
-   215 ms; dropping the fonts' `rel=preload` buys 172 ms and delays the web font by 1.2s. **Each lever is
-   worth ~200 ms and the gap is ~1,400 ms.** The hero is 192 KB sitting behind ~460 KB of first-screen
-   bytes on a ~200 KB/s link — it is bandwidth-bound. Closing it needs a smaller hero or a smaller first
-   screen, which is the client's call, not an engineering one.
+   mobile LCP by **0 ms** and the hero by 213 ms. Blocking *every* font byte buys the hero 565 ms, but the
+   lever actually available is subsetting (~43 of the 110 KB loaded), worth about 215 ms; dropping the
+   fonts' `rel=preload` buys 172 ms and delays the web font by 1.2s. **Each remaining lever is ~200 ms and
+   the gap is ~1,475 ms.** The hero is 192 KB sitting behind ~360 KB of first-screen bytes on a ~200 KB/s
+   link — it is bandwidth-bound. Closing it needs a smaller hero or a smaller first screen, which is the
+   client's call, not an engineering one.
 
-   **LCP is text on this page, every time.** Across 35 measured loads LCP equalled FCP exactly and resolved
-   to a paragraph on mobile and to the `<h1>` on desktop — never once to a photograph.
+   **LCP is text on this page, every time.** Across 45 measured loads LCP equalled FCP exactly and resolved
+   to a paragraph on mobile and to the `<h1>` on desktop — never once to a photograph. It is also far
+   noisier than the hero's own `responseEnd`: 988-1,436 ms across ten runs on 7 Aug while the hero held to
+   60 ms within each arm. A few hundred ms of *hero* difference is real; the same in LCP is nothing.
 7. **Gold is decorative only.** `gold` (`#BB8F2E`) is for rules, ornaments, the emblem — it measures
    ~2.5:1 on cream and must never carry text. `goldText` (`#7A5C18`) is the legible sibling; use it for any
    text or link that would otherwise sit in gold. Guarded by `lib/palette.test.ts`.
@@ -170,9 +185,16 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
    53.8% of the average screen, up from 49.7%.
 
-   **Current, measured 7 Aug 2026 on the build that carries both films and the lantern: page mean 40.4%,
-   worst screen 73.1%, 2.03 photographs per screen, imagery 51.7% of the average screen, and all twelve
-   chapters inside 45%.** `lantern-hour` is 36.5%, down 1.4 points when the lantern landed.
+   **Current, measured 7 Aug 2026 on the build that carries both films and the lantern: page mean 40.1%,
+   worst screen 73.4%, 2.03 photographs per screen, imagery 51.9% of the average screen, and all twelve
+   chapters inside 45%.** `lantern-hour` is 36.4%, down ~1.5 points when the lantern landed.
+
+   **A film's still is not a photograph, and `collectImages` skips it.** Once the films' posters became real
+   `<img loading="lazy">` elements (non-negotiable #6), counting them would have moved `distinctImages` by
+   two and `imagesPerScreen` from 2.03 to 2.14 — the figure the client's whole density complaint turns on —
+   for no new imagery whatsoever. The films themselves are still counted where it matters, as `<video>`, by
+   the coverage pass. `check_pinned_collage.mjs` needed the same lesson: it reported the potter colliding
+   with one of the chapter's photographs, and the photograph was its own still.
 
    **`measure_density.mjs` was blind to anything with `pointer-events: none` until 7 Aug 2026.** It
    hit-tests with `document.elementsFromPoint`, which does not return such elements, so the lantern — which
