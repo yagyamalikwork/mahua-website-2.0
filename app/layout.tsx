@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Grain } from "@/components/motion/Grain";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
-import { DURATION, ENTER, IMAGE_FROM, LIVING } from "@/lib/motion";
+import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
+import { DURATION, ENTER, IMAGE_FROM, LIVING, WELCOME } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -63,6 +64,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // the number lives in `lib/motion.ts`, the keyframes in
           // `app/globals.css`, and neither can drift from the other.
           "--emblem-turn-duration": `${DURATION.emblemTurn}s`,
+          // The welcome screen. Its flower turns faster than the header's — see
+          // the note on `WELCOME` for why — and `--welcome-hold` is an
+          // animation-delay rather than a keyframe percentage so both numbers
+          // stay changeable from `lib/motion.ts` alone.
+          "--welcome-turn": `${WELCOME.turn}s`,
+          "--welcome-hold": `${WELCOME.hold}s`,
+          "--welcome-fade": `${WELCOME.fade}s`,
           // The hairline that slides in under a link, on the same terms as
           // everything above it: the number lives in `lib/motion.ts`, the rule
           // lives in `app/globals.css`, and neither can drift from the other.
@@ -84,6 +92,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       }
     >
       <body className={`${display.variable} ${label.variable} ${body.variable}`}>
+        {/*
+         * The welcome, outside `SmoothScroll` and before everything else.
+         *
+         * Outside because it is `position: fixed` and takes no part in the
+         * scrolling page; before, so that in the painting order it sits under
+         * nothing it needs to cover. It carries no JavaScript at all — see the
+         * note on the component, and the base style in `app/globals.css`, which
+         * is hidden precisely so that a welcome screen can never become a wall.
+         */}
+        <WelcomeScreen />
         <SmoothScroll>
           <Grain />
           {/*

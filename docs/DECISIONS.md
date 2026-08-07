@@ -264,7 +264,76 @@ margin would pass with the figure a screen adrift, which is defect shape #2 exac
 
 ---
 
-## 13. The butterfly overlays, and why they cannot be used
+## 14. The welcome screen, and why it has no JavaScript
+
+Client request, 8 Aug 2026: the lockup centred, the flower turning once as it does in the header, then a
+smooth fade to the site — "quick enough that it doesn't come as too long of a break". Their two rulings:
+**a half turn, identical to the header's**, and **every page load** rather than once per session.
+
+### The base style is hidden, and that is the whole feature
+
+**A welcome screen that fails to leave is a site nobody can use**, and every route that could strand one
+runs through script: a chunk that never arrives, a handler that throws, a timer in a backgrounded tab. So
+there is none. It is server-rendered and a CSS animation takes it away — the thing that removes it is the
+thing that drew it.
+
+And it is written the reverse of the usual way round. `[data-welcome]` is `opacity: 0; visibility: hidden`
+in its base style; the animation's **backwards** fill makes it visible from the first painted frame and its
+**forwards** fill leaves it hidden afterwards. So:
+
+| | |
+|---|---|
+| animation runs | visible, fades, gone. As designed |
+| animation never runs | base style stands. **No welcome, site works** |
+
+Written visible-by-default and hidden-by-animation, that second row is a cream screen with a logo on it and
+no way past, on exactly the browsers least able to recover.
+
+`--welcome-hold` is an `animation-delay`, not a keyframe percentage, so both durations stay adjustable from
+`lib/motion.ts` alone. Measured: up from first paint, gone by **~2.3s** on the page's own clock.
+
+**Reduced motion needs its own line and it is load-bearing.** The blanket `*` rule crushes
+`animation-duration`; it does not touch `animation-delay`, and this one is 0.85s. Without an explicit
+`animation: none` a visitor who asked for less motion would get a blank cream screen held for the full delay
+and *then* a 0.001ms fade — a wall with none of the gesture that justifies it.
+
+### It costs nothing, and that was measured rather than assumed
+
+The flower is already in the first load for the header at the same encoded widths, and the name is live
+type. Medians of five, one build with only the welcome differing:
+
+| | Without | With |
+|---|---|---|
+| Hero photograph | 3,975 ms | **3,987 ms** |
+| LCP | 1,340 ms | **1,332 ms** |
+| Initial load, 390 / 1440 | 581 / 705 KB | **581 / 705 KB** |
+
++12 ms on the hero, inside the run-to-run spread of either arm. LCP still resolves to the same paragraph —
+the curtain does not capture it.
+
+### Two defects it introduced, both invisible in the numbers
+
+1. **The brand name rendered cream on cream.** `BrandMark`'s wordmark takes its colour from the header's
+   own state; standing anywhere else it has none. The welcome showed a flower, off centre, with an
+   invisible word beside it holding the space — and every assertion in the new rig passed. **A screenshot
+   caught it.** The rig now measures the rendered contrast of the name against the screen it stands on.
+2. **It gave `check_contrast_over_photos.mjs` a second target.** That rig queries `data-contrast`
+   **globally** — its `container` field only scopes what it *hides* — so it found the welcome's hidden
+   wordmark, measured it against the hero photograph, and reported the header failing at 1:1. The page was
+   fine. `BrandMark` now takes `standalone`, which drops the two hooks that are header contracts
+   (`data-contrast`, `data-header-tint`) and keeps `data-brand-wordmark`, which is identity and is
+   *supposed* to appear twice. **Reusing a component reuses its hooks; check whether any of them are
+   promises about being unique.**
+
+---
+
+## 13. The butterfly — parked 8 Aug 2026, and how to restart it
+
+**The client parked this deliberately, after seeing the measurements below.** It is not cancelled and
+nothing about it is owed. If it comes back, everything needed is here: skip to *What would work* at the
+foot, which carries a re-render brief that can go straight to an illustrator.
+
+### Why the supplied films could not be used
 
 Checked 8 Aug 2026: `Butterfly-overlays/Butterflies-Overlay.mp4` (1.8 MB) and `-bright.mp4` (5.0 MB). Same
 footage, one graded brighter. **Neither can go on this page, and the reason is size before it is anything
@@ -292,7 +361,9 @@ HEVC-with-alpha for Safari, which ffmpeg cannot produce — two encodes and stil
 No watermark was visible in the frames checked, and the blob scan found exactly six butterfly-shaped
 regions and nothing else. Licence was therefore not the blocker here; geometry was.
 
-**What would work, if a butterfly is still wanted.** Either:
+### What would work, if the butterfly is restarted
+
+Either:
 
 1. **A re-render to the specification that has worked twice** — one butterfly, filling most of the frame,
    on flat white (so `darken` erases it), 4:5 at 1080px or more, ≤10s, 24-30fps, **no audio**, camera
@@ -434,10 +505,10 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 - **The lantern is hidden between 1024 and 1279px** — the composition leaves 80–196px there and the smallest
   lantern worth drawing needs 179. See §11. The client knows; if that band matters the fix is to hang it
   over the bonfire flank as the stacked layout already does.
-- **Plan 5 task 8, the butterfly, is the only task left and it is blocked on a decision.** The two overlay
-  films the client supplied on 7 Aug cannot be used — chroma green, and butterflies 1.9% of frame width;
-  see §13 for the measurements and for the two things that would work instead. Whether a *fourth* figure is
-  wanted at all is the prior question.
+- **The butterfly is parked, at the client's request on 8 Aug 2026 — not abandoned.** Everything needed to
+  pick it up again is in §13: why the supplied overlay films cannot be used, and the two routes that would
+  work, one of them a re-render specification ready to hand to an illustrator. Nothing is owed until the
+  client asks for it.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---

@@ -168,6 +168,38 @@ export const CURSOR = {
 } as const;
 
 /**
+ * The welcome screen: the brand lockup on cream, the flower turning once, and
+ * then it goes.
+ *
+ * **Seconds, and the whole thing is 1.35 of them.** The client asked for
+ * something "quick enough that it doesn't come as too long of a break" — so the
+ * emblem's turn here is `turn`, not `DURATION.emblemTurn`. The header's 2.4s
+ * half-turn is right for a mark that arrives *alongside* the page; a screen that
+ * stands in front of the page for 2.4s before it will even fade is a wall.
+ *
+ * **`hold` is a delay, not a keyframe percentage, and that is deliberate.** The
+ * fade is one animation with `animation-delay: var(--welcome-hold)` and
+ * `animation-fill-mode: both`, so these two numbers can be changed here without
+ * anyone recomputing a percentage in `app/globals.css`. A keyframe set with
+ * `63%` in it would silently mean something else the moment either number moved.
+ *
+ * The screen is **hidden in its base style and made visible only by the
+ * animation's backwards fill.** That is the fail-safe: if animations never run —
+ * an old browser, a stylesheet that failed, `prefers-reduced-motion`, anything —
+ * the base style wins and the visitor gets the site with no welcome at all. The
+ * opposite arrangement, visible by default and hidden by the animation, fails
+ * into a cream screen with a logo on it and no way past. See `app/globals.css`.
+ */
+export const WELCOME = {
+  /** The flower's half-turn. Shorter than the header's, on purpose. */
+  turn: 0.85,
+  /** How long the screen stands before it begins to leave. Matches `turn`, so the fade starts as the flower settles. */
+  hold: 0.85,
+  /** The fade itself. */
+  fade: 0.5,
+} as const;
+
+/**
  * The lantern that hangs out of `after-dark` into `06 · The Lantern Hour`, and
  * swings when a visitor pushes it.
  *

@@ -188,6 +188,95 @@ html {
 }
 
 /*
+ * The welcome screen — the brand lockup on cream, the flower turning once, gone
+ * in 1.35s. Client request, 8 Aug 2026. Markup in `components/ui/WelcomeScreen.tsx`,
+ * numbers in `lib/motion.ts` as `WELCOME`.
+ *
+ * **Read the base style first. It is hidden.**
+ *
+ * That is the safety property this whole feature rests on, and it is the reverse
+ * of how a splash screen is usually written. The animation's *backwards* fill is
+ * what makes it visible, from the first painted frame; its *forwards* fill is
+ * what leaves it hidden afterwards. So:
+ *
+ * - animation runs        -> visible, then fades, then gone. As designed.
+ * - animation never runs  -> the base style stands. No welcome, site works.
+ *
+ * Written the usual way round — visible in CSS, hidden by an animation — the
+ * second row is a cream screen with a logo on it and no way past, on exactly the
+ * browsers least able to recover. There is no JavaScript here to fall back to;
+ * the thing that removes it is the same thing that drew it.
+ *
+ * `--welcome-hold` is an `animation-delay`, not a percentage inside the
+ * keyframes, so both durations stay adjustable from `lib/motion.ts` without
+ * anyone recomputing anything here.
+ *
+ * `visibility` is in the keyframes as well as `opacity`. It steps rather than
+ * interpolating — which is what is wanted — and it is what takes the screen out
+ * of the accessibility tree and out of the way of the pointer once it has gone,
+ * rather than leaving a transparent sheet over the whole page for ever.
+ */
+@keyframes welcome-out {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+[data-welcome] {
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  animation: welcome-out var(--welcome-fade) var(--enter-ease) var(--welcome-hold) 1 both;
+  /*
+   * **The name was invisible without this line, and a screenshot is the only
+   * thing that caught it.**
+   *
+   * In the header, `BrandMark`'s wordmark takes `var(--header-wordmark, var(--bg))`
+   * and the header's own state sets that variable. This lockup is `standalone`, so
+   * it carries no `data-header-tint` and no rule gives it a colour at all — it
+   * inherited, and what it inherited was the page's default. The welcome showed a
+   * flower, off centre, with an invisible word beside it holding the space.
+   *
+   * The brown is the correct value by the client's own 5 Aug ruling: the objection
+   * was never to the colour, it was to the colour *over a photograph*, and there
+   * is no photograph here. `lib/palette.test.ts` guards it at 4.5:1 on both creams,
+   * and `scripts/check_welcome.mjs` measures the rendered result rather than
+   * trusting either.
+   */
+  color: var(--brand);
+}
+
+/*
+ * The flower turns faster here than in the header — see the note on `WELCOME` in
+ * `lib/motion.ts`. Only the duration is overridden; the keyframes are the
+ * header's, so the two can never describe different turns.
+ */
+[data-welcome] .emblem-turn {
+  animation-duration: var(--welcome-turn);
+}
+
+/*
+ * The lockup, large and centred. An attribute selector because a `text-*`
+ * utility passed through `className` would tie on specificity with the ones
+ * `BrandMark` already carries and be settled by emission order — the trap that
+ * shipped the lantern at the wrong size. See the note in `BrandMark`.
+ */
+[data-welcome] [data-brand-lockup] {
+  font-size: 20px;
+}
+
+@media (min-width: 768px) {
+  [data-welcome] [data-brand-lockup] {
+    font-size: 34px;
+  }
+}
+
+/*
  * The hairline that slides in under a link on hover or focus — the reference
  * site's affordance, and the client's 5 Aug request.
  *
@@ -630,6 +719,24 @@ body {
    * is no animation there to end anywhere.
    */
   .emblem-turn {
+    animation: none;
+  }
+
+  /*
+   * There is no welcome screen at all. Not a fast one — none.
+   *
+   * **And this rule is load-bearing, unlike the one above it.** The `*` rule
+   * crushes `animation-duration`; it does not touch `animation-delay`, and the
+   * welcome's is 0.85s. Without this line a visitor who asked for less motion
+   * would get the backwards fill holding a blank cream screen in front of the
+   * page for the full delay and *then* a 0.001ms fade — a wall, with none of the
+   * gesture that justifies it. `animation: none` drops it back to the base style,
+   * which is hidden, which is the whole reason the base style is hidden.
+   *
+   * Verified by `scripts/check_welcome.mjs`, which asserts the screen is never
+   * visible under reduced motion rather than that this rule exists.
+   */
+  [data-welcome] {
     animation: none;
   }
 

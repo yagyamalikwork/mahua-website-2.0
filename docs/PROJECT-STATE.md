@@ -69,6 +69,14 @@ at the tiger's size, with 99.89% of 1.8 MB being background. Measurements and th
 work are in [`DECISIONS.md`](DECISIONS.md) §13. **Task 8 is now blocked on a client decision**, and the
 prior question is whether a fourth figure is wanted beside the tiger, the potter and the lantern at all.
 
+**Done 8 Aug: a welcome screen.** Client request — the lockup centred on cream, the flower making the
+header's same half turn, then a fade to the site, "quick enough that it doesn't come as too long of a
+break". Their rulings: **half turn, every page load.** It carries **no JavaScript at all**, and its base
+style is *hidden* so that a failed animation means no welcome rather than a wall; measured up from first
+paint and gone by ~2.3s, costing **+12 ms on the hero and zero bytes**. `scripts/check_welcome.mjs` checks
+it on four routes including scripting-off. Two defects it introduced along the way — an invisible wordmark
+and a hijacked contrast target — are in [`DECISIONS.md`](DECISIONS.md) §14.
+
 **Immediate next job:** task 10, whole-page verification — the last of Plan 5 that is not waiting on
 someone else.
 

@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-05T03:32:29.403Z",
-  "url": "http://localhost:3104/",
+  "measuredAt": "2026-08-07T21:49:47.401Z",
+  "url": "http://localhost:3100/",
   "viewports": {
     "320x800": {
       "top": {
@@ -85,7 +85,7 @@
         "scrollPaddingTop": "75px",
         "docScrollWidth": 320,
         "innerWidth": 320,
-        "scrollY": 2677
+        "scrollY": 2675
       },
       "wordmarkDarkestPixel": "#A97F5B",
       "bottom": {
@@ -128,7 +128,7 @@
         "scrollPaddingTop": "75px",
         "docScrollWidth": 320,
         "innerWidth": 320,
-        "scrollY": 16830
+        "scrollY": 17330
       },
       "anchor": {
         "sectionTop": 75,
@@ -218,7 +218,7 @@
         "scrollPaddingTop": "75px",
         "docScrollWidth": 390,
         "innerWidth": 390,
-        "scrollY": 2759
+        "scrollY": 2757
       },
       "wordmarkDarkestPixel": "#9B7F6C",
       "bottom": {
@@ -261,7 +261,7 @@
         "scrollPaddingTop": "75px",
         "docScrollWidth": 390,
         "innerWidth": 390,
-        "scrollY": 19609
+        "scrollY": 20110
       },
       "anchor": {
         "sectionTop": 75,
@@ -305,7 +305,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, -1.02187e-13, 1.02187e-13, 1, 0, 0)",
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 768,
         "innerWidth": 768,
@@ -351,7 +351,7 @@
         "scrollPaddingTop": "107px",
         "docScrollWidth": 768,
         "innerWidth": 768,
-        "scrollY": 3437
+        "scrollY": 3435
       },
       "wordmarkDarkestPixel": "#7F5C24",
       "bottom": {
@@ -394,7 +394,7 @@
         "scrollPaddingTop": "107px",
         "docScrollWidth": 768,
         "innerWidth": 768,
-        "scrollY": 19431
+        "scrollY": 20019
       },
       "anchor": {
         "sectionTop": 107,
@@ -484,7 +484,7 @@
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1440,
         "innerWidth": 1440,
-        "scrollY": 2346
+        "scrollY": 2345
       },
       "wordmarkDarkestPixel": "#7F5C24",
       "bottom": {
@@ -527,7 +527,7 @@
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1440,
         "innerWidth": 1440,
-        "scrollY": 14587
+        "scrollY": 15059
       },
       "anchor": {
         "sectionTop": 107,
@@ -571,7 +571,7 @@
             "height": 40
           }
         },
-        "emblemTransform": "matrix(1, -1.22091e-06, 1.22091e-06, 1, 0, 0)",
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1920,
         "innerWidth": 1920,
@@ -617,7 +617,7 @@
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1920,
         "innerWidth": 1920,
-        "scrollY": 2400
+        "scrollY": 2399
       },
       "wordmarkDarkestPixel": "#7F5C24",
       "bottom": {
@@ -660,7 +660,7 @@
         "scrollPaddingTop": "107px",
         "docScrollWidth": 1920,
         "innerWidth": 1920,
-        "scrollY": 15391
+        "scrollY": 15836
       },
       "anchor": {
         "sectionTop": 107,
@@ -669,7 +669,7 @@
     }
   },
   "emblem": {
-    "early": "matrix(0.192065, -0.981382, 0.981382, 0.192065, 0, 0)",
+    "early": "matrix(0.0718789, -0.997413, 0.997413, 0.0718789, 0, 0)",
     "late": "matrix(1, 0, 0, 1, 0, 0)"
   },
   "reducedMotion": {
@@ -756,7 +756,7 @@
       "scrollPaddingTop": "107px",
       "docScrollWidth": 1440,
       "innerWidth": 1440,
-      "scrollY": 2346
+      "scrollY": 2345
     }
   },
   "noJs": {
@@ -784,9 +784,9 @@
   },
   "midScrollReload": {
     "sawScrolled": true,
-    "scrolledAt": 284,
-    "scrollY": 2346,
-    "settledOnFrame": 2,
+    "scrolledAt": 305,
+    "scrollY": 2345,
+    "settledOnFrame": 1,
     "samples": [
       {
         "frame": 0,
@@ -796,7 +796,7 @@
       },
       {
         "frame": 1,
-        "t": 32,
+        "t": 30,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
@@ -808,343 +808,343 @@
       },
       {
         "frame": 3,
-        "t": 52,
+        "t": 49,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 4,
-        "t": 72,
+        "t": 60,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 5,
-        "t": 80,
+        "t": 77,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 6,
-        "t": 98,
+        "t": 94,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 7,
-        "t": 114,
+        "t": 111,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 8,
-        "t": 131,
+        "t": 127,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 9,
-        "t": 147,
+        "t": 144,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 10,
-        "t": 165,
+        "t": 160,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 11,
-        "t": 180,
+        "t": 177,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 12,
-        "t": 197,
+        "t": 194,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 13,
-        "t": 214,
+        "t": 211,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 14,
-        "t": 231,
+        "t": 228,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 15,
-        "t": 247,
+        "t": 244,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 16,
-        "t": 264,
+        "t": 260,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 17,
-        "t": 280,
+        "t": 278,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 18,
-        "t": 297,
+        "t": 294,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 19,
-        "t": 315,
+        "t": 311,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 20,
-        "t": 331,
+        "t": 328,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 21,
-        "t": 347,
+        "t": 344,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 22,
-        "t": 364,
+        "t": 360,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 23,
-        "t": 381,
+        "t": 377,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 24,
-        "t": 398,
+        "t": 394,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 25,
-        "t": 414,
+        "t": 410,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 26,
-        "t": 430,
+        "t": 428,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 27,
-        "t": 447,
+        "t": 444,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 28,
-        "t": 464,
+        "t": 461,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 29,
-        "t": 480,
+        "t": 476,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 30,
-        "t": 498,
+        "t": 493,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 31,
-        "t": 514,
+        "t": 511,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 32,
-        "t": 530,
+        "t": 527,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 33,
-        "t": 548,
+        "t": 544,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 34,
-        "t": 564,
+        "t": 561,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 35,
-        "t": 580,
+        "t": 578,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 36,
-        "t": 597,
+        "t": 594,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 37,
-        "t": 613,
+        "t": 611,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 38,
-        "t": 631,
+        "t": 627,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 39,
-        "t": 648,
+        "t": 645,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 40,
-        "t": 664,
+        "t": 660,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 41,
-        "t": 681,
+        "t": 677,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 42,
-        "t": 697,
+        "t": 693,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 43,
-        "t": 714,
+        "t": 710,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 44,
-        "t": 730,
+        "t": 728,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 45,
-        "t": 748,
+        "t": 744,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 46,
-        "t": 765,
+        "t": 761,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 47,
-        "t": 781,
+        "t": 777,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 48,
-        "t": 797,
+        "t": 808,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 49,
-        "t": 814,
+        "t": 817,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 50,
-        "t": 830,
+        "t": 839,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 51,
-        "t": 848,
+        "t": 861,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 52,
-        "t": 864,
+        "t": 883,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 53,
-        "t": 880,
+        "t": 904,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 54,
-        "t": 897,
+        "t": 926,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 55,
-        "t": 914,
+        "t": 949,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 56,
-        "t": 931,
+        "t": 972,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 57,
-        "t": 948,
+        "t": 994,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 58,
-        "t": 964,
+        "t": 1018,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       },
       {
         "frame": 59,
-        "t": 981,
+        "t": 1039,
         "background": "rgb(241, 233, 215)",
         "wordmark": "rgb(127, 92, 36)"
       }

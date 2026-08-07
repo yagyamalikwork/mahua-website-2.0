@@ -18,7 +18,7 @@ hand-drawn field-guide idiom.
 >    shipped instead as `scripts/check_films.mjs`, and task 8 was written before the client supplied
 >    butterfly films. **Task 8 is all that is left of the plan.** Two things on the page are in no plan at
 >    all — the films and the hanging lantern. Read
->    `docs/DECISIONS.md` §8–§12 alongside it or you will redo work that was expensive to learn.
+>    `docs/DECISIONS.md` §8–§14 alongside it or you will redo work that was expensive to learn.
 >    [`2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md) is complete, and its predecessor,
 >    [`2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md),
 >    is also complete and still describes the page's structure. Both override the original spec where they
@@ -34,12 +34,12 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | **Plan 5, the signature interactions — tasks 1–7 and 9 of 10 done, plus two things the plan never had.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — and **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§12 before touching the tiger, the films, the lantern, or where a figure sits in a chapter** — that ground was covered expensively. |
+| **Phase** | **Plan 5, the signature interactions — tasks 1–7 and 9 of 10 done, plus two things the plan never had.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — and **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§14 before touching the tiger, the films, the lantern, the welcome screen, or where a figure sits in a chapter** — that ground was covered expensively. |
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
-| **See it** | `npm run dev` → `/`. Twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. |
+| **See it** | `npm run dev` → `/`. A welcome screen, then twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. |
 | **Tests** | **276**, all green. `npm test` must stay green before any commit claiming completion. |
-| **Evidence** | `docs/reviews/2026-08-08-films/` (the two films), `2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
+| **Evidence** | `docs/reviews/2026-08-08-welcome/` (the welcome), `2026-08-08-films/` (the two films), `2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
 
@@ -334,6 +334,7 @@ node scripts/check_rule_in.mjs                   # the hairline under links: cov
 node scripts/check_leaf_cursor.mjs               # the leaf: follow, swing, gold, zero bytes on a phone, AND that its loop stops
 node scripts/check_lantern.mjs                   # the hanging lantern: where it hangs, that a push swings it, and that it stops
 node scripts/check_films.mjs                     # the two films: play once, hold, hover-replay, and the white ground gone (pixels)
+node scripts/check_welcome.mjs                   # the welcome screen: it welcomes, and it ALWAYS leaves — including with no JS
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
 node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples
