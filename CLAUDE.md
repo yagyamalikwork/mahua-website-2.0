@@ -6,7 +6,7 @@ throughout, in the layout language of [thesujanlife.com](https://thesujanlife.co
 hand-drawn field-guide idiom.
 
 > **Read these four, in order, before doing any work:**
-> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the twenty-five-instance defect
+> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the twenty-seven-instance defect
 >    pattern, and the things that look broken and are not.** §7–§14 are the expensive findings: the leaf's
 >    removability contract, why three hand-drawn tigers failed, film on cream, what a figure does to a
 >    chapter's density, the lantern, the films' rig, the butterfly's restart brief, and the welcome screen. Distilled from the per-task ledgers, which are
@@ -35,11 +35,11 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | **Plan 5, the signature interactions — COMPLETE (8 Aug 2026). Nine of ten tasks shipped, the butterfly parked by the client, and three things the plan never contained.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own**, and **a welcome screen carrying the client's own logo, its flower turning once, gone in 2.1s and carrying no JavaScript at all.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§14 before touching the tiger, the films, the lantern, the welcome screen, or where a figure sits in a chapter** — that ground was covered expensively. |
+| **Phase** | **Plan 6, the property pages — COMPLETE (9 Aug 2026), after a full review-and-correction round; Plan 5 complete before it (8 Aug), nine of ten tasks, the butterfly parked by the client, and three things that plan never contained.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own**, and **a welcome screen carrying the client's own logo, its flower turning once, gone in 2.1s and carrying no JavaScript at all.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§14 before touching the tiger, the films, the lantern, the welcome screen, or where a figure sits in a chapter** — that ground was covered expensively. |
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
-| **Scope** | The **home page is done**. **Individual property pages for Mahua Vann and Mahua Tola are the agreed next piece of work** (client, 8 Aug) — in the style of the current site's property pages and of thesujanlife.com's. Brainstorm before building: a property page has a different job from the home page. Booking restyle, Tripadvisor wiring, the SEO redirect map and CMS remain out of scope until asked. |
+| **Scope** | The **home page is done**, and **both property pages are live** — `/mahua-vann` and `/mahua-tola` (Plan 6, 8–9 Aug), each in two registers: the chapter idiom, then a field-notes register (rooms as full-width bands, getting-there, and a closing banner of the sister lodge). Shipped once on 8 Aug with failing evidence by a session that had silently dropped to a smaller model, then fully reviewed, corrected and re-verified on 9 Aug — the story is in `docs/reviews/2026-08-08-property-pages/README.md`, and §2 of DECISIONS.md gained instances 26–27 from it. Four small items await the client (Tola's room count, the cottage/suite caption, Tola's hero swap, a Nagpur distance). Booking restyle, Tripadvisor wiring, the SEO redirect map and CMS remain out of scope until asked. |
 | **See it** | `npm run dev` → `/`. A welcome screen, then twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. |
-| **Tests** | **280**, all green. `npm test` must stay green before any commit claiming completion. |
+| **Tests** | **316**, all green. `npm test` must stay green before any commit claiming completion. |
 | **Evidence** | `docs/reviews/2026-08-08-welcome/` (the welcome), `2026-08-08-films/` (the two films), `2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
@@ -278,7 +278,7 @@ rhythm rule. The sequence lives there, not in `app/page.tsx`, and `content/chapt
 | `reference/site-copy.md` | 3,036 words of the live site's copy, by page (Plan 3 Task 2) |
 | `docs/copy-provenance.md` | **Where every line came from**, and the eleven hard numbers awaiting the client |
 | `Mahua-property-logos/` | Client-supplied **vector** logos — real paths, not traced. Emblem is 340 paths / 439 groups, so petals and leaves already separate |
-| `public/media/` | 34 curated images at four widths each (400/640/960/1440), 17 of them `fullBleedSafe`. **Distinctness is guarded by perceptual hash** — four pairs turned out to be the same photograph under two ids on 4 Aug |
+| `public/media/` | 53 curated images (34 home + 19 property) at responsive widths up to 1440. **Distinctness is guarded by perceptual hash** — four pairs turned out to be the same photograph under two ids on 4 Aug, and the guard has since caught two more live-site files that were one photograph under two names |
 | `reference/video-stills/` | Frames harvested from the client's property video — the petal table, the bonfire, the hammocks. 1920px, so all three go full-bleed |
 | `reference/wp-media/` | ~56 images from the live site (30 MB) — crawl + media API |
 | `reference/mockup-media/` | 31 images extracted from the prior HTML mockups — **better curated than the live site's** |
@@ -342,7 +342,7 @@ node scripts/build_welcome_logo.mjs              # split the client's logo into 
 
 npm run build && npx next start -p 3100          # then, against the production build:
 node scripts/measure_page.mjs                    # transfer, hero responseEnd on Slow 4G, motion, overflow
-node scripts/check_contrast_over_photos.mjs      # worst-pixel contrast for type laid over a photograph
+node scripts/check_contrast_over_photos.mjs      # worst-pixel contrast for type over a photograph — route-aware; --url any of /, /mahua-vann, /mahua-tola
 node scripts/check_image_resolution.mjs          # is any photograph served below its own box
 node scripts/measure_density.mjs                 # empty space per chapter, against non-negotiable #8
 node scripts/check_entrances.mjs                 # did each entrance stage and settle, and did EVERY parallax move
@@ -354,6 +354,7 @@ node scripts/check_lantern.mjs                   # the hanging lantern: where it
 node scripts/check_films.mjs                     # the two films: play once, hold, hover-replay, and the white ground gone (pixels)
 node scripts/check_welcome.mjs                   # the welcome screen: it welcomes, and it ALWAYS leaves — including with no JS
 node scripts/capture_signature.mjs               # the 20 evidence frames: every signature scene, 4 widths, reduced motion, no JS
+node scripts/capture_property_pages.mjs          # full-page captures of /mahua-vann and /mahua-tola at the four review widths
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
 node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples

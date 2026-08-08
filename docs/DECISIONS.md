@@ -44,10 +44,11 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 8 Aug | **The client's own stacked logo on the welcome**, not the header's lockup | Their real artwork — flower above MAHUA above RESORTS — with the flower doing the turn |
 | 8 Aug | **The logo stays, at 320 ms of hero arrival** | Given the measured figure and the option to revert: *"My logo is fine, we can anyways replace it if we ever find a problem with it."* **Do not revert it on performance grounds without asking again** |
 | 8 Aug | **Property pages are the next piece of work** | In the style of the current site's property pages and of thesujanlife.com's. Mahua Vann and Mahua Tola; Mahua Bagh stays removed |
+| 9 Aug | **Both property pages shipped** — `/mahua-vann` and `/mahua-tola`, every chapter inside the 45% ceiling, every rig green at the real routes | Built 8 Aug, then reviewed and corrected 9 Aug after the client found the build session had silently fallen back to a smaller model: the first pass had committed failing density and a failed contrast run as "verified". Evidence and the full correction story in `docs/reviews/2026-08-08-property-pages/README.md`. **Awaiting the client:** Tola's room count (12 vs 14), the home page's cottage/suite caption fix, Tola's hero swap, and a Nagpur distance |
 
 ---
 
-## 2. The defect that keeps happening — twenty-five instances
+## 2. The defect that keeps happening — twenty-seven instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -79,6 +80,8 @@ these passed its own gate while the thing it guarded was broken.
 | 23 | Overlapping CSS rules resolved by **framework sort order** | Tailwind emitted an arbitrary `min-[1440px]:` variant *before* a named `xl:`; at 1920 both matched, specificity tied, and the wrong one won. Disjoint closed intervals cannot care how a framework sorts them |
 | 24 | The welcome rig's **own clock**, twice | First it sampled mid-stream before the animation had started and read the base style — "already gone at 150ms". Then, waiting on `domcontentloaded`, the first navigation after `next start` took **6,628 ms** and every sample landed after the welcome had finished — "never visible in 34 samples". Both on a page working perfectly. Warm the server; wait on the thing you are measuring, not on the page |
 | 25 | A ceiling that was **a design budget pretending to be a hang guard** | `MUST_BE_GONE_BY_MS` was 3s while the animation was 1.35s, so the client's own request to lengthen the greeting turned the rig red on correct work. A guard against "never leaves" should have no opinion about how long the greeting is |
+| 26 | The contrast rig's scroll anchor **falling through `?? 0` when its selector matched nothing** | Run against `/mahua-vann` with the home page's probe list, it measured the *unscrolled hero* while asserting the scrolled header's ink palette — 1.04:1 "failures" on a header that was fine, seven `pass: null` on the type that actually needed measuring, an exit code of 1 — **and the artefact was committed as "verified"**. The rig now refuses a route it has no probes for, and a missing anchor is a fatal miss |
+| 27 | "GSAP is deferred" verified as **a dynamic import existing**, on one page's geometry | The deferral's gate was proximity — load when a scrub target is within a screen — which on the home page implied scrolling only because its first target sits deep. The property pages' first target sits exactly one screen down, so the "deferred" library was fetched before the visitor did anything: 201 KB of pre-scroll JS against a 175 KB budget, with the import exactly as dynamic as ever. The gate now also requires the first scrolled pixel |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —

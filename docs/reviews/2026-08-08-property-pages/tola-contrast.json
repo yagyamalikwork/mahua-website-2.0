@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-08-08T23:09:08.556Z",
-  "url": "http://localhost:3100/mahua-vann",
+  "measuredAt": "2026-08-08T23:10:43.870Z",
+  "url": "http://localhost:3100/mahua-tola",
   "widths": {
     "390": [
       {
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.81,
+        "worst": 7.78,
         "brightest": [
-          52,
-          49,
-          33
+          66,
+          72,
+          64
         ],
         "boxes": 1,
         "pass": true
@@ -20,11 +20,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 11.09,
+        "worst": 6.78,
         "brightest": [
-          51,
-          47,
-          31
+          74,
+          81,
+          73
         ],
         "boxes": 1,
         "pass": true
@@ -46,11 +46,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 3.81,
+        "worst": 4.53,
         "brightest": [
-          136,
-          114,
-          77
+          104,
+          106,
+          100
         ],
         "boxes": 7,
         "pass": true
@@ -59,11 +59,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 4.66,
+        "worst": 4.84,
         "brightest": [
-          98,
-          105,
-          101
+          95,
+          103,
+          95
         ],
         "boxes": 1,
         "pass": true
@@ -72,11 +72,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.87,
+        "worst": 7.27,
         "brightest": [
-          62,
-          72,
-          65
+          67,
+          77,
+          71
         ],
         "boxes": 1,
         "pass": true
@@ -119,6 +119,19 @@
         ],
         "boxes": 1,
         "pass": true
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.37,
+        "brightest": [
+          91,
+          96,
+          80
+        ],
+        "boxes": 18,
+        "pass": true
       }
     ],
     "768": [
@@ -126,11 +139,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.59,
+        "worst": 7.72,
         "brightest": [
-          55,
-          50,
-          33
+          65,
+          73,
+          64
         ],
         "boxes": 1,
         "pass": true
@@ -139,11 +152,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.02,
+        "worst": 6.25,
         "brightest": [
-          62,
-          53,
-          32
+          80,
+          86,
+          78
         ],
         "boxes": 1,
         "pass": true
@@ -165,11 +178,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 6.52,
+        "worst": 5.52,
         "brightest": [
-          79,
-          83,
-          72
+          92,
+          93,
+          84
         ],
         "boxes": 7,
         "pass": true
@@ -178,11 +191,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.63,
+        "worst": 5.53,
         "brightest": [
-          73,
-          83,
-          75
+          87,
+          94,
+          86
         ],
         "boxes": 1,
         "pass": true
@@ -191,11 +204,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 9.43,
+        "worst": 8.77,
         "brightest": [
-          52,
-          60,
-          52
+          56,
+          65,
+          56
         ],
         "boxes": 1,
         "pass": true
@@ -237,6 +250,19 @@
           45
         ],
         "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.5,
+        "brightest": [
+          104,
+          91,
+          65
+        ],
+        "boxes": 18,
         "pass": true
       }
     ],
@@ -245,11 +271,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 11.83,
+        "worst": 7.81,
         "brightest": [
-          43,
-          43,
-          32
+          65,
+          72,
+          64
         ],
         "boxes": 1,
         "pass": true
@@ -258,11 +284,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.09,
+        "worst": 5.89,
         "brightest": [
-          60,
-          53,
-          32
+          83,
+          90,
+          82
         ],
         "boxes": 1,
         "pass": true
@@ -284,11 +310,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 3.57,
+        "worst": 4.2,
         "brightest": [
-          120,
-          123,
-          113
+          116,
+          110,
+          95
         ],
         "boxes": 7,
         "pass": true
@@ -297,11 +323,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.32,
+        "worst": 7.53,
         "brightest": [
-          61,
-          68,
-          59
+          69,
+          74,
+          65
         ],
         "boxes": 1,
         "pass": true
@@ -310,11 +336,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.32,
+        "worst": 10.3,
         "brightest": [
-          46,
+          47,
           54,
-          46
+          45
         ],
         "boxes": 1,
         "pass": true
@@ -357,6 +383,19 @@
         ],
         "boxes": 1,
         "pass": true
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.66,
+        "brightest": [
+          116,
+          122,
+          110
+        ],
+        "boxes": 18,
+        "pass": true
       }
     ],
     "1920": [
@@ -364,11 +403,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 9.52,
+        "worst": 7.21,
         "brightest": [
-          61,
-          58,
-          33
+          70,
+          77,
+          70
         ],
         "boxes": 1,
         "pass": true
@@ -377,11 +416,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 11.1,
+        "worst": 5.86,
         "brightest": [
-          47,
-          48,
-          33
+          84,
+          90,
+          83
         ],
         "boxes": 1,
         "pass": true
@@ -403,11 +442,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 4.15,
+        "worst": 4.84,
         "brightest": [
-          107,
-          113,
-          103
+          87,
+          106,
+          83
         ],
         "boxes": 7,
         "pass": true
@@ -416,11 +455,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.94,
+        "worst": 8.02,
         "brightest": [
-          64,
-          71,
-          62
+          69,
+          69,
+          58
         ],
         "boxes": 1,
         "pass": true
@@ -429,10 +468,10 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.45,
+        "worst": 10.1,
         "brightest": [
-          46,
-          53,
+          50,
+          55,
           45
         ],
         "boxes": 1,
@@ -475,6 +514,19 @@
           45
         ],
         "boxes": 1,
+        "pass": true
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.85,
+        "brightest": [
+          114,
+          118,
+          106
+        ],
+        "boxes": 18,
         "pass": true
       }
     ]

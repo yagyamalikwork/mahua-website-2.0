@@ -1,23 +1,34 @@
-# Project state — 8 August 2026
+# Project state — 9 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
 ## Where we are
 
-**Branch `feat/chapters-rebuild`.** **Plans 3, 4 and 5 are all complete.** The page opens with a welcome
-carrying the client's logo, runs twelve chapters, and carries five signature interactions — the sliding
-rule, the leaf cursor, two films and a hanging lantern — every one of them verified in a browser by a rig
-that has been watched failing first.
+**Branch `feat/chapters-rebuild`.** **Plans 3, 4, 5 and 6 are all complete.** The home page opens with a
+welcome carrying the client's logo, runs twelve chapters, and carries five signature interactions — the
+sliding rule, the leaf cursor, two films and a hanging lantern. **Both property pages are live**:
+`/mahua-vann` (six chapters) and `/mahua-tola` (seven, including the page's one full-bleed guest quote),
+each in two registers — the home page's chapter idiom, then a denser field-notes register for the rooms
+and getting-there — closing on a full-width photograph of the *other* lodge. The home page's lodge cards
+now link to them internally. Every page verified in a browser by rigs that have been watched failing first.
 
 **Nothing is half-built.** One task is parked at the client's request (the butterfly, §13 of
-[`DECISIONS.md`](DECISIONS.md)) and two decisions are theirs to make, listed at the foot of this document.
+[`DECISIONS.md`](DECISIONS.md)) and the client-decisions list at the foot of this document gained four
+small property-page items (see `docs/reviews/2026-08-08-property-pages/README.md`).
+
+**Plan 6 carries a warning worth keeping.** Its execution session silently fell back from the intended
+model after a mid-session interruption, shipped `/mahua-vann` with failing density evidence committed as
+"verified", and was caught by the client the same night. The 9 Aug review-and-correction pass that
+followed is written up in the evidence README; DECISIONS.md §2 gained instances 26 and 27 from it. **When
+resuming an interrupted session, check the model first.**
 
 | Plan | State |
 |---|---|
 | 3 · [The chapters rebuild](superpowers/plans/2026-08-03-rebuild-chapters-layout.md) | ✅ eight tasks. Day-arc retired, copy harvested, library 14 → 34, twelve chapters, motion primitives, copy, the page, and the verification pass |
 | 4 · [The scroll craft](superpowers/plans/2026-08-05-scroll-craft.md) | ✅ seven tasks, five fix rounds. Fixed header, CSS entrances, pinned collage, emblem turn, GSAP out of the critical path |
 | 5 · [The signature interactions](superpowers/plans/2026-08-05-signature-interactions.md) | ✅ **nine of ten tasks; the butterfly parked by the client.** Plus three things the plan never contained: the two films, the lantern and the welcome |
+| 6 · [The property pages](superpowers/plans/2026-08-08-property-pages.md) | ✅ twelve tasks, then a full review-and-correction round (9 Aug). Library 34 → 53 photographs; two new section components (`RoomsIndex` bands, `FieldNotes` with the sibling banner); a shared `PropertyPage` renderer; the contrast rig made route-aware; GSAP's loader gated on the first scrolled pixel |
 
 ### Where Plan 5 actually got to
 
