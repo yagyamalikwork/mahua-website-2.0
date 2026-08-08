@@ -860,9 +860,23 @@ function renderManifest(entries) {
 // silently deleted on the next run — it won't be in any entry's
 // `_allFilenames`. Keep any such file in a different directory under
 // public/.
+//
+// The assumption above is known false for exactly the four files below.
+// Filenames in OUT_DIR this cleanup pass must never remove, however the
+// current CURATION list computes `expectedFilenames`. These are checked in
+// outside this pipeline — client-supplied video, referenced by literal path
+// in components/signature/SignatureFilm.tsx rather than through MediaId/
+// media() — so they will never appear in any entry's `_allFilenames`.
+const NEVER_DELETE = new Set([
+  "tiger-film.mp4",
+  "tiger-film-poster.webp",
+  "potter-film.mp4",
+  "potter-film-poster.webp",
+]);
+
 async function cleanupStaleFiles(expectedFilenames) {
   const existing = await readdir(OUT_DIR);
-  const stale = existing.filter((f) => !expectedFilenames.has(f));
+  const stale = existing.filter((f) => !expectedFilenames.has(f) && !NEVER_DELETE.has(f));
   for (const f of stale) {
     await rm(path.join(OUT_DIR, f));
   }
