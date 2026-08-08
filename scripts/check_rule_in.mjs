@@ -241,11 +241,17 @@ const browser = await chromium.launch();
 
   const surfaces = [];
 
-  // Cream: the lodge link, which sits on paper in an ordinary chapter.
-  await page.$eval("a.rule-in--rest", (el) => el.scrollIntoView({ block: "center" }));
+  // Cream: a resting rule that sits on paper in an ordinary chapter. Matched
+  // by class alone, not `a.rule-in--rest`: on the home page the resting rule
+  // is on the lodge links' own `<a>`, but on the property pages it is on the
+  // label `<span>` inside the sibling banner's anchor (the anchor wraps a
+  // photograph too, and a full-banner-width resting hairline would be wrong).
+  // The measurement is the same either way — the rule's colour against the
+  // section behind it.
+  await page.$eval(".rule-in--rest", (el) => el.scrollIntoView({ block: "center" }));
   await page.waitForTimeout(400);
   surfaces.push(
-    await page.$eval("a.rule-in--rest", (el) => ({
+    await page.$eval(".rule-in--rest", (el) => ({
       where: "cream",
       rule: getComputedStyle(el, "::after").backgroundColor,
       behind: getComputedStyle(el.closest("section") ?? document.body).backgroundColor,

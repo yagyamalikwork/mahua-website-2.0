@@ -95,7 +95,7 @@ const ratio = (rgb, text = CREAM) => {
  * on a photograph and would fail loudly. Parked over a cream chapter they would
  * pass whether the bar was there or not, which is a check that cannot fail.
  */
-const RUNS = [
+const HOME_RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='chapter-menu']" },
   {
     name: "header · wordmark",
@@ -151,11 +151,77 @@ const RUNS = [
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },
 ];
 
+/**
+ * The property pages' shared probe set. Same header and hero runs as the home
+ * page's, retargeted at that page's own hero id — the selectors are the same
+ * because `Hero` and `SiteHeader` are the same components.
+ *
+ * `scrolledAt` should be a chapter where the scrolled header sits over a
+ * photograph, so a missing cream bar fails loudly (the home page's own rule
+ * above). Tola has one — the full-bleed guest quote. **Vann has no full-bleed
+ * chapter below its hero at all**, so its scrolled runs park over the rooms
+ * bands: they verify the scrolled palette against whatever is painted there,
+ * and a failed cream bar over cream would still pass. That weakness is
+ * structural to the page, not to the rig — noted rather than papered over.
+ */
+const propertyRuns = (heroId, scrolledAt) => [
+  { name: "header · menu", min: 4.5, at: `#${heroId}`, container: "header", sel: "[aria-controls='chapter-menu']" },
+  { name: "header · wordmark", min: 4.5, at: `#${heroId}`, container: "header", sel: '[data-contrast="brand-wordmark"]' },
+  {
+    name: "header · pill",
+    min: 4.5,
+    at: `#${heroId}`,
+    container: "header",
+    sel: "[data-contrast='header-pill'] a span",
+    text: OVERLAY,
+    hide: "color",
+  },
+  { name: "hero · headline", min: 3, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} h1 [data-word]` },
+  { name: "hero · sub", min: 4.5, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} > div > p` },
+  { name: "hero · scroll cue", min: 4.5, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} div.flex > span:nth-child(2)` },
+  { name: "header scrolled · menu", min: 4.5, at: scrolledAt, container: "header", sel: "[aria-controls='chapter-menu']", text: INK },
+  { name: "header scrolled · wordmark", min: 4.5, at: scrolledAt, container: "header", sel: '[data-contrast="brand-wordmark"]', text: BRAND },
+  {
+    name: "header scrolled · pill",
+    min: 4.5,
+    at: scrolledAt,
+    container: "header",
+    sel: "[data-contrast='header-pill'] a span",
+    text: OVERLAY,
+    hide: "color",
+  },
+];
+
+/**
+ * Which probe set a URL gets, by pathname. An unknown route is fatal, not a
+ * silent pass: the committed vann-contrast.json of 8 Aug 2026 was this script
+ * running the home page's probes against /mahua-vann — seven "not found"
+ * targets, an exit code of 1, and the artefact still landed in a commit that
+ * said "verified". A rig must refuse to measure a page it has no probes for.
+ */
+const RUN_SETS = {
+  "/": HOME_RUNS,
+  "/mahua-vann": propertyRuns("vann-hero", "#vann-rooms"),
+  "/mahua-tola": [
+    ...propertyRuns("tola-hero", "#tola-guest-word"),
+    { name: "quote · tola-guest-word", min: 3, at: "#tola-guest-word", container: "#tola-guest-word", sel: "#tola-guest-word [data-word]" },
+  ],
+};
+
 async function measure(page, run) {
-  await page.evaluate((sel) => {
+  // A missing scroll anchor is a missing target, full stop. Until 9 Aug 2026
+  // this fell through to `?? 0` and measured wherever the page already was —
+  // which is how the home page's "header scrolled" probes, run against
+  // /mahua-vann where `#why-you-came` does not exist, asserted the scrolled
+  // palette against the un-scrolled hero and reported 1.04:1 "failures" for
+  // a header that was actually fine.
+  const anchored = await page.evaluate((sel) => {
     const el = document.querySelector(sel);
-    window.scrollTo(0, (el?.getBoundingClientRect().top ?? 0) + window.scrollY);
+    if (!el) return false;
+    window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY);
+    return true;
   }, run.at);
+  if (!anchored) return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
   // Long enough for parallax and any reveal to have finished; the measurement is
   // of the settled frame, which is the one the visitor reads.
   await page.waitForTimeout(1500);
@@ -234,6 +300,17 @@ async function measure(page, run) {
 }
 
 async function main() {
+  const pathname = new globalThis.URL(URL).pathname.replace(/\/$/, "") || "/";
+  const RUNS = RUN_SETS[pathname];
+  if (!RUNS) {
+    console.error(
+      `FAILED: no probe set for "${pathname}". Add one to RUN_SETS — refusing to run another ` +
+        `page's probes and call the result evidence.`,
+    );
+    process.exitCode = 1;
+    return;
+  }
+
   const browser = await chromium.launch();
   const report = { measuredAt: new Date().toISOString(), url: URL, widths: {} };
   let failures = 0;
