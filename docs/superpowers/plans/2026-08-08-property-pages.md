@@ -1696,13 +1696,23 @@ export const TOLA_NAV = {
 
 - [ ] **Step 3: Write the tests**
 
-Same shape as `content/mahua-vann.test.ts` (Task 7 Step 3), importing `TOLA_CHAPTERS` in place of `VANN_CHAPTERS` and updating the "opens/closes" assertion's ids (`tola-hero`, `tola-field-notes`). Additionally guard the guest quote against drifting from its source — `FullBleedQuoteCopy` here is just `{ quote: string }`, with no name/source/year fields to check the way `content/home.test.ts`'s "attributes every guest quote" test does for `GuestQuote`, so the guard this test file can actually make is that the reused text stays byte-identical to the attributed original in `content/home.ts`, rather than silently diverging from the review it was verified under:
+Same shape as `content/mahua-vann.test.ts` (Task 7 Step 3), importing `TOLA_CHAPTERS` in place of `VANN_CHAPTERS` and updating the "opens/closes" assertion's ids (`tola-hero`, `tola-field-notes`). Additionally guard the guest quote against drifting from its source — `FullBleedQuoteCopy` here is just `{ quote: string }`, with no name/source/year fields to check the way `content/home.test.ts`'s "attributes every guest quote" test does for `GuestQuote`, so the guard this test file can actually make is that the reused text stays byte-identical to the attributed original in `content/home.ts`, rather than silently diverging from the review it was verified under. **Also add a cross-chapter duplicate-photograph test that `content/mahua-vann.test.ts` should have carried too** (Task 7's review flagged this as a gap in the plan's own brief, not something to repeat here) — mirrors `content/chapters.test.ts`'s "never shows the same photograph twice", scoped to `TOLA_CHAPTERS`:
 
 ```ts
 import { HOME } from "@/content/home";
 import { TOLA_COPY } from "./mahua-tola";
 
 // ...
+
+  it("never shows the same photograph twice", () => {
+    const seen = new Map<string, string>();
+    for (const c of TOLA_CHAPTERS) {
+      for (const id of c.media) {
+        expect(seen.get(id), `${id} appears in both "${seen.get(id)}" and "${c.id}"`).toBeUndefined();
+        seen.set(id, c.id);
+      }
+    }
+  });
 
   it("reuses its guest quote byte-identical to the attributed original in content/home.ts", () => {
     // FullBleedQuoteCopy carries only `quote` — there is nowhere on a
