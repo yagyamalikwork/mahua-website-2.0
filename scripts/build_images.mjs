@@ -366,6 +366,177 @@ const CURATION = [
     orientation: "landscape",
     fullBleedSafe: true,
   },
+
+  // ---- Property pages: Mahua Vann ----
+  {
+    id: "vann-hero",
+    src: "reference/wp-media/property-pages/JAS05303-HDR-scaled.jpg",
+    alt: "Mahua Vann's lodge grounds under the Pench forest canopy.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    id: "vann-room-deluxe",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Deluxe.jpg",
+    alt: "A Deluxe room at Mahua Vann, garden and jungle view.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  // No "vann-room-cottage" entry. lib/media.test.ts's perceptual-hash
+  // duplicate guard flagged it (distance 0/256) as byte-identical to
+  // "suite-tiger-painting", already curated for the home page from the same
+  // source file (reference/wp-media/Cottage-with-deck-2-scaled.jpg) — a true
+  // positive, not a false alarm. Per this task's brief: dropped rather than
+  // exempting the guard. Whichever task writes the Vann rooms copy should
+  // reference the existing "suite-tiger-painting" id directly.
+  {
+    id: "vann-safari",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Jungle-Safari.jpg",
+    alt: "An open safari vehicle on a morning game drive at Pench.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "vann-kohka-lake",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Kohka-Lake.jpg",
+    alt: "Kohka Lake near Mahua Vann, still water at the forest's edge.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "vann-potters-village",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Potters-Village.jpg",
+    alt: "A potter at work in Pachdhar, the village of Kumhar families beside Pench.",
+    category: "details",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "vann-dining",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Dining.jpg",
+    alt: "A table laid at Mahua Vann, seasonal dishes under the open sky.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "vann-bird-watching",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Bird-Watching.jpg",
+    alt: "Birdwatching in Mahua Vann's private eco park.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "vann-evening",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Wildlife-Documentaries.jpg",
+    alt: "An evening gathering at Mahua Vann after the day's safari.",
+    category: "lanternHour",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+
+  // ---- Property pages: Mahua Tola ----
+  {
+    id: "tola-hero",
+    src: "reference/wp-media/property-pages/TWD5337-scaled.jpg",
+    alt: "Mahua Tola's lodge grounds on the edge of Tadoba-Andhari Tiger Reserve.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    id: "tola-room-deluxe",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Deluxe-room.jpg",
+    alt: "A Deluxe room at Mahua Tola, forest view.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "tola-room-suite",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Suite-room.jpg",
+    alt: "A Suite room at Mahua Tola, forest view.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "tola-room-camping",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Camping-hut.jpg",
+    alt: "The camping hut at Mahua Tola, forest view.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "tola-tiger-safari",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Tiger-safari.jpg",
+    alt: "A tiger safari vehicle in Tadoba-Andhari Tiger Reserve.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "tola-river-walk",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_River-Walk.jpg",
+    alt: "The Hattinala river near Mahua Tola.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    id: "tola-experiences",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Experiences.jpg",
+    alt: "Guests exploring near Mahua Tola.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    // Corrected against Task 3's by-eye findings (9 Aug 2026): DSC00091 is the
+    // dining hall (wood-beamed, tables laid, wicker pendant lamps); DSC00044 —
+    // this id's src until this correction — is a lodge/pond exterior with no
+    // dining furniture at all. Do not revert to DSC00044 without re-viewing it.
+    id: "tola-dining",
+    src: "reference/wp-media/property-pages/DSC00091-scaled.jpg",
+    alt: "The dining hall at Mahua Tola, tables laid under wicker pendant lamps.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    // Corrected the same way: DSC00122 is an accommodation-block exterior at
+    // dusk with clean negative space for a text scrim — DSC00091 (this id's
+    // src until this correction) is the dining hall, wrong mood and no room
+    // for overlaid type without cropping across a laid table.
+    id: "tola-guest-word",
+    src: "reference/wp-media/property-pages/DSC00122-scaled.jpg",
+    alt: "An accommodation block at Mahua Tola, dusk light through the bamboo.",
+    category: "lanternHour",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    id: "tola-swimming",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Swimming.jpg",
+    alt: "The pool at Mahua Tola.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  // No "tola-evening" entry. Task 3 (9 Aug 2026) confirmed by perceptual hash
+  // (distance 0/256, lib/media.test.ts's own duplicate algorithm) that
+  // Mahua-Website-Images_Tadoba_Wildlife-documentaries.jpg is the identical
+  // photograph to Mahua-Website-Images_Pench_Wildlife-Documentaries.jpg
+  // (curated above as "vann-evening") — same people, same poses, same frame.
+  // Curating both under separate ids would fail that test. Vann keeps it;
+  // Tola's Experiences plateGrid runs on one plate instead of two (still
+  // valid — plateGrid's floor is 1, see content/mahua-tola.test.ts).
 ];
 
 /**
