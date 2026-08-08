@@ -39,11 +39,28 @@ import { HOME } from "@/content/home";
  * in the most prominent position on the page. It now opens `ChapterMenu`, which
  * lists the seven numbered chapters of `content/chapters.ts` and goes to them.
  */
-export function SiteHeader({ ctaHref }: { ctaHref: string }) {
+type HeaderChapter = {
+  readonly id: string;
+  readonly kind?: string;
+  readonly number?: string;
+  readonly label?: string;
+};
+
+export function SiteHeader({
+  ctaHref,
+  ctaLabel = HOME.nav.cta,
+  chapters = CHAPTERS,
+  nav = HOME.nav,
+}: {
+  ctaHref: string;
+  ctaLabel?: string;
+  chapters?: readonly HeaderChapter[];
+  nav?: { menu: string; menuTitle: string; menuClose: string; menuHint: string };
+}) {
   // Found by kind rather than by index. The hero is the chapter the bar is
   // transparent over, and "the first chapter" is a coincidence of the current
   // spine rather than a property of it.
-  const hero = CHAPTERS.find((chapter) => chapter.kind === "hero");
+  const hero = chapters.find((chapter) => chapter.kind === "hero");
   if (!hero) throw new Error("The page has no hero chapter for the header to watch.");
 
   return (
@@ -56,7 +73,7 @@ export function SiteHeader({ ctaHref }: { ctaHref: string }) {
        * `sm` up gets the roomier spacing back.
        */}
       <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
-        <ChapterMenu />
+        <ChapterMenu chapters={chapters} nav={nav} />
 
         <BrandMark className="justify-self-center" />
 
@@ -71,7 +88,7 @@ export function SiteHeader({ ctaHref }: { ctaHref: string }) {
          * is a child of this header and keeps its layout boxes while closed.
          */}
         <div data-contrast="header-pill" className="pointer-events-auto justify-self-end">
-          <PillButton href={ctaHref}>{HOME.nav.cta}</PillButton>
+          <PillButton href={ctaHref}>{ctaLabel}</PillButton>
         </div>
       </div>
     </StickyHeader>

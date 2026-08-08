@@ -53,14 +53,28 @@ import { HOME } from "@/content/home";
  * proposition. The links themselves are ordinary `href="#id"` anchors, so nothing
  * about the navigation depends on script once the panel is open.
  */
-export function ChapterMenu() {
+type MenuChapter = { readonly id: string; readonly number?: string; readonly label?: string };
+type MenuNav = {
+  readonly menu: string;
+  readonly menuTitle: string;
+  readonly menuClose: string;
+  readonly menuHint: string;
+};
+
+export function ChapterMenu({
+  chapters = CHAPTERS,
+  nav = HOME.nav,
+}: {
+  chapters?: readonly MenuChapter[];
+  nav?: MenuNav;
+}) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const scroll = useScrollControl();
 
-  const numbered = CHAPTERS.filter((c) => c.number && c.label);
+  const numbered = chapters.filter((c) => c.number && c.label);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -136,7 +150,7 @@ export function ChapterMenu() {
          */
         className="rule-in pointer-events-auto justify-self-start font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
       >
-        {HOME.nav.menu}
+        {nav.menu}
       </button>
 
       <div
@@ -144,7 +158,7 @@ export function ChapterMenu() {
         id="chapter-menu"
         role="dialog"
         aria-modal="true"
-        aria-label={HOME.nav.menuTitle}
+        aria-label={nav.menuTitle}
         inert={!open}
         className={`pointer-events-auto fixed inset-0 z-50 overflow-y-auto transition-opacity duration-500 ${
           open ? "visible opacity-100" : "invisible opacity-0"
@@ -154,7 +168,7 @@ export function ChapterMenu() {
         <div className="mx-auto flex min-h-full max-w-[1600px] flex-col px-6 py-5 md:px-12 md:py-8">
           <div className="flex items-center justify-between">
             <p className="font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] text-[color:var(--accent)] sm:text-xs sm:tracking-[0.28em]">
-              {HOME.nav.menuHint}
+              {nav.menuHint}
             </p>
             <button
               ref={closeRef}
@@ -162,12 +176,12 @@ export function ChapterMenu() {
               onClick={close}
               className="rule-in font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] text-[color:var(--bg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)] sm:text-xs sm:tracking-[0.28em] md:text-sm"
             >
-              {HOME.nav.menuClose}
+              {nav.menuClose}
             </button>
           </div>
 
           <nav
-            aria-label={HOME.nav.menuTitle}
+            aria-label={nav.menuTitle}
             className="flex flex-1 flex-col justify-center py-12 short:py-6"
           >
             <ol>
