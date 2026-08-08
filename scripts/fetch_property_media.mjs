@@ -30,6 +30,7 @@
 // other.
 
 import { mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -61,12 +62,28 @@ const FILES = [
   "DSC00091-scaled.jpg",
   "DSC00097-scaled.jpg",
   "DSC00122-scaled.jpg",
+  // Second sweep (9 Aug 2026): every uploads/*.jpg the two crawled property
+  // pages reference that neither the first fetch list nor the home page's own
+  // CURATION already holds. Deliberately skipped from the same sweep:
+  // Pench_Conference / Pench_Karaoke / _Indoor-and-Outdoor-Games (off-brand
+  // for a page selling quiet), the location-map JPGs (spec D8 parks maps),
+  // press logos, and Homepage_Pench / DSC00063 (bytes already curated by the
+  // home page — a second id would trip the perceptual-hash duplicate guard).
+  "JAS05372-HDR-scaled.jpg",
+  "JAS05502-HDR-scaled.jpg",
+  "Mahua-Website-Images_Pench_Experiences.jpg",
+  "DSC09703-scaled.jpg",
+  "Mahua-Website-Images_Homepage_Tadoba-1.jpg",
 ];
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   for (const file of FILES) {
     const dest = path.join(OUT_DIR, file);
+    if (existsSync(dest)) {
+      console.log(`${file} — already fetched, skipped`);
+      continue;
+    }
     const res = await fetch(BASE + file);
     if (!res.ok) {
       console.error(`FAILED ${res.status} ${file} — this file may need a different path or is no longer live.`);

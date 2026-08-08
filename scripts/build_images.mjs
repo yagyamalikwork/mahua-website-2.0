@@ -369,9 +369,12 @@ const CURATION = [
 
   // ---- Property pages: Mahua Vann ----
   {
+    // Viewed 9 Aug 2026: this is the lodge's entrance court — ochre walls,
+    // brass pots, a bowl of petals at the dining-hall doors. Not "grounds
+    // under the forest canopy", which is what the alt claimed until then.
     id: "vann-hero",
     src: "reference/wp-media/property-pages/JAS05303-HDR-scaled.jpg",
-    alt: "Mahua Vann's lodge grounds under the Pench forest canopy.",
+    alt: "The entrance court at Mahua Vann — brass pots, lanterns, and a bowl of petals at the dining-hall doors.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: true,
@@ -408,9 +411,12 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    // Viewed 9 Aug 2026: finished pots — terracotta and blackened clay —
+    // laid out in the sun. No potter and no wheel in the frame, whatever
+    // the filename suggests.
     id: "vann-potters-village",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Potters-Village.jpg",
-    alt: "A potter at work in Pachdhar, the village of Kumhar families beside Pench.",
+    alt: "Terracotta and blackened clay pots drying in the sun at Pachdhar, the potters' village near Pench.",
     category: "details",
     orientation: "landscape",
     fullBleedSafe: false,
@@ -432,22 +438,95 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    // Viewed 9 Aug 2026: guests in safari chairs watching an open-air
+    // wildlife documentary in the lit courtyard — elephants on the screen.
+    // The earlier alt ("an evening gathering") undersold what the lodge
+    // actually offers here; the filename had it right all along.
     id: "vann-evening",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Wildlife-Documentaries.jpg",
-    alt: "An evening gathering at Mahua Vann after the day's safari.",
+    alt: "An open-air wildlife documentary in Mahua Vann's courtyard after dinner.",
     category: "lanternHour",
     orientation: "landscape",
     fullBleedSafe: false,
   },
-
-  // ---- Property pages: Mahua Tola ----
   {
-    id: "tola-hero",
-    src: "reference/wp-media/property-pages/TWD5337-scaled.jpg",
-    alt: "Mahua Tola's lodge grounds on the edge of Tadoba-Andhari Tiger Reserve.",
+    // The live Vann page's own "Experiences" banner — a tiger among the sal
+    // trunks, head turned to the road. 1163x508, so far below the 1400px
+    // full-bleed floor: a plate, never a backdrop.
+    id: "vann-tiger",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Experiences.jpg",
+    alt: "A tiger pausing between sal trunks in Pench.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    // Second sweep, 9 Aug 2026 — the pool under the trees at golden hour,
+    // from the same JAS shoot as the hero. Vann's page carried no pool at
+    // all until this landed; Tola's page had one from the start.
+    id: "vann-pool",
+    src: "reference/wp-media/property-pages/JAS05502-HDR-scaled.jpg",
+    alt: "Mahua Vann's pool under the trees, late-afternoon sun through the canopy.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: true,
+  },
+
+  // ---- Property pages: Mahua Tola ----
+  {
+    // Repointed 9 Aug 2026, by eye. TWD5337 — this id's src until then — is a
+    // candlelit dinner for two beside the pool at night: a beautiful frame
+    // that contradicted both the hero's own headline ("Tadoba, raw and close
+    // to the gate") and the alt text describing lodge grounds. DSC00044 is
+    // the lodge seen across its lily pond at dusk — the arrival the headline
+    // actually promises. TWD5337 now closes /mahua-vann as its "Looking for
+    // Tadoba instead?" banner, under the id "tola-candlelit-dinner".
+    id: "tola-hero",
+    src: "reference/wp-media/property-pages/DSC00044-scaled.jpg",
+    alt: "Mahua Tola across its lily pond at dusk, the lodge lit under the trees.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    // TWD5337, the frame that was briefly Tola's hero (see "tola-hero"
+    // above). It closes /mahua-vann as the sibling banner — the invitation
+    // to Tadoba — where its subject and its caption finally agree. It was
+    // briefly a second dining plate on /mahua-tola instead, and measurement
+    // ended that: two half-width plates carry less imagery than the one
+    // full-width dining-hall plate they replaced (18.1% -> 49.8% empty).
+    id: "tola-candlelit-dinner",
+    src: "reference/wp-media/property-pages/TWD5337-scaled.jpg",
+    alt: "A candlelit dinner for two laid beside Mahua Tola's pool at night.",
+    category: "lanternHour",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    // A guest by the bonfire at night — the live Tola page's Bonfire
+    // experience, portrait. 1707px wide clears the full-bleed floor on
+    // paper, but the page's full-bleed pattern is landscape-only (see
+    // scripts/fetch_property_media.mjs); kept false so nobody reaches for
+    // it as a backdrop without looking at it first.
+    id: "tola-bonfire",
+    src: "reference/wp-media/property-pages/DSC00097-scaled.jpg",
+    alt: "A guest warming her hands over the bonfire at Mahua Tola.",
+    category: "lanternHour",
+    orientation: "portrait",
+    fullBleedSafe: false,
+  },
+  {
+    // The live Tola page's own Family Suite tab image (data-image on the
+    // rooms tabs, cross-referenced 9 Aug 2026) — white walls, terracotta
+    // beams, a Gond painting over the bed. The spec's claim that the Family
+    // Suite had no photograph anywhere in the harvest was wrong; the mapping
+    // was sitting in the same data-image attributes the first fetch read.
+    id: "tola-room-family",
+    src: "reference/wp-media/property-pages/DSC09703-scaled.jpg",
+    alt: "The Family Suite at Mahua Tola — terracotta beams and a Gond painting over the bed.",
+    category: "lodgeLife",
+    orientation: "portrait",
+    fullBleedSafe: false,
   },
   {
     id: "tola-room-deluxe",
@@ -474,9 +553,11 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    // Viewed 9 Aug 2026: three tigers at rest on grass in the shade — no
+    // vehicle anywhere in the frame, whatever the filename suggests.
     id: "tola-tiger-safari",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Tiger-safari.jpg",
-    alt: "A tiger safari vehicle in Tadoba-Andhari Tiger Reserve.",
+    alt: "Three tigers at rest in the shade at Tadoba-Andhari Tiger Reserve.",
     category: "forest",
     orientation: "landscape",
     fullBleedSafe: false,
@@ -490,9 +571,12 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    // Viewed 9 Aug 2026: two rope hammocks slung between trees at the
+    // lodge — there are no guests in the frame, so the alt does not
+    // invent any.
     id: "tola-experiences",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Experiences.jpg",
-    alt: "Guests exploring near Mahua Tola.",
+    alt: "Rope hammocks slung between the trees at Mahua Tola.",
     category: "forest",
     orientation: "landscape",
     fullBleedSafe: false,
