@@ -3,12 +3,12 @@ import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Plate } from "@/components/ui/Plate";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
-import type { Chapter } from "@/content/chapters";
+import type { ChapterLike } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type PlateCopy, type TwoTone } from "@/content/home";
 import { media } from "@/lib/media";
 import { ENTER } from "@/lib/motion";
 
-type PlateGridCopy = {
+export type PlateGridCopy = {
   readonly heading: TwoTone;
   readonly intro: string;
   readonly plates: readonly PlateCopy[];
@@ -115,9 +115,17 @@ export function plateFrame(
  * `ChapterIntro`'s centred header: the page shows these two layouts alternately
  * and they must not blur into each other.
  */
-export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surface?: boolean }) {
-  const copy = chapterCopy(chapter.id as ChapterCopyKey) as PlateGridCopy;
-  const { plates } = copy;
+export function PlateGrid({
+  chapter,
+  copy,
+  surface = false,
+}: {
+  chapter: ChapterLike;
+  copy?: PlateGridCopy;
+  surface?: boolean;
+}) {
+  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as PlateGridCopy);
+  const { plates } = resolvedCopy;
 
   const orientations = plates.map((p) => media(p.mediaId).orientation);
   const landscapes = orientations.filter((o) => o === "landscape").length;
@@ -144,7 +152,7 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
               {chapter.number && chapter.label && (
                 <ChapterMark number={chapter.number} label={chapter.label} />
               )}
-              <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[16ch]" />
+              <TwoToneHeading heading={resolvedCopy.heading} className="mt-6 max-w-[16ch]" />
             </div>
           </Enter>
           <Enter delay={ENTER.stagger}>
@@ -152,7 +160,7 @@ export function PlateGrid({ chapter, surface = false }: { chapter: Chapter; surf
               className="max-w-[58ch] font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.72] md:text-lg"
               style={{ color: "var(--dim)" }}
             >
-              {copy.intro}
+              {resolvedCopy.intro}
             </p>
           </Enter>
         </div>

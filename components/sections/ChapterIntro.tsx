@@ -5,11 +5,11 @@ import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
-import type { Chapter } from "@/content/chapters";
+import type { ChapterLike } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey, type TwoTone } from "@/content/home";
 import { DURATION } from "@/lib/motion";
 
-type IntroCopy = {
+export type ChapterIntroCopy = {
   readonly heading: TwoTone;
   readonly body: readonly string[];
 };
@@ -88,12 +88,14 @@ export const BOXES = {
  */
 export function ChapterIntro({
   chapter,
+  copy,
   mirrored = false,
   surface = false,
   footer,
   hanging,
 }: {
-  chapter: Chapter;
+  chapter: ChapterLike;
+  copy?: ChapterIntroCopy;
   mirrored?: boolean;
   surface?: boolean;
   /**
@@ -121,7 +123,7 @@ export function ChapterIntro({
    */
   footer?: React.ReactNode;
 }) {
-  const copy = chapterCopy(chapter.id as ChapterCopyKey) as IntroCopy;
+  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as ChapterIntroCopy);
   const [solo, pairTop, pairLower] = chapter.media;
 
   const soloColumn = mirrored ? "lg:col-start-3" : "lg:col-start-1";
@@ -192,7 +194,7 @@ export function ChapterIntro({
                   <ChapterMark number={chapter.number} label={chapter.label} align="centre" />
                 )}
                 <TwoToneHeading
-                  heading={copy.heading}
+                  heading={resolvedCopy.heading}
                   align="centre"
                   className="mt-6 max-w-[18ch]"
                 />
@@ -205,7 +207,7 @@ export function ChapterIntro({
             </Enter>
 
             <div className="mx-auto mt-8 max-w-[56ch] space-y-5">
-              {copy.body.map((paragraph, i) => (
+              {resolvedCopy.body.map((paragraph, i) => (
                 <Enter key={i} delay={DURATION.stagger * i}>
                   <p
                     className={`font-[family-name:var(--font-body)] leading-[1.72] ${

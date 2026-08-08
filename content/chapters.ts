@@ -46,6 +46,23 @@ export type Chapter = {
 };
 
 /**
+ * The shape a chapter *section component* actually reads — id, its optional
+ * number/label, and the photographs it carries. Every one of `Hero`,
+ * `ChapterIntro`, `PlateGrid` and `FullBleedQuote` types its `chapter` prop
+ * against this rather than the full `Chapter`, because none of them reads
+ * `kind` — and `content/property-chapters.ts`'s `PropertyChapter` has a
+ * different, non-overlapping `kind` union, so it could never satisfy `Chapter`
+ * itself. Both `Chapter` and `PropertyChapter` satisfy `ChapterLike`
+ * structurally, with no import relationship needed between the two files.
+ */
+export type ChapterLike = {
+  id: string;
+  number?: string;
+  label?: string;
+  media: readonly MediaId[];
+};
+
+/**
  * The kinds that count as carrying a screen on their photography.
  *
  * Deliberately conservative: `lodgeCards` and `splitFeature` both show

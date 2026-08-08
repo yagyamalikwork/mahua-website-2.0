@@ -1,10 +1,10 @@
 import { SplitLines } from "@/components/motion/SplitLines";
 import { FullBleed } from "@/components/ui/FullBleed";
 import { Scrim, type ScrimStrength } from "@/components/ui/Scrim";
-import type { Chapter } from "@/content/chapters";
+import type { ChapterLike } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey } from "@/content/home";
 
-type QuoteCopy = { readonly quote: string };
+export type FullBleedQuoteCopy = { readonly quote: string };
 
 /**
  * A photograph filling the viewport with one line laid *on* it — the reference's
@@ -28,12 +28,14 @@ type QuoteCopy = { readonly quote: string };
  */
 export function FullBleedQuote({
   chapter,
+  copy,
   scrim,
 }: {
-  chapter: Chapter;
+  chapter: ChapterLike;
+  copy?: FullBleedQuoteCopy;
   scrim: ScrimStrength;
 }) {
-  const copy = chapterCopy(chapter.id as ChapterCopyKey) as QuoteCopy;
+  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as FullBleedQuoteCopy);
 
   return (
     <section
@@ -53,7 +55,7 @@ export function FullBleedQuote({
         slow
         className="max-w-[22ch] text-center font-[family-name:var(--font-display)] text-[clamp(1.9rem,4.6vw,3.9rem)] font-light leading-[1.16] tracking-[-0.01em] text-[color:var(--bg)] short:text-[clamp(1.5rem,3.6vw,2.4rem)]"
       >
-        {copy.quote}
+        {resolvedCopy.quote}
       </SplitLines>
     </section>
   );

@@ -3,11 +3,11 @@ import { ImageReveal } from "@/components/motion/ImageReveal";
 import { SplitLines } from "@/components/motion/SplitLines";
 import { Photo, servedSizes } from "@/components/ui/Photo";
 import { Scrim } from "@/components/ui/Scrim";
-import type { Chapter } from "@/content/chapters";
+import type { ChapterLike } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey } from "@/content/home";
 import { media } from "@/lib/media";
 
-type HeroCopy = {
+export type HeroCopy = {
   readonly headline: string;
   readonly sub: string;
   readonly scrollCue: string;
@@ -45,11 +45,11 @@ export const HERO_BOX = { viewportHeightVh: 100 } as const;
  * reads warmer over a dusk photograph than pure white does. Its contrast against
  * the scrim is measured in `docs/reviews/2026-08-04-task-7/`.
  */
-export function Hero({ chapter }: { chapter: Chapter }) {
+export function Hero({ chapter, copy }: { chapter: ChapterLike; copy?: HeroCopy }) {
   // One documented narrowing per section: `Chapter.id` is widened to `string` on
   // the exported type, and nothing in the type system ties a `kind` to the shape
   // of the copy that kind renders. `content/home.test.ts` guards the join itself.
-  const copy = chapterCopy(chapter.id as ChapterCopyKey) as HeroCopy;
+  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as HeroCopy);
   const heroImage = media(chapter.media[0]);
 
   // `react-dom`'s `preload`, not a `<link>` in the JSX. A hand-written
@@ -116,11 +116,11 @@ export function Hero({ chapter }: { chapter: Chapter }) {
           as="h1"
           className="max-w-[15ch] font-[family-name:var(--font-display)] text-[clamp(2.6rem,6.6vw,5.75rem)] font-light leading-[1.02] tracking-[-0.015em] text-[color:var(--bg)] short:text-[clamp(2rem,5vw,3.25rem)]"
         >
-          {copy.headline}
+          {resolvedCopy.headline}
         </SplitLines>
 
         <p className="mt-6 max-w-[46ch] font-[family-name:var(--font-body)] text-lg leading-relaxed text-[color:var(--bg)] opacity-90 md:text-xl short:mt-3 short:text-base">
-          {copy.sub}
+          {resolvedCopy.sub}
         </p>
 
         <div className="mt-10 flex items-center gap-4 short:mt-5">
@@ -130,7 +130,7 @@ export function Hero({ chapter }: { chapter: Chapter }) {
             style={{ backgroundColor: "var(--accent)" }}
           />
           <span className="font-[family-name:var(--font-label)] text-[0.65rem] uppercase tracking-[0.3em] text-[color:var(--bg)] opacity-85 md:text-xs">
-            {copy.scrollCue}
+            {resolvedCopy.scrollCue}
           </span>
         </div>
       </div>
