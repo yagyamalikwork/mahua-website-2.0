@@ -25,6 +25,13 @@ export type PlateGridCopy = {
  * `px-6` / `md:px-12`) and this grid's `gap-x-8` / `lg:gap-x-10`, rounded up.
  */
 export const PLATE_SIZES: Record<number, string> = {
+  // A one-plate grid never splits into columns at any width (there is only
+  // ever one `grid-cols-1` cell), so this is the container's own width, full
+  // stop — no `50vw` tier, because there is no breakpoint at which this plate
+  // shares its row. 1504px is `ChapterSurface`'s 1600px cap minus its
+  // `md:px-12` gutter; the two narrower tiers are that same container's own
+  // width below the 1600px cap and below `md`'s 768px, respectively.
+  1: "(min-width: 1600px) 1504px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)",
   2: "(min-width: 1600px) 736px, (min-width: 640px) 50vw, calc(100vw - 48px)",
   3: "(min-width: 1600px) 480px, (min-width: 1024px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
   // 4-up runs a tighter gutter than the other two (see `COLUMN_GAP`), so its
@@ -129,18 +136,31 @@ export function PlateGrid({
 
   const orientations = plates.map((p) => media(p.mediaId).orientation);
   const landscapes = orientations.filter((o) => o === "landscape").length;
-  const columns = landscapes > plates.length / 2 ? 2 : plates.length;
+  // A single landscape plate still passed `landscapes > plates.length / 2`
+  // (1 > 0.5), which reserved two columns for one photograph and left the
+  // second sitting empty — measured on Mahua Vann's one-plate `vann-dining`
+  // at 78% empty screen (docs/reviews/2026-08-08-property-pages/). Every
+  // other caller already has `plates.length >= columns`, because the "else"
+  // branch below sets `columns` to `plates.length` itself; one plate is the
+  // only count the "if" branch's fixed `2` could ever exceed.
+  const columns = plates.length === 1 ? 1 : landscapes > plates.length / 2 ? 2 : plates.length;
   const frame = plateFrame(orientations);
 
+  // `columns === 1` adds no breakpoint override at all: the grid's own base
+  // class is already `grid-cols-1`, and a real column split at `sm`/`lg`/`xl`
+  // for a single plate would reopen the same empty-cell bug the `columns`
+  // clamp above exists to close.
   const columnClass =
-    columns === 2
-      ? "sm:grid-cols-2"
-      : columns === 3
-        ? "sm:grid-cols-2 lg:grid-cols-3"
-        : "sm:grid-cols-2 xl:grid-cols-4";
+    columns === 1
+      ? ""
+      : columns === 2
+        ? "sm:grid-cols-2"
+        : columns === 3
+          ? "sm:grid-cols-2 lg:grid-cols-3"
+          : "sm:grid-cols-2 xl:grid-cols-4";
 
-  // A chapter with one plate, or five, would fall through to the two-column
-  // rule, which is the widest of the three and therefore the safe miss.
+  // A chapter with five plates would fall through to the four-column rule,
+  // the widest of the four and therefore the safe miss.
   const plateSizes = PLATE_SIZES[columns] ?? PLATE_SIZES[2];
 
   return (

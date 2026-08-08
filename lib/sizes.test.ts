@@ -8,6 +8,7 @@ import {
 } from "@/components/sections/ChapterIntro";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
+import { ROOMS_BOX, SIZES as ROOMS_SIZES } from "@/components/sections/RoomsIndex";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
   BOXES as TESTIMONIAL_BOXES,
@@ -165,6 +166,13 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: TESTIMONIAL_SIZES[k],
     box: TESTIMONIAL_BOXES[k] as CoverBox,
   })),
+  // The property pages' rooms grid — two-column and three-column layouts,
+  // each a distinct `sizes` string, both drawn at the same 4:3 crop.
+  ...Object.entries(ROOMS_SIZES).map(([k, v]) => ({
+    name: `RoomsIndex.${k}-up`,
+    sizes: v,
+    box: ROOMS_BOX,
+  })),
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -187,7 +195,20 @@ describe("the sizes the page actually serves", () => {
     // 18 since 7 Aug 2026: `HangingLantern`, the lantern hung out of `after-dark`
     // into `06 · The Lantern Hour`. 20 since 8 Aug: the welcome screen's two
     // halves of the client's stacked logo, the flower and the wordmark.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(20);
+    // Still 20 as of 9 Aug for the same reason: `RoomsIndex` (the property
+    // pages' rooms grid) adds two more slots below but reuses `PlateGrid`'s
+    // 2-up and 3-up strings verbatim — same grid, same column widths — so it
+    // is two more rows and no new distinct string, the same shape as
+    // `PinnedCollage` reusing `ChapterIntro`'s three strings above.
+    // 21 since the same day: fixing the one-plate `vann-dining` chapter's
+    // forced-two-column layout (a real bug — `landscapes > plates.length / 2`
+    // reserved a second, empty column for a single landscape plate, measured
+    // at 78% empty in `docs/reviews/2026-08-08-property-pages/vann-density.json`)
+    // gave `PlateGrid` a genuine one-up variant, `PLATE_SIZES[1]`, which is a
+    // real new string: unlike every 2/3/4-up entry it carries no `50vw`
+    // tier, because a one-column grid never shares its row with another
+    // plate at any width.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

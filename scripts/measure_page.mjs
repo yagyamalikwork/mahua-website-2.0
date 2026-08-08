@@ -18,7 +18,7 @@
 //   npm run build && npx next start -p 3100 &
 //   node scripts/measure_page.mjs --out docs/reviews/2026-08-04-task-7/verification.json
 //
-// Flags: --url, --out, --port.
+// Flags: --url, --out, --port, --hero.
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -50,8 +50,18 @@ const SLOW_4G = {
 };
 const CPU_THROTTLE = 4;
 
-/** The hero photograph — the one the visitor is actually waiting for. */
-const HERO = "reception-path-dusk";
+/**
+ * The hero photograph — the one the visitor is actually waiting for.
+ *
+ * A flag, not a bare constant: this rig was written for the home page and its
+ * one hero file, and a hardcoded id silently reports `hero: null` on any other
+ * route — which is exactly what happened pointing it at `/mahua-vann` (its
+ * hero is `vann-hero-*`, not `reception-path-dusk-*`) on 9 Aug 2026. Nothing
+ * failed loudly; the field most of this file's own comment is about simply
+ * came back empty. Defaults to the home page's hero so every existing command
+ * and committed report stays reproducible unchanged.
+ */
+const HERO = flag("hero", "reception-path-dusk");
 
 const LCP_PROBE = `
   window.__lcp = null;

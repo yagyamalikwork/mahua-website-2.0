@@ -1,0 +1,422 @@
+{
+  "measuredAt": "2026-08-08T20:52:41.797Z",
+  "url": "http://localhost:3100/mahua-vann",
+  "viewport": "1440x900",
+  "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
+  "imagery": {
+    "distinctImages": 13,
+    "imgElements": 14,
+    "documentHeightPx": 5232,
+    "screensOfScroll": 5.8,
+    "imagesPerScreen": 2.24,
+    "ids": [
+      {
+        "id": "vann-hero",
+        "instances": 1,
+        "area": 1296000
+      },
+      {
+        "id": "vann-dining",
+        "instances": 1,
+        "area": 788991
+      },
+      {
+        "id": "vann-safari",
+        "instances": 1,
+        "area": 449004
+      },
+      {
+        "id": "vann-potters-village",
+        "instances": 1,
+        "area": 292157
+      },
+      {
+        "id": "vann-kohka-lake",
+        "instances": 1,
+        "area": 210677
+      },
+      {
+        "id": "vann-bird-watching",
+        "instances": 1,
+        "area": 185423
+      },
+      {
+        "id": "vann-evening",
+        "instances": 1,
+        "area": 185423
+      },
+      {
+        "id": "suite-tiger-painting",
+        "instances": 2,
+        "area": 136535
+      },
+      {
+        "id": "vann-room-deluxe",
+        "instances": 1,
+        "area": 136523
+      },
+      {
+        "id": "welcome-flower",
+        "instances": 1,
+        "area": 26044
+      },
+      {
+        "id": "welcome-wordmark",
+        "instances": 1,
+        "area": 23612
+      },
+      {
+        "id": "emblem",
+        "instances": 1,
+        "area": 1764
+      },
+      {
+        "id": "leaf",
+        "instances": 1,
+        "area": 728
+      }
+    ]
+  },
+  "page": {
+    "screens": 30,
+    "meanEmptyPercent": 45.8,
+    "medianEmptyPercent": 51.7,
+    "bestEmptyPercent": 0.4,
+    "worstEmptyPercent": 79.5,
+    "worstAt": 4332,
+    "overBudget": 16,
+    "meanImagePercent": 46.4,
+    "meanTypePercent": 7.8
+  },
+  "chapters": [
+    {
+      "id": "vann-hero",
+      "heightPx": 900,
+      "screensTall": 1,
+      "wholeScreensAvailable": true,
+      "screens": 1,
+      "meanEmptyPercent": 0.4,
+      "medianEmptyPercent": 0.4,
+      "bestEmptyPercent": 0.4,
+      "worstEmptyPercent": 0.4,
+      "worstAt": 0,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-place",
+      "heightPx": 1167,
+      "screensTall": 1.3,
+      "wholeScreensAvailable": true,
+      "screens": 2,
+      "meanEmptyPercent": 35.7,
+      "medianEmptyPercent": 35.7,
+      "bestEmptyPercent": 35.6,
+      "worstEmptyPercent": 35.7,
+      "worstAt": 1050,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-dining",
+      "heightPx": 994,
+      "screensTall": 1.1,
+      "wholeScreensAvailable": true,
+      "screens": 1,
+      "meanEmptyPercent": 32.9,
+      "medianEmptyPercent": 32.9,
+      "bestEmptyPercent": 32.9,
+      "worstEmptyPercent": 32.9,
+      "worstAt": 2100,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-experiences",
+      "heightPx": 715,
+      "screensTall": 0.79,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 64.4,
+      "medianEmptyPercent": 64.4,
+      "bestEmptyPercent": 64.4,
+      "worstEmptyPercent": 64.4,
+      "worstAt": 3000,
+      "overBudget": 1,
+      "passesMean": false,
+      "passesWorst": false
+    },
+    {
+      "id": "vann-rooms",
+      "heightPx": 943,
+      "screensTall": 1.05,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 60.3,
+      "medianEmptyPercent": 60.3,
+      "bestEmptyPercent": 60.3,
+      "worstEmptyPercent": 60.3,
+      "worstAt": 3750,
+      "overBudget": 1,
+      "passesMean": false,
+      "passesWorst": false
+    },
+    {
+      "id": "vann-field-notes",
+      "heightPx": 515,
+      "screensTall": 0.57,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 79.5,
+      "medianEmptyPercent": 79.5,
+      "bestEmptyPercent": 79.5,
+      "worstEmptyPercent": 79.5,
+      "worstAt": 4332,
+      "overBudget": 1,
+      "passesMean": false,
+      "passesWorst": false
+    }
+  ],
+  "emptiestScreens": [
+    {
+      "at": 4332,
+      "empty": 79.5,
+      "spans": "vann-rooms / vann-field-notes"
+    },
+    {
+      "at": 4200,
+      "empty": 66.7,
+      "spans": "vann-rooms / vann-field-notes"
+    },
+    {
+      "at": 3000,
+      "empty": 64.4,
+      "spans": "vann-dining / vann-experiences / vann-rooms"
+    },
+    {
+      "at": 3300,
+      "empty": 61.9,
+      "spans": "vann-experiences / vann-rooms"
+    },
+    {
+      "at": 3150,
+      "empty": 61.6,
+      "spans": "vann-experiences / vann-rooms"
+    }
+  ],
+  "screens": [
+    {
+      "at": 0,
+      "occupied": 99.6,
+      "empty": 0.4,
+      "imagePercent": 89.5,
+      "typePercent": 10.1
+    },
+    {
+      "at": 150,
+      "occupied": 89.4,
+      "empty": 10.6,
+      "imagePercent": 79.3,
+      "typePercent": 10.1
+    },
+    {
+      "at": 300,
+      "occupied": 82.9,
+      "empty": 17.1,
+      "imagePercent": 72.6,
+      "typePercent": 10.3
+    },
+    {
+      "at": 450,
+      "occupied": 79,
+      "empty": 21,
+      "imagePercent": 66.1,
+      "typePercent": 12.9
+    },
+    {
+      "at": 600,
+      "occupied": 73.9,
+      "empty": 26.1,
+      "imagePercent": 64.1,
+      "typePercent": 9.8
+    },
+    {
+      "at": 750,
+      "occupied": 69.8,
+      "empty": 30.2,
+      "imagePercent": 61.4,
+      "typePercent": 8.4
+    },
+    {
+      "at": 900,
+      "occupied": 64.4,
+      "empty": 35.6,
+      "imagePercent": 54.5,
+      "typePercent": 9.9
+    },
+    {
+      "at": 1050,
+      "occupied": 64.3,
+      "empty": 35.7,
+      "imagePercent": 54.4,
+      "typePercent": 9.9
+    },
+    {
+      "at": 1200,
+      "occupied": 54.6,
+      "empty": 45.4,
+      "imagePercent": 45.5,
+      "typePercent": 9.1
+    },
+    {
+      "at": 1350,
+      "occupied": 45.4,
+      "empty": 54.6,
+      "imagePercent": 35.5,
+      "typePercent": 9.9
+    },
+    {
+      "at": 1500,
+      "occupied": 39.7,
+      "empty": 60.3,
+      "imagePercent": 30.6,
+      "typePercent": 9.1
+    },
+    {
+      "at": 1650,
+      "occupied": 43.2,
+      "empty": 56.8,
+      "imagePercent": 36.2,
+      "typePercent": 7
+    },
+    {
+      "at": 1800,
+      "occupied": 48.3,
+      "empty": 51.7,
+      "imagePercent": 42.7,
+      "typePercent": 5.6
+    },
+    {
+      "at": 1950,
+      "occupied": 58.9,
+      "empty": 41.1,
+      "imagePercent": 53.3,
+      "typePercent": 5.6
+    },
+    {
+      "at": 2100,
+      "occupied": 67.1,
+      "empty": 32.9,
+      "imagePercent": 61.1,
+      "typePercent": 6
+    },
+    {
+      "at": 2250,
+      "occupied": 64,
+      "empty": 36,
+      "imagePercent": 61.1,
+      "typePercent": 2.9
+    },
+    {
+      "at": 2400,
+      "occupied": 60.6,
+      "empty": 39.4,
+      "imagePercent": 55.2,
+      "typePercent": 5.4
+    },
+    {
+      "at": 2550,
+      "occupied": 58.1,
+      "empty": 41.9,
+      "imagePercent": 52.7,
+      "typePercent": 5.4
+    },
+    {
+      "at": 2700,
+      "occupied": 56.4,
+      "empty": 43.6,
+      "imagePercent": 50.8,
+      "typePercent": 5.6
+    },
+    {
+      "at": 2850,
+      "occupied": 43.2,
+      "empty": 56.8,
+      "imagePercent": 36.7,
+      "typePercent": 6.5
+    },
+    {
+      "at": 3000,
+      "occupied": 35.6,
+      "empty": 64.4,
+      "imagePercent": 28.9,
+      "typePercent": 6.7
+    },
+    {
+      "at": 3150,
+      "occupied": 38.4,
+      "empty": 61.6,
+      "imagePercent": 28.9,
+      "typePercent": 9.5
+    },
+    {
+      "at": 3300,
+      "occupied": 38.1,
+      "empty": 61.9,
+      "imagePercent": 30.7,
+      "typePercent": 7.4
+    },
+    {
+      "at": 3450,
+      "occupied": 39.7,
+      "empty": 60.3,
+      "imagePercent": 32.3,
+      "typePercent": 7.4
+    },
+    {
+      "at": 3600,
+      "occupied": 40.2,
+      "empty": 59.8,
+      "imagePercent": 33.2,
+      "typePercent": 7
+    },
+    {
+      "at": 3750,
+      "occupied": 39.7,
+      "empty": 60.3,
+      "imagePercent": 31.6,
+      "typePercent": 8.1
+    },
+    {
+      "at": 3900,
+      "occupied": 38.9,
+      "empty": 61.1,
+      "imagePercent": 31.6,
+      "typePercent": 7.3
+    },
+    {
+      "at": 4050,
+      "occupied": 38.6,
+      "empty": 61.4,
+      "imagePercent": 31.6,
+      "typePercent": 7
+    },
+    {
+      "at": 4200,
+      "occupied": 33.3,
+      "empty": 66.7,
+      "imagePercent": 26.6,
+      "typePercent": 6.7
+    },
+    {
+      "at": 4332,
+      "occupied": 20.5,
+      "empty": 79.5,
+      "imagePercent": 13.5,
+      "typePercent": 7
+    }
+  ]
+}

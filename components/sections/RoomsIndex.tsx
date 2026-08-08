@@ -29,10 +29,18 @@ export type RoomsIndexCopy = {
   readonly rooms: readonly RoomEntryCopy[];
 };
 
-const SIZES: Record<number, string> = {
+/**
+ * Exported, like every other section's `SIZES`/`BOXES`, so `lib/sizes.test.ts`
+ * can import the live strings rather than a copy of them — see that file's
+ * `LIVE_SLOTS` for why the copy failed silently for two components before.
+ */
+export const SIZES: Record<number, string> = {
   2: "(min-width: 1600px) 736px, (min-width: 640px) 50vw, calc(100vw - 48px)",
   3: "(min-width: 1600px) 480px, (min-width: 1024px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
 };
+
+/** Every room photograph is drawn at 4:3, whichever column count applies. */
+export const ROOMS_BOX = 4 / 3;
 
 /**
  * The rooms index — the field notes register's first beat. A compact grid
@@ -48,7 +56,13 @@ export function RoomsIndex({
   copy: RoomsIndexCopy;
   surface?: boolean;
 }) {
-  const columns = copy.rooms.length >= 4 ? 3 : 2;
+  // >= 3, not >= 4: three rooms in a forced two-column grid leave the third
+  // alone in its own row, half the row's width sitting empty — measured on
+  // Mahua Vann's three-room `vann-rooms` at 71.6% empty on its worst screen
+  // (docs/reviews/2026-08-08-property-pages/). `lg:grid-cols-3` only, same as
+  // `PlateGrid`'s own three-up class below `sm:grid-cols-2` — the identical
+  // tablet-width tradeoff that pattern already accepts elsewhere on the page.
+  const columns = copy.rooms.length >= 3 ? 3 : 2;
   const sizes = SIZES[columns] ?? SIZES[2];
 
   return (
@@ -81,7 +95,7 @@ export function RoomsIndex({
                   <Photo
                     id={room.mediaId}
                     sizes={sizes}
-                    box={4 / 3}
+                    box={ROOMS_BOX}
                     pictureClassName="block h-full w-full"
                     className="h-full w-full object-cover"
                   />

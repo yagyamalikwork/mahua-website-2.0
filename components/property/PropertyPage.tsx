@@ -43,7 +43,13 @@ export function PropertyPage({
 }: {
   chapters: readonly PropertyChapter[];
   copy: PropertyPageCopy;
-  /** Per-chapter scrim for `fullBleedQuote` chapters — mirrors `QUOTE_SCRIM` in `app/page.tsx`. */
+  /**
+   * Per-chapter scrim, keyed by chapter id — mirrors `QUOTE_SCRIM` in
+   * `app/page.tsx`. Covers both `fullBleedQuote` chapters and the `hero`
+   * chapter: a hero photograph needs the same per-photograph tuning a
+   * quote's backdrop does, and an entry missing for either falls through to
+   * that section's own built-in default.
+   */
   scrim: Record<string, ScrimStrength>;
   bookHref: string;
   /**
@@ -76,7 +82,15 @@ export function PropertyPage({
 
           switch (chapter.kind) {
             case "hero":
-              return <Hero key={chapter.id} chapter={chapter} copy={copy.heroCopy} />;
+              // `scrim[chapter.id]` doubles as the hero's own scrim, not only
+              // `fullBleedQuote`'s: both are "a chapter id to a scrim
+              // strength", and a hero photograph needs exactly the same
+              // per-photograph tuning a quote's backdrop does. Undefined for
+              // a hero chapter with no entry falls through to `Hero`'s own
+              // `DEFAULT_SCRIM` — the home page's figure, unchanged.
+              return (
+                <Hero key={chapter.id} chapter={chapter} copy={copy.heroCopy} scrim={scrim[chapter.id]} />
+              );
             case "chapterIntro":
               return (
                 <ChapterIntro
