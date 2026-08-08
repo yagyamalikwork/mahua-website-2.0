@@ -1,6 +1,6 @@
 {
   "url": "http://localhost:3100/",
-  "measuredAt": "2026-08-06T21:50:19.009Z",
+  "measuredAt": "2026-08-08T09:08:59.951Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
@@ -57,7 +57,7 @@
     "headlineStagings": 11,
     "headlineSettlings": 11,
     "peakMaskCover": 1,
-    "peakWordOffset": 83.852,
+    "peakWordOffset": 83.816,
     "peakStagedAtOnce": 67,
     "afterScroll": {
       "staged": 0,
@@ -268,7 +268,7 @@
         "id": "field-days",
         "words": 190,
         "hidden": 0,
-        "photographs": 6,
+        "photographs": 7,
         "maskedOver": 0
       },
       {
@@ -289,7 +289,7 @@
         "id": "lantern-hour",
         "words": 106,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -371,7 +371,7 @@
     "headlineStagings": 11,
     "headlineSettlings": 11,
     "peakMaskCover": 1,
-    "peakWordOffset": 45.718,
+    "peakWordOffset": 45.697,
     "peakStagedAtOnce": 67,
     "afterScroll": {
       "staged": 0,
@@ -574,7 +574,7 @@
         "id": "rooted",
         "words": 144,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -588,7 +588,7 @@
         "id": "field-days",
         "words": 190,
         "hidden": 0,
-        "photographs": 6,
+        "photographs": 7,
         "maskedOver": 0
       },
       {
@@ -609,7 +609,7 @@
         "id": "lantern-hour",
         "words": 106,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -895,7 +895,7 @@
         "id": "rooted",
         "words": 144,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -909,7 +909,7 @@
         "id": "field-days",
         "words": 190,
         "hidden": 0,
-        "photographs": 6,
+        "photographs": 7,
         "maskedOver": 0
       },
       {
@@ -930,7 +930,7 @@
         "id": "lantern-hour",
         "words": 106,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -1067,49 +1067,49 @@
       {
         "label": "after-dark[0] lodge-facade-night-1440.avif",
         "section": "after-dark",
-        "layoutTop": 10551,
+        "layoutTop": 10552,
         "height": 1149,
         "scrubsBetween": [
-          9651,
-          11700
+          9652,
+          11701
         ],
         "at": [
-          10061,
-          11290
+          10062,
+          11291
         ],
-        "shift": 103,
-        "ofHeight": 0.09,
+        "shift": 104,
+        "ofHeight": 0.091,
         "unsampled": false
       },
       {
         "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
         "section": "lantern-hour",
-        "layoutTop": 11531,
+        "layoutTop": 11532,
         "height": 760,
         "scrubsBetween": [
-          10631,
-          12291
+          10632,
+          12292
         ],
         "at": [
-          10963,
-          11959
+          10964,
+          11960
         ],
-        "shift": 37,
-        "ofHeight": 0.049,
+        "shift": 36,
+        "ofHeight": 0.047,
         "unsampled": false
       },
       {
         "label": "lantern-hour[1] sound-healing-640.avif",
         "section": "lantern-hour",
-        "layoutTop": 11531,
+        "layoutTop": 11532,
         "height": 375,
         "scrubsBetween": [
-          10631,
-          11906
+          10632,
+          11907
         ],
         "at": [
-          10886,
-          11651
+          10887,
+          11652
         ],
         "shift": 22,
         "ofHeight": 0.059,
@@ -1128,8 +1128,8 @@
           11335,
           12237
         ],
-        "shift": 21,
-        "ofHeight": 0.035,
+        "shift": 22,
+        "ofHeight": 0.036,
         "unsampled": false
       },
       {
@@ -1169,14 +1169,14 @@
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 15058,
+        "layoutTop": 15059,
         "height": 1149,
         "scrubsBetween": [
-          14158,
-          16207
+          14159,
+          16208
         ],
         "at": [
-          14568,
+          14569,
           15059
         ],
         "shift": 41,
@@ -1756,7 +1756,7 @@
           "id": "rooted",
           "words": 144,
           "hidden": 0,
-          "photographs": 3,
+          "photographs": 4,
           "maskedOver": 0
         },
         {
@@ -1770,7 +1770,7 @@
           "id": "field-days",
           "words": 190,
           "hidden": 0,
-          "photographs": 6,
+          "photographs": 7,
           "maskedOver": 0
         },
         {
@@ -1791,7 +1791,7 @@
           "id": "lantern-hour",
           "words": 106,
           "hidden": 0,
-          "photographs": 3,
+          "photographs": 4,
           "maskedOver": 0
         },
         {
@@ -1846,7 +1846,7 @@
           "id": "rooted",
           "words": 144,
           "hidden": 0,
-          "photographs": 3,
+          "photographs": 4,
           "maskedOver": 0
         },
         {
@@ -1860,7 +1860,7 @@
           "id": "field-days",
           "words": 190,
           "hidden": 0,
-          "photographs": 6,
+          "photographs": 7,
           "maskedOver": 0
         },
         {
@@ -1881,7 +1881,7 @@
           "id": "lantern-hour",
           "words": 106,
           "hidden": 0,
-          "photographs": 3,
+          "photographs": 4,
           "maskedOver": 0
         },
         {

@@ -1,0 +1,37 @@
+{
+  "measuredAt": "2026-08-08T09:23:30.207Z",
+  "url": "http://localhost:3100/",
+  "widths": [
+    390,
+    768,
+    1440,
+    1920
+  ],
+  "scenes": [
+    "rooted",
+    "field-days",
+    "lantern-hour"
+  ],
+  "files": [
+    "w390-00-welcome.webp",
+    "w390-01-rooted.webp",
+    "w390-02-field-days.webp",
+    "w390-03-lantern-hour.webp",
+    "w768-00-welcome.webp",
+    "w768-01-rooted.webp",
+    "w768-02-field-days.webp",
+    "w768-03-lantern-hour.webp",
+    "w1440-00-welcome.webp",
+    "w1440-01-rooted.webp",
+    "w1440-02-field-days.webp",
+    "w1440-03-lantern-hour.webp",
+    "w1920-00-welcome.webp",
+    "w1920-01-rooted.webp",
+    "w1920-02-field-days.webp",
+    "w1920-03-lantern-hour.webp",
+    "reduced-motion-1440-top.webp",
+    "reduced-motion-1440-field-days.webp",
+    "no-js-1440-top.webp",
+    "no-js-1440-field-days.webp"
+  ]
+}

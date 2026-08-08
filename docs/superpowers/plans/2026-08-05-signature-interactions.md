@@ -4,10 +4,10 @@
 > superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for
 > tracking.
 
-> ## ⚠ Status, 7 Aug 2026 — read this before following any task below
+> ## ✅ Status, 8 Aug 2026 — the plan is closed. Read this before following any task below
 >
-> **Tasks 1–7 are done. Tasks 5–7 were then overtaken by events and their output is dormant. Tasks 8–10 are
-> open, and task 9 as written is obsolete.** This plan is kept for its reasoning, not as a set of
+> **Plan 5 is complete. Nine of its ten tasks shipped; task 8 is parked at the client's request, and
+> three things shipped that the plan never contained.** This plan is kept for its reasoning, not as a set of
 > instructions to follow literally. The record of what actually happened is
 > [`docs/DECISIONS.md`](../../DECISIONS.md) §7–§11 and [`docs/PROJECT-STATE.md`](../../PROJECT-STATE.md).
 >
@@ -22,9 +22,10 @@
 > | 7 · It lives, dozes, stirs | ⚠️ built, dormant with the component |
 > | — · **The two films** | ✅ **not in this plan.** A tiger closing `04 · Days in the Field`, a potter closing `02 · Rooted like the mahua`. Play once, hold the last frame, replay on a deliberate hover. `DECISIONS.md` §9 |
 > | — · **The hanging lantern** | ✅ **not in this plan.** Client request, 7 Aug. Hangs out of `after-dark` into `06 · The Lantern Hour` and swings when pushed. `check_lantern.mjs`, `DECISIONS.md` §11 |
-> | 8 · The butterfly | ⬜ **blocked on a client decision.** The two overlay films supplied 7 Aug cannot be used — chroma green, butterflies 1.9% of frame width. `DECISIONS.md` §13 |
+> | — · **The welcome screen** | ✅ **not in this plan.** Client request, 8 Aug. Their own logo on cream, flower turning, gone in 2.1s, and **no JavaScript at all**. `check_welcome.mjs`, `DECISIONS.md` §14 |
+> | 8 · The butterfly | ⏸ **parked by the client, 8 Aug.** The two overlay films supplied 7 Aug cannot be used — chroma green, butterflies 1.9% of frame width. `DECISIONS.md` §13 |
 > | 9 · The tiger's browser rig | ✅ **done as `scripts/check_films.mjs`, 8 Aug** — a rig for the two *films*, not for the SVG the task below describes. The task's own steps were not built and should not be. `DECISIONS.md` §12 |
-> | 10 · Whole-page verification | ⬜ open |
+> | 10 · Whole-page verification | ✅ done 8 Aug. Eleven rigs green, 20 evidence frames, [`docs/reviews/2026-08-05-signature/README.md`](../../reviews/2026-08-05-signature/README.md) |
 
 **Goal:** Ship the three signature interactions — a hairline that slides in under links, a mahua leaf that
 follows the pointer, and an ink tiger that draws itself and then dozes.

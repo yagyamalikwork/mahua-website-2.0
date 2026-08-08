@@ -348,9 +348,11 @@ though it costs nothing either way. `fetchPriority="low"` stays so they cannot o
 `check_welcome.mjs` asserts there are exactly two of them — a tripwire against somebody later pointing this
 at a full-resolution logo.
 
-**The client has the figure and chose the logo.** If they would rather have the 320 ms back, reverting is
-one component: `WelcomeScreen` returning to `<BrandMark />` on cream, which cost nothing because it borrows
-the header's flower and sets the name in live type.
+**The client was given the figure and kept the logo** — 8 Aug 2026: *"my logo is fine, we can anyways
+replace it if we ever find a problem with it."* Do not revert it on performance grounds without asking
+them again. If they ever do change their mind it is one component: `WelcomeScreen` returning to
+`<BrandMark />` on cream, which cost nothing because it borrows the header's flower and sets the name in
+live type.
 
 ### Three defects it introduced, none visible in the numbers
 

@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-08-07T09:39:27.939Z",
+  "measuredAt": "2026-08-08T09:20:13.957Z",
   "url": "http://localhost:3100/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
   "imagery": {
-    "distinctImages": 36,
-    "imgElements": 36,
+    "distinctImages": 38,
+    "imgElements": 38,
     "documentHeightPx": 15959,
     "screensOfScroll": 17.7,
-    "imagesPerScreen": 2.03,
+    "imagesPerScreen": 2.14,
     "ids": [
       {
         "id": "tiger-golden-grass",
@@ -179,6 +179,16 @@
         "id": "mahua-tola-suite",
         "instances": 1,
         "area": 55583
+      },
+      {
+        "id": "welcome-flower",
+        "instances": 1,
+        "area": 26044
+      },
+      {
+        "id": "welcome-wordmark",
+        "instances": 1,
+        "area": 23612
       },
       {
         "id": "emblem",

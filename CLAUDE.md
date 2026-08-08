@@ -12,12 +12,11 @@ hand-drawn field-guide idiom.
 > 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
 >    said, and what is still owed. **Start here for state.**
 > 2. [`docs/superpowers/plans/2026-08-05-signature-interactions.md`](docs/superpowers/plans/2026-08-05-signature-interactions.md)
->    — the current plan, **tasks 1–7 and 9 of 10 done**, and it now opens with a status table saying which of its
->    own tasks are still true. Its tiger half was overtaken by events: the client supplied film, so tasks
+>    — **complete**, and it opens with a status table saying which of its own tasks are still true. Its tiger half was overtaken by events: the client supplied film, so tasks
 >    5–7 are built but dormant, **task 9 was obsolete as written** (it measures an SVG inking itself) and
 >    shipped instead as `scripts/check_films.mjs`, and task 8 was written before the client supplied
->    butterfly films. **Task 8 is all that is left of the plan.** Two things on the page are in no plan at
->    all — the films and the hanging lantern. Read
+>    butterfly films, which cannot be used and which the client parked. **Three things on the page are in
+>    no plan at all** — the two films, the hanging lantern and the welcome screen. Read
 >    `docs/DECISIONS.md` §8–§14 alongside it or you will redo work that was expensive to learn.
 >    [`2026-08-05-scroll-craft.md`](docs/superpowers/plans/2026-08-05-scroll-craft.md) is complete, and its predecessor,
 >    [`2026-08-03-rebuild-chapters-layout.md`](docs/superpowers/plans/2026-08-03-rebuild-chapters-layout.md),
@@ -34,11 +33,11 @@ hand-drawn field-guide idiom.
 
 | | |
 |---|---|
-| **Phase** | **Plan 5, the signature interactions — tasks 1–7 and 9 of 10 done, plus two things the plan never had.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — and **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§14 before touching the tiger, the films, the lantern, the welcome screen, or where a figure sits in a chapter** — that ground was covered expensively. |
+| **Phase** | **Plan 5, the signature interactions — COMPLETE (8 Aug 2026). Nine of ten tasks shipped, the butterfly parked by the client, and three things the plan never contained.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own**, and **a welcome screen carrying the client's own logo, its flower turning once, gone in 2.1s and carrying no JavaScript at all.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§14 before touching the tiger, the films, the lantern, the welcome screen, or where a figure sits in a chapter** — that ground was covered expensively. |
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
 | **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
 | **See it** | `npm run dev` → `/`. A welcome screen, then twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. |
-| **Tests** | **276**, all green. `npm test` must stay green before any commit claiming completion. |
+| **Tests** | **280**, all green. `npm test` must stay green before any commit claiming completion. |
 | **Evidence** | `docs/reviews/2026-08-08-welcome/` (the welcome), `2026-08-08-films/` (the two films), `2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
@@ -322,12 +321,22 @@ did not start**: a stale `next start` on the port would otherwise be measured si
 JavaScript of a build that no longer exists. `-- --no-build` reuses `.next`; `-- --port N` moves it;
 anything else is passed to the rig (`--width 390`, `--max-untouched-kb`, `--out`).
 
+**Every piece of artwork on this page has a swap point, and it is always the same shape:** a source file
+under `reference/client-art/` or `Mahua-property-logos/`, a `build_*.mjs` that derives everything from the
+artwork's own ink rather than from hard-coded numbers, and a generated `lib/*-art.ts` the component reads.
+Replacing a drawing means dropping the new file over the source and re-running one script — `lib/leaf-art.ts`,
+`lib/lantern-art.ts` and `lib/welcome-logo.ts` all say so at the top, and each has a test that holds any
+replacement to the guarantees its component depends on. **Never hand-edit a generated module.**
+
 The browser measurements. **Every committed number in `docs/reviews/` comes from one of these** — they live
 in `scripts/` precisely so nobody has to trust a figure they cannot re-derive:
 
 ```bash
 node scripts/build_images.mjs                    # re-encode public/media + lib/media-manifest.ts
+node scripts/build_brand.mjs                     # the header's flower + lib/brand-emblem.ts
+node scripts/build_leaf.mjs                      # the cursor's leaf + lib/leaf-art.ts
 node scripts/build_lantern.mjs                   # cut the lantern's white ground to real alpha + lib/lantern-art.ts
+node scripts/build_welcome_logo.mjs              # split the client's logo into flower + wordmark, + lib/welcome-logo.ts
 
 npm run build && npx next start -p 3100          # then, against the production build:
 node scripts/measure_page.mjs                    # transfer, hero responseEnd on Slow 4G, motion, overflow
@@ -342,6 +351,7 @@ node scripts/check_leaf_cursor.mjs               # the leaf: follow, swing, gold
 node scripts/check_lantern.mjs                   # the hanging lantern: where it hangs, that a push swings it, and that it stops
 node scripts/check_films.mjs                     # the two films: play once, hold, hover-replay, and the white ground gone (pixels)
 node scripts/check_welcome.mjs                   # the welcome screen: it welcomes, and it ALWAYS leaves — including with no JS
+node scripts/capture_signature.mjs               # the 20 evidence frames: every signature scene, 4 widths, reduced motion, no JS
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
 node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples

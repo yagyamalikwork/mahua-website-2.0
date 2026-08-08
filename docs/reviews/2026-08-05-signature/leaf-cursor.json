@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-05T17:35:43.382Z",
+  "measuredAt": "2026-08-08T09:07:15.272Z",
   "url": "http://localhost:3100/",
   "cursor": {
     "sizePx": 28,
@@ -27,12 +27,12 @@
     "excessOverTravelPx": 12,
     "clampPx": 12,
     "restErrorPx": 0,
-    "maxSwingDeg": 25.1,
-    "restSwingDeg": 0.1
+    "maxSwingDeg": 24.75,
+    "restSwingDeg": 0.14
   },
   "loop": {
-    "baselineFramesPerSecond": 60,
-    "framesPerSecondAfterResting": 60
+    "baselineFramesPerSecond": 58,
+    "framesPerSecondAfterResting": 61
   },
   "warm": {
     "overProse": {
@@ -66,9 +66,9 @@
       "leaf-26.webp"
     ],
     "chunksOnlyOnDesktop": [
-      "3tw_m4oyoud09.js"
+      "150o7wjn1z5kq.js"
     ],
-    "savedKB": 1.2
+    "savedKB": 1.3
   },
   "failures": [],
   "verdict": "pass"

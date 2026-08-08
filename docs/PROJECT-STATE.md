@@ -1,18 +1,23 @@
-# Project state — 5 August 2026
+# Project state — 8 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
 ## Where we are
 
-**Branch `feat/chapters-rebuild`.** **Plans 3 and 4 are complete. Plan 5 is seven tasks of ten done** — the
-sliding rule, the leaf cursor and both films are on the page and verified.
+**Branch `feat/chapters-rebuild`.** **Plans 3, 4 and 5 are all complete.** The page opens with a welcome
+carrying the client's logo, runs twelve chapters, and carries five signature interactions — the sliding
+rule, the leaf cursor, two films and a hanging lantern — every one of them verified in a browser by a rig
+that has been watched failing first.
+
+**Nothing is half-built.** One task is parked at the client's request (the butterfly, §13 of
+[`DECISIONS.md`](DECISIONS.md)) and two decisions are theirs to make, listed at the foot of this document.
 
 | Plan | State |
 |---|---|
 | 3 · [The chapters rebuild](superpowers/plans/2026-08-03-rebuild-chapters-layout.md) | ✅ eight tasks. Day-arc retired, copy harvested, library 14 → 34, twelve chapters, motion primitives, copy, the page, and the verification pass |
 | 4 · [The scroll craft](superpowers/plans/2026-08-05-scroll-craft.md) | ✅ seven tasks, five fix rounds. Fixed header, CSS entrances, pinned collage, emblem turn, GSAP out of the critical path |
-| 5 · [The signature interactions](superpowers/plans/2026-08-05-signature-interactions.md) | 🟡 **tasks 1–7 done, 8–10 outstanding** |
+| 5 · [The signature interactions](superpowers/plans/2026-08-05-signature-interactions.md) | ✅ **nine of ten tasks; the butterfly parked by the client.** Plus three things the plan never contained: the two films, the lantern and the welcome |
 
 ### Where Plan 5 actually got to
 
@@ -29,9 +34,11 @@ events — read [`DECISIONS.md`](DECISIONS.md) §8 and §9 before touching any o
 | 6 · It inks itself in | ✅ built, now dormant with the component |
 | 7 · It lives, dozes, stirs | ✅ built, now dormant with the component |
 | — · The two films | ✅ **not in the plan.** Tiger closes `field-days`, potter closes `rooted`. `SignatureFilm` serves both |
-| 8 · The butterfly | ⬜ not started |
+| — · The hanging lantern | ✅ **not in the plan.** Client request 7 Aug. Hangs out of `after-dark` into `06 · The Lantern Hour`, swings when pushed, comes to rest on its own |
+| — · The welcome screen | ✅ **not in the plan.** Client request 8 Aug. Their own logo, flower turning, gone in 2.1s, **no JavaScript at all** |
+| 8 · The butterfly | ⏸ **parked by the client, 8 Aug.** Their overlay films cannot be used — chroma green, butterflies 1.9% of frame width. Restart notes and a re-render brief in [`DECISIONS.md`](DECISIONS.md) §13 |
 | 9 · The tiger rig | ✅ **rewritten for film**, 8 Aug. `scripts/check_films.mjs` — the plan's SVG-inking version was obsolete and was not built |
-| 10 · Verification + docs | ⬜ this document is part of it |
+| 10 · Verification + docs | ✅ done 8 Aug. Eleven rigs green, 20 evidence frames, [`reviews/2026-08-05-signature/README.md`](reviews/2026-08-05-signature/README.md) |
 
 **Done 7 Aug:** the potter is up against the copy. The client's note — "it still feels pretty disconnected
 from the section" — turned out to be about the *drift*, not the margin: the pinned photographs are still
@@ -81,12 +88,29 @@ including scripting-off.
 they are charged against the hero — see [`DECISIONS.md`](DECISIONS.md) §14 for what that costs and what was
 tried. Three instrument defects it exposed along the way are recorded there too.
 
-**Immediate next job:** task 10, whole-page verification — the last of Plan 5 that is not waiting on
-someone else.
+## What a Plan 6 inherits
 
-**Plan 5 starts from a clean base.** 222 tests, `tsc`/`build`/`lint` clean, ten asserting rigs in `scripts/`,
-nothing parked and nothing owed from Plan 4 beyond the deferred minors in
-[`DECISIONS.md`](DECISIONS.md) §6. The client tested the build on 5 Aug and it works.
+**A finished home page and a clean base.** 280 tests, `tsc` / `build` / `lint` / `verify:budget` all clean,
+and **fourteen asserting rigs** in `scripts/`, every one of which exits non-zero on failure and has been
+watched failing against a deliberately broken build. Nothing is half-built and nothing is owed from Plans 3
+or 4 beyond the deferred minors in [`DECISIONS.md`](DECISIONS.md) §6.
+
+**Two things are the client's to settle, and neither blocks anything:**
+
+1. **The hero photograph lands at 4,308 ms against a 2,500 ms budget.** Every engineering lever has been
+   measured and each remaining one is worth ~200 ms; the gap is ~1,808 ms. It needs a **smaller hero
+   photograph or a lighter first screen**, which is a design decision. §3.
+2. **Eleven hard numbers in the copy are unconfirmed** — room counts, acreage, drive times. The sharpest:
+   the live site lists twelve rooms for Mahua Tola while the brand record says fourteen.
+   [`copy-provenance.md`](copy-provenance.md).
+
+**And one is parked:** the butterfly, §13, with a re-render brief ready for an illustrator.
+
+**The most obvious next piece of work on the page itself** is the `field-days / rooms` join, the emptiest
+screen on the page at 73.4%. It is the join the tiger closes, and it has never had the treatment `rooted`'s
+join got on 7 Aug. Look there before looking at any chapter — §10.
+
+Out of scope until asked: other pages, the booking restyle, Tripadvisor wiring, the SEO redirect map, Sanity.
 
 **The current density figures**, measured 7 Aug with both films in place and the potter moved — every
 chapter inside non-negotiable #8's 45% ceiling:
@@ -96,7 +120,12 @@ chapter inside non-negotiable #8's 45% ceiling:
 | `rooted` | **39.7%** | 44.5% | potter 56px below the last paragraph; was 41.8% / **55.9%** before the move |
 | `field-days` | **44%** | 58% | tiger film at 300px |
 | `lantern-hour` | **36.4%** | 41% | lantern hung at 200px; was 37.9% / 41.7% |
-| page | **40.1%** | 73.4% | document 15,958px, 2.03 photographs per screen, 51.9% imagery |
+| page | **40.1%** | 73.4% | 2.03 photographs per screen, 51.9% imagery |
+
+Re-measured 8 Aug on the final build. **All twelve chapters are inside the 45% ceiling.** Plan 5 left the
+page ~0.6 points emptier on the mean than it found it — a figure standing in a chapter adds height as well
+as imagery — and `field-days` is the one that moved the wrong way, 41.6% → 43.9%, which is what the tiger
+costs it.
 
 `measure_density.mjs` could not see the lantern at all until it was fixed on 7 Aug — `elementsFromPoint`
 skips `pointer-events: none`. Any future ornament that hangs over copy has the same problem; the rig now

@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-04T17:21:14.959Z",
+  "measuredAt": "2026-08-08T09:13:26.819Z",
   "url": "http://localhost:3100/",
   "densityCap": 2,
   "results": [
     {
       "viewport": "390x844@1x",
-      "images": 34,
+      "images": 38,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -42,6 +42,27 @@
         }
       ],
       "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 110,
+          "drawnWidth": 110,
+          "needed": 110,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 190,
+          "drawnWidth": 190,
+          "needed": 190,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
         {
           "file": "/brand/emblem-80.webp",
           "cssWidth": 19,
@@ -92,7 +113,7 @@
           "ratio": 0.89
         },
         {
-          "file": "/media/potters-hands-400.avif",
+          "file": "/media/lantern-bridge-dusk-400.avif",
           "cssWidth": 366,
           "drawnWidth": 368,
           "needed": 368,
@@ -106,10 +127,10 @@
           "ratio": 1.09
         },
         {
-          "file": "/media/lantern-bridge-dusk-640.avif",
+          "file": "/media/potters-hands-640.avif",
           "cssWidth": 280,
-          "drawnWidth": 528,
-          "needed": 528,
+          "drawnWidth": 527,
+          "needed": 527,
           "ratio": 1.21
         },
         {
@@ -211,6 +232,13 @@
           "ratio": 0.89
         },
         {
+          "file": "/brand/lantern-200.webp",
+          "cssWidth": 128,
+          "drawnWidth": 128,
+          "needed": 128,
+          "ratio": 1.56
+        },
+        {
           "file": "/media/bonfire-circle-night-640.avif",
           "cssWidth": 366,
           "drawnWidth": 435,
@@ -284,7 +312,7 @@
     },
     {
       "viewport": "390x844@3x",
-      "images": 34,
+      "images": 38,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -315,14 +343,14 @@
           "ratio": 0.45
         },
         {
-          "file": "/media/potters-hands-700.avif",
-          "needed": 735,
-          "ratio": 0.95
-        },
-        {
           "file": "/media/forest-shrine-incense-700.avif",
           "needed": 732,
           "ratio": 0.96
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "needed": 1053,
+          "ratio": 0.66
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
@@ -351,6 +379,27 @@
         }
       ],
       "all": [
+        {
+          "file": "/brand/welcome-flower-486.webp",
+          "cssWidth": 110,
+          "drawnWidth": 110,
+          "needed": 220,
+          "ratio": 2.21
+        },
+        {
+          "file": "/brand/welcome-wordmark-840.webp",
+          "cssWidth": 190,
+          "drawnWidth": 190,
+          "needed": 380,
+          "ratio": 2.21
+        },
+        {
+          "file": "/brand/leaf-78.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 52,
+          "ratio": 1.5
+        },
         {
           "file": "/brand/emblem-120.webp",
           "cssWidth": 19,
@@ -401,11 +450,11 @@
           "ratio": 0.45
         },
         {
-          "file": "/media/potters-hands-700.avif",
+          "file": "/media/lantern-bridge-dusk-768.avif",
           "cssWidth": 366,
           "drawnWidth": 368,
           "needed": 735,
-          "ratio": 0.95
+          "ratio": 1.04
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
@@ -415,11 +464,11 @@
           "ratio": 0.96
         },
         {
-          "file": "/media/lantern-bridge-dusk-1200.avif",
+          "file": "/media/potters-hands-700.avif",
           "cssWidth": 280,
           "drawnWidth": 527,
           "needed": 1053,
-          "ratio": 1.14
+          "ratio": 0.66
         },
         {
           "file": "/media/tiger-pair-profile-768.avif",
@@ -520,6 +569,13 @@
           "ratio": 0.45
         },
         {
+          "file": "/brand/lantern-440.webp",
+          "cssWidth": 128,
+          "drawnWidth": 128,
+          "needed": 256,
+          "ratio": 1.72
+        },
+        {
           "file": "/media/bonfire-circle-night-960.avif",
           "cssWidth": 366,
           "drawnWidth": 435,
@@ -593,22 +649,22 @@
     },
     {
       "viewport": "768x1024@1x",
-      "images": 34,
+      "images": 38,
       "softestServed": {
-        "file": "/media/tiger-golden-grass-1440.avif",
-        "fileWidth": 1440,
-        "widestOffered": 1440,
+        "file": "/media/potters-hands-700.avif",
+        "fileWidth": 700,
+        "widestOffered": 700,
         "objectFit": "cover",
-        "cssWidth": 768,
-        "drawnWidth": 1963,
-        "needed": 1963,
-        "ratio": 0.73,
-        "ratioAtDeviceDensity": 0.73,
+        "cssWidth": 551,
+        "drawnWidth": 1035,
+        "needed": 1035,
+        "ratio": 0.68,
+        "ratioAtDeviceDensity": 0.68,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.73,
-        "median": 1.21,
+        "worst": 0.68,
+        "median": 1.18,
         "best": 1.9
       },
       "understatedSizes": [],
@@ -624,14 +680,14 @@
           "ratio": 0.73
         },
         {
-          "file": "/media/potters-hands-700.avif",
-          "needed": 722,
-          "ratio": 0.97
-        },
-        {
           "file": "/media/forest-shrine-incense-700.avif",
           "needed": 720,
           "ratio": 0.97
+        },
+        {
+          "file": "/media/potters-hands-700.avif",
+          "needed": 1035,
+          "ratio": 0.68
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
@@ -645,6 +701,27 @@
         }
       ],
       "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
         {
           "file": "/brand/emblem-80.webp",
           "cssWidth": 42,
@@ -695,11 +772,11 @@
           "ratio": 0.73
         },
         {
-          "file": "/media/potters-hands-700.avif",
+          "file": "/media/lantern-bridge-dusk-768.avif",
           "cssWidth": 720,
-          "drawnWidth": 722,
-          "needed": 722,
-          "ratio": 0.97
+          "drawnWidth": 720,
+          "needed": 720,
+          "ratio": 1.07
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
@@ -709,11 +786,11 @@
           "ratio": 0.97
         },
         {
-          "file": "/media/lantern-bridge-dusk-1200.avif",
+          "file": "/media/potters-hands-700.avif",
           "cssWidth": 551,
           "drawnWidth": 1035,
           "needed": 1035,
-          "ratio": 1.16
+          "ratio": 0.68
         },
         {
           "file": "/media/tiger-pair-profile-400.avif",
@@ -814,6 +891,13 @@
           "ratio": 0.74
         },
         {
+          "file": "/brand/lantern-200.webp",
+          "cssWidth": 168,
+          "drawnWidth": 168,
+          "needed": 168,
+          "ratio": 1.19
+        },
+        {
           "file": "/media/bonfire-circle-night-960.avif",
           "cssWidth": 720,
           "drawnWidth": 854,
@@ -887,21 +971,21 @@
     },
     {
       "viewport": "1440x900@1x",
-      "images": 34,
+      "images": 38,
       "softestServed": {
-        "file": "/media/potters-hands-700.avif",
-        "fileWidth": 700,
-        "widestOffered": 700,
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
         "objectFit": "cover",
-        "cssWidth": 591,
-        "drawnWidth": 1141,
-        "needed": 1141,
-        "ratio": 0.61,
-        "ratioAtDeviceDensity": 0.61,
+        "cssWidth": 1440,
+        "drawnWidth": 1726,
+        "needed": 1726,
+        "ratio": 0.83,
+        "ratioAtDeviceDensity": 0.83,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.61,
+        "worst": 0.83,
         "median": 1.18,
         "best": 1.9
       },
@@ -911,11 +995,6 @@
           "file": "/media/tiger-golden-grass-1440.avif",
           "needed": 1726,
           "ratio": 0.83
-        },
-        {
-          "file": "/media/potters-hands-700.avif",
-          "needed": 1141,
-          "ratio": 0.61
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
@@ -929,6 +1008,27 @@
         }
       ],
       "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
         {
           "file": "/brand/emblem-80.webp",
           "cssWidth": 42,
@@ -979,11 +1079,11 @@
           "ratio": 0.83
         },
         {
-          "file": "/media/potters-hands-700.avif",
+          "file": "/media/lantern-bridge-dusk-1200.avif",
           "cssWidth": 591,
-          "drawnWidth": 1141,
-          "needed": 1141,
-          "ratio": 0.61
+          "drawnWidth": 1110,
+          "needed": 1110,
+          "ratio": 1.08
         },
         {
           "file": "/media/forest-shrine-incense-640.avif",
@@ -993,11 +1093,11 @@
           "ratio": 1.14
         },
         {
-          "file": "/media/lantern-bridge-dusk-960.avif",
+          "file": "/media/potters-hands-700.avif",
           "cssWidth": 483,
-          "drawnWidth": 906,
-          "needed": 906,
-          "ratio": 1.06
+          "drawnWidth": 484,
+          "needed": 484,
+          "ratio": 1.45
         },
         {
           "file": "/media/tiger-pair-profile-640.avif",
@@ -1098,6 +1198,13 @@
           "ratio": 0.84
         },
         {
+          "file": "/brand/lantern-200.webp",
+          "cssWidth": 200,
+          "drawnWidth": 200,
+          "needed": 200,
+          "ratio": 1
+        },
+        {
           "file": "/media/bonfire-circle-night-1440.avif",
           "cssWidth": 591,
           "drawnWidth": 1352,
@@ -1171,22 +1278,22 @@
     },
     {
       "viewport": "1920x1080@1x",
-      "images": 34,
+      "images": 38,
       "softestServed": {
-        "file": "/media/potters-hands-700.avif",
-        "fileWidth": 700,
-        "widestOffered": 700,
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
         "objectFit": "cover",
-        "cssWidth": 704,
-        "drawnWidth": 1362,
-        "needed": 1362,
-        "ratio": 0.51,
-        "ratioAtDeviceDensity": 0.51,
+        "cssWidth": 1920,
+        "drawnWidth": 2070,
+        "needed": 2070,
+        "ratio": 0.7,
+        "ratioAtDeviceDensity": 0.7,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.51,
-        "median": 1.12,
+        "worst": 0.7,
+        "median": 1.06,
         "best": 1.9
       },
       "understatedSizes": [],
@@ -1202,9 +1309,9 @@
           "ratio": 0.7
         },
         {
-          "file": "/media/potters-hands-700.avif",
-          "needed": 1362,
-          "ratio": 0.51
+          "file": "/media/lantern-bridge-dusk-1300.avif",
+          "needed": 1323,
+          "ratio": 0.98
         },
         {
           "file": "/media/guide-sunrise-1000.avif",
@@ -1228,6 +1335,27 @@
         }
       ],
       "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
         {
           "file": "/brand/emblem-80.webp",
           "cssWidth": 42,
@@ -1278,11 +1406,11 @@
           "ratio": 0.7
         },
         {
-          "file": "/media/potters-hands-700.avif",
+          "file": "/media/lantern-bridge-dusk-1300.avif",
           "cssWidth": 704,
-          "drawnWidth": 1362,
-          "needed": 1362,
-          "ratio": 0.51
+          "drawnWidth": 1323,
+          "needed": 1323,
+          "ratio": 0.98
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
@@ -1292,11 +1420,11 @@
           "ratio": 1.05
         },
         {
-          "file": "/media/lantern-bridge-dusk-1300.avif",
+          "file": "/media/potters-hands-700.avif",
           "cssWidth": 573,
-          "drawnWidth": 1075,
-          "needed": 1075,
-          "ratio": 1.21
+          "drawnWidth": 574,
+          "needed": 574,
+          "ratio": 1.22
         },
         {
           "file": "/media/tiger-pair-profile-640.avif",
@@ -1395,6 +1523,13 @@
           "drawnWidth": 2067,
           "needed": 2067,
           "ratio": 0.7
+        },
+        {
+          "file": "/brand/lantern-200.webp",
+          "cssWidth": 200,
+          "drawnWidth": 200,
+          "needed": 200,
+          "ratio": 1
         },
         {
           "file": "/media/bonfire-circle-night-1440.avif",
