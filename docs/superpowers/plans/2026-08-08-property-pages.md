@@ -476,14 +476,13 @@ Add this block to the end of the `CURATION` array in `scripts/build_images.mjs`,
     orientation: "landscape",
     fullBleedSafe: false,
   },
-  {
-    id: "vann-room-cottage",
-    src: "reference/wp-media/Cottage-with-deck-2-scaled.jpg",
-    alt: "A cottage with a private deck over the seasonal river at Mahua Vann.",
-    category: "lodgeLife",
-    orientation: "landscape",
-    fullBleedSafe: true,
-  },
+  // No "vann-room-cottage" entry. Executed 9 Aug 2026: lib/media.test.ts's
+  // perceptual-hash duplicate guard correctly flagged this file
+  // (reference/wp-media/Cottage-with-deck-2-scaled.jpg) as byte-identical
+  // (distance 0/256) to the home page's existing "suite-tiger-painting",
+  // already curated from the same source. Dropped per this task's own
+  // resolution rule — a true positive, not exempted. Task 7's Vann rooms
+  // copy references "suite-tiger-painting" directly instead.
   {
     id: "vann-safari",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Jungle-Safari.jpg",
@@ -1165,9 +1164,13 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
     media: ["vann-bird-watching", "vann-evening"],
   },
   {
+    // "suite-tiger-painting", not a new "vann-room-cottage" id: Task 4 (9 Aug
+    // 2026) found the cottage-with-deck source file is byte-identical to this
+    // existing home-page entry and dropped the duplicate rather than curating
+    // it twice.
     id: "vann-rooms",
     kind: "roomsIndex",
-    media: ["vann-room-deluxe", "vann-room-cottage"],
+    media: ["vann-room-deluxe", "suite-tiger-painting"],
   },
   {
     id: "vann-field-notes",
@@ -1270,14 +1273,14 @@ export const VANN_COPY: PropertyPageCopy = {
           view: "Garden and jungle view",
         },
         {
-          mediaId: "vann-room-cottage",
+          mediaId: "suite-tiger-painting",
           name: "Cottage with Deck",
           size: "324 sq. ft.",
           bed: "King bed, private sit-out",
           view: "Jungle and seasonal river view",
         },
         {
-          mediaId: "vann-room-cottage",
+          mediaId: "suite-tiger-painting",
           name: "Cottage without Deck",
           size: "324 sq. ft.",
           bed: "King bed, private sit-out",
