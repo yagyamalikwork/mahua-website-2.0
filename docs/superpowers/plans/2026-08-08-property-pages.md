@@ -786,6 +786,7 @@ import { PillButton } from "@/components/ui/PillButton";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { TwoTone } from "@/content/home";
 import type { PropertyChapter } from "@/content/property-chapters";
+import { ENTER } from "@/lib/motion";
 
 export type FieldNotesCopy = {
   readonly heading: TwoTone;
@@ -850,7 +851,7 @@ export function FieldNotes({
           </div>
         </Enter>
 
-        <Enter delay={0.08}>
+        <Enter delay={ENTER.stagger}>
           <div className="flex flex-col items-start gap-6 lg:justify-center">
             <div className="flex flex-wrap items-center gap-4">
               <PillButton href={bookHref} size="large" external>
@@ -991,6 +992,7 @@ export function PropertyPage({
   copy,
   scrim,
   bookHref,
+  bookLabel,
   enquireHref,
   siblingHref,
   nav,
@@ -1000,6 +1002,16 @@ export function PropertyPage({
   /** Per-chapter scrim for `fullBleedQuote` chapters — mirrors `QUOTE_SCRIM` in `app/page.tsx`. */
   scrim: Record<string, ScrimStrength>;
   bookHref: string;
+  /**
+   * The header pill's label. An explicit prop rather than derived from
+   * `copy.fieldNotesCopy` with a fallback string: every other content lookup
+   * on this page (`chapterCopy`, `media`, `chapter`) throws on a miss rather
+   * than silently substituting a value, and a hard-coded "Book" fallback
+   * here would be the one exception — never actually exercised, since both
+   * properties' copy always supplies it, and a maintenance trap if that ever
+   * stops being true.
+   */
+  bookLabel: string;
   enquireHref: string;
   siblingHref: string;
   nav: { menu: string; menuTitle: string; menuClose: string; menuHint: string };
@@ -1010,7 +1022,7 @@ export function PropertyPage({
     <>
       <SiteHeader
         ctaHref={`#${chapters[chapters.length - 1].id}`}
-        ctaLabel={copy.fieldNotesCopy?.[chapters[chapters.length - 1].id]?.bookLabel ?? "Book"}
+        ctaLabel={bookLabel}
         chapters={chapters}
         nav={nav}
       />
@@ -1401,6 +1413,7 @@ export default function MahuaVannPage() {
       copy={VANN_COPY}
       scrim={{}}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MQ=="
+      bookLabel={VANN_COPY.fieldNotesCopy!["vann-field-notes"].bookLabel}
       enquireHref="mailto:sales@mahuaresorts.com?subject=Enquiry%20—%20Mahua%20Vann"
       siblingHref="/mahua-tola"
       nav={VANN_NAV}
@@ -1674,19 +1687,27 @@ export const TOLA_NAV = {
 
 - [ ] **Step 3: Write the tests**
 
-Same shape as `content/mahua-vann.test.ts` (Task 7 Step 3), importing `TOLA_CHAPTERS` in place of `VANN_CHAPTERS` and updating the "opens/closes" assertion's ids (`tola-hero`, `tola-field-notes`). Additionally assert the guest quote is attributed, mirroring `content/home.test.ts`'s "attributes every guest quote" pattern — since `FullBleedQuoteCopy` here is just `{ quote: string }` with no name/source/year fields (unlike `content/home.ts`'s `GuestQuote`), add the attribution as a code comment at the point of use (already present in Step 2 above) rather than a runtime-checked field, and note in the test file why:
+Same shape as `content/mahua-vann.test.ts` (Task 7 Step 3), importing `TOLA_CHAPTERS` in place of `VANN_CHAPTERS` and updating the "opens/closes" assertion's ids (`tola-hero`, `tola-field-notes`). Additionally guard the guest quote against drifting from its source — `FullBleedQuoteCopy` here is just `{ quote: string }`, with no name/source/year fields to check the way `content/home.test.ts`'s "attributes every guest quote" test does for `GuestQuote`, so the guard this test file can actually make is that the reused text stays byte-identical to the attributed original in `content/home.ts`, rather than silently diverging from the review it was verified under:
 
 ```ts
-  it("does not invent a photograph-caption pairing FullBleedQuote cannot show attribution for", () => {
+import { HOME } from "@/content/home";
+import { TOLA_COPY } from "./mahua-tola";
+
+// ...
+
+  it("reuses its guest quote byte-identical to the attributed original in content/home.ts", () => {
     // FullBleedQuoteCopy carries only `quote` — there is nowhere on a
     // full-bleed photograph to set a name, source and year in the display
-    // serif the home page uses for pull-quotes. Attribution for
-    // "tola-guest-word" lives as a comment beside the copy in
-    // content/mahua-tola.ts: Vedant, 2019, Tripadvisor, reused verbatim from
-    // content/home.ts's own guests.quotes[1]. This test exists so that
-    // comment is not the only thing keeping the discipline honest — anyone
-    // adding a second fullBleedQuote chapter here should read it first.
-    expect(true).toBe(true);
+    // serif the home page uses for pull-quotes. So this page's attribution
+    // lives one level up: "tola-guest-word" is Vedant, 2019, Tripadvisor —
+    // content/home.ts's own guests.quotes[1], which content/home.test.ts's
+    // "attributes every guest quote" test already holds to a name, a source
+    // and a year. This test is what keeps the two copies from silently
+    // diverging — an edit to one without the other would otherwise ship
+    // unattributed words with nothing to catch it.
+    const original = HOME.chapters.guests.quotes.find((q) => q.name === "Vedant");
+    expect(original, "content/home.ts no longer carries Vedant's quote").toBeDefined();
+    expect(TOLA_COPY.fullBleedQuoteCopy?.["tola-guest-word"]?.quote).toBe(original?.quote);
   });
 ```
 
@@ -1734,6 +1755,7 @@ export default function MahuaTolaPage() {
       copy={TOLA_COPY}
       scrim={{ "tola-guest-word": { flat: 0.36, centre: 0.42 } }}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MA=="
+      bookLabel={TOLA_COPY.fieldNotesCopy!["tola-field-notes"].bookLabel}
       enquireHref="mailto:sales@mahuaresorts.com?subject=Enquiry%20—%20Mahua%20Tola"
       siblingHref="/mahua-vann"
       nav={TOLA_NAV}
