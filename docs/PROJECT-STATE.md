@@ -147,7 +147,7 @@ The page's emptiest screen is the `field-days / rooms` join at 73.1%. `rooted / 
 
 ## Where the durable record lives
 
-**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the fourteen-instance
+**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the twenty-five-instance
 catalogue of this project's recurring defect, why the hero's budget is unreachable, and the things that look
 broken and are not. It exists because the per-task ledgers at `.superpowers/sdd/*/progress.md` are
 **git-ignored** — 335 lines across four plans that would not survive a fresh clone. Anything learned that

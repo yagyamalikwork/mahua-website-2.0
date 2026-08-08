@@ -36,10 +36,18 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 6 Aug | **Hover replays a film** | Client's addition. A deliberate hover is the visitor asking, which is a different thing from motion happening at them |
 | 7 Aug | **The coloured tiger idea is parked, not dead** | Assets kept in `Tiger-illustrations/`. The `darken` finding in §9 is what makes it possible whenever they return to it |
 | 7 Aug | **The potter closes `rooted`, as an accessory** | Not a band of its own. "It still feels pretty disconnected from the section" — the figure belongs *in* the chapter's existing space, not below it |
+| 7 Aug | **The lantern hangs out of `after-dark` into `06 · The Lantern Hour`, and swings when pushed** | Client request, with their own watercolour. Keep the navy: it descends from a night photograph, and the flame carries the page's gold — see §11 |
+| 8 Aug | **The butterfly is parked, not cancelled** | Their overlay films cannot be used (chroma green; butterflies 1.9% of frame width). Restart brief in §13. *"Skip the butterfly for now, make a note of it"* |
+| 8 Aug | **A welcome screen: the logo centred, the flower turning once, then a fade** | *"Quick enough that it doesn't come as too long of a break and gently welcoming"* — see §14 |
+| 8 Aug | **A half turn, identical to the header's; every page load** | Chosen over a full 360° and over once-per-session. Every load is what lets it carry no JavaScript at all, which is what stops it ever becoming a wall |
+| 8 Aug | **~2.1s, not 1.35s** | *"A few more milliseconds."* Chosen from three measured options, all of which finish before the hero photograph arrives |
+| 8 Aug | **The client's own stacked logo on the welcome**, not the header's lockup | Their real artwork — flower above MAHUA above RESORTS — with the flower doing the turn |
+| 8 Aug | **The logo stays, at 320 ms of hero arrival** | Given the measured figure and the option to revert: *"My logo is fine, we can anyways replace it if we ever find a problem with it."* **Do not revert it on performance grounds without asking again** |
+| 8 Aug | **Property pages are the next piece of work** | In the style of the current site's property pages and of thesujanlife.com's. Mahua Vann and Mahua Tola; Mahua Bagh stays removed |
 
 ---
 
-## 2. The defect that keeps happening — fourteen instances
+## 2. The defect that keeps happening — twenty-five instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -65,6 +73,12 @@ these passed its own gate while the thing it guarded was broken.
 | 17 | A removability guard matching **any mention** of a path | A rig tripped it on its own *output filename*, `2026-08-05-signature/leaf-cursor.json`. The same weakness pointing the other way would hide a real importer that spelled the path differently |
 | 18 | A stagger test asserting **the opposite of what was needed** | It demanded waves be separated, and shipped the stutter it existed to prevent: twenty strokes drawing, then nothing for ~0.15s, eight times. The client saw it immediately |
 | 19 | **A commit landing with tests red**, because `npm test \| tail` swallowed the exit code | The suite CLAUDE.md requires green before any commit failed into a void. Read exit codes; do not eyeball output |
+| 20 | A frame counter proving a decorative loop had stopped, that **counted the whole page's frames** | Reported 189 frames still running on a lantern that had correctly gone to sleep — they were Lenis's, which never stops. Fixed with a *control*: idle rate, rate during the effect, rate after. Without the middle one, "adds no frames at rest" is trivially true of something that never ran |
+| 21 | `measure_density.mjs` **could not see** a `pointer-events: none` element | It hit-tests with `elementsFromPoint`, which does not return them, so the click-through lantern scored as bare paper. It gave itself away by disagreeing with *itself* — same report, image counted in the inventory, zero coverage |
+| 22 | A fit check asserting the lantern **covered no words**, and never its size | True, and useless: a Tailwind width rule that lost the cascade shipped it 128px wide where 200 was meant, with every check green. Assert every property the change was meant to affect, not the one easiest to phrase |
+| 23 | Overlapping CSS rules resolved by **framework sort order** | Tailwind emitted an arbitrary `min-[1440px]:` variant *before* a named `xl:`; at 1920 both matched, specificity tied, and the wrong one won. Disjoint closed intervals cannot care how a framework sorts them |
+| 24 | The welcome rig's **own clock**, twice | First it sampled mid-stream before the animation had started and read the base style — "already gone at 150ms". Then, waiting on `domcontentloaded`, the first navigation after `next start` took **6,628 ms** and every sample landed after the welcome had finished — "never visible in 34 samples". Both on a page working perfectly. Warm the server; wait on the thing you are measuring, not on the page |
+| 25 | A ceiling that was **a design budget pretending to be a hang guard** | `MUST_BE_GONE_BY_MS` was 3s while the animation was 1.35s, so the client's own request to lengthen the greeting turned the rig red on correct work. A guard against "never leaves" should have no opinion about how long the greeting is |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —

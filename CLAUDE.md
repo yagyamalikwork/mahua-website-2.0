@@ -6,8 +6,10 @@ throughout, in the layout language of [thesujanlife.com](https://thesujanlife.co
 hand-drawn field-guide idiom.
 
 > **Read these four, in order, before doing any work:**
-> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the fourteen-instance defect
->    pattern, and the things that look broken and are not.** Distilled from the per-task ledgers, which are
+> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the twenty-five-instance defect
+>    pattern, and the things that look broken and are not.** §7–§14 are the expensive findings: the leaf's
+>    removability contract, why three hand-drawn tigers failed, film on cream, what a figure does to a
+>    chapter's density, the lantern, the films' rig, the butterfly's restart brief, and the welcome screen. Distilled from the per-task ledgers, which are
 >    git-ignored and do not survive a clone. Read it before relitigating anything.
 > 1. [`docs/PROJECT-STATE.md`](docs/PROJECT-STATE.md) — where we are, what came before, what the client has
 >    said, and what is still owed. **Start here for state.**
@@ -35,7 +37,7 @@ hand-drawn field-guide idiom.
 |---|---|
 | **Phase** | **Plan 5, the signature interactions — COMPLETE (8 Aug 2026). Nine of ten tasks shipped, the butterfly parked by the client, and three things the plan never contained.** On `feat/chapters-rebuild`. A hairline that slides in under every link, the client's own mahua leaf following the pointer, **two animated films** — a tiger closing *04 · Days in the Field*, a potter closing *02 · Rooted like the mahua*, both playing once, holding their last frame and replaying on hover — **a watercolour lantern hung out of the night photograph into *06 · The Lantern Hour*, which swings when you push it and comes to rest on its own**, and **a welcome screen carrying the client's own logo, its flower turning once, gone in 2.1s and carrying no JavaScript at all.** Plans 3 and 4 complete before it. **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §8–§14 before touching the tiger, the films, the lantern, the welcome screen, or where a figure sits in a chapter** — that ground was covered expensively. |
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. |
-| **Scope** | Home page only. Other pages, booking restyle, CMS wiring are all out of scope. |
+| **Scope** | The **home page is done**. **Individual property pages for Mahua Vann and Mahua Tola are the agreed next piece of work** (client, 8 Aug) — in the style of the current site's property pages and of thesujanlife.com's. Brainstorm before building: a property page has a different job from the home page. Booking restyle, Tripadvisor wiring, the SEO redirect map and CMS remain out of scope until asked. |
 | **See it** | `npm run dev` → `/`. A welcome screen, then twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. |
 | **Tests** | **280**, all green. `npm test` must stay green before any commit claiming completion. |
 | **Evidence** | `docs/reviews/2026-08-08-welcome/` (the welcome), `2026-08-08-films/` (the two films), `2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
