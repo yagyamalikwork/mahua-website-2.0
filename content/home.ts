@@ -115,7 +115,7 @@ export const HOME = {
             "sized for what is outside them. The lodge sits in its own private eco park, which " +
             "the birds found long before we did.",
           cta: "Discover Mahua Vann",
-          href: "https://mahuaresorts.com/resorts/mahua-vann/",
+          href: "/mahua-vann",
         },
         {
           name: "Mahua Tola",
@@ -127,7 +127,7 @@ export const HOME = {
             "onto a stretch the dominant male, Xylo, still walks. Raw forest, and very little " +
             "standing between you and it.",
           cta: "Discover Mahua Tola",
-          href: "https://mahuaresorts.com/resorts/mahua-tola/",
+          href: "/mahua-tola",
         },
       ],
     },
@@ -243,7 +243,12 @@ export const HOME = {
         {
           mediaId: "suite-tiger-painting",
           plate: "II",
-          caption: "A suite with the glass folded back to the trees.",
+          // "A suite" until 9 Aug 2026 — but the live site's own filename for
+          // this photograph is Cottage-with-deck-2, and /mahua-vann's rooms
+          // index names it Cottage with Deck. Vann has no "suite" room type at
+          // all; one site must not call the same photograph two different
+          // rooms. Flagged to the client with the property-pages review.
+          caption: "A cottage with the glass folded back to the trees.",
         },
         {
           mediaId: "room-hanging-chair-view",

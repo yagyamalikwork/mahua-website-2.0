@@ -145,10 +145,11 @@ export function LodgeCards({ chapter, surface = false }: { chapter: Chapter; sur
                       {lodge.body}
                     </p>
 
+                    {/* Internal since 9 Aug 2026 — /mahua-vann and /mahua-tola
+                        exist now, so the external-link chrome (target=_blank,
+                        rel) came off with the WordPress URLs. */}
                     <a
                       href={lodge.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
                       /*
                        * `border-b` became the rule's resting line on 5 Aug 2026.
                        * The border was permanent and gold, so a gold rule sliding

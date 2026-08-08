@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { CHAPTERS } from "./chapters";
 import { HOME, chapterCopy } from "./home";
+import { TOLA_COPY } from "./mahua-tola";
+import { VANN_COPY } from "./mahua-vann";
 
 const strings = (obj: unknown): string[] =>
   typeof obj === "string" ? [obj]
@@ -12,7 +14,10 @@ const strings = (obj: unknown): string[] =>
 const entries = Object.entries(HOME.chapters) as [string, Record<string, unknown>][];
 
 describe("house style (CLAUDE.md conventions)", () => {
-  const all = strings(HOME);
+  // All three copy dials, not just the home page's. The property pages
+  // shipped "Maharashtrian specialties" on 9 Aug 2026 — American, from the
+  // live site's own copy — precisely because this net covered only HOME.
+  const all = [...strings(HOME), ...strings(VANN_COPY), ...strings(TOLA_COPY)];
 
   it("uses British spelling", () => {
     // House convention is British with -ise endings (the brand record uses
@@ -102,6 +107,12 @@ describe("HOME.chapters", () => {
   it("leaves nothing blank", () => {
     for (const s of strings(HOME)) {
       expect(s.trim().length, `an empty string in HOME`).toBeGreaterThan(0);
+    }
+  });
+
+  it("links to the two property pages internally, not out to the live WordPress site", () => {
+    for (const lodge of HOME.chapters.lodges.lodges) {
+      expect(lodge.href.startsWith("/"), `${lodge.name} links externally: ${lodge.href}`).toBe(true);
     }
   });
 
