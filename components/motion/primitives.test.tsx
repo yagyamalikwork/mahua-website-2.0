@@ -608,9 +608,14 @@ describe("PinnedCollage", () => {
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
     expect(sceneIn(container), "the scene was never pinned, so this proves nothing").not.toBeNull();
 
-    // `whenNear` fires on the observer's first look, which is what attempts the
-    // import; the rejection then has to settle before React re-renders.
+    // `whenNear` fires on the observer's first look — but since 9 Aug 2026 it
+    // also waits for the visitor to have scrolled at all (the property pages'
+    // first scrub target sits inside the observer's margin at load, and the
+    // library must not be fetched before the first scrolled pixel). A real
+    // visitor near this scene has scrolled to get there; the test does the
+    // same. The rejection then has to settle before React re-renders.
     look(true);
+    window.dispatchEvent(new Event("scroll"));
     await act(async () => {
       await Promise.resolve();
     });

@@ -44,7 +44,8 @@ export function loadScrubTools(): Promise<ScrubTools> {
 }
 
 /**
- * Run `then` once `el` is within a screen of the viewport, and never twice.
+ * Run `then` once `el` is within a screen of the viewport AND the visitor has
+ * scrolled at all — and never twice.
  *
  * A screen of margin, not zero, and the reason is correctness rather than
  * prefetching manners. ScrollTrigger sets a scrubbed element to the transform
@@ -52,6 +53,24 @@ export function loadScrubTools(): Promise<ScrubTools> {
  * initialised while it is on screen would visibly jump by up to half its
  * strength. Initialising it a screen early means that snap always happens where
  * nobody can see it, exactly as it does today when GSAP loads at hydration.
+ *
+ * **The scroll gate exists for the property pages** (9 Aug 2026). On the home
+ * page the first scrubbed element sits more than a screen below the fold, so
+ * proximity alone already implied scrolling and this gate changes nothing
+ * there. `/mahua-vann` and `/mahua-tola` open with a 100svh hero and their
+ * first chapter's parallax photographs exactly one screen down — inside the
+ * observer's margin at load — so proximity alone fetched GSAP before the
+ * visitor did anything, 201 KB of pre-scroll JavaScript against the 175 KB
+ * budget (`docs/reviews/2026-08-08-property-pages/*-js-budget.json`). A
+ * visitor who never scrolls never sees a scrubbed effect, so the library has
+ * no business arriving before the first scrolled pixel. The snap-hiding
+ * margin still applies from that point on; the one case that can now
+ * initialise on screen — a first scroll landing directly inside a scrub
+ * target — moves it by at most half its strength, which for the chapter
+ * photographs' 7-24px drifts is imperceptible mid-scroll.
+ *
+ * A page opened already scrolled (a deep link to an anchor, a reload with a
+ * restored position) counts as scrolled from the start.
  *
  * With no `IntersectionObserver` there is no scrub, matching `useInView`'s
  * decision to leave the page at rest on a browser that has none. The still
@@ -63,17 +82,39 @@ export function loadScrubTools(): Promise<ScrubTools> {
 export function whenNear(el: Element, then: () => void): () => void {
   if (typeof IntersectionObserver === "undefined") return () => {};
 
+  let near = false;
+  let scrolled = typeof window !== "undefined" && window.scrollY > 0;
+  let done = false;
+
+  const fire = () => {
+    if (done || !near || !scrolled) return;
+    done = true;
+    observer.disconnect();
+    window.removeEventListener("scroll", onScroll);
+    then();
+  };
+
+  const onScroll = () => {
+    scrolled = true;
+    fire();
+  };
+
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        observer.disconnect();
-        then();
+        near = true;
+        fire();
         return;
       }
     },
     { rootMargin: "100% 0px 100% 0px" },
   );
+
+  if (!scrolled) window.addEventListener("scroll", onScroll, { passive: true, once: true });
   observer.observe(el);
-  return () => observer.disconnect();
+  return () => {
+    observer.disconnect();
+    window.removeEventListener("scroll", onScroll);
+  };
 }
