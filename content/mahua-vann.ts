@@ -8,10 +8,16 @@ import type { PropertyChapter } from "./property-chapters";
 
 /**
  * Mahua Vann's spine. Six chapters: hero, place, dining, experiences, the
- * rooms index, then field notes — no guest quote yet (none of the harvested
- * Tripadvisor reviews name Pench or Vann specifically, and this page does
- * not invent one). Rhythm holds without it: `chapterIntro` is the only
- * "quiet" kind here and it sits between two image-led ones on both sides.
+ * rooms, then field notes — no guest quote (none of the harvested Tripadvisor
+ * reviews name Pench or Vann specifically, and this page does not invent
+ * one). Rhythm holds without it: `chapterIntro` is the only "quiet" kind here
+ * and it sits between two image-led ones.
+ *
+ * **The rooms and field notes are numbered 04 and 05** so `ChapterMenu`'s
+ * `number && label` filter lists them — the approved spec's own menu (§5) is
+ * "Stay · Dining · Experiences · Getting there", and the two entries a
+ * planner actually opens the menu for are exactly the rooms and the way in.
+ * The first build left both unnumbered and the menu lost them.
  */
 export const VANN_CHAPTERS: readonly PropertyChapter[] = [
   { id: "vann-hero", kind: "hero", media: ["vann-hero"] },
@@ -30,25 +36,36 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
     media: ["vann-dining"],
   },
   {
+    // Four plates since 9 Aug 2026 — the day's own arc: the drive's tiger,
+    // the birds, the pool, the film under the stars. "vann-tiger" and
+    // "vann-pool" are from the live Vann page's own imagery, missed by the
+    // first fetch; at two plates this chapter measured 64.4% empty against
+    // the 45% ceiling (docs/reviews/2026-08-08-property-pages/).
     id: "vann-experiences",
     number: "03",
     label: "Experiences",
     kind: "plateGrid",
-    media: ["vann-bird-watching", "vann-evening"],
+    media: ["vann-tiger", "vann-bird-watching", "vann-pool", "vann-evening"],
   },
   {
-    // "suite-tiger-painting", not a new "vann-room-cottage" id: Task 4 (9 Aug
-    // 2026) found the cottage-with-deck source file is byte-identical to this
-    // existing home-page entry and dropped the duplicate rather than curating
-    // it twice.
+    // "suite-tiger-painting" is the home page's existing id for the live
+    // site's own Cottage-with-deck photograph (byte-identical file, so a
+    // second manifest entry would trip the perceptual-hash duplicate guard).
     id: "vann-rooms",
+    number: "04",
+    label: "The Rooms",
     kind: "roomsIndex",
     media: ["vann-room-deluxe", "suite-tiger-painting"],
   },
   {
+    // The sibling banner carries Mahua Tola's candlelit poolside dinner — a
+    // photograph of the *other* lodge, which is the point (see FieldNotes'
+    // sibling note). Cross-page use, not a within-page repeat.
     id: "vann-field-notes",
+    number: "05",
+    label: "Getting There",
     kind: "fieldNotes",
-    media: [],
+    media: ["tola-candlelit-dinner"],
   },
 ] as const satisfies readonly PropertyChapter[];
 
@@ -59,9 +76,10 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
  *
  * The room count (26, split 13 Deluxe / 5 Cottage without Deck / 8 Cottage
  * with Deck) is the live site's own structured total and cross-checks
- * against the brand record. Nagpur's distance is deliberately omitted — the
+ * against the brand record. Nagpur's *distance* is deliberately omitted — the
  * live site says 80 km, the brand record 104-112 km, and neither is trusted
- * (see docs/copy-provenance.md, same standard the home page already holds).
+ * (docs/copy-provenance.md) — but Nagpur itself is uncontested and is the
+ * fact a traveller needs, so the row names the city and claims no figure.
  */
 export const VANN_COPY: PropertyPageCopy = {
   heroCopy: {
@@ -102,18 +120,28 @@ export const VANN_COPY: PropertyPageCopy = {
     "vann-experiences": {
       heading: { text: "The day at Vann", dim: "day" },
       intro:
-        "Morning and evening game drives, birdwatching in the lodge's own private eco park, and a " +
-        "quieter afternoon at Kohka Lake or the Pachdhar potters' wheel.",
+        "Morning and evening game drives, birdwatching in the lodge's own private eco park, an " +
+        "afternoon in the pool under the trees, and a film in the courtyard once the light goes.",
       plates: [
         {
-          mediaId: "vann-bird-watching",
+          mediaId: "vann-tiger",
           plate: "I",
+          caption: "The reason the vehicles queue at Turia Gate before dawn.",
+        },
+        {
+          mediaId: "vann-bird-watching",
+          plate: "II",
           caption: "Birdwatching in Mahua Vann's own private eco park.",
         },
         {
+          mediaId: "vann-pool",
+          plate: "III",
+          caption: "The pool under the trees, late-afternoon sun through the canopy.",
+        },
+        {
           mediaId: "vann-evening",
-          plate: "II",
-          caption: "An evening gathering after the day's safari, the naturalist's stories still going.",
+          plate: "IV",
+          caption: "An open-air wildlife documentary in the courtyard after dinner.",
         },
       ],
     } satisfies PlateGridCopy,
@@ -126,28 +154,39 @@ export const VANN_COPY: PropertyPageCopy = {
         "Deluxe rooms, cottages without a deck and cottages with one over the seasonal river — all " +
         "handmade in mud and local wood, with air conditioning, a tea and coffee maker and a " +
         "private vanity area.",
-      rooms: [
+      bands: [
         {
           mediaId: "vann-room-deluxe",
-          name: "Deluxe",
-          size: "225 sq. ft.",
-          bed: "Queen bed",
-          view: "Garden and jungle view",
+          entries: [
+            {
+              name: "Deluxe",
+              size: "225 sq. ft.",
+              bed: "Queen bed",
+              view: "Garden and jungle view",
+            },
+          ],
         },
         {
+          // One photograph, both cottage types: the live site has no distinct
+          // Cottage-without-Deck image anywhere in its media library (spec §6
+          // checked this against the page's own markup), so the two share the
+          // band and the note says which one is shown.
           mediaId: "suite-tiger-painting",
-          name: "Cottage with Deck",
-          size: "324 sq. ft.",
-          bed: "King bed, private sit-out",
-          view: "Jungle and seasonal river view",
-        },
-        {
-          mediaId: "suite-tiger-painting",
-          name: "Cottage without Deck",
-          size: "324 sq. ft.",
-          bed: "King bed, private sit-out",
-          view: "Jungle view",
           note: "Shown: Cottage with Deck.",
+          entries: [
+            {
+              name: "Cottage with Deck",
+              size: "324 sq. ft.",
+              bed: "King bed, private sit-out",
+              view: "Jungle and seasonal river view",
+            },
+            {
+              name: "Cottage without Deck",
+              size: "324 sq. ft.",
+              bed: "King bed, private sit-out",
+              view: "Jungle view",
+            },
+          ],
         },
       ],
     } satisfies RoomsIndexCopy,
@@ -157,13 +196,17 @@ export const VANN_COPY: PropertyPageCopy = {
     "vann-field-notes": {
       heading: { text: "Getting to Mahua Vann", dim: "Vann" },
       gettingThere: [
+        { label: "By air or train", value: "Nagpur, then by road to Khawasa" },
         { label: "By road", value: "Khawasa Bus Stop, 8 km" },
         { label: "From the gate", value: "Five kilometres from Turia Gate" },
       ],
       address: "Village Kuppitola, Khawasa, Madhya Pradesh 480881",
       bookLabel: "Book Mahua Vann",
       enquireLabel: "Enquire",
-      siblingLabel: "Looking for Tadoba instead? Mahua Tola →",
+      sibling: {
+        mediaId: "tola-candlelit-dinner",
+        label: "Looking for Tadoba instead? Mahua Tola →",
+      },
     } satisfies FieldNotesCopy,
   },
 };

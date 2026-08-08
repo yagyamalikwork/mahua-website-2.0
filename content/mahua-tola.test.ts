@@ -68,6 +68,51 @@ describe("TOLA_CHAPTERS", () => {
     }
   });
 
+  it("keeps every chapter's copy joined to the spine it renders under", () => {
+    // Same join as content/mahua-vann.test.ts — see the note there.
+    for (const c of TOLA_CHAPTERS) {
+      switch (c.kind) {
+        case "hero":
+          expect(TOLA_COPY.heroCopy, `"${c.id}" has no hero copy`).toBeDefined();
+          break;
+        case "chapterIntro":
+          expect(TOLA_COPY.chapterIntroCopy?.[c.id], `"${c.id}" has no intro copy`).toBeDefined();
+          break;
+        case "fullBleedQuote":
+          expect(TOLA_COPY.fullBleedQuoteCopy?.[c.id], `"${c.id}" has no quote copy`).toBeDefined();
+          break;
+        case "plateGrid": {
+          const plates = TOLA_COPY.plateGridCopy?.[c.id]?.plates;
+          expect(plates, `"${c.id}" has no plate copy`).toBeDefined();
+          expect(plates?.map((p) => p.mediaId)).toEqual([...c.media]);
+          break;
+        }
+        case "roomsIndex": {
+          const bands = TOLA_COPY.roomsIndexCopy?.[c.id]?.bands;
+          expect(bands, `"${c.id}" has no rooms copy`).toBeDefined();
+          expect(bands?.map((b) => b.mediaId)).toEqual([...c.media]);
+          break;
+        }
+        case "fieldNotes": {
+          const notes = TOLA_COPY.fieldNotesCopy?.[c.id];
+          expect(notes, `"${c.id}" has no field-notes copy`).toBeDefined();
+          expect([notes?.sibling.mediaId]).toEqual([...c.media]);
+          break;
+        }
+      }
+    }
+  });
+
+  it("marks every shared room photograph with a note saying what is shown", () => {
+    for (const rooms of Object.values(TOLA_COPY.roomsIndexCopy ?? {})) {
+      for (const band of rooms.bands) {
+        if (band.entries.length > 1) {
+          expect(band.note, `the "${band.mediaId}" band covers ${band.entries.length} room types silently`).toBeDefined();
+        }
+      }
+    }
+  });
+
   it("reuses its guest quote byte-identical to the attributed original in content/home.ts", () => {
     // FullBleedQuoteCopy carries only `quote` — there is nowhere on a
     // full-bleed photograph to set a name, source and year in the display

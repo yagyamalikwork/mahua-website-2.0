@@ -7,8 +7,12 @@ import {
   SIZES as INTRO_SIZES,
 } from "@/components/sections/ChapterIntro";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
+import {
+  FIELD_NOTES_SIBLING_BOX,
+  FIELD_NOTES_SIBLING_SIZES,
+} from "@/components/sections/FieldNotes";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
-import { ROOMS_BOX, SIZES as ROOMS_SIZES } from "@/components/sections/RoomsIndex";
+import { ROOMS_BOX, ROOMS_SIZES } from "@/components/sections/RoomsIndex";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
   BOXES as TESTIMONIAL_BOXES,
@@ -166,13 +170,10 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: TESTIMONIAL_SIZES[k],
     box: TESTIMONIAL_BOXES[k] as CoverBox,
   })),
-  // The property pages' rooms grid — two-column and three-column layouts,
-  // each a distinct `sizes` string, both drawn at the same 4:3 crop.
-  ...Object.entries(ROOMS_SIZES).map(([k, v]) => ({
-    name: `RoomsIndex.${k}-up`,
-    sizes: v,
-    box: ROOMS_BOX,
-  })),
+  // The property pages' rooms bands — one eight-column 4:3 plate, every band.
+  { name: "RoomsIndex.band", sizes: ROOMS_SIZES, box: ROOMS_BOX },
+  // The field notes' sibling-lodge banner — full container width at 21:9.
+  { name: "FieldNotes.sibling", sizes: FIELD_NOTES_SIBLING_SIZES, box: FIELD_NOTES_SIBLING_BOX },
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -195,11 +196,6 @@ describe("the sizes the page actually serves", () => {
     // 18 since 7 Aug 2026: `HangingLantern`, the lantern hung out of `after-dark`
     // into `06 · The Lantern Hour`. 20 since 8 Aug: the welcome screen's two
     // halves of the client's stacked logo, the flower and the wordmark.
-    // Still 20 as of 9 Aug for the same reason: `RoomsIndex` (the property
-    // pages' rooms grid) adds two more slots below but reuses `PlateGrid`'s
-    // 2-up and 3-up strings verbatim — same grid, same column widths — so it
-    // is two more rows and no new distinct string, the same shape as
-    // `PinnedCollage` reusing `ChapterIntro`'s three strings above.
     // 21 since the same day: fixing the one-plate `vann-dining` chapter's
     // forced-two-column layout (a real bug — `landscapes > plates.length / 2`
     // reserved a second, empty column for a single landscape plate, measured
@@ -208,7 +204,14 @@ describe("the sizes the page actually serves", () => {
     // real new string: unlike every 2/3/4-up entry it carries no `50vw`
     // tier, because a one-column grid never shares its row with another
     // plate at any width.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
+    // 22 since 9 Aug 2026, when the rooms index was recomposed from a card
+    // grid (which reused `PlateGrid`'s 2/3-up strings and so added nothing
+    // distinct) into full-width bands, after the grid measured 60.3% / 53%
+    // empty against the 45% ceiling: the band's 8-of-12-column plate is one
+    // genuinely new string. The field notes' sibling banner spans the full
+    // container and so repeats `PLATE_SIZES[1]`'s string (deliberately
+    // written out, not imported) — one more row, no new distinct string.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(22);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -352,6 +355,8 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/SplitFeature.tsx", declared: SPLIT_BOXES },
     { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
+    { file: "components/sections/RoomsIndex.tsx", declared: ROOMS_BOX },
+    { file: "components/sections/FieldNotes.tsx", declared: FIELD_NOTES_SIBLING_BOX },
     { file: "components/motion/PinnedCollage.tsx", declared: COLLAGE_BOXES },
   ];
 
