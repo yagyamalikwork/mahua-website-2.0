@@ -591,19 +591,25 @@ Add this block to the end of the `CURATION` array in `scripts/build_images.mjs`,
     fullBleedSafe: false,
   },
   {
-    // Confirm in Task 3 Step 3 which DSC000xx frame actually shows dining and
-    // substitute its real filename here before running Step 2 below.
+    // Corrected against Task 3's by-eye findings (9 Aug 2026): DSC00091 is the
+    // dining hall (wood-beamed, tables laid, wicker pendant lamps); DSC00044 —
+    // this id's src until this correction — is a lodge/pond exterior with no
+    // dining furniture at all. Do not revert to DSC00044 without re-viewing it.
     id: "tola-dining",
-    src: "reference/wp-media/property-pages/DSC00044-scaled.jpg",
-    alt: "Dining at Mahua Tola.",
+    src: "reference/wp-media/property-pages/DSC00091-scaled.jpg",
+    alt: "The dining hall at Mahua Tola, tables laid under wicker pendant lamps.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: true,
   },
   {
+    // Corrected the same way: DSC00122 is an accommodation-block exterior at
+    // dusk with clean negative space for a text scrim — DSC00091 (this id's
+    // src until this correction) is the dining hall, wrong mood and no room
+    // for overlaid type without cropping across a laid table.
     id: "tola-guest-word",
-    src: "reference/wp-media/property-pages/DSC00091-scaled.jpg",
-    alt: "Evening light over Mahua Tola.",
+    src: "reference/wp-media/property-pages/DSC00122-scaled.jpg",
+    alt: "An accommodation block at Mahua Tola, dusk light through the bamboo.",
     category: "lanternHour",
     orientation: "landscape",
     fullBleedSafe: true,
@@ -616,14 +622,14 @@ Add this block to the end of the `CURATION` array in `scripts/build_images.mjs`,
     orientation: "landscape",
     fullBleedSafe: false,
   },
-  {
-    id: "tola-evening",
-    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Wildlife-documentaries.jpg",
-    alt: "An evening gathering at Mahua Tola after the day's safari.",
-    category: "lanternHour",
-    orientation: "landscape",
-    fullBleedSafe: false,
-  },
+  // No "tola-evening" entry. Task 3 (9 Aug 2026) confirmed by perceptual hash
+  // (distance 0/256, lib/media.test.ts's own duplicate algorithm) that
+  // Mahua-Website-Images_Tadoba_Wildlife-documentaries.jpg is the identical
+  // photograph to Mahua-Website-Images_Pench_Wildlife-Documentaries.jpg
+  // (curated above as "vann-evening") — same people, same poses, same frame.
+  // Curating both under separate ids would fail that test. Vann keeps it;
+  // Tola's Experiences plateGrid runs on one plate instead of two (still
+  // valid — plateGrid's floor is 1, see content/mahua-tola.test.ts).
 ```
 
 - [ ] **Step 2: Regenerate the manifest**
@@ -1505,11 +1511,16 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
     media: ["tola-dining"],
   },
   {
+    // One plate, not two — Task 3 (9 Aug 2026) found "tola-evening" would
+    // have been a byte-identical duplicate of "vann-evening"'s underlying
+    // photograph (perceptual hash distance 0). Vann keeps it; this chapter
+    // runs on tola-swimming alone. Still valid: plateGrid's floor is 1
+    // (content/mahua-tola.test.ts).
     id: "tola-experiences",
     number: "03",
     label: "Experiences",
     kind: "plateGrid",
-    media: ["tola-swimming", "tola-evening"],
+    media: ["tola-swimming"],
   },
   {
     id: "tola-rooms",
@@ -1604,11 +1615,6 @@ export const TOLA_COPY: PropertyPageCopy = {
           mediaId: "tola-swimming",
           plate: "I",
           caption: "The pool at Mahua Tola, between drives.",
-        },
-        {
-          mediaId: "tola-evening",
-          plate: "II",
-          caption: "An evening gathering after the day's safari.",
         },
       ],
     } satisfies PlateGridCopy,
