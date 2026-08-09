@@ -242,17 +242,28 @@ export const TOLA_COPY: PropertyPageCopy = {
       // task's authorised extra work added, rather than adding an unused
       // legend line.
       labels: [
-        // The gates (all sharing the artwork's one settlement icon — see
-        // above). North-west cluster first, then clockwise.
+        // Kolara and Moharli lead the gate list — reordered in the
+        // whole-branch review's fix wave (10 Aug 2026) for
+        // `declutterMobile` in components/sections/PropertyMap.tsx, which
+        // keeps whichever of two colliding gate labels it reaches first
+        // and drops the rest. Kolara is the one gate this very page names
+        // elsewhere (the map's own heading, and gettingThere below) and
+        // Moharli is Tadoba's other core-zone gate (the fourteen gates
+        // after these two are all buffer-zone entry points, sharing the
+        // artwork's one settlement icon with no way to tell them apart on
+        // the drawing itself) — between them the two gates an actual guest
+        // is most likely to use, so they are the two that must survive a
+        // phone screen too small to show all sixteen.
+        { text: "Kolara", x: 0.4591, y: 0.2025, kind: "gate" },
+        { text: "Moharli", x: 0.4712, y: 0.595, kind: "gate" },
+        // The rest, north-west cluster first, then clockwise.
         { text: "Nimdela", x: 0.3227, y: 0.1322, kind: "gate" },
         { text: "Ramdegi", x: 0.3788, y: 0.1198, kind: "gate" },
         { text: "Alizanza", x: 0.4197, y: 0.157, kind: "gate" },
         { text: "Navegaon", x: 0.3697, y: 0.1756, kind: "gate" },
-        { text: "Kolara", x: 0.4591, y: 0.2025, kind: "gate" },
         { text: "Madnapur", x: 0.5197, y: 0.2893, kind: "gate" },
         { text: "Shirkheda", x: 0.6258, y: 0.3678, kind: "gate" },
         { text: "Khutwanda", x: 0.4212, y: 0.4318, kind: "gate" },
-        { text: "Moharli", x: 0.4712, y: 0.595, kind: "gate" },
         { text: "Junona", x: 0.4712, y: 0.655, kind: "gate" },
         // One label for both icons — the artwork sets "Devada" and
         // "Adegaon" as one combined name over a pair of adjacent icons.
@@ -267,9 +278,14 @@ export const TOLA_COPY: PropertyPageCopy = {
         // The one village dot the artwork actually draws — see the long
         // note above.
         { text: "Agarzari", x: 0.3712, y: 0.7273, kind: "village" },
-        // Water: the four named lakes and the dam backwaters.
-        { text: "Pandharpauni Lake", x: 0.4106, y: 0.2789, kind: "water" },
+        // Water: the four named lakes and the dam backwaters. Tadoba Lake
+        // leads — the reserve's own namesake, and (same reordering, same
+        // reason as the gates above) the one of the three tightly
+        // clustered lake names here that `declutterMobile` should keep
+        // when a phone screen cannot show Pandharpauni, Tadoba and Jamni
+        // separately.
         { text: "Tadoba Lake", x: 0.4061, y: 0.3285, kind: "water" },
+        { text: "Pandharpauni Lake", x: 0.4106, y: 0.2789, kind: "water" },
         { text: "Jamni Lake", x: 0.453, y: 0.3202, kind: "water" },
         { text: "Teliya Lake", x: 0.4894, y: 0.5455, kind: "water" },
         { text: "Irai Dam Backwaters", x: 0.3333, y: 0.5992, kind: "water" },
@@ -303,15 +319,14 @@ export const TOLA_COPY: PropertyPageCopy = {
         // This task's authorised extra work: see the long comment on
         // labels above for the one point on this map it actually describes.
         { swatch: "village", text: "Village" },
+        // The artwork's own legend text for the mustard badges is "Zone
+        // number" — added here (whole-branch review fix wave, 10 Aug 2026)
+        // now that MapLegendEntryCopy's swatch union has a "zone" member.
+        // Until then the four numbered safari zones were drawn on the map
+        // (kind: "zone") with nothing in the key naming them — the same gap
+        // "village" once had, above, and the same fix.
+        { swatch: "zone", text: "Safari zone" },
       ],
-      // The artwork also prints a "Zone number" legend line for the mustard
-      // badges above, but MapLegendEntryCopy's swatch union has no member
-      // for it (only the five — now six — fixed swatches PropertyMap can
-      // draw a dot for), so it is left off the key rather than added under
-      // a swatch that would draw the wrong colour. The zone badges are
-      // still transcribed on the map itself (kind: "zone"); only the legend
-      // line describing them is missing, the same gap Vann's own map has
-      // for its triangle-icon forest rest houses.
       gettingThere: [
         { label: "By air or train", value: "Nagpur, then by road to Chimur" },
         { label: "By road", value: "Chimur, 17 km" },

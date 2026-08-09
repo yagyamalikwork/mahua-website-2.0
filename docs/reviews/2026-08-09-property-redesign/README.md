@@ -84,6 +84,31 @@ Neither page's mean is over budget as a whole; both improved from the first read
 brought under the per-chapter ceiling without either bad typography or invented content —
 reported here rather than forced, per the brief.
 
+**Re-measured 10 Aug 2026, after the whole-branch review's fix wave**, against a freshly
+restarted server: Mahua Vann's page mean now reads **36.1%**, not 36.2%. Run twice
+back-to-back on the identical build to check: both runs read 36.1% for the page mean, but
+the *chapter*-level figures underneath it wobbled between the two runs by up to 0.7 points
+(`vann-press` 87.2%→86.5%, `vann-where` 36.6%→36.5%) with no code change between them — so
+the 0.1-point page-mean move is inside this rig's own run-to-run noise, not a regression the
+fix wave caused. Left as 36.2% above rather than silently edited, per the instruction to say
+so rather than overwrite; `docs/reviews/2026-08-09-property-redesign/vann-density.json`
+carries the 10 Aug reading.
+
+**Mahua Tola did move, and this correction replaces a wrong claim.** An earlier draft of
+this paragraph asserted Tola's figures were unchanged (31.4%, `tola-reserve` 58.3%,
+`tola-where` 21.9%) — that was not re-derived from the rig, it was copied from the table
+above. A fresh run against the 10 Aug build (run twice back-to-back and stable both times,
+not noise) reads: page mean **31.3%**, `tola-reserve`
+**58%**, `tola-where` **23.3%**, worst screen **71.9%** (still the `tola-day` /
+`tola-invitation` join, not a chapter). `tola-where`'s 1.4-point move is real and has a real
+cause: the fix wave gave Tola's legend a seventh row, "Safari zone" — the whole-branch
+review's fix for its zone swatch having no legend entry at all — which Vann's legend never
+gets, because Vann's map has no `zone` kind. Only Tola's info column grew taller. That is
+why Vann's own figures hold steady while Tola's do not: it is not the same `PropertyMap`
+change landing unevenly, it is one page's legend legitimately carrying one more line than
+before. `docs/reviews/2026-08-09-property-redesign/tola-density.json` carries the 10 Aug
+reading; the 31.4%/58.3%/21.9% figures should not be treated as current.
+
 ### 2a. `ChapterSurface`'s new `tight` rhythm
 
 Both `OpeningColumn` and `PropertyMap` (and, on Vann, `PressBand`) are shorter than one
