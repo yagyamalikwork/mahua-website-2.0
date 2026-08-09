@@ -126,10 +126,20 @@ export function PlateGrid({
   chapter,
   copy,
   surface = false,
+  backdrop,
 }: {
   chapter: ChapterLike;
   copy?: PlateGridCopy;
   surface?: boolean;
+  /**
+   * Laid between the cream and this chapter's content — see `ChapterSurface`.
+   *
+   * A slot rather than a lookup by `chapter.id`, for the same reason
+   * `ChapterIntro`'s `footer` and `hanging` are: this component renders four
+   * different chapters across three routes and none of them should have to know
+   * which one it is.
+   */
+  backdrop?: React.ReactNode;
 }) {
   const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as PlateGridCopy);
   const { plates } = resolvedCopy;
@@ -164,7 +174,7 @@ export function PlateGrid({
   const plateSizes = PLATE_SIZES[columns] ?? PLATE_SIZES[2];
 
   return (
-    <ChapterSurface id={chapter.id} surface={surface}>
+    <ChapterSurface id={chapter.id} surface={surface} backdrop={backdrop}>
       <div>
         <div className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
           <Enter>
@@ -177,6 +187,16 @@ export function PlateGrid({
           </Enter>
           <Enter delay={ENTER.stagger}>
             <p
+              /*
+               * The hook `scripts/check_contrast_over_photos.mjs` finds this by.
+               * An attribute, not a structural selector: `#forest p` also matches
+               * `ChapterMark`'s two gold paragraphs, and pointing the rig at that
+               * had it measuring the chapter number as though it were body copy.
+               * The same class of mistake — a contrast target found by structure —
+               * once left cream type over a photograph unchecked for days with the
+               * suite green (`DECISIONS.md` §2, instance 10).
+               */
+              data-contrast="plate-intro"
               className="max-w-[58ch] font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.72] md:text-lg"
               style={{ color: "var(--dim)" }}
             >

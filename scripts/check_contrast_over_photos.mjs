@@ -42,6 +42,8 @@ const CREAM = [0xf1, 0xe9, 0xd7];
 const INK = [0x31, 0x40, 0x2c];
 /** `PALETTE.brand` — the client's own wordmark brown, on the cream bar only. */
 const BRAND = [0x7f, 0x5c, 0x24];
+/** `PALETTE.dim` — the page's lighter body colour, and the one the forest tint's floor is set by. */
+const DIM = [0x5a, 0x52, 0x40];
 /** `PALETTE.overlay` — the pill's label, on gold, in both header states. */
 const OVERLAY = [0x23, 0x2b, 0x21];
 
@@ -118,6 +120,36 @@ const HOME_RUNS = [
     hide: "color",
   },
   { name: "hero · headline", min: 3, at: "#arrival", container: "#arrival", sel: "#arrival h1 [data-word]" },
+  /*
+   * `03 · The Forest` carries a tinted drawing between its cream and its
+   * content as of 10 Aug 2026, so its type is now text over imagery and belongs
+   * in this rig like any other.
+   *
+   * `scripts/build_forest_overlay.mjs` already refuses to emit a tint that would
+   * put `PALETTE.dim` under 4.5:1 on its own darkest pixel — but that is
+   * arithmetic on the file, and this is the rendered page. The two have
+   * disagreed before on this project; the build maths cannot see a mask, a
+   * scale, or a second thing painted on top.
+   */
+  {
+    name: "forest · headline",
+    min: 3,
+    at: "#forest",
+    container: "#forest",
+    sel: "#forest h2 [data-word]",
+    // Ink, not cream. The default here is cream because almost every run in this
+    // rig sits on a photograph; this chapter's type sits on paper, and measuring
+    // cream against a cream-tinted backdrop reads 1:1 — which is what it did.
+    text: INK,
+  },
+  {
+    name: "forest · intro",
+    min: 4.5,
+    at: "#forest",
+    container: "#forest",
+    sel: '#forest [data-contrast="plate-intro"]',
+    text: DIM,
+  },
   { name: "hero · sub", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival > div > p" },
   { name: "hero · scroll cue", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival div.flex > span:nth-child(2)" },
   {

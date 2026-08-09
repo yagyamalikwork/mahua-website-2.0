@@ -10,6 +10,7 @@ import { PlateGrid } from "@/components/sections/PlateGrid";
 import { SplitFeature } from "@/components/sections/SplitFeature";
 import { Testimonials } from "@/components/sections/Testimonials";
 import type { ScrimStrength } from "@/components/ui/Scrim";
+import { ForestBackdrop } from "@/components/ui/ForestBackdrop";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
 
@@ -155,7 +156,28 @@ function renderChapter(chapter: Chapter, at: Position) {
         />
       );
     case "plateGrid":
-      return <PlateGrid key={chapter.id} chapter={chapter} surface={at.surface} />;
+      return (
+        <PlateGrid
+          key={chapter.id}
+          chapter={chapter}
+          surface={at.surface}
+          /*
+           * The hornbills go behind `03 · The Forest`, and only there. Client
+           * request, 10 Aug 2026, with their own drawing.
+           *
+           * It is the right chapter for them twice over: the copy already counts
+           * "three hundred recorded birds", and Malabar pied hornbills are native
+           * to Pench — Mahua Vann's own park. `details` and `rooms` are the other
+           * two plate grids and take no backdrop; a wash under every one of them
+           * would be a texture rather than a moment.
+           *
+           * `surface` is passed on because the tint is baked onto a cream at
+           * build time rather than blended at runtime, so it has to be given the
+           * one it is standing on. See `ForestBackdrop`.
+           */
+          backdrop={chapter.id === "forest" ? <ForestBackdrop surface={at.surface} /> : undefined}
+        />
+      );
     case "splitFeature":
       return (
         <SplitFeature

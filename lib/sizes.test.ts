@@ -25,6 +25,7 @@ import {
 } from "@/components/motion/PinnedCollage";
 import { INVITATION_BOX, INVITATION_SIZES } from "@/components/property/PropertyInvitation";
 import { LANTERN_SIZES } from "@/components/signature/lantern/HangingLantern";
+import { FOREST_BACKDROP_SIZES } from "@/components/ui/ForestBackdrop";
 import { EMBLEM_SIZES } from "@/components/ui/BrandMark";
 import {
   WELCOME_FLOWER_SIZES,
@@ -125,6 +126,10 @@ const LIVE_SLOTS: readonly Slot[] = [
   // No `box`: the lantern is drawn at its own aspect with no `object-fit: cover`
   // frame around it, so there is no crop for `coverSizes` to widen.
   { name: "HangingLantern", sizes: LANTERN_SIZES },
+  // The forest tint behind `03 · The Forest`. No `box`: it is `object-cover`
+  // over the whole section, so its drawn width is the viewport and `100vw` is
+  // already the widest honest answer — there is no crop to widen further.
+  { name: "ForestBackdrop", sizes: FOREST_BACKDROP_SIZES },
   // The welcome's two halves of the client's logo. Also uncropped — each is laid
   // out at its own fraction of the logo's box, at its own aspect.
   { name: "WelcomeScreen.flower", sizes: WELCOME_FLOWER_SIZES },

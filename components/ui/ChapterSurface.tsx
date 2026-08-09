@@ -46,6 +46,7 @@ export function ChapterSurface({
   children,
   surface = false,
   tight = false,
+  backdrop,
   className,
 }: {
   id: string;
@@ -54,6 +55,28 @@ export function ChapterSurface({
   surface?: boolean;
   /** The narrower rhythm — see the doc comment above. */
   tight?: boolean;
+  /**
+   * A tint laid between the cream and the chapter's content — added 10 Aug 2026
+   * for `03 · The Forest`, which carries the client's hornbill drawing.
+   *
+   * **Not a `background-image` on the section**, because `measure_density.mjs`
+   * hit-tests with `elementsFromPoint` and scores a section's own background as
+   * bare paper. A real element in the tree is what makes the drawing count as the
+   * imagery it is — the same reasoning that made the lantern's blindness a bug
+   * (`DECISIONS.md` §11).
+   *
+   * **It paints under the content by tree order, not by `z-index`.** Both this
+   * and the container below are positioned with `z-index: auto`, so the later one
+   * wins — and that is deliberately *not* done with a negative z-index, which
+   * would need the section to become a stacking context and would then break the
+   * `mix-blend-mode` on any film inside it (§14).
+   *
+   * The container only becomes `relative` when there is a backdrop to sit above.
+   * Making it unconditional would re-parent `ChapterIntro`'s absolutely
+   * positioned `hanging` slot from the section to the padded container, and move
+   * the lantern.
+   */
+  backdrop?: React.ReactNode;
   className?: string;
 }) {
   return (
@@ -65,7 +88,10 @@ export function ChapterSurface({
       className={`relative overflow-x-clip bg-[color:var(--bg)] ${tight ? "py-10 md:py-12 lg:py-14" : "py-14 md:py-16 lg:py-20"} ${className ?? ""}`}
       style={surface ? ({ "--bg": "var(--surface)" } as React.CSSProperties) : undefined}
     >
-      <div className="mx-auto max-w-[1600px] px-6 md:px-12">{children}</div>
+      {backdrop}
+      <div className={`mx-auto max-w-[1600px] px-6 md:px-12 ${backdrop ? "relative" : ""}`}>
+        {children}
+      </div>
     </section>
   );
 }
