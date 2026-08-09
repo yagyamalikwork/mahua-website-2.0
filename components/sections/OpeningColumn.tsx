@@ -23,6 +23,21 @@ export type OpeningColumnCopy = {
  * It is a quiet screen, so the rhythm rule (non-negotiable #10) requires
  * image-led shapes on both sides of it. Each spine places it between the
  * full-bleed hero and the map.
+ *
+ * **`tight` + a wider measure, Task 15 (9/10 Aug 2026).** At 640px this is the
+ * shortest chapter on either page (0.71 of a 900px screen), so
+ * `measure_density.mjs` scores it on the single window centred over it —
+ * `vann-forest` measured 72.6% empty, `tola-reserve` 72.1%. `ChapterSurface`'s
+ * `tight` rhythm takes back the padding it does not need (see that
+ * component's own comment); the body copy's own column widens from 62ch to
+ * 92ch for the same reason non-negotiable #8's own precedent gives width to a
+ * photograph — there is no photograph here to give it to, so it goes to the
+ * only content this chapter has, its two paragraphs. A first pass at 78ch
+ * (measured, not assumed) only brought `vann-forest` to 60.3% — a real
+ * improvement, still over the ceiling — so the measure widened again rather
+ * than declared close enough. The heading keeps its own tighter 22ch cap
+ * (nested inside this wider column, so it is unaffected) — the display line
+ * is meant to stay short; the prose was not.
  */
 export function OpeningColumn({
   chapter,
@@ -34,8 +49,8 @@ export function OpeningColumn({
   surface?: boolean;
 }) {
   return (
-    <ChapterSurface id={chapter.id} surface={surface}>
-      <div className="mx-auto max-w-[62ch] text-center">
+    <ChapterSurface id={chapter.id} surface={surface} tight>
+      <div className="mx-auto max-w-[92ch] text-center">
         <Enter>
           <div>
             {chapter.number && chapter.label && (

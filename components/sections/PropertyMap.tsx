@@ -70,6 +70,20 @@ const SWATCH: Record<MapLegendEntryCopy["swatch"], { fill: string; opacity: numb
  * `prefers-reduced-motion`, and it renders identically with scripting off.
  * The region paths come from `lib/*-map-art.ts`, generated from the client's
  * artwork; every word on it comes from `content/`.
+ *
+ * **`tight` + a wider map column, Task 15 (9/10 Aug 2026).** At 0.79/0.89 of
+ * a 900px screen, both maps are shorter than one, so `measure_density.mjs`
+ * scores each on the single window centred over it — `vann-where` measured
+ * 56.9% empty (`tola-where` 44.5%, inside the ceiling but close enough to
+ * benefit from the same fix). `ChapterSurface`'s `tight` rhythm takes back
+ * padding the same way `OpeningColumn`'s does. The map's own column widens
+ * from `lg:col-span-8` to `lg:col-span-10` (the facts/legend column narrows
+ * 4→2) — the drawn regions scale with it since the `<svg>` is `w-full` over
+ * a fixed `viewBox`, so this is real artwork covering more of the screen, not
+ * a wider box around the same drawing. A first pass at `lg:col-span-9`
+ * (measured, not assumed) only brought `vann-where` to 46.9%, still just over
+ * the ceiling, so the column widened again rather than declared close
+ * enough.
  */
 export function PropertyMap({
   chapter,
@@ -90,18 +104,30 @@ export function PropertyMap({
   // kind and copy.lodge, so it can never say a name the artwork doesn't also
   // draw, and introduces no new user-facing string: it is a minimal, punctuation-only
   // joining of names already supplied as props, not a written sentence.
+  //
+  // **Villages and safari zones joined 9/10 Aug 2026 (Task 15).** Until then
+  // this label named only gates and water, which was backwards for Tola in
+  // particular: its map's one `village` marker (Agarzari) and its four
+  // numbered safari zones are exactly the kind of local detail a sighted
+  // visitor reads off the artwork and a screen reader visitor could not get
+  // at all. Same construction as the two groups above — read off
+  // `copy.labels`, so it can never announce a name the artwork does not draw.
   const gateNames = copy.labels.filter((l) => l.kind === "gate").map((l) => l.text);
   const waterNames = copy.labels.filter((l) => l.kind === "water").map((l) => l.text);
+  const villageNames = copy.labels.filter((l) => l.kind === "village").map((l) => l.text);
+  const zoneNames = copy.labels.filter((l) => l.kind === "zone").map((l) => l.text);
   const mapAriaLabel = `Map of ${copy.lodge.text} and the reserve around it — ${[
     ...gateNames,
     ...waterNames,
+    ...villageNames,
+    ...zoneNames,
     copy.lodge.text,
   ].join(", ")}.`;
 
   return (
-    <ChapterSurface id={chapter.id} surface={surface}>
+    <ChapterSurface id={chapter.id} surface={surface} tight>
       <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-12 lg:gap-x-12">
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-2">
           <Enter>
             <div>
               {chapter.number && chapter.label && (
@@ -147,7 +173,7 @@ export function PropertyMap({
           </Enter>
         </div>
 
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-10">
           <Enter delay={ENTER.stagger}>
             <figure>
               <svg

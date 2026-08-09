@@ -158,11 +158,18 @@ const HOME_RUNS = [
  *
  * `scrolledAt` should be a chapter where the scrolled header sits over a
  * photograph, so a missing cream bar fails loudly (the home page's own rule
- * above). Tola has one — the full-bleed guest quote. **Vann has no full-bleed
- * chapter below its hero at all**, so its scrolled runs park over the rooms
- * bands: they verify the scrolled palette against whatever is painted there,
- * and a failed cream bar over cream would still pass. That weakness is
- * structural to the page, not to the rig — noted rather than papered over.
+ * above). Tola has one — the full-bleed guest quote (`#tola-guest-word`).
+ *
+ * **Vann's own scrolled anchor moved on 9/10 Aug 2026, Task 15.** It was
+ * `#vann-rooms`, a cream showcase band, with a comment here claiming "Vann
+ * has no full-bleed chapter below its hero at all" — true of the page this
+ * rig was first written against, false of the shape-vocabulary redesign that
+ * shipped in `05d8925`: `vann-table` ("04 · The Table") is now a `fullBleed`
+ * chapter with a photograph under it. `#vann-rooms` was a probe that could
+ * never fail the way its home-page counterpart can, exactly the weakness the
+ * comment it replaced flagged and then left unfixed. `scrolledAt` is now
+ * `#vann-table`, which is also where the new quote probe below reads its
+ * type.
  */
 const propertyRuns = (heroId, scrolledAt) => [
   { name: "header · menu", min: 4.5, at: `#${heroId}`, container: "header", sel: "[aria-controls='chapter-menu']" },
@@ -201,10 +208,21 @@ const propertyRuns = (heroId, scrolledAt) => [
  */
 const RUN_SETS = {
   "/": HOME_RUNS,
-  "/mahua-vann": propertyRuns("vann-hero", "#vann-rooms"),
+  "/mahua-vann": [
+    ...propertyRuns("vann-hero", "#vann-table"),
+    // `vann-table` renders as `FullBleedQuote` — type over a photograph —
+    // and until Task 15 (9/10 Aug 2026) had never been measured: it fell
+    // through to that component's generic default scrim
+    // (`{ flat: 0.4, centre: 0.4 }`), tuned for no composition in particular.
+    // Added alongside `tola-table`'s equivalent below.
+    { name: "quote · vann-table", min: 3, at: "#vann-table", container: "#vann-table", sel: "#vann-table [data-word]" },
+  ],
   "/mahua-tola": [
     ...propertyRuns("tola-hero", "#tola-guest-word"),
     { name: "quote · tola-guest-word", min: 3, at: "#tola-guest-word", container: "#tola-guest-word", sel: "#tola-guest-word [data-word]" },
+    // `tola-table`, this page's other generic-scrim `FullBleedQuote` chapter
+    // — same gap `vann-table` had, closed the same way, Task 15.
+    { name: "quote · tola-table", min: 3, at: "#tola-table", container: "#tola-table", sel: "#tola-table [data-word]" },
   ],
 };
 

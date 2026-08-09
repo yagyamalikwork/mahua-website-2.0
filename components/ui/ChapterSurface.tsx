@@ -25,17 +25,35 @@
  * 67-71% empty, belonging to no chapter and so appearing in no chapter's score
  * (`docs/reviews/2026-08-05-density/`). 80px a side is the dial this comment
  * always said it was; nothing was removed to turn it.
+ *
+ * **`tight` is a second, narrower rhythm, added Task 15 (9/10 Aug 2026) and
+ * opt-in only — the default above is untouched, which is what keeps this
+ * change off the home page.** `OpeningColumn`, `PropertyMap` and `PressBand`
+ * are the property pages' three shortest chapters, each well under one
+ * 900px screen tall (`0.61`–`0.79` of one in `measure_density.mjs`'s own
+ * count), which is exactly the shape that fails non-negotiable #8: a chapter
+ * shorter than a screen is measured on the single 900px window centred on
+ * it, and the shorter the chapter, the more of that window is unavoidably
+ * some neighbour's own top/bottom padding rather than either chapter's real
+ * content. `vann-press` measured 88.4% empty this way. Shrinking the padding
+ * is "taking height back" in the same sense CLAUDE.md's own #8 examples
+ * are — it does not add anything, it removes air the chapter does not need
+ * to make its case, and it was re-measured after, not assumed:
+ * `docs/reviews/2026-08-09-property-redesign/README.md`.
  */
 export function ChapterSurface({
   id,
   children,
   surface = false,
+  tight = false,
   className,
 }: {
   id: string;
   children: React.ReactNode;
   /** Sit on `paperDeep` rather than `paper`. */
   surface?: boolean;
+  /** The narrower rhythm — see the doc comment above. */
+  tight?: boolean;
   className?: string;
 }) {
   return (
@@ -44,7 +62,7 @@ export function ChapterSurface({
       // `overflow-x-clip`, never `overflow-x-hidden`: several chapters push a
       // photograph past the viewport edge on purpose, and `hidden` would make
       // the page a scroll container and break `position: sticky` inside it.
-      className={`relative overflow-x-clip bg-[color:var(--bg)] py-14 md:py-16 lg:py-20 ${className ?? ""}`}
+      className={`relative overflow-x-clip bg-[color:var(--bg)] ${tight ? "py-10 md:py-12 lg:py-14" : "py-14 md:py-16 lg:py-20"} ${className ?? ""}`}
       style={surface ? ({ "--bg": "var(--surface)" } as React.CSSProperties) : undefined}
     >
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">{children}</div>

@@ -5,30 +5,37 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 
 ## Where we are
 
-**Branch `feat/chapters-rebuild`.** **Plans 3, 4, 5 and 6 are all complete.** The home page opens with a
+**Branch `feat/chapters-rebuild`.** **Plans 3, 4, 5, 6 and 7 are all complete.** The home page opens with a
 welcome carrying the client's logo, runs twelve chapters, and carries five signature interactions — the
-sliding rule, the leaf cursor, two films and a hanging lantern. **Both property pages are live**:
-`/mahua-vann` (six chapters) and `/mahua-tola` (seven, including the page's one full-bleed guest quote),
-each in two registers — the home page's chapter idiom, then a denser field-notes register for the rooms
-and getting-there — closing on a full-width photograph of the *other* lodge. The home page's lodge cards
-now link to them internally. Every page verified in a browser by rigs that have been watched failing first.
+sliding rule, the leaf cursor, two films and a hanging lantern. **Both property pages are live**,
+`/mahua-vann` and `/mahua-tola`, and were **rebuilt again in Plan 7** into a "shape vocabulary" — eight
+chapters each, no two adjacent chapters sharing a shape (mechanically enforced), a persistent booking bar,
+the client's own park maps drawn in cream, rooms as a showcase rather than a spec table, six experiences
+per property with an honest "also" line for what did not make the six, and contact details in place of the
+enquiry form the client dropped. This superseded Plan 6's `ChapterIntro`/`PlateGrid`/`RoomsIndex`/
+`FieldNotes` structure, which the client had approved but which still read as a template. The home page's
+lodge cards link to both pages internally. Every page verified in a browser by rigs that have been watched
+failing first.
 
 **Nothing is half-built.** One task is parked at the client's request (the butterfly, §13 of
-[`DECISIONS.md`](DECISIONS.md)) and the client-decisions list at the foot of this document gained four
-small property-page items (see `docs/reviews/2026-08-08-property-pages/README.md`).
+[`DECISIONS.md`](DECISIONS.md)). The client-decisions list gained the property pages' first four items from
+Plan 6 (see `docs/reviews/2026-08-08-property-pages/README.md`) and Plan 7 added its own three — the
+persistent bar, six experiences with an also-line, contact details instead of a form (`docs/DECISIONS.md`
+§1, 9 Aug).
 
-**Plan 6 carries a warning worth keeping.** Its execution session silently fell back from the intended
-model after a mid-session interruption, shipped `/mahua-vann` with failing density evidence committed as
-"verified", and was caught by the client the same night. The 9 Aug review-and-correction pass that
-followed is written up in the evidence README; DECISIONS.md §2 gained instances 26 and 27 from it. **When
-resuming an interrupted session, check the model first.**
+**Plan 6 carries a warning worth keeping**, even though its structure is superseded. Its execution session
+silently fell back from the intended model after a mid-session interruption, shipped `/mahua-vann` with
+failing density evidence committed as "verified", and was caught by the client the same night. The 9 Aug
+review-and-correction pass that followed is written up in the evidence README; DECISIONS.md §2 gained
+instances 26 and 27 from it. **When resuming an interrupted session, check the model first.**
 
 | Plan | State |
 |---|---|
 | 3 · [The chapters rebuild](superpowers/plans/2026-08-03-rebuild-chapters-layout.md) | ✅ eight tasks. Day-arc retired, copy harvested, library 14 → 34, twelve chapters, motion primitives, copy, the page, and the verification pass |
 | 4 · [The scroll craft](superpowers/plans/2026-08-05-scroll-craft.md) | ✅ seven tasks, five fix rounds. Fixed header, CSS entrances, pinned collage, emblem turn, GSAP out of the critical path |
 | 5 · [The signature interactions](superpowers/plans/2026-08-05-signature-interactions.md) | ✅ **nine of ten tasks; the butterfly parked by the client.** Plus three things the plan never contained: the two films, the lantern and the welcome |
-| 6 · [The property pages](superpowers/plans/2026-08-08-property-pages.md) | ✅ twelve tasks, then a full review-and-correction round (9 Aug). Library 34 → 53 photographs; two new section components (`RoomsIndex` bands, `FieldNotes` with the sibling banner); a shared `PropertyPage` renderer; the contrast rig made route-aware; GSAP's loader gated on the first scrolled pixel |
+| 6 · [The property pages](superpowers/plans/2026-08-08-property-pages.md) | ✅ (superseded by Plan 7) twelve tasks, then a full review-and-correction round (9 Aug). Library 34 → 53 photographs; the contrast rig made route-aware; GSAP's loader gated on the first scrolled pixel |
+| 7 · [The property pages redesign](superpowers/plans/2026-08-09-property-pages-redesign.md) | ✅ fifteen tasks. New shape vocabulary (`fullBleed`/`column`/`map`/`showcase`/`pair`/`press`/`invitation`) replaces Plan 6's structure; the client's Pench and Tadoba maps traced into cream field-guide artwork (`scripts/build_map.mjs`); Task 15 closed it out with both routes' rigs green and the home page proven untouched — `docs/reviews/2026-08-09-property-redesign/README.md` |
 
 ### Where Plan 5 actually got to
 
@@ -99,6 +106,40 @@ including scripting-off.
 they are charged against the hero — see [`DECISIONS.md`](DECISIONS.md) §14 for what that costs and what was
 tried. Three instrument defects it exposed along the way are recorded there too.
 
+## Where Plan 7 actually got to
+
+**The redesign, and why it exists.** Plan 6 shipped and the client approved it, then asked for a second
+pass 9 Aug: the pages still read like a template, the client's own park maps were unused, and an enquiry
+form was a defect waiting to happen (a bare `mailto:` on a phone with no mail client leaves the visitor
+believing they wrote to someone). Plan 7 is that second pass, not a bug-fix round on Plan 6.
+
+**The new component inventory** (`components/sections/`, `components/property/`) — each rendered by
+`PropertyPage.tsx`'s shape dispatcher, which switches on `PropertyChapter.shape` with an exhaustive
+never-check, so a shape with no renderer is a compile error:
+
+| Component | Shape | Carries |
+|---|---|---|
+| `Hero` (shared with the home page) | `fullBleed` (chapter 0 only) | The opening photograph and headline. Explicitly opts out of `Parallax` — it is the LCP element |
+| `FullBleedQuote` (shared with the home page) | `fullBleed` (non-hero, with `quoteCopy`) | A photograph with one line of type on it |
+| `OpeningColumn` | `column` | The page's one held breath — heading and two paragraphs, no photograph by design |
+| `PropertyMap` | `map` | The client's own park artwork (`lib/vann-map-art.ts` / `lib/tola-map-art.ts`, built by `scripts/build_map.mjs`), gates/water/villages/safari zones, the getting-there facts |
+| `RoomShowcase` | `showcase` | Rooms at three photograph scales (`offsetLeft`/`wide`/`offsetRight`) so the rooms read as a composition, not a ledger |
+| `ExperiencePair` | `pair` | Six experiences at two weights (`hero`/`quiet`) plus an optional `alsoLine` naming what did not make the six |
+| `PressBand` | `press` | Vann only — three real press citations, set as type, deliberately not as three foreign publications' logos |
+| `PropertyInvitation` | `invitation` | The closing ask: heading, the booking pill, `ContactBlock`, and a full-width photograph of the *other* lodge |
+| `PropertyBar` | (fixed chrome, not a chapter) | The persistent booking bar — slides in past the hero, steps aside over the closing invitation, renders nothing without JavaScript |
+| `ContactLine` / `ContactBlock` (`PropertyContact.tsx`) | — | The phone/email/address that replaced the enquiry form. `ContactLine` (the bar's own line) is hidden below 640px, present from 640px up |
+
+`RoomsIndex` and `FieldNotes` (Plan 6) are retired — nothing imports them and `tsc --noEmit` proves it.
+
+**Task 15 closed the branch out** (9/10 Aug): every rig green at both real routes, the home page proven
+untouched by the same three rigs that guard it, `vann-table`/`tola-table` measured for the first time
+(both clear their contrast floor on `FullBleedQuote`'s untouched default scrim), and eight screenshots
+opened and read rather than only captured. Three of eight chapters across both pages could not be brought
+inside the 45% density ceiling despite genuine, measured attempts (`vann-forest` 55.8%, `vann-press` 87.2%,
+`tola-reserve` 58.3%) — reported rather than forced; see `docs/reviews/2026-08-09-property-redesign/README.md`
+for the full working and what was tried and reverted. **371 tests, all green.**
+
 ## What a Plan 6 inherits
 
 **A finished home page and a clean base.** 280 tests, `tsc` / `build` / `lint` / `verify:budget` all clean,
@@ -158,7 +199,7 @@ The page's emptiest screen is the `field-days / rooms` join at 73.1%. `rooted / 
 
 ## Where the durable record lives
 
-**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the twenty-five-instance
+**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the twenty-eight-instance
 catalogue of this project's recurring defect, why the hero's budget is unreachable, and the things that look
 broken and are not. It exists because the per-task ledgers at `.superpowers/sdd/*/progress.md` are
 **git-ignored** — 335 lines across four plans that would not survive a fresh clone. Anything learned that
@@ -328,6 +369,21 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
   and video shoot is planned but **not soon**, and that newer assets can replace these later.
 - **Plan 4:** the signature interactions — spinning mahua emblem, leaf cursor, ink tiger.
 - **Plan 5:** performance hardening, the SEO redirect map (spec §10), Sanity CMS wiring.
+
+**From Plan 7 (9/10 Aug), still owed:**
+
+- **Tola's room count** — twelve on the live site's own structured list, fourteen in the brand record (three
+  river-facing machaan rooms under construction, no published facts yet). `content/mahua-tola.ts` states
+  twelve and flags it; not this task's call.
+- **Nagpur's distance from both lodges** — Vann: 80 km live vs 104–112 km brand record; Tola: 100 km live,
+  uncorroborated. Both pages name Nagpur as the gateway city and state no figure.
+- **Tola's map: the gate/zone marker distinction is confirmed too subtle by eye**, and there is no legend
+  entry at all for what a safari-zone square means. Screenshotted and reported, not fixed —
+  `docs/reviews/2026-08-09-property-redesign/README.md` §5.
+- **Three chapters remain over the 45% density ceiling** — `vann-forest` (55.8%), `vann-press` (87.2%),
+  `tola-reserve` (58.3%) — after real, measured improvement. The remaining levers would either widen a
+  deliberately quiet screen past what non-negotiable #4 protects or enlarge press citations past "set
+  quietly". Same README, §2.
 
 ## Process notes worth keeping
 

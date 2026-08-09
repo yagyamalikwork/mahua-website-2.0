@@ -30,6 +30,28 @@ export type PressBandCopy = {
  *
  * This shape is type-led and therefore counts as a *quiet* screen for the
  * rhythm rule — see `PROPERTY_IMAGE_LED_SHAPES`.
+ *
+ * **`tight` + larger type, Task 15 (9/10 Aug 2026) — and a stacked layout
+ * that was tried and reverted.** At 545px (0.61 of a 900px screen) this was
+ * the emptiest chapter on either page — `measure_density.mjs` scored
+ * `vann-press` at 88.4%, sandwiched between the tail of `vann-day` and the
+ * head of `vann-invitation` with almost nothing in the window that was a
+ * photograph. `tight` padding plus one step of larger type (`text-xl`→
+ * `text-2xl`, `0.98rem`→`1.05rem`, the standfirst's cap dropped from 44ch)
+ * brought it to 87.2% — measured, not assumed.
+ *
+ * A single-column, publication-beside-copy layout was tried next, on the
+ * theory that a `lg:grid-cols-3` grid put every line in a column a third of
+ * the screen wide. Measured, it made the chapter *taller* (0.57 → 0.85
+ * screens) and *emptier* (87.2% → 89.6%): a headline and a one-sentence
+ * standfirst are short strings that do not stretch to fill a wider box, they
+ * just sit in more of it, and the extra vertical rhythm the stacked rows
+ * added diluted the same words over more area. Reverted for that reason —
+ * see `docs/reviews/2026-08-09-property-redesign/README.md` for both
+ * readings. `vann-press` is reported there as a chapter the ceiling could
+ * not be brought inside of without either enlarging three press citations
+ * past what "set quietly" (this component's own opening line) means, or
+ * inventing content non-negotiable #6 already forbids.
  */
 export function PressBand({
   chapter,
@@ -41,7 +63,7 @@ export function PressBand({
   surface?: boolean;
 }) {
   return (
-    <ChapterSurface id={chapter.id} surface={surface}>
+    <ChapterSurface id={chapter.id} surface={surface} tight>
       <div>
         <Enter>
           <div>
@@ -62,11 +84,11 @@ export function PressBand({
                 >
                   {article.publication}
                 </p>
-                <h3 className="mt-4 font-[family-name:var(--font-display)] text-xl font-light leading-snug text-[color:var(--text)]">
+                <h3 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-light leading-snug text-[color:var(--text)]">
                   {article.headline}
                 </h3>
                 <p
-                  className="mt-3 max-w-[44ch] font-[family-name:var(--font-body)] text-[0.98rem] leading-[1.7]"
+                  className="mt-3 font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.7]"
                   style={{ color: "var(--dim)" }}
                 >
                   {article.standfirst}
