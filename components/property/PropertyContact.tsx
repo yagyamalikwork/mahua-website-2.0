@@ -1,16 +1,22 @@
 import type { ReactNode } from "react";
 
-export type ContactEntry = {
+export type ContactLink = {
   readonly label: string;
   readonly value: string;
-  /** Absent for the address: a postal address is not a link. */
-  readonly href?: string;
+  readonly href: string;
 };
 
+export type ContactFact = {
+  readonly label: string;
+  readonly value: string;
+};
+
+type ContactEntry = ContactLink | ContactFact;
+
 export type PropertyContactCopy = {
-  readonly phone: ContactEntry;
-  readonly email: ContactEntry;
-  readonly address: ContactEntry;
+  readonly phone: ContactLink;
+  readonly email: ContactLink;
+  readonly address: ContactFact;
 };
 
 /**
@@ -30,7 +36,7 @@ const LINK_CLASS =
   "rule-in inline-block pb-0.5 font-[family-name:var(--font-body)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]";
 
 function Row({ entry }: { entry: ContactEntry }) {
-  const body: ReactNode = entry.href ? (
+  const body: ReactNode = "href" in entry ? (
     <a href={entry.href} className={LINK_CLASS} style={{ color: "var(--accent-text)" }}>
       {entry.value}
     </a>
@@ -73,6 +79,10 @@ export function ContactBlock({ copy }: { copy: PropertyContactCopy }) {
  * On an Indian phone this is the shortest route there is from wanting to stay
  * to speaking to somebody, which is why it sits beside Book rather than
  * behind anything.
+ *
+ * Hidden on mobile (390px): the bar already holds the property name and booking pill,
+ * and adding a third item wraps it to two lines. The number is one tap away in the
+ * closing band's ContactBlock, so the bar's job at narrow widths is Book.
  */
 export function ContactLine({ copy }: { copy: PropertyContactCopy }) {
   return (
