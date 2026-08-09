@@ -12,7 +12,15 @@ import {
   FIELD_NOTES_SIBLING_SIZES,
 } from "@/components/sections/FieldNotes";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
+// `RoomsIndex` is the component `RoomShowcase` replaces. It is still wired
+// into `content/mahua-vann.ts`, `content/mahua-tola.ts` and `PropertyPage.tsx`
+// until Tasks 12-14 rewire them, so its `sizes` prop is still real and still
+// live — deleting this import now would make the "imports from every
+// component that passes a sizes prop" check below fail on a file this task
+// has no mandate to touch. Both imports stay until the task that deletes
+// `RoomsIndex.tsx` removes this one with it.
 import { ROOMS_BOX, ROOMS_SIZES } from "@/components/sections/RoomsIndex";
+import { ROOM_BOXES, ROOM_SIZES, type RoomScale } from "@/components/sections/RoomShowcase";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
   BOXES as TESTIMONIAL_BOXES,
@@ -170,8 +178,16 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: TESTIMONIAL_SIZES[k],
     box: TESTIMONIAL_BOXES[k] as CoverBox,
   })),
-  // The property pages' rooms bands — one eight-column 4:3 plate, every band.
+  // `RoomsIndex.band` — still rendered by the live content dials until a
+  // later task retires it (see the import comment above).
   { name: "RoomsIndex.band", sizes: ROOMS_SIZES, box: ROOMS_BOX },
+  // Its replacement: three scales, so consecutive rooms never repeat a
+  // band's ledger rhythm.
+  ...(["wide", "offsetRight", "offsetLeft"] as const).map((k: RoomScale) => ({
+    name: `RoomShowcase.${k}`,
+    sizes: ROOM_SIZES[k],
+    box: ROOM_BOXES[k] as CoverBox,
+  })),
   // The field notes' sibling-lodge banner — full container width at 21:9.
   { name: "FieldNotes.sibling", sizes: FIELD_NOTES_SIBLING_SIZES, box: FIELD_NOTES_SIBLING_BOX },
 ];
@@ -211,7 +227,15 @@ describe("the sizes the page actually serves", () => {
     // genuinely new string. The field notes' sibling banner spans the full
     // container and so repeats `PLATE_SIZES[1]`'s string (deliberately
     // written out, not imported) — one more row, no new distinct string.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(22);
+    // 24 since the same day, when `RoomShowcase` replaced `RoomsIndex`'s
+    // ledger of bands with three rooms at three scales: `ROOM_SIZES.wide`
+    // repeats `PLATE_SIZES[1]` verbatim (one more row, no new string), but
+    // `offsetRight` and `offsetLeft` are genuinely new crops, so +2.
+    // `RoomsIndex.band`'s own slot and string are still here too — the
+    // component it describes is still wired into the live content dials
+    // until Tasks 12-14 retire it, so its `sizes` string is still real and
+    // still owed coverage; see the import comment above.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -356,6 +380,7 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
     { file: "components/sections/RoomsIndex.tsx", declared: ROOMS_BOX },
+    { file: "components/sections/RoomShowcase.tsx", declared: ROOM_BOXES },
     { file: "components/sections/FieldNotes.tsx", declared: FIELD_NOTES_SIBLING_BOX },
     { file: "components/motion/PinnedCollage.tsx", declared: COLLAGE_BOXES },
   ];
