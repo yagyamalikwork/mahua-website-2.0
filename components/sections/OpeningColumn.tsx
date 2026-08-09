@@ -46,9 +46,11 @@ export function OpeningColumn({
         </Enter>
         <Enter delay={ENTER.stagger}>
           <div className="mt-9 space-y-6">
-            {copy.body.map((p) => (
+            {copy.body.map((p, i) => (
               <p
-                key={p.slice(0, 32)}
+                // Index is correct here because this list is static and never reorders,
+                // filters or animates between states. See ChapterIntro for the established pattern.
+                key={i}
                 className="font-[family-name:var(--font-body)] text-[1.08rem] leading-[1.8] md:text-lg"
                 style={{ color: "var(--dim)" }}
               >
