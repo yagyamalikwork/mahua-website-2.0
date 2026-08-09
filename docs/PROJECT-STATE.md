@@ -17,6 +17,23 @@ enquiry form the client dropped. This superseded Plan 6's `ChapterIntro`/`PlateG
 lodge cards link to both pages internally. Every page verified in a browser by rigs that have been watched
 failing first.
 
+**Done 10 Aug, after Plan 7 closed.** The final whole-branch review (run on the most capable model) returned
+one Critical and two Important findings that fifteen task reviews had all passed, and all were fixed
+(`6dad619`, `cb65fef`, `765a464`):
+
+- **The map was illegible on a phone** — 4.3px labels at 390px, Tola's thirty overprinting. The redesign's
+  signature element, decoration on the traffic that matters most. Fixed by growing the type *and* thinning
+  the label set below `lg` with a collision-reach calculation (Tola drops 30 labels to 12). `DECISIONS.md`
+  §2 #29 records why every rig missed it.
+- **The two pages still shared sentences** — the invitation line was byte-identical bar the gate name, and
+  it is the last line a visitor reads on either page. The anti-template guard covered the opening headline
+  only. Both lines rewritten, guard widened and watched failing. §2 #30.
+- **The legend marks could not be told apart** — `gate` and `road` were the same swatch, `zone` had none.
+
+**Also 10 Aug: a guest's face withdrawn on consent grounds** from Mahua Tola's Bonfire entry, replaced with
+a frame from the client's own Tola property video that carries no people, and the withdrawn photograph
+deleted from the pipeline rather than shelved (`DECISIONS.md` §1, 10 Aug).
+
 **Nothing is half-built.** One task is parked at the client's request (the butterfly, §13 of
 [`DECISIONS.md`](DECISIONS.md)). The client-decisions list gained the property pages' first four items from
 Plan 6 (see `docs/reviews/2026-08-08-property-pages/README.md`) and Plan 7 added its own three — the

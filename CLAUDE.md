@@ -6,8 +6,10 @@ throughout, in the layout language of [thesujanlife.com](https://thesujanlife.co
 hand-drawn field-guide idiom.
 
 > **Read these four, in order, before doing any work:**
-> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the twenty-eight-instance defect
->    pattern, and the things that look broken and are not.** §7–§14 are the expensive findings: the leaf's
+> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the thirty-instance defect
+>    pattern, and the things that look broken and are not.** §5 carries the one open question the client
+>    still owns: three chapters above the 45% density ceiling, and why two of them arguably cannot be
+>    fixed. §7–§14 are the expensive findings: the leaf's
 >    removability contract, why three hand-drawn tigers failed, film on cream, what a figure does to a
 >    chapter's density, the lantern, the films' rig, the butterfly's restart brief, and the welcome screen. Distilled from the per-task ledgers, which are
 >    git-ignored and do not survive a clone. Read it before relitigating anything.
@@ -39,7 +41,7 @@ hand-drawn field-guide idiom.
 | **Working mode** | Implementer + adversarial reviewer per task, fix rounds where needed. Plan 4 ran seven tasks, five fix rounds, and a whole-branch review. Plan 7 ran fifteen tasks, closed by a whole-branch verification (Task 15) that also proved the home page untouched. |
 | **Scope** | The **home page is done**, and **both property pages are live** — `/mahua-vann` and `/mahua-tola`, rebuilt in Plan 7's shape vocabulary (9/10 Aug), superseding Plan 6's field-notes register. Plan 6 shipped once on 8 Aug with failing evidence by a session that had silently dropped to a smaller model, then fully reviewed, corrected and re-verified on 9 Aug (`docs/reviews/2026-08-08-property-pages/README.md`, DECISIONS.md §2 instances 26–27); Plan 7's own Task 15 closed the redesign out (`docs/reviews/2026-08-09-property-redesign/README.md`, instance 28). Open items: Tola's room count, a Nagpur distance for both lodges, Tola's map gate/zone marker legibility, and three chapters that remain over the 45% density ceiling after genuine, measured attempts (`vann-forest`, `vann-press`, `tola-reserve`) — full reasoning in that README. Booking restyle, Tripadvisor wiring, the SEO redirect map and CMS remain out of scope until asked. |
 | **See it** | `npm run dev` → `/`. A welcome screen, then twelve chapters, 34 photographs, two films, a lantern, ~18 screens at 1440×900. **Demo above 1500px** — the pinned collage needs ≥1440 of *layout* viewport, so a Windows laptop at 1440 with a classic scrollbar will not show it, and the lantern is at its full size only from 1440 up. `/mahua-vann` and `/mahua-tola` are eight chapters each, no scrollbar-width caveat — neither pins anything. |
-| **Tests** | **371**, all green. `npm test` must stay green before any commit claiming completion. |
+| **Tests** | **375**, all green. `npm test` must stay green before any commit claiming completion. |
 | **Evidence** | `docs/reviews/2026-08-09-property-redesign/` (Plan 7's close-out — both property routes' density, contrast, rule-in, transfer, JS budget, and the home-page regression proof), `docs/reviews/2026-08-08-property-pages/` (Plan 6's own evidence, superseded), `2026-08-08-welcome/` (the welcome), `2026-08-08-films/` (the two films), `2026-08-07-lantern/` (the lantern), `2026-08-05-signature/` (Plan 5), `2026-08-05-scroll-craft/` (Plan 4), `2026-08-04-task-7/` (Plan 3). **Every number is re-derivable with one command** — the rigs live in `scripts/` and each one asserts. `npm run verify:budget` builds, serves, measures and propagates its exit code. |
 
 ## The non-negotiables
@@ -239,6 +241,18 @@ Decided and reasoned through with the client. **Do not relitigate these without 
 11. **Only images ≥ 1400px wide may go full-bleed.** Narrower images tiled edge-to-edge is exactly the
     "resemblance to a template, not the reference" complaint. `lib/media.ts` marks each entry
     `fullBleedSafe`; below 1400px it must be `false`.
+
+**A recognisable guest's face never ships without consent.** Two photographs have now been rejected on
+these grounds — one in the original curation, one withdrawn by the client on 10 Aug after it had already
+shipped on `/mahua-tola`. A rejected image is **deleted from `CURATION`**, not left curated-but-unused: an
+id in the manifest is an id a later chapter reaches for by name, without ever seeing the face in it. Both
+instances are recorded in `scripts/build_images.mjs`'s own comment. Look at every frame before curating it.
+
+**Every rig on this project measures at 1440×900, and type over cream is measured nowhere.** That shared
+blind spot let the redesign's signature element — the drawn park map — ship *illegible on a phone*, through
+fifteen task reviews and a whole-branch verification, because its labels were 4.3px at 390px and no
+instrument looks there. **Open a 390px screenshot and read it** before believing a page is done.
+`DECISIONS.md` §2 #29.
 
 **Contrast is checked by test, not by eye.** `lib/contrast.ts` + `lib/palette.test.ts` guard the fixed
 palette (≥4.5:1 body text, ≥4.5:1 links, on both paper surfaces). Text laid over a photograph (hero,
