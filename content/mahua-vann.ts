@@ -407,7 +407,14 @@ export const VANN_COPY: PropertyPageCopy = {
   invitationCopy: {
     "vann-invitation": {
       heading: { text: "Stay at Mahua Vann", dim: "Vann" },
-      line: "The forest is five kilometres from Turia Gate, and it is ready for you. Write to us, or call — we will do the rest.",
+      // Rewritten in the whole-branch review's fix wave (10 Aug 2026): this
+      // line was byte-identical to Mahua Tola's own, bar the gate name — the
+      // last sentence a visitor reads on either page, saying the same thing
+      // twice. Kipling is Vann's own texture (already established in
+      // columnCopy above), not Tola's, and belongs in its close too. See
+      // content/mahua-tola.test.ts's widened "does not reuse Mahua Vann's
+      // opening headline" test, which now checks this field as well.
+      line: "Turia Gate is five kilometres up the road, and the forest Kipling wrote about is waiting on the other side of it. Write to us, or call — we will do the rest.",
       bookLabel: "Book Mahua Vann",
       contact: VANN_CONTACT,
       sibling: {

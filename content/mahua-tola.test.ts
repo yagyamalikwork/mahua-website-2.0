@@ -214,13 +214,47 @@ describe("TOLA_CHAPTERS", () => {
     }
   });
 
-  it("does not reuse Mahua Vann's opening headline", () => {
+  it("does not reuse Mahua Vann's opening headline, invitation line, or chapter-01 opening sentence", () => {
     // Both pages shipped on 9 Aug with "Five kilometres from the gate" as
     // chapter 01. Nothing tells a visitor they are reading a template faster
     // than two properties introducing themselves in the same words.
     expect(TOLA_COPY.columnCopy?.["tola-reserve"]?.heading.text).not.toBe(
       VANN_COPY.columnCopy?.["vann-forest"]?.heading.text,
     );
+
+    // Widened in the whole-branch review's fix wave (10 Aug 2026): the
+    // headline guard above shipped alone, and two more sentences sat right
+    // below it byte-identical bar a gate name — the closing invitation's
+    // line (the last sentence a visitor reads on either page) and chapter
+    // 01's own opening clause. A plain `.not.toBe` would not have caught
+    // either: "The forest is five kilometres from Turia Gate…" and "…from
+    // Kolara Gate…" are technically unequal strings while reading as one
+    // description with the nouns swapped, which is the exact complaint this
+    // whole redesign exists to answer ("very wordpress and templaty").
+    // `stripGateNames` closes that loophole by normalising both known gate
+    // names to one token before comparing, so a rewrite that only swaps the
+    // gate back in cannot silently pass this test again.
+    const stripGateNames = (s: string) => s.replace(/Turia Gate/g, "GATE").replace(/Kolara Gate/g, "GATE");
+
+    const vannLine = VANN_COPY.invitationCopy?.["vann-invitation"]?.line;
+    const tolaLine = TOLA_COPY.invitationCopy?.["tola-invitation"]?.line;
+    expect(vannLine, "Mahua Vann has no invitation line").toBeDefined();
+    expect(tolaLine, "Mahua Tola has no invitation line").toBeDefined();
+    expect(tolaLine, "invitation lines are byte-identical").not.toBe(vannLine);
+    expect(
+      stripGateNames(tolaLine!),
+      "invitation lines differ only by the gate name",
+    ).not.toBe(stripGateNames(vannLine!));
+
+    const vannOpener = VANN_COPY.columnCopy?.["vann-forest"]?.body[0];
+    const tolaOpener = TOLA_COPY.columnCopy?.["tola-reserve"]?.body[0];
+    expect(vannOpener, "Mahua Vann has no chapter 01 opening paragraph").toBeDefined();
+    expect(tolaOpener, "Mahua Tola has no chapter 01 opening paragraph").toBeDefined();
+    expect(tolaOpener, "chapter 01 openers are byte-identical").not.toBe(vannOpener);
+    expect(
+      stripGateNames(tolaOpener!),
+      "chapter 01 openers differ only by the gate name",
+    ).not.toBe(stripGateNames(vannOpener!));
   });
 
   it("reuses its guest quote byte-identical to the attributed original in content/home.ts", () => {

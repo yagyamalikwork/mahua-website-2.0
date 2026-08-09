@@ -191,10 +191,17 @@ export const TOLA_COPY: PropertyPageCopy = {
       // Hattinala."
       heading: { text: "Where Tadoba runs at its densest", dim: "densest" },
       body: [
-        "Mahua Tola sits at the edge of the Tadoba-Andhari Tiger Reserve, close enough to Kolara " +
-          "Gate to be among the first vehicles through it. Tadoba carries one of the highest tiger " +
-          "densities anywhere in the country, and the drives here are guided by trackers who know " +
-          "this forest's cats by name.",
+        // First sentence rewritten in the whole-branch review's fix wave (10
+        // Aug 2026): it shared the clause "close enough to [Gate] to be
+        // among the first vehicles through it" verbatim with Mahua Vann's
+        // own opening paragraph, bar the gate name. Same fact (five
+        // kilometres, Kolara Gate — see mapCopy and gettingThere below), put
+        // differently, and leading with what actually distinguishes this
+        // reserve rather than a sentence shape Vann's file already used.
+        "Mahua Tola sits at the edge of the Tadoba-Andhari Tiger Reserve, a five-kilometre run from " +
+          "Kolara Gate that puts its jeeps at the front of the queue when the barrier lifts. Tadoba " +
+          "carries one of the highest tiger densities anywhere in the country, and the drives here " +
+          "are guided by trackers who know this forest's cats by name.",
         "The Hattinala river runs along the property — flowing water, birdsong, and a walk with " +
           "nothing scheduled on it. The villages just beyond the boundary are their own find: a " +
           "warm welcome, and a bamboo crafts market worth the detour.",
@@ -531,7 +538,13 @@ export const TOLA_COPY: PropertyPageCopy = {
   invitationCopy: {
     "tola-invitation": {
       heading: { text: "Stay at Mahua Tola", dim: "Tola" },
-      line: "The forest is five kilometres from Kolara Gate, and it is ready for you. Write to us, or call — we will do the rest.",
+      // Rewritten in the whole-branch review's fix wave (10 Aug 2026): this
+      // line was byte-identical to Mahua Vann's own, bar the gate name — the
+      // sharpest evidence the client's "very wordpress and templaty" verdict
+      // had, on the last sentence a visitor reads on either page. Tadoba's
+      // tiger density is this page's own texture (already established in
+      // columnCopy above), not Vann's, and belongs in its close too.
+      line: "Kolara Gate is five kilometres away, close enough that the tigers of Tadoba are almost part of the address. Write to us, or call, and we will take it from there.",
       bookLabel: "Book Mahua Tola",
       contact: TOLA_CONTACT,
       sibling: {
