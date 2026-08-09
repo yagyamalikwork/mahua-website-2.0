@@ -5,29 +5,10 @@ import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
 import type { PressBandCopy } from "@/components/sections/PressBand";
 import type { FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
 import type { HeroCopy } from "@/components/sections/Hero";
+import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
 import type { PropertyContactCopy } from "@/components/property/PropertyContact";
 import type { PropertyChapter } from "./property-chapters";
-
-/**
- * The shape `PropertyPage.tsx` will declare as `PropertyPageCopy` once Task 14
- * rewrites it to the new shape vocabulary (`fullBleed | column | map |
- * showcase | pair | press | invitation`, see `content/property-chapters.ts`).
- * Declared locally so this file type-checks on its own ahead of that rewrite —
- * Task 14 replaces this with `import type { PropertyPageCopy } from
- * "@/components/property/PropertyPage"` and this type can be deleted then.
- * Keep the two in sync until it lands.
- */
-export type VannPageCopy = {
-  readonly heroCopy?: HeroCopy;
-  readonly columnCopy?: Record<string, OpeningColumnCopy>;
-  readonly mapCopy?: Record<string, PropertyMapCopy>;
-  readonly showcaseCopy?: Record<string, RoomShowcaseCopy>;
-  readonly pairCopy?: Record<string, ExperiencePairCopy>;
-  readonly pressCopy?: Record<string, PressBandCopy>;
-  readonly quoteCopy?: Record<string, FullBleedQuoteCopy>;
-  readonly invitationCopy?: Record<string, PropertyInvitationCopy>;
-};
 
 /**
  * Mahua Vann's spine, in the redesign's shape vocabulary. Eight moments, no
@@ -139,7 +120,7 @@ export const VANN_CONTACT: PropertyContactCopy = {
  * but Nagpur itself is uncontested and is the fact a traveller needs, so the
  * getting-there row names the city and claims no figure.
  */
-export const VANN_COPY: VannPageCopy = {
+export const VANN_COPY: PropertyPageCopy = {
   heroCopy: {
     headline: "Pench, at the hour the forest wakes",
     sub: "Mahua Vann — five kilometres from Turia Gate, among the first vehicles through it at dawn.",

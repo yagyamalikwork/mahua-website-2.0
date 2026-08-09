@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PropertyPage } from "@/components/property/PropertyPage";
-import { TOLA_CHAPTERS, TOLA_COPY, TOLA_NAV } from "@/content/mahua-tola";
+import { TOLA_BAR, TOLA_CHAPTERS, TOLA_COPY, TOLA_NAV } from "@/content/mahua-tola";
 
 export const metadata: Metadata = {
   title: "Mahua Tola, Tadoba — Mahua Resorts",
@@ -25,10 +25,14 @@ export default function MahuaTolaPage() {
         // docs/reviews/2026-08-08-property-pages/tola-contrast.json.
         "tola-hero": { top: 0.92, bottom: 0.6, corner: 0.85, flat: 0.12 },
         "tola-guest-word": { flat: 0.36, centre: 0.42 },
+        // `tola-table`, this page's third `fullBleed` chapter, also has no
+        // entry here — same reasoning as Vann's `vann-table`. It has a
+        // `quoteCopy` entry, so it renders as a `FullBleedQuote`, and it
+        // falls through to that component's own generic default scrim until
+        // Task 15 measures it against the real composition.
       }}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MA=="
-      bookLabel={TOLA_COPY.fieldNotesCopy!["tola-field-notes"].bookLabel}
-      enquireHref="mailto:sales@mahuaresorts.com?subject=Enquiry%20—%20Mahua%20Tola"
+      bar={TOLA_BAR}
       siblingHref="/mahua-vann"
       nav={TOLA_NAV}
     />

@@ -12,19 +12,7 @@ import {
   EXPERIENCE_SIZES,
   type ExperienceWeight,
 } from "@/components/sections/ExperiencePair";
-import {
-  FIELD_NOTES_SIBLING_BOX,
-  FIELD_NOTES_SIBLING_SIZES,
-} from "@/components/sections/FieldNotes";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
-// `RoomsIndex` is the component `RoomShowcase` replaces. It is still wired
-// into `content/mahua-vann.ts`, `content/mahua-tola.ts` and `PropertyPage.tsx`
-// until Tasks 12-14 rewire them, so its `sizes` prop is still real and still
-// live — deleting this import now would make the "imports from every
-// component that passes a sizes prop" check below fail on a file this task
-// has no mandate to touch. Both imports stay until the task that deletes
-// `RoomsIndex.tsx` removes this one with it.
-import { ROOMS_BOX, ROOMS_SIZES } from "@/components/sections/RoomsIndex";
 import { ROOM_BOXES, ROOM_SIZES, type RoomScale } from "@/components/sections/RoomShowcase";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
@@ -184,18 +172,16 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: TESTIMONIAL_SIZES[k],
     box: TESTIMONIAL_BOXES[k] as CoverBox,
   })),
-  // `RoomsIndex.band` — still rendered by the live content dials until a
-  // later task retires it (see the import comment above).
-  { name: "RoomsIndex.band", sizes: ROOMS_SIZES, box: ROOMS_BOX },
-  // Its replacement: three scales, so consecutive rooms never repeat a
-  // band's ledger rhythm.
+  // Three scales, so consecutive rooms never repeat a band's ledger rhythm.
+  // `RoomsIndex.band`, the component this replaced, is retired as of Task 14
+  // (9 Aug 2026) — deleted along with `FieldNotes.tsx`, and both slots below
+  // that described them are gone with it (see the distinct-string comment
+  // beneath the assertion this feeds).
   ...(["wide", "offsetRight", "offsetLeft"] as const).map((k: RoomScale) => ({
     name: `RoomShowcase.${k}`,
     sizes: ROOM_SIZES[k],
     box: ROOM_BOXES[k] as CoverBox,
   })),
-  // The field notes' sibling-lodge banner — full container width at 21:9.
-  { name: "FieldNotes.sibling", sizes: FIELD_NOTES_SIBLING_SIZES, box: FIELD_NOTES_SIBLING_BOX },
   // The day's six experiences, two weights. `hero` repeats `PLATE_SIZES[1]`
   // and `quiet` repeats `PLATE_SIZES[2]` verbatim — same container, same
   // columns — so neither adds a distinct string; both still get their own
@@ -265,7 +251,17 @@ describe("the sizes the page actually serves", () => {
     // character for character, checked by hand rather than assumed — same
     // 1600px container, one column, no `50vw` tier. One more row, no new
     // string; its 21:9 box is the only new thing about it.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
+    // 23 since Task 14 (9 Aug 2026), which retired `RoomsIndex.tsx` and
+    // `FieldNotes.tsx` now that `RoomShowcase` and `PropertyInvitation` are
+    // wired into both live routes and nothing imports the old two any more.
+    // Their two slots come out of `LIVE_SLOTS` with them. `FieldNotes.sibling`
+    // was never a distinct string (it repeated `PLATE_SIZES[1]`, per the note
+    // that used to sit above it), so removing it costs nothing here.
+    // `RoomsIndex.band` (`ROOMS_SIZES`) *was* the one genuinely new string
+    // the 21→22 step added — no surviving slot shares it — so losing it is
+    // the whole of the drop: 24 → 23, read off this suite rather than
+    // computed by hand, per this task's own instruction not to guess it.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(23);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -409,9 +405,7 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/SplitFeature.tsx", declared: SPLIT_BOXES },
     { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
-    { file: "components/sections/RoomsIndex.tsx", declared: ROOMS_BOX },
     { file: "components/sections/RoomShowcase.tsx", declared: ROOM_BOXES },
-    { file: "components/sections/FieldNotes.tsx", declared: FIELD_NOTES_SIBLING_BOX },
     // The day's six experiences: `hero` at 2:1, `quiet` at 4:5 — new crops
     // even though both `sizes` strings are borrowed from `PlateGrid`.
     { file: "components/sections/ExperiencePair.tsx", declared: EXPERIENCE_BOXES },

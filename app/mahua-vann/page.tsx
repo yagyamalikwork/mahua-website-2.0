@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PropertyPage } from "@/components/property/PropertyPage";
-import { VANN_CHAPTERS, VANN_COPY, VANN_NAV } from "@/content/mahua-vann";
+import { VANN_BAR, VANN_CHAPTERS, VANN_COPY, VANN_NAV } from "@/content/mahua-vann";
 
 export const metadata: Metadata = {
   title: "Mahua Vann, Pench — Mahua Resorts",
@@ -22,10 +22,15 @@ export default function MahuaVannPage() {
       // portrait crop centres the pale stone floor under the type. `bottom`
       // raised until the worst pixel under the sub cleared 4.5. Figures in
       // `docs/reviews/2026-08-08-property-pages/vann-contrast.json`.
+      //
+      // `vann-table`, this page's other `fullBleed` chapter, carries no entry
+      // here on purpose: it renders as a `FullBleedQuote` (it has a
+      // `quoteCopy` entry — see `PropertyPage.tsx`'s dispatcher), and it has
+      // not yet been measured against the new composition. It falls through
+      // to `FullBleedQuote`'s own generic default. Task 15 re-measures it.
       scrim={{ "vann-hero": { top: 0.92, bottom: 0.78, corner: 0.88 } }}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MQ=="
-      bookLabel={VANN_COPY.fieldNotesCopy!["vann-field-notes"].bookLabel}
-      enquireHref="mailto:sales@mahuaresorts.com?subject=Enquiry%20—%20Mahua%20Vann"
+      bar={VANN_BAR}
       siblingHref="/mahua-tola"
       nav={VANN_NAV}
     />

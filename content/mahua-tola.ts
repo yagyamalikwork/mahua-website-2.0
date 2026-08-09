@@ -4,31 +4,10 @@ import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase";
 import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
 import type { FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
 import type { HeroCopy } from "@/components/sections/Hero";
+import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
 import type { PropertyContactCopy } from "@/components/property/PropertyContact";
 import type { PropertyChapter } from "./property-chapters";
-
-/**
- * The shape `PropertyPage.tsx` will declare as `PropertyPageCopy` once Task 14
- * rewrites it to the new shape vocabulary (`fullBleed | column | map |
- * showcase | pair | press | invitation`, see `content/property-chapters.ts`).
- * Declared locally so this file type-checks on its own ahead of that rewrite —
- * Task 14 replaces this with `import type { PropertyPageCopy } from
- * "@/components/property/PropertyPage"` and this type can be deleted then.
- * Keep it in sync with `VannPageCopy` in `content/mahua-vann.ts` (same shape,
- * minus `pressCopy`'s ever being read — Tola has no press band, but the field
- * stays on the type for parity with Vann's, unused, so both files can share
- * one eventual `PropertyPageCopy`) until it lands.
- */
-export type TolaPageCopy = {
-  readonly heroCopy?: HeroCopy;
-  readonly columnCopy?: Record<string, OpeningColumnCopy>;
-  readonly mapCopy?: Record<string, PropertyMapCopy>;
-  readonly showcaseCopy?: Record<string, RoomShowcaseCopy>;
-  readonly pairCopy?: Record<string, ExperiencePairCopy>;
-  readonly quoteCopy?: Record<string, FullBleedQuoteCopy>;
-  readonly invitationCopy?: Record<string, PropertyInvitationCopy>;
-};
 
 /**
  * Mahua Tola's spine, in the redesign's shape vocabulary — deliberately NOT
@@ -187,7 +166,7 @@ export const TOLA_CONTACT: PropertyContactCopy = {
  * fact a traveller needs, so the getting-there row names the city and claims
  * no figure.
  */
-export const TOLA_COPY: TolaPageCopy = {
+export const TOLA_COPY: PropertyPageCopy = {
   heroCopy: {
     headline: "Tadoba, raw and close to the gate",
     sub: "Mahua Tola — on the Hattinala river, five kilometres from Kolara Gate.",

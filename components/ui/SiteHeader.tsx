@@ -41,7 +41,6 @@ import { HOME } from "@/content/home";
  */
 type HeaderChapter = {
   readonly id: string;
-  readonly kind?: string;
   readonly number?: string;
   readonly label?: string;
 };
@@ -57,10 +56,16 @@ export function SiteHeader({
   chapters?: readonly HeaderChapter[];
   nav?: { menu: string; menuTitle: string; menuClose: string; menuHint: string };
 }) {
-  // Found by kind rather than by index. The hero is the chapter the bar is
-  // transparent over, and "the first chapter" is a coincidence of the current
-  // spine rather than a property of it.
-  const hero = chapters.find((chapter) => chapter.kind === "hero");
+  // Found by position, not by tag. This header now renders both the home
+  // page (`content/chapters.ts`, `kind: "hero"`) and the two property pages
+  // (`content/property-chapters.ts`), whose `PropertyChapter` carries no
+  // `kind` at all — it dispatches on a different, non-overlapping `shape`
+  // union instead (see `content/property-chapters.ts`). There is no tag both
+  // spines share to search by, so this reads the one thing they do share:
+  // the hero is always the first chapter, in all three spines, each with its
+  // own test asserting it (`content/chapters.test.ts`,
+  // `content/mahua-vann.test.ts`, `content/mahua-tola.test.ts`).
+  const hero = chapters[0];
   if (!hero) throw new Error("The page has no hero chapter for the header to watch.");
 
   return (
