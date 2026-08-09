@@ -637,6 +637,14 @@ const CURATION = [
     // both cottage types and reserves "deck" for the one over the seasonal
     // river). Reworded to "sit-out" so the alt text doesn't read as
     // contradicting the room name it will sit beside.
+    //
+    // CONSTRAINT for whoever wires this into a content dial: this source is
+    // 1931x789, 2.45:1 — unusually wide. RoomShowcase's offsetRight (4:3)
+    // and offsetLeft (3:2) scales centre-crop to box, which at 2.45:1 into
+    // either box removes close to half the frame's width, split evenly, and
+    // takes the sit-out and cane chair this alt text names out of the
+    // visible crop entirely. Use the "wide" scale (21:9 = 2.33:1) — under
+    // 5% width loss, keeps the whole room including the sit-out and chair.
     id: "vann-room-cottage-plain",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_TC.jpg",
     alt: "A cottage at Mahua Vann — mud-plastered walls, a woven cane chair on the private sit-out, and the forest close through the glass doors.",
