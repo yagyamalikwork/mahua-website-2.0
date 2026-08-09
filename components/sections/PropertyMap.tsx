@@ -22,7 +22,7 @@ export type MapLabelCopy = {
 };
 
 export type MapLegendEntryCopy = {
-  readonly swatch: "core" | "park" | "water" | "road" | "gate";
+  readonly swatch: "core" | "park" | "water" | "road" | "gate" | "village";
   readonly text: string;
 };
 
@@ -50,6 +50,13 @@ const SWATCH: Record<MapLegendEntryCopy["swatch"], { fill: string; opacity: numb
   water: { fill: "var(--text)", opacity: 0.34 },
   road: { fill: "var(--accent)", opacity: 0.95 },
   gate: { fill: "var(--accent)", opacity: 0.95 },
+  // Matches the village marker drawn below exactly — `<circle r="3"
+  // fill="var(--text)" />` with no `fillOpacity`, i.e. full opacity. Task 12
+  // shipped that marker with no legend entry able to describe it: this
+  // swatch union only had room for core/park/water/road/gate, so eight
+  // village dots on Mahua Vann's own map rendered with nothing in the key
+  // naming them. See content/mahua-vann.ts and content/mahua-tola.ts.
+  village: { fill: "var(--text)", opacity: 1 },
 };
 
 /**

@@ -223,6 +223,13 @@ export const VANN_COPY: VannPageCopy = {
         { swatch: "water", text: "Water" },
         { swatch: "road", text: "Main road" },
         { swatch: "gate", text: "Park entry gate" },
+        // Added 9 Aug 2026 (Task 13's authorised extra work): the eight
+        // village dots below (Halal, Tikari, Ghumtara…) were already being
+        // drawn — PropertyMap has always rendered `kind: "village"` as a
+        // solid dot — but MapLegendEntryCopy's swatch union had no "village"
+        // member, so nothing in the key could name them. See
+        // components/sections/PropertyMap.tsx's SWATCH map.
+        { swatch: "village", text: "Village" },
       ],
       gettingThere: [
         { label: "By air or train", value: "Nagpur, then by road to Khawasa" },

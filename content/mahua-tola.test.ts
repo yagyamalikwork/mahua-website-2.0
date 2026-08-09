@@ -1,47 +1,73 @@
 import { describe, expect, it } from "vitest";
 import { HOME } from "@/content/home";
 import { media } from "@/lib/media";
-import { PROPERTY_FULL_BLEED_KINDS, PROPERTY_IMAGE_LED_KINDS, type PropertyChapterKind } from "./property-chapters";
+import {
+  findRepeatedShape,
+  PROPERTY_FULL_BLEED_SHAPES,
+  PROPERTY_IMAGE_LED_SHAPES,
+  type PropertyShape,
+} from "./property-chapters";
+import { VANN_COPY } from "./mahua-vann";
 import { TOLA_CHAPTERS, TOLA_COPY } from "./mahua-tola";
 
 const MIN_MEDIA = {
-  hero: 1,
-  chapterIntro: 3,
-  plateGrid: 1,
-  fullBleedQuote: 1,
-  roomsIndex: 1,
-  fieldNotes: 0,
-} satisfies Record<PropertyChapterKind, number>;
+  fullBleed: 1,
+  column: 0,
+  map: 0,
+  showcase: 1,
+  pair: 2,
+  press: 0,
+  invitation: 1,
+} satisfies Record<PropertyShape, number>;
 
 describe("TOLA_CHAPTERS", () => {
-  it("opens on the hero and closes on field notes", () => {
-    expect(TOLA_CHAPTERS[0].kind).toBe("hero");
-    expect(TOLA_CHAPTERS[TOLA_CHAPTERS.length - 1].kind).toBe("fieldNotes");
+  it("opens on the hero and closes on the invitation", () => {
+    expect(TOLA_CHAPTERS[0].shape).toBe("fullBleed");
+    expect(TOLA_CHAPTERS[0].id).toBe("tola-hero");
+    expect(TOLA_CHAPTERS[TOLA_CHAPTERS.length - 1].shape).toBe("invitation");
   });
 
   it("has unique ids", () => {
     expect(new Set(TOLA_CHAPTERS.map((c) => c.id)).size).toBe(TOLA_CHAPTERS.length);
   });
 
+  it("never runs two moments of the same shape back to back", () => {
+    // Tola's spine is deliberately not Vann's: a guest's word where Vann has
+    // a press band, moved earlier in the run, so this page has two fullBleed
+    // moments (tola-guest-word, tola-table) rather than one. This test is
+    // what proves they never end up adjacent to each other or to the hero.
+    const repeat = findRepeatedShape(TOLA_CHAPTERS);
+    expect(
+      repeat && `"${repeat.first}" and "${repeat.second}" are both ${repeat.shape}`,
+    ).toBeUndefined();
+  });
+
   it("never runs two quiet screens back to back", () => {
+    // Independent of the rule above and equally binding: `column` is this
+    // page's only quiet shape (there is no `press` band), flanked on both
+    // sides by image-led moments.
     for (let i = 0; i < TOLA_CHAPTERS.length - 1; i++) {
-      const a = PROPERTY_IMAGE_LED_KINDS.includes(TOLA_CHAPTERS[i].kind);
-      const b = PROPERTY_IMAGE_LED_KINDS.includes(TOLA_CHAPTERS[i + 1].kind);
+      const a = PROPERTY_IMAGE_LED_SHAPES.includes(TOLA_CHAPTERS[i].shape);
+      const b = PROPERTY_IMAGE_LED_SHAPES.includes(TOLA_CHAPTERS[i + 1].shape);
       expect(a || b, `"${TOLA_CHAPTERS[i].id}" and "${TOLA_CHAPTERS[i + 1].id}" are both quiet`).toBe(true);
     }
   });
 
   it("carries enough photographs in each chapter for its layout", () => {
     for (const c of TOLA_CHAPTERS) {
-      expect(c.media.length, `"${c.id}" is a ${c.kind} with ${c.media.length} image(s)`).toBeGreaterThanOrEqual(
-        MIN_MEDIA[c.kind],
+      expect(c.media.length, `"${c.id}" is a ${c.shape} with ${c.media.length} image(s)`).toBeGreaterThanOrEqual(
+        MIN_MEDIA[c.shape],
       );
     }
   });
 
   it("only uses full-bleed-safe images where the layout is full-bleed", () => {
+    // Task 12's own brief was tripped by exactly this rule (a 1163px
+    // photograph assigned to a fullBleed slot) — this is the mechanical
+    // guard against repeating it. tola-hero, tola-guest-word and tola-table
+    // all render edge-to-edge and all check out at 1440px.
     for (const c of TOLA_CHAPTERS) {
-      if (!PROPERTY_FULL_BLEED_KINDS.includes(c.kind)) continue;
+      if (!PROPERTY_FULL_BLEED_SHAPES.includes(c.shape)) continue;
       for (const id of c.media) {
         const m = media(id);
         expect(m.fullBleedSafe, `${id} is only ${m.width}px wide`).toBe(true);
@@ -59,6 +85,10 @@ describe("TOLA_CHAPTERS", () => {
   });
 
   it("never shows the same photograph twice", () => {
+    // Mirrors content/chapters.test.ts's own rule; scoped to this page, so
+    // vann-hero (used cross-page as this page's own invitation sibling, the
+    // same move Vann's own invitation makes with tola-candlelit-dinner) is
+    // allowed, and a second use of it *here* is not.
     const seen = new Map<string, string>();
     for (const c of TOLA_CHAPTERS) {
       for (const id of c.media) {
@@ -69,34 +99,42 @@ describe("TOLA_CHAPTERS", () => {
   });
 
   it("keeps every chapter's copy joined to the spine it renders under", () => {
-    // Same join as content/mahua-vann.test.ts — see the note there.
+    // The dial and the spine are two files that must agree: the spine's
+    // `media` is what the density and rhythm rules are argued against, and
+    // the copy's `mediaId`s are what the components actually draw. A photo
+    // added to one but not the other would ship a page whose measured
+    // composition is not its rendered one, with every other test green.
     for (const c of TOLA_CHAPTERS) {
-      switch (c.kind) {
-        case "hero":
-          expect(TOLA_COPY.heroCopy, `"${c.id}" has no hero copy`).toBeDefined();
+      switch (c.shape) {
+        case "fullBleed":
+          if (c.id === "tola-hero") {
+            expect(TOLA_COPY.heroCopy, `"${c.id}" has no hero copy`).toBeDefined();
+          } else {
+            expect(TOLA_COPY.quoteCopy?.[c.id], `"${c.id}" has no quote copy`).toBeDefined();
+          }
           break;
-        case "chapterIntro":
-          expect(TOLA_COPY.chapterIntroCopy?.[c.id], `"${c.id}" has no intro copy`).toBeDefined();
+        case "column":
+          expect(TOLA_COPY.columnCopy?.[c.id], `"${c.id}" has no column copy`).toBeDefined();
           break;
-        case "fullBleedQuote":
-          expect(TOLA_COPY.fullBleedQuoteCopy?.[c.id], `"${c.id}" has no quote copy`).toBeDefined();
+        case "map":
+          expect(TOLA_COPY.mapCopy?.[c.id], `"${c.id}" has no map copy`).toBeDefined();
           break;
-        case "plateGrid": {
-          const plates = TOLA_COPY.plateGridCopy?.[c.id]?.plates;
-          expect(plates, `"${c.id}" has no plate copy`).toBeDefined();
-          expect(plates?.map((p) => p.mediaId)).toEqual([...c.media]);
-          break;
-        }
-        case "roomsIndex": {
-          const bands = TOLA_COPY.roomsIndexCopy?.[c.id]?.bands;
-          expect(bands, `"${c.id}" has no rooms copy`).toBeDefined();
-          expect(bands?.map((b) => b.mediaId)).toEqual([...c.media]);
+        case "showcase": {
+          const rooms = TOLA_COPY.showcaseCopy?.[c.id]?.rooms;
+          expect(rooms, `"${c.id}" has no showcase copy`).toBeDefined();
+          expect(rooms?.map((r) => r.mediaId)).toEqual([...c.media]);
           break;
         }
-        case "fieldNotes": {
-          const notes = TOLA_COPY.fieldNotesCopy?.[c.id];
-          expect(notes, `"${c.id}" has no field-notes copy`).toBeDefined();
-          expect([notes?.sibling.mediaId]).toEqual([...c.media]);
+        case "pair": {
+          const experiences = TOLA_COPY.pairCopy?.[c.id]?.experiences;
+          expect(experiences, `"${c.id}" has no pair copy`).toBeDefined();
+          expect(experiences?.map((e) => e.mediaId)).toEqual([...c.media]);
+          break;
+        }
+        case "invitation": {
+          const invitation = TOLA_COPY.invitationCopy?.[c.id];
+          expect(invitation, `"${c.id}" has no invitation copy`).toBeDefined();
+          expect([invitation?.sibling.mediaId]).toEqual([...c.media]);
           break;
         }
       }
@@ -104,13 +142,85 @@ describe("TOLA_CHAPTERS", () => {
   });
 
   it("marks every shared room photograph with a note saying what is shown", () => {
-    for (const rooms of Object.values(TOLA_COPY.roomsIndexCopy ?? {})) {
-      for (const band of rooms.bands) {
-        if (band.entries.length > 1) {
-          expect(band.note, `the "${band.mediaId}" band covers ${band.entries.length} room types silently`).toBeDefined();
+    // Vacuous on this page by construction — the showcase's four rows each
+    // use their own distinct photograph (Super Deluxe Cottage, which shares
+    // the Suite's styling, is named in the intro paragraph rather than given
+    // a row, since it has no interior photograph of its own to share a row
+    // with without repeating a media id within the chapter). Kept as a guard
+    // against the regression the pre-redesign file shipped with.
+    for (const showcase of Object.values(TOLA_COPY.showcaseCopy ?? {})) {
+      const byMedia = new Map<string, number>();
+      for (const room of showcase.rooms) byMedia.set(room.mediaId, (byMedia.get(room.mediaId) ?? 0) + 1);
+      for (const room of showcase.rooms) {
+        if ((byMedia.get(room.mediaId) ?? 0) > 1) {
+          expect(room.note, `"${room.mediaId}" is shared by more than one room type silently`).toBeDefined();
         }
       }
     }
+  });
+
+  it("places every map label inside the artwork", () => {
+    const map = TOLA_COPY.mapCopy?.["tola-where"];
+    expect(map, "no map copy").toBeDefined();
+    for (const l of [...(map?.labels ?? []), map!.lodge]) {
+      expect(l.x, `${l.text} x`).toBeGreaterThanOrEqual(0);
+      expect(l.x, `${l.text} x`).toBeLessThanOrEqual(1);
+      expect(l.y, `${l.text} y`).toBeGreaterThanOrEqual(0);
+      expect(l.y, `${l.text} y`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it("keeps an even number of quiet experiences between each hero", () => {
+    // ExperiencePair lays out in a two-column grid where a `hero` spans both
+    // columns. If a `hero` is preceded by an ODD number of `quiet` entries,
+    // CSS grid cannot fit it in the half-row left over and leaves a visible
+    // empty cell (Task 6's carry-forward note, same guard as Vann's file).
+    const experiences = TOLA_COPY.pairCopy?.["tola-day"]?.experiences ?? [];
+    expect(experiences.length, "tola-day has no experiences to check").toBeGreaterThan(0);
+    let quietRun = 0;
+    for (const e of experiences) {
+      if (e.weight === "quiet") {
+        quietRun++;
+        continue;
+      }
+      expect(
+        quietRun % 2,
+        `"${e.name}" is a hero preceded by ${quietRun} quiet experience(s) — an odd run orphans a grid cell`,
+      ).toBe(0);
+      quietRun = 0;
+    }
+  });
+
+  it("dims a word that is actually in its heading, exactly once", () => {
+    // Mirrors content/home.test.ts's own guard and content/mahua-vann.test.ts's
+    // copy of it. Collected structurally: any object anywhere in TOLA_COPY
+    // with a string `text` and a string `dim` is a TwoTone — nothing else in
+    // this file's copy shapes combines those two keys.
+    const found: { text: string; dim: string }[] = [];
+    const walk = (value: unknown) => {
+      if (!value || typeof value !== "object") return;
+      const obj = value as Record<string, unknown>;
+      if (typeof obj.text === "string" && typeof obj.dim === "string") {
+        found.push({ text: obj.text, dim: obj.dim });
+      }
+      for (const v of Object.values(obj)) walk(v);
+    };
+    walk(TOLA_COPY);
+
+    expect(found.length, "found no TwoTone headings in TOLA_COPY at all").toBeGreaterThan(0);
+    for (const { text, dim } of found) {
+      const occurrences = text.split(dim).length - 1;
+      expect(occurrences, `"${dim}" appears ${occurrences}× in "${text}"`).toBe(1);
+    }
+  });
+
+  it("does not reuse Mahua Vann's opening headline", () => {
+    // Both pages shipped on 9 Aug with "Five kilometres from the gate" as
+    // chapter 01. Nothing tells a visitor they are reading a template faster
+    // than two properties introducing themselves in the same words.
+    expect(TOLA_COPY.columnCopy?.["tola-reserve"]?.heading.text).not.toBe(
+      VANN_COPY.columnCopy?.["vann-forest"]?.heading.text,
+    );
   });
 
   it("reuses its guest quote byte-identical to the attributed original in content/home.ts", () => {
@@ -122,9 +232,10 @@ describe("TOLA_CHAPTERS", () => {
     // "attributes every guest quote" test already holds to a name, a source
     // and a year. This test is what keeps the two copies from silently
     // diverging — an edit to one without the other would otherwise ship
-    // unattributed words with nothing to catch it.
+    // unattributed words with nothing to catch it. Carried forward from the
+    // pre-redesign file, updated only for quoteCopy's new field name.
     const original = HOME.chapters.guests.quotes.find((q) => q.name === "Vedant");
     expect(original, "content/home.ts no longer carries Vedant's quote").toBeDefined();
-    expect(TOLA_COPY.fullBleedQuoteCopy?.["tola-guest-word"]?.quote).toBe(original?.quote);
+    expect(TOLA_COPY.quoteCopy?.["tola-guest-word"]?.quote).toBe(original?.quote);
   });
 });
