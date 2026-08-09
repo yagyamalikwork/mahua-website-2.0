@@ -31,10 +31,12 @@ export type VannPageCopy = {
 
 /**
  * Mahua Vann's spine, in the redesign's shape vocabulary. Eight moments, no
- * two adjacent alike (`findRepeatedShape` in `content/property-chapters.test.ts`
- * is watched failing against this file — see the test file's own note), and
- * `column` / `press` — the two quiet shapes — are each flanked by image-led
- * ones so the older rhythm rule (CLAUDE.md non-negotiable #10) holds too.
+ * two adjacent alike (`findRepeatedShape` is unit-tested generically in
+ * `content/property-chapters.test.ts`; the test watched failing against
+ * *this* file's actual spine lives in `content/mahua-vann.test.ts` — see its
+ * own note), and `column` / `press` — the two quiet shapes — are each
+ * flanked by image-led ones so the older rhythm rule (CLAUDE.md
+ * non-negotiable #10) holds too.
  *
  * `vann-hero` and `vann-invitation` carry no number/label, matching the
  * spec's own menu (Stay · Dining · Experiences · Getting there is now Rooms ·
@@ -369,8 +371,13 @@ export const VANN_COPY: VannPageCopy = {
         },
       ],
       alsoLine:
+        // "seats forty" was cut 9 Aug (fix round 1): it traced to nothing —
+        // not the live site's own copy, not the brand record, not
+        // docs/copy-provenance.md, not the task brief. It existed only in
+        // the master plan's illustrative worked example, which was never
+        // sourced. Do not reintroduce a capacity figure without a source.
         "Also: cycling the estate's trails, swimming, table tennis and carrom, karaoke, " +
-        "and a conference hall that seats forty.",
+        "and a conference hall.",
     } satisfies ExperiencePairCopy,
   },
 

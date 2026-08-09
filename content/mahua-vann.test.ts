@@ -189,4 +189,36 @@ describe("VANN_CHAPTERS", () => {
       quietRun = 0;
     }
   });
+
+  it("dims a word that is actually in its heading, exactly once", () => {
+    // Mirrors content/home.test.ts's own guard, which VANN_COPY had none of
+    // (fix round 1, Finding 2). If the dim word is absent the effect
+    // silently does nothing; if it appears twice, which occurrence gets
+    // dimmed is down to whichever way the component happens to split the
+    // string. Both are invisible without this.
+    //
+    // Collected structurally rather than by listing each heading's path by
+    // hand: any object anywhere in VANN_COPY with a string `text` and a
+    // string `dim` is a TwoTone — nothing else in this file's copy shapes
+    // combines those two keys — so a seventh heading added later is covered
+    // the moment it is written, with no test edit required. HeroCopy has no
+    // `dim` field, so the hero is correctly skipped rather than needing a
+    // special case.
+    const found: { text: string; dim: string }[] = [];
+    const walk = (value: unknown) => {
+      if (!value || typeof value !== "object") return;
+      const obj = value as Record<string, unknown>;
+      if (typeof obj.text === "string" && typeof obj.dim === "string") {
+        found.push({ text: obj.text, dim: obj.dim });
+      }
+      for (const v of Object.values(obj)) walk(v);
+    };
+    walk(VANN_COPY);
+
+    expect(found.length, "found no TwoTone headings in VANN_COPY at all").toBeGreaterThan(0);
+    for (const { text, dim } of found) {
+      const occurrences = text.split(dim).length - 1;
+      expect(occurrences, `"${dim}" appears ${occurrences}× in "${text}"`).toBe(1);
+    }
+  });
 });
