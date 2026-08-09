@@ -621,6 +621,37 @@ const CURATION = [
   // Curating both under separate ids would fail that test. Vann keeps it;
   // Tola's Experiences plateGrid runs on one plate instead of two (still
   // valid — plateGrid's floor is 1, see content/mahua-tola.test.ts).
+  {
+    // The live Vann page's own "Cottages without Deck" tab image — confirmed
+    // by the tab's own data-image attribute in reference/wp-pages, not by
+    // this file's name (its filename is shared with an unrelated WordPress
+    // page and is not evidence of anything). Task 3 recorded this room type
+    // as having no photograph anywhere in the harvest; it does, and the
+    // Vann rooms index has been showing "Shown: Cottage with Deck" against
+    // both cottage types for a fortnight because of that miss.
+    //
+    // Draft alt text called the sit-out a "deck" — accurate to what a cane
+    // chair and railing through the glass look like, but this is
+    // specifically the room type the brand calls "without deck" (see
+    // content/mahua-vann.ts's rooms copy, which lists "private sit-out" for
+    // both cottage types and reserves "deck" for the one over the seasonal
+    // river). Reworded to "sit-out" so the alt text doesn't read as
+    // contradicting the room name it will sit beside.
+    id: "vann-room-cottage-plain",
+    src: "reference/wp-media/property-pages/Mahua-Website-Images_TC.jpg",
+    alt: "A cottage at Mahua Vann — mud-plastered walls, a woven cane chair on the private sit-out, and the forest close through the glass doors.",
+    category: "lodgeLife",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  // No Conference-hall entry. Looked at Mahua-Website-Images_Pench_Conference.jpg
+  // (an empty multipurpose hall — beamed ceiling, pendant lights, a handful
+  // of chairs, tall curtained windows) and decided against curating it:
+  // ExperiencePair's `alsoLine` (components/sections/ExperiencePair.tsx)
+  // names the conference hall in one quiet text line by the client's own
+  // 9 Aug ruling and never gives it a photograph. Nothing on either
+  // property page will render this image, so curating it would only add
+  // bytes and a manifest entry with no consumer.
 ];
 
 /**
