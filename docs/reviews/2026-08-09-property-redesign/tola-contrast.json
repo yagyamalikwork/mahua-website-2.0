@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-09T19:53:33.481Z",
+  "measuredAt": "2026-08-09T21:50:36.425Z",
   "url": "http://localhost:3100/mahua-tola",
   "widths": {
     "390": [
@@ -137,11 +137,11 @@
         "name": "quote · tola-table",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 3.3,
+        "worst": 3.29,
         "brightest": [
-          125,
+          126,
           129,
-          115
+          116
         ],
         "boxes": 17,
         "pass": true
@@ -269,11 +269,11 @@
         "name": "quote · tola-guest-word",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.47,
+        "worst": 5.12,
         "brightest": [
-          105,
-          91,
-          66
+          95,
+          99,
+          83
         ],
         "boxes": 18,
         "pass": true

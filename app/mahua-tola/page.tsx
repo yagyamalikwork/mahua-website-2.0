@@ -27,9 +27,12 @@ export default function MahuaTolaPage() {
         "tola-guest-word": { flat: 0.36, centre: 0.42 },
         // `tola-table`, this page's third `fullBleed` chapter, also has no
         // entry here — same reasoning as Vann's `vann-table`. It has a
-        // `quoteCopy` entry, so it renders as a `FullBleedQuote`, and it
-        // falls through to that component's own generic default scrim until
-        // Task 15 measures it against the real composition.
+        // `quoteCopy` entry, so it renders as a `FullBleedQuote`. Task 15
+        // measured it against the real composition (9/10 Aug 2026) and it
+        // clears the 3.0 floor comfortably on the untouched default scrim —
+        // worst-pixel contrast 3.30 at 390px, 3.58 at 768/1440/1920 — so no
+        // scrim was added here.
+        // docs/reviews/2026-08-09-property-redesign/README.md §1.
       }}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MA=="
       bar={TOLA_BAR}

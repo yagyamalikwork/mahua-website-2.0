@@ -25,9 +25,12 @@ export default function MahuaVannPage() {
       //
       // `vann-table`, this page's other `fullBleed` chapter, carries no entry
       // here on purpose: it renders as a `FullBleedQuote` (it has a
-      // `quoteCopy` entry — see `PropertyPage.tsx`'s dispatcher), and it has
-      // not yet been measured against the new composition. It falls through
-      // to `FullBleedQuote`'s own generic default. Task 15 re-measures it.
+      // `quoteCopy` entry — see `PropertyPage.tsx`'s dispatcher). Task 15
+      // measured it against the real composition (9/10 Aug 2026) and it
+      // clears the 3.0 floor comfortably on the untouched default scrim —
+      // worst-pixel contrast 3.30 at 390px, 3.58 at 768/1440/1920 — so no
+      // scrim was added here.
+      // docs/reviews/2026-08-09-property-redesign/README.md §1.
       scrim={{ "vann-hero": { top: 0.92, bottom: 0.78, corner: 0.88 } }}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MQ=="
       bar={VANN_BAR}
