@@ -48,26 +48,38 @@ const OUT_DIR = path.join(ROOT, "public", "brand");
 const ART = path.join(ROOT, "lib", "forest-overlay.ts");
 
 /**
- * How strongly the drawing prints on the cream, at its darkest.
+ * The darkest the drawing's ink may be before it becomes tint — **the one dial**.
  *
- * The chapter's heading and its intro paragraph both sit over this, so the floor
- * below is what really sets it: this script throws if the page's lightest text
- * colour would fall under 4.5:1 on the darkest pixel the tint produces.
+ * The strength is not set here. It is solved for, below, as the strongest tint
+ * that still clears the contrast floor, so the only thing left to choose is how
+ * much of the drawing's own range to keep. That matters because the floor is set
+ * by the *single darkest pixel* and this drawing contains pure black: one black
+ * outline anywhere in the frame otherwise dictates how strongly the other 99% of
+ * it may print.
+ *
+ * Measured, at a constant worst-case contrast of 4.55:1 on the deeper cream:
+ *
+ * | ink floor | solved strength | mean ink laid down |
+ * |---|---|---|
+ * | 60 | 0.201 | 0.085 |
+ * | 120 | 0.458 | 0.134 |
+ * | **160** | **1.060** | **0.218** |
+ *
+ * So lifting the blacks from 60 to 160 makes the drawing **2.6x more present for
+ * exactly the same worst case**. It shipped at 60 on 10 Aug and the client's
+ * verdict was "it is almost not visible" — which was the arithmetic's fault, not
+ * the drawing's. Past ~160 the outlines lose their bite and it starts to read as
+ * fog rather than as a drawing; 120 keeps more line and less presence, if this is
+ * ever judged too heavy.
  */
-const STRENGTH = 0.2;
+const INK_FLOOR = 160;
 
 /**
- * The darkest the drawing's ink may be before it becomes tint.
- *
- * **The floor is set by the single darkest pixel, and this drawing contains pure
- * black.** Without lifting it, one black outline anywhere in the frame drags
- * `STRENGTH` down to 0.11 — the darkest 1% of the ink dictating how strongly the
- * other 99% may print, and a wash too faint to be worth its bytes.
- *
- * Lifting the blacks to 60 costs the outlines a little bite and lets the mass of
- * foliage print at nearly double the strength for the same worst case.
+ * The worst contrast the tint may leave for `PALETTE.dim`, the page's lighter
+ * body colour. A hair above the 4.5 the guidelines require, so that rounding in
+ * the encoder cannot take it under.
  */
-const INK_FLOOR = 60;
+const FLOOR = 4.55;
 
 /** Encoded widths. Capped at the source's own resolution — never upscale into a file. */
 const WIDTHS = [640, 1024];
@@ -97,18 +109,74 @@ const { width: W, height: H, channels: C } = info;
 /** Map [0,255] onto [INK_FLOOR,255] — lifts the blacks, leaves the white sky alone. */
 const lift = (v) => INK_FLOOR + (v * (255 - INK_FLOOR)) / 255;
 
-const alpha = new Float32Array(W * H);
+/** The lifted drawing, and each pixel's ink fraction — 0 for the sky, 1 for the darkest foliage. */
+const inkFraction = new Float32Array(W * H);
 const ink = new Uint8Array(W * H * 3);
 for (let p = 0; p < W * H; p++) {
   const i = p * C;
   const r = lift(data[i]);
   const g = lift(data[i + 1]);
   const b = lift(data[i + 2]);
-  alpha[p] = (1 - Math.min(r, g, b) / 255) * STRENGTH;
+  inkFraction[p] = 1 - Math.min(r, g, b) / 255;
   ink[p * 3] = Math.round(r);
   ink[p * 3 + 1] = Math.round(g);
   ink[p * 3 + 2] = Math.round(b);
 }
+
+/**
+ * The worst contrast this strength would leave, on the darker of the two creams.
+ *
+ * `paperDeep` is always the binding surface — it is the darker ground, so the
+ * same ink lands closer to the text on it. Solving against it covers both.
+ */
+const worstAt = (strength) => {
+  const cream = hex(PALETTE.paperDeep);
+  let lo = 1;
+  let darkest = null;
+  for (let p = 0; p < W * H; p++) {
+    const a = inkFraction[p] * strength;
+    // `Math.round`, because that is what `flatten` writes into the file. Solving
+    // against the un-rounded float and asserting against the rounded byte is two
+    // instruments measuring different things, and they duly disagreed by 0.01 —
+    // the solver returning a strength the final check then rejected.
+    const px = [0, 1, 2].map((k) => Math.round(cream[k] * (1 - a) + ink[p * 3 + k] * a));
+    const l = luminance(px);
+    if (l < lo) {
+      lo = l;
+      darkest = px;
+    }
+  }
+  return contrast(hex(PALETTE.dim), darkest);
+};
+
+/**
+ * **The strength is solved, not chosen.** Binary search for the strongest tint
+ * that still clears `FLOOR`, so the contrast guarantee is exact rather than
+ * hand-tuned and the only thing anyone has to decide is `INK_FLOOR`.
+ *
+ * Hand-tuning is what left this at 0.2 when 1.06 was available at the same worst
+ * case, and the client saw a drawing that was "almost not visible".
+ */
+const STRENGTH = (() => {
+  let lo = 0.02;
+  let hi = 4;
+  if (worstAt(lo) < FLOOR) {
+    throw new Error(
+      `even the faintest tint leaves ${worstAt(lo).toFixed(2)}:1 — the drawing cannot go under type at all`,
+    );
+  }
+  for (let i = 0; i < 24; i++) {
+    const mid = (lo + hi) / 2;
+    if (worstAt(mid) >= FLOOR) lo = mid;
+    else hi = mid;
+  }
+  // Rounded **down**, never to nearest: rounding up would hand back a strength
+  // fractionally stronger than the one that was proved to clear the floor.
+  return Math.floor(lo * 1000) / 1000;
+})();
+
+const alpha = new Float32Array(W * H);
+for (let p = 0; p < W * H; p++) alpha[p] = inkFraction[p] * STRENGTH;
 
 /** Flatten onto one cream, and report the darkest pixel it produces. */
 const flatten = (creamHex) => {
@@ -130,7 +198,7 @@ const flatten = (creamHex) => {
 };
 
 // --- The floor, before anything is written to disk. --------------------------
-const FLOOR = 4.5;
+
 const worst = [];
 const flattened = {};
 for (const [name, creamHex] of SURFACES) {

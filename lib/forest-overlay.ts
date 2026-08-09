@@ -8,7 +8,7 @@
 // **The strength is enforced at build time, not asserted here.** The script
 // composites every pixel onto both creams, finds the darkest result, and
 // throws if `PALETTE.dim` would fall under 4.5:1 on it. Worst measured case
-// at the strength below: **4.56:1**.
+// at the strength below: **4.55:1**.
 //
 // **Two files, one per cream, because the tint is baked rather than blended.**
 // That flattening is what takes it from 282 KB to ~6 KB — see the build script.
@@ -29,9 +29,9 @@ export const FOREST_OVERLAY = {
   width: 1024,
   height: 572,
   /** How strongly its darkest ink prints on the cream. */
-  strength: 0.2,
+  strength: 1.047,
   /** Blacks are lifted to this before becoming tint — see the build script. */
-  inkFloor: 60,
+  inkFloor: 160,
   /** Worst-case contrast of the page's text colours over the darkest part of it. */
-  worstContrast: 4.56,
+  worstContrast: 4.55,
 } as const;
