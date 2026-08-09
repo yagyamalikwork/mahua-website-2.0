@@ -1,43 +1,67 @@
 import type { MediaId } from "@/lib/media";
 
 /**
- * The kinds a property page's spine may use. A deliberately small subset of
- * the home page's `ChapterKind` — property pages do not carry the home
- * page's signature interactions (the lantern, the two films, the pinned
- * collage), so those kinds have no equivalent here.
+ * The shapes a property page's spine may use.
+ *
+ * A *shape*, not a *kind*: the field exists so that two adjacent moments can
+ * be forbidden from looking alike. The pages this replaced shipped with three
+ * consecutive sections opening on the identical eyebrow-heading-paragraph-grid
+ * move, and the client's word for the result was "templaty" — which is exactly
+ * what one section component applied down a page produces. See
+ * `findRepeatedShape` below; it is the fix, and it is mechanical.
  */
-export type PropertyChapterKind =
-  | "hero"
-  | "chapterIntro"
-  | "plateGrid"
-  | "fullBleedQuote"
-  | "roomsIndex"
-  | "fieldNotes";
+export type PropertyShape =
+  | "fullBleed"
+  | "column"
+  | "map"
+  | "showcase"
+  | "pair"
+  | "press"
+  | "invitation";
 
 export type PropertyChapter = {
   id: string;
   number?: string;
   label?: string;
-  kind: PropertyChapterKind;
+  shape: PropertyShape;
   media: readonly MediaId[];
 };
 
 /**
- * The kinds that count as carrying a screen on their photography, for the
- * rhythm-alternation test each property's own test file runs.
+ * The shapes that carry a screen on their photography.
  *
- * `roomsIndex` is counted image-led here, unlike the home page's
- * (deliberately conservative) treatment of visually similar layouts —
- * every entry in it is a real photograph of a real room, which is closer in
- * spirit to `plateGrid`'s specimen board than to `chapterIntro`'s prose
- * column with photographs at the margins.
+ * `press` is deliberately absent: it is a band of publication wordmarks and
+ * type, which is quiet in the eye however much information it holds. That is
+ * why `invitation` carries the sister lodge's photograph — on Mahua Vann the
+ * two sit adjacent, and a type-led band followed by a type-led close would
+ * satisfy the no-repeated-shape rule while breaking the older rhythm rule
+ * (CLAUDE.md non-negotiable #10). The two rules are independent and both bind.
  */
-export const PROPERTY_IMAGE_LED_KINDS: readonly PropertyChapterKind[] = [
-  "hero",
-  "plateGrid",
-  "fullBleedQuote",
-  "roomsIndex",
+export const PROPERTY_IMAGE_LED_SHAPES: readonly PropertyShape[] = [
+  "fullBleed",
+  "map",
+  "showcase",
+  "pair",
+  "invitation",
 ];
 
-/** Mirrors `FULL_BLEED_KINDS` in `content/chapters.ts` — CLAUDE.md non-negotiable #11. */
-export const PROPERTY_FULL_BLEED_KINDS: readonly PropertyChapterKind[] = ["hero", "fullBleedQuote"];
+/** Mirrors `FULL_BLEED_KINDS` in `content/chapters.ts` — non-negotiable #11. */
+export const PROPERTY_FULL_BLEED_SHAPES: readonly PropertyShape[] = ["fullBleed"];
+
+/**
+ * The first place two adjacent moments share a shape, or `undefined`.
+ *
+ * Returns the offenders rather than a boolean so the failure message can name
+ * them: a test that says only "false is not true" costs a reader ten minutes
+ * of counting sections by hand.
+ */
+export function findRepeatedShape(
+  chapters: readonly PropertyChapter[],
+): { first: string; second: string; shape: PropertyShape } | undefined {
+  for (let i = 0; i < chapters.length - 1; i++) {
+    if (chapters[i].shape === chapters[i + 1].shape) {
+      return { first: chapters[i].id, second: chapters[i + 1].id, shape: chapters[i].shape };
+    }
+  }
+  return undefined;
+}
