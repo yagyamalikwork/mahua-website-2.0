@@ -103,7 +103,15 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
     media: [
       "tola-tiger-safari",
       "tola-river-walk",
-      "tola-bonfire",
+      // `bonfire-circle-night`, not `tola-bonfire`. The live site's own
+      // bonfire photograph shows a guest's face clearly enough to identify
+      // her, and the client asked for it off the page on consent grounds
+      // (10 Aug 2026) — the same rule the original curation already applied
+      // to another frame (see `scripts/build_images.mjs`'s CURATION note).
+      // This frame is from the client's own Mahua Tola property video
+      // (docs/PROJECT-STATE.md), so it is honestly this lodge's own bonfire
+      // and not a stand-in from Pench, and it carries no people at all.
+      "bonfire-circle-night",
       "tola-candlelit-dinner",
       "tola-swimming",
       "tola-experiences",
@@ -486,7 +494,7 @@ export const TOLA_COPY: PropertyPageCopy = {
           weight: "quiet",
         },
         {
-          mediaId: "tola-bonfire",
+          mediaId: "bonfire-circle-night",
           name: "Bonfire",
           line: "A fire lit once the evening drive comes in, and conversation that runs late under the stars.",
           weight: "quiet",

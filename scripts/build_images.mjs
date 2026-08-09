@@ -502,19 +502,20 @@ const CURATION = [
     orientation: "landscape",
     fullBleedSafe: true,
   },
-  {
-    // A guest by the bonfire at night — the live Tola page's Bonfire
-    // experience, portrait. 1707px wide clears the full-bleed floor on
-    // paper, but the page's full-bleed pattern is landscape-only (see
-    // scripts/fetch_property_media.mjs); kept false so nobody reaches for
-    // it as a backdrop without looking at it first.
-    id: "tola-bonfire",
-    src: "reference/wp-media/property-pages/DSC00097-scaled.jpg",
-    alt: "A guest warming her hands over the bonfire at Mahua Tola.",
-    category: "lanternHour",
-    orientation: "portrait",
-    fullBleedSafe: false,
-  },
+  // No "tola-bonfire" entry. DSC00097-scaled.jpg (the live Tola page's own
+  // Bonfire image) shows a guest's face clearly enough to identify her, and
+  // the client asked for it off the site on consent grounds, 10 Aug 2026.
+  // This is the second image rejected here for exactly that reason — the
+  // original curation dropped one on the same grounds (see this array's own
+  // header note), and that rule should have been applied when this one was
+  // curated on 9 Aug. It was not, and the photograph shipped.
+  //
+  // Deleted rather than left curated-but-unused: an id in the manifest is an
+  // id a later chapter can reach for, and the next person to want a bonfire
+  // would find it by name without ever seeing the face in it. Mahua Tola's
+  // Bonfire experience now uses "bonfire-circle-night", a frame from the
+  // client's own Mahua Tola property video with no people in it at all.
+  // Restoring this needs the guest's consent, not a code change.
   {
     // The live Tola page's own Family Suite tab image (data-image on the
     // rooms tabs, cross-referenced 9 Aug 2026) — white walls, terracotta
