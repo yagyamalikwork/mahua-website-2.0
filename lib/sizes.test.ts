@@ -35,6 +35,7 @@ import {
   BOXES as COLLAGE_BOXES,
   SIZES as COLLAGE_SIZES,
 } from "@/components/motion/PinnedCollage";
+import { INVITATION_BOX, INVITATION_SIZES } from "@/components/property/PropertyInvitation";
 import { LANTERN_SIZES } from "@/components/signature/lantern/HangingLantern";
 import { EMBLEM_SIZES } from "@/components/ui/BrandMark";
 import {
@@ -204,6 +205,11 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: EXPERIENCE_SIZES[k],
     box: EXPERIENCE_BOXES[k] as CoverBox,
   })),
+  // The closing band's sister-lodge photograph — full container width at
+  // 21:9. Repeats `PLATE_SIZES[1]`'s string verbatim (same 1600px container,
+  // one column, no `50vw` tier), so this row adds no new distinct string;
+  // its box is new (21:9, nobody else on the page uses it).
+  { name: "PropertyInvitation.sibling", sizes: INVITATION_SIZES, box: INVITATION_BOX },
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -254,6 +260,11 @@ describe("the sizes the page actually serves", () => {
     // verbatim (same 1600px container, same columns as everywhere else that
     // reaches for those two crops), so the two new rows below add no new
     // distinct string between them — only new boxes (2:1, 4:5).
+    // Still 24 as of `PropertyInvitation`, the property pages' closing band
+    // (Task 8, 9 Aug 2026): `INVITATION_SIZES` is `PLATE_SIZES[1]` copied
+    // character for character, checked by hand rather than assumed — same
+    // 1600px container, one column, no `50vw` tier. One more row, no new
+    // string; its 21:9 box is the only new thing about it.
     expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
@@ -405,6 +416,10 @@ describe("cover boxes match the markup they describe", () => {
     // even though both `sizes` strings are borrowed from `PlateGrid`.
     { file: "components/sections/ExperiencePair.tsx", declared: EXPERIENCE_BOXES },
     { file: "components/motion/PinnedCollage.tsx", declared: COLLAGE_BOXES },
+    // The closing band's one photograph, the sister lodge at 21:9 — a bare
+    // ratio rather than a `BOXES` map, because there is only the one crop on
+    // the page that uses it.
+    { file: "components/property/PropertyInvitation.tsx", declared: INVITATION_BOX },
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(
