@@ -8,6 +8,11 @@ import {
 } from "@/components/sections/ChapterIntro";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
 import {
+  EXPERIENCE_BOXES,
+  EXPERIENCE_SIZES,
+  type ExperienceWeight,
+} from "@/components/sections/ExperiencePair";
+import {
   FIELD_NOTES_SIBLING_BOX,
   FIELD_NOTES_SIBLING_SIZES,
 } from "@/components/sections/FieldNotes";
@@ -190,6 +195,15 @@ const LIVE_SLOTS: readonly Slot[] = [
   })),
   // The field notes' sibling-lodge banner — full container width at 21:9.
   { name: "FieldNotes.sibling", sizes: FIELD_NOTES_SIBLING_SIZES, box: FIELD_NOTES_SIBLING_BOX },
+  // The day's six experiences, two weights. `hero` repeats `PLATE_SIZES[1]`
+  // and `quiet` repeats `PLATE_SIZES[2]` verbatim — same container, same
+  // columns — so neither adds a distinct string; both still get their own
+  // rows because their boxes (2:1, 4:5) are new crops.
+  ...(["hero", "quiet"] as const).map((k: ExperienceWeight) => ({
+    name: `ExperiencePair.${k}`,
+    sizes: EXPERIENCE_SIZES[k],
+    box: EXPERIENCE_BOXES[k] as CoverBox,
+  })),
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -235,6 +249,11 @@ describe("the sizes the page actually serves", () => {
     // component it describes is still wired into the live content dials
     // until Tasks 12-14 retire it, so its `sizes` string is still real and
     // still owed coverage; see the import comment above.
+    // Still 24 as of the same day's `ExperiencePair`: `EXPERIENCE_SIZES.hero`
+    // repeats `PLATE_SIZES[1]` verbatim and `.quiet` repeats `PLATE_SIZES[2]`
+    // verbatim (same 1600px container, same columns as everywhere else that
+    // reaches for those two crops), so the two new rows below add no new
+    // distinct string between them — only new boxes (2:1, 4:5).
     expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
@@ -382,6 +401,9 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/RoomsIndex.tsx", declared: ROOMS_BOX },
     { file: "components/sections/RoomShowcase.tsx", declared: ROOM_BOXES },
     { file: "components/sections/FieldNotes.tsx", declared: FIELD_NOTES_SIBLING_BOX },
+    // The day's six experiences: `hero` at 2:1, `quiet` at 4:5 — new crops
+    // even though both `sizes` strings are borrowed from `PlateGrid`.
+    { file: "components/sections/ExperiencePair.tsx", declared: EXPERIENCE_BOXES },
     { file: "components/motion/PinnedCollage.tsx", declared: COLLAGE_BOXES },
   ];
 
