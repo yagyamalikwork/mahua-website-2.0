@@ -76,6 +76,21 @@ export function PropertyMap({
   const art = ART[copy.art];
   const { width, height } = art.viewBox;
 
+  // The accessible name for a map role="img" collapses everything inside the
+  // SVG to one string — every <text> label (gates, lakes) is otherwise
+  // invisible to a screen reader, which is exactly backwards for the element
+  // that exists to prove local knowledge. Built from copy.labels grouped by
+  // kind and copy.lodge, so it can never say a name the artwork doesn't also
+  // draw, and introduces no new user-facing string: it is a minimal, punctuation-only
+  // joining of names already supplied as props, not a written sentence.
+  const gateNames = copy.labels.filter((l) => l.kind === "gate").map((l) => l.text);
+  const waterNames = copy.labels.filter((l) => l.kind === "water").map((l) => l.text);
+  const mapAriaLabel = `Map of ${copy.lodge.text} and the reserve around it — ${[
+    ...gateNames,
+    ...waterNames,
+    copy.lodge.text,
+  ].join(", ")}.`;
+
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
       <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-12 lg:gap-x-12">
@@ -132,11 +147,12 @@ export function PropertyMap({
                 viewBox={`0 0 ${width} ${height}`}
                 className="block h-auto w-full"
                 role="img"
-                aria-label={`Map of ${copy.lodge.text} and the reserve around it`}
+                aria-label={mapAriaLabel}
               >
                 {REGION.map((r) => (
                   <path
                     key={r.key}
+                    data-region={r.key}
                     d={art.regions[r.key]}
                     fill={r.fill}
                     fillOpacity={r.opacity}
@@ -188,11 +204,12 @@ export function PropertyMap({
 
                 {/* North. A single hairline arrow, not a compass rose.
                     Drawn as a line and a polyline rather than one <path> with
-                    a moveto in it: the region loop above is the only thing
-                    that should ever put a <path> in this SVG, because that is
-                    exactly what the "one path per region" test is counting —
-                    a fifth path here would pass silently and the test would
-                    stop meaning what its comment says it means. */}
+                    a moveto in it. No longer load-bearing for the region
+                    count — that test now selects path[data-region], so an
+                    unmarked <path> here would sit outside it — but kept this
+                    way anyway: it reads the same either way, and it keeps
+                    <path> meaning "a traced region" everywhere it appears in
+                    this file, with nothing to double-check by counting. */}
                 <g transform={`translate(${width - 34} 30)`} stroke="var(--accent)" strokeWidth="1.2" fill="none">
                   <line x1="0" y1="20" x2="0" y2="-8" />
                   <polyline points="-5,-2 0,-8 5,-2" />

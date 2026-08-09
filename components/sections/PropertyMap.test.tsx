@@ -20,9 +20,14 @@ describe("PropertyMap", () => {
     const { container } = render(
       <PropertyMap chapter={{ id: "vann-map", shape: "map", media: [] }} copy={COPY} />,
     );
-    // Four regions, one path each. A map that silently drops one is a map
-    // with no road or no water on it, and nothing else would notice.
-    expect(container.querySelectorAll("svg path")).toHaveLength(4);
+    // Each region path carries data-region, so this counts regions
+    // specifically rather than every <path> in the SVG — a decorative
+    // <path> added elsewhere (an arrow, a flourish) can't inflate this count
+    // and mask a genuinely dropped region. Expected count comes from the
+    // artwork's own keys, not a literal, so it can't drift from the art.
+    expect(container.querySelectorAll("svg path[data-region]")).toHaveLength(
+      Object.keys(VANN_MAP_ART.regions).length,
+    );
   });
 
   it("places every label inside the artwork's own box", () => {
