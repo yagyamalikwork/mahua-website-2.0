@@ -1,4 +1,4 @@
-# Project state — 9 August 2026
+# Project state — 10 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
@@ -7,7 +7,8 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 
 **Branch `feat/chapters-rebuild`.** **Plans 3, 4, 5, 6 and 7 are all complete.** The home page opens with a
 welcome carrying the client's logo, runs twelve chapters, and carries five signature interactions — the
-sliding rule, the leaf cursor, two films and a hanging lantern. **Both property pages are live**,
+sliding rule, the leaf cursor, two films and a hanging lantern — plus, since 10 Aug, **the client's forest
+drawing tinted into the background of `03 · The Forest`** (§15). **Both property pages are live**,
 `/mahua-vann` and `/mahua-tola`, and were **rebuilt again in Plan 7** into a "shape vocabulary" — eight
 chapters each, no two adjacent chapters sharing a shape (mechanically enforced), a persistent booking bar,
 the client's own park maps drawn in cream, rooms as a showcase rather than a spec table, six experiences

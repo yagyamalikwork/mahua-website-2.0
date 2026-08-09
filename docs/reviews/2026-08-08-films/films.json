@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-08T09:04:24.104Z",
+  "measuredAt": "2026-08-09T22:31:13.346Z",
   "url": "http://localhost:3100/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.76,
+        "currentTime": 2.94,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.77,
-        "afterHover": 3.57
+        "beforeHover": 2.94,
+        "afterHover": 3.59
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -115,7 +115,7 @@
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.86
+        "to": 0.85
       },
       "pointerParked": {
         "paused": true,
@@ -164,7 +164,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.66,
+        "currentTime": 2.7,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -177,8 +177,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.66,
-        "afterHover": 3.26
+        "beforeHover": 2.71,
+        "afterHover": 3.3
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -240,7 +240,7 @@
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.88
+        "to": 0.86
       },
       "pointerParked": {
         "paused": true,
@@ -249,7 +249,7 @@
       },
       "leaveAndReturn": {
         "from": 10,
-        "to": 0.86
+        "to": 0.87
       }
     }
   ],

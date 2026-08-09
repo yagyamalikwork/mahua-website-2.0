@@ -200,9 +200,14 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
    53.8% of the average screen, up from 49.7%.
 
-   **Current, measured 7 Aug 2026 on the build that carries both films and the lantern: page mean 40.1%,
-   worst screen 73.4%, 2.03 photographs per screen, imagery 51.9% of the average screen, and all twelve
-   chapters inside 45%.** `lantern-hour` is 36.4%, down ~1.5 points when the lantern landed.
+   **Current, measured 10 Aug 2026 on the build that carries both films, the lantern and the forest tint:
+   page mean 36.6%, worst screen 73.4%, 2.2 photographs per screen, imagery 54.2% of the average screen, and
+   all twelve chapters inside 45%.**
+
+   **`forest` reads 12.4% since the tint landed, against 35.5% before it, and that number is flattering.**
+   The tint is real imagery and `collectImages` counts it, so the chapter now scores beside the hero's 0.3%.
+   It does genuinely fill that chapter's bare middle; it is not four photographs' worth of density. Read the
+   improvement as real and the figure as overstated — `docs/DECISIONS.md` §15. `lantern-hour` is 36.4%, down ~1.5 points when the lantern landed.
 
    **A film's still is not a photograph, and `collectImages` skips it.** Once the films' posters became real
    `<img loading="lazy">` elements (non-negotiable #6), counting them would have moved `distinctImages` by
@@ -341,8 +346,15 @@ anything else is passed to the rig (`--width 390`, `--max-untouched-kb`, `--out`
 under `reference/client-art/` or `Mahua-property-logos/`, a `build_*.mjs` that derives everything from the
 artwork's own ink rather than from hard-coded numbers, and a generated `lib/*-art.ts` the component reads.
 Replacing a drawing means dropping the new file over the source and re-running one script — `lib/leaf-art.ts`,
-`lib/lantern-art.ts` and `lib/welcome-logo.ts` all say so at the top, and each has a test that holds any
-replacement to the guarantees its component depends on. **Never hand-edit a generated module.**
+`lib/lantern-art.ts`, `lib/welcome-logo.ts` and `lib/forest-overlay.ts` all say so at the top, and each has a
+test or a build-time assertion that holds any replacement to the guarantees its component depends on.
+**Never hand-edit a generated module.**
+
+**`build_forest_overlay.mjs` goes furthest and is the one to copy.** It does not merely *check* its output —
+it **solves** for it, binary-searching the strongest tint that still leaves `PALETTE.dim` above 4.5:1 on its
+own darkest pixel, and throwing rather than emitting if even the faintest one would fail. The dial left to a
+human is the artwork's flatness, not the guarantee. Hand-picking that number instead is what shipped a
+drawing the client could not see (`docs/DECISIONS.md` §15).
 
 The browser measurements. **Every committed number in `docs/reviews/` comes from one of these** — they live
 in `scripts/` precisely so nobody has to trust a figure they cannot re-derive:
@@ -354,6 +366,7 @@ node scripts/build_leaf.mjs                      # the cursor's leaf + lib/leaf-
 node scripts/build_lantern.mjs                   # cut the lantern's white ground to real alpha + lib/lantern-art.ts
 node scripts/build_welcome_logo.mjs              # split the client's logo into flower + wordmark, + lib/welcome-logo.ts
 node scripts/build_map.mjs                       # trace the client's Pench/Tadoba park maps + lib/vann-map-art.ts, lib/tola-map-art.ts
+node scripts/build_forest_overlay.mjs           # the hornbill drawing -> a tint that can sit under type + lib/forest-overlay.ts
 
 npm run build && npx next start -p 3100          # then, against the production build:
 node scripts/measure_page.mjs                    # transfer, hero responseEnd on Slow 4G, motion, overflow

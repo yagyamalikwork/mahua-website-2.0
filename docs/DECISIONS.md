@@ -44,6 +44,9 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 8 Aug | **The client's own stacked logo on the welcome**, not the header's lockup | Their real artwork — flower above MAHUA above RESORTS — with the flower doing the turn |
 | 8 Aug | **The logo stays, at 320 ms of hero arrival** | Given the measured figure and the option to revert: *"My logo is fine, we can anyways replace it if we ever find a problem with it."* **Do not revert it on performance grounds without asking again** |
 | 8 Aug | **Property pages are the next piece of work** | In the style of the current site's property pages and of thesujanlife.com's. Mahua Vann and Mahua Tola; Mahua Bagh stays removed |
+| 10 Aug | **The client's forest drawing goes behind a chapter, as background** | *"Between the cream background and the content."* Malabar pied hornbills are native to Pench, which is Mahua Vann's park |
+| 10 Aug | **`03 · The Forest`, not the lodge cards** | Corrected the same day. The right home twice over: that chapter's copy already counts "three hundred recorded birds" |
+| 10 Aug | **Stronger than the first attempt** | *"It is almost not visible."* The fault was the arithmetic, not the drawing — see §15 |
 | 9 Aug | **Both property pages shipped** — `/mahua-vann` and `/mahua-tola`, every chapter inside the 45% ceiling, every rig green at the real routes | Built 8 Aug, then reviewed and corrected 9 Aug after the client found the build session had silently fallen back to a smaller model: the first pass had committed failing density and a failed contrast run as "verified". Evidence and the full correction story in `docs/reviews/2026-08-08-property-pages/README.md`. **Awaiting the client:** Tola's room count (12 vs 14), the home page's cottage/suite caption fix, Tola's hero swap, and a Nagpur distance |
 | 9 Aug | **Both property pages rebuilt in a "shape vocabulary"** — eight chapters each, no two adjacent chapters sharing a shape, mechanically enforced (`findRepeatedShape`) — replacing the first ship's `ChapterIntro`/`PlateGrid`/`RoomsIndex`/`FieldNotes` structure that read as a template | Three client decisions inside this redesign: **(1) a persistent booking bar**, quiet and always reachable, that slides in past the hero and steps aside over the closing invitation — *"a visitor on a property page has already chosen a lodge, so asking is fair here"*, distinct from the home page's "seduce, not convert" (non-negotiable #2), and built to fail towards absent with no JavaScript, the welcome screen's own contract (§14); **(2) six experiences per property, each given real space, plus one honest "also" line** naming what did not make the six (karaoke, the conference hall, wildlife documentaries, indoor games) rather than promoting or deleting them; **(3) the enquiry form dropped for plain contact details** — *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later"* — which fixes the same defect a form would have (a bare `mailto:` doing nothing on a phone with no mail client) better than a form does: a real `tel:` link works on every device, with scripting off, with no third party and nothing to sign up for |
 | 10 Aug | **A guest's face comes off the site on consent grounds, and the photograph is deleted rather than shelved** | Mahua Tola's Bonfire entry (`DSC00097-scaled.jpg`, the live site's own) showed a guest clearly enough to identify her. *"It directly shows a person's face who was a guest, which we don't want."* Replaced with `bonfire-circle-night` — a frame from **the client's own Mahua Tola property video**, so it is honestly this lodge's bonfire and not a stand-in from Pench, and it carries no people at all. **The withdrawn entry was removed from `CURATION`, not left curated-but-unused:** an id that stays in the manifest is an id a later chapter reaches for by name, and the next person wanting a bonfire would find it without ever seeing the face in it. Restoring it needs the guest's consent, not a code change. **This is the second image rejected on these grounds** — the original curation dropped one for the same reason — and the rule was simply not applied when this one was curated on 9 Aug. Both instances are now recorded in `scripts/build_images.mjs`'s own comment, which is the only place that survives a clone |
@@ -51,7 +54,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 
 ---
 
-## 2. The defect that keeps happening — thirty instances
+## 2. The defect that keeps happening — thirty-three instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -88,6 +91,9 @@ these passed its own gate while the thing it guarded was broken.
 | 28 | `measure_js_budget.mjs`'s own default `--scroll 1400`, **tuned for the home page's geometry and never re-checked against another one** | Pointed at `/mahua-vann` with no `--scroll` override, it printed "nothing at all was fetched on scroll — GSAP is not deferred, it is unreachable, and every scrubbed effect on the page is dead" — a load-bearing claim about the *shipped page*, produced entirely by the *rig's* untested default. The home page's first scrub target sits within 1400px; Vann's (`vann-table`) sits at ~4,677px, Tola's (`tola-guest-word`) at ~2,354px — 1400px never brought either into `Parallax`'s rootMargin, on a page whose GSAP was in fact correctly deferred and reachable. Fixed by scrolling past each route's own first `fullBleed` chapter (`--scroll 5000` / `--scroll 2700`), not by touching the page — Task 15, `docs/reviews/2026-08-09-property-redesign/README.md` §3 |
 | 29 | **Every rig on the project measured the map at a width where it worked.** | The redesign's signature element — the drawn park map — was *illegible on a phone*, and fifteen task reviews plus a whole-branch verification all passed it. `PropertyMap` set label type at a fixed `fontSize={10}` inside a `viewBox` the SVG scales down to the column width: at 390px that is ×0.43 on Vann, so 10px rendered at **~4.3px**, and Tola's thirty labels overprinted each other. Nothing caught it because **`measure_density.mjs` runs at 1440×900 and `check_contrast_over_photos.mjs` only probes type laid over a *photograph*** — type over cream, at a width nobody measured, was outside every instrument's field of view at once. Found by the final review opening a 390px screenshot and *looking*. The lesson is not "add a probe": it is that a suite of rigs can have a shared blind spot, and the only thing that finds it is a human eye at the width the visitor actually holds |
 | 30 | **An anti-template guard that covered one string of five.** | The client's complaint was that two properties introduced themselves in the same words. A test was added asserting the two pages' *opening headlines* differ — and shipped while the **invitation line** (the last sentence a visitor reads on either page) was byte-identical bar the gate name, both chapter-01 openers shared a clause verbatim, and "five kilometres from the gate" appeared five times per page in the same five slots on both. The guard was written against the one instance that had been noticed, not against the *rule*, so it certified as fixed a problem that was four-fifths intact. Widened to compare the invitation line and `columnCopy.body[0]`, and watched failing |
+| 31 | **A tint's strength chosen by hand rather than solved for.** | The contrast floor is set by the drawing's single darkest pixel, and this one contains pure black — so one outline dictated how faintly the other 99% printed. 0.2 shipped where 1.047 was available at the *same* worst case, and the client's verdict was "it is almost not visible". The build now binary-searches the strongest tint that clears the floor |
+| 32 | **A solver and its own assertion measuring different things.** | The search worked in floating point; the check that follows it measured the rounded bytes actually written to the file. They disagreed by 0.01 and the script rejected a strength it had just proved. Both now measure the rounded pixels, and the search rounds *down* |
+| 33 | **A contrast target found by structure: `#forest p`.** | It also matched `ChapterMark`'s two gold paragraphs, so the rig measured the chapter *number* as though it were body copy and reported 1:1. Instance 10 in this same table is the same mistake; the intro now carries a `data-contrast` hook |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
@@ -284,6 +290,78 @@ figures measured on one build with only that margin differing.
 gap to the last paragraph is 24-100px, plus that it overlaps no photograph. Run against the pre-change build
 first, it reports 151px and exits 1. It measures the gap a visitor sees, not the margin — a check of the
 margin would pass with the figure a screen adrift, which is defect shape #2 exactly.
+
+---
+
+## 15. The forest tint behind `03 · The Forest`
+
+Client request, 10 Aug 2026, with their own drawing —
+`Forest-illustrations/forest-overlay.jfif`, a 1024×572 JPEG of a line-drawn forest with three Malabar pied
+hornbills on a white sky. Asked for behind the lodge cards, corrected the same day to `03 · The Forest`.
+
+### Three reasons it could not be used the way the films are
+
+`mix-blend-mode: darken` erases the tiger's and the potter's white ground (§9). Wrong here, and each reason
+was measured rather than guessed:
+
+| | |
+|---|---|
+| Its bottom corners are **(73,88,65)** and **(85,100,77)** | It is a scene with a white *sky*, not a figure on white. `darken` would leave its lower two-thirds a dark band across the section — non-negotiable #3 |
+| **64.4% of its ink is dark** (luma < 110) | Type over that is unreadable whatever the blend mode |
+| **It is 1024px wide** | Non-negotiable #11 sets 1400 as the floor for edge-to-edge imagery |
+
+So the ink becomes a faint tint, **flattened onto the cream at build time**.
+
+### Flattening is worth 45× the bytes
+
+| How the same tint is carried | At 1024px |
+|---|---|
+| Semi-transparent WebP, drawing's own colours | **282 KB** |
+| Semi-transparent WebP, one flat ink colour | 116 KB |
+| **Flattened onto the cream, opaque** | **~38 KB** |
+
+Almost all of the cost is the alpha plane — a full frame of fine foliage encoded as per-pixel opacity. The
+first of those is past non-negotiable #6's 200 KB ceiling for a single image, for a decoration. The price of
+flattening is that a file belongs to one cream, so both are emitted at ~38 KB each and the component is
+handed the surface it stands on.
+
+### The strength is solved, and hand-picking it was the defect
+
+**The contrast floor is set by the drawing's single darkest pixel, and this one contains pure black.** With
+the blacks lifted to 60, the strongest tint clearing 4.55:1 is 0.201 — one outline dictating how faintly the
+other 99% printed. Lifting them compresses the range and buys strength at the *same* worst case:
+
+| ink floor | solved strength | mean ink laid down |
+|---|---|---|
+| 60 | 0.201 | 0.085 |
+| 120 | 0.458 | 0.134 |
+| **160** | **1.047** | **0.218** |
+
+It shipped at 60 and the client said *"it is almost not visible"* — correctly. **2.6× the presence for an
+identical guarantee.** Past ~160 the outlines lose their bite and it reads as fog; 120 keeps more line and
+less presence if it is ever judged too heavy.
+
+`scripts/build_forest_overlay.mjs` now **binary-searches** the strongest tint that clears the floor, so the
+only dial left is `INK_FLOOR`. Rendered on the page at four widths: headline 3.64–6.84:1, intro 4.56–6:1.
+The build's arithmetic worst is 4.55 and the browser's 4.56 — the agreement you want between two
+instruments.
+
+### The density figure it produces is flattering, and should be read as such
+
+`forest` went **35.5% → 12.4% empty**, because the tint is real imagery and `measure_density.mjs` counts it.
+It does genuinely fill that chapter's bare middle — but 12.4% puts it beside the hero at 0.3%, which is not
+a fair comparison. The improvement is real; the number overstates it. Page mean 40.1% → 36.6%, imagery
+51.9% → 54.2%, 2.03 → 2.2 photographs per screen.
+
+### Still open
+
+- **On a phone it is a whisper.** The drawing keeps its own 1.79:1 aspect rather than being stretched to the
+  section's 0.17:1, which would zoom tenfold into a sliver — so it is a faint band behind the heading and
+  gone by the paragraph.
+- **A re-render at ~2800px would remove the last compromise** for about 20 KB. The browser currently
+  stretches the 1024px source ~1.9× at 1920. Tolerable for a near-flat texture, and it would not be for a
+  photograph.
+- **The client has not yet judged it.** 10 Aug: *"Looks fine for now, let me sleep on it."*
 
 ---
 

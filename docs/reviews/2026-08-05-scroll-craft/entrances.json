@@ -1,6 +1,6 @@
 {
   "url": "http://localhost:3100/",
-  "measuredAt": "2026-08-09T19:53:59.017Z",
+  "measuredAt": "2026-08-09T22:28:46.418Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
@@ -57,7 +57,7 @@
     "headlineStagings": 11,
     "headlineSettlings": 11,
     "peakMaskCover": 1,
-    "peakWordOffset": 83.697,
+    "peakWordOffset": 83.886,
     "peakStagedAtOnce": 67,
     "afterScroll": {
       "staged": 0,
@@ -261,7 +261,7 @@
         "id": "forest",
         "words": 97,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -581,7 +581,7 @@
         "id": "forest",
         "words": 97,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -902,7 +902,7 @@
         "id": "forest",
         "words": 97,
         "hidden": 0,
-        "photographs": 3,
+        "photographs": 4,
         "maskedOver": 0
       },
       {
@@ -1763,7 +1763,7 @@
           "id": "forest",
           "words": 97,
           "hidden": 0,
-          "photographs": 3,
+          "photographs": 4,
           "maskedOver": 0
         },
         {
@@ -1853,7 +1853,7 @@
           "id": "forest",
           "words": 97,
           "hidden": 0,
-          "photographs": 3,
+          "photographs": 4,
           "maskedOver": 0
         },
         {

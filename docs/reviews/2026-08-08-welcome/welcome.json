@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-08T09:03:51.653Z",
+  "measuredAt": "2026-08-09T22:32:38.811Z",
   "url": "http://localhost:3100/",
   "mustBeGoneByMs": 5000,
-  "lastSeenUpMs": 2361,
-  "goneAtMs": 2495,
+  "lastSeenUpMs": 2668,
+  "goneAtMs": 2782,
   "welcomeParts": [
     "welcome-flower-162.webp",
     "welcome-wordmark-280.webp"
@@ -20,18 +20,18 @@
   "narrow": {
     "up": {
       "present": true,
-      "now": 171,
+      "now": 205,
       "visibility": "visible",
       "opacity": 1,
       "zIndex": "90",
       "gone": false,
       "coversViewport": true,
-      "emblemAngle": 180,
+      "emblemAngle": -137.3,
       "logoWidthPx": 190,
       "flowerImg": {
         "painted": true,
         "src": "welcome-flower-162.webp",
-        "w": 110
+        "w": 155
       },
       "wordmarkImg": {
         "painted": true,
@@ -43,7 +43,7 @@
     },
     "after": {
       "present": true,
-      "now": 5263,
+      "now": 5284,
       "visibility": "hidden",
       "opacity": 0,
       "zIndex": "90",
@@ -68,18 +68,18 @@
   "normal": {
     "early": {
       "present": true,
-      "now": 646,
+      "now": 743,
       "visibility": "visible",
       "opacity": 1,
       "zIndex": "90",
       "gone": false,
       "coversViewport": true,
-      "emblemAngle": -38.6,
+      "emblemAngle": -101.2,
       "logoWidthPx": 280,
       "flowerImg": {
         "painted": true,
         "src": "welcome-flower-162.webp",
-        "w": 227
+        "w": 190
       },
       "wordmarkImg": {
         "painted": true,
@@ -92,18 +92,18 @@
     "timeline": [
       {
         "present": true,
-        "now": 646,
+        "now": 743,
         "visibility": "visible",
         "opacity": 1,
         "zIndex": "90",
         "gone": false,
         "coversViewport": true,
-        "emblemAngle": -38.6,
+        "emblemAngle": -101.2,
         "logoWidthPx": 280,
         "flowerImg": {
           "painted": true,
           "src": "welcome-flower-162.webp",
-          "w": 227
+          "w": 190
         },
         "wordmarkImg": {
           "painted": true,
@@ -115,13 +115,128 @@
       },
       {
         "present": true,
-        "now": 1345,
+        "now": 1019,
         "visibility": "visible",
         "opacity": 1,
         "zIndex": "90",
         "gone": false,
         "coversViewport": true,
-        "emblemAngle": -0.1,
+        "emblemAngle": -21.8,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 210
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 1129,
+        "visibility": "visible",
+        "opacity": 1,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": -10.7,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 189
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 1238,
+        "visibility": "visible",
+        "opacity": 1,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": -5.5,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 176
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 1350,
+        "visibility": "visible",
+        "opacity": 1,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": -2.3,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 168
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 1463,
+        "visibility": "visible",
+        "opacity": 1,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": -0.8,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 164
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 1571,
+        "visibility": "visible",
+        "opacity": 1,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": -0.2,
         "logoWidthPx": 280,
         "flowerImg": {
           "painted": true,
@@ -138,7 +253,7 @@
       },
       {
         "present": true,
-        "now": 1461,
+        "now": 1682,
         "visibility": "visible",
         "opacity": 1,
         "zIndex": "90",
@@ -161,7 +276,7 @@
       },
       {
         "present": true,
-        "now": 1576,
+        "now": 1791,
         "visibility": "visible",
         "opacity": 1,
         "zIndex": "90",
@@ -184,7 +299,7 @@
       },
       {
         "present": true,
-        "now": 1684,
+        "now": 1903,
         "visibility": "visible",
         "opacity": 1,
         "zIndex": "90",
@@ -207,9 +322,9 @@
       },
       {
         "present": true,
-        "now": 1798,
+        "now": 2012,
         "visibility": "visible",
-        "opacity": 0.887,
+        "opacity": 1,
         "zIndex": "90",
         "gone": false,
         "coversViewport": true,
@@ -230,9 +345,9 @@
       },
       {
         "present": true,
-        "now": 1951,
+        "now": 2119,
         "visibility": "visible",
-        "opacity": 0.372,
+        "opacity": 0.78,
         "zIndex": "90",
         "gone": false,
         "coversViewport": true,
@@ -253,9 +368,9 @@
       },
       {
         "present": true,
-        "now": 2060,
+        "now": 2229,
         "visibility": "visible",
-        "opacity": 0.077,
+        "opacity": 0.225,
         "zIndex": "90",
         "gone": false,
         "coversViewport": true,
@@ -276,7 +391,30 @@
       },
       {
         "present": true,
-        "now": 2195,
+        "now": 2339,
+        "visibility": "visible",
+        "opacity": 0.064,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": 0,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 162
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 2450,
         "visibility": "visible",
         "opacity": 0.014,
         "zIndex": "90",
@@ -299,7 +437,30 @@
       },
       {
         "present": true,
-        "now": 2361,
+        "now": 2562,
+        "visibility": "visible",
+        "opacity": 0.002,
+        "zIndex": "90",
+        "gone": false,
+        "coversViewport": true,
+        "emblemAngle": 0,
+        "logoWidthPx": 280,
+        "flowerImg": {
+          "painted": true,
+          "src": "welcome-flower-162.webp",
+          "w": 162
+        },
+        "wordmarkImg": {
+          "painted": true,
+          "src": "welcome-wordmark-280.webp",
+          "w": 280
+        },
+        "heroBehind": true,
+        "horizontalOverflow": 0
+      },
+      {
+        "present": true,
+        "now": 2668,
         "visibility": "visible",
         "opacity": 0,
         "zIndex": "90",
@@ -322,7 +483,7 @@
       },
       {
         "present": true,
-        "now": 2495,
+        "now": 2782,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -345,7 +506,7 @@
       },
       {
         "present": true,
-        "now": 2617,
+        "now": 2890,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -368,7 +529,7 @@
       },
       {
         "present": true,
-        "now": 2735,
+        "now": 2999,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -391,7 +552,7 @@
       },
       {
         "present": true,
-        "now": 2854,
+        "now": 3111,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -414,7 +575,7 @@
       },
       {
         "present": true,
-        "now": 2964,
+        "now": 3222,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -437,7 +598,7 @@
       },
       {
         "present": true,
-        "now": 3075,
+        "now": 3333,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -460,7 +621,7 @@
       },
       {
         "present": true,
-        "now": 3187,
+        "now": 3443,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -483,7 +644,7 @@
       },
       {
         "present": true,
-        "now": 3299,
+        "now": 3552,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -506,7 +667,7 @@
       },
       {
         "present": true,
-        "now": 3411,
+        "now": 3661,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -529,7 +690,7 @@
       },
       {
         "present": true,
-        "now": 3536,
+        "now": 3772,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -552,7 +713,7 @@
       },
       {
         "present": true,
-        "now": 3648,
+        "now": 3883,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -575,7 +736,7 @@
       },
       {
         "present": true,
-        "now": 3758,
+        "now": 3995,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -598,7 +759,7 @@
       },
       {
         "present": true,
-        "now": 3869,
+        "now": 4105,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -621,7 +782,7 @@
       },
       {
         "present": true,
-        "now": 3981,
+        "now": 4213,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -644,7 +805,7 @@
       },
       {
         "present": true,
-        "now": 4091,
+        "now": 4323,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -667,7 +828,7 @@
       },
       {
         "present": true,
-        "now": 4200,
+        "now": 4434,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",
@@ -690,168 +851,7 @@
       },
       {
         "present": true,
-        "now": 4311,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 4422,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 4531,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 4640,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 4751,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 4861,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 4972,
-        "visibility": "hidden",
-        "opacity": 0,
-        "zIndex": "90",
-        "gone": true,
-        "coversViewport": true,
-        "emblemAngle": 0,
-        "logoWidthPx": 280,
-        "flowerImg": {
-          "painted": true,
-          "src": "welcome-flower-162.webp",
-          "w": 162
-        },
-        "wordmarkImg": {
-          "painted": true,
-          "src": "welcome-wordmark-280.webp",
-          "w": 280
-        },
-        "heroBehind": true,
-        "horizontalOverflow": 0
-      },
-      {
-        "present": true,
-        "now": 5082,
+        "now": 4544,
         "visibility": "hidden",
         "opacity": 0,
         "zIndex": "90",

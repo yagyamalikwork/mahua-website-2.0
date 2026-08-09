@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-08T09:13:26.819Z",
+  "measuredAt": "2026-08-09T22:31:12.499Z",
   "url": "http://localhost:3100/",
   "densityCap": 2,
   "results": [
     {
       "viewport": "390x844@1x",
-      "images": 38,
+      "images": 39,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -132,6 +132,13 @@
           "drawnWidth": 527,
           "needed": 527,
           "ratio": 1.21
+        },
+        {
+          "file": "/brand/forest-overlay-paper-640.webp",
+          "cssWidth": 390,
+          "drawnWidth": 390,
+          "needed": 390,
+          "ratio": 1.64
         },
         {
           "file": "/media/tiger-pair-profile-400.avif",
@@ -312,7 +319,7 @@
     },
     {
       "viewport": "390x844@3x",
-      "images": 38,
+      "images": 39,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -469,6 +476,13 @@
           "drawnWidth": 527,
           "needed": 1053,
           "ratio": 0.66
+        },
+        {
+          "file": "/brand/forest-overlay-paper-1024.webp",
+          "cssWidth": 390,
+          "drawnWidth": 390,
+          "needed": 780,
+          "ratio": 1.31
         },
         {
           "file": "/media/tiger-pair-profile-768.avif",
@@ -649,7 +663,7 @@
     },
     {
       "viewport": "768x1024@1x",
-      "images": 38,
+      "images": 39,
       "softestServed": {
         "file": "/media/potters-hands-700.avif",
         "fileWidth": 700,
@@ -791,6 +805,13 @@
           "drawnWidth": 1035,
           "needed": 1035,
           "ratio": 0.68
+        },
+        {
+          "file": "/brand/forest-overlay-paper-1024.webp",
+          "cssWidth": 768,
+          "drawnWidth": 768,
+          "needed": 768,
+          "ratio": 1.33
         },
         {
           "file": "/media/tiger-pair-profile-400.avif",
@@ -971,21 +992,21 @@
     },
     {
       "viewport": "1440x900@1x",
-      "images": 38,
+      "images": 39,
       "softestServed": {
-        "file": "/media/tiger-golden-grass-1440.avif",
-        "fileWidth": 1440,
-        "widestOffered": 1440,
-        "objectFit": "cover",
+        "file": "/brand/forest-overlay-paper-1024.webp",
+        "fileWidth": 1024,
+        "widestOffered": 1024,
+        "objectFit": "fill",
         "cssWidth": 1440,
-        "drawnWidth": 1726,
-        "needed": 1726,
-        "ratio": 0.83,
-        "ratioAtDeviceDensity": 0.83,
+        "drawnWidth": 1440,
+        "needed": 1440,
+        "ratio": 0.71,
+        "ratioAtDeviceDensity": 0.71,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.83,
+        "worst": 0.71,
         "median": 1.18,
         "best": 1.9
       },
@@ -995,6 +1016,11 @@
           "file": "/media/tiger-golden-grass-1440.avif",
           "needed": 1726,
           "ratio": 0.83
+        },
+        {
+          "file": "/brand/forest-overlay-paper-1024.webp",
+          "needed": 1440,
+          "ratio": 0.71
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
@@ -1098,6 +1124,13 @@
           "drawnWidth": 484,
           "needed": 484,
           "ratio": 1.45
+        },
+        {
+          "file": "/brand/forest-overlay-paper-1024.webp",
+          "cssWidth": 1440,
+          "drawnWidth": 1440,
+          "needed": 1440,
+          "ratio": 0.71
         },
         {
           "file": "/media/tiger-pair-profile-640.avif",
@@ -1278,21 +1311,21 @@
     },
     {
       "viewport": "1920x1080@1x",
-      "images": 38,
+      "images": 39,
       "softestServed": {
-        "file": "/media/tiger-golden-grass-1440.avif",
-        "fileWidth": 1440,
-        "widestOffered": 1440,
-        "objectFit": "cover",
+        "file": "/brand/forest-overlay-paper-1024.webp",
+        "fileWidth": 1024,
+        "widestOffered": 1024,
+        "objectFit": "fill",
         "cssWidth": 1920,
-        "drawnWidth": 2070,
-        "needed": 2070,
-        "ratio": 0.7,
-        "ratioAtDeviceDensity": 0.7,
+        "drawnWidth": 1920,
+        "needed": 1920,
+        "ratio": 0.53,
+        "ratioAtDeviceDensity": 0.53,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.7,
+        "worst": 0.53,
         "median": 1.06,
         "best": 1.9
       },
@@ -1312,6 +1345,11 @@
           "file": "/media/lantern-bridge-dusk-1300.avif",
           "needed": 1323,
           "ratio": 0.98
+        },
+        {
+          "file": "/brand/forest-overlay-paper-1024.webp",
+          "needed": 1920,
+          "ratio": 0.53
         },
         {
           "file": "/media/guide-sunrise-1000.avif",
@@ -1425,6 +1463,13 @@
           "drawnWidth": 574,
           "needed": 574,
           "ratio": 1.22
+        },
+        {
+          "file": "/brand/forest-overlay-paper-1024.webp",
+          "cssWidth": 1920,
+          "drawnWidth": 1920,
+          "needed": 1920,
+          "ratio": 0.53
         },
         {
           "file": "/media/tiger-pair-profile-640.avif",
