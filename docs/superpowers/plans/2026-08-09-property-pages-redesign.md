@@ -4,7 +4,9 @@
 
 **Goal:** Rebuild `/mahua-vann` and `/mahua-tola` so they read as quiet luxury rather than as a WordPress template — a shape vocabulary that cannot repeat itself, the client's own park maps redrawn in cream, the rooms as showcases instead of spec tables, six experiences given real space, and a booking ask that is always reachable.
 
-**Architecture:** The page spine gains a `shape` field, and a test forbids two adjacent moments from sharing one — that single mechanical rule is the fix for the "templaty" complaint. Seven small section components each render one shape. The maps are traced from the client's artwork by a build script into generated modules, in the same swap-point pattern as the leaf, the lantern and the welcome logo. A fixed bar and an in-place enquiry form sit outside the chapter flow.
+**Architecture:** The page spine gains a `shape` field, and a test forbids two adjacent moments from sharing one — that single mechanical rule is the fix for the "templaty" complaint. Seven small section components each render one shape. The maps are traced from the client's artwork by a build script into generated modules, in the same swap-point pattern as the leaf, the lantern and the welcome logo. A fixed bar carrying Book and a tap-to-call sits outside the chapter flow.
+
+**Scope change, 9 Aug, after this plan was first written.** The client removed the enquiry form: *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later."* Task 10 is now `PropertyContact`; Tasks 8 and 9 consume it in place of the form's trigger. No third-party service, no signup, no environment variable, and nothing on these pages that can be pressed to no effect.
 
 **Tech Stack:** Next.js App Router, React server components, TypeScript, Tailwind v4, Vitest, Playwright (verification rigs), `sharp` + `potrace` (map pipeline).
 
@@ -41,7 +43,7 @@ Every task's requirements implicitly include these. They are copied from the spe
 | `components/sections/PressBand.tsx` | **New.** The `press` shape |
 | `components/property/PropertyInvitation.tsx` | **New.** The `invitation` shape |
 | `components/property/PropertyBar.tsx` | **New.** The persistent bar |
-| `components/property/EnquiryPanel.tsx` | **New.** The enquiry form |
+| `components/property/PropertyContact.tsx` | **New.** The lodge's phone, email and address |
 | `components/property/PropertyPage.tsx` | **Modified.** Dispatches shapes; mounts the bar |
 | `content/mahua-vann.ts`, `content/mahua-tola.ts` | **Rewritten.** New spines, full copy |
 | `content/mahua-vann.test.ts`, `content/mahua-tola.test.ts` | **Modified.** R1 + rhythm + join tests |
@@ -1615,8 +1617,11 @@ const COPY: PropertyInvitationCopy = {
   heading: { text: "Come and see it", dim: "see" },
   line: "Rooms from the river, and the gate five minutes away.",
   bookLabel: "Book Mahua Vann",
-  enquireLabel: "Enquire",
-  address: "Village Kuppitola, Khawasa, Madhya Pradesh 480881",
+  contact: {
+    phone: { label: "Speak to us", value: "+91 87448 67278", href: "tel:+918744867278" },
+    email: { label: "Write", value: "sales@mahuaresorts.com", href: "mailto:sales@mahuaresorts.com" },
+    address: { label: "Find us", value: "Village Kuppitola, Khawasa, Madhya Pradesh 480881" },
+  },
   sibling: { mediaId: "tola-candlelit-dinner", label: "Looking for Tadoba instead? Mahua Tola" },
 };
 
@@ -1636,10 +1641,12 @@ describe("PropertyInvitation", () => {
     expect(container.querySelectorAll("picture, img").length).toBeGreaterThan(0);
   });
 
-  it("offers both asks", () => {
-    const { getByText } = render(<PropertyInvitation {...props} />);
+  it("offers the booking and a way to reach a person", () => {
+    const { getByText, container } = render(<PropertyInvitation {...props} />);
     expect(getByText("Book Mahua Vann")).toBeTruthy();
-    expect(getByText("Enquire")).toBeTruthy();
+    // A real tel: link, not type that looks like a number — the whole reason
+    // the client chose details over a form is that details cannot fail.
+    expect(container.querySelector("a[href='tel:+918744867278']")).not.toBeNull();
   });
 
   it("sends Book out to the real engine, in a new tab", () => {
@@ -1660,7 +1667,7 @@ Expected: FAIL — module not found.
 ```tsx
 import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
-import { EnquiryTrigger } from "@/components/property/EnquiryPanel";
+import { ContactBlock, type PropertyContactCopy } from "@/components/property/PropertyContact";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
 import { PillButton } from "@/components/ui/PillButton";
@@ -1674,8 +1681,8 @@ export type PropertyInvitationCopy = {
   readonly heading: TwoTone;
   readonly line: string;
   readonly bookLabel: string;
-  readonly enquireLabel: string;
-  readonly address: string;
+  /** Phone, email and address — the enquiry route since the form was dropped. */
+  readonly contact: PropertyContactCopy;
   /** The other lodge. A visitor leaving this page is choosing, not leaving. */
   readonly sibling: { readonly mediaId: MediaId; readonly label: string };
 };
@@ -1729,18 +1736,12 @@ export function PropertyInvitation({
         <div className="lg:col-span-5 lg:col-start-8">
           <Enter delay={ENTER.stagger}>
             <div>
-              <div className="flex flex-wrap items-center gap-4">
-                <PillButton href={bookHref} size="large" external>
-                  {copy.bookLabel}
-                </PillButton>
-                <EnquiryTrigger label={copy.enquireLabel} />
+              <PillButton href={bookHref} size="large" external>
+                {copy.bookLabel}
+              </PillButton>
+              <div className="mt-9">
+                <ContactBlock copy={copy.contact} />
               </div>
-              <p
-                className="mt-8 font-[family-name:var(--font-body)] text-sm"
-                style={{ color: "var(--dim)" }}
-              >
-                {copy.address}
-              </p>
             </div>
           </Enter>
         </div>
@@ -1784,7 +1785,7 @@ Note that `lib/sizes.test.ts`'s "imports from every component that passes a size
 - [ ] **Step 5: Run the tests**
 
 Run: `npx vitest run components/property/PropertyInvitation.test.tsx lib/sizes.test.ts`
-Expected: FAIL on the missing `EnquiryPanel` module — that is Task 10. Write Task 10 next if executing in order, or stub nothing and accept the red until then. **Do not create a placeholder `EnquiryTrigger`**; a stub that renders a dead button is exactly the silent-failure this design exists to remove.
+Expected: FAIL on the missing `PropertyContact` module — that is Task 10. Write Task 10 next if executing in order, or accept the red until then. **Do not stub `ContactBlock`**; a stub that renders a phone number as inert text is exactly the silent failure the client chose real contact details to avoid.
 
 - [ ] **Step 6: Commit after Task 10 is green**
 
@@ -1792,9 +1793,10 @@ Expected: FAIL on the missing `EnquiryPanel` module — that is Task 10. Write T
 git add components/property/PropertyInvitation.tsx components/property/PropertyInvitation.test.tsx lib/sizes.test.ts
 git commit -m "feat: the property pages' closing invitation
 
-Carries the sister lodge's photograph, which is not decoration: it
-follows the type-led press band on Vann, and the rhythm rule forbids
-two quiet screens in a row independently of the shape rule."
+Book, then the lodge's phone, email and address, then the sister lodge.
+The photograph is not decoration: this follows the type-led press band
+on Vann, and the rhythm rule forbids two quiet screens in a row
+independently of the shape rule."
 ```
 
 ---
@@ -1806,7 +1808,7 @@ two quiet screens in a row independently of the shape rule."
 - Create: `components/property/PropertyBar.test.tsx`
 
 **Interfaces:**
-- Consumes: `EnquiryTrigger` (Task 10).
+- Consumes: `ContactLine`, `PropertyContactCopy` (Task 10).
 - Produces: `PropertyBar` — consumed by Task 14.
 
 - [ ] **Step 1: Write the failing test**
@@ -1820,7 +1822,11 @@ const props = {
   name: "Mahua Vann · Pench",
   bookHref: "https://asiatech.in/booking_engine/index3?token=ODM1MQ==",
   bookLabel: "Book",
-  enquireLabel: "Enquire",
+  contact: {
+    phone: { label: "Speak to us", value: "+91 87448 67278", href: "tel:+918744867278" },
+    email: { label: "Write", value: "sales@mahuaresorts.com", href: "mailto:sales@mahuaresorts.com" },
+    address: { label: "Find us", value: "Village Kuppitola, Khawasa, Madhya Pradesh 480881" },
+  },
   heroId: "vann-hero",
   invitationId: "vann-invitation",
 };
@@ -1838,11 +1844,11 @@ describe("PropertyBar", () => {
     vi.unstubAllGlobals();
   });
 
-  it("carries the property's name and both asks once shown", () => {
-    const { getByText } = render(<PropertyBar {...props} shown />);
+  it("carries the property's name, the booking and the phone once shown", () => {
+    const { getByText, container } = render(<PropertyBar {...props} shown />);
     expect(getByText("Mahua Vann · Pench")).toBeTruthy();
     expect(getByText("Book")).toBeTruthy();
-    expect(getByText("Enquire")).toBeTruthy();
+    expect(container.querySelector("a[href='tel:+918744867278']")).not.toBeNull();
   });
 
   it("steps aside once the closing invitation is on screen", () => {
@@ -1888,7 +1894,7 @@ Expected: FAIL — module not found.
 "use client";
 
 import { useEffect, useState } from "react";
-import { EnquiryTrigger } from "@/components/property/EnquiryPanel";
+import { ContactLine, type PropertyContactCopy } from "@/components/property/PropertyContact";
 import { PillButton } from "@/components/ui/PillButton";
 
 /**
@@ -1914,7 +1920,7 @@ export function PropertyBar({
   name,
   bookHref,
   bookLabel,
-  enquireLabel,
+  contact,
   heroId,
   invitationId,
   shown,
@@ -1922,7 +1928,7 @@ export function PropertyBar({
   name: string;
   bookHref: string;
   bookLabel: string;
-  enquireLabel: string;
+  contact: PropertyContactCopy;
   heroId: string;
   invitationId: string;
   shown?: boolean;
@@ -1965,8 +1971,8 @@ export function PropertyBar({
         >
           {name}
         </span>
-        <div className="flex shrink-0 items-center gap-4">
-          <EnquiryTrigger label={enquireLabel} />
+        <div className="flex shrink-0 items-center gap-5">
+          <ContactLine copy={contact} />
           <PillButton href={bookHref} external>
             {bookLabel}
           </PillButton>
@@ -1980,7 +1986,7 @@ export function PropertyBar({
 - [ ] **Step 4: Run the test**
 
 Run: `npx vitest run components/property/PropertyBar.test.tsx`
-Expected: FAIL on the missing `EnquiryPanel` until Task 10 lands; PASS after.
+Expected: FAIL on the missing `PropertyContact` until Task 10 lands; PASS after.
 
 - [ ] **Step 5: Commit after Task 10 is green**
 
@@ -1995,372 +2001,207 @@ must fail towards absent, the welcome screen's own contract."
 
 ---
 
-### Task 10: `EnquiryPanel`
+### Task 10: `PropertyContact`
 
 **Files:**
-- Create: `components/property/EnquiryPanel.tsx`
-- Create: `components/property/EnquiryPanel.test.tsx`
-- Modify: `.env.example` (create if absent), `README.md` or `CLAUDE.md` — whichever documents environment setup
+- Create: `components/property/PropertyContact.tsx`
+- Create: `components/property/PropertyContact.test.tsx`
 
 **Interfaces:**
-- Produces: `EnquiryTrigger` (the link that opens it) and `EnquiryPanel` (the dialog) — consumed by Tasks 8, 9, 14.
+- Produces: `ContactLine` (for the bar), `ContactBlock` (for the closing band), and `PropertyContactCopy` — consumed by Tasks 8, 9, 12, 13.
 
-**Before writing code:** pick the form service against the spec's constraints — a plain HTTPS `POST` of form fields with **no client-side SDK** (it must cost nothing against the 175 KB first-load JS budget), delivery to an arbitrary address, and a free tier. Record which was chosen and why in the component's doc comment. The endpoint goes in `NEXT_PUBLIC_ENQUIRY_ENDPOINT`; **the repository must never carry the account identifier**.
+**Why this replaces the enquiry form.** The client removed the form on 9 Aug: *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later."* The original problem is unchanged and still solved — a bare `mailto:` does nothing at all on a phone with no mail client configured, and the visitor believes they have written to us. A phone number shown as text always works. Nothing on these pages is now a control that can be pressed to no effect.
+
+**Everything here is server-rendered and carries no JavaScript.** There is no state, no effect and no `"use client"`. That is the point: a `tel:` link works with scripting off, on every device, forever.
 
 - [ ] **Step 1: Write the failing test**
 
+Create `components/property/PropertyContact.test.tsx`:
+
 ```tsx
-import { fireEvent, render, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { EnquiryPanel, EnquiryTrigger } from "./EnquiryPanel";
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { ContactBlock, ContactLine, type PropertyContactCopy } from "./PropertyContact";
 
-afterEach(() => vi.unstubAllGlobals());
+const COPY: PropertyContactCopy = {
+  phone: { label: "Speak to us", value: "+91 87448 67278", href: "tel:+918744867278" },
+  email: { label: "Write", value: "sales@mahuaresorts.com", href: "mailto:sales@mahuaresorts.com" },
+  address: { label: "Find us", value: "Village Kuppitola, Khawasa, Madhya Pradesh 480881" },
+};
 
-describe("EnquiryTrigger", () => {
-  it("is a working mailto link before script upgrades it", () => {
-    // The whole reason this task exists: today's mailto silently does nothing
-    // on a phone with no mail client, and the enquiry is lost with no trace.
-    // The fix must not introduce the opposite failure — a button that does
-    // nothing at all when the script has not run.
-    const { container } = render(<EnquiryTrigger label="Enquire" />);
+describe("ContactLine", () => {
+  it("is a real tel: link, not type that looks like one", () => {
+    // The whole reason details were chosen over a form: they cannot fail. A
+    // number rendered as inert text would look identical in a screenshot and
+    // be useless on the device most visitors are holding.
+    const { container } = render(<ContactLine copy={COPY} />);
     const a = container.querySelector("a");
-    expect(a?.getAttribute("href")).toMatch(/^mailto:/);
+    expect(a?.getAttribute("href")).toBe("tel:+918744867278");
+    expect(a?.textContent).toContain("+91 87448 67278");
   });
 });
 
-describe("EnquiryPanel", () => {
-  const open = () => {
-    const r = render(
-      <>
-        <EnquiryTrigger label="Enquire" />
-        <EnquiryPanel property="Mahua Vann" phone="+91 87448 67278" />
-      </>,
-    );
-    fireEvent.click(r.container.querySelector("a")!);
-    return r;
-  };
-
-  it("opens in place, without leaving the page", () => {
-    const { getByLabelText } = open();
-    expect(getByLabelText(/name/i)).toBeTruthy();
-    expect(getByLabelText(/email/i)).toBeTruthy();
+describe("ContactBlock", () => {
+  it("gives the phone and the email working links", () => {
+    const { container } = render(<ContactBlock copy={COPY} />);
+    expect(container.querySelector("a[href^='tel:']")).not.toBeNull();
+    expect(container.querySelector("a[href^='mailto:']")).not.toBeNull();
   });
 
-  it("says so, visibly, when the send fails", async () => {
-    // A form that fails silently is the mailto problem again with more steps.
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500 }));
-    const { getByLabelText, getByRole, findByRole } = open();
-    fireEvent.change(getByLabelText(/name/i), { target: { value: "A" } });
-    fireEvent.change(getByLabelText(/email/i), { target: { value: "a@b.com" } });
-    fireEvent.click(getByRole("button", { name: /send/i }));
-    const alert = await findByRole("alert");
-    expect(alert.textContent).toMatch(/could not|try|phone/i);
+  it("sets the address as text, because an address is not a link", () => {
+    const { getByText, container } = render(<ContactBlock copy={COPY} />);
+    const address = getByText(/Village Kuppitola/);
+    expect(address.closest("a")).toBeNull();
+    expect(container.querySelectorAll("a")).toHaveLength(2);
   });
 
-  it("confirms, visibly, when the send succeeds", async () => {
-    vi.stubEnv("NEXT_PUBLIC_ENQUIRY_ENDPOINT", "https://example.test/f");
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200 }));
-    const { getByLabelText, getByRole, findByRole } = open();
-    fireEvent.change(getByLabelText(/name/i), { target: { value: "A" } });
-    fireEvent.change(getByLabelText(/email/i), { target: { value: "a@b.com" } });
-    fireEvent.click(getByRole("button", { name: /send/i }));
-    await waitFor(async () => expect((await findByRole("status")).textContent).toMatch(/thank|write back/i));
+  it("labels every row, so the block scans without punctuation", () => {
+    const { getByText } = render(<ContactBlock copy={COPY} />);
+    expect(getByText("Speak to us")).toBeTruthy();
+    expect(getByText("Write")).toBeTruthy();
+    expect(getByText("Find us")).toBeTruthy();
   });
 
-  it("fails visibly when no endpoint is configured, rather than appearing to send", () => {
-    // Deployed without NEXT_PUBLIC_ENQUIRY_ENDPOINT the form must not swallow
-    // the enquiry and thank the visitor for it.
-    vi.stubEnv("NEXT_PUBLIC_ENQUIRY_ENDPOINT", "");
-    const { getByLabelText, getByRole, findByRole } = open();
-    fireEvent.change(getByLabelText(/name/i), { target: { value: "A" } });
-    fireEvent.change(getByLabelText(/email/i), { target: { value: "a@b.com" } });
-    fireEvent.click(getByRole("button", { name: /send/i }));
-    return expect(findByRole("alert")).resolves.toBeTruthy();
+  it("carries the sliding hairline on every link it renders", () => {
+    // scripts/check_rule_in.mjs fails any link carrying neither `rule-in` nor
+    // an explicit data-rule opt-out. Catching it here costs a second; catching
+    // it in the browser rig costs a build and a server.
+    const { container } = render(<ContactBlock copy={COPY} />);
+    for (const a of container.querySelectorAll("a[href]")) {
+      expect(
+        a.classList.contains("rule-in") || a.querySelector(".rule-in") !== null,
+        `${a.getAttribute("href")} carries no rule`,
+      ).toBe(true);
+    }
   });
 });
 ```
-
-Add `afterEach(() => vi.unstubAllEnvs())` alongside the existing `afterEach`.
 
 - [ ] **Step 2: Run it to verify it fails**
 
-Run: `npx vitest run components/property/EnquiryPanel.test.tsx`
-Expected: FAIL — module not found.
+Run: `npx vitest run components/property/PropertyContact.test.tsx`
+Expected: FAIL — `./PropertyContact` does not exist.
 
 - [ ] **Step 3: Write the component**
 
-Create `components/property/EnquiryPanel.tsx`:
+Create `components/property/PropertyContact.tsx`:
 
 ```tsx
-"use client";
+import type { ReactNode } from "react";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+export type ContactEntry = {
+  readonly label: string;
+  readonly value: string;
+  /** Absent for the address: a postal address is not a link. */
+  readonly href?: string;
+};
 
-/**
- * The two halves talk over a window event rather than a React context.
- *
- * `EnquiryTrigger` appears twice in different parts of the tree — in the
- * fixed bar and inside the closing invitation — while the panel is mounted
- * once. An event costs no provider plumbing in `PropertyPage` and cannot be
- * broken by moving either of them.
- */
-const OPEN_EVENT = "mahua:enquire";
-
-/** Already published on every page of the live site, for exactly this. */
-const MAILTO = "sales@mahuaresorts.com";
+export type PropertyContactCopy = {
+  readonly phone: ContactEntry;
+  readonly email: ContactEntry;
+  readonly address: ContactEntry;
+};
 
 /**
- * The ask, as a link that always works.
+ * The lodge's own details, shown plainly.
  *
- * It is a real `mailto:` in the markup and only *becomes* a panel opener once
- * the effect below has run. That order matters: a `<button>` here would be a
- * dead control with no JavaScript, which is the same silent failure this
- * whole task exists to remove, pointing the other way.
+ * This is what the enquiry form became when the client removed it on 9 Aug —
+ * and it solves the original problem better than the form would have. The
+ * defect being fixed was a bare `mailto:` that does nothing on a phone with
+ * no mail client, leaving the visitor believing they had written to us. A
+ * phone number that is a real `tel:` link works on every device, with
+ * scripting off, with no third party involved and with nothing to sign up
+ * for.
+ *
+ * No `"use client"`, no state, no effect. Deliberately.
  */
-export function EnquiryTrigger({ label, property }: { label: string; property?: string }) {
-  const [scripted, setScripted] = useState(false);
-  useEffect(() => setScripted(true), []);
+const LINK_CLASS =
+  "rule-in inline-block pb-0.5 font-[family-name:var(--font-body)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]";
 
-  return (
-    <a
-      href={`mailto:${MAILTO}?subject=${encodeURIComponent(`Enquiry — ${property ?? "Mahua Resorts"}`)}`}
-      className="rule-in inline-block pb-1 font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.22em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
-      style={{ color: "var(--accent-text)" }}
-      onClick={(e) => {
-        if (!scripted) return;
-        e.preventDefault();
-        window.dispatchEvent(new CustomEvent(OPEN_EVENT));
-      }}
-    >
-      {label}
+function Row({ entry }: { entry: ContactEntry }) {
+  const body: ReactNode = entry.href ? (
+    <a href={entry.href} className={LINK_CLASS} style={{ color: "var(--accent-text)" }}>
+      {entry.value}
     </a>
+  ) : (
+    <span className="font-[family-name:var(--font-body)]" style={{ color: "var(--text)" }}>
+      {entry.value}
+    </span>
   );
-}
-
-type SendState = "idle" | "sending" | "sent" | "failed";
-
-const FIELDS = [
-  { name: "name", label: "Name", type: "text", required: true },
-  { name: "email", label: "Email", type: "email", required: true },
-  { name: "dates", label: "Dates", type: "text", required: false },
-  { name: "guests", label: "Guests", type: "number", required: false },
-] as const;
-
-/**
- * A short enquiry, sent from the page.
- *
- * It replaces a `mailto:` that does nothing at all on a phone with no mail
- * client configured — the enquiry lost, with nobody aware it existed. So the
- * one thing this must never do is fail quietly: every outcome below is
- * announced, and an unconfigured endpoint is a visible failure rather than a
- * thank-you over a discarded message.
- *
- * No SDK and no third-party script: a plain `POST` of form data, so the
- * feature costs nothing against the 175 KB first-load JavaScript budget.
- */
-export function EnquiryPanel({ property, phone }: { property: string; phone: string }) {
-  const [open, setOpen] = useState(false);
-  const [state, setState] = useState<SendState>("idle");
-  const firstField = useRef<HTMLInputElement>(null);
-  const returnTo = useRef<HTMLElement | null>(null);
-
-  const close = useCallback(() => {
-    setOpen(false);
-    returnTo.current?.focus?.();
-  }, []);
-
-  useEffect(() => {
-    const onOpen = () => {
-      returnTo.current = document.activeElement as HTMLElement | null;
-      setState("idle");
-      setOpen(true);
-    };
-    window.addEventListener(OPEN_EVENT, onOpen);
-    return () => window.removeEventListener(OPEN_EVENT, onOpen);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    firstField.current?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, close]);
-
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    // Captured before the await: `currentTarget` is null by the time the
-    // promise settles.
-    const form = event.currentTarget;
-    const endpoint = process.env.NEXT_PUBLIC_ENQUIRY_ENDPOINT;
-    setState("sending");
-    try {
-      if (!endpoint) throw new Error("NEXT_PUBLIC_ENQUIRY_ENDPOINT is not set");
-      const res = await fetch(endpoint, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" },
-      });
-      setState(res.ok ? "sent" : "failed");
-    } catch {
-      setState("failed");
-    }
-  }
-
-  if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-      <button
-        type="button"
-        aria-label="Close"
-        data-rule="none"
-        onClick={close}
-        className="absolute inset-0 cursor-default"
-        style={{ backgroundColor: "var(--overlay)", opacity: 0.5 }}
-      />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Enquire about ${property}`}
-        className="relative m-4 w-full max-w-[34rem] p-8 sm:p-10"
-        style={{ backgroundColor: "var(--bg)" }}
+    <div
+      className="grid grid-cols-1 gap-x-6 border-t py-3 sm:grid-cols-[8rem_minmax(0,1fr)]"
+      style={{ borderColor: "var(--accent)" }}
+    >
+      <span
+        className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]"
+        style={{ color: "var(--accent-text)" }}
       >
-        {state === "sent" ? (
-          <p
-            role="status"
-            className="font-[family-name:var(--font-body)] text-lg leading-relaxed"
-            style={{ color: "var(--text)" }}
-          >
-            Thank you — we have your note and will write back.
-          </p>
-        ) : (
-          <form onSubmit={submit}>
-            <input type="hidden" name="property" value={property} />
-            <p
-              className="font-[family-name:var(--font-body)] text-lg leading-relaxed"
-              style={{ color: "var(--text)" }}
-            >
-              Tell us when, and we will write back.
-            </p>
-
-            <div className="mt-7 space-y-5">
-              {FIELDS.map((f, i) => (
-                <div key={f.name}>
-                  <label
-                    htmlFor={`enquiry-${f.name}`}
-                    className="block font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]"
-                    style={{ color: "var(--accent-text)" }}
-                  >
-                    {f.label}
-                  </label>
-                  <input
-                    id={`enquiry-${f.name}`}
-                    name={f.name}
-                    type={f.type}
-                    required={f.required}
-                    {...(f.type === "number" ? { min: 1 } : {})}
-                    ref={i === 0 ? firstField : undefined}
-                    className="mt-1 w-full border-b bg-transparent pb-1.5 font-[family-name:var(--font-body)] text-[1.02rem] focus:outline-none"
-                    style={{ borderColor: "var(--accent)", color: "var(--text)" }}
-                  />
-                </div>
-              ))}
-
-              <div>
-                <label
-                  htmlFor="enquiry-message"
-                  className="block font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]"
-                  style={{ color: "var(--accent-text)" }}
-                >
-                  Anything we should know
-                </label>
-                <textarea
-                  id="enquiry-message"
-                  name="message"
-                  rows={3}
-                  className="mt-1 w-full resize-none border-b bg-transparent pb-1.5 font-[family-name:var(--font-body)] text-[1.02rem] focus:outline-none"
-                  style={{ borderColor: "var(--accent)", color: "var(--text)" }}
-                />
-              </div>
-            </div>
-
-            {state === "failed" && (
-              <p
-                role="alert"
-                className="mt-6 font-[family-name:var(--font-body)] text-sm"
-                style={{ color: "var(--text)" }}
-              >
-                We could not send that just now. Please try again, or call us on {phone}.
-              </p>
-            )}
-
-            <div className="mt-8 flex flex-wrap items-center gap-5">
-              <button
-                type="submit"
-                disabled={state === "sending"}
-                data-rule="none"
-                className="inline-block rounded-full px-7 py-3 font-[family-name:var(--font-label)] text-xs uppercase tracking-[0.18em] disabled:opacity-60"
-                style={{ backgroundColor: "var(--accent)", color: "var(--overlay)" }}
-              >
-                <span>{state === "sending" ? "Sending" : "Send"}</span>
-              </button>
-              <span
-                className="font-[family-name:var(--font-body)] text-sm"
-                style={{ color: "var(--dim)" }}
-              >
-                Or call {phone}
-              </span>
-            </div>
-          </form>
-        )}
-      </div>
+        {entry.label}
+      </span>
+      <span className="mt-1 text-[1.02rem] leading-relaxed sm:mt-0">{body}</span>
     </div>
   );
 }
+
+/** The closing band's contact set: phone, email, address. */
+export function ContactBlock({ copy }: { copy: PropertyContactCopy }) {
+  return (
+    <div>
+      <Row entry={copy.phone} />
+      <Row entry={copy.email} />
+      <Row entry={copy.address} />
+    </div>
+  );
+}
+
+/**
+ * The bar's one line — the phone number, tappable.
+ *
+ * On an Indian phone this is the shortest route there is from wanting to stay
+ * to speaking to somebody, which is why it sits beside Book rather than
+ * behind anything.
+ */
+export function ContactLine({ copy }: { copy: PropertyContactCopy }) {
+  return (
+    <a
+      href={copy.phone.href}
+      className="rule-in hidden whitespace-nowrap pb-0.5 font-[family-name:var(--font-body)] text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)] sm:inline-block"
+      style={{ color: "var(--accent-text)" }}
+    >
+      {copy.phone.value}
+    </a>
+  );
+}
 ```
 
-Note the two `data-rule="none"` attributes: `scripts/check_rule_in.mjs` fails any link or text control carrying neither the sliding hairline nor an explicit opt-out, and a hairline inside a filled gold pill or under a full-screen scrim backdrop reads as a rendering fault.
+Note `hidden … sm:inline-block` on `ContactLine`: at 390px the bar carries the property's name and the booking pill already, and a third item turns it into two lines. The number is a tap away in the closing band on a phone, and the bar's job there is Book.
 
-- [ ] **Step 4: Run the tests**
+- [ ] **Step 4: Run the test**
 
-Run: `npx vitest run components/property/EnquiryPanel.test.tsx`
-Expected: PASS, all four.
+Run: `npx vitest run components/property/PropertyContact.test.tsx`
+Expected: PASS, all five.
 
-- [ ] **Step 5: Document the environment variable**
-
-Create `.env.example`:
-
-```
-# Where the property pages' enquiry form posts. A plain HTTPS endpoint that
-# accepts multipart form data and delivers to sales@mahuaresorts.com.
-# Never commit the real value.
-NEXT_PUBLIC_ENQUIRY_ENDPOINT=
-```
-
-Add a line to CLAUDE.md's Commands section noting that the property pages need this variable set, and that with it unset the form renders and reports a visible failure rather than appearing to succeed.
-
-- [ ] **Step 6: Run the whole suite, build, lint**
+- [ ] **Step 5: Run the whole suite, build, lint**
 
 Run: `npm test && npm run build && npm run lint`
 Expected: all green. Tasks 8 and 9 can now be committed.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
-git add components/property/EnquiryPanel.tsx components/property/EnquiryPanel.test.tsx .env.example CLAUDE.md
-git commit -m "feat: a real enquiry form, in place, that cannot fail silently
+git add components/property/PropertyContact.tsx components/property/PropertyContact.test.tsx
+git commit -m "feat: the lodge's contact details, which cannot fail
 
-Replaces a mailto: that does nothing at all on a phone with no mail
-client configured and loses the enquiry with no trace. Degrades to that
-same mailto with no JavaScript, so the control is never dead; reports
-success and failure visibly, because a silent failure is the original
-bug with more steps. Endpoint is configuration, never committed."
+Replaces the enquiry form the client removed. The defect being fixed is
+unchanged — a bare mailto: does nothing on a phone with no mail client
+and the visitor believes they have written to us — and details solve it
+better than a form would: a real tel: link works on every device, with
+scripting off, with no third party and nothing to sign up for.
+
+Server-rendered, no state, no effect, no 'use client'. Deliberately."
 ```
-
----
 
 ### Task 11: The newly-found photography
 
@@ -2570,15 +2411,31 @@ curate that file in Task 11 or pick a photograph that honestly shows a walk —
 do not caption the pool as a forest path. Five alt texts on this branch already
 described photographs they were not.
 
-Also export the bar's copy:
+Also export the bar's copy and the lodge's contact details. **The phone number's
+`href` must be the digits with no spaces** — `tel:+918744867278` — while its
+`value` is the readable form; a `tel:` with spaces in it fails silently on some
+Android dialers, which is precisely the failure mode this replaced a form to
+avoid.
 
 ```ts
+export const VANN_CONTACT: PropertyContactCopy = {
+  phone: { label: "Speak to us", value: "+91 87448 67278", href: "tel:+918744867278" },
+  email: { label: "Write", value: "sales@mahuaresorts.com", href: "mailto:sales@mahuaresorts.com" },
+  address: {
+    label: "Find us",
+    value: "Village Kuppitola, Khawasa, Madhya Pradesh 480881",
+  },
+};
+
 export const VANN_BAR = {
   name: "Mahua Vann · Pench",
   bookLabel: "Book",
-  enquireLabel: "Enquire",
 };
 ```
+
+`VANN_COPY.invitationCopy["vann-invitation"].contact` takes `VANN_CONTACT`, and
+so does the bar — one definition, two places, so the number can never disagree
+with itself.
 
 - [ ] **Step 3: Write the tests**
 
@@ -2651,7 +2508,7 @@ labels. Nagpur is named and its distance is not claimed."
 - Rewrite: `content/mahua-tola.test.ts`
 
 **Interfaces:**
-- Produces: `TOLA_CHAPTERS`, `TOLA_COPY`, `TOLA_NAV`, `TOLA_BAR` — consumed by Task 14.
+- Produces: `TOLA_CHAPTERS`, `TOLA_COPY`, `TOLA_NAV`, `TOLA_BAR`, `TOLA_CONTACT` — consumed by Task 14.
 
 - [ ] **Step 1: Write the spine — deliberately not Vann's**
 
@@ -2690,7 +2547,7 @@ Three rules bind this copy:
 - **Tiger density stays comparative.** The live site's "115 tigers" and "highest Sighting Rating Index in the country" are numbers that will date; the home page already softened the same claim.
 - **The guest quote stays byte-identical** to `content/home.ts`'s Vedant entry, and its test comes across unchanged.
 
-Export `TOLA_BAR` in the same shape as `VANN_BAR`, with `name: "Mahua Tola · Tadoba"`.
+Export `TOLA_BAR` in the same shape as `VANN_BAR`, with `name: "Mahua Tola · Tadoba"`, and `TOLA_CONTACT` in the same shape as `VANN_CONTACT` — the same phone and email (the brand publishes one of each), with Tola's own address: `Village – Adegaon Tehsil – Chimur TATR, Maharashtra 442904`.
 
 - [ ] **Step 4: Write the tests**
 
@@ -2757,7 +2614,7 @@ export type PropertyPageCopy = {
 
 `fullBleed` covers two different jobs — the hero and a quote over a photograph. Dispatch on whether `quoteCopy` has an entry for the chapter id: with one it renders `FullBleedQuote`, without one and at index 0 it renders `Hero`, and otherwise a `FullBleed` photograph with the chapter's own heading. Every branch that finds no copy must `throw` naming the chapter id, exactly as the current dispatcher does — no silent fallbacks.
 
-Mount `PropertyBar` after `</main>`, passing `heroId={chapters[0].id}` and `invitationId` = the last chapter's id, plus `EnquiryPanel` once.
+Mount `PropertyBar` after `</main>`, passing `heroId={chapters[0].id}`, `invitationId` = the last chapter's id, and the property's `contact` copy.
 
 Keep the existing cream-alternation counter, but count only shapes that sit on cream: `column`, `map`, `showcase`, `pair`, `press`, `invitation`.
 
@@ -2846,14 +2703,14 @@ Then open all eight. Automated rigs cannot judge whether a page feels expensive;
 
 - [ ] **Step 5: Write the evidence README**
 
-`docs/reviews/2026-08-09-property-redesign/README.md`: the density figures for both pages, the contrast figures, transfer and JS budget, links to every artefact and screenshot, and the items still open with the client (Tola's room count, the Nagpur distance, the form-service signup).
+`docs/reviews/2026-08-09-property-redesign/README.md`: the density figures for both pages, the contrast figures, transfer and JS budget, links to every artefact and screenshot, and the items still open with the client (Tola's room count and the Nagpur distance).
 
 - [ ] **Step 6: Update the durable record**
 
 - `docs/DECISIONS.md` §1: a row for 9 Aug — the redesign, why, and the three client rulings (persistent bar, six experiences with an also-line, a real enquiry form).
 - `docs/DECISIONS.md` §2: any new instance the build found of a check confirming a mechanism rather than a behaviour.
 - `docs/PROJECT-STATE.md`: Plan 7 complete, the new component inventory, what is owed.
-- `CLAUDE.md`: the status table, the test count, `node scripts/build_map.mjs` in the commands list, and the note that property pages need `NEXT_PUBLIC_ENQUIRY_ENDPOINT`.
+- `CLAUDE.md`: the status table, the test count, and `node scripts/build_map.mjs` in the commands list.
 
 - [ ] **Step 7: Final commit**
 

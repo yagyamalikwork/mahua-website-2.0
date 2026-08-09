@@ -68,7 +68,7 @@ fixed here.
 | **R1** | **No two consecutive moments on a page may share a shape**, enforced by a test on the spine | The direct, mechanical fix for finding #1. A rule held by good intentions is a rule that decays; `content/chapters.test.ts` already proves the pattern works for the rhythm rule |
 | **R2** | **A quiet persistent bar, plus a real closing invitation** | Client-chosen 9 Aug over "repeated quiet moments" and "one closing band". A visitor on a property page has already chosen a lodge, so asking is fair — non-negotiable #2's "seduce, not convert" governs the home page, not the page a visitor reaches by deciding |
 | **R3** | **Six experiences given real space; the remainder named in one quiet line** | Client-chosen 9 Aug over "all twelve as an index" and "six only". Nothing is hidden from a family or a corporate booker; Karaoke and the conference hall simply do not get to set the tone |
-| **R4** | **"Enquire" opens a real form, posting to `sales@mahuaresorts.com`** | Client-chosen 9 Aug over phone/WhatsApp only. Today's `mailto:` silently does nothing on a phone with no mail client configured, and the enquiry is lost with no trace. Phone remains, beneath the form, as the human fallback |
+| **R4** | ~~"Enquire" opens a real form~~ — **superseded 9 Aug, same day.** The pages carry **the lodge's contact details, not a form**: the bar pairs Book with a tap-to-call, and the closing band sets phone, email and address as plain tappable text | Client's ruling: *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later."* It removes a third-party dependency, a signup, an environment variable and the entire class of "the form silently ate the enquiry" failure. The original problem stands and is still solved: today's bare `mailto:` does nothing on a phone with no mail client, and a phone number shown as text always works |
 | **R5** | **The park maps are redrawn in the cream palette from the client's own artwork**, by a build script | Overturns the previous spec's D8. `docs/reference-sujan-layout.md` §5 already named an illustrated map "directly compatible with Mahua's field-guide idiom", and the audit praised the Pench map specifically. It answers "five kilometres from Turia Gate" in a way no sentence can, and it is the single strongest differentiator between the two pages |
 | **R6** | **Traced, never hand-drawn** | `DECISIONS.md` §8 records three hand-authored tigers failing because hand-written bezier coordinates are slightly wrong everywhere, which is what reads as cheap. The maps' geography is the client's; only its colour and type change |
 | **R7** | **The rooms' facts become one letterspaced caption line, not a table** | Finding #2. Same information, a quarter of the height, and it reads as a caption rather than a database |
@@ -204,25 +204,24 @@ paid to learn:
 - **Fail towards absent** (the welcome screen's contract, §14): with no JavaScript the bar must not exist
   rather than existing permanently over the content. Server-render it hidden; script may only reveal it.
 
-### The enquiry form
+### The contact details
 
-`Enquire` opens a panel **in place** — no new tab, no route change. Fields: name, email, dates, guests, a
-free note. It posts to a hosted form endpoint delivering to `sales@mahuaresorts.com`; `+91 87448 67278` sits
-beneath it as the human fallback.
+**No form.** The lodge's own details, shown plainly, in two places:
 
-Constraints:
+- **In the bar**, beside Book: the phone number, as a `tel:` link. On an Indian phone that is the shortest
+  route from wanting to stay to speaking to someone, and it cannot fail.
+- **In the closing band**: phone, email and the lodge's postal address, each set as text under a small
+  letterspaced label, all tappable.
 
-- **It must degrade.** With no JavaScript, `Enquire` is a plain link to `mailto:` — worse, but never dead.
-- **The endpoint is configuration, not code.** It belongs in an environment variable, so the address can
-  change without a deploy of new source, and so the repository never carries an account identifier.
-- **Success and failure both need a visible state.** A form that silently fails is the mailto problem again
-  with more steps.
-- **The service is the plan's choice, against stated constraints**: a plain HTTPS `POST` of form fields with
-  no client-side SDK (so it costs no first-load JavaScript against the 175 KB budget), delivery to an
-  arbitrary address, and a free tier sufficient for a lodge's enquiry volume. It adds **a signup on the
-  client's side** — named and accepted, 9 Aug.
-- **No personal data is stored by this site.** The page posts and forgets; there is no database here and
-  this design does not introduce one.
+Both come from `content/` like every other word on the site. Nothing here is a control that can be pressed
+to no effect — the failure this replaces was a bare `mailto:` doing nothing at all on a phone with no mail
+client configured, with the visitor believing they had written to us.
+
+**This site collects nothing and stores nothing.** There is no form, no endpoint, no third-party script and
+no database — the enquiry route is a phone number and an email address the brand already publishes.
+
+A site-wide directory carrying the full contact set is the client's stated next piece of work and is out of
+scope here (§11).
 
 ---
 
@@ -233,7 +232,7 @@ Constraints:
 | Component | Purpose |
 |---|---|
 | `components/property/PropertyBar.tsx` | The persistent bar |
-| `components/property/EnquiryPanel.tsx` | The form, opening in place |
+| `components/property/PropertyContact.tsx` | The lodge's phone, email and address — a line for the bar, a block for the close |
 | `components/sections/PropertyMap.tsx` | The map band — art, labels, legend, getting-there column |
 | `components/sections/RoomShowcase.tsx` | Replaces `RoomsIndex`; one room, one scale, facts as a caption |
 | `components/sections/ExperiencePair.tsx` | Two experiences at different scales |
@@ -293,8 +292,10 @@ its pass is trusted:
 2. **The bar** — that it is absent before the hero leaves, present after, absent again over the invitation,
    and **absent entirely with no JavaScript**. Assert the outcome (is it on screen, does it cover the
    invitation), not that a class was applied — `DECISIONS.md` §2 has twenty-seven instances of why.
-3. **The form** — that it opens in place, that it validates, that a failed submission is *visible*, and that
-   with no JavaScript `Enquire` is still a working link.
+3. **The contact details** — that the phone number is a real `tel:` link and the email a real `mailto:` in
+   the served markup, on both routes, **with no JavaScript**. The whole reason for choosing details over a
+   form is that they cannot fail; a test that only proves the text is present would not notice a number
+   rendered as inert type.
 4. **The map** — that every declared label has a position inside the artwork's box, that the road is
    continuous, and that the traced paths are not empty. A map that fails to trace must fail the build
    loudly, not render an empty cream rectangle.
@@ -318,6 +319,8 @@ design should be reconsidered before it is built around a hole.
 ## 11. Out of scope
 
 - **The home page.** Untouched by this work.
+- **The site-wide directory.** The client's stated next piece of work, and where the full contact set will
+  live. These pages carry only each lodge's own phone, email and address.
 - **Tripadvisor wiring, the booking-engine restyle, the SEO redirect map, Sanity CMS** — all still out of
   scope per CLAUDE.md.
 - **The India locator map.** Fetched and available (`Mahua-website_{Vann,Tola}-location-map.jpg`) but not
