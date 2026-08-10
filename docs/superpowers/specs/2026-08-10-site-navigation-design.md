@@ -27,6 +27,9 @@ Both reference points were revisited live on 10 Aug before this spec was written
 |---|---|
 | **The menu is places only.** Home, Mahua Vann, Mahua Tola — real page links. The chapter lists leave the menu on every page, including the home page's | The 18-screen home page goes back to being scrolled, which `ChapterMenu`'s own doc calls "the page's actual proposition". The property pages' chapter numbering stays as page furniture. The menu's *mechanics* (dialog semantics, focus trap, Escape-to-trigger, the Lenis-aware scroll lock, cream-on-dark) are reviewed and keep |
 | **The Website Directory ships now, as a footer on all three pages** | This is the section the client named on 9 Aug when dropping the enquiry form ("we can just share the contact details in the Website Directory section when we build it later"). Later is now |
+| **The lodges appear in the menu with their photographs; Home is a plain tag** (10 Aug) | "Like The Sujan Life" — whose menu presents each camp as an image card with its region. Home carries no image: it is wayfinding, not a destination being sold |
+| **The menu surface is cream glass, not the dark green** (10 Aug) | Client asked for "a blurred transparent background … or Liquid Glass". A *pure* transparent blur cannot guarantee legible type over an arbitrary page, so the glass carries a translucent wash of the site's own paper; type turns ink, accents stay gold. Chosen over dark glass with both previews on the table |
+| **The trigger is a hamburger icon, not the word "Menu"** (10 Aug) | "Like the Sujan Life." Drawn as three hairlines in the header's own ink (`--header-ink`), with the label moving to `aria-label` |
 
 **One controller revision to the sketch the client saw, open to veto:** the menu carries **no Book pill**.
 Booking is per-lodge (two AsiaTech tokens), so one pill in a site-wide menu is ambiguous on the home page —
@@ -37,10 +40,30 @@ The menu stays pure wayfinding, which is also the "seduce, not convert" reading 
 
 ### 3.1 `SiteMenu` (the renamed `ChapterMenu`)
 
-The overlay lists the three places, in fixed order: **Home**, **Mahua Vann** with *Pench* beside it in
-gold small caps, **Mahua Tola** with *Tadoba* beside it — the same register the old menu gave chapter
-numbers, and Sujan's own presentation of its camps. Links are ordinary `href` anchors to `/`,
-`/mahua-vann`, `/mahua-tola`.
+**The surface is cream glass.** The page blurs behind a translucent wash of the site's own paper
+(`backdrop-filter: blur` plus `--bg` at partial opacity); type turns **ink**, accents stay gold. Two
+guarantees ride with it: an `@supports not (backdrop-filter…)` fallback raises the wash to near-solid so a
+browser without the filter gets a plain cream panel rather than raw page-behind-type, and the worst-pixel
+contrast of ink type over the frost is **measured by the contrast rig against the worst backdrop the site
+can produce** (the menu opened over a full-bleed photograph), not assumed from the wash looking opaque
+enough. The blur runs only while the panel is open and the page is scroll-locked, so it costs no frames to
+the page at rest.
+
+**The trigger is a hamburger icon** — three hairlines drawn inline, taking `--header-ink` through
+`currentColor` exactly as the old text trigger did (cream over the hero, ink once the bar is cream). The
+word moves to `aria-label`, the button keeps `aria-expanded`/`aria-controls` and a generous hit area, and
+the icon is exempt from the rule-in contract the way all non-text controls are.
+
+**The list**, in fixed order: **Home** as a plain type row — wayfinding, not a destination being sold —
+then **Mahua Vann** and **Mahua Tola** as image cards in Sujan's manner: the lodge's own hero photograph
+(`vann-hero`, `tola-hero` — each page's established face), the name in display serif, the region beside it
+in gold small caps. Links are ordinary `href` anchors to `/`, `/mahua-vann`, `/mahua-tola`.
+
+**The photographs mount on the menu's first open, not at page load.** The panel is permanently in the DOM
+(inert while closed) for the reviewed accessibility machinery, and `visibility: hidden` does not stop a
+lazy image intersecting the viewport — two eager card images would join every page's initial transfer and
+compete with the hero on a 4G link for nothing the visitor asked for. State-gating the `<Photo>`s on
+first-open keeps the cost at zero until the menu is opened, once, per visit.
 
 **The current place is marked, not linked out of.** The row for the page you are standing on carries
 `aria-current="page"`, sits dimmed, and closes the menu on click rather than reloading the route. So the
@@ -104,7 +127,14 @@ New tests, each watched failing first: the menu lists exactly the places and mar
 (`aria-current`); `content/site.ts`'s places match the routes that exist (a test importing the app's route
 folders, so a ghost link is a red test); the footer renders real `tel:`/`mailto:`/page anchors with no
 client component in its tree; `PropertyBar` stays absent while the footer is on screen (driven through the
-observer seam, as its existing tests are).
+observer seam, as its existing tests are); **no image request occurs before the menu's first open** (the
+card `<Photo>`s are absent from the closed panel's DOM); and the icon trigger still carries its
+`aria-label`, `aria-expanded` and `aria-controls`.
+
+**The contrast rig gains a menu-over-photograph probe**: opened over the worst backdrop each route offers
+(a full-bleed photograph), ink type on the frost must clear its floors at the worst pixel — the same
+standard as type over photographs, because with a translucent surface that is what it is. The glass also
+gets a `@supports` fallback check: with `backdrop-filter` unavailable the wash must read near-solid.
 
 Then screenshots at 390/768/1440/1920 on all three routes, looked at — including 390px, where every rig has
 a documented blind spot (`DECISIONS.md` §2 #29).
