@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-08-10T21:08:44.143Z",
-  "url": "http://localhost:3100/mahua-tola",
+  "measuredAt": "2026-08-10T20:52:39.354Z",
+  "url": "http://localhost:3100/mahua-vann",
   "widths": {
     "390": [
       {
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.48,
+        "worst": 10.36,
         "brightest": [
-          67,
-          75,
-          66
+          51,
+          53,
+          37
         ],
         "boxes": 1,
         "pass": true
@@ -20,11 +20,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.88,
+        "worst": 10.75,
         "brightest": [
-          73,
-          80,
-          72
+          54,
+          49,
+          31
         ],
         "boxes": 1,
         "pass": true
@@ -46,11 +46,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 4.53,
+        "worst": 3.81,
         "brightest": [
-          104,
-          106,
-          100
+          136,
+          114,
+          77
         ],
         "boxes": 7,
         "pass": true
@@ -59,11 +59,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 4.84,
+        "worst": 4.66,
         "brightest": [
-          95,
-          103,
-          95
+          98,
+          105,
+          101
         ],
         "boxes": 1,
         "pass": true
@@ -72,11 +72,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.27,
+        "worst": 7.87,
         "brightest": [
-          67,
-          77,
-          71
+          62,
+          72,
+          65
         ],
         "boxes": 1,
         "pass": true
@@ -124,11 +124,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 8.16,
+        "worst": 6.07,
         "brightest": [
-          228,
-          221,
-          204
+          200,
+          191,
+          175
         ],
         "boxes": 3,
         "pass": true
@@ -136,40 +136,27 @@
       {
         "name": "menu · region over frost",
         "min": 4.5,
-        "text": "#7a5c18",
-        "worst": 4.61,
+        "text": "#31402c",
+        "worst": 6.3,
         "brightest": [
-          229,
-          221,
-          204
+          203,
+          195,
+          176
         ],
         "boxes": 2,
         "pass": true
       },
       {
-        "name": "quote · tola-guest-word",
+        "name": "quote · vann-table",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.56,
+        "worst": 3.3,
         "brightest": [
-          104,
-          90,
-          65
-        ],
-        "boxes": 18,
-        "pass": true
-      },
-      {
-        "name": "quote · tola-table",
-        "min": 3,
-        "text": "#f1e9d7",
-        "worst": 3.29,
-        "brightest": [
-          126,
+          124,
           129,
-          116
+          120
         ],
-        "boxes": 17,
+        "boxes": 15,
         "pass": true
       }
     ],
@@ -178,11 +165,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.68,
+        "worst": 10.85,
         "brightest": [
-          66,
-          73,
-          66
+          51,
+          49,
+          33
         ],
         "boxes": 1,
         "pass": true
@@ -191,11 +178,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.25,
+        "worst": 10.02,
         "brightest": [
-          80,
-          86,
-          78
+          62,
+          53,
+          32
         ],
         "boxes": 1,
         "pass": true
@@ -217,11 +204,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.52,
+        "worst": 6.52,
         "brightest": [
-          92,
-          93,
-          84
+          79,
+          83,
+          72
         ],
         "boxes": 7,
         "pass": true
@@ -230,11 +217,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.53,
+        "worst": 6.63,
         "brightest": [
-          87,
-          94,
-          86
+          73,
+          83,
+          75
         ],
         "boxes": 1,
         "pass": true
@@ -243,11 +230,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.77,
+        "worst": 9.43,
         "brightest": [
-          56,
-          65,
-          56
+          52,
+          60,
+          52
         ],
         "boxes": 1,
         "pass": true
@@ -295,11 +282,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 8.16,
+        "worst": 6.1,
         "brightest": [
-          228,
-          221,
-          204
+          200,
+          192,
+          173
         ],
         "boxes": 3,
         "pass": true
@@ -307,40 +294,27 @@
       {
         "name": "menu · region over frost",
         "min": 4.5,
-        "text": "#7a5c18",
-        "worst": 4.6,
+        "text": "#31402c",
+        "worst": 6.23,
         "brightest": [
-          228,
-          221,
-          204
+          202,
+          194,
+          175
         ],
         "boxes": 2,
         "pass": true
       },
       {
-        "name": "quote · tola-guest-word",
-        "min": 3,
-        "text": "#f1e9d7",
-        "worst": 5.12,
-        "brightest": [
-          95,
-          99,
-          83
-        ],
-        "boxes": 18,
-        "pass": true
-      },
-      {
-        "name": "quote · tola-table",
+        "name": "quote · vann-table",
         "min": 3,
         "text": "#f1e9d7",
         "worst": 3.58,
         "brightest": [
           118,
           123,
-          116
+          115
         ],
-        "boxes": 17,
+        "boxes": 15,
         "pass": true
       }
     ],
@@ -349,11 +323,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.81,
+        "worst": 10.58,
         "brightest": [
-          65,
-          72,
-          64
+          55,
+          50,
+          34
         ],
         "boxes": 1,
         "pass": true
@@ -362,11 +336,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.89,
+        "worst": 10.09,
         "brightest": [
-          83,
-          90,
-          82
+          60,
+          53,
+          32
         ],
         "boxes": 1,
         "pass": true
@@ -388,11 +362,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 4.2,
+        "worst": 3.57,
         "brightest": [
-          116,
-          110,
-          95
+          120,
+          123,
+          113
         ],
         "boxes": 7,
         "pass": true
@@ -401,11 +375,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.53,
+        "worst": 8.32,
         "brightest": [
-          69,
-          74,
-          65
+          61,
+          68,
+          59
         ],
         "boxes": 1,
         "pass": true
@@ -414,11 +388,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.3,
+        "worst": 10.32,
         "brightest": [
-          47,
+          46,
           54,
-          45
+          46
         ],
         "boxes": 1,
         "pass": true
@@ -466,11 +440,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 8.08,
+        "worst": 6.22,
         "brightest": [
-          227,
-          220,
-          202
+          200,
+          194,
+          178
         ],
         "boxes": 3,
         "pass": true
@@ -478,40 +452,27 @@
       {
         "name": "menu · region over frost",
         "min": 4.5,
-        "text": "#7a5c18",
-        "worst": 4.6,
+        "text": "#31402c",
+        "worst": 6.43,
         "brightest": [
-          228,
-          221,
-          203
+          204,
+          197,
+          180
         ],
         "boxes": 2,
         "pass": true
       },
       {
-        "name": "quote · tola-guest-word",
-        "min": 3,
-        "text": "#f1e9d7",
-        "worst": 3.76,
-        "brightest": [
-          115,
-          120,
-          105
-        ],
-        "boxes": 18,
-        "pass": true
-      },
-      {
-        "name": "quote · tola-table",
+        "name": "quote · vann-table",
         "min": 3,
         "text": "#f1e9d7",
         "worst": 3.58,
         "brightest": [
           118,
           123,
-          116
+          115
         ],
-        "boxes": 17,
+        "boxes": 15,
         "pass": true
       }
     ],
@@ -520,11 +481,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.13,
+        "worst": 9.5,
         "brightest": [
-          70,
-          78,
-          70
+          62,
+          58,
+          31
         ],
         "boxes": 1,
         "pass": true
@@ -533,11 +494,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.86,
+        "worst": 11.1,
         "brightest": [
-          84,
-          90,
-          83
+          47,
+          48,
+          33
         ],
         "boxes": 1,
         "pass": true
@@ -559,11 +520,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 4.84,
+        "worst": 4.15,
         "brightest": [
-          87,
-          106,
-          83
+          107,
+          113,
+          103
         ],
         "boxes": 7,
         "pass": true
@@ -572,11 +533,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.02,
+        "worst": 7.94,
         "brightest": [
-          69,
-          69,
-          58
+          64,
+          71,
+          62
         ],
         "boxes": 1,
         "pass": true
@@ -585,10 +546,10 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 10.1,
+        "worst": 10.45,
         "brightest": [
-          50,
-          55,
+          46,
+          53,
           45
         ],
         "boxes": 1,
@@ -637,11 +598,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 8.08,
+        "worst": 6.48,
         "brightest": [
-          227,
-          220,
-          202
+          206,
+          198,
+          175
         ],
         "boxes": 3,
         "pass": true
@@ -649,40 +610,27 @@
       {
         "name": "menu · region over frost",
         "min": 4.5,
-        "text": "#7a5c18",
-        "worst": 4.59,
+        "text": "#31402c",
+        "worst": 6.59,
         "brightest": [
-          227,
-          221,
-          203
+          209,
+          199,
+          177
         ],
         "boxes": 2,
         "pass": true
       },
       {
-        "name": "quote · tola-guest-word",
-        "min": 3,
-        "text": "#f1e9d7",
-        "worst": 3.85,
-        "brightest": [
-          114,
-          118,
-          106
-        ],
-        "boxes": 18,
-        "pass": true
-      },
-      {
-        "name": "quote · tola-table",
+        "name": "quote · vann-table",
         "min": 3,
         "text": "#f1e9d7",
         "worst": 3.58,
         "brightest": [
           118,
           123,
-          116
+          115
         ],
-        "boxes": 17,
+        "boxes": 15,
         "pass": true
       }
     ]

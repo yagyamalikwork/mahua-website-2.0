@@ -22,11 +22,18 @@ had a footer, and with JavaScript off the menu could not open, leaving **no cros
 - **A real accessibility failure was found and fixed, not just documented.** The new menu-over-photograph
   contrast probe (`check_contrast_over_photos.mjs`'s `pre: "menu"`) found the glass's shipped 82% wash left
   the gold region labels at 3.43-3.55:1 over a hero photograph, against non-negotiable #7's 4.5:1 floor — a
-  promise the spec made and nothing had measured until this task built the capability to. **The fix itself
-  took two attempts**: the first reverse-solved the photograph pixel from one rendered composite and shipped
-  95%, which *still measured 4.40-4.44:1* on rebuild; the second fit two real composites instead of one
-  modelled point and landed on 98%, confirmed at 4.62-4.66:1 across all four widths, both properties. Full
-  working — including the wrong first answer — in `docs/DECISIONS.md` §16.
+  promise the spec made and nothing had measured until this task built the capability to. **The fix took
+  three attempts, corrected by a fix round.** The first reverse-solved the photograph pixel from one rendered
+  composite and shipped 95%, which *still measured 4.40-4.44:1* on rebuild. The second fit two real composites
+  and shipped 98% (measured 4.62-4.66:1, a real pass) — but the write-up claiming a per-channel RGB fit
+  predicted that number did not reproduce under independent review; what actually reproduces it is a linear
+  fit of the two composites' *scalar relative luminance*. The third attempt then asked whether 98% had been
+  forced at all: the only failure was the *gold* region label, and setting it in *ink* instead clears both
+  floors at the *original* 82% with large margin. Two variants were measured — **Variant B (gold, wash
+  solved by binary search to its minimum, 97%) is what shipped**; **Variant A (ink, 82%, closer to the
+  client's "Liquid Glass" brief) is recorded, not applied**, because switching the label's colour is the
+  client's design call, not this task's. Full working — including both wrong turns — in `docs/DECISIONS.md`
+  §16.
 - **Three rig gaps the plan didn't name were also found and fixed**: `check_menu.mjs` was still asserting
   against a seven-anchor chapter list that no longer exists (rewritten for three places, real routes,
   `aria-current`, and the same focus-trap/scroll-lock machinery, unchanged); `check_leaf_cursor.mjs` and

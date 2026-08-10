@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-10T20:06:22.019Z",
+  "measuredAt": "2026-08-10T21:15:44.284Z",
   "url": "http://localhost:3100/",
   "cursor": {
     "sizePx": 28,
@@ -21,17 +21,17 @@
     "src": "leaf-26.webp"
   },
   "follow": {
-    "samplesWhileMoving": 19,
+    "samplesWhileMoving": 21,
     "worstErrorPx": 12,
     "pointerTravelThatFramePx": 0,
     "excessOverTravelPx": 12,
     "clampPx": 12,
     "restErrorPx": 0,
     "maxSwingDeg": 25.1,
-    "restSwingDeg": 0.13
+    "restSwingDeg": 0.11
   },
   "loop": {
-    "baselineFramesPerSecond": 59,
+    "baselineFramesPerSecond": 58,
     "framesPerSecondAfterResting": 61
   },
   "warm": {

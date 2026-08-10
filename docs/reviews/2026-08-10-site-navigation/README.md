@@ -9,12 +9,22 @@ numbers on this project before (the second one happened during this very task; s
 uncommitted work present), so nothing here is contaminated by a concurrent home-page session. This task's
 own commits are the only changes reflected in these figures.
 
+**Fix round 1 (11 Aug):** a reviewer found the glass-wash derivation write-up did not reproduce under its
+own stated method, and asked whether the wash needed to move at all rather than just accepting the first
+number that passed. Both are addressed in §3 below and in `docs/DECISIONS.md` §16: the derivation is
+corrected (a luminance fit, not a per-channel one, is what actually reproduces the shipped figure), and two
+variants were measured — the glass now ships at **97%** with gold regions (Variant B, solved by binary
+search, not 98%), with an ink-region alternative at the **original 82%** (Variant A) recorded but not
+applied, for the client to choose between. Every figure below reflects that corrected, final state; the
+files with a `-variant-a-ink` or `-variant-b-gold` suffix are the side-by-side comparison.
+
 ## Contents
 
 | File | What |
 |---|---|
 | `home-density.json`, `vann-density.json`, `tola-density.json` | Empty space per chapter, non-negotiable #8 |
-| `home-contrast.json`, `vann-contrast.json`, `tola-contrast.json` | Worst-pixel contrast for every run of type over a photograph, including the new `menu · …` probes, measured on the **final, fixed** build |
+| `home-contrast.json`, `vann-contrast.json`, `tola-contrast.json` | Worst-pixel contrast for every run of type over a photograph, including the new `menu · …` probes, measured on the **shipped build (Variant B, 97% wash, gold regions)** |
+| `{home,vann,tola}-contrast-variant-a-ink.json` | The same probes against **Variant A** (region label in ink, wash left at 82%) — measured and recorded, not shipped |
 | `_weakened-glass-40pct-watch-fail.json` | The deliberately-broken build (glass wash forced to 40%) — evidence the new probe genuinely fails |
 | `home-rule-in.json`, `vann-rule-in.json`, `tola-rule-in.json` | The sliding hairline: coverage, travel, keyboard, both surfaces |
 | `header.json` | The header's two states, both routes' worth of behaviour, re-run clean after a build-race contaminated the first attempt (§6) |
@@ -23,9 +33,10 @@ own commits are the only changes reflected in these figures.
 | `js-budget.json` | First-load JS, via `npm run verify:budget` |
 | `home-{390,768,1440,1920}.png` | Full-page home route |
 | `mahua-{vann,tola}-{390,768,1440,1920}.png` | Full-page property routes (`capture_property_pages.mjs`) |
-| `menu-{home,mahua-vann}-{390,1440}.png` | The menu open, viewport only, over each route's hero |
+| `menu-{home,mahua-vann}-{390,1440}-variant-a-ink.png` | The menu open, Variant A (ink regions, 82% wash) |
+| `menu-{home,mahua-vann}-{390,1440}-variant-b-gold.png` | The menu open, Variant B (gold regions, 97% wash) — **shipped** |
 | `footer-{home,mahua-vann,mahua-tola}-{390,1440}.png` | The page foot, viewport only — booking bar and footer, past the welcome screen's 2.1s |
-| `header-{320,390,768,1440,1920}-{top,scrolled}.png`, `w{390,1440}-menu-open.png` | `check_header.mjs` / `check_menu.mjs`'s own evidence frames |
+| `header-{320,390,768,1440,1920}-{top,scrolled}.png`, `w{390,1440}-menu-open.png` | `check_header.mjs` / `check_menu.mjs`'s own evidence frames (the latter shows Variant B, the shipped state) |
 
 ---
 
@@ -82,32 +93,48 @@ read **3.43-3.55:1 against their 4.5:1 floor**, over the hero's own darkest patc
 glass's 82% wash. This is exactly what the spec had promised would be measured and never was — no earlier
 probe in this file had ever looked at type over a translucent surface.
 
-**The fix took two attempts, and the second is the one worth keeping in mind next time.** A first pass
-reverse-solved the photograph pixel from a single rendered composite, forward-solved a "minimum" of 94%, and
-shipped 95% for margin — rebuilt and re-measured, it read **4.40-4.44:1, still short**. The single-point
-model's own rounding, amplified by dividing through a small `(1 − wash)` factor, was enough to be wrong. A
-second pass fit two *real* rendered composites (82% and the failed 95%) instead of one modelled point —
-composite-vs-wash-fraction is linear, so two measurements fully determine it with no assumption about the
-photograph needed — and predicted 98% at 4.65-4.66. Rebuilt and re-measured a second time:
+**The fix took three attempts, and a fix round on this task corrected both the number and the story around
+it.** A first pass reverse-solved the photograph pixel from a single rendered composite, forward-solved a
+"minimum" of 94%, and shipped 95% for margin — rebuilt and re-measured, it read **4.40-4.44:1, still short**.
+A second pass fit two *real* rendered composites (82% and the failed 95%) instead of one modelled point and
+shipped 98%, which measured 4.62-4.66:1 — a real, passing number. **What was wrong was the write-up, not the
+number**: the comment claimed a per-channel RGB fit of those two points predicted 98%'s result, and a
+reviewer's independent check of that exact method got 4.97, not 4.65. What actually reproduces the shipped
+figure to within 0.002 is fitting the two composites' *scalar relative luminance* linearly, not their RGB
+channels separately — full arithmetic, and an honest statement of why the luminance fit works empirically
+without being more theoretically justified, in `docs/DECISIONS.md` §16.
 
-| Wash | `menu · region over frost`, all four widths |
-|---|---|
-| 82% (shipped) | 3.43, 3.43, 3.55, 3.55 — **FAIL** |
-| 95% (first fix attempt) | 4.40, 4.40, 4.43, 4.44 — **still FAIL** |
-| **98% (shipped)** | **4.62, 4.62, 4.66, 4.66 — PASS** |
+**The same fix round asked a question the first pass skipped: was 98% forced at all?** The only failing run
+was the *gold* region label; the *ink* place-labels cleared even the original 82% by a wide margin
+(6.02-6.17:1), so the gap was never a legibility problem with the glass itself, only with gold on it. Two
+variants were measured rather than one shipped by feel:
 
-The `@supports not (backdrop-filter)` fallback moved too, 97%→99%, to stay the more opaque of the two paths
-(its whole point is standing in for the blur that isn't there). Full working, including the wrong first
-answer, in `docs/DECISIONS.md` §16 and in `.site-menu-glass`'s own comment in `app/globals.css`.
+| Variant | Wash | `menu · place over frost` | `menu · region over frost` |
+|---|---|---|---|
+| Shipped originally (rejected in this fix round) | 98% | 8.19-8.26 | 4.62-4.66 — PASS, but more opaque than needed |
+| **A — region label set to ink, not gold** | 82% (unchanged) | 6.02-6.48 | **6.09-6.63 — PASS with large margin** |
+| **B — region label stays gold, wash solved to its minimum** | **97%** | **8.08-8.16** | **4.55-4.61 — PASS with sensible margin** |
 
-**Cost:** the "blurred transparent…or Liquid Glass" surface reads considerably less see-through than it did
-at 82% — see §5 for what it looks like now. Not yet put back to the client the way the forest tint's
-strength was, because this is a hard accessibility requirement rather than a taste trade; flagged in
-DECISIONS.md as worth a look.
+Variant B's 97% was reached by binary search against real rebuilds, not a round number: 96% measured 4.49
+(FAIL), 96.5% measured 4.52 (margin too thin to trust), 97% measured 4.55-4.60 across all three routes and
+four widths. **Variant B (gold, 97%) is what shipped** — closer to the already-approved design — and
+Variant A's numbers are recorded as the alternative on the table, not applied: it is a real, visible design
+choice (ink loses the gold accent that distinguishes a region from a place name everywhere else on the site,
+but reads far closer to the client's own "Liquid Glass" brief) that the client should see both screenshots
+of and choose, not one this task should make for him. The `@supports not (backdrop-filter)` fallback stays
+at 99%, unchanged, still the more opaque of the two paths. Full working for both variants, including the two
+wrong turns before Variant B, in `docs/DECISIONS.md` §16 and in `.site-menu-glass`'s own comment in
+`app/globals.css`.
 
-**Every other run passed at every width, both properties, both before and after the fix** — the ink
-place-labels were never in danger (worst 8.2-8.26:1 against a 3.0 floor), and nothing else in either probe
-set regressed. Final state, all three routes:
+**Cost:** even Variant B's 97% reads less see-through than the 82% wash the client's brief was written
+against — see §8 for what it looks like now, and for Variant A's noticeably more transparent alternative.
+Not yet put back to the client the way the forest tint's strength was, because clearing the floor is a hard
+accessibility requirement rather than a taste trade; flagged in DECISIONS.md as worth a look, with both
+variants ready to show.
+
+**Every other run passed at every width, both properties, throughout every attempt** — the ink
+place-labels were never in danger, and nothing else in either probe set regressed. Final state, all three
+routes, Variant B (shipped):
 
 | Route | Widths | Failures | Missing targets |
 |---|---|---|---|
@@ -183,7 +210,8 @@ menu · region over frost floor 4.5  worst 1.29   FAIL
 ```
 
 Both menu probes go red — proof the new capability genuinely can fail, not only that it happens to pass.
-Restored to 98%, rebuilt, re-measured clean (§3). Artefact: `_weakened-glass-40pct-watch-fail.json`.
+Restored to shipped (Variant B, 97%), rebuilt, re-measured clean (§3). Artefact:
+`_weakened-glass-40pct-watch-fail.json`.
 
 ## 8. The eyes — screenshots, looked at
 
@@ -192,12 +220,15 @@ style for the home route and for the menu opened at 390/1440 on `/` and `/mahua-
 viewport captures at the very foot of all three routes (past the welcome screen's 2.1s — see the note
 below).
 
-- **The glass at 390px is not merely legible — it reads as essentially solid cream paper.** At 98% wash,
-  `menu-home-390.png` shows no perceptible trace of the hero photograph behind the panel; "WHERE NEXT" and
-  "CLOSE" in gold/ink small caps, "Home" as the dimmed current row, and "Mahua Vann · PENCH" / "Mahua Tola ·
-  TADOBA" with their photograph cards all read cleanly. This is the visual cost §3 describes: the "blurred
-  transparent…or Liquid Glass" character from the client's own brief is largely gone at this opacity — worth
-  a look before the client sees it, per DECISIONS.md §16.
+- **The glass at 390px is legible in both variants, and looks meaningfully different between them.**
+  `menu-home-390-variant-b-gold.png` (shipped, 97%): "PENCH" and "TADOBA" keep their gold, and a faint
+  warmth is visible where the first-ship 98% was flatly solid, but the hero photograph itself is not really
+  perceptible behind the panel. `menu-home-390-variant-a-ink.png` (82%, recorded not applied): the hero's
+  soft blurred greens and warm tones genuinely show through the cream, and at 1440px
+  (`menu-home-1440-variant-a-ink.png`) a faint gold shape from the header's own pill is visible through the
+  glass behind "CLOSE" — this is the "Liquid Glass" character from the client's own brief. Both variants:
+  "WHERE NEXT" and "CLOSE" in gold/ink small caps, "Home" as the dimmed current row, and the lodge cards all
+  read cleanly. Worth a look before the client sees either, per DECISIONS.md §16.
 - **The hamburger is visible in both header states.** `header-390-top.png`: three cream hairlines over the
   dark hero photograph, beside the cream wordmark and the gold pill. `header-390-scrolled.png`: the same
   three hairlines now in dark ink on the cream bar. Both legible, both consistent with the wordmark's own
@@ -225,10 +256,12 @@ below).
 
 ## Open
 
-- **The glass wash's new opacity (98%) has not been shown to the client.** It is a real, visible change from
-  the "Liquid Glass" brief, made to satisfy a hard, tested requirement rather than a taste call — see
-  `docs/DECISIONS.md` §16 for the full reasoning and the two rejected alternatives (a one-off darker
-  `goldText`; reclassifying the label as large text).
+- **Which variant of the glass ships — B (gold, 97%, currently in the tree) or A (ink, 82%, measured and
+  screenshotted but not applied) — has not been shown to the client.** Both clear the contrast floor; the
+  choice between them is a real, visible design trade (gold accent vs. genuine "Liquid Glass" transparency)
+  that only he can make. Both sets of figures and all eight menu screenshots are in this directory; full
+  reasoning in `docs/DECISIONS.md` §16, including the two further alternatives considered and rejected (a
+  one-off darker `goldText`; reclassifying the label as large text).
 - Everything else this task touched is closed: all three routes' rigs green, 396 tests, JS budget unchanged,
   and the three chapters over the density ceiling are the same pre-existing ones `docs/reviews/
   2026-08-09-property-redesign/README.md` already reported — untouched by this task.

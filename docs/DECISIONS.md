@@ -777,7 +777,7 @@ The place labels were never in danger — ink is dark enough that even a thin wa
 were, and did: the worst pixel behind them, `[202, 191, 174]` at 390/768px, is where the hero photograph's
 own darkest patch shows through the 18% of the wash that was not cream.
 
-### The fix took two attempts, and the second is the one worth remembering
+### The fix took three attempts. The first two are both worth remembering, for different reasons
 
 The lesson `build_forest_overlay.mjs` already taught this project (§15): when a rule bounds a value, solve
 for the bound instead of hand-picking a number under it. **The first attempt did that and was still wrong.**
@@ -789,37 +789,107 @@ in it roughly sixfold, and that is exactly what happened: the modelled 82% compo
 against a *rendered* `[202,191,174]`, close enough to look right and wrong enough to break the extrapolation
 built on it.
 
-**The second attempt used two real rendered composites instead of one modelled one.** Composite-vs-wash-
-fraction is linear, so the 82% measurement (`[202,191,174]`) and the (failed) 95% measurement
-(`[225,216,198]`) fully determine the line per channel — no assumption about the photograph underneath is
-needed at all. That fit predicted 98% at 4.65–4.66 on both of the two measured worst cases (390-768px's crop
-and 1440-1920px's slightly different one). **Rebuilt and re-measured a second time, the region label reads
-4.62–4.66:1 across all four widths** — matching the fit to within 0.04. `.site-menu-glass`'s own comment in
-`app/globals.css` and `check_contrast_over_photos.mjs`'s `GOLD_TEXT` comment both carry the full working,
-including the wrong first answer, because the reason it was wrong (extrapolating from one point through a
-division that magnifies its own error) is the more useful thing to have on record than the number that
-worked. Fixed values, all four widths, home route:
-`docs/reviews/2026-08-10-site-navigation/home-contrast.json`; the same probes ran clean on both property
-routes too.
+**The second attempt used two real rendered composites instead of one modelled one — and the number it
+shipped was real even though the reasoning written down for it was not.** Two composites, taken from actual
+renders (82% → `[202,191,174]`, the failed 95% → `[225,216,198]`), a build at 98%, and a rendered
+4.62–4.66:1 that genuinely cleared the floor. What went in the record alongside those numbers was wrong: it
+claimed a **per-channel RGB** linear fit through the same two points predicted the 98% result, and it does
+not. Interpolating `[202,191,174]` and `[225,216,198]` per channel to 98% predicts `[230,222,204]` → 4.65:1
+— close by luck, not by method, and a caught-by-review check of the *identical* extrapolation using the
+95%→100%(cream) segment instead of the 82%→95% one (both equally "two real points, no assumption about the
+photograph") predicts a visibly different `[235,226,208]`-ish composite and a **4.97:1** that does not match
+anything measured. Per-channel RGB fits from only two noisy 8-bit samples are not reliable here: color-mix
+blends linearly in theory, but AVIF re-encoding and anti-aliasing put enough noise into three separate
+channels that which two points you pick changes the extrapolated colour by more than the effect being
+measured.
 
-### What this cost, and what was not touched
+**What actually reproduces the shipped number, checked independently and matching to within 0.002, is
+fitting the two composites' *scalar relative luminance* linearly** — not the three RGB channels separately.
+The two real points:
 
-Going from 82% to 98% is a real, visible change: the "blurred transparent…or Liquid Glass" surface the
-client asked for on 10 Aug reads considerably less see-through than it did before this fix — nearer solid
-paper than glass. The `@supports not (backdrop-filter)` fallback moved too, 97%→99%, to keep it the more
-opaque of the two paths (its whole point is standing in for the blur that is not there to soften whatever
-shows through; left at 97% it would have sat *below* the now-98% blurred path, backwards for a fallback).
-Two alternatives were considered and rejected rather than tried:
+| Wash | Composite (390/768px worst case) | Relative luminance |
+|---|---|---|
+| 82% | `[202, 191, 174]` | 0.52874 |
+| 95% (failed) | `[225, 216, 198]` | 0.69197 |
 
-- **Darkening `goldText` just for this context** would have cleared the floor without touching the wash at
-  all — a darker gold-brown has enough headroom (§ working above). Rejected: it is a hard-coded, one-off
-  colour outside `lib/palette.ts`, the exact thing the architecture rule forbids, and it would have made the
-  region labels a different colour here than everywhere else they appear.
-- **Reclassifying the region label as "large text"** (a 3.0:1 floor, which the original 3.43–3.55:1 would
-  already clear) was not done — the label is 9.92–12px, nowhere near the 18px/14px-bold WCAG threshold, and
-  lowering a floor to make a number pass is the one thing CLAUDE.md says never to do again.
+`L(a) = L₈₂ + (a − 0.82) / (0.95 − 0.82) × (L₉₅ − L₈₂)`. At `a = 0.98`: `L = 0.52874 + (0.16/0.13) ×
+0.16323 = 0.72963`, and `(L + 0.05) / (Lgold + 0.05) = (0.72963 + 0.05) / (0.11858 + 0.05) = 4.625` —
+against a rendered 4.62–4.66. **Be honest about why this works and the per-channel fit does not: it is not
+more theoretically justified — color-mix blends RGB, not luminance, so "linear in luminance" has no
+first-principles basis the way "linear per channel" does.** It works empirically because contrast ratio is
+*itself* a function of luminance alone, so fitting the one already-computed scalar the question actually
+turns on absorbs the three channels' independent rounding noise into a single number instead of propagating
+three separately-noisy fits through a further nonlinear gamma step. A luminance fit is the pragmatic
+instrument for *this* question — "what wash clears a contrast floor" — not a more correct model of what
+`color-mix()` does. Anyone re-deriving this number should fit luminance, not RGB, and should still confirm
+against a real rebuild rather than trust either fit past two decimal places — see the `~96.3%` estimate
+below, which the luminance fit gets right and a real measurement still had to confirm.
 
-The wash is the one dial this is, and it was moved to the number the measurement demanded. **Not yet put to
-the client**, the way the forest tint's strength was — this is a hard accessibility requirement rather than
-a taste trade, so it shipped rather than waiting, but the visual change is real enough that it is worth a
-look the next time the menu comes up.
+### The third attempt asked the question §16 should have asked the first time: was 98% forced at all?
+
+The only failing run was the **gold** region label at its 4.5:1 floor. The **ink** place-labels, at a 3.0:1
+floor, cleared even the original 82% wash by a wide margin (6.02–6.17:1) — there was never a legibility
+problem with ink on this glass, only with gold. Two variants were built and measured rather than one shipped
+by feel:
+
+**Variant A — set the region label in `--text` (ink) instead of `--accent-text` (gold), wash left at 82%.**
+Reuses a palette token already in the file; breaks no architecture rule. Measured, all three routes, all
+four widths (`docs/reviews/2026-08-10-site-navigation/{home,vann,tola}-contrast-variant-a-ink.json`):
+
+| Route | `menu · place over frost` (ink, floor 3.0) | `menu · region over frost` (now ink, floor 4.5) |
+|---|---|---|
+| `/` | 6.02–6.17:1 | 6.09–6.29:1 |
+| `/mahua-vann` | 6.07–6.48:1 | 6.23–6.59:1 |
+| `/mahua-tola` | 6.08–6.46:1 | 6.37–6.63:1 |
+
+Every run clears its floor with enormous margin, at the **original 82%** — the wash the client's own
+"blurred transparent…or Liquid Glass" brief was written against. By eye
+(`menu-home-{390,1440}-variant-a-ink.png`, `menu-mahua-vann-{390,1440}-variant-a-ink.png`): the hero
+photograph is genuinely visible through the panel — soft blurred greens and warm tones bleed through the
+cream, and at 1440px on the home route a faint gold shape (the header's own pill) is visible through the
+glass behind "CLOSE". This is the "Liquid Glass" character the client described. The cost: "Pench" and
+"Tadoba" read in the same ink as the place names above them, losing the gold accent that distinguishes a
+region from a destination name elsewhere on the site.
+
+**Variant B — keep gold, solve for the lowest wash that clears 4.5:1 with a sensible margin, by binary
+search against real rebuilds.** Not a round number chosen and hoped for:
+
+| Wash | `menu · region over frost`, 390px | Verdict |
+|---|---|---|
+| 96% | 4.49:1 | FAIL |
+| 96.5% | 4.52:1 | Clears, margin too thin to trust against measurement noise |
+| **97%** | **4.55–4.60:1 (390px)** | **Clears with a sensible margin — shipped** |
+
+Confirmed across all three routes, all four widths after the rebuild
+(`docs/reviews/2026-08-10-site-navigation/{home,vann,tola}-contrast.json`):
+
+| Route | `menu · place over frost` | `menu · region over frost` |
+|---|---|---|
+| `/` | 8.08–8.10:1 | 4.55–4.60:1 |
+| `/mahua-vann` | 8.08–8.15:1 | 4.56–4.61:1 |
+| `/mahua-tola` | 8.08–8.16:1 | 4.59–4.61:1 |
+
+By eye (`menu-home-{390,1440}-variant-b-gold.png`): "Pench" and "Tadoba" keep their gold; the panel is
+still noticeably more opaque than Variant A's 82%, but a faint warmth is visible where flatly solid was not
+at the 98% first ship. The `@supports not (backdrop-filter)` fallback stays at 99%, still the more opaque of
+the two paths.
+
+### What is in the tree, and what is not this task's call
+
+**Variant B — gold regions, 97% wash — is what is shipped**, because it is closer to the design that was
+already approved (gold distinguishes a region from a place name everywhere else on the site) and it clears
+the floor with real margin, solved rather than guessed. **Variant A's numbers are recorded here, not
+applied**: switching the region label's colour is a real, visible design choice — closer to the client's own
+"Liquid Glass" brief, at the cost of the gold accent — and it is the client's to make with both screenshots
+in front of him, not something to switch unilaterally because the numbers are better. Both variants' JSON
+and all eight menu screenshots (four per variant) are in `docs/reviews/2026-08-10-site-navigation/`.
+
+Going from 82% to 97% (Variant B, shipped) is still a real, visible change from the wash the client's brief
+was written against — see the screenshots — even though it is a smaller jump than the first ship's 98%.
+**Not yet put to the client.** A third alternative, considered and still rejected: darkening `goldText`
+itself just for this context would also have cleared the floor without moving the wash at all, but it is a
+hard-coded, one-off colour outside `lib/palette.ts` — the architecture rule this project holds everywhere
+else — and it would make the region labels a different colour here than anywhere else they appear.
+Reclassifying the label as WCAG "large text" (a 3.0:1 floor the original 82% would already clear) was also
+not done: the label is 9.92–12px, nowhere near the 18px/14px-bold threshold, and lowering a floor to make a
+number pass is the one thing CLAUDE.md says never to do again.
