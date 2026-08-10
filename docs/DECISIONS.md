@@ -59,7 +59,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 
 ---
 
-## 2. The defect that keeps happening — thirty-three instances
+## 2. The defect that keeps happening — thirty-six instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -99,6 +99,9 @@ these passed its own gate while the thing it guarded was broken.
 | 31 | **A tint's strength chosen by hand rather than solved for.** | The contrast floor is set by the drawing's single darkest pixel, and this one contains pure black — so one outline dictated how faintly the other 99% printed. 0.2 shipped where 1.047 was available at the *same* worst case, and the client's verdict was "it is almost not visible". The build now binary-searches the strongest tint that clears the floor |
 | 32 | **A solver and its own assertion measuring different things.** | The search worked in floating point; the check that follows it measured the rounded bytes actually written to the file. They disagreed by 0.01 and the script rejected a strength it had just proved. Both now measure the rounded pixels, and the search rounds *down* |
 | 33 | **A contrast target found by structure: `#forest p`.** | It also matched `ChapterMark`'s two gold paragraphs, so the rig measured the chapter *number* as though it were body copy and reported 1:1. Instance 10 in this same table is the same mistake; the intro now carries a `data-contrast` hook |
+| 34 | **A correction to a non-reproducing derivation, itself carrying a non-reproducing figure.** | §16 was rewritten *because* its per-channel RGB fit did not reproduce. The rewrite's own counter-example then quoted 4.97:1 for the 95%→100% segment — a figure belonging to the 82%→100% one. Recomputed from the composite the passage itself prints: **4.844:1**. The shape survived the fix aimed at it, in the same paragraph. Caught by a reviewer retyping four numbers |
+| 35 | **The probe set measured two of the three gold runs on the glass.** | `menu-place` and `menu-region` were probed; the panel's "Where next" label — the same `goldText`, on the same wash — was not. It measures **4.56:1**, all but identical to the region label's 4.6 that *failed* at the original 82%. It was failing too, was rescued by a fix aimed at something else, and no instrument would have reported it either way |
+| 36 | **A comment claiming a check confirms what the check filters out.** | `check_rule_in.mjs` said check 1 "confirms" the hamburger's `data-rule="none"` opt-out. Check 1's coverage filter is `textContent.trim().length > 0`, so a text-free control never reaches it — nothing in the file has ever read that attribute. The check was right; only its account of itself was wrong |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
