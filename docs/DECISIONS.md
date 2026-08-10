@@ -675,6 +675,22 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 
 ## 5. Owed, and open
 
+- **THE MENU'S GLASS, AWAITING THE CLIENT (11 Aug).** The client asked for the places menu to open on
+  "a blurred transparent background… or Liquid Glass". Built that way, at an 82% cream wash, the panel's
+  **gold** region labels (`Pench`, `Tadoba`) measured **3.43:1** over the hero — under the 4.5:1 floor.
+  There are two ways out and **both are built and measured**; §16 carries the arithmetic.
+
+  | | Wash | Region label | Lodge names | Reads as |
+  |---|---|---|---|---|
+  | **A — regions in ink** | 82% | 6.09–6.63:1 | 6.02–6.48:1 | real glass; the hero shows through |
+  | **B — regions in gold** *(on the branch)* | 97% | 4.55–4.61:1 | 8.08–8.16:1 | effectively solid cream |
+
+  **B is what is committed**, because it preserves the design the client last saw and nothing illegible
+  may ship while he decides. **The recommendation put to him is A**: it is the only one of the two that is
+  actually the effect he asked for; it spends gold on the two smallest words in the panel, where gold was
+  doing least; and it clears the floor with room to spare, where B passes by 0.05 of a point and could be
+  pushed back under by any future hero brighter than today's. Switching is one line plus a re-measure.
+  Screenshots at 390 and 1440, both variants, are in `docs/reviews/2026-08-10-site-navigation/`.
 - **THE DENSITY QUESTION, AWAITING THE CLIENT (10 Aug).** Three chapters on the redesigned property pages
   sit above non-negotiable #8's 45%-empty ceiling: `vann-forest` **55.8%**, `tola-reserve` **58.3%** and
   `vann-press` **87.2%**. Page means are *better* than the home page's 40.1% — Vann **36.2%**, Tola
