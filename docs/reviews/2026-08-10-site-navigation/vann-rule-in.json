@@ -1,0 +1,41 @@
+{
+  "measuredAt": "2026-08-10T20:08:41.653Z",
+  "url": "http://localhost:3100/mahua-vann",
+  "ruleInDuration": 0.4,
+  "coverage": {
+    "total": 22,
+    "uncovered": []
+  },
+  "rest": 0,
+  "travel": {
+    "durationMs": 400,
+    "atFifteenPercent": 0.554011,
+    "atFiftyFivePercent": 0.974493
+  },
+  "complete": 1,
+  "keyboard": {
+    "reachedByTab": true,
+    "tabsUsed": 12,
+    "scaleX": 1
+  },
+  "reducedMotion": {
+    "scaleX": 1,
+    "running": false
+  },
+  "surfaces": [
+    {
+      "where": "cream",
+      "rule": "rgb(122, 92, 24)",
+      "behind": "rgb(233, 223, 200)",
+      "delta": 0.6241130603661846
+    },
+    {
+      "where": "menu overlay",
+      "rule": "rgb(49, 64, 44)",
+      "behind": "color(srgb 0.945098 0.913725 0.843137 / 0.98)",
+      "delta": 0.7738328703029722
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

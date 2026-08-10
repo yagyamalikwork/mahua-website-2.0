@@ -1,0 +1,41 @@
+{
+  "measuredAt": "2026-08-10T20:11:02.241Z",
+  "url": "http://localhost:3100/mahua-tola",
+  "ruleInDuration": 0.4,
+  "coverage": {
+    "total": 19,
+    "uncovered": []
+  },
+  "rest": 0,
+  "travel": {
+    "durationMs": 400,
+    "atFifteenPercent": 0.554011,
+    "atFiftyFivePercent": 0.974493
+  },
+  "complete": 1,
+  "keyboard": {
+    "reachedByTab": true,
+    "tabsUsed": 9,
+    "scaleX": 1
+  },
+  "reducedMotion": {
+    "scaleX": 1,
+    "running": false
+  },
+  "surfaces": [
+    {
+      "where": "cream",
+      "rule": "rgb(122, 92, 24)",
+      "behind": "rgb(241, 233, 215)",
+      "delta": 0.7002708032945816
+    },
+    {
+      "where": "menu overlay",
+      "rule": "rgb(49, 64, 44)",
+      "behind": "color(srgb 0.945098 0.913725 0.843137 / 0.98)",
+      "delta": 0.7738328703029722
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

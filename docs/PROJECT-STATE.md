@@ -1,9 +1,48 @@
-# Project state — 10 August 2026
+# Project state — 11 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
-## Where we are
+## Site-wide navigation — complete 10-11 Aug 2026
+
+The three pages now behave as one website, closing the gap the client raised on 10 Aug: from `/mahua-vann`
+there was no route to Home or Tola except the closing sibling banner and the browser's back button, no page
+had a footer, and with JavaScript off the menu could not open, leaving **no cross-page navigation at all**.
+
+- **`SiteMenu`** (`ChapterMenu`'s successor — same reviewed dialog machinery, new job) lists **the three
+  places, not the current page's chapters**: Home as a plain type row, Mahua Vann and Mahua Tola as
+  photograph cards with their region in gold small caps, in Sujan's own manner. The current page is marked
+  `aria-current="page"` and closes the menu on click rather than reloading. The trigger is a hamburger, not
+  the word "Menu". The surface is cream glass — a translucent wash of the site's own paper, blurred.
+- **`SiteFooter`** — the Website Directory the client named on 9 Aug when dropping the enquiry form — is a
+  zero-JavaScript band (enforced by a test that walks its whole import graph) mounted once in `app/layout.tsx`,
+  present on every route identically. It is what finally gives the site working navigation with scripting off.
+- **`PropertyBar`** now steps aside over the footer as well as the closing invitation, so the booking ask is
+  never on screen twice and never floats over the directory's own contact details.
+- **A real accessibility failure was found and fixed, not just documented.** The new menu-over-photograph
+  contrast probe (`check_contrast_over_photos.mjs`'s `pre: "menu"`) found the glass's shipped 82% wash left
+  the gold region labels at 3.43-3.55:1 over a hero photograph, against non-negotiable #7's 4.5:1 floor — a
+  promise the spec made and nothing had measured until this task built the capability to. **The fix itself
+  took two attempts**: the first reverse-solved the photograph pixel from one rendered composite and shipped
+  95%, which *still measured 4.40-4.44:1* on rebuild; the second fit two real composites instead of one
+  modelled point and landed on 98%, confirmed at 4.62-4.66:1 across all four widths, both properties. Full
+  working — including the wrong first answer — in `docs/DECISIONS.md` §16.
+- **Three rig gaps the plan didn't name were also found and fixed**: `check_menu.mjs` was still asserting
+  against a seven-anchor chapter list that no longer exists (rewritten for three places, real routes,
+  `aria-current`, and the same focus-trap/scroll-lock machinery, unchanged); `check_leaf_cursor.mjs` and
+  `check_rule_in.mjs` still selected `#chapter-menu`; and `check_rule_in.mjs`'s checks 2-5 and 6 probed the
+  hamburger for a hairline it correctly does not carry (retargeted to the footer's own "Mahua Vann" link).
+  A latent instrument defect was also caught and fixed: `check_rule_in.mjs`'s check 7 mis-parsed
+  `color-mix()`'s `color(srgb …)` computed-style serialisation and reported a luminance delta of
+  231,251,768.592 — comfortably over its own 0.15 floor either way, so never a false pass on a broken rule,
+  but never really measuring the claim it reported either.
+
+**Evidence:** `docs/reviews/2026-08-10-site-navigation/` — density, contrast (all three routes, before and
+after the glass fix), rule-in, header, the JS budget (159 KB untouched, unchanged), `check_menu.mjs`,
+`check_leaf_cursor.mjs`, and 20+ screenshots including the menu opened at 390 and 1440 on `/` and
+`/mahua-vann`, looked at rather than only captured. **396 tests, all green.**
+
+## Where we were before that
 
 **Branch `feat/chapters-rebuild`.** **Plans 3, 4, 5, 6 and 7 are all complete.** The home page opens with a
 welcome carrying the client's logo, runs twelve chapters, and carries five signature interactions — the
@@ -54,6 +93,7 @@ instances 26 and 27 from it. **When resuming an interrupted session, check the m
 | 5 · [The signature interactions](superpowers/plans/2026-08-05-signature-interactions.md) | ✅ **nine of ten tasks; the butterfly parked by the client.** Plus three things the plan never contained: the two films, the lantern and the welcome |
 | 6 · [The property pages](superpowers/plans/2026-08-08-property-pages.md) | ✅ (superseded by Plan 7) twelve tasks, then a full review-and-correction round (9 Aug). Library 34 → 53 photographs; the contrast rig made route-aware; GSAP's loader gated on the first scrolled pixel |
 | 7 · [The property pages redesign](superpowers/plans/2026-08-09-property-pages-redesign.md) | ✅ fifteen tasks. New shape vocabulary (`fullBleed`/`column`/`map`/`showcase`/`pair`/`press`/`invitation`) replaces Plan 6's structure; the client's Pench and Tadoba maps traced into cream field-guide artwork (`scripts/build_map.mjs`); Task 15 closed it out with both routes' rigs green and the home page proven untouched — `docs/reviews/2026-08-09-property-redesign/README.md` |
+| 8 · [Site navigation](superpowers/plans/2026-08-10-site-navigation.md) | ✅ six tasks. `SiteMenu` (places, not chapters) and `SiteFooter` (the Website Directory) ship on all three routes; `ChapterMenu` retired. Task 6 closed it out — found and fixed a real 4.5:1 contrast failure in the menu's glass wash that no earlier probe had looked for, plus three unnamed rig gaps and one instrument defect — `docs/reviews/2026-08-10-site-navigation/README.md`, `docs/DECISIONS.md` §16 |
 
 ### Where Plan 5 actually got to
 

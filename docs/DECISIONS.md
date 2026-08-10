@@ -52,6 +52,10 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 9 Aug | **Both property pages rebuilt in a "shape vocabulary"** — eight chapters each, no two adjacent chapters sharing a shape, mechanically enforced (`findRepeatedShape`) — replacing the first ship's `ChapterIntro`/`PlateGrid`/`RoomsIndex`/`FieldNotes` structure that read as a template | Three client decisions inside this redesign: **(1) a persistent booking bar**, quiet and always reachable, that slides in past the hero and steps aside over the closing invitation — *"a visitor on a property page has already chosen a lodge, so asking is fair here"*, distinct from the home page's "seduce, not convert" (non-negotiable #2), and built to fail towards absent with no JavaScript, the welcome screen's own contract (§14); **(2) six experiences per property, each given real space, plus one honest "also" line** naming what did not make the six (karaoke, the conference hall, wildlife documentaries, indoor games) rather than promoting or deleting them; **(3) the enquiry form dropped for plain contact details** — *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later"* — which fixes the same defect a form would have (a bare `mailto:` doing nothing on a phone with no mail client) better than a form does: a real `tel:` link works on every device, with scripting off, with no third party and nothing to sign up for |
 | 10 Aug | **A guest's face comes off the site on consent grounds, and the photograph is deleted rather than shelved** | Mahua Tola's Bonfire entry (`DSC00097-scaled.jpg`, the live site's own) showed a guest clearly enough to identify her. *"It directly shows a person's face who was a guest, which we don't want."* Replaced with `bonfire-circle-night` — a frame from **the client's own Mahua Tola property video**, so it is honestly this lodge's bonfire and not a stand-in from Pench, and it carries no people at all. **The withdrawn entry was removed from `CURATION`, not left curated-but-unused:** an id that stays in the manifest is an id a later chapter reaches for by name, and the next person wanting a bonfire would find it without ever seeing the face in it. Restoring it needs the guest's consent, not a code change. **This is the second image rejected on these grounds** — the original curation dropped one for the same reason — and the rule was simply not applied when this one was curated on 9 Aug. Both instances are now recorded in `scripts/build_images.mjs`'s own comment, which is the only place that survives a clone |
 | 9/10 Aug | **Task 15 closed the redesign out** — both routes' rigs green, home page proven untouched, `vann-table`/`tola-table` measured for the first time (both clear their contrast floor on the untouched default scrim) | Density's first read found `vann-forest` 72.6%, `vann-where` 56.9%, `vann-press` 88.4% and `tola-reserve` 72.1% over the 45% ceiling — all four are chapters shorter than one 900px screen, which `measure_density.mjs` scores on the single window centred over them, mostly some neighbour's own padding rather than the chapter's content. `vann-where` and `tola-where` were brought fully inside (56.9%→36.6%, 44.5%→21.9%) by widening the map's own column and a new opt-in `tight` rhythm on `ChapterSurface` (default untouched, so the home page is provably unaffected — see §4 of the task's own evidence). `vann-forest`/`tola-reserve` (`OpeningColumn`, widened 62ch→92ch) and `vann-press` (`PressBand`) improved but remain over — 55.8%, 58.3%, 87.2% — and were reported rather than forced: the remaining levers would either widen a "held breath" screen past what non-negotiable #4 protects, or enlarge three press citations past what "set quietly" (that component's own words) means. Full figures, both readings PressBand tried, and the screenshot findings: `docs/reviews/2026-08-09-property-redesign/README.md` |
+| 10 Aug | **The menu is places only** — Home, Mahua Vann, Mahua Tola, as real page links; the per-page chapter lists leave the menu on every page, including the home page's | The site was three well-made pages that did not behave like one — from `/mahua-vann` there was no route to Home or Tola except the closing sibling banner and the browser's back button. The 18-screen home page goes back to being scrolled, which `ChapterMenu`'s own doc called "the page's actual proposition". The property pages keep their chapter numbering as page furniture; the menu's reviewed mechanics (dialog semantics, focus trap, Escape-to-trigger, the Lenis-aware scroll lock) carry over unchanged into `SiteMenu`, `ChapterMenu`'s successor |
+| 10 Aug | **The Website Directory ships now, as a footer on all three pages** | *"we can just share the contact details in the Website Directory section when we build it later"* (9 Aug, when the enquiry form was dropped) — later is now. One server-rendered band, zero JavaScript anywhere in its import graph (enforced by a test that walks it), mounted once in `app/layout.tsx` so every route carries it identically — and it is what finally gives the site working cross-page navigation with JavaScript off, which the menu alone cannot |
+| 10 Aug | **The lodges appear in the menu with their own photographs; Home is a plain type row** | *"Like The Sujan Life"* — whose menu presents each camp as an image card with its region. Home carries no image: it is wayfinding, not a destination being sold. The card photographs mount into the DOM only on the menu's first open, not at page load — the panel is permanently present (`inert` while closed) for the accessibility machinery, and `visibility: hidden` does not stop a lazy image intersecting the viewport, so an always-mounted eager card would have joined every page's initial transfer for nothing the visitor asked for |
+| 10 Aug | **The menu surface is cream glass, with a hamburger trigger, on gold accents** | *"a blurred transparent background … or Liquid Glass"* and, for the icon, *"Like the Sujan Life"* — both chosen over previewed alternatives (dark glass; the word "Menu"). A *pure* transparent blur cannot guarantee legible type over an arbitrary photograph, so the glass carries a translucent wash of the site's own paper; type turns ink, the region labels stay `goldText`. Verified, not assumed — and the verification found a real failure, not a hypothetical one. Full story in §16 |
 
 ---
 
@@ -745,3 +749,77 @@ None block anything. Listed so they are not rediscovered as new.
 - `invitation[0]`'s parallax is sampled over 24% of its scrub; the tween is linear so it can only
   under-report, never fabricate movement.
 - Evidence folders `2026-08-05-header/` and `2026-08-05-scroll-craft/` overlap.
+
+---
+
+## 16. The menu's glass wash, and the region label it failed
+
+10-11 Aug 2026, closing out the site navigation. The spec for `SiteMenu`'s glass promised the worst-pixel
+contrast of ink type over it would be **measured** against the worst backdrop the site can produce — the
+panel opened over a full-bleed photograph — "not assumed from the wash looking opaque enough." That
+measurement had never actually been built: `scripts/check_contrast_over_photos.mjs` had no capability to
+open the menu at all before this task added `pre: "menu"`. Built and run for the first time, it found the
+promise broken.
+
+### What failed, and by how much
+
+Two runs per route, opened over that route's own hero: the ink place-labels ("Home", "Mahua Vann", "Mahua
+Tola") against a 3.0:1 floor, and the gold `--accent-text` region labels ("Pench", "Tadoba") against 4.5:1
+— non-negotiable #7's own number, since `goldText` exists specifically to be "the legible sibling" to
+decorative gold.
+
+| Run | Floor | Worst, at 82% wash |
+|---|---|---|
+| `menu · place over frost` (ink) | 3.0 | 6.02–6.17:1 — clear |
+| `menu · region over frost` (goldText) | 4.5 | **3.43–3.55:1 — FAIL, all four widths, on the home route** |
+
+The place labels were never in danger — ink is dark enough that even a thin wash holds. The region labels
+were, and did: the worst pixel behind them, `[202, 191, 174]` at 390/768px, is where the hero photograph's
+own darkest patch shows through the 18% of the wash that was not cream.
+
+### The fix took two attempts, and the second is the one worth remembering
+
+The lesson `build_forest_overlay.mjs` already taught this project (§15): when a rule bounds a value, solve
+for the bound instead of hand-picking a number under it. **The first attempt did that and was still wrong.**
+It reverse-solved the photograph pixel from the single rendered composite at 82% — `(cream × 0.82) −
+composite`, divided by `0.18` — landing near `(24, 0, 0)`, forward-solved a "minimum" of 94% from that one
+modelled point, and shipped 95% for margin. Rebuilt and re-measured, the region label read **4.40–4.44:1 —
+still short of 4.5.** Dividing by 0.18 to back out a single real measurement amplifies whatever rounding sits
+in it roughly sixfold, and that is exactly what happened: the modelled 82% composite was `[202,191,176]`
+against a *rendered* `[202,191,174]`, close enough to look right and wrong enough to break the extrapolation
+built on it.
+
+**The second attempt used two real rendered composites instead of one modelled one.** Composite-vs-wash-
+fraction is linear, so the 82% measurement (`[202,191,174]`) and the (failed) 95% measurement
+(`[225,216,198]`) fully determine the line per channel — no assumption about the photograph underneath is
+needed at all. That fit predicted 98% at 4.65–4.66 on both of the two measured worst cases (390-768px's crop
+and 1440-1920px's slightly different one). **Rebuilt and re-measured a second time, the region label reads
+4.62–4.66:1 across all four widths** — matching the fit to within 0.04. `.site-menu-glass`'s own comment in
+`app/globals.css` and `check_contrast_over_photos.mjs`'s `GOLD_TEXT` comment both carry the full working,
+including the wrong first answer, because the reason it was wrong (extrapolating from one point through a
+division that magnifies its own error) is the more useful thing to have on record than the number that
+worked. Fixed values, all four widths, home route:
+`docs/reviews/2026-08-10-site-navigation/home-contrast.json`; the same probes ran clean on both property
+routes too.
+
+### What this cost, and what was not touched
+
+Going from 82% to 98% is a real, visible change: the "blurred transparent…or Liquid Glass" surface the
+client asked for on 10 Aug reads considerably less see-through than it did before this fix — nearer solid
+paper than glass. The `@supports not (backdrop-filter)` fallback moved too, 97%→99%, to keep it the more
+opaque of the two paths (its whole point is standing in for the blur that is not there to soften whatever
+shows through; left at 97% it would have sat *below* the now-98% blurred path, backwards for a fallback).
+Two alternatives were considered and rejected rather than tried:
+
+- **Darkening `goldText` just for this context** would have cleared the floor without touching the wash at
+  all — a darker gold-brown has enough headroom (§ working above). Rejected: it is a hard-coded, one-off
+  colour outside `lib/palette.ts`, the exact thing the architecture rule forbids, and it would have made the
+  region labels a different colour here than everywhere else they appear.
+- **Reclassifying the region label as "large text"** (a 3.0:1 floor, which the original 3.43–3.55:1 would
+  already clear) was not done — the label is 9.92–12px, nowhere near the 18px/14px-bold WCAG threshold, and
+  lowering a floor to make a number pass is the one thing CLAUDE.md says never to do again.
+
+The wash is the one dial this is, and it was moved to the number the measurement demanded. **Not yet put to
+the client**, the way the forest tint's strength was — this is a hard accessibility requirement rather than
+a taste trade, so it shipped rather than waiting, but the visual change is real enough that it is worth a
+look the next time the menu comes up.

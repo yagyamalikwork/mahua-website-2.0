@@ -1,0 +1,220 @@
+{
+  "measuredAt": "2026-08-10T19:57:32.941Z",
+  "url": "http://localhost:3100/",
+  "scrollLock": [
+    {
+      "viewport": 1440,
+      "reducedMotion": false,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    },
+    {
+      "viewport": 390,
+      "reducedMotion": false,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    },
+    {
+      "viewport": 1440,
+      "reducedMotion": true,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    },
+    {
+      "viewport": 390,
+      "reducedMotion": true,
+      "scrolledBefore": 2400,
+      "scrollYAtOpen": 0,
+      "afterWheelWhileOpen": 0,
+      "afterKeysWhileOpen": 0,
+      "afterClose": 0,
+      "afterWheelWhenClosed": 2400,
+      "wheelWorksBeforeOpening": true,
+      "wheelBlockedWhileOpen": true,
+      "keyboardBlockedWhileOpen": true,
+      "positionKeptOnClose": true,
+      "wheelRestoredAfterClose": true,
+      "htmlOverflowWhenClosed": "visible"
+    }
+  ],
+  "menu": {
+    "390": {
+      "open": {
+        "places": 3,
+        "hrefs": [
+          "/",
+          "/mahua-vann",
+          "/mahua-tola"
+        ],
+        "current": [
+          "page",
+          null,
+          null
+        ],
+        "ariaLabel": "Menu",
+        "ariaExpanded": "true",
+        "focusedOnOpen": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
+        "role": "dialog",
+        "modal": "true"
+      },
+      "afterEscape": {
+        "ariaExpanded": "false",
+        "focusReturnedToTrigger": true,
+        "panelInert": true
+      },
+      "trap": {
+        "count": 4,
+        "first": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
+        "last": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "onLast": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "wrappedToFirst": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        }
+      }
+    },
+    "1440": {
+      "open": {
+        "places": 3,
+        "hrefs": [
+          "/",
+          "/mahua-vann",
+          "/mahua-tola"
+        ],
+        "current": [
+          "page",
+          null,
+          null
+        ],
+        "ariaLabel": "Menu",
+        "ariaExpanded": "true",
+        "focusedOnOpen": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
+        "role": "dialog",
+        "modal": "true"
+      },
+      "afterEscape": {
+        "ariaExpanded": "false",
+        "focusReturnedToTrigger": true,
+        "panelInert": true
+      },
+      "trap": {
+        "count": 4,
+        "first": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
+        "last": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "onLast": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "wrappedToFirst": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "390": {
+      "before": {
+        "path": "/",
+        "currentHref": "/",
+        "otherHref": "/mahua-vann"
+      },
+      "afterSelfClick": {
+        "path": "/",
+        "panelInert": true
+      },
+      "afterRealNav": {
+        "path": "/mahua-vann"
+      }
+    },
+    "1440": {
+      "before": {
+        "path": "/",
+        "currentHref": "/",
+        "otherHref": "/mahua-vann"
+      },
+      "afterSelfClick": {
+        "path": "/",
+        "panelInert": true
+      },
+      "afterRealNav": {
+        "path": "/mahua-vann"
+      }
+    }
+  },
+  "overflow": [
+    {
+      "width": 390,
+      "anyHorizontal": false,
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    {
+      "width": 1440,
+      "anyHorizontal": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    }
+  ]
+}
