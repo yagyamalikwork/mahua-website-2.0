@@ -12,12 +12,13 @@ describe("SiteHeader", () => {
     // expects a way back. data-rule="none" because a hairline under an image
     // lockup reads as a rendering fault (the pills' own opt-out).
     const { container } = render(<SiteHeader ctaHref="#invitation" />);
-    // The header grid renders: SiteMenu (which contains a[href='/'], then the
-    // lockup anchor, then the pill. Selector must distinguish the lockup from
-    // the menu's own Home link—include data-rule="none" to be specific.
-    const home = container.querySelector("a[href='/'][data-rule='none']");
+    const home = container.querySelector("a[aria-label='Mahua Resorts — home']");
     expect(home).not.toBeNull();
+    // Assert it carries the grid centring
+    expect(home?.getAttribute("class")).toContain("justify-self-center");
+    // Assert it wraps the lockup (BrandMark renders a flex span with gap)
+    expect(home?.querySelector("span.flex")).not.toBeNull();
+    // Assert the opt-out from the hairline rule
     expect(home?.getAttribute("data-rule")).toBe("none");
-    expect(home?.getAttribute("aria-label")).toBeTruthy();
   });
 });

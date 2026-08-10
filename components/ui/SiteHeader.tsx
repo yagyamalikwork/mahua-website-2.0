@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { Photo } from "@/components/ui/Photo";
 import { PillButton } from "@/components/ui/PillButton";
@@ -109,14 +108,17 @@ export function SiteHeader({
       <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
         <SiteMenu places={SITE.places} cards={menuCards} />
 
-        <Link
+        {/* Chrome on every page, so real anchor is the fallback navigation when
+            scripting fails. SiteFooter and SiteMenu use plain anchors too. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a
           href="/"
           aria-label="Mahua Resorts — home"
           data-rule="none"
           className="pointer-events-auto justify-self-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)]"
         >
           <BrandMark />
-        </Link>
+        </a>
 
         {/*
          * `data-contrast` is the hook `scripts/check_contrast_over_photos.mjs`
