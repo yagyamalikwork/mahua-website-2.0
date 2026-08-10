@@ -74,7 +74,6 @@ export function PropertyPage({
   bookHref,
   bar,
   siblingHref,
-  nav,
 }: {
   chapters: readonly PropertyChapter[];
   copy: PropertyPageCopy;
@@ -95,7 +94,6 @@ export function PropertyPage({
    */
   bar: { name: string; bookLabel: string };
   siblingHref: string;
-  nav: { menu: string; menuTitle: string; menuClose: string; menuHint: string };
 }) {
   let cream = 0;
 
@@ -116,7 +114,6 @@ export function PropertyPage({
         ctaHref={`#${lastChapter.id}`}
         ctaLabel={bar.bookLabel}
         chapters={chapters}
-        nav={nav}
       />
       <main>
         {chapters.map((chapter, index) => {

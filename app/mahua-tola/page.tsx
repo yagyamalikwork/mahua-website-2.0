@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PropertyPage } from "@/components/property/PropertyPage";
-import { TOLA_BAR, TOLA_CHAPTERS, TOLA_COPY, TOLA_NAV } from "@/content/mahua-tola";
+import { TOLA_BAR, TOLA_CHAPTERS, TOLA_COPY } from "@/content/mahua-tola";
 
 export const metadata: Metadata = {
   title: "Mahua Tola, Tadoba — Mahua Resorts",
@@ -37,7 +37,6 @@ export default function MahuaTolaPage() {
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MA=="
       bar={TOLA_BAR}
       siblingHref="/mahua-vann"
-      nav={TOLA_NAV}
     />
   );
 }

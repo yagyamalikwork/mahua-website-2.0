@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PropertyPage } from "@/components/property/PropertyPage";
-import { VANN_BAR, VANN_CHAPTERS, VANN_COPY, VANN_NAV } from "@/content/mahua-vann";
+import { VANN_BAR, VANN_CHAPTERS, VANN_COPY } from "@/content/mahua-vann";
 
 export const metadata: Metadata = {
   title: "Mahua Vann, Pench — Mahua Resorts",
@@ -35,7 +35,6 @@ export default function MahuaVannPage() {
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MQ=="
       bar={VANN_BAR}
       siblingHref="/mahua-tola"
-      nav={VANN_NAV}
     />
   );
 }

@@ -76,15 +76,14 @@ export const HOME = {
     // a photograph and a sixth of the whole page budget, so the header sets the
     // name in the display serif instead (Task 7 report).
     brand: "Mahua Resorts",
-    menu: "Menu",
-    // The chapter menu's own words. `components/ui/ChapterMenu.tsx` lists the
-    // seven numbered chapters, and it takes their numbers and names from
-    // `content/chapters.ts` — these three are the only strings the panel needs
-    // that are not already a chapter's own.
-    menuTitle: "The chapters",
-    menuClose: "Close",
-    menuHint: "Jump to a chapter",
     cta: "Plan your stay",
+    // The menu used to be this page's own — "Menu", "The chapters", "Close",
+    // "Jump to a chapter" — and lived here because there was only one page to
+    // navigate. `SiteMenu` (10 Aug 2026, `docs/superpowers/plans/2026-08-10-
+    // site-navigation.md` Task 3) is the *site's* menu, listing the three
+    // places rather than one page's chapters, so its four strings moved to
+    // `content/site.ts`'s `SITE.nav` — one source the menu and the footer
+    // both read, so they can never name a place differently.
   },
 
   chapters: {
@@ -367,10 +366,6 @@ export const HOME = {
   meta: { title: string; description: string };
   nav: {
     brand: string;
-    menu: string;
-    menuTitle: string;
-    menuClose: string;
-    menuHint: string;
     cta: string;
   };
   chapters: Record<

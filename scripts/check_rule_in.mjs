@@ -56,7 +56,7 @@ const browser = await chromium.launch();
   // The menu's seven links live in a panel that is `inert` until it opens, so
   // they must be on screen for this to mean anything. Opening it is also what
   // puts the rule on the dark overlay for check 6.
-  await page.click("[aria-controls='chapter-menu']");
+  await page.click("[aria-controls='site-menu']");
   await page.waitForTimeout(600);
 
   const uncovered = await page.$$eval("a[href], button", (els) =>
@@ -95,7 +95,7 @@ const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(URL, { waitUntil: "networkidle" });
 
-  const SEL = "[aria-controls='chapter-menu']";
+  const SEL = "[aria-controls='site-menu']";
 
   const rest = scaleX(await readAfter(page, SEL));
   report.rest = rest;
@@ -178,7 +178,7 @@ const browser = await chromium.launch();
   await page.waitForTimeout(DURATION.ruleIn * 1000 + 200);
   const byKeyboard = scaleX(await readAfter(page, SEL));
   report.keyboard = { focused, scaleX: byKeyboard };
-  if (focused !== "chapter-menu") {
+  if (focused !== "site-menu") {
     fail(`the first Tab landed on ${focused ?? "nothing"}, not the menu trigger`);
   } else if (byKeyboard < 0.98) {
     fail(`keyboard focus did not draw the rule (scaleX ${byKeyboard.toFixed(3)})`);
@@ -200,7 +200,7 @@ const browser = await chromium.launch();
   const page = await context.newPage();
   await page.goto(URL, { waitUntil: "networkidle" });
 
-  const SEL = "[aria-controls='chapter-menu']";
+  const SEL = "[aria-controls='site-menu']";
   await page.hover(SEL);
   const immediate = scaleX(await readAfter(page, SEL));
   const running = await page.$eval(SEL, (el) =>
@@ -259,13 +259,13 @@ const browser = await chromium.launch();
   );
 
   // The dark overlay: a chapter link inside the open menu panel.
-  await page.click("[aria-controls='chapter-menu']");
+  await page.click("[aria-controls='site-menu']");
   await page.waitForTimeout(600);
   surfaces.push(
-    await page.$eval("#chapter-menu a .rule-in", (el) => ({
+    await page.$eval("#site-menu a .rule-in", (el) => ({
       where: "menu overlay",
       rule: getComputedStyle(el, "::after").backgroundColor,
-      behind: getComputedStyle(document.getElementById("chapter-menu")).backgroundColor,
+      behind: getComputedStyle(document.getElementById("site-menu")).backgroundColor,
     })),
   );
 

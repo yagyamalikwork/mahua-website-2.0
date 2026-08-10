@@ -98,7 +98,7 @@ const ratio = (rgb, text = CREAM) => {
  * pass whether the bar was there or not, which is a check that cannot fail.
  */
 const HOME_RUNS = [
-  { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='chapter-menu']" },
+  { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='site-menu']" },
   {
     name: "header · wordmark",
     min: 4.5,
@@ -157,7 +157,7 @@ const HOME_RUNS = [
     min: 4.5,
     at: "#why-you-came",
     container: "header",
-    sel: "[aria-controls='chapter-menu']",
+    sel: "[aria-controls='site-menu']",
     text: INK,
   },
   {
@@ -204,7 +204,7 @@ const HOME_RUNS = [
  * type.
  */
 const propertyRuns = (heroId, scrolledAt) => [
-  { name: "header · menu", min: 4.5, at: `#${heroId}`, container: "header", sel: "[aria-controls='chapter-menu']" },
+  { name: "header · menu", min: 4.5, at: `#${heroId}`, container: "header", sel: "[aria-controls='site-menu']" },
   { name: "header · wordmark", min: 4.5, at: `#${heroId}`, container: "header", sel: '[data-contrast="brand-wordmark"]' },
   {
     name: "header · pill",
@@ -218,7 +218,7 @@ const propertyRuns = (heroId, scrolledAt) => [
   { name: "hero · headline", min: 3, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} h1 [data-word]` },
   { name: "hero · sub", min: 4.5, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} > div > p` },
   { name: "hero · scroll cue", min: 4.5, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} div.flex > span:nth-child(2)` },
-  { name: "header scrolled · menu", min: 4.5, at: scrolledAt, container: "header", sel: "[aria-controls='chapter-menu']", text: INK },
+  { name: "header scrolled · menu", min: 4.5, at: scrolledAt, container: "header", sel: "[aria-controls='site-menu']", text: INK },
   { name: "header scrolled · wordmark", min: 4.5, at: scrolledAt, container: "header", sel: '[data-contrast="brand-wordmark"]', text: BRAND },
   {
     name: "header scrolled · pill",

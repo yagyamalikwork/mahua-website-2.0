@@ -324,6 +324,36 @@ button:focus-visible .rule-in::after {
 }
 
 /*
+ * The menu's cream glass. A pure transparent blur cannot guarantee legible
+ * type over an arbitrary page, so the frost carries the site's own paper as
+ * a wash; the worst-pixel contrast of ink type over it is MEASURED by
+ * scripts/check_contrast_over_photos.mjs with the menu opened over a
+ * full-bleed photograph — the worst backdrop the site can produce.
+ *
+ * Three states, in order of grace: blur where supported; near-solid paper
+ * where backdrop-filter does not exist (raw page behind ink type is the
+ * failure this rules out); solid paper for a visitor who asked for reduced
+ * transparency.
+ */
+.site-menu-glass {
+  background-color: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-menu-glass {
+    background-color: color-mix(in srgb, var(--bg) 97%, transparent);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .site-menu-glass {
+    background-color: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/*
  * The leaf that follows the pointer — `components/signature/leaf-cursor/`.
  *
  * Only the *warm state* lives here. The travel is written frame by frame in the

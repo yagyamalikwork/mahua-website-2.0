@@ -425,13 +425,6 @@ export const VANN_COPY: PropertyPageCopy = {
   },
 };
 
-export const VANN_NAV = {
-  menu: "Menu",
-  menuTitle: "The chapters",
-  menuClose: "Close",
-  menuHint: "Jump to a chapter",
-};
-
 export const VANN_BAR = {
   name: "Mahua Vann · Pench",
   bookLabel: "Book",

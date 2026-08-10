@@ -563,13 +563,6 @@ export const TOLA_COPY: PropertyPageCopy = {
   },
 };
 
-export const TOLA_NAV = {
-  menu: "Menu",
-  menuTitle: "The chapters",
-  menuClose: "Close",
-  menuHint: "Jump to a chapter",
-};
-
 export const TOLA_BAR = {
   name: "Mahua Tola · Tadoba",
   bookLabel: "Book",

@@ -14,6 +14,7 @@ import {
 } from "@/components/sections/ExperiencePair";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_BOXES, ROOM_SIZES, type RoomScale } from "@/components/sections/RoomShowcase";
+import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
   BOXES as TESTIMONIAL_BOXES,
@@ -201,6 +202,11 @@ const LIVE_SLOTS: readonly Slot[] = [
   // one column, no `50vw` tier), so this row adds no new distinct string;
   // its box is new (21:9, nobody else on the page uses it).
   { name: "PropertyInvitation.sibling", sizes: INVITATION_SIZES, box: INVITATION_BOX },
+  // `SiteMenu`'s two lodge cards, drawn server-side in `SiteHeader.tsx` (the
+  // client menu itself must never import `Photo`) at up to 208px — a genuinely
+  // new crop and a genuinely new width list, since nothing else on the page is
+  // sized this small.
+  { name: "SiteMenu.card", sizes: MENU_CARD_SIZES, box: MENU_CARD_BOX },
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -266,7 +272,13 @@ describe("the sizes the page actually serves", () => {
     // the 21→22 step added — no surviving slot shares it — so losing it is
     // the whole of the drop: 24 → 23, read off this suite rather than
     // computed by hand, per this task's own instruction not to guess it.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(23);
+    // 24 since the site-navigation Task 3 (10 Aug 2026): `SiteMenu`'s two
+    // lodge cards, drawn at up to 208px by `SiteHeader.tsx` (the server file
+    // that renders the `<Photo>`s the client menu is only handed as
+    // elements). Nothing else on the page is sized this small, so
+    // `MENU_CARD_SIZES` is a genuinely new width list — read off this suite,
+    // not guessed, per the same instruction.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -419,6 +431,12 @@ describe("cover boxes match the markup they describe", () => {
     // ratio rather than a `BOXES` map, because there is only the one crop on
     // the page that uses it.
     { file: "components/property/PropertyInvitation.tsx", declared: INVITATION_BOX },
+    // The site menu's two lodge cards — a bare 3:2 ratio, the same shape as
+    // `SiteMenu.tsx`'s `aspect-[3/2]` class on the card's wrapper `<span>`.
+    // The `<Photo>` itself lives in `SiteHeader.tsx` (the server component
+    // that renders it), which is why this entry names that file and not the
+    // client menu.
+    { file: "components/ui/SiteHeader.tsx", declared: MENU_CARD_BOX },
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(

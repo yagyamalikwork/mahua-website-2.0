@@ -1,9 +1,11 @@
 import { BrandMark } from "@/components/ui/BrandMark";
-import { ChapterMenu } from "@/components/ui/ChapterMenu";
+import { Photo } from "@/components/ui/Photo";
 import { PillButton } from "@/components/ui/PillButton";
+import { SiteMenu } from "@/components/ui/SiteMenu";
 import { StickyHeader } from "@/components/ui/StickyHeader";
 import { CHAPTERS } from "@/content/chapters";
 import { HOME } from "@/content/home";
+import { SITE } from "@/content/site";
 
 /**
  * Menu left, the brand lockup centred, pill right — the reference's three-item
@@ -35,9 +37,10 @@ import { HOME } from "@/content/home";
  * width, which is the difference between a centred wordmark and one that drifts
  * left because "Plan your stay" is wider than "Menu".
  *
- * **The menu used to be inert** — a `<button>` labelled "Menu" that did nothing,
- * in the most prominent position on the page. It now opens `ChapterMenu`, which
- * lists the seven numbered chapters of `content/chapters.ts` and goes to them.
+ * **The menu is the site's, not the page's.** `SiteMenu` lists `SITE.places` —
+ * Home and both lodges — rather than the current page's own chapters, because
+ * this header now renders on all three routes. `chapters` stays as a prop
+ * purely so the sticky-header machinery below knows which id is the hero.
  */
 type HeaderChapter = {
   readonly id: string;
@@ -45,16 +48,41 @@ type HeaderChapter = {
   readonly label?: string;
 };
 
+/**
+ * The menu's lodge cards, drawn at up to ~208px (`md:w-52`). Rendered HERE,
+ * on the server, and handed to the client menu as elements — `SiteMenu` must
+ * never import `Photo` (see the architecture rule; the manifest is the
+ * payload). Exported for `lib/sizes.test.ts`.
+ */
+export const MENU_CARD_SIZES = "(min-width: 768px) 208px, (min-width: 640px) 160px, 112px";
+export const MENU_CARD_BOX = 3 / 2;
+
+const menuCards = Object.fromEntries(
+  SITE.places
+    .filter((p) => p.cardMediaId)
+    .map((p) => [
+      p.href,
+      <span key={p.href} className="block aspect-[3/2] w-full">
+        <Photo
+          id={p.cardMediaId!}
+          decorative
+          sizes={MENU_CARD_SIZES}
+          box={MENU_CARD_BOX}
+          pictureClassName="block h-full w-full"
+          className="h-full w-full object-cover"
+        />
+      </span>,
+    ]),
+);
+
 export function SiteHeader({
   ctaHref,
   ctaLabel = HOME.nav.cta,
   chapters = CHAPTERS,
-  nav = HOME.nav,
 }: {
   ctaHref: string;
   ctaLabel?: string;
   chapters?: readonly HeaderChapter[];
-  nav?: { menu: string; menuTitle: string; menuClose: string; menuHint: string };
 }) {
   // Found by position, not by tag. This header now renders both the home
   // page (`content/chapters.ts`, `kind: "hero"`) and the two property pages
@@ -72,13 +100,13 @@ export function SiteHeader({
     <StickyHeader heroId={hero.id}>
       {/*
        * The base gap and padding are tighter than they look like they should be
-       * because a 320px phone has to fit "Menu", the brand lockup and the "Plan
-       * your stay" pill on one row. At `gap-3 px-5` the lockup ran 7px past the
-       * pill and pushed the whole page into horizontal scroll. Everything from
-       * `sm` up gets the roomier spacing back.
+       * because a 320px phone has to fit the hamburger, the brand lockup and the
+       * "Plan your stay" pill on one row. At `gap-3 px-5` the lockup ran 7px past
+       * the pill and pushed the whole page into horizontal scroll. Everything
+       * from `sm` up gets the roomier spacing back.
        */}
       <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-5 sm:gap-6 sm:px-6 sm:py-6 md:px-12 md:py-8">
-        <ChapterMenu chapters={chapters} nav={nav} />
+        <SiteMenu places={SITE.places} cards={menuCards} />
 
         <BrandMark className="justify-self-center" />
 
@@ -89,8 +117,8 @@ export function SiteHeader({
          * that means "the one in the header". Selecting it structurally is what
          * this project has already been burned by twice — `header > div > p` for
          * the wordmark, and `header a[href^='#']`, which would also have matched
-         * the seven chapter links inside `ChapterMenu`'s panel, since the panel
-         * is a child of this header and keeps its layout boxes while closed.
+         * the places' links inside `SiteMenu`'s panel, since the panel is a
+         * child of this header and keeps its layout boxes while closed.
          */}
         <div data-contrast="header-pill" className="pointer-events-auto justify-self-end">
           <PillButton href={ctaHref}>{ctaLabel}</PillButton>
