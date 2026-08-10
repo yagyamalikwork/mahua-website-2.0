@@ -43,7 +43,7 @@ import sharp from "sharp";
 import { PALETTE } from "../lib/palette.ts";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = path.join(ROOT, "Forest-illustrations", "forest-overlay.jfif");
+const SRC = path.join(ROOT, "Forest-illustrations", "forest-overlay-2.png");
 const OUT_DIR = path.join(ROOT, "public", "brand");
 const ART = path.join(ROOT, "lib", "forest-overlay.ts");
 
@@ -72,7 +72,7 @@ const ART = path.join(ROOT, "lib", "forest-overlay.ts");
  * fog rather than as a drawing; 120 keeps more line and less presence, if this is
  * ever judged too heavy.
  */
-const INK_FLOOR = 160;
+const INK_FLOOR = 20;
 
 /**
  * The worst contrast the tint may leave for `PALETTE.dim`, the page's lighter
@@ -82,7 +82,16 @@ const INK_FLOOR = 160;
 const FLOOR = 4.55;
 
 /** Encoded widths. Capped at the source's own resolution — never upscale into a file. */
-const WIDTHS = [640, 1024];
+/**
+ * Encoded widths, capped at the source's own resolution.
+ *
+ * **1600 is the top, not 2400**, even though the 2752px source could carry it.
+ * This is a near-flat texture: a 1920 screen drawing the 1600 file upscales it
+ * 1.2x, which is invisible here and would not be on a photograph. The 2400 file
+ * cost 149 KB against 1600's 92 for no difference anyone can see, on a
+ * decoration several screens below the fold.
+ */
+const WIDTHS = [640, 1024, 1600];
 
 /** The two creams a chapter can stand on. Each file is baked onto one of them. */
 const SURFACES = [
@@ -146,6 +155,30 @@ if (W < 2400) {
 /** Map [0,255] onto [INK_FLOOR,255] — lifts the blacks, leaves the white sky alone. */
 const lift = (v) => INK_FLOOR + (v * (255 - INK_FLOOR)) / 255;
 
+/**
+ * **The drawing is solved in two segments, and both keep the same guarantee.**
+ *
+ * The second artwork (10 Aug) separates cleanly: pale outline foliage, and the
+ * three hornbills as the only solid darks — 11.9% of the frame against 35.6% in
+ * the first. That separation is what makes this worth doing.
+ *
+ * A single strength is capped by the darkest pixel anywhere, so the birds were
+ * holding the whole drawing to 0.135 and the foliage came out a whisper. Solving
+ * each segment against the *same* 4.55:1 floor lets each take the most it can
+ * carry: the birds land at the floor, which is where they should be, and the
+ * pale foliage — which starts far lighter — gets a much larger multiplier before
+ * it reaches the same limit.
+ *
+ * **Nothing is relaxed.** Both targets are the body-copy floor, so every pixel of
+ * the result still clears it, and the final assertion below still measures the
+ * whole image. This is not the earlier attempt that gave the birds a lower bar
+ * and was rightly rejected at 2.1:1.
+ */
+const BIRD_MAX = 70;
+const isBird = new Uint8Array(W * H);
+let birdPixels = 0;
+
+/** The lifted drawing, and each pixel's ink fraction — 0 for the sky, 1 for black. */
 /** The lifted drawing, and each pixel's ink fraction — 0 for the sky, 1 for the darkest foliage. */
 const inkFraction = new Float32Array(W * H);
 const ink = new Uint8Array(W * H * 3);
@@ -155,9 +188,19 @@ for (let p = 0; p < W * H; p++) {
   const g = lift(data[i + 1]);
   const b = lift(data[i + 2]);
   inkFraction[p] = 1 - Math.min(r, g, b) / 255;
+  if (Math.min(data[i], data[i + 1], data[i + 2]) < BIRD_MAX) {
+    isBird[p] = 1;
+    birdPixels++;
+  }
   ink[p * 3] = Math.round(r);
   ink[p * 3 + 1] = Math.round(g);
   ink[p * 3 + 2] = Math.round(b);
+}
+if (birdPixels === 0) {
+  throw new Error(
+    `nothing in the source is darker than ${BIRD_MAX} — this artwork has no solid darks, so there is no ` +
+      "second segment and the birds cannot be the accent the client asked for",
+  );
 }
 
 /**
@@ -166,12 +209,19 @@ for (let p = 0; p < W * H; p++) {
  * `paperDeep` is always the binding surface — it is the darker ground, so the
  * same ink lands closer to the text on it. Solving against it covers both.
  */
-const worstAt = (strength) => {
+const worstAt = (strength, birds) => {
   const cream = hex(PALETTE.paperDeep);
   let lo = 1;
   let darkest = null;
   for (let p = 0; p < W * H; p++) {
-    const a = inkFraction[p] * strength;
+    if (Boolean(isBird[p]) !== birds) continue;
+    // **Clamped.** `inkFraction` can be ~1 and the solved strength can exceed 1,
+    // so the product must be capped or the composite goes negative — which fed
+    // `luminance` nonsense and had the solver reporting -32:1 over
+    // rgb(-181,-174,-157). It never bit while the blacks were lifted high enough
+    // to keep every strength under 1; the second drawing, with its own range
+    // preserved, walked straight into it.
+    const a = Math.min(1, inkFraction[p] * strength);
     // `Math.round`, because that is what `flatten` writes into the file. Solving
     // against the un-rounded float and asserting against the rounded byte is two
     // instruments measuring different things, and they duly disagreed by 0.01 —
@@ -194,26 +244,32 @@ const worstAt = (strength) => {
  * Hand-tuning is what left this at 0.2 when 1.06 was available at the same worst
  * case, and the client saw a drawing that was "almost not visible".
  */
-const STRENGTH = (() => {
-  let lo = 0.02;
-  let hi = 4;
-  if (worstAt(lo) < FLOOR) {
+const solve = (birds) => {
+  let lo = 0.005;
+  let hi = 8;
+  if (worstAt(lo, birds) < FLOOR) {
     throw new Error(
-      `even the faintest tint leaves ${worstAt(lo).toFixed(2)}:1 — the drawing cannot go under type at all`,
+      `even the faintest tint leaves ${worstAt(lo, birds).toFixed(2)}:1 over the ` +
+        `${birds ? "birds" : "foliage"} — it cannot go under type at all`,
     );
   }
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 26; i++) {
     const mid = (lo + hi) / 2;
-    if (worstAt(mid) >= FLOOR) lo = mid;
+    if (worstAt(mid, birds) >= FLOOR) lo = mid;
     else hi = mid;
   }
-  // Rounded **down**, never to nearest: rounding up would hand back a strength
-  // fractionally stronger than the one that was proved to clear the floor.
+  // Rounded **down**, never to nearest: rounding up hands back a strength
+  // fractionally stronger than the one proved to clear the floor.
   return Math.floor(lo * 1000) / 1000;
-})();
+};
+
+const STRENGTH = solve(false);
+const STRENGTH_BIRDS = solve(true);
 
 const alpha = new Float32Array(W * H);
-for (let p = 0; p < W * H; p++) alpha[p] = inkFraction[p] * STRENGTH;
+for (let p = 0; p < W * H; p++) {
+  alpha[p] = inkFraction[p] * (isBird[p] ? STRENGTH_BIRDS : STRENGTH);
+}
 
 /** Flatten onto one cream, and report the darkest pixel it produces. */
 const flatten = (creamHex) => {
@@ -222,7 +278,7 @@ const flatten = (creamHex) => {
   let darkest = null;
   let lum = 1;
   for (let p = 0; p < W * H; p++) {
-    const a = alpha[p];
+    const a = Math.min(1, alpha[p]);
     const px = [0, 1, 2].map((k) => cream[k] * (1 - a) + ink[p * 3 + k] * a);
     for (let k = 0; k < 3; k++) out[p * 3 + k] = Math.round(px[k]);
     const l = luminance(px);
@@ -339,7 +395,7 @@ await writeFile(
 );
 
 console.log(
-  `\nheaviest file ${(heaviest / 1024).toFixed(1)} KB — strength ${STRENGTH}, ink floor ${INK_FLOOR}`,
+  `\nheaviest file ${(heaviest / 1024).toFixed(1)} KB — foliage ${STRENGTH}, birds ${STRENGTH_BIRDS} (${((100 * birdPixels) / (W * H)).toFixed(1)}% of the frame), ink floor ${INK_FLOOR}`,
 );
 console.log("worst contrast over the darkest ink:");
 for (const w of worst) {

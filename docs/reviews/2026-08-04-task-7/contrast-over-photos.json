@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-09T22:48:21.832Z",
+  "measuredAt": "2026-08-10T18:13:13.379Z",
   "url": "http://localhost:3100/",
   "widths": {
     "390": [
@@ -59,11 +59,11 @@
         "name": "forest · headline",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.84,
+        "worst": 7.08,
         "brightest": [
-          210,
-          203,
-          187
+          215,
+          206,
+          189
         ],
         "boxes": 9,
         "pass": true
@@ -269,11 +269,11 @@
         "name": "forest · intro",
         "min": 4.5,
         "text": "#5a5240",
-        "worst": 4.63,
+        "worst": 4.81,
         "brightest": [
-          206,
-          200,
-          184
+          212,
+          203,
+          186
         ],
         "boxes": 1,
         "pass": true
@@ -453,11 +453,11 @@
         "name": "forest · headline",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.52,
+        "worst": 6.78,
         "brightest": [
-          203,
-          199,
-          182
+          210,
+          202,
+          184
         ],
         "boxes": 9,
         "pass": true
@@ -466,11 +466,11 @@
         "name": "forest · intro",
         "min": 4.5,
         "text": "#5a5240",
-        "worst": 4.56,
+        "worst": 4.66,
         "brightest": [
-          203,
-          199,
-          182
+          209,
+          200,
+          184
         ],
         "boxes": 1,
         "pass": true
@@ -650,11 +650,11 @@
         "name": "forest · headline",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.76,
+        "worst": 6.8,
         "brightest": [
-          206,
-          203,
-          183
+          211,
+          202,
+          186
         ],
         "boxes": 9,
         "pass": true
@@ -663,11 +663,11 @@
         "name": "forest · intro",
         "min": 4.5,
         "text": "#5a5240",
-        "worst": 4.71,
+        "worst": 4.64,
         "brightest": [
-          206,
-          202,
-          186
+          207,
+          200,
+          183
         ],
         "boxes": 1,
         "pass": true

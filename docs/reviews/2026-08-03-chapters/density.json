@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-09T22:13:58.940Z",
+  "measuredAt": "2026-08-10T18:22:52.971Z",
   "url": "http://localhost:3100/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
@@ -33,7 +33,7 @@
       {
         "id": "forest-overlay-paper",
         "instances": 1,
-        "area": 1158300
+        "area": 1157310
       },
       {
         "id": "forest-boardwalk-daylight",

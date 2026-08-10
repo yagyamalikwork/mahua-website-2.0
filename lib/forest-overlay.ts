@@ -8,12 +8,12 @@
 // **The strength is enforced at build time, not asserted here.** The script
 // composites every pixel onto both creams, finds the darkest result, and
 // throws if `PALETTE.dim` would fall under 4.5:1 on it. Worst measured case
-// at the strength below: **4.55:1**.
+// at the strength below: **4.56:1**.
 //
 // **Two files, one per cream, because the tint is baked rather than blended.**
 // That flattening is what takes it from 282 KB to ~6 KB — see the build script.
 //
-// **The source is only 1024px wide** and nothing wider is emitted; upscaling
+// **The source is only 2752px wide** and nothing wider is emitted; upscaling
 // into the file would bake softness in and hide it. The browser therefore
 // stretches it on a wide screen, which is tolerable for a near-flat texture
 // and would not be for a photograph. Non-negotiable #11 sets 1400px as the
@@ -22,16 +22,16 @@
 
 export const FOREST_OVERLAY = {
   /** Encoded widths. Capped at the source's own resolution. */
-  widths: [640, 1024] as const,
+  widths: [640, 1024, 1600] as const,
   /** The one `src` a browser without `srcset` support would take. */
-  fallback: 1024,
+  fallback: 1600,
   /** Intrinsic size of the drawing. */
-  width: 1024,
-  height: 572,
+  width: 2752,
+  height: 1536,
   /** How strongly its darkest ink prints on the cream. */
-  strength: 1.047,
+  strength: 0.267,
   /** Blacks are lifted to this before becoming tint — see the build script. */
-  inkFloor: 160,
+  inkFloor: 20,
   /** Worst-case contrast of the page's text colours over the darkest part of it. */
-  worstContrast: 4.55,
+  worstContrast: 4.56,
 } as const;
