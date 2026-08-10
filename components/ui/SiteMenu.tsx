@@ -176,6 +176,15 @@ export function SiteMenu({
         <div className="mx-auto flex min-h-full max-w-[1600px] flex-col px-6 py-5 md:px-12 md:py-8">
           <div className="flex items-center justify-between">
             <p
+              /*
+               * `data-contrast` is the hook `scripts/check_contrast_over_photos.mjs`
+               * finds this by, same reason as `data-contrast="menu-region"` below:
+               * the colour is inline, not a class, so a `[class*='--accent-text']`
+               * selector matches nothing. Added 10-11 Aug 2026 review follow-up —
+               * this is the one goldText run on the glass no probe read before then
+               * (docs/DECISIONS.md §16, "the region label it failed").
+               */
+              data-contrast="menu-hint"
               className="font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] sm:text-xs sm:tracking-[0.28em]"
               style={{ color: "var(--accent-text)" }}
             >

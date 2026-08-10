@@ -58,8 +58,10 @@ const OVERLAY = [0x23, 0x2b, 0x21];
  *
  * **This is the probe that found the wash's original 82% too thin.** The
  * region label failed at 3.43-3.55:1 against its 4.5:1 floor before the fix;
- * `app/globals.css`'s own comment on `.site-menu-glass` carries the full
- * working for why it is 95% now.
+ * `app/globals.css`'s own comment on `.site-menu-glass` is the authority on
+ * the wash's current value and the full working behind it — read the
+ * percentage off that CSS rule itself, not off a number restated here, which
+ * would go stale the moment the wash is re-solved.
  */
 const GOLD_TEXT = [0x7a, 0x5c, 0x18];
 
@@ -148,6 +150,20 @@ const MENU_RUNS = (heroId) => [
     // text)" }}`), not a class. `SiteMenu.tsx` carries `data-contrast="menu-
     // region"` for exactly this, following `BrandMark`'s own wordmark hook.
     sel: "#site-menu a [data-contrast='menu-region']",
+    text: GOLD_TEXT,
+  },
+  {
+    // The one goldText run on the glass no probe read before 10-11 Aug 2026's
+    // review follow-up: the panel's top-strip hint sits outside the boxes the
+    // two runs above probe, on the same translucent wash, in the same colour
+    // this whole task exists to guard. `SiteMenu.tsx` carries
+    // `data-contrast="menu-hint"` for exactly this.
+    name: "menu · hint over frost",
+    min: 4.5,
+    at: `#${heroId}`,
+    pre: "menu",
+    container: "#site-menu",
+    sel: "#site-menu [data-contrast='menu-hint']",
     text: GOLD_TEXT,
   },
 ];

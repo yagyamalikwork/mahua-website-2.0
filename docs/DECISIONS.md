@@ -813,11 +813,11 @@ claimed a **per-channel RGB** linear fit through the same two points predicted t
 not. Interpolating `[202,191,174]` and `[225,216,198]` per channel to 98% predicts `[230,222,204]` → 4.65:1
 — close by luck, not by method, and a caught-by-review check of the *identical* extrapolation using the
 95%→100%(cream) segment instead of the 82%→95% one (both equally "two real points, no assumption about the
-photograph") predicts a visibly different `[235,226,208]`-ish composite and a **4.97:1** that does not match
-anything measured. Per-channel RGB fits from only two noisy 8-bit samples are not reliable here: color-mix
-blends linearly in theory, but AVIF re-encoding and anti-aliasing put enough noise into three separate
-channels that which two points you pick changes the extrapolated colour by more than the effect being
-measured.
+photograph") predicts a visibly different `[235,226,208]`-ish composite and, on that **95%→100% segment**,
+a contrast of **4.844:1** — not the theoretical fit's 4.65:1, and not anything measured. Per-channel RGB
+fits from only two noisy 8-bit samples are not reliable here: color-mix blends linearly in theory, but AVIF
+re-encoding and anti-aliasing put enough noise into three separate channels that which two points you pick
+changes the extrapolated colour by more than the effect being measured.
 
 **What actually reproduces the shipped number, checked independently and matching to within 0.002, is
 fitting the two composites' *scalar relative luminance* linearly** — not the three RGB channels separately.

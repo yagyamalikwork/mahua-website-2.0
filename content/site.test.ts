@@ -5,6 +5,37 @@ import { describe, expect, it } from "vitest";
 import { media } from "@/lib/media";
 import { SITE, SITE_FOOTER_ID } from "./site";
 
+/** Every string anywhere in a nested object/array — the same flattening `content/home.test.ts` uses. */
+const strings = (obj: unknown): string[] =>
+  typeof obj === "string" ? [obj]
+    : Array.isArray(obj) ? obj.flatMap(strings)
+    : obj && typeof obj === "object" ? Object.values(obj).flatMap(strings)
+    : [];
+
+describe("SITE house style (CLAUDE.md conventions)", () => {
+  // Every user-facing string on every route: the nav labels, the place labels
+  // and their regions, and all footer copy (the office address, the legal
+  // links' labels — not their external hrefs — and the copyright line).
+  const all = strings(SITE.nav)
+    .concat(SITE.places.flatMap((p) => [p.label, ...(p.region ? [p.region] : [])]))
+    .concat([SITE.footer.placesLabel, SITE.footer.officeLabel, SITE.footer.office, SITE.footer.copyright])
+    .concat(SITE.footer.legal.map((l) => l.label));
+
+  it("uses British spelling", () => {
+    // House convention is British with -ise endings. Only unambiguously
+    // American forms are listed — the plausible ones for site chrome and a
+    // website directory footer (an office address, legal-page labels, a
+    // copyright line), not a single token: words like "practice", "license"
+    // and "curb" are valid in British English too and would produce false
+    // failures.
+    const american =
+      /\b(colors?|colored|coloring|gray|favorites?|centers?|centered|honors?|honored|flavors?|flavored|neighbors?|labor|humor|harbor|savor|splendor|somber|fiber|liters?|meters?|theaters?|defense|offense|jewelry|aluminum|catalog|dialog|specialty|program|travelers?|traveled|traveling|canceled|canceling|apologize|organize|organization|authorize|authorized|realize|recognize|recognized|emphasize|minimize|maximize|customize|personalize|prioritize|harmonize|revitalize|analyze|paralyze|inquire|inquires|inquired|inquiring|inquiry|inquiries)\b/i;
+    for (const s of all) {
+      expect(american.test(s), `American spelling in: "${s}"`).toBe(false);
+    }
+  });
+});
+
 describe("SITE", () => {
   it("links only to routes that exist", () => {
     // The footer and menu must never link a ghost. Checked against the app

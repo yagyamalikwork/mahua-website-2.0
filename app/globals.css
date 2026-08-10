@@ -43,8 +43,10 @@ html {
   /*
    * The offset a fragment link has to leave for the header that now stays at the
    * top of the page. `components/ui/StickyHeader.tsx` measures the bar and writes
-   * the property; `ChapterMenu`'s seven `href="#id"` links land under it without
-   * this, because the browser scrolls a target to y=0 and y=0 is behind the bar.
+   * the property; the header's own `href="#id"` CTA pill, and a property page's
+   * in-page chapter anchors, land under it without this, because the browser
+   * scrolls a target to y=0 and y=0 is behind the bar. `SiteMenu` itself links
+   * whole routes, not anchors, so it needs none of this.
    *
    * **The fallback is `0px` and it is load-bearing**, not a formality. The
    * property is only ever written while the header is actually following, so a
@@ -131,10 +133,10 @@ html {
 
 /*
  * An attribute, not a structural selector. `header button`, `header span` would
- * reach into `ChapterMenu`'s panel — which is a child of the header and is cream
- * type on the dark overlay in both states — and the wordmark being found as
- * `header > div > p` is precisely how the contrast rig came to measure nothing
- * for a whole task (see `components/ui/BrandMark.tsx`).
+ * reach into `SiteMenu`'s panel — which is a child of the header and is ink and
+ * goldText type on the cream glass wash in both states — and the wordmark being
+ * found as `header > div > p` is precisely how the contrast rig came to measure
+ * nothing for a whole task (see `components/ui/BrandMark.tsx`).
  */
 /* Gated on `data-settled` for the reason given above the bar's own transition. */
 [data-site-header][data-settled] [data-header-tint] {
@@ -351,7 +353,8 @@ button:focus-visible .rule-in::after {
  * independent noise per channel that which two points you interpolate
  * between changes the extrapolated colour by more than the effect being
  * measured, and a caught-in-review check using the 95%→100%(cream) segment
- * instead of 82%→95% predicted 4.97, not anything real. The luminance fit
+ * instead of 82%→95% predicted 4.844 on that segment (not the theoretical
+ * fit's 4.65), not anything real. The luminance fit
  * has no more theoretical footing than the RGB one — `color-mix()` blends
  * RGB, not luminance — it simply absorbs the channels' noise into one
  * number before the further nonlinear step (contrast ratio) that is the

@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-10T21:03:27.776Z",
+  "measuredAt": "2026-08-10T21:58:50.582Z",
   "url": "http://localhost:3100/",
   "widths": {
     "390": [
@@ -222,6 +222,19 @@
           202
         ],
         "boxes": 2,
+        "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.59,
+        "brightest": [
+          227,
+          221,
+          203
+        ],
+        "boxes": 1,
         "pass": true
       }
     ],
@@ -446,6 +459,19 @@
         ],
         "boxes": 2,
         "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
+        "pass": true
       }
     ],
     "1440": [
@@ -669,6 +695,19 @@
         ],
         "boxes": 2,
         "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
+        "pass": true
       }
     ],
     "1920": [
@@ -891,6 +930,19 @@
           203
         ],
         "boxes": 2,
+        "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
         "pass": true
       }
     ]

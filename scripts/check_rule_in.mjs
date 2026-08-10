@@ -98,9 +98,13 @@ const browser = await chromium.launch();
 
   // Retargeted 10-11 Aug 2026. The hamburger is `SiteMenu`'s trigger, and it
   // correctly carries no `rule-in` — it is a non-text control, and non-text
-  // controls are exactly what `data-rule="none"` exists for (check 1's
-  // coverage still confirms it opts out rather than being missed). Probing
-  // *it* here failed on correct code. The Website Directory footer
+  // controls are exactly what `data-rule="none"` exists for. Probing *it*
+  // here failed on correct code, because a control with no travelling rule
+  // has nothing for checks 2-5 to seek. Note that check 1's own coverage
+  // filter (`textContent.trim().length > 0`) excludes it too — a text-free
+  // control is never a candidate there, so check 1 does not see it and
+  // cannot confirm its opt-out either; nothing in this file actually reads
+  // `data-rule="none"` off the hamburger. The Website Directory footer
   // (`SiteFooter.tsx`, mounted on every route) is a real text link that does
   // carry the hairline and is always in the DOM with no menu to open first —
   // its own "Mahua Vann" entry is the probe.

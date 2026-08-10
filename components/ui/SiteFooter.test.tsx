@@ -39,12 +39,36 @@ function extractImportSpecifiers(source: string): { typeOnly: boolean; specifier
   return specifiers;
 }
 
-/** Resolves an `@/`-prefixed specifier to a real `.ts`/`.tsx` file, or null. */
-function resolveAtImport(specifier: string): string | null {
-  if (!specifier.startsWith("@/")) return null;
-  const base = path.resolve(ROOT, specifier.slice(2));
+/**
+ * Resolves an `@/`-prefixed or relative (`./`, `../`) specifier to a real
+ * `.ts`/`.tsx` file, or null for a bare package specifier (`"react"`,
+ * `"next/navigation"`) — nothing on disk in this repo to walk into.
+ *
+ * The relative case matters as much as the `@/` one: this walk exists to
+ * prove the whole reachable tree carries no client directive, and a relative
+ * `import { x } from "./x"` reaches exactly the same runtime code as
+ * `import { x } from "@/components/ui/x"` would. Until this fix the walker
+ * resolved only `@/` specifiers, so a `"use client"` module reachable through
+ * a relative value import from anywhere in the tree would have been silently
+ * skipped — the same fail-open shape as every import this walk already knows
+ * to distrust, just on a path it had not been asked to widen against. See
+ * `docs/reviews/2026-08-10-site-navigation/final-review.md` (finding, minor,
+ * "SiteFooter import-graph walk skips relative value imports").
+ */
+function resolveImportSpecifier(specifier: string, fromDir: string): string | null {
+  const base = specifier.startsWith("@/")
+    ? path.resolve(ROOT, specifier.slice(2))
+    : specifier.startsWith(".")
+      ? path.resolve(fromDir, specifier)
+      : null;
+  if (base === null) return null; // bare package specifier — not a repo file
   for (const ext of [".ts", ".tsx"]) {
     const candidate = `${base}${ext}`;
+    if (existsSync(candidate)) return candidate;
+  }
+  // A directory import (`./foo` resolving to `foo/index.ts(x)`).
+  for (const ext of [".ts", ".tsx"]) {
+    const candidate = path.join(base, `index${ext}`);
     if (existsSync(candidate)) return candidate;
   }
   return null;
@@ -82,8 +106,8 @@ function assertServerOnlyTree(entryPath: string): void {
 
     for (const { typeOnly, specifier } of extractImportSpecifiers(source)) {
       if (typeOnly) continue; // erased at compile time — cannot reach the runtime tree
-      const resolved = resolveAtImport(specifier);
-      if (!resolved) continue; // not an "@/" module on disk (e.g. "react") — nothing to walk
+      const resolved = resolveImportSpecifier(specifier, path.dirname(absPath));
+      if (!resolved) continue; // not an "@/" or relative module on disk (e.g. "react") — nothing to walk
       visit(resolved, [...chain, relPath]);
     }
   }

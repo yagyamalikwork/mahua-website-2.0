@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-10T21:08:44.143Z",
+  "measuredAt": "2026-08-10T22:00:36.151Z",
   "url": "http://localhost:3100/mahua-tola",
   "widths": {
     "390": [
@@ -144,6 +144,19 @@
           204
         ],
         "boxes": 2,
+        "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.6,
+        "brightest": [
+          228,
+          221,
+          203
+        ],
+        "boxes": 1,
         "pass": true
       },
       {
@@ -318,6 +331,19 @@
         "pass": true
       },
       {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · tola-guest-word",
         "min": 3,
         "text": "#f1e9d7",
@@ -489,6 +515,19 @@
         "pass": true
       },
       {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · tola-guest-word",
         "min": 3,
         "text": "#f1e9d7",
@@ -657,6 +696,19 @@
           203
         ],
         "boxes": 2,
+        "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.59,
+        "brightest": [
+          227,
+          221,
+          203
+        ],
+        "boxes": 1,
         "pass": true
       },
       {

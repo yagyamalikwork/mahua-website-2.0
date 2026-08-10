@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-10T21:06:19.691Z",
+  "measuredAt": "2026-08-10T21:58:15.930Z",
   "url": "http://localhost:3100/mahua-vann",
   "widths": {
     "390": [
@@ -144,6 +144,19 @@
           203
         ],
         "boxes": 2,
+        "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
         "pass": true
       },
       {
@@ -305,6 +318,19 @@
         "pass": true
       },
       {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · vann-table",
         "min": 3,
         "text": "#f1e9d7",
@@ -463,6 +489,19 @@
         "pass": true
       },
       {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
+        "pass": true
+      },
+      {
         "name": "quote · vann-table",
         "min": 3,
         "text": "#f1e9d7",
@@ -618,6 +657,19 @@
           203
         ],
         "boxes": 2,
+        "pass": true
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#7a5c18",
+        "worst": 4.56,
+        "brightest": [
+          227,
+          220,
+          203
+        ],
+        "boxes": 1,
         "pass": true
       },
       {
