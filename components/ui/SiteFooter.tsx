@@ -21,8 +21,13 @@ import type { PropertyContactCopy } from "@/components/property/PropertyContact"
  */
 const LABEL =
   "font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]";
-const LINK =
-  "rule-in inline-block pb-0.5 font-[family-name:var(--font-body)] text-[0.98rem] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]";
+// The one place the hairline-plus-focus-ring fragment is written. `LINK` adds
+// this chapter's body-copy sizing on top of it; the legal links below compose
+// it with `LABEL` instead. Neither ever re-derives the ring, so a future
+// change to it cannot silently miss one or the other.
+const RULE_IN_LINK =
+  "rule-in inline-block pb-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]";
+const LINK = `${RULE_IN_LINK} font-[family-name:var(--font-body)] text-[0.98rem]`;
 
 function LodgeContact({ name, contact }: { name: string; contact: PropertyContactCopy }) {
   return (
@@ -111,7 +116,7 @@ export function SiteFooter() {
                   href={l.href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className={`${LABEL} rule-in inline-block pb-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]`}
+                  className={`${LABEL} ${RULE_IN_LINK}`}
                   style={{ color: "var(--accent-text)" }}
                 >
                   {l.label}
