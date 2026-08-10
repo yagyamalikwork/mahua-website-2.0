@@ -330,30 +330,47 @@ button:focus-visible .rule-in::after {
  * scripts/check_contrast_over_photos.mjs with the menu opened over a
  * full-bleed photograph — the worst backdrop the site can produce.
  *
- * **82% failed that measurement, and the failure is the reason this is 98%
- * now.** 10-11 Aug 2026, when the menu-over-photograph probes were added:
- * the ink place-labels cleared their floor easily (worst 6.02:1 against
- * 3.0), but the gold `--accent-text` region labels ("Pench", "Tadoba") did
- * not — 3.43-3.55:1 against the 4.5:1 non-negotiable #7 requires, over the
- * hero's own darkest patch showing through the wash. `goldText` exists
- * specifically to *be* the legible sibling to decorative gold; a translucent
- * surface that fails it is the promise broken, not a taste call to survey.
+ * **82% failed that measurement.** 10-11 Aug 2026, when the menu-over-photograph
+ * probes were added: the ink place-labels cleared their floor easily (worst
+ * 6.02:1 against 3.0), but the gold `--accent-text` region labels ("Pench",
+ * "Tadoba") did not — 3.43-3.55:1 against the 4.5:1 non-negotiable #7
+ * requires, over the hero's own darkest patch showing through the wash.
+ * `goldText` exists specifically to *be* the legible sibling to decorative
+ * gold; a translucent surface that fails it is the promise broken, not a
+ * taste call to survey.
  *
- * **The number was measured twice, not guessed once.** A first attempt
- * reverse-solved the photograph pixel from a single rendered composite at
- * 82% and forward-solved a "minimum" of 94% from it — shipped at 95% for
- * margin, rebuilt, and *still measured 4.40-4.44:1, short of the 4.5 floor*.
- * The single-point model was wrong: composite-vs-wash is linear in the wash
- * fraction, so fitting it from **two real rendered composites** (82% and
- * 95%, both actually screenshotted) rather than one modelled point predicts
- * the true relationship, and predicted 95% at 4.40 — which is what 95%
- * actually measured. That fit puts 98% at 4.65-4.66 on both of the two
- * measured worst cases (390-768px's crop, 1440-1920px's slightly different
- * one), and the rebuilt, re-measured page confirms it. Re-derive with the
- * same rig if the hero photograph, the palette, or this value ever changes:
- * `node scripts/check_contrast_over_photos.mjs`, rows named `menu · …` — and
- * trust the *rendered* number over any model of it, including this one's
- * first attempt.
+ * **97% is a solved minimum, not a guess, and the method that solved it is
+ * worth getting right.** Two real rendered composites — 82% → `[202,191,174]`,
+ * a failed 95% attempt → `[225,216,198]`, both actually screenshotted —
+ * determine a line, and the number that reproduces a real rebuild's result is
+ * a linear fit of the two composites' **scalar relative luminance**, not a
+ * per-channel RGB fit: `L(a) = L₈₂ + (a−0.82)/(0.95−0.82) × (L₉₅−L₈₂)`. At
+ * a=0.98 that predicts 4.625, matching the rendered 4.62-4.66 to within 0.04.
+ * A per-channel RGB fit through the *same two points* does not reliably
+ * reproduce a rebuild — two AVIF-compressed 8-bit samples carry enough
+ * independent noise per channel that which two points you interpolate
+ * between changes the extrapolated colour by more than the effect being
+ * measured, and a caught-in-review check using the 95%→100%(cream) segment
+ * instead of 82%→95% predicted 4.97, not anything real. The luminance fit
+ * has no more theoretical footing than the RGB one — `color-mix()` blends
+ * RGB, not luminance — it simply absorbs the channels' noise into one
+ * number before the further nonlinear step (contrast ratio) that is the
+ * actual question, instead of propagating three separately-noisy fits
+ * through it. Full working, including the two wrong turns before this one,
+ * in `docs/DECISIONS.md` §16.
+ *
+ * **97% is also not the only design that clears the floor.** Setting the
+ * region label in `--text` (ink) instead of gold clears both floors at the
+ * *original* 82% with enormous margin (6.09-6.63:1) and looks closer to the
+ * "Liquid Glass" brief the wash was written for — recorded as Variant A in
+ * `docs/DECISIONS.md` §16, measured and screenshotted, but **not applied**:
+ * it is a real design trade the client has not been asked about, not a
+ * free win to take unilaterally because the numbers are better.
+ *
+ * Re-derive with the same rig if the hero photograph, the palette, or this
+ * value ever changes: `node scripts/check_contrast_over_photos.mjs`, rows
+ * named `menu · …` — and trust the *rendered* number over any model of it,
+ * including both of this one's first attempts.
  *
  * Three states, in order of grace: blur where supported; near-solid paper
  * where backdrop-filter does not exist (raw page behind ink type is the
@@ -361,16 +378,16 @@ button:focus-visible .rule-in::after {
  * transparency.
  */
 .site-menu-glass {
-  background-color: color-mix(in srgb, var(--bg) 98%, transparent);
+  background-color: color-mix(in srgb, var(--bg) 97%, transparent);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-menu-glass {
-    /* Was 97%, one point *below* the blurred path's now-98% — backwards for
-       a fallback whose whole point is to be nearer solid, precisely because
-       it has no blur to soften whatever shows through. Raised to keep that
-       ordering true. */
+    /* Kept at 99%, two points above the blurred path's 97% — a fallback's
+       whole point is to be nearer solid, precisely because it has no blur to
+       soften whatever shows through, so this must stay the more opaque of
+       the two paths whatever the primary wash is solved to. */
     background-color: color-mix(in srgb, var(--bg) 99%, transparent);
   }
 }
