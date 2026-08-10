@@ -106,6 +106,43 @@ const contrast = (a, b) => {
 const { data, info } = await sharp(SRC).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
 const { width: W, height: H, channels: C } = info;
 
+/**
+ * **Does this artwork suit the job?** Reported, not assumed, because the answer
+ * decided the whole design once already.
+ *
+ * A tint under type is capped by the contrast floor: on the deeper cream the
+ * darkest any pixel may be is about rgb(205,198,184). Everything gets compressed
+ * into that narrow band — so a **dense** drawing arrives as flat mush and a
+ * **sparse** one arrives as clean line work, at the same average luminance. What
+ * the eye reads here is line contrast, not area fill.
+ *
+ * The first drawing was 75% inked and the client's verdict was that it was almost
+ * not visible; raising the strength dial from 160 to 190 moved the average inked
+ * pixel from luma 221.4 to 221.7, which is nothing. It was never a tuning
+ * problem. The brief for a replacement is in `docs/DECISIONS.md` §15.
+ */
+const COVERAGE_CEILING = 0.45;
+let inked = 0;
+for (let p = 0; p < W * H; p++) {
+  const i = p * C;
+  if (Math.min(data[i], data[i + 1], data[i + 2]) < 246) inked++;
+}
+const coverage = inked / (W * H);
+console.log(`source ${W}x${H}, ${(100 * coverage).toFixed(1)}% inked`);
+if (coverage > COVERAGE_CEILING) {
+  console.warn(
+    `  WARNING: ${(100 * coverage).toFixed(1)}% ink coverage, over the ${(100 * COVERAGE_CEILING).toFixed(0)}% ` +
+      "this reads well at. A dense drawing squeezed into the contrast floor's narrow band arrives as mush " +
+      "however the dials are set — see the note above.",
+  );
+}
+if (W < 2400) {
+  console.warn(
+    `  WARNING: ${W}px wide. The section spans the viewport, so anything under ~2400 is stretched on a ` +
+      "large screen, and non-negotiable #11 sets 1400 as the floor for edge-to-edge imagery.",
+  );
+}
+
 /** Map [0,255] onto [INK_FLOOR,255] — lifts the blacks, leaves the white sky alone. */
 const lift = (v) => INK_FLOOR + (v * (255 - INK_FLOOR)) / 255;
 

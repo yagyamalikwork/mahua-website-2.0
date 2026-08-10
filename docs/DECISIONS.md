@@ -47,6 +47,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 10 Aug | **The client's forest drawing goes behind a chapter, as background** | *"Between the cream background and the content."* Malabar pied hornbills are native to Pench, which is Mahua Vann's park |
 | 10 Aug | **`03 · The Forest`, not the lodge cards** | Corrected the same day. The right home twice over: that chapter's copy already counts "three hundred recorded birds" |
 | 10 Aug | **Stronger than the first attempt** | *"It is almost not visible."* The fault was the arithmetic, not the drawing — see §15 |
+| 10 Aug | **Re-render the forest drawing rather than push the dials** | *"Increase the opacity, and the birds are an important detail I want to show."* Both are unavailable by tuning — body copy sits on the drawing, so the contrast floor caps every pixel including the birds. Brief in §15 |
 | 9 Aug | **Both property pages shipped** — `/mahua-vann` and `/mahua-tola`, every chapter inside the 45% ceiling, every rig green at the real routes | Built 8 Aug, then reviewed and corrected 9 Aug after the client found the build session had silently fallen back to a smaller model: the first pass had committed failing density and a failed contrast run as "verified". Evidence and the full correction story in `docs/reviews/2026-08-08-property-pages/README.md`. **Awaiting the client:** Tola's room count (12 vs 14), the home page's cottage/suite caption fix, Tola's hero swap, and a Nagpur distance |
 | 9 Aug | **Both property pages rebuilt in a "shape vocabulary"** — eight chapters each, no two adjacent chapters sharing a shape, mechanically enforced (`findRepeatedShape`) — replacing the first ship's `ChapterIntro`/`PlateGrid`/`RoomsIndex`/`FieldNotes` structure that read as a template | Three client decisions inside this redesign: **(1) a persistent booking bar**, quiet and always reachable, that slides in past the hero and steps aside over the closing invitation — *"a visitor on a property page has already chosen a lodge, so asking is fair here"*, distinct from the home page's "seduce, not convert" (non-negotiable #2), and built to fail towards absent with no JavaScript, the welcome screen's own contract (§14); **(2) six experiences per property, each given real space, plus one honest "also" line** naming what did not make the six (karaoke, the conference hall, wildlife documentaries, indoor games) rather than promoting or deleting them; **(3) the enquiry form dropped for plain contact details** — *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later"* — which fixes the same defect a form would have (a bare `mailto:` doing nothing on a phone with no mail client) better than a form does: a real `tel:` link works on every device, with scripting off, with no third party and nothing to sign up for |
 | 10 Aug | **A guest's face comes off the site on consent grounds, and the photograph is deleted rather than shelved** | Mahua Tola's Bonfire entry (`DSC00097-scaled.jpg`, the live site's own) showed a guest clearly enough to identify her. *"It directly shows a person's face who was a guest, which we don't want."* Replaced with `bonfire-circle-night` — a frame from **the client's own Mahua Tola property video**, so it is honestly this lodge's bonfire and not a stand-in from Pench, and it carries no people at all. **The withdrawn entry was removed from `CURATION`, not left curated-but-unused:** an id that stays in the manifest is an id a later chapter reaches for by name, and the next person wanting a bonfire would find it without ever seeing the face in it. Restoring it needs the guest's consent, not a code change. **This is the second image rejected on these grounds** — the original curation dropped one for the same reason — and the rule was simply not applied when this one was curated on 9 Aug. Both instances are now recorded in `scripts/build_images.mjs`'s own comment, which is the only place that survives a clone |
@@ -352,6 +353,41 @@ instruments.
 It does genuinely fill that chapter's bare middle — but 12.4% puts it beside the hero at 0.3%, which is not
 a fair comparison. The improvement is real; the number overstates it. Page mean 40.1% → 36.6%, imagery
 51.9% → 54.2%, 2.03 → 2.2 photographs per screen.
+
+### The ceiling is the artwork, not the dials — and the client chose to re-render
+
+10 Aug, second round: *"We need to increase the opacity, and the birds are an important detail I want to
+show."* **Neither is available by tuning, and that was measured rather than argued.**
+
+| ink floor | solved strength | mean inked luma on paper |
+|---|---|---|
+| 160 (shipped) | 1.047 | 221.4 |
+| 175 | 1.626 | 221.6 |
+| 190 | 2.912 | 221.7 |
+| 205 | 7.999 | 223.2 |
+
+**Raising the dial buys nothing.** The reason is the same one that stops the birds going darker: **body copy
+sits on the drawing** — at 768px the intro paragraph covers about 90% of it — so the 4.5:1 floor binds
+almost everywhere, and the birds, being the darkest thing in the frame, are what it grips first. Giving them
+their own darker treatment was built and rejected by the build's own assertion: body text over them measured
+**2.1:1**.
+
+So everything is compressed into the narrow band the floor allows — on `paperDeep` the darkest any pixel may
+be is about **rgb(205,198,184)**. A drawing that is **75.5% inked** arrives in that band as flat mush; a
+sparse one arrives as clean line work at the *same* average luminance. What the eye reads here is line
+contrast, not area fill.
+
+**The brief for the replacement**, which the client took on 10 Aug:
+
+> Same scene and composition — forest with the three Malabar pied hornbills on their branch, on a pure white
+> sky. Drawn as **line work, not a filled illustration**: under 45% ink coverage, foliage as outline with
+> little solid fill. The **three hornbills solid and dark**, and the only large solid dark masses in the
+> frame. **2800px wide** (2400 minimum), same landscape proportion. No texture, grain, vignette or
+> watermark. JPEG or PNG both fine — the white ground is used, not transparency.
+
+`scripts/build_forest_overlay.mjs` measures the arriving artwork against that brief and warns on both counts
+— coverage and width — so acceptance is a number rather than an opinion. The width half also ends the
+resolution compromise below.
 
 ### Still open
 
