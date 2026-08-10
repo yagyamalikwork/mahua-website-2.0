@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Grain } from "@/components/motion/Grain";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
+import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
 import { DURATION, ENTER, IMAGE_FROM, LIVING, WELCOME } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
@@ -112,6 +113,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
            */}
           <LeafCursorMount />
           {children}
+          {/*
+           * The Website Directory. Inside the scroller and after the page's
+           * own content, so it scrolls with the page like any other footer —
+           * only the welcome sits outside `SmoothScroll`. Server-only, zero
+           * JavaScript: see the note on the component itself for why that is
+           * the one property this section exists to have.
+           */}
+          <SiteFooter />
         </SmoothScroll>
       </body>
     </html>
