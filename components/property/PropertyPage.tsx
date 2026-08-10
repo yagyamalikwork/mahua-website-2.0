@@ -12,6 +12,7 @@ import { FullBleed } from "@/components/ui/FullBleed";
 import { Scrim, type ScrimStrength } from "@/components/ui/Scrim";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import type { PropertyChapter, PropertyShape } from "@/content/property-chapters";
+import { SITE_FOOTER_ID } from "@/content/site";
 
 export type PropertyPageCopy = {
   readonly heroCopy?: HeroCopy;
@@ -224,6 +225,7 @@ export function PropertyPage({
         contact={barContact}
         heroId={chapters[0].id}
         invitationId={lastChapter.id}
+        footerId={SITE_FOOTER_ID}
       />
     </>
   );

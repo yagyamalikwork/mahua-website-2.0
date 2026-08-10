@@ -14,6 +14,7 @@ const props = {
   },
   heroId: "vann-hero",
   invitationId: "vann-invitation",
+  footerId: "site-footer",
 };
 
 describe("PropertyBar", () => {
@@ -51,8 +52,8 @@ describe("PropertyBar", () => {
         disconnect() {}
       },
     );
-    // Both targets must exist for the component to observe them.
-    document.body.innerHTML = `<div id="vann-hero"></div><div id="vann-invitation"></div>`;
+    // All three targets must exist for the component to observe them.
+    document.body.innerHTML = `<div id="vann-hero"></div><div id="vann-invitation"></div><div id="site-footer"></div>`;
     const { container } = render(<PropertyBar {...props} />);
 
     // Hero has left the viewport: the bar arrives.
@@ -62,5 +63,31 @@ describe("PropertyBar", () => {
     // The invitation comes into view: the bar leaves again.
     act(() => observers[1]([{ isIntersecting: true }]));
     expect(container.querySelector("[data-property-bar]")).toBeNull();
+  });
+
+  it("stays away while the footer is on screen", () => {
+    // Without this, the bar steps aside at the invitation and then REAPPEARS
+    // over the directory footer — a Book bar floating over the directory's
+    // own contact details, doubling the ask the invitation just made quietly.
+    const observers: Array<(entries: { isIntersecting: boolean }[]) => void> = [];
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(cb: (entries: { isIntersecting: boolean }[]) => void) {
+          observers.push(cb);
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
+    document.body.innerHTML = `<div id="vann-hero"></div><div id="vann-invitation"></div><div id="site-footer"></div>`;
+    const { container } = render(<PropertyBar {...props} footerId="site-footer" />);
+    // observers: [hero, invitation, footer] in mount order.
+    act(() => observers[0]([{ isIntersecting: false }])); // past the hero — bar arrives
+    expect(container.querySelector("[data-property-bar]")).not.toBeNull();
+    act(() => observers[2]([{ isIntersecting: true }])); // footer on screen — bar leaves
+    expect(container.querySelector("[data-property-bar]")).toBeNull();
+    act(() => observers[2]([{ isIntersecting: false }])); // scrolled back up — bar returns
+    expect(container.querySelector("[data-property-bar]")).not.toBeNull();
   });
 });

@@ -28,10 +28,11 @@ import { PillButton } from "@/components/ui/PillButton";
  * folded into the sentence above, which is what overclaimed it until the
  * whole-branch review's fix wave (10 Aug 2026) caught it.
  *
- * It steps aside over the closing invitation so the ask is never on screen
- * twice at once.
+ * It steps aside over the closing invitation and over the site-wide footer
+ * below it, so the ask is never on screen twice at once and never floats
+ * over the directory's own contact details.
  *
- * `shown` is a test seam only — production always drives it from the two
+ * `shown` is a test seam only — production always drives it from the three
  * observers below.
  */
 export function PropertyBar({
@@ -41,6 +42,7 @@ export function PropertyBar({
   contact,
   heroId,
   invitationId,
+  footerId,
   shown,
 }: {
   name: string;
@@ -49,10 +51,12 @@ export function PropertyBar({
   contact: PropertyContactCopy;
   heroId: string;
   invitationId: string;
+  footerId: string;
   shown?: boolean;
 }) {
   const [pastHero, setPastHero] = useState(false);
   const [atInvitation, setAtInvitation] = useState(false);
+  const [atFooter, setAtFooter] = useState(false);
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
@@ -65,15 +69,19 @@ export function PropertyBar({
       o.observe(el);
       return () => o.disconnect();
     };
+    // Order matters: the tests drive these observer callbacks by array
+    // index (hero, invitation, footer), so create them in that order.
     const stopHero = watch(heroId, setPastHero, false);
     const stopInvitation = watch(invitationId, setAtInvitation, true);
+    const stopFooter = watch(footerId, setAtFooter, true);
     return () => {
       stopHero();
       stopInvitation();
+      stopFooter();
     };
-  }, [heroId, invitationId]);
+  }, [heroId, invitationId, footerId]);
 
-  const visible = shown ?? (pastHero && !atInvitation);
+  const visible = shown ?? (pastHero && !atInvitation && !atFooter);
   if (!visible) return null;
 
   return (
