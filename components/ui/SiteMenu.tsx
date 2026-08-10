@@ -219,6 +219,16 @@ export function SiteMenu({
                       </span>
                       {place.region && (
                         <span
+                          /*
+                           * `data-contrast` is the hook
+                           * `scripts/check_contrast_over_photos.mjs` finds this by. The
+                           * colour is set inline via a CSS custom property, not a
+                           * class, so a `[class*='--accent-text']` selector (the shape
+                           * the brief for this probe first suggested) would match
+                           * nothing — same lesson as `BrandMark`'s wordmark, which
+                           * carries the identical hook for the identical reason.
+                           */
+                          data-contrast="menu-region"
                           className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.24em] md:text-xs"
                           style={{ color: "var(--accent-text)" }}
                         >

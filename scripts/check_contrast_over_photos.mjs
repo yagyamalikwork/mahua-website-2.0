@@ -46,6 +46,22 @@ const BRAND = [0x7f, 0x5c, 0x24];
 const DIM = [0x5a, 0x52, 0x40];
 /** `PALETTE.overlay` — the pill's label, on gold, in both header states. */
 const OVERLAY = [0x23, 0x2b, 0x21];
+/**
+ * `PALETTE.goldText` — the menu's region label ("Pench", "Tadoba") and its
+ * "Where next" hint, both set via `--accent-text`. Added 10-11 Aug 2026 for
+ * the menu-over-photograph probes: the panel's glass wash is translucent
+ * (`.site-menu-glass`, `color-mix(in srgb, var(--bg) …%, transparent)`),
+ * which makes every run of type on it type over whatever photograph the menu
+ * was opened above — a case no probe in this file measured before, because
+ * every earlier run either sat on solid paper, a solid pill, or a photograph
+ * with no translucent layer between the two.
+ *
+ * **This is the probe that found the wash's original 82% too thin.** The
+ * region label failed at 3.43-3.55:1 against its 4.5:1 floor before the fix;
+ * `app/globals.css`'s own comment on `.site-menu-glass` carries the full
+ * working for why it is 95% now.
+ */
+const GOLD_TEXT = [0x7a, 0x5c, 0x18];
 
 const luminance = (rgb) =>
   rgb
@@ -97,6 +113,45 @@ const ratio = (rgb, text = CREAM) => {
  * on a photograph and would fail loudly. Parked over a cream chapter they would
  * pass whether the bar was there or not, which is a check that cannot fail.
  */
+
+/**
+ * The menu-over-photograph probes, one pair per route, added 10-11 Aug 2026.
+ * `heroId` is the route's own hero — the frost's worst case, because it is the
+ * one photograph guaranteed behind the menu on every route at scroll position
+ * zero. `pre: "menu"` (handled in `measure()`) opens the panel before either
+ * box is read.
+ *
+ * Two runs, not one, because the panel carries two different colours of type
+ * over the same glass: the place names themselves (`--text`, ink) and the
+ * region labels beside them (`--accent-text`, goldText) — CLAUDE.md #7's
+ * "goldText is the legible sibling; use it for any text that would otherwise
+ * sit in gold" is exactly the claim this second probe is checking.
+ */
+const MENU_RUNS = (heroId) => [
+  {
+    name: "menu · place over frost",
+    min: 3,
+    at: `#${heroId}`,
+    pre: "menu",
+    container: "#site-menu",
+    sel: "#site-menu a span.rule-in",
+    text: INK,
+  },
+  {
+    name: "menu · region over frost",
+    min: 4.5,
+    at: `#${heroId}`,
+    pre: "menu",
+    container: "#site-menu",
+    // `[class*='--accent-text']` (the shape first proposed for this probe)
+    // matches nothing — the colour is inline (`style={{ color: "var(--accent-
+    // text)" }}`), not a class. `SiteMenu.tsx` carries `data-contrast="menu-
+    // region"` for exactly this, following `BrandMark`'s own wordmark hook.
+    sel: "#site-menu a [data-contrast='menu-region']",
+    text: GOLD_TEXT,
+  },
+];
+
 const HOME_RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='site-menu']" },
   {
@@ -181,6 +236,7 @@ const HOME_RUNS = [
   { name: "quote · after-dark", min: 3, at: "#after-dark", container: "#after-dark", sel: "#after-dark [data-word]" },
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },
+  ...MENU_RUNS("arrival"),
 ];
 
 /**
@@ -229,6 +285,7 @@ const propertyRuns = (heroId, scrolledAt) => [
     text: OVERLAY,
     hide: "color",
   },
+  ...MENU_RUNS(heroId),
 ];
 
 /**
@@ -276,6 +333,25 @@ async function measure(page, run) {
   // of the settled frame, which is the one the visitor reads.
   await page.waitForTimeout(1500);
 
+  /**
+   * `pre: "menu"` opens the site menu over whatever photograph `run.at`
+   * scrolled to, before any box is measured — the one new capability this
+   * rig gained on 10-11 Aug 2026. The menu is closed again at every exit path
+   * below (empty boxes, and the normal return), not only the happy path: a
+   * run left open would put a fixed, full-viewport, `z-50` panel over every
+   * run measured after it in the same `page`, however `RUNS` happens to be
+   * ordered.
+   */
+  const closeMenu = async () => {
+    if (run.pre !== "menu") return;
+    await page.keyboard.press("Escape").catch(() => {});
+    await page.waitForTimeout(400);
+  };
+  if (run.pre === "menu") {
+    await page.click("button[aria-controls='site-menu']");
+    await page.waitForTimeout(700);
+  }
+
   const boxes = await page.evaluate(
     ({ sel }) =>
       Array.from(document.querySelectorAll(sel))
@@ -289,7 +365,10 @@ async function measure(page, run) {
         })),
     { sel: run.sel },
   );
-  if (boxes.length === 0) return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
+  if (boxes.length === 0) {
+    await closeMenu();
+    return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
+  }
 
   await page.evaluate(({ container, hide }) => {
     // `button` matters: the header's own run *is* a button, and leaving it
@@ -319,6 +398,7 @@ async function measure(page, run) {
       delete e.dataset.rigStyle;
     }
   });
+  await closeMenu();
 
   const text = run.text ?? CREAM;
   let worst = Number.POSITIVE_INFINITY;

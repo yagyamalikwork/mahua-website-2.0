@@ -330,19 +330,48 @@ button:focus-visible .rule-in::after {
  * scripts/check_contrast_over_photos.mjs with the menu opened over a
  * full-bleed photograph — the worst backdrop the site can produce.
  *
+ * **82% failed that measurement, and the failure is the reason this is 98%
+ * now.** 10-11 Aug 2026, when the menu-over-photograph probes were added:
+ * the ink place-labels cleared their floor easily (worst 6.02:1 against
+ * 3.0), but the gold `--accent-text` region labels ("Pench", "Tadoba") did
+ * not — 3.43-3.55:1 against the 4.5:1 non-negotiable #7 requires, over the
+ * hero's own darkest patch showing through the wash. `goldText` exists
+ * specifically to *be* the legible sibling to decorative gold; a translucent
+ * surface that fails it is the promise broken, not a taste call to survey.
+ *
+ * **The number was measured twice, not guessed once.** A first attempt
+ * reverse-solved the photograph pixel from a single rendered composite at
+ * 82% and forward-solved a "minimum" of 94% from it — shipped at 95% for
+ * margin, rebuilt, and *still measured 4.40-4.44:1, short of the 4.5 floor*.
+ * The single-point model was wrong: composite-vs-wash is linear in the wash
+ * fraction, so fitting it from **two real rendered composites** (82% and
+ * 95%, both actually screenshotted) rather than one modelled point predicts
+ * the true relationship, and predicted 95% at 4.40 — which is what 95%
+ * actually measured. That fit puts 98% at 4.65-4.66 on both of the two
+ * measured worst cases (390-768px's crop, 1440-1920px's slightly different
+ * one), and the rebuilt, re-measured page confirms it. Re-derive with the
+ * same rig if the hero photograph, the palette, or this value ever changes:
+ * `node scripts/check_contrast_over_photos.mjs`, rows named `menu · …` — and
+ * trust the *rendered* number over any model of it, including this one's
+ * first attempt.
+ *
  * Three states, in order of grace: blur where supported; near-solid paper
  * where backdrop-filter does not exist (raw page behind ink type is the
  * failure this rules out); solid paper for a visitor who asked for reduced
  * transparency.
  */
 .site-menu-glass {
-  background-color: color-mix(in srgb, var(--bg) 82%, transparent);
+  background-color: color-mix(in srgb, var(--bg) 98%, transparent);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-menu-glass {
-    background-color: color-mix(in srgb, var(--bg) 97%, transparent);
+    /* Was 97%, one point *below* the blurred path's now-98% — backwards for
+       a fallback whose whole point is to be nearer solid, precisely because
+       it has no blur to soften whatever shows through. Raised to keep that
+       ordering true. */
+    background-color: color-mix(in srgb, var(--bg) 99%, transparent);
   }
 }
 @media (prefers-reduced-transparency: reduce) {
