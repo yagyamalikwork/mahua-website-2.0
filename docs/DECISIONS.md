@@ -55,7 +55,8 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 10 Aug | **The menu is places only** — Home, Mahua Vann, Mahua Tola, as real page links; the per-page chapter lists leave the menu on every page, including the home page's | The site was three well-made pages that did not behave like one — from `/mahua-vann` there was no route to Home or Tola except the closing sibling banner and the browser's back button. The 18-screen home page goes back to being scrolled, which `ChapterMenu`'s own doc called "the page's actual proposition". The property pages keep their chapter numbering as page furniture; the menu's reviewed mechanics (dialog semantics, focus trap, Escape-to-trigger, the Lenis-aware scroll lock) carry over unchanged into `SiteMenu`, `ChapterMenu`'s successor |
 | 10 Aug | **The Website Directory ships now, as a footer on all three pages** | *"we can just share the contact details in the Website Directory section when we build it later"* (9 Aug, when the enquiry form was dropped) — later is now. One server-rendered band, zero JavaScript anywhere in its import graph (enforced by a test that walks it), mounted once in `app/layout.tsx` so every route carries it identically — and it is what finally gives the site working cross-page navigation with JavaScript off, which the menu alone cannot |
 | 10 Aug | **The lodges appear in the menu with their own photographs; Home is a plain type row** | *"Like The Sujan Life"* — whose menu presents each camp as an image card with its region. Home carries no image: it is wayfinding, not a destination being sold. The card photographs mount into the DOM only on the menu's first open, not at page load — the panel is permanently present (`inert` while closed) for the accessibility machinery, and `visibility: hidden` does not stop a lazy image intersecting the viewport, so an always-mounted eager card would have joined every page's initial transfer for nothing the visitor asked for |
-| 10 Aug | **The menu surface is cream glass, with a hamburger trigger, on gold accents** | *"a blurred transparent background … or Liquid Glass"* and, for the icon, *"Like the Sujan Life"* — both chosen over previewed alternatives (dark glass; the word "Menu"). A *pure* transparent blur cannot guarantee legible type over an arbitrary photograph, so the glass carries a translucent wash of the site's own paper; type turns ink, the region labels stay `goldText`. Verified, not assumed — and the verification found a real failure, not a hypothetical one. Full story in §16 |
+| 10 Aug | **The menu surface is cream glass, with a hamburger trigger, on gold accents** | *"a blurred transparent background … or Liquid Glass"* and, for the icon, *"Like the Sujan Life"* — both chosen over previewed alternatives (dark glass; the word "Menu"). A *pure* transparent blur cannot guarantee legible type over an arbitrary photograph, so the glass carries a translucent wash of the site's own paper; type turns ink. Verified, not assumed — and the verification found a real failure, not a hypothetical one. Full story in §16 |
+| 11 Aug | **Keep the glass; spend the gold.** Every text run in the menu panel is ink, and the wash stays at the 82% the effect was designed at | The gold region labels measured **3.43:1** on that wash against a 4.5:1 floor, and the only way to save them was thickening the cream to **97%** — which made the panel effectively solid and threw away the "Liquid Glass" brief that produced it. Both were built, measured and screenshotted before he was asked. *"Lets go ahead with Option A… if in case we need to change it later we can do that."* Ink measures **6.02–6.63:1** across all three routes at four widths — roughly a third of the panel's opacity in hand. Gold keeps this panel's rules and focus ring, which are non-text at a 3:1 floor. **The two facts are one decision: gold text here forces the wash back to ~97%** |
 
 ---
 
@@ -678,22 +679,6 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 
 ## 5. Owed, and open
 
-- **THE MENU'S GLASS, AWAITING THE CLIENT (11 Aug).** The client asked for the places menu to open on
-  "a blurred transparent background… or Liquid Glass". Built that way, at an 82% cream wash, the panel's
-  **gold** region labels (`Pench`, `Tadoba`) measured **3.43:1** over the hero — under the 4.5:1 floor.
-  There are two ways out and **both are built and measured**; §16 carries the arithmetic.
-
-  | | Wash | Region label | Lodge names | Reads as |
-  |---|---|---|---|---|
-  | **A — regions in ink** | 82% | 6.09–6.63:1 | 6.02–6.48:1 | real glass; the hero shows through |
-  | **B — regions in gold** *(on the branch)* | 97% | 4.55–4.61:1 | 8.08–8.16:1 | effectively solid cream |
-
-  **B is what is committed**, because it preserves the design the client last saw and nothing illegible
-  may ship while he decides. **The recommendation put to him is A**: it is the only one of the two that is
-  actually the effect he asked for; it spends gold on the two smallest words in the panel, where gold was
-  doing least; and it clears the floor with room to spare, where B passes by 0.05 of a point and could be
-  pushed back under by any future hero brighter than today's. Switching is one line plus a re-measure.
-  Screenshots at 390 and 1440, both variants, are in `docs/reviews/2026-08-10-site-navigation/`.
 - **THE DENSITY QUESTION, AWAITING THE CLIENT (10 Aug).** Three chapters on the redesigned property pages
   sit above non-negotiable #8's 45%-empty ceiling: `vann-forest` **55.8%**, `tola-reserve` **58.3%** and
   `vann-press` **87.2%**. Page means are *better* than the home page's 40.1% — Vann **36.2%**, Tola
@@ -877,7 +862,7 @@ search against real rebuilds.** Not a round number chosen and hoped for:
 |---|---|---|
 | 96% | 4.49:1 | FAIL |
 | 96.5% | 4.52:1 | Clears, margin too thin to trust against measurement noise |
-| **97%** | **4.55–4.60:1 (390px)** | **Clears with a sensible margin — shipped** |
+| **97%** | **4.55–4.60:1 (390px)** | **Clears with a sensible margin — the solved minimum, superseded 11 Aug** |
 
 Confirmed across all three routes, all four widths after the rebuild
 (`docs/reviews/2026-08-10-site-navigation/{home,vann,tola}-contrast.json`):
@@ -893,19 +878,35 @@ still noticeably more opaque than Variant A's 82%, but a faint warmth is visible
 at the 98% first ship. The `@supports not (backdrop-filter)` fallback stays at 99%, still the more opaque of
 the two paths.
 
-### What is in the tree, and what is not this task's call
+### What shipped: Variant A. The client chose the glass, 11 Aug 2026
 
-**Variant B — gold regions, 97% wash — is what is shipped**, because it is closer to the design that was
-already approved (gold distinguishes a region from a place name everywhere else on the site) and it clears
-the floor with real margin, solved rather than guessed. **Variant A's numbers are recorded here, not
-applied**: switching the region label's colour is a real, visible design choice — closer to the client's own
-"Liquid Glass" brief, at the cost of the gold accent — and it is the client's to make with both screenshots
-in front of him, not something to switch unilaterally because the numbers are better. Both variants' JSON
-and all eight menu screenshots (four per variant) are in `docs/reviews/2026-08-10-site-navigation/`.
+Both variants were built, measured, screenshotted at 390 and 1440, and put to the client side by side —
+because switching the label's colour is a real design choice, not a free win to take unilaterally on the
+strength of better numbers. **He chose A**: *"Lets go ahead with Option A and if in case we need to change
+it later we can do that."*
 
-Going from 82% to 97% (Variant B, shipped) is still a real, visible change from the wash the client's brief
-was written against — see the screenshots — even though it is a smaller jump than the first ship's 98%.
-**Not yet put to the client.** A third alternative, considered and still rejected: darkening `goldText`
+**Implementing A took one thing the comparison had not covered, and it would have shipped broken.** Variant
+A was measured *before* the "Where next" hint had a probe at all (§2 #35) — so A's recorded figures covered
+the region label and the place names, and said nothing about the panel's other goldText run. Dropping the
+wash to 82% with that hint still gold would simply have moved the failure from one gold label to another,
+at the same ~3.4:1, with the freshly-built probe now watching it. **A means every text run in the panel is
+ink**, not just the regions. Re-measured on the shipped build, all three routes, all four widths:
+
+| Route | `menu · place` (floor 3.0) | `menu · region` (floor 4.5) | `menu · hint` (floor 4.5) |
+|---|---|---|---|
+| `/` | 6.02–6.17:1 | 6.09–6.29:1 | 6.09–6.28:1 |
+| `/mahua-vann` | 6.07–6.48:1 | 6.23–6.59:1 | 6.09–6.22:1 |
+| `/mahua-tola` | 6.08–6.46:1 | 6.37–6.63:1 | 6.20–6.40:1 |
+
+Gold keeps this panel's hairline rules and its focus ring — non-text, a 3:1 floor, and clear of it even when
+gold *text* was failing. `GOLD_TEXT` in `check_contrast_over_photos.mjs` is now unused and deliberately
+retained: it is the value to restore if gold text ever returns here.
+
+**The 97% solved minimum is kept on record for exactly that case.** Nothing renders at it now. Gold text in
+this panel and an 82% wash cannot both be true, and the CSS, the component and the rig each say so at the
+site of the change, because the failure mode is somebody restoring one without the other.
+
+A third alternative, considered and still rejected: darkening `goldText`
 itself just for this context would also have cleared the floor without moving the wash at all, but it is a
 hard-coded, one-off colour outside `lib/palette.ts` — the architecture rule this project holds everywhere
 else — and it would make the region labels a different colour here than anywhere else they appear.

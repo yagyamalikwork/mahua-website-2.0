@@ -332,16 +332,29 @@ button:focus-visible .rule-in::after {
  * scripts/check_contrast_over_photos.mjs with the menu opened over a
  * full-bleed photograph — the worst backdrop the site can produce.
  *
- * **82% failed that measurement.** 10-11 Aug 2026, when the menu-over-photograph
- * probes were added: the ink place-labels cleared their floor easily (worst
- * 6.02:1 against 3.0), but the gold `--accent-text` region labels ("Pench",
- * "Tadoba") did not — 3.43-3.55:1 against the 4.5:1 non-negotiable #7
- * requires, over the hero's own darkest patch showing through the wash.
- * `goldText` exists specifically to *be* the legible sibling to decorative
- * gold; a translucent surface that fails it is the promise broken, not a
- * taste call to survey.
+ * **THE WASH IS 82% ONLY BECAUSE NO TEXT IN THIS PANEL IS GOLD. Those two
+ * facts are one decision and must move together.** 10-11 Aug 2026, when the
+ * menu-over-photograph probes were added: the ink place-labels cleared their
+ * floor easily (worst 6.02:1 against 3.0), but the gold `--accent-text` runs
+ * did not — the region labels ("Pench", "Tadoba") measured 3.43-3.55:1
+ * against the 4.5:1 non-negotiable #7 requires, over the hero's own darkest
+ * patch showing through the wash. `goldText` exists specifically to *be* the
+ * legible sibling to decorative gold; a translucent surface that fails it is
+ * the promise broken, not a taste call to survey.
  *
- * **97% is a solved minimum, not a guess, and the method that solved it is
+ * There were exactly two ways out, both built and measured: thicken the wash
+ * until gold survives (**97%**, solved — see below), or set the panel's text
+ * in ink and keep the glass. **The client chose the glass, 11 Aug 2026**, and
+ * that is what ships: `SiteMenu`'s region label and its "Where next" hint are
+ * both `var(--text)`, and the wash is back to the 82% the effect was designed
+ * at. Gold remains on this panel's *rules* and its focus ring — non-text, a
+ * 3:1 floor, and clear of it.
+ *
+ * **So: reintroducing any gold text here silently breaks a measured promise.**
+ * The wash would have to go back to ~97%, which is the near-opaque panel the
+ * client rejected. Change one and you have changed the other; re-run the rig.
+ *
+ * **97% was a solved minimum, not a guess, and the method that solved it is
  * worth getting right.** Two real rendered composites — 82% → `[202,191,174]`,
  * a failed 95% attempt → `[225,216,198]`, both actually screenshotted —
  * determine a line, and the number that reproduces a real rebuild's result is
@@ -362,13 +375,9 @@ button:focus-visible .rule-in::after {
  * through it. Full working, including the two wrong turns before this one,
  * in `docs/DECISIONS.md` §16.
  *
- * **97% is also not the only design that clears the floor.** Setting the
- * region label in `--text` (ink) instead of gold clears both floors at the
- * *original* 82% with enormous margin (6.09-6.63:1) and looks closer to the
- * "Liquid Glass" brief the wash was written for — recorded as Variant A in
- * `docs/DECISIONS.md` §16, measured and screenshotted, but **not applied**:
- * it is a real design trade the client has not been asked about, not a
- * free win to take unilaterally because the numbers are better.
+ * That solved 97% is kept on record because it is the number to return to if
+ * gold text ever comes back to this panel — not because anything renders at
+ * it now.
  *
  * Re-derive with the same rig if the hero photograph, the palette, or this
  * value ever changes: `node scripts/check_contrast_over_photos.mjs`, rows
@@ -381,16 +390,19 @@ button:focus-visible .rule-in::after {
  * transparency.
  */
 .site-menu-glass {
-  background-color: color-mix(in srgb, var(--bg) 97%, transparent);
+  background-color: color-mix(in srgb, var(--bg) 82%, transparent);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-menu-glass {
-    /* Kept at 99%, two points above the blurred path's 97% — a fallback's
-       whole point is to be nearer solid, precisely because it has no blur to
-       soften whatever shows through, so this must stay the more opaque of
-       the two paths whatever the primary wash is solved to. */
+    /* Kept at 99% — deliberately far above the blurred path's 82%, not a
+       couple of points above it. Contrast is not the reason: ink clears its
+       floor at 82% with room to spare. The reason is that this path has no
+       blur, so whatever sits behind the panel shows through *sharp*, and a
+       legible-but-unreadable panel over a busy photograph is the failure a
+       fallback exists to rule out. It must stay near-solid whatever the
+       primary wash is, and it does not track it. */
     background-color: color-mix(in srgb, var(--bg) 99%, transparent);
   }
 }

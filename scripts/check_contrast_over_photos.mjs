@@ -62,7 +62,15 @@ const OVERLAY = [0x23, 0x2b, 0x21];
  * the wash's current value and the full working behind it — read the
  * percentage off that CSS rule itself, not off a number restated here, which
  * would go stale the moment the wash is re-solved.
+ *
+ * **Unused since 11 Aug 2026, and deliberately kept.** The client resolved
+ * that failure by spending the accent rather than the glass, so both runs it
+ * named are now `INK` and no type anywhere on this site is goldText over a
+ * photograph. It is retained, rather than deleted, because it is exactly the
+ * value to restore if gold text ever returns to the panel — and because a
+ * constant with this history attached is cheaper to keep than to rediscover.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- see above: retained on purpose
 const GOLD_TEXT = [0x7a, 0x5c, 0x18];
 
 const luminance = (rgb) =>
@@ -146,25 +154,31 @@ const MENU_RUNS = (heroId) => [
     pre: "menu",
     container: "#site-menu",
     // `[class*='--accent-text']` (the shape first proposed for this probe)
-    // matches nothing — the colour is inline (`style={{ color: "var(--accent-
-    // text)" }}`), not a class. `SiteMenu.tsx` carries `data-contrast="menu-
-    // region"` for exactly this, following `BrandMark`'s own wordmark hook.
+    // matches nothing — the colour is inline, not a class. `SiteMenu.tsx`
+    // carries `data-contrast="menu-region"` for exactly this, following
+    // `BrandMark`'s own wordmark hook.
+    //
+    // INK since 11 Aug 2026, not GOLD_TEXT: this label is what failed at
+    // 3.43-3.55:1 on the 82% wash, and the client's fix was to spend the gold
+    // rather than the glass. **If it ever goes back to gold, this `text:` must
+    // go back with it** — a probe measuring the wrong foreground reports a
+    // confident number about a colour that is not on the page.
     sel: "#site-menu a [data-contrast='menu-region']",
-    text: GOLD_TEXT,
+    text: INK,
   },
   {
-    // The one goldText run on the glass no probe read before 10-11 Aug 2026's
-    // review follow-up: the panel's top-strip hint sits outside the boxes the
-    // two runs above probe, on the same translucent wash, in the same colour
-    // this whole task exists to guard. `SiteMenu.tsx` carries
-    // `data-contrast="menu-hint"` for exactly this.
+    // The panel's top-strip hint sits outside the boxes the two runs above
+    // probe, and until 10-11 Aug 2026's review follow-up nothing read it at
+    // all — it was goldText on the same wash, failing beside the region label,
+    // unmeasured (`docs/DECISIONS.md` §2 #35). Ink since 11 Aug, same ruling
+    // and same warning as the region above.
     name: "menu · hint over frost",
     min: 4.5,
     at: `#${heroId}`,
     pre: "menu",
     container: "#site-menu",
     sel: "#site-menu [data-contrast='menu-hint']",
-    text: GOLD_TEXT,
+    text: INK,
   },
 ];
 

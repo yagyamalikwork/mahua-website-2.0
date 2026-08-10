@@ -177,16 +177,23 @@ export function SiteMenu({
           <div className="flex items-center justify-between">
             <p
               /*
-               * `data-contrast` is the hook `scripts/check_contrast_over_photos.mjs`
-               * finds this by, same reason as `data-contrast="menu-region"` below:
-               * the colour is inline, not a class, so a `[class*='--accent-text']`
-               * selector matches nothing. Added 10-11 Aug 2026 review follow-up —
-               * this is the one goldText run on the glass no probe read before then
-               * (docs/DECISIONS.md §16, "the region label it failed").
+               * Ink, not `--accent-text`, and that is load-bearing rather than a
+               * taste call: this label sits on the 82% glass, where gold measures
+               * ~3.4:1 against its 4.5:1 floor. Gold here would force the wash back
+               * to ~97% — the near-opaque panel the client rejected on 11 Aug when
+               * he chose the glass over the accent. See `app/globals.css`'s
+               * `.site-menu-glass` comment; the two decisions are one.
+               *
+               * It was gold until then, and no probe ever read it: `data-contrast`
+               * is the hook `scripts/check_contrast_over_photos.mjs` finds it by
+               * (the colour is inline, not a class, so a `[class*='--accent-text']`
+               * selector matches nothing), and it was only added in the 10-11 Aug
+               * review follow-up. It had been failing beside the region label that
+               * triggered the whole investigation. `docs/DECISIONS.md` §2 #35.
                */
               data-contrast="menu-hint"
               className="font-[family-name:var(--font-label)] text-[0.6rem] uppercase tracking-[0.24em] sm:text-xs sm:tracking-[0.28em]"
-              style={{ color: "var(--accent-text)" }}
+              style={{ color: "var(--text)" }}
             >
               {SITE.nav.menuHint}
             </p>
@@ -229,6 +236,14 @@ export function SiteMenu({
                       {place.region && (
                         <span
                           /*
+                           * Ink, not `--accent-text`. This is the label that failed —
+                           * 3.43-3.55:1 on the 82% glass against a 4.5:1 floor — and
+                           * the client's ruling on 11 Aug 2026 was to keep the glass
+                           * and spend the gold: the region reads in ink at 6.09-6.63:1
+                           * and the wash stays where the effect was designed. Putting
+                           * gold back here forces the wash to ~97% and the "Liquid
+                           * Glass" brief is gone. `app/globals.css` `.site-menu-glass`.
+                           *
                            * `data-contrast` is the hook
                            * `scripts/check_contrast_over_photos.mjs` finds this by. The
                            * colour is set inline via a CSS custom property, not a
@@ -239,7 +254,7 @@ export function SiteMenu({
                            */
                           data-contrast="menu-region"
                           className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.24em] md:text-xs"
-                          style={{ color: "var(--accent-text)" }}
+                          style={{ color: "var(--text)" }}
                         >
                           {place.region}
                         </span>

@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-05T02:36:47.311Z",
-  "url": "http://localhost:3158/",
+  "measuredAt": "2026-08-10T23:13:55.502Z",
+  "url": "http://localhost:3100/",
   "scrollLock": [
     {
       "viewport": 1440,
@@ -70,18 +70,24 @@
   "menu": {
     "390": {
       "open": {
-        "links": 7,
-        "labels": [
-          "01The Lodges",
-          "02Rooted like the mahua",
-          "03The Forest",
-          "04Days in the Field",
-          "05The Rooms",
-          "06The Lantern Hour",
-          "07Details"
+        "places": 3,
+        "hrefs": [
+          "/",
+          "/mahua-vann",
+          "/mahua-tola"
         ],
+        "current": [
+          "page",
+          null,
+          null
+        ],
+        "ariaLabel": "Menu",
         "ariaExpanded": "true",
-        "focusedOnOpen": "Close",
+        "focusedOnOpen": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
         "role": "dialog",
         "modal": "true"
       },
@@ -90,28 +96,50 @@
         "focusReturnedToTrigger": true,
         "panelInert": true
       },
-      "keyboardTarget": "#rooted",
-      "navigated": {
-        "hash": "#rooted",
-        "scrollY": 3528,
-        "panelInert": true,
-        "sectionTopFromViewport": 75
+      "trap": {
+        "count": 4,
+        "first": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
+        "last": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "onLast": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "wrappedToFirst": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        }
       }
     },
     "1440": {
       "open": {
-        "links": 7,
-        "labels": [
-          "01The Lodges",
-          "02Rooted like the mahua",
-          "03The Forest",
-          "04Days in the Field",
-          "05The Rooms",
-          "06The Lantern Hour",
-          "07Details"
+        "places": 3,
+        "hrefs": [
+          "/",
+          "/mahua-vann",
+          "/mahua-tola"
         ],
+        "current": [
+          "page",
+          null,
+          null
+        ],
+        "ariaLabel": "Menu",
         "ariaExpanded": "true",
-        "focusedOnOpen": "Close",
+        "focusedOnOpen": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
         "role": "dialog",
         "modal": "true"
       },
@@ -120,12 +148,58 @@
         "focusReturnedToTrigger": true,
         "panelInert": true
       },
-      "keyboardTarget": "#rooted",
-      "navigated": {
-        "hash": "#rooted",
-        "scrollY": 3139,
-        "panelInert": true,
-        "sectionTopFromViewport": 107
+      "trap": {
+        "count": 4,
+        "first": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        },
+        "last": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "onLast": {
+          "tag": "A",
+          "href": "/mahua-tola",
+          "text": "Mahua TolaTadoba"
+        },
+        "wrappedToFirst": {
+          "tag": "BUTTON",
+          "href": null,
+          "text": "Close"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "390": {
+      "before": {
+        "path": "/",
+        "currentHref": "/",
+        "otherHref": "/mahua-vann"
+      },
+      "afterSelfClick": {
+        "path": "/",
+        "panelInert": true
+      },
+      "afterRealNav": {
+        "path": "/mahua-vann"
+      }
+    },
+    "1440": {
+      "before": {
+        "path": "/",
+        "currentHref": "/",
+        "otherHref": "/mahua-vann"
+      },
+      "afterSelfClick": {
+        "path": "/",
+        "panelInert": true
+      },
+      "afterRealNav": {
+        "path": "/mahua-vann"
       }
     }
   },

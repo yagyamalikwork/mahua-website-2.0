@@ -29,11 +29,15 @@ had a footer, and with JavaScript off the menu could not open, leaving **no cros
   predicted that number did not reproduce under independent review; what actually reproduces it is a linear
   fit of the two composites' *scalar relative luminance*. The third attempt then asked whether 98% had been
   forced at all: the only failure was the *gold* region label, and setting it in *ink* instead clears both
-  floors at the *original* 82% with large margin. Two variants were measured — **Variant B (gold, wash
-  solved by binary search to its minimum, 97%) is what shipped**; **Variant A (ink, 82%, closer to the
-  client's "Liquid Glass" brief) is recorded, not applied**, because switching the label's colour is the
-  client's design call, not this task's. Full working — including both wrong turns — in `docs/DECISIONS.md`
-  §16.
+  floors at the *original* 82% with large margin. Both variants were built, measured and screenshotted, and
+  **the client chose the glass on 11 Aug** — *"Lets go ahead with Option A"*. **What ships is ink type on
+  the 82% wash**, measured 6.02–6.63:1 across all three routes at four widths; the binary-searched 97% is
+  kept on record as the number to return to only if gold text ever comes back to that panel.
+  **Implementing it took one thing the comparison had not covered:** Variant A had been measured before the
+  panel's "Where next" hint had any probe, so dropping the wash with that hint still gold would have moved
+  the failure rather than fixed it. Option A means *every* text run in the panel is ink. Gold keeps the
+  panel's rules and focus ring — non-text, a 3:1 floor. Full working, including both wrong turns, in
+  `docs/DECISIONS.md` §16.
 - **Three rig gaps the plan didn't name were also found and fixed**: `check_menu.mjs` was still asserting
   against a seven-anchor chapter list that no longer exists (rewritten for three places, real routes,
   `aria-current`, and the same focus-trap/scroll-lock machinery, unchanged); `check_leaf_cursor.mjs` and
