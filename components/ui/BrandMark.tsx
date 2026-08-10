@@ -103,7 +103,7 @@ export function BrandMark({ className }: { className?: string }) {
       {/*
        * `data-header-tint` is the other hook, and it is an attribute for the same
        * reason: it is what `app/globals.css` gives the colour transition to, and
-       * a structural selector would have to reach past `ChapterMenu`'s panel,
+       * a structural selector would have to reach past `SiteMenu`'s panel,
        * which is also inside the header and is cream in both states.
        */}
       <span

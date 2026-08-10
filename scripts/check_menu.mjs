@@ -1,4 +1,4 @@
-// The chapter menu, driven rather than inspected.
+// The site menu, driven rather than inspected.
 //
 // This script exists because of a specific mistake. The first version of the menu
 // locked scrolling with `document.documentElement.style.overflow = "hidden"`, and
@@ -11,6 +11,19 @@
 // **"The property is set" and "scrolling has stopped" are different claims, and
 // only the second one is the requirement.** So every assertion below drives a real
 // input — `page.mouse.wheel`, real key presses — and reads `window.scrollY`.
+//
+// **Rewritten 10-11 Aug 2026** for `SiteMenu.tsx`, `ChapterMenu`'s successor: this
+// panel does not hold seven links to `#id` anchors inside one page — it holds
+// three places (`Home`, `Mahua Vann`, `Mahua Tola`), each a real `href` route, and
+// the current route is marked `aria-current="page"`. The scroll-lock mechanism
+// and the focus trap/Escape/inert machinery are unchanged (both components share
+// the same reviewed dialog code), so those assertions survive verbatim under the
+// new id (`site-menu`, was `chapter-menu`). What changed is what the panel
+// contains and where a link actually takes you — a full browser navigation now,
+// since the links are plain `<a href>` and not client-side route changes, and the
+// old "does Enter+Tab+Tab+Enter scroll to a chapter" check has no subject left:
+// it is replaced below by a check that a real route link performs a real
+// navigation, and that the current page's own link is a same-page no-op.
 //
 // Run (with `npx next start -p 3100` already up):
 //   node scripts/check_menu.mjs
@@ -41,6 +54,7 @@ async function wheel(page, turns = 6) {
   await page.waitForTimeout(1600);
 }
 
+/** Unchanged from the chapter menu: the lock mechanism did not move. */
 async function checkScrollLock(browser, { width, reducedMotion }) {
   const context = await browser.newContext({
     viewport: { width, height: width === 390 ? 844 : 900 },
@@ -107,7 +121,14 @@ async function checkScrollLock(browser, { width, reducedMotion }) {
   };
 }
 
-/** Semantics, focus and keyboard navigation — unchanged from fix round 1. */
+/**
+ * The panel's own contents: three places, real routes, the current one marked,
+ * the hamburger's `aria-label`/`aria-expanded`, and the focus trap/Escape/inert
+ * machinery. What the seven-anchor chapter menu asserted about its link *count*
+ * and *labels* is now asserted about three places instead — the mechanism
+ * (focus lands inside on open, Escape returns it to the trigger, Tab wraps at
+ * both ends, the panel is `inert` while closed) is exactly what it was.
+ */
 async function checkSemantics(browser, width) {
   const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 900 } });
   const page = await context.newPage();
@@ -119,14 +140,22 @@ async function checkSemantics(browser, width) {
   await page.screenshot({ path: `${SHOTS}/w${width}-menu-open.png` });
 
   const open = await page.evaluate(() => {
-    const panel = document.getElementById("chapter-menu");
+    const panel = document.getElementById("site-menu");
+    const links = [...panel.querySelectorAll("nav a[href]")];
+    const trigger = document.querySelector("[aria-controls='site-menu']");
+    const describe = (el) =>
+      el && {
+        tag: el.tagName,
+        href: el.getAttribute ? el.getAttribute("href") : null,
+        text: (el.textContent ?? "").replace(/\s+/g, " ").trim(),
+      };
     return {
-      links: panel.querySelectorAll("a[href^='#']").length,
-      labels: [...panel.querySelectorAll("a[href^='#']")].map((a) =>
-        a.textContent.replace(/\s+/g, " ").trim(),
-      ),
-      ariaExpanded: document.querySelector("[aria-controls='chapter-menu']").getAttribute("aria-expanded"),
-      focusedOnOpen: document.activeElement?.textContent?.trim(),
+      places: links.length,
+      hrefs: links.map((a) => new URL(a.getAttribute("href"), location.href).pathname),
+      current: links.map((a) => a.getAttribute("aria-current")),
+      ariaLabel: trigger.getAttribute("aria-label"),
+      ariaExpanded: trigger.getAttribute("aria-expanded"),
+      focusedOnOpen: describe(document.activeElement),
       role: panel.getAttribute("role"),
       modal: panel.getAttribute("aria-modal"),
     };
@@ -135,31 +164,104 @@ async function checkSemantics(browser, width) {
   await page.keyboard.press("Escape");
   await page.waitForTimeout(600);
   const afterEscape = await page.evaluate(() => ({
-    ariaExpanded: document.querySelector("[aria-controls='chapter-menu']").getAttribute("aria-expanded"),
+    ariaExpanded: document.querySelector("[aria-controls='site-menu']").getAttribute("aria-expanded"),
     focusReturnedToTrigger:
-      document.activeElement === document.querySelector("[aria-controls='chapter-menu']"),
-    panelInert: document.getElementById("chapter-menu").hasAttribute("inert"),
+      document.activeElement === document.querySelector("[aria-controls='site-menu']"),
+    panelInert: document.getElementById("site-menu").hasAttribute("inert"),
   }));
 
+  // Reopen (Enter on the trigger, which still has focus), and walk the trap:
+  // Tab from the first focusable to the last, then once more to prove it wraps
+  // back to the first rather than escaping the panel. Four focusables now
+  // (Close, then the three place links) rather than the old panel's, but the
+  // wrap is the same mechanism.
   await page.keyboard.press("Enter");
   await page.waitForTimeout(700);
+  const trap = await page.evaluate(() => {
+    const panel = document.getElementById("site-menu");
+    const focusable = [...panel.querySelectorAll("a[href], button")];
+    const describe = (el) =>
+      el && {
+        tag: el.tagName,
+        href: el.getAttribute ? el.getAttribute("href") : null,
+        text: (el.textContent ?? "").replace(/\s+/g, " ").trim(),
+      };
+    return { count: focusable.length, first: describe(focusable[0]), last: describe(focusable[focusable.length - 1]) };
+  });
+  for (let i = 0; i < trap.count - 1; i++) await page.keyboard.press("Tab");
+  const onLast = await page.evaluate(() => {
+    const el = document.activeElement;
+    return el && {
+      tag: el.tagName,
+      href: el.getAttribute ? el.getAttribute("href") : null,
+      text: (el.textContent ?? "").replace(/\s+/g, " ").trim(),
+    };
+  });
   await page.keyboard.press("Tab");
-  await page.keyboard.press("Tab");
-  const target = await page.evaluate(() => document.activeElement?.getAttribute("href"));
-  await page.keyboard.press("Enter");
-  await page.waitForTimeout(1800);
-  const navigated = await page.evaluate(() => {
-    const el = location.hash ? document.querySelector(location.hash) : null;
-    return {
-      hash: location.hash,
-      scrollY: Math.round(window.scrollY),
-      panelInert: document.getElementById("chapter-menu").hasAttribute("inert"),
-      sectionTopFromViewport: el ? Math.round(el.getBoundingClientRect().top) : null,
+  const wrappedToFirst = await page.evaluate(() => {
+    const el = document.activeElement;
+    return el && {
+      tag: el.tagName,
+      href: el.getAttribute ? el.getAttribute("href") : null,
+      text: (el.textContent ?? "").replace(/\s+/g, " ").trim(),
     };
   });
 
   await context.close();
-  return { open, afterEscape, keyboardTarget: target, navigated };
+  return { open, afterEscape, trap: { ...trap, onLast, wrappedToFirst } };
+}
+
+/**
+ * Real navigation. The links are ordinary `<a href>` (SiteMenu.tsx: "nothing
+ * about the navigation depends on script once the panel is open"), so following
+ * one to another place is a full browser navigation, not a client-side route
+ * change — and the current page's own link is a same-page no-op that still
+ * closes the menu (`if (current(place.href)) e.preventDefault(); close();`).
+ * Both halves of that contract are asserted here, because a menu that either
+ * failed to navigate at all, or reloaded the page you were already reading,
+ * would look identical to a glance at the markup.
+ */
+async function checkNavigation(browser, width) {
+  const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 900 } });
+  const page = await context.newPage();
+  await page.goto(URL, { waitUntil: "load" });
+  await page.waitForTimeout(1200);
+
+  await page.getByRole("button", { name: "Menu" }).click();
+  await page.waitForTimeout(700);
+
+  const before = await page.evaluate(() => {
+    const panel = document.getElementById("site-menu");
+    const links = [...panel.querySelectorAll("nav a[href]")];
+    return {
+      path: location.pathname,
+      currentHref: links.find((a) => a.getAttribute("aria-current") === "page")?.getAttribute("href") ?? null,
+      otherHref: links.find((a) => a.getAttribute("aria-current") !== "page")?.getAttribute("href") ?? null,
+    };
+  });
+
+  let afterSelfClick = null;
+  if (before.currentHref) {
+    await page.click(`#site-menu a[href='${before.currentHref}']`);
+    await page.waitForTimeout(500);
+    afterSelfClick = await page.evaluate(() => ({
+      path: location.pathname,
+      panelInert: document.getElementById("site-menu").hasAttribute("inert"),
+    }));
+  }
+
+  let afterRealNav = null;
+  if (before.otherHref) {
+    await page.getByRole("button", { name: "Menu" }).click();
+    await page.waitForTimeout(700);
+    await page.click(`#site-menu a[href='${before.otherHref}']`);
+    await page.waitForURL(`**${before.otherHref}`, { timeout: 8000 }).catch(() => {});
+    await page.waitForTimeout(500);
+    afterRealNav = { path: await page.evaluate(() => location.pathname) };
+  }
+
+  await context.close();
+  return { before, afterSelfClick, afterRealNav };
 }
 
 /** No horizontal scroll at any position — several chapters bleed past the edge. */
@@ -183,7 +285,15 @@ async function checkOverflow(browser, width) {
 
 async function main() {
   const browser = await chromium.launch();
-  const report = { measuredAt: new Date().toISOString(), url: URL, scrollLock: [], menu: {}, overflow: [] };
+  const report = {
+    measuredAt: new Date().toISOString(),
+    url: URL,
+    scrollLock: [],
+    menu: {},
+    navigation: {},
+    overflow: [],
+  };
+  const failures = [];
 
   for (const spec of [
     { width: 1440 },
@@ -198,11 +308,70 @@ async function main() {
         `wheel before open ${r.scrolledBefore}px, wheel while open ${r.scrollYAtOpen}→${r.afterWheelWhileOpen}, ` +
         `keys while open →${r.afterKeysWhileOpen}, wheel after close →${r.afterWheelWhenClosed}`,
     );
+    if (
+      !r.wheelWorksBeforeOpening ||
+      !r.wheelBlockedWhileOpen ||
+      !r.keyboardBlockedWhileOpen ||
+      !r.wheelRestoredAfterClose
+    ) {
+      failures.push(`scroll lock broken at ${r.viewport}px${r.reducedMotion ? " (reduced motion)" : ""}`);
+    }
   }
 
   for (const width of [390, 1440]) {
-    report.menu[width] = await checkSemantics(browser, width);
+    const s = await checkSemantics(browser, width);
+    report.menu[width] = s;
+    console.log(
+      `menu ${width}px — ${s.open.places} places (${s.open.hrefs.join(", ")}), current=${JSON.stringify(
+        s.open.current,
+      )}, focusedOnOpen=${s.open.focusedOnOpen?.text}, trap ${s.trap.count} focusables`,
+    );
+
+    if (s.open.places !== 3) failures.push(`${width}px: menu holds ${s.open.places} places, not 3`);
+    if (JSON.stringify(s.open.hrefs) !== JSON.stringify(["/", "/mahua-vann", "/mahua-tola"])) {
+      failures.push(`${width}px: place hrefs are ${JSON.stringify(s.open.hrefs)}, not the three routes`);
+    }
+    if (s.open.current[0] !== "page") {
+      failures.push(`${width}px: Home is not marked aria-current="page" while on "/"`);
+    }
+    if (s.open.current.slice(1).some((c) => c === "page")) {
+      failures.push(`${width}px: a lodge link is marked aria-current="page" while on the home route`);
+    }
+    if (s.open.ariaLabel !== "Menu") failures.push(`${width}px: trigger aria-label is "${s.open.ariaLabel}", not "Menu"`);
+    if (s.open.ariaExpanded !== "true") failures.push(`${width}px: aria-expanded did not become "true" on open`);
+    if (s.open.role !== "dialog" || s.open.modal !== "true") {
+      failures.push(`${width}px: panel is not role="dialog" aria-modal="true"`);
+    }
+    if (s.afterEscape.ariaExpanded !== "false") failures.push(`${width}px: aria-expanded did not return to "false" after Escape`);
+    if (!s.afterEscape.focusReturnedToTrigger) failures.push(`${width}px: focus did not return to the trigger after Escape`);
+    if (!s.afterEscape.panelInert) failures.push(`${width}px: panel is not inert after closing`);
+    if (s.trap.count !== 4) failures.push(`${width}px: panel holds ${s.trap.count} focusables, not 4 (Close + 3 places)`);
+    if (s.trap.onLast?.href !== s.trap.last?.href) {
+      failures.push(`${width}px: Tab did not reach the last focusable (${JSON.stringify(s.trap.last)}) before wrapping`);
+    }
+    if (s.trap.wrappedToFirst?.tag !== s.trap.first?.tag || s.trap.wrappedToFirst?.text !== s.trap.first?.text) {
+      failures.push(`${width}px: Tab from the last focusable did not wrap to the first`);
+    }
+
     report.overflow.push(await checkOverflow(browser, width));
+
+    const nav = await checkNavigation(browser, width);
+    report.navigation[width] = nav;
+    console.log(
+      `navigation ${width}px — self-click stayed at ${nav.afterSelfClick?.path}, ` +
+        `real link took the browser to ${nav.afterRealNav?.path} (asked for ${nav.before.otherHref})`,
+    );
+    if (nav.afterSelfClick && nav.afterSelfClick.path !== nav.before.path) {
+      failures.push(`${width}px: clicking the current page's own menu link navigated anyway (to ${nav.afterSelfClick.path})`);
+    }
+    if (nav.afterSelfClick && !nav.afterSelfClick.panelInert) {
+      failures.push(`${width}px: the menu did not close after clicking the current page's own link`);
+    }
+    if (nav.afterRealNav && nav.afterRealNav.path !== nav.before.otherHref) {
+      failures.push(
+        `${width}px: following a real place link landed on ${nav.afterRealNav.path}, not ${nav.before.otherHref}`,
+      );
+    }
   }
 
   await browser.close();
@@ -210,17 +379,12 @@ async function main() {
   await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`, "utf8");
   console.log(`Wrote ${OUT}`);
 
-  const failures = report.scrollLock.filter(
-    (r) =>
-      !r.wheelWorksBeforeOpening ||
-      !r.wheelBlockedWhileOpen ||
-      !r.keyboardBlockedWhileOpen ||
-      !r.wheelRestoredAfterClose,
-  );
   if (failures.length > 0) {
-    console.error(`FAILED: scroll lock broken in ${failures.length} configuration(s).`);
-    for (const f of failures) console.error(`  ${JSON.stringify(f)}`);
+    console.error(`FAILED: ${failures.length} problem(s).`);
+    for (const f of failures) console.error(`  ${f}`);
     process.exitCode = 1;
+  } else {
+    console.log("PASS — 0 failures");
   }
 }
 

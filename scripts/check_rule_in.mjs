@@ -53,9 +53,10 @@ const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(URL, { waitUntil: "networkidle" });
 
-  // The menu's seven links live in a panel that is `inert` until it opens, so
-  // they must be on screen for this to mean anything. Opening it is also what
-  // puts the rule on the dark overlay for check 6.
+  // The menu's links (three places, plus the lodges' cards) live in a panel
+  // that is `inert` until it opens, so they must be on screen for this to
+  // mean anything. Opening it is also what puts the rule on the dark overlay
+  // for check 6.
   await page.click("[aria-controls='site-menu']");
   await page.waitForTimeout(600);
 
@@ -95,7 +96,15 @@ const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(URL, { waitUntil: "networkidle" });
 
-  const SEL = "[aria-controls='site-menu']";
+  // Retargeted 10-11 Aug 2026. The hamburger is `SiteMenu`'s trigger, and it
+  // correctly carries no `rule-in` — it is a non-text control, and non-text
+  // controls are exactly what `data-rule="none"` exists for (check 1's
+  // coverage still confirms it opts out rather than being missed). Probing
+  // *it* here failed on correct code. The Website Directory footer
+  // (`SiteFooter.tsx`, mounted on every route) is a real text link that does
+  // carry the hairline and is always in the DOM with no menu to open first —
+  // its own "Mahua Vann" entry is the probe.
+  const SEL = "#site-footer a[href='/mahua-vann']";
 
   const rest = scaleX(await readAfter(page, SEL));
   report.rest = rest;
@@ -171,20 +180,36 @@ const browser = await chromium.launch();
 
   // Keyboard. `:focus-visible` does not match a programmatic `.focus()`, so this
   // has to be a real Tab — which is also the only way it proves what it claims.
-  await page.mouse.move(0, 0);
-  await page.waitForTimeout(DURATION.ruleIn * 1000 + 200);
-  await page.keyboard.press("Tab");
-  const focused = await page.evaluate(() => document.activeElement?.getAttribute("aria-controls"));
-  await page.waitForTimeout(DURATION.ruleIn * 1000 + 200);
-  const byKeyboard = scaleX(await readAfter(page, SEL));
-  report.keyboard = { focused, scaleX: byKeyboard };
-  if (focused !== "site-menu") {
-    fail(`the first Tab landed on ${focused ?? "nothing"}, not the menu trigger`);
+  //
+  // The footer link is dozens of tab stops deep, unlike the hamburger this
+  // check used to target (the page's first focusable). Rather than hard-code a
+  // stop count that would drift every time a link is added or removed upstream
+  // — exactly the kind of number this project keeps learning not to hand-pick
+  // — this presses real Tabs on a fresh load, one at a time, until the footer
+  // link itself is `document.activeElement`, capped well past any plausible
+  // page size so a genuine regression (the link unreachable by keyboard at
+  // all) still fails instead of looping forever.
+  const kbPage = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await kbPage.goto(URL, { waitUntil: "networkidle" });
+  let reached = false;
+  let tabs = 0;
+  const CAP = 300;
+  for (; tabs < CAP; tabs++) {
+    await kbPage.keyboard.press("Tab");
+    reached = await kbPage.evaluate((sel) => document.activeElement === document.querySelector(sel), SEL);
+    if (reached) { tabs += 1; break; }
+  }
+  await kbPage.waitForTimeout(DURATION.ruleIn * 1000 + 200);
+  const byKeyboard = reached ? scaleX(await readAfter(kbPage, SEL)) : null;
+  report.keyboard = { reachedByTab: reached, tabsUsed: tabs, scaleX: byKeyboard };
+  if (!reached) {
+    fail(`the footer link was not reached within ${CAP} real Tab presses from a fresh load`);
   } else if (byKeyboard < 0.98) {
     fail(`keyboard focus did not draw the rule (scaleX ${byKeyboard.toFixed(3)})`);
   } else {
-    ok(`keyboard focus reaches the same state as hover (scaleX ${byKeyboard.toFixed(3)})`);
+    ok(`keyboard focus reaches the same state as hover after ${tabs} Tabs (scaleX ${byKeyboard.toFixed(3)})`);
   }
+  await kbPage.close();
   await page.close();
 }
 
@@ -200,7 +225,10 @@ const browser = await chromium.launch();
   const page = await context.newPage();
   await page.goto(URL, { waitUntil: "networkidle" });
 
-  const SEL = "[aria-controls='site-menu']";
+  // Same retargeting as checks 2-5, for the same reason: the hamburger carries
+  // no `rule-in` to begin with, so probing it here would fail on correct code
+  // regardless of `prefers-reduced-motion`.
+  const SEL = "#site-footer a[href='/mahua-vann']";
   await page.hover(SEL);
   const immediate = scaleX(await readAfter(page, SEL));
   const running = await page.$eval(SEL, (el) =>
@@ -237,7 +265,27 @@ const browser = await chromium.launch();
     };
     return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
   };
-  const parse = (c) => c.match(/\d+/g).slice(0, 3).map(Number);
+  /**
+   * Found while re-running this check 10-11 Aug 2026: the menu overlay's
+   * `behind` colour comes from `.site-menu-glass`'s `color-mix(in srgb, ...)`,
+   * and Chromium's computed style serialises that as CSS Color 4's
+   * `color(srgb R G B / A)` — components as **0-1 floats**, not the legacy
+   * `rgb(R, G, B)` 0-255 integers this parser assumed. `\d+` splits each
+   * float at its decimal point (`"0.945098"` → `"0"`, `"945098"`), so
+   * `slice(0, 3)` silently took `[0, 945098, 0]` as an RGB triple — a
+   * "channel" of 945098 blows the gamma-correction curve up to astronomical
+   * luminance and the delta read **231251768.592**. Comfortably over the 0.15
+   * floor either way, so this was never a false PASS on a broken rule, but it
+   * was never really measuring the claim it reported either — exactly the
+   * defect shape CLAUDE.md's own catalogue exists to stop. Both formats are
+   * handled explicitly now, rather than trusting one regex to survive
+   * whichever serialisation the engine happens to choose.
+   */
+  const parse = (c) => {
+    const colorFn = c.match(/^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+    if (colorFn) return colorFn.slice(1, 4).map((n) => Math.round(Number(n) * 255));
+    return c.match(/\d+/g).slice(0, 3).map(Number);
+  };
 
   const surfaces = [];
 

@@ -167,9 +167,11 @@ export function StickyHeader({
     /**
      * The bar's own height, published for `scroll-padding-top`.
      *
-     * A fixed bar covers the top of whatever an anchor scrolls to, and
-     * `ChapterMenu` navigates to seven chapters by `href="#id"`. The offset has
-     * to be the header's height, and the header's height is three padding steps,
+     * A fixed bar covers the top of whatever an anchor scrolls to, and a
+     * property page's own chapters are still reached by `href="#id"` even
+     * though the header's menu itself now links whole routes, not anchors.
+     * The offset has to be the header's height, and the header's height is
+     * three padding steps,
      * a font size that arrives with the webfont and a border — knowable only
      * after layout. So it is measured rather than restated in CSS, where it
      * would be a second copy free to drift from the first.

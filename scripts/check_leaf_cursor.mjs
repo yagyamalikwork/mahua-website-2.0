@@ -253,7 +253,7 @@ const browser = await chromium.launch();
   await page.waitForTimeout(500);
   const overProse = await page.$eval(SEL, (el) => ({ filter: getComputedStyle(el).filter, over: el.dataset.over }));
 
-  const link = await page.$("[aria-controls='chapter-menu']");
+  const link = await page.$("[aria-controls='site-menu']");
   const lb = await link.boundingBox();
   await page.mouse.move(lb.x + lb.width / 2, lb.y + lb.height / 2);
   await page.waitForTimeout(700);
