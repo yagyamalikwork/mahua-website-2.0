@@ -149,9 +149,36 @@ export function RoomCard({
          * plain paper beneath it. Below `lg` it still needs the aspect-ratio:
          * there the card is a column and the photo would otherwise be full
          * height again.
+         *
+         * `min-h-0` is not decorative. A flex item's default `min-height` is
+         * `auto`, which resolves to the LARGER of any explicit min-height and
+         * an automatic, content-based minimum — and for a box whose only
+         * child is a replaced element (the `<img>`, carrying real `width`/
+         * `height` HTML attributes so the browser knows its aspect before a
+         * byte arrives), that automatic minimum is derived from the IMAGE's
+         * own aspect ratio, not this box's declared `aspect-ratio`. Below
+         * `lg`, with width stretched to the card's full width, that content
+         * minimum only exceeds the `aspect-ratio`-derived height for a
+         * PORTRAIT photograph narrower than the box ratio — `tola-room-family`
+         * (0.67:1) is the only one; every other room, `beside` or `stacked`,
+         * is wider than its own box and never triggers it. Measured on the
+         * live page before this line existed: at 390px the wrapper rendered
+         * 513px tall against the 273.6px `aspect-ratio: 1.25` was supposed to
+         * produce (342 / 1.25) — 239px of photograph eating into the card's
+         * fixed height where the text block was budgeted to sit, and at 768px
+         * the wrapper alone (1008px) already exceeded the entire 760px card.
+         * That is `docs/reviews/2026-08-11-card-stack/README.md`'s "Family Suite
+         * fix" section's defect: Family Suite's text was never both on screen and undimmed,
+         * because `overflow-hidden` on `.room-card` was clipping it every
+         * time. `min-h-0` removes the automatic minimum and lets the declared
+         * `aspect-ratio` govern for every photograph, portrait included —
+         * confirmed live: with it, the same wrapper renders 273.6px, exactly
+         * `342 / 1.25`. At `lg` and up this is a no-op: both axes are already
+         * definite there (`lg:w-[60%]` and the card's own `lg:items-stretch`
+         * height), and a definite size leaves nothing for min-height to clamp.
          */}
         <div
-          className={beside ? "flex-none lg:w-[60%]" : "flex-none"}
+          className={`min-h-0 ${beside ? "flex-none lg:w-[60%]" : "flex-none"}`}
           style={{ aspectRatio: String(ROOM_CARD_BOXES[layout]) } as React.CSSProperties}
         >
           <Photo

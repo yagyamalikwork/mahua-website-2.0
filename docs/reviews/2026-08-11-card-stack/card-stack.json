@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T14:42:47.357Z",
+  "measuredAt": "2026-08-11T15:55:12.094Z",
   "url": "http://localhost:3100",
   "noRecede": false,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
@@ -349,7 +349,7 @@
           "naturalWidth": 342,
           "naturalHeight": 513,
           "boxWidth": 321.47998046875,
-          "boxHeight": 482.22021484375
+          "boxHeight": 257.17822265625
         },
         {
           "name": "Camping Hut",
@@ -430,7 +430,7 @@
           "naturalWidth": 719,
           "naturalHeight": 1079,
           "boxWidth": 631.679931640625,
-          "boxHeight": 947.52001953125
+          "boxHeight": 505.33837890625
         },
         {
           "name": "Camping Hut",
