@@ -3,6 +3,39 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## The booking contract — built 12 Aug 2026, blocked on one vendor answer
+
+`lib/booking/` exists: a `BookingProvider` interface, a `MockProvider` that can produce every named failure
+mode on demand, and an `AsiaTechProvider` that deliberately throws on every call. Six tasks, each reviewed,
+**every one needing a fix round**. Suite 419 → **453**. Plan
+`docs/superpowers/plans/2026-08-12-booking-contract.md`; spec §8a carries what the UI plan must inherit.
+
+**Nothing visitor-facing was built, and that is the design.** AsiaTech has no usable API — PHP with jQuery
+1.9.1, form posts returning HTML fragments, no partner token, no versioning — and their engine **cannot be
+pre-filled**: a GET 500s, query parameters are silently ignored, and a cross-origin POST returns an orphaned
+fragment with no route onward to payment. So the interim "collect dates on our page, hand them over" step is
+not buildable, and a branded search box without it would make a guest type their dates twice. The three
+questions to put to AsiaTech are in the spec's §8.
+
+**Two primitives are fixed because both are where money and dates go quietly wrong.** `Money` is integer
+paise behind a compile-time brand, so `rupees()` is the only way to obtain one — and the brand is
+`declare const`, not a real `Symbol()`, because `JSON.stringify` drops symbol keys and money is the one
+value here that crosses HTTP. A `StayDate` is a branded `YYYY-MM-DD` civil date, never a `Date`: a hotel
+night is a calendar day at Kolara Gate, and an instant read in London is a different one.
+
+**Six defects were found in the plan itself** — a `Money` that declared a brand it did not have, a
+`@ts-expect-error` suppressing a missing-import error rather than the type error it claimed to prove, an
+`as const` whose removal no test would catch, a failure-mode test that passed when a throw moved to the
+wrong method, a `quote()` that silently halved the total `search()` had just shown, and a guest-facing
+message bent to satisfy a badly-aimed regex. **The last one is the shape to remember: a badly-aimed test
+made a product string worse**, pushing "this provider is not implemented" into words a guest would read.
+
+**And one deferral was falsified by a later fix.** `quote()` resolving a room id across both properties was
+correctly deferred as unfixable — the interface carries no property on `quote`. Task 4's own fix then put
+`context.query.property` in reach and nobody noticed the ground had moved; the final review's probe booked a
+Vann cottage at Vann's rate under a Tola search. **Re-examine a parked finding when the code it was parked
+against changes.**
+
 ## Tola's rooms corrected — 12 Aug 2026, found while scoping the checkout
 
 Scoping the branded checkout meant reading the client's own AsiaTech booking engine, and that turned up two

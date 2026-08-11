@@ -316,6 +316,39 @@ Question 3 already paid for itself: reading their engine settled Tola's long-ope
 exposed a retired Camping Hut still being advertised, and found the home page quoting a future room count in
 the present tense. All three were fixed on 12 Aug (`docs/DECISIONS.md` §1).
 
+## 8a. Built, 12 Aug 2026 — and what the UI plan must carry
+
+`lib/booking/` ships: `types.ts`, `errors.ts`, `provider.ts`, `mock-provider.ts`, `asiatech-provider.ts`,
+`index.ts`, and `constraints.test.ts`. Six tasks, each reviewed, **every one of which needed a fix round**.
+453 tests suite-wide. `docs/superpowers/plans/2026-08-12-booking-contract.md`.
+
+**Six defects were found in the plan itself**, and they are the reason the review layer exists rather than a
+sign it was wasted: `Money` declared branded but structurally forgeable with no cast; a `@ts-expect-error`
+guard suppressing a missing-import error instead of the type error it claimed to prove; an `as const` whose
+removal no test would catch; a failure-mode test that passed when a throw moved to the wrong method; a
+`quote()` that silently halved the total `search()` had just shown; and a guest-facing message bent to
+satisfy a badly-aimed regex.
+
+**Four things the next plan — the checkout UI against `MockProvider` — must carry, from the final review:**
+
+1. **`BookingError.message` is an engineer-facing fallback, not guest copy.** The UI must key its wording off
+   `code` and take the words from `content/`, like every other string a visitor reads here. This is now
+   documented at `errors.ts`, `mock-provider.ts` and `asiatech-provider.ts`, because the module ships
+   sentences from `lib/` that never passed the client's copy review.
+2. **Any rate-bearing screen must carry a visible mock marker** while `MockProvider` is behind it. Its rates
+   are labelled fictional in code but look entirely plausible on screen, and a screenshot reaching the client
+   without a marker would read as this lodge's tariff.
+3. **A money formatter belongs *inside* `lib/booking/`**, so `constraints.test.ts`'s integer-money guard
+   covers it. Written anywhere else it is exactly where a `toFixed` would appear, unguarded.
+4. **`Quote` does not echo the selection and `heldUntil`'s format is undocumented.** A UI holding a
+   selection must carry `{ continuation, roomId, ratePlanId }` itself — all serialisable, because the `Money`
+   brand is compile-time only by design.
+
+**Two limits of the guards, known and accepted.** The `@ts-expect-error` guards bite only under `tsc` and
+the build, never under `npm test` — a forged `Money` runs green in Vitest. And the float guard enforces
+`parseFloat(`/`.toFixed(` as proxies, not the whole "no `/`, no non-integer `*`" constraint, which no regex
+can express. Neither is a reason to trust `npm test` alone before a commit.
+
 ## 9. Constraints inherited from the project
 
 - Colour, duration and copy come from dials (`lib/palette.ts`, `lib/motion.ts`, `content/`). No component

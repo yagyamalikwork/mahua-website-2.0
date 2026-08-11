@@ -71,7 +71,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 
 ---
 
-## 2. The defect that keeps happening — forty-six instances
+## 2. The defect that keeps happening — forty-eight instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -124,6 +124,8 @@ these passed its own gate while the thing it guarded was broken.
 | 44 | **A media query that named a height and meant a phone.** | `short:` was `(max-height: 800px)`, written for a landscape phone, and `ui/Plate.tsx` used it to cap a plate at 24vh. It fires on a 1366×768 laptop, a 1024×768 tablet and any browser zoomed past ~110%. Worse, the cap and the base `w-full` both applied, so which won was framework emission order — the height clamped, the width did not, and photographs rendered **up to 230% wider than their true shape**. Instance 22 in this table is the same cascade defect on the lantern. Now keyed to the viewport's *shape* (`pocket:`, short AND ≥2:1), with every state naming its own width |
 | 45 | **No rig had ever measured a short, normal-width viewport.** | Every instrument here samples 390, 768, 1440 and 1920 — and 768 is a *width*, never a height. So no case in the whole suite resembled an ordinary laptop, and instance 44 was found by the client opening the site on his own. Third defect in two days living in the gap between fixed sample points, after the card stack's 51% crop at 1024×1366. **A grid of fixed shapes is not coverage** |
 | 46 | **A like-for-like photograph swap that silently changed a component's composition.** | `roomCardLayout` derives a room card's whole layout from its photograph's aspect ratio — at or above 1.9 the card is `stacked`, below it `beside`. The retired Camping Hut was 2.29; the client's replacement was a true 3:2. Dropping it in flipped the card's composition, and with it the chapter's height: `tola-rooms` went 33.8% → **37.1% mean, 44.3% → 47.9% worst**, breaking non-negotiable #8's 45% ceiling. **The full suite stayed green** — nothing tests a chapter's density. Caught only by running `measure_density.mjs` on the route, which nothing obliged me to do. **An image's aspect ratio can be an input to layout logic, not just to cropping; check what reads it before swapping one.** The first fix, cropping to 2.00 (the stacked box exactly, so zero render crop), was then rejected by `lib/room-card.test.ts` — it requires 0.35 of clearance from the threshold so no card is one re-encode from flipping, and 2.00 clears by 0.10. 2.29, its siblings' own ratio, is what shipped |
+| 47 | **A guard that suppressed the wrong error, in the test written to prove the guard.** | `Money` was branded and a `@ts-expect-error` test was added to prove a forged literal would not compile. The test never imported `Money`, so the directive was suppressing `TS2304: Cannot find name` — and with the brand **deleted** the project type-check still exited 0. The implementer's own verification used `tsc --strict` on the single file, outside `tsconfig.json`, which hid it. **Check a guard under the same config as the build, and in both directions** |
+| 48 | **A deferral falsified by a later fix, with nobody re-reading it.** | `MockProvider.quote()` resolving a room id across both properties was correctly parked as unfixable — `BookingProvider.quote` carries no property. Task 4's own fix then threaded the search query through the continuation, putting `context.query.property` in reach, and the parked note was never revisited. The final review's probe quoted and booked `vann-cottage-deck` at Vann's rate under a Tola search. **A parked finding's rationale is a claim about the code; when that code changes, the parking expires** |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
@@ -743,6 +745,21 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 ---
 
 ## 5. Owed, and open
+
+- **THE CHECKOUT IS BLOCKED ON ASIATECH, AND THE ASK IS WRITTEN (12 Aug).** The client wants a Mahua-branded
+  checkout where the guest pays on our site and never sees AsiaTech. Nothing visitor-facing can be built until
+  they answer, and the interim fallback was **tested and does not work**: their engine cannot be pre-filled
+  (a GET 500s, query parameters are ignored, and a cross-origin POST returns an orphaned fragment with no
+  route to payment), so a branded search box would make a guest type their dates twice. Three questions, in
+  order of ambition, in `docs/superpowers/specs/2026-08-12-branded-checkout-design.md` §8:
+  a **prefill deep link** (small, unblocks an interim improvement), a **partner API** (large, unblocks the
+  real goal, and must say whether the payment gateway can be in Mahua Resorts' own name), and **total
+  inventory per room type**. The third already paid for itself — reading their engine settled Tola's room
+  count and found a retired room still being advertised.
+- **The room counts want one word of confirmation.** Eleven at Tola is what the engine sells and what the
+  site now says; fourteen is that plus three machaans still being built. An engine reports what is *sellable*,
+  which need not equal what exists.
+
 
 - **THE DENSITY QUESTION, AWAITING THE CLIENT (10 Aug).** Three chapters on the redesigned property pages
   sit above non-negotiable #8's 45%-empty ceiling: `vann-forest` **55.8%**, `tola-reserve` **58.3%** and
