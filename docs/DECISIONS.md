@@ -48,6 +48,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 10 Aug | **`03 · The Forest`, not the lodge cards** | Corrected the same day. The right home twice over: that chapter's copy already counts "three hundred recorded birds" |
 | 10 Aug | **Stronger than the first attempt** | *"It is almost not visible."* The fault was the arithmetic, not the drawing — see §15 |
 | 10 Aug | **Re-render the forest drawing rather than push the dials** | *"Increase the opacity, and the birds are an important detail I want to show."* Both are unavailable by tuning — body copy sits on the drawing, so the contrast floor caps every pixel including the birds. Brief in §15 |
+| 11 Aug | **The re-rendered forest ships, and the tint question is closed** | *"Looks fine, we can keep it for now."* Kept, not acclaimed — so it is settled unless he raises it. The new drawing delivered what the dials could not: foliage at **0.267** against the old 0.135 and the three hornbills reading as the chapter's darkest element, both under the *same* 4.5:1 guarantee. §15 |
 | 9 Aug | **Both property pages shipped** — `/mahua-vann` and `/mahua-tola`, every chapter inside the 45% ceiling, every rig green at the real routes | Built 8 Aug, then reviewed and corrected 9 Aug after the client found the build session had silently fallen back to a smaller model: the first pass had committed failing density and a failed contrast run as "verified". Evidence and the full correction story in `docs/reviews/2026-08-08-property-pages/README.md`. **Awaiting the client:** Tola's room count (12 vs 14), the home page's cottage/suite caption fix, Tola's hero swap, and a Nagpur distance |
 | 9 Aug | **Both property pages rebuilt in a "shape vocabulary"** — eight chapters each, no two adjacent chapters sharing a shape, mechanically enforced (`findRepeatedShape`) — replacing the first ship's `ChapterIntro`/`PlateGrid`/`RoomsIndex`/`FieldNotes` structure that read as a template | Three client decisions inside this redesign: **(1) a persistent booking bar**, quiet and always reachable, that slides in past the hero and steps aside over the closing invitation — *"a visitor on a property page has already chosen a lodge, so asking is fair here"*, distinct from the home page's "seduce, not convert" (non-negotiable #2), and built to fail towards absent with no JavaScript, the welcome screen's own contract (§14); **(2) six experiences per property, each given real space, plus one honest "also" line** naming what did not make the six (karaoke, the conference hall, wildlife documentaries, indoor games) rather than promoting or deleting them; **(3) the enquiry form dropped for plain contact details** — *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later"* — which fixes the same defect a form would have (a bare `mailto:` doing nothing on a phone with no mail client) better than a form does: a real `tel:` link works on every device, with scripting off, with no third party and nothing to sign up for |
 | 10 Aug | **A guest's face comes off the site on consent grounds, and the photograph is deleted rather than shelved** | Mahua Tola's Bonfire entry (`DSC00097-scaled.jpg`, the live site's own) showed a guest clearly enough to identify her. *"It directly shows a person's face who was a guest, which we don't want."* Replaced with `bonfire-circle-night` — a frame from **the client's own Mahua Tola property video**, so it is honestly this lodge's bonfire and not a stand-in from Pench, and it carries no people at all. **The withdrawn entry was removed from `CURATION`, not left curated-but-unused:** an id that stays in the manifest is an id a later chapter reaches for by name, and the next person wanting a bonfire would find it without ever seeing the face in it. Restoring it needs the guest's consent, not a code change. **This is the second image rejected on these grounds** — the original curation dropped one for the same reason — and the rule was simply not applied when this one was curated on 9 Aug. Both instances are now recorded in `scripts/build_images.mjs`'s own comment, which is the only place that survives a clone |
@@ -60,7 +61,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 
 ---
 
-## 2. The defect that keeps happening — thirty-six instances
+## 2. The defect that keeps happening — thirty-eight instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -103,6 +104,8 @@ these passed its own gate while the thing it guarded was broken.
 | 34 | **A correction to a non-reproducing derivation, itself carrying a non-reproducing figure.** | §16 was rewritten *because* its per-channel RGB fit did not reproduce. The rewrite's own counter-example then quoted 4.97:1 for the 95%→100% segment — a figure belonging to the 82%→100% one. Recomputed from the composite the passage itself prints: **4.844:1**. The shape survived the fix aimed at it, in the same paragraph. Caught by a reviewer retyping four numbers |
 | 35 | **The probe set measured two of the three gold runs on the glass.** | `menu-place` and `menu-region` were probed; the panel's "Where next" label — the same `goldText`, on the same wash — was not. It measures **4.56:1**, all but identical to the region label's 4.6 that *failed* at the original 82%. It was failing too, was rescued by a fix aimed at something else, and no instrument would have reported it either way |
 | 36 | **A comment claiming a check confirms what the check filters out.** | `check_rule_in.mjs` said check 1 "confirms" the hamburger's `data-rule="none"` opt-out. Check 1's coverage filter is `textContent.trim().length > 0`, so a text-free control never reaches it — nothing in the file has ever read that attribute. The check was right; only its account of itself was wrong |
+| 37 | **A fix that existed only in a discarded working tree.** | `build_forest_overlay.mjs` never clamped alpha. It was found and fixed during a two-segment attempt the build itself rejected, and the `git checkout` that withdrew the attempt took the unrelated fix with it. The same bug then surfaced a second time on the new artwork — `rgb(-181,-174,-157)`, a contrast of −32:1 — because it had never been latent: it was invisible only while every solved strength stayed under 1. A fix living in a branch you are about to abandon is not a fix; lift it out first |
+| 38 | **An acceptance threshold that warned while its purpose was met.** | The re-render brief capped ink coverage at 45% and the drawing arrived at 47.3%, so the script warned. But coverage was only ever a proxy for *is the dark spread everywhere or concentrated*, and the deep-dark fraction — the thing that actually binds the contrast floor — had fallen 35.6% → 11.9%. The proxy was overruled deliberately. **A threshold that can fail while the property it stands for holds is measuring the wrong quantity**; if this is revisited, key it on deep darks |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
@@ -397,15 +400,59 @@ contrast, not area fill.
 — coverage and width — so acceptance is a number rather than an opinion. The width half also ends the
 resolution compromise below.
 
+### The re-render arrived, and it unlocked a second solve
+
+`Forest-illustrations/forest-overlay-2.png`, 10 Aug. Shipped 11 Aug as `1e623e9`; the client's verdict is
+*"looks fine, we can keep it for now"* — kept, not acclaimed.
+
+| Brief | Delivered |
+|---|---|
+| 2400px minimum | **2752×1536** ✓ |
+| birds the only solid dark masses | **deep darks 11.9%** of the frame, from 35.6% ✓ |
+| under 45% ink coverage | **47.3%** — over, and it did not matter |
+
+**The coverage warning fired and was overruled on purpose, which is the interesting part.** 45% was a proxy
+for *is the dark spread everywhere or concentrated*, and the drawing satisfies the thing the proxy stood for
+while missing the proxy. A threshold that can be over while its purpose is met is a threshold worth
+distrusting — the deep-dark fraction is the honest measure and is what the script should key on if this is
+ever revisited.
+
+Because the artwork now separates cleanly, the tint is solved in **two segments against the same 4.55:1
+floor** — `BIRD_MAX = 70` splits them, and `INK_FLOOR` drops to 20 because this drawing's own range needs no
+lifting:
+
+| segment | solved strength |
+|---|---|
+| foliage | **0.267** |
+| birds | 0.135 |
+
+One multiplier is capped by the darkest pixel anywhere, so the birds were holding the foliage to their own
+0.135. Solved apart, the foliage takes double while the birds sit exactly at the floor — the darkest thing on
+the page's palest chapter, which is what the client asked for.
+
+**Nothing was relaxed to get that, and the distinction matters**: both segments target body copy's 4.5:1, and
+the closing assertion still measures every pixel. This is *not* the earlier attempt that gave the birds a
+lower bar and was rejected by the build at 2.1:1. Measured on the page at four widths afterwards: headline
+3.64–7.08:1, intro 4.64–6:1, rig exits 0.
+
+**One real bug surfaced, and it was in the committed script: alpha was never clamped.** It could not bite
+while the blacks were lifted high enough to hold every solved strength under 1. This drawing, keeping its own
+range at ink floor 20, walked straight into it — the solver reported −32:1 over `rgb(-181,-174,-157)`. Now
+clamped in both `worstAt` and `flatten`. It had been found and fixed once during the rejected two-segment
+attempt, then lost to a `git checkout`; a fix that only exists in a discarded working tree is not a fix.
+
+**Encoded to 1600 rather than 2400 despite the source carrying it.** This is a near-flat texture, so a 1920
+screen upscaling 1.2× is invisible, and 2400 cost 149 KB against 92 for no visible difference on a decoration
+several screens below the fold. Initial load is unchanged at 600/724 KB — the tint is lazy and below the
+fold; whole-page grew 61 KB at 1440.
+
 ### Still open
 
 - **On a phone it is a whisper.** The drawing keeps its own 1.79:1 aspect rather than being stretched to the
   section's 0.17:1, which would zoom tenfold into a sliver — so it is a faint band behind the heading and
-  gone by the paragraph.
-- **A re-render at ~2800px would remove the last compromise** for about 20 KB. The browser currently
-  stretches the 1024px source ~1.9× at 1920. Tolerable for a near-flat texture, and it would not be for a
-  photograph.
-- **The client has not yet judged it.** 10 Aug: *"Looks fine for now, let me sleep on it."*
+  gone by the paragraph. Unchanged by the re-render: it is a layout consequence, not a resolution one.
+- **The resolution compromise is closed.** 1600px files from a 2752px source; the browser now stretches
+  ~1.2× at 1920 rather than ~1.9× from 1024.
 
 ---
 

@@ -6,7 +6,7 @@ throughout, in the layout language of [thesujanlife.com](https://thesujanlife.co
 hand-drawn field-guide idiom.
 
 > **Read these four, in order, before doing any work:**
-> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the thirty-instance defect
+> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the thirty-eight-instance defect
 >    pattern, and the things that look broken and are not.** §5 carries the one open question the client
 >    still owns: three chapters above the 45% density ceiling, and why two of them arguably cannot be
 >    fixed. §7–§14 are the expensive findings: the leaf's
@@ -200,9 +200,10 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
    53.8% of the average screen, up from 49.7%.
 
-   **Current, measured 10 Aug 2026 on the build that carries both films, the lantern and the forest tint:
-   page mean 36.6%, worst screen 73.4%, 2.2 photographs per screen, imagery 54.2% of the average screen, and
-   all twelve chapters inside 45%.**
+   **Current, re-measured 11 Aug 2026 on the build that carries both films, the lantern and the client's
+   re-rendered forest tint: page mean 36.6%, worst screen 73.4%, 2.2 photographs per screen, imagery 54.2% of
+   the average screen, and all twelve chapters inside 45%.** Every figure held across the artwork swap — the
+   tint occupies the same box whatever is drawn in it, so density is blind to a change the eye is not.
 
    **`forest` reads 12.4% since the tint landed, against 35.5% before it, and that number is flattering.**
    The tint is real imagery and `collectImages` counts it, so the chapter now scores beside the hero's 0.3%.
@@ -355,6 +356,15 @@ it **solves** for it, binary-searching the strongest tint that still leaves `PAL
 own darkest pixel, and throwing rather than emitting if even the faintest one would fail. The dial left to a
 human is the artwork's flatness, not the guarantee. Hand-picking that number instead is what shipped a
 drawing the client could not see (`docs/DECISIONS.md` §15).
+
+It now solves **twice**, because the client's re-rendered drawing separates into pale foliage and three solid
+hornbills: `BIRD_MAX` splits them and each segment gets its own strength — **0.267 and 0.135**. One
+multiplier is capped by the darkest pixel anywhere, so before the split the birds were holding the whole
+drawing down to theirs. **Both segments target the same 4.55:1 floor**; giving the darker one a lower bar was
+built and the script rejected it at 2.1:1, so if a future edit makes the segments disagree about the floor,
+that is the regression. Its acceptance checks also warn on the artwork's ink coverage — which fired at 47.3%
+and was overruled on purpose, because coverage is a proxy and the quantity that binds is the deep-dark
+fraction (§2 #38).
 
 The browser measurements. **Every committed number in `docs/reviews/` comes from one of these** — they live
 in `scripts/` precisely so nobody has to trust a figure they cannot re-derive:

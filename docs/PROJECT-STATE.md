@@ -58,7 +58,8 @@ after the glass fix), rule-in, header, the JS budget (159 KB untouched, unchange
 **Branch `feat/chapters-rebuild`.** **Plans 3, 4, 5, 6 and 7 are all complete.** The home page opens with a
 welcome carrying the client's logo, runs twelve chapters, and carries five signature interactions — the
 sliding rule, the leaf cursor, two films and a hanging lantern — plus, since 10 Aug, **the client's forest
-drawing tinted into the background of `03 · The Forest`** (§15). **Both property pages are live**,
+drawing tinted into the background of `03 · The Forest`**, re-rendered by him and re-shipped on 11 Aug so the
+three Malabar pied hornbills read as the chapter's darkest element (§15). **Both property pages are live**,
 `/mahua-vann` and `/mahua-tola`, and were **rebuilt again in Plan 7** into a "shape vocabulary" — eight
 chapters each, no two adjacent chapters sharing a shape (mechanically enforced), a persistent booking bar,
 the client's own park maps drawn in cream, rooms as a showcase rather than a spec table, six experiences
