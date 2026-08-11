@@ -428,6 +428,77 @@ export const ROOM_STACK = {
   dim: 0.55,
   /** Space held for the booking bar. Measured 63px at 390, 69px from 768. */
   barReserve: 72,
+  /**
+   * The floor under a `stacked`-layout card's text block: the PHOTO area may
+   * never grow taller than `card height − textReserve`.
+   *
+   * Fix round, 11 Aug 2026 (`.superpowers/sdd/2026-08-11-room-card-stack/
+   * task-7-fix2-report.md`). `ROOM_CARD_BOXES.stacked` (`RoomCard.tsx`) is an
+   * `aspect-ratio` chosen to bound *width* crop — the 25% rule assertion 6
+   * enforces — and it was never checked against the card's own height. At
+   * 390/768 that never mattered: the slack formula in `.room-stack` gives a
+   * short enough card, relative to its width, that the aspect-derived photo
+   * band leaves 400+px over. At 1440/1920 the card is wide enough that a
+   * 2.0:1 photo band is *taller* than the card itself — measured live,
+   * unreceded: Vann's Deluxe/Cottage-without-Deck and Tola's Deluxe/Suite/
+   * Camping Hut all rendered a photo wrapper 3–17px TALLER than their own
+   * card at 1440, and the words block — clipped by the card's own
+   * `overflow: hidden` — was entirely below the visible box. Zero legible
+   * samples on all five, at both 1440 and 1920 — a sixth, Tola's Camping Hut,
+   * was hidden from the pre-existing hand sweep by the exact rig gap
+   * assertion 8 now closes: it never checked the CARD's own clip, only the
+   * viewport, so a text rect that lands inside the visible band by
+   * coincidence while sitting outside its own ancestor's overflow read as
+   * "legible" when it was, on screen, 100% photograph.
+   *
+   * `185` is the measured natural height of a room's words block at every
+   * width where this ceiling can bind, PLUS a paired change in
+   * `RoomCard.tsx`: the words block's own `gap`/`py` tighten from `gap-3
+   * py-6` to `gap-2 py-4` at `lg` and up ONLY (below `lg` — 390/768, where the
+   * ceiling never binds — the block keeps its original, more generous
+   * spacing). That trimmed the natural content height from 193px to 169px at
+   * every width this ceiling can bind (1440/1920, flat across Vann's Deluxe/
+   * Cottage-without-Deck and Tola's Deluxe/Suite/Camping Hut); `185` is that
+   * 169px plus a 16px margin.
+   *
+   * **Why the padding needed to move at all, not just this number.** The
+   * first cut of this fix used `240` (`193 + 47px margin`, the untightened
+   * padding) and passed assertion 8 cleanly — but reversing the clip that
+   * made illegible text invisible also reverses the pixels the density rig
+   * was crediting as "photograph": `measure_density.mjs` had scored the
+   * defect's overflowing photo as covering the card edge-to-edge, and giving
+   * the words their true space back necessarily turns some of that area to
+   * cream and type. Measured: `vann-rooms` 24.8%→35.1% mean, worst 42.1%→
+   * **47.2%**; `tola-rooms` 27.4%→37% mean, worst 42.4%→**49.8% — over the
+   * 45% ceiling** (non-negotiable #8), not merely worse than before. Tightening
+   * `textReserve` alone recovers some of that (`205`: `vann-rooms` worst
+   * 43.9%, `tola-rooms` worst 46.7% — Tola still over), and pushing the
+   * reserve to its absolute floor with the OLD padding (`193`, zero margin,
+   * too fragile to ship) still left `tola-rooms` at 45.3% — over, even at the
+   * limit. The 24px this padding change frees is what closes the remaining
+   * gap: at `185` (this value), `vann-rooms` is 31.5% mean / **42.1% worst**
+   * and `tola-rooms` is 33.8% mean / **44.3% worst** — both chapters back
+   * inside 45%, confirmed on a production build with the real rig, not
+   * projected. Full before/after table, all four intermediate values, and the
+   * screenshots: `.superpowers/sdd/2026-08-11-room-card-stack/
+   * task-7-fix2-report.md`.
+   *
+   * **Neither chapter's MEAN recovers to its pre-fix figure (24.8%/27.4%),
+   * and it cannot.** That number was itself inflated by this exact defect —
+   * a card reading as 100% photograph because its text was clipped away
+   * entirely — and preserving it would mean preserving the illegible text
+   * that produced it. The number this project owes is the honest one, not
+   * the flattering one; see `docs/DECISIONS.md` §15 for the same lesson
+   * learned once already, about the forest tint.
+   *
+   * Only applied to `stacked` cards (`app/globals.css`,
+   * `.room-card[data-card-layout="stacked"] > :first-child`) — `beside`
+   * cards size their photo from the card's own full height
+   * (`lg:items-stretch`) or their own portrait aspect, and were never part of
+   * this defect (their `leftover` measured positive at every combo checked),
+   * and their words block keeps its original `gap-3 py-6` at every width.
+   */
+  textReserve: 185,
 } as const;
 
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */

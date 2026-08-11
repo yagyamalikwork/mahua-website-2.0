@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T15:55:12.094Z",
+  "measuredAt": "2026-08-11T17:25:16.214Z",
   "url": "http://localhost:3100",
   "noRecede": false,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
@@ -46,6 +46,20 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -115,6 +129,20 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -184,6 +212,20 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -191,7 +233,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 631.68017578125
+          "boxHeight": 454.9599609375
         },
         {
           "name": "Cottage without Deck",
@@ -199,7 +241,7 @@
           "naturalWidth": 1586,
           "naturalHeight": 647,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 631.68017578125
+          "boxHeight": 454.9599609375
         },
         {
           "name": "Cottage with Deck",
@@ -253,6 +295,20 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -260,7 +316,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 706.88037109375
+          "boxHeight": 540.5
         },
         {
           "name": "Cottage without Deck",
@@ -268,7 +324,7 @@
           "naturalWidth": 1840,
           "naturalHeight": 751,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 706.88037109375
+          "boxHeight": 540.5
         },
         {
           "name": "Cottage with Deck",
@@ -326,6 +382,24 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -407,6 +481,24 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -488,6 +580,24 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -495,7 +605,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 631.68017578125
+          "boxHeight": 441.80029296875
         },
         {
           "name": "Suite",
@@ -503,7 +613,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 631.68017578125
+          "boxHeight": 441.80029296875
         },
         {
           "name": "Family Suite",
@@ -519,7 +629,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1344,
-          "boxHeight": 672
+          "boxHeight": 470
         }
       ]
     },
@@ -569,6 +679,24 @@
         "worstLastScale": 1,
         "anyCoveredReceded": true
       },
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -576,7 +704,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 706.88037109375
+          "boxHeight": 540.5
         },
         {
           "name": "Suite",
@@ -584,7 +712,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 706.88037109375
+          "boxHeight": 540.5
         },
         {
           "name": "Family Suite",
@@ -600,7 +728,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1504,
-          "boxHeight": 752
+          "boxHeight": 575
         }
       ]
     }

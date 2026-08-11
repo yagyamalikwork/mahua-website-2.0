@@ -203,9 +203,21 @@ export function RoomCard({
          * height, and stays needed.
          */}
         <div
-          className={`flex shrink-0 flex-col justify-center gap-3 px-6 py-6 md:px-10 ${
-            beside ? "lg:flex-1" : ""
-          }`}
+          className={
+            beside
+              ? "flex shrink-0 flex-col justify-center gap-3 px-6 py-6 md:px-10 lg:flex-1"
+              : // Tighter at `lg` and up ONLY — see `ROOM_STACK.textReserve` in
+                // `lib/motion.ts`: the photo's height ceiling frees a fixed
+                // budget for this block, and every px this padding gives up is
+                // a px the photo gets back. `gap-3`/`py-6` (this block's
+                // ordinary size, unchanged below `lg`, where the ceiling never
+                // binds) versus `lg:gap-2 lg:py-4` measured a 24px saving —
+                // recovered as photograph, not spent on more cream, and it is
+                // that recovery, not the reserve number alone, that gets
+                // `vann-rooms`/`tola-rooms` back under the 45% ceiling
+                // (non-negotiable #8) after the photo stopped over-cropping.
+                "flex shrink-0 flex-col justify-center gap-3 py-6 px-6 md:px-10 lg:gap-2 lg:py-4"
+          }
         >
           <h3 className="font-[family-name:var(--font-display)] text-2xl font-light leading-tight text-[color:var(--text)] md:text-3xl">
             {room.name}

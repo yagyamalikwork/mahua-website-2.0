@@ -45,6 +45,26 @@
 //      card being trivially opaque. Not run under `--no-recede`, where
 //      nothing recedes by design. This is the check that guards the
 //      tail-bleed fix — see the spec's §7.
+//   8. **A visitor can actually read every card.** Assertions 2 and 6 both
+//      measure the card's own OUTER box and its photograph; neither one ever
+//      looks at the words. A card can pass both while its text is entirely
+//      invisible, if the photo area grows taller than the card itself — the
+//      words, which sit after it in flow, land below the card's own
+//      `overflow: hidden` line and are clipped away regardless of where the
+//      outer box sits relative to the header or the bar. That is exactly what
+//      shipped on five stacked cards at 1440/1920 (fix round, 11 Aug 2026,
+//      `.superpowers/sdd/2026-08-11-room-card-stack/task-7-fix2-report.md`):
+//      `ROOM_CARD_BOXES` bounds the photo's WIDTH crop and was never checked
+//      against the card's own height. For every card, a fine (20px) sweep
+//      across the chapter's scroll range checks whether its TEXT BLOCK
+//      (`card.children[1]`, not the card) is ever simultaneously (a) inside
+//      the visible band — below the header, above the booking bar, not just
+//      inside `window.innerHeight`, which is exactly the gap that let a
+//      still-clipped card look "on screen"; (b) inside the CARD's OWN box,
+//      so a text rect that lands inside the visible band by coincidence while
+//      sitting outside its own ancestor's clip is still caught; (c) at
+//      opacity >= 0.98. A card that never manages all three at once fails,
+//      naming the room and the width.
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -563,6 +583,51 @@ for (const route of ROUTES) {
       }
     }
 
+    // ------------------------------------------------------- assertion 8
+    //
+    // See the long comment above this rig's assertion list for the mechanism.
+    // One evaluate() per step (not one per card) so a fine 20px sweep over a
+    // multi-thousand-px chapter stays affordable: every card's text-block
+    // legibility is read in the same round trip. `scrollToAndSettle` (not a
+    // fixed wait) for the same reason assertions 1/2/4/5 use it — a stale
+    // read mid-Lenis-interpolation would misplace exactly the boundary this
+    // assertion is checking.
+    const TEXT_STEP = 20;
+    const textLegible = Array.from({ length: count }, () => false);
+    for (let y = scanStart; y <= scanEnd; y += TEXT_STEP) {
+      await scrollToAndSettle(page, y);
+      const rows = await page.evaluate((selector) => {
+        const header = document.querySelector("[data-site-header]");
+        const bar = document.querySelector("[data-property-bar]");
+        const headerH = header ? header.getBoundingClientRect().height : 0;
+        const barTop = bar ? bar.getBoundingClientRect().top : window.innerHeight;
+        const visibleBottom = Math.min(window.innerHeight, barTop);
+        return Array.from(document.querySelectorAll(selector)).map((card) => {
+          const words = card.children[1];
+          const cardRect = card.getBoundingClientRect();
+          const wordsRect = words.getBoundingClientRect();
+          const opacity = Number(getComputedStyle(card).opacity);
+          const insideBand = wordsRect.top >= headerH - 0.5 && wordsRect.bottom <= visibleBottom + 0.5;
+          const insideCardClip =
+            wordsRect.top >= cardRect.top - 0.5 && wordsRect.bottom <= cardRect.bottom + 0.5;
+          return insideBand && insideCardClip && opacity >= 0.98;
+        });
+      }, sel);
+      rows.forEach((ok, i) => {
+        if (ok) textLegible[i] = true;
+      });
+    }
+    for (let i = 0; i < count; i++) {
+      if (!textLegible[i]) {
+        const name = crops[i]?.name ?? `card ${i}`;
+        note(
+          label,
+          `assertion 8: "${name}" text block was never simultaneously inside [header, bar], inside ` +
+            "its own card's clip box, and at full opacity — a visitor can never read it",
+        );
+      }
+    }
+
     report.combos.push({
       route: route.label,
       path: route.path,
@@ -576,15 +641,18 @@ for (const route of ROUTES) {
       assertion4Strips: strips,
       assertion5: recedeAt5,
       assertion7,
+      assertion8: crops.map((c, i) => ({ name: c.name, legible: textLegible[i] })),
       crops,
     });
 
+    const textLegibleCount = textLegible.filter(Boolean).length;
     console.log(
       `${label.padEnd(16)} rooms=${count} samples=${samples.length} bar<=${reservePx ?? "?"}px ` +
         `(max ${maxBar.toFixed(1)}px) resting@${resting ? Math.round(resting.scrollY) : "-"}` +
         (recedeAt5
           ? ` recede=${recedeAt5.receded} (${recedeAt5.widthDiffPct.toFixed(1)}%, op ${recedeAt5.opacity.toFixed(2)})`
-          : ""),
+          : "") +
+        ` text-legible=${textLegibleCount}/${count}`,
     );
 
     await context.close();

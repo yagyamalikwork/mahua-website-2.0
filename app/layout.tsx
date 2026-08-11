@@ -83,6 +83,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--room-card-scale-min": String(ROOM_STACK.scaleMin),
           "--room-card-dim": String(ROOM_STACK.dim),
           "--property-bar-reserve": `${ROOM_STACK.barReserve}px`,
+          // The floor under a stacked card's text block — see ROOM_STACK.textReserve's
+          // own comment for the mechanism and the measurement behind 240.
+          "--room-text-reserve": `${ROOM_STACK.textReserve}px`,
           // The base paper, under its own name.
           //
           // `--bg` cannot serve here: `ChapterSurface` shadows it with

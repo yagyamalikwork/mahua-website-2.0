@@ -1073,6 +1073,37 @@ body {
 }
 
 /*
+ * The photo area's HEIGHT CEILING for a `stacked` card — the words block's
+ * floor. `RoomCard.tsx`'s `ROOM_CARD_BOXES.stacked` (`aspect-ratio: 2`) bounds
+ * the photograph's WIDTH crop (assertion 6's 25% rule) and was never checked
+ * against the card's own height. At 1440/1920 a 2:1 band across a ~1,248–
+ * 1,504px-wide card is 624–752px tall against a 655–669px card — the words
+ * block, which follows it in flow inside `.room-card`'s `overflow: hidden`,
+ * landed entirely below the visible box. See `ROOM_STACK.textReserve` in
+ * `lib/motion.ts` for the measurement, the paired `lg:`-only padding change
+ * in `RoomCard.tsx` this dial depends on, and why 185px is the value that
+ * clears both the legibility rig and the 45% density ceiling (non-negotiable
+ * #8) — a looser value passed the former alone and pushed `tola-rooms` over
+ * the latter.
+ *
+ * `:first-child` (not a dedicated class) because the wrapper's only marker is
+ * position — it is always the card's first child, `RoomCard.tsx`'s own
+ * comment says so, and `[data-card-layout="stacked"]` (already written by the
+ * component, read by `check_card_stack.mjs`'s crop assertion) already scopes
+ * this to the layout that needs it. `beside` cards are untouched: their photo
+ * takes the card's own full height (`lg:items-stretch`) or a portrait aspect,
+ * and never measured a negative `leftover` at any reviewed width.
+ *
+ * `aspect-ratio` still supplies the PREFERRED height — this only caps it.
+ * Capping height can only widen a box's effective aspect (more height lost,
+ * never more width), so this can only improve assertion 6's width-crop
+ * figure, never worsen it.
+ */
+.room-card[data-card-layout="stacked"] > :first-child {
+  max-height: calc(var(--room-card-height) - var(--room-text-reserve));
+}
+
+/*
  * The last card is never covered by anything, so it must never recede.
  * `view()` tracks a sticky element's FLOW position, not its stuck one: for a
  * covered card that is fine, because its exit phase plays out while an
