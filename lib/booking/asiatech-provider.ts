@@ -22,7 +22,7 @@ export class AsiaTechProvider implements BookingProvider {
   private refuse(): never {
     throw new BookingError(
       "PROVIDER_DOWN",
-      "Online booking is not available yet — this provider is not implemented.",
+      "Online booking is not available yet.",
       "AsiaTechProvider: not implemented — awaiting AsiaTech API documentation (spec §8)",
     );
   }

@@ -20,8 +20,13 @@ describe("AsiaTechProvider", () => {
     ];
     for (const call of calls) {
       await expect(call).rejects.toBeInstanceOf(BookingError);
-      await expect(call).rejects.toMatchObject({ code: "PROVIDER_DOWN" });
-      await expect(call).rejects.toThrow(/not implemented/i);
+      await expect(call).rejects.toMatchObject({
+        code: "PROVIDER_DOWN",
+        providerDetail: expect.stringMatching(/not implemented/i),
+      });
+      await call.catch((e: unknown) => {
+        expect((e as Error).message).not.toMatch(/not implemented/i);
+      });
     }
   });
 });
