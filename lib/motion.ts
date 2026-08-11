@@ -398,6 +398,38 @@ export const IMAGE_FROM = { scale: 1.08 } as const;
  */
 export const STICKY_SCREENS_MAX = 3;
 
+/**
+ * The rooms card stack — `components/sections/RoomCardStack.tsx`.
+ *
+ * Every number here is spent against one measured budget: the *slack* between
+ * the sticky header and the booking bar, which is **706px on a 390x844 phone**
+ * and 724px at 1440x900. The phone is the tighter case, which is a first on
+ * this page, so nothing here may be tuned against a desktop screenshot.
+ *
+ * `barReserve` is a constant rather than the bar's published height on purpose.
+ * `PropertyBar` returns `null` over the hero, the invitation and the footer, so
+ * a live measurement would flip between 0 and 69 as the visitor scrolls, and
+ * card height is computed from it — every card in the chapter would resize, and
+ * a resizing card moves the page under the reader's hand.
+ * `scripts/check_card_stack.mjs` measures the real bar at four widths and fails
+ * if it outgrows this, so the drift a constant invites is caught rather than
+ * shipped.
+ */
+export const ROOM_STACK = {
+  /** Vertical offset added per card, so the read cards leave a visible deck. */
+  deckStep: 14,
+  /** Breathing room between the deepest card and the booking bar. */
+  gutter: 24,
+  /** Past this a card stops reading as a card and starts reading as a section. */
+  heightMax: 760,
+  /** A covered card's scale at full recede. */
+  scaleMin: 0.94,
+  /** A covered card's opacity at full recede. */
+  dim: 0.55,
+  /** Space held for the booking bar. Measured 63px at 390, 69px from 768. */
+  barReserve: 72,
+} as const;
+
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined" || !window.matchMedia) return false;

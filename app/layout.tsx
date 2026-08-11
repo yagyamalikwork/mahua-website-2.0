@@ -4,7 +4,7 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
-import { DURATION, ENTER, IMAGE_FROM, LIVING, RAISE, WELCOME } from "@/lib/motion";
+import { DURATION, ENTER, IMAGE_FROM, LIVING, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -72,6 +72,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--welcome-turn": `${WELCOME.turn}s`,
           "--welcome-hold": `${WELCOME.hold}s`,
           "--welcome-fade": `${WELCOME.fade}s`,
+          // The rooms card stack, on the same terms as everything above it: the
+          // numbers live in `lib/motion.ts`, the rules live in
+          // `app/globals.css`, and neither can drift from the other. Published
+          // on `<html>` rather than on the section because `--property-bar-reserve`
+          // describes a bar that is fixed to the viewport, not to any chapter.
+          "--room-deck-step": `${ROOM_STACK.deckStep}px`,
+          "--room-card-gutter": `${ROOM_STACK.gutter}px`,
+          "--room-card-height-max": `${ROOM_STACK.heightMax}px`,
+          "--room-card-scale-min": String(ROOM_STACK.scaleMin),
+          "--room-card-dim": String(ROOM_STACK.dim),
+          "--property-bar-reserve": `${ROOM_STACK.barReserve}px`,
+          // The base paper, under its own name.
+          //
+          // `--bg` cannot serve here: `ChapterSurface` shadows it with
+          // `var(--surface)` on every second chapter, so inside one of those a
+          // card asking for `--bg` gets the deeper paper it is trying to sit
+          // ON, and the whole stack goes invisible against its own section.
+          // `--surface` is never shadowed, so this is the missing half of the
+          // pair. Same value as `--bg` at the root, and never reassigned.
+          "--paper": PALETTE.paper,
           // The hairline that slides in under a link, on the same terms as
           // everything above it: the number lives in `lib/motion.ts`, the rule
           // lives in `app/globals.css`, and neither can drift from the other.

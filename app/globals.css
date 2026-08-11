@@ -936,3 +936,72 @@ body {
     height: auto;
   }
 }
+
+/*
+ * The rooms card stack — `components/sections/RoomCardStack.tsx`.
+ *
+ * **The slot/card split is the mechanism, not tidiness.** A sticky element
+ * cannot drive a scroll-linked animation from its own position: once it sticks
+ * it stops moving, so its own view progress stops advancing and the recede
+ * never runs. The slot stays in normal flow and scrolls normally; the card
+ * inside reads the slot's timeline. Merge them and the recede silently dies
+ * while everything still stacks — which looks almost right, which is worse.
+ */
+.room-slot {
+  view-timeline-name: --room-slot;
+  view-timeline-axis: block;
+  /* The slot is the scroll the card is read over. Its height IS the card's. */
+  height: var(--room-card-height);
+}
+
+.room-stack {
+  /*
+   * `--room-card-height` is solved, not chosen. `100svh` and not `100vh`:
+   * on a phone the URL bar's collapse changes `vh` mid-scroll, which would
+   * resize every card in the chapter while the visitor is reading one.
+   */
+  --room-deck-depth: calc(var(--room-deck-step) * (var(--room-count) - 1));
+  --room-card-height: min(
+    calc(
+      100svh - var(--header-height, 0px) - var(--property-bar-reserve) -
+        var(--room-deck-depth) - var(--room-card-gutter)
+    ),
+    var(--room-card-height-max)
+  );
+}
+
+.room-card {
+  position: sticky;
+  top: calc(var(--header-height, 0px) + var(--room-deck-step) * var(--i));
+  height: var(--room-card-height);
+  /* The deck edge. Gold's actual job — decorative, carrying no text. */
+  border-top: 1px solid var(--accent);
+  /* Scaling from the top keeps the deck's hairlines evenly spaced as cards recede. */
+  transform-origin: top center;
+  animation: room-recede linear both;
+  animation-timeline: --room-slot;
+  animation-range: exit 0% exit 100%;
+}
+
+@keyframes room-recede {
+  to {
+    transform: scale(var(--room-card-scale-min));
+    opacity: var(--room-card-dim);
+  }
+}
+
+/*
+ * Reduced motion keeps the stack and drops only the recede — deliberately
+ * unlike `.sticky-scene` above, which collapses entirely.
+ *
+ * The two are not alike. `StickyScene` reserves *empty* scroll that only means
+ * anything once something moves through it, so with motion off it is screens of
+ * nothing. A card stack's scroll is the visitor's own movement, 1:1, with
+ * nothing animating at them. What goes is the recede, which is the only part
+ * not under their hand.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .room-card {
+    animation: none;
+  }
+}

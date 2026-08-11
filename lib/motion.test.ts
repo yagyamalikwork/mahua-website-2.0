@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DURATION, EASE, ENTER, IMAGE_FROM, LIVING, PARALLAX_MAX, STICKY_SCREENS_MAX } from "./motion";
+import { DURATION, EASE, ENTER, IMAGE_FROM, LIVING, PARALLAX_MAX, ROOM_STACK, STICKY_SCREENS_MAX } from "./motion";
 
 describe("the motion laws (spec section 4.3)", () => {
   it("keeps reveals between 800ms and 1400ms", () => {
@@ -205,5 +205,30 @@ describe("the entrance vocabulary (ENTER)", () => {
     // and another that feels cheap.
     expect(ENTER.duration).toBeGreaterThanOrEqual(0.8);
     expect(ENTER.duration).toBeLessThanOrEqual(1.4);
+  });
+});
+
+describe("ROOM_STACK", () => {
+  it("reserves more than the booking bar's measured height", () => {
+    // Measured 11 Aug 2026 on both routes: 63px at 390, 69px at 768 and up.
+    // `scripts/check_card_stack.mjs` re-measures the real bar and fails if it
+    // ever grows past this; this test only guards the constant's intent.
+    expect(ROOM_STACK.barReserve).toBeGreaterThanOrEqual(69);
+  });
+
+  it("recedes a covered card without hiding it", () => {
+    expect(ROOM_STACK.scaleMin).toBeGreaterThan(0.85);
+    expect(ROOM_STACK.scaleMin).toBeLessThan(1);
+    // Dim, not vanish: a card the visitor can no longer see is a card that
+    // stopped being a deck and started being a disappearance.
+    expect(ROOM_STACK.dim).toBeGreaterThan(0.35);
+    expect(ROOM_STACK.dim).toBeLessThan(1);
+  });
+
+  it("keeps a four-card deck inside the tightest measured slack", () => {
+    // 390x844: 844 - 75 header - 63 bar = 706px of slack.
+    const SLACK_390 = 706;
+    const deck = ROOM_STACK.deckStep * 3;
+    expect(deck + ROOM_STACK.gutter).toBeLessThan(SLACK_390 * 0.15);
   });
 });
