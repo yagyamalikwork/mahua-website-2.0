@@ -25,12 +25,22 @@ describe("the booking module keeps its two load-bearing rules", () => {
   });
 
   it("does no floating-point money arithmetic", () => {
-    // Paise are integers. A `/` or a `parseFloat` in a file that computes a
-    // total is how a bill stops matching the arithmetic behind it.
+    // Paise are integers. A `parseFloat(` or `.toFixed(` call in a file that
+    // computes a total is how a bill stops matching the arithmetic behind it.
+    //
+    // This matches the *call form* (trailing paren) against the raw,
+    // unstripped source, rather than stripping comments first and matching
+    // the bare word. Comment-stripping used to run via
+    // `text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "")`, and
+    // that second replace is not string-literal-aware: a `//` inside an
+    // ordinary string (e.g. a URL) on the same line as a real call would
+    // delete everything after it, including the call, producing a false
+    // pass. Matching the call form directly removes the hole *and* the
+    // reason stripping existed — a prose mention like "no `parseFloat`" has
+    // no trailing `(` and does not trip this. Do not reintroduce stripping.
     for (const { file, text } of sources) {
-      const stripped = text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
-      expect(stripped, `${file} uses parseFloat`).not.toMatch(/parseFloat|Number\.parseFloat/);
-      expect(stripped, `${file} uses toFixed`).not.toMatch(/toFixed/);
+      expect(text, `${file} uses parseFloat(`).not.toMatch(/parseFloat\s*\(/);
+      expect(text, `${file} uses .toFixed(`).not.toMatch(/\.toFixed\s*\(/);
     }
   });
 });
