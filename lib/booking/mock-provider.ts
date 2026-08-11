@@ -1,7 +1,6 @@
 import { BookingError, type BookingErrorCode } from "./errors";
 import type { BookingProvider } from "./provider";
 import {
-  addMoney,
   nightsBetween,
   rupees,
   type Booking,
@@ -12,6 +11,7 @@ import {
   type RoomOffer,
   type SearchQuery,
   type SearchResult,
+  type StayDate,
 } from "./types";
 
 /**
@@ -57,6 +57,15 @@ const PLANS = [
 export class MockProvider implements BookingProvider {
   private readonly scenario: MockScenario;
   private readonly quotes = new Map<string, Quote>();
+  /**
+   * The search a continuation came from, plus its nights — so `quote` prices
+   * the same stay `search` showed, rather than guessing at one night and one
+   * room. An unrecognised continuation is exactly a stale one, hence
+   * `QUOTE_EXPIRED` rather than a new error code.
+   */
+  private readonly continuations = new Map<string, { query: SearchQuery; nights: number }>();
+  /** The property and dates a quote was struck for, so `book` can return them for real. */
+  private readonly quoteContext = new Map<string, { property: PropertyId; checkIn: StayDate; checkOut: StayDate }>();
   private counter = 0;
 
   constructor(options: { scenario?: MockScenario } = {}) {
@@ -87,7 +96,9 @@ export class MockProvider implements BookingProvider {
     }
 
     if (this.scenario === "SOLD_OUT") {
-      return { query, offers: [], continuation: this.next("cont") };
+      const continuation = this.next("cont");
+      this.continuations.set(continuation, { query, nights });
+      return { query, offers: [], continuation };
     }
 
     const roomCount = query.rooms.length;
@@ -108,7 +119,9 @@ export class MockProvider implements BookingProvider {
       }),
     }));
 
-    return { query, offers, continuation: this.next("cont") };
+    const continuation = this.next("cont");
+    this.continuations.set(continuation, { query, nights });
+    return { query, offers, continuation };
   }
 
   async quote(input: { continuation: string; roomId: string; ratePlanId: string }): Promise<Quote> {
@@ -122,6 +135,15 @@ export class MockProvider implements BookingProvider {
       throw new BookingError("PROVIDER_DOWN", "We could not reach the booking system.", "mock: forced");
     }
 
+    const context = this.continuations.get(input.continuation);
+    if (!context) {
+      throw new BookingError(
+        "QUOTE_EXPIRED",
+        "That search has expired. Please search again.",
+        "mock: unknown continuation",
+      );
+    }
+
     const shape = Object.values(ROOMS)
       .flat()
       .find((s) => s.id === input.roomId);
@@ -130,10 +152,14 @@ export class MockProvider implements BookingProvider {
       throw new BookingError("SOLD_OUT", "That room is no longer available.", `mock: unknown ${input.roomId}`);
     }
 
-    const base: Money = rupees(shape.nightlyPaise + plan.upliftPaise);
+    // Priced exactly as `search` priced it — same per-night rate, same nights,
+    // same room count — so a quote never silently disagrees with the offer the
+    // guest was just shown.
+    const perNight: Money = rupees(shape.nightlyPaise + plan.upliftPaise);
+    const roomCount = context.query.rooms.length;
     const quote: Quote = {
       id: this.next("quote"),
-      total: addMoney(base, rupees(0)),
+      total: rupees(perNight.amount * context.nights * roomCount),
       // The mock holds nothing. `null` is the honest answer and the one the UI
       // must be built against — a provider that cannot hold a room should never
       // let a confirmation screen imply it did.
@@ -142,6 +168,11 @@ export class MockProvider implements BookingProvider {
       charges: [{ label: "MOCK CHARGE — not a real tax line", amount: rupees(0) }],
     };
     this.quotes.set(quote.id, quote);
+    this.quoteContext.set(quote.id, {
+      property: context.query.property,
+      checkIn: context.query.checkIn,
+      checkOut: context.query.checkOut,
+    });
     return quote;
   }
 
@@ -153,14 +184,15 @@ export class MockProvider implements BookingProvider {
       throw new BookingError("PROVIDER_DOWN", "We could not reach the booking system.", "mock: forced");
     }
     const quote = this.quotes.get(input.quoteId);
-    if (!quote) {
+    const context = this.quoteContext.get(input.quoteId);
+    if (!quote || !context) {
       throw new BookingError("QUOTE_EXPIRED", "That hold has expired. Please search again.", "mock: unknown quote");
     }
     return {
       reference: this.next("MOCK"),
-      property: "mahua-tola",
-      checkIn: "2026-11-14" as Booking["checkIn"],
-      checkOut: "2026-11-16" as Booking["checkOut"],
+      property: context.property,
+      checkIn: context.checkIn,
+      checkOut: context.checkOut,
       total: quote.total,
       // Nothing was charged. Saying so is the point of the field.
       payment: "unpaid",
