@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - **No rate, tax, cancellation term, or room count may be presented as Mahua's real commercial terms.** The spec's §3 figures are one sampled date range and almost certainly seasonal. Mock rates must be visibly fictional and labelled as such in code. This project has already nearly shipped an invented capacity figure as a claim about the client's property.
-- **Money is `{ amount: number; currency: "INR" }` in integer paise. Never a float, never a formatted string.** No total may be produced by an expression containing `/`, `*` by a non-integer, or `parseFloat`.
+- **Money is integer paise in INR, and is *branded* — `rupees()` is the only way to obtain one.** Never a float, never a formatted string. No total may be produced by an expression containing `/`, `*` by a non-integer, or `parseFloat`. (The brand was added in Task 1's review: without it a forged object literal type-checked with no cast and skipped `rupees()`'s validation entirely.)
 - **A stay date is a branded `YYYY-MM-DD` string in the property's own calendar. Never a `Date`.**
 - **No user-facing strings.** This is `lib/` only — nothing here renders. Provider-supplied text (cancellation policy, charge labels) passes through verbatim and is never re-worded.
 - **British spelling** in comments and any text.
