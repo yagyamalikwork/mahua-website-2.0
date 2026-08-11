@@ -14,6 +14,17 @@ import {
 } from "@/components/sections/ExperiencePair";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_BOXES, ROOM_SIZES, type RoomScale } from "@/components/sections/RoomShowcase";
+// `RoomCard` (Task 4 of the room-card-stack plan) is not mounted on any route
+// yet — Task 5 builds the stack and mounts it, Task 7 retires `RoomShowcase`
+// above. The import below is imported-but-unused on purpose: the companion
+// check further down ("imports from every component that passes a sizes
+// prop") requires it the moment the file exists on disk, regardless of
+// whether it is live, and `LIVE_SLOTS` — which "covers every distinct sizes
+// string on the page" — must stay honest about what the page actually
+// serves today. Task 5 moves these two into `LIVE_SLOTS` and bumps the
+// distinct-string count when the stack goes live.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ROOM_CARD_BOXES, ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
