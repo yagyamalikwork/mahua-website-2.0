@@ -119,17 +119,34 @@ how the 35% crops got there.
 ChapterSurface  (existing — already overflow-x: clip, which is what lets sticky work)
 └── RoomCardStack                        server component, no "use client"
     ├── heading block                    ChapterMark + TwoToneHeading + intro — NOT sticky
-    └── <ol class="room-stack">
-        └── <li class="room-slot">       normal flow. Carries view-timeline-name.
-            └── <article class="room-card">   position: sticky. The card.
-                ├── <RoomCardMedia>      Photo at the room's own aspect
-                └── words                name, line, facts, optional note
+    └── <ol class="room-stack">          tall: its height is the sum of its cards'
+        └── <li class="room-card">       position: sticky. The card IS the list item.
+            ├── Photo                    at the room's own aspect
+            └── words                    name, line, facts, optional note
 ```
 
-**The slot/card split is the mechanism, not decoration.** A sticky element cannot drive a scroll-linked
-animation from its own position — once stuck it stops moving, so its own view progress stops advancing.
-The slot stays in normal flow and scrolls normally; its view timeline is what the card inside reads to
-know how far it has been covered. Collapsing the two into one element removes the recede entirely.
+**The cards must be direct children of the stack, and this was learned the expensive way.** An earlier
+draft of this spec wrapped each card in a slot of exactly the card's height, on the theory that a sticky
+element cannot drive a scroll-linked animation from its own position. **Both halves of that were wrong,
+and the second one silently destroys the effect** — measured in Chrome 151 over four cards:
+
+| construction | cards ever simultaneously pinned | cards that receded |
+|---|---|---|
+| card inside a slot of equal height | **0 of 4** | all four |
+| **card as a direct child, `animation-timeline: view()`** | **3 of 4** | all four |
+
+`position: sticky` is clamped to its containing block, so a wrapper exactly as tall as the card leaves
+zero slack and the card renders exactly as if it were `static`. The deck needs each card to stay pinned
+while *later* cards scroll past it, which means the containing block has to be the whole stack.
+
+And the premise that forced the wrapper is simply false: a sticky element's view timeline tracks its
+**flow** position, not its stuck one, so `animation-timeline: view()` on the card works. The wrapper was
+unnecessary and harmful at once.
+
+**Note the failure's shape, because it is this project's own:** in the broken construction the recede ran
+perfectly on all four cards. Everything animated; nothing stacked. A check that confirmed "the animation
+is running" would have passed it. What catches it is asserting that a card's position *freezes while the
+next one advances* — which is assertion 1 in §10.
 
 **Nothing here is a client component.** No `"use client"`, no hooks, no scroll listener — and, after §5,
 no JavaScript anywhere in this design at all.
@@ -171,8 +188,6 @@ JavaScript is **byte-identical**.
 ## 6. The stack
 
 ```css
-.room-slot { view-timeline-name: --room-slot; view-timeline-axis: block; }
-
 .room-card {
   position: sticky;
   top: calc(var(--header-height, 0px) + var(--deck-step) * var(--i));
@@ -191,12 +206,12 @@ JavaScript is **byte-identical**.
 
 ## 7. The recede
 
-Driven by the slot's view timeline, so it is CSS end to end:
+Driven by the card's own view timeline, so it is CSS end to end:
 
 ```css
 .room-card {
   animation: room-recede linear both;
-  animation-timeline: --room-slot;
+  animation-timeline: view();
   animation-range: exit 0% exit 100%;
 }
 

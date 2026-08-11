@@ -4,7 +4,7 @@
 
 **Goal:** Replace the rooms chapter on `/mahua-vann` and `/mahua-tola` with a card stack — each room a card that sticks below the header while the next rises over it, covered cards receding slightly — adding zero bytes of JavaScript.
 
-**Architecture:** A server-rendered `<ol>` of slots; each slot sits in normal flow and carries a `view-timeline-name`, and the `position: sticky` card inside it reads that timeline to know how far it has been covered. Card height is *calculated* from the measured slack between the sticky header and the booking bar, never hard-coded. Every dial (recede scale, dim, deck step) lives in `lib/motion.ts` and reaches CSS through `app/layout.tsx`, like every other number on this site.
+**Architecture:** A server-rendered `<ol>` whose `<li>` children ARE the cards, each `position: sticky` at a stepped offset so they pile up under the header, each running a recede off its own `view()` timeline. Card height is *calculated* from the measured slack between the sticky header and the booking bar, never hard-coded. Every dial (recede scale, dim, deck step) lives in `lib/motion.ts` and reaches CSS through `app/layout.tsx`, like every other number on this site.
 
 **Tech Stack:** Next.js 16 (App Router, React 19 server components), Tailwind v4, plain CSS in `app/globals.css` for the stack mechanics, CSS scroll-driven animations (`view-timeline` / `animation-timeline`), Vitest + Testing Library for units, Playwright for the browser rig.
 
@@ -32,13 +32,13 @@ Copied from the spec and `CLAUDE.md`. Every task's requirements implicitly inclu
 |---|---|
 | `lib/motion.ts` | **Modify.** Add `ROOM_STACK` — the recede scale, the dim, the deck step, the card gutter, the max card height. The only place these numbers exist. |
 | `app/layout.tsx` | **Modify.** Publish `ROOM_STACK` as CSS custom properties, beside the existing `--welcome-*` and `--lantern-*` blocks. |
-| `app/globals.css` | **Modify.** `--property-bar-reserve`, the `.room-slot` / `.room-card` rules, the `room-recede` keyframes, and the two switch-offs (reduced motion, no `animation-timeline`). |
+| `app/globals.css` | **Modify.** `--property-bar-reserve`, the `.room-stack` / `.room-card` rules, the `room-recede` keyframes, and the reduced-motion switch-off. |
 | `lib/room-card.ts` | **Create.** `roomCardLayout(aspect)` — the one function deciding whether a room is a `stacked` or `beside` card, from the photograph's own aspect ratio. Pure, no React, so it is unit-testable and reusable by the rig. |
 | `lib/room-card.test.ts` | **Create.** The threshold rule, and that every room in both content files resolves to the intended layout. |
 | `components/sections/RoomCard.tsx` | **Create.** One room as a card, in either composition. Owns `ROOM_CARD_SIZES` and `ROOM_CARD_BOXES`. |
 | `components/sections/RoomCard.test.tsx` | **Create.** Both compositions, `--i`, the words, the optional note. |
 | `components/sections/RoomCardStack.tsx` | **Create.** The section: heading block, then the `<ol>` of slots. Server component. |
-| `components/sections/RoomCardStack.test.tsx` | **Create.** Structure: slot/card nesting, `--i` per card, `--room-count`, heading outside the stack. |
+| `components/sections/RoomCardStack.test.tsx` | **Create.** Structure: cards as direct `<li>` children, `--i` per card, `--room-count`, heading outside the stack. |
 | `components/sections/RoomShowcase.tsx` | **Delete** in Task 7, with its test. |
 | `components/property/PropertyPage.tsx` | **Modify.** The `showcase` branch renders `RoomCardStack`. |
 | `components/sections/RoomShowcase.types.ts` | **Create** in Task 1 — `RoomEntryCopy` / `RoomShowcaseCopy` move here so the content files keep one import when `RoomShowcase.tsx` is deleted. |
@@ -452,27 +452,33 @@ Append to `app/globals.css`, after the `.sticky-scene` rules:
 /*
  * The rooms card stack — `components/sections/RoomCardStack.tsx`.
  *
- * **The slot/card split is the mechanism, not tidiness.** A sticky element
- * cannot drive a scroll-linked animation from its own position: once it sticks
- * it stops moving, so its own view progress stops advancing and the recede
- * never runs. The slot stays in normal flow and scrolls normally; the card
- * inside reads the slot's timeline. Merge them and the recede silently dies
- * while everything still stacks — which looks almost right, which is worse.
+ * **The cards are direct children of the stack, and that is load-bearing.**
+ * `position: sticky` is clamped to its containing block, so wrapping each card
+ * in a slot of the card's own height leaves zero slack and the card renders
+ * exactly as if it were `static`. Measured in Chrome 151 over four cards:
+ * wrapped, **0 of 4** were ever simultaneously pinned; as direct children,
+ * **3 of 4**. The deck needs each card pinned while LATER cards scroll past it,
+ * so the containing block has to be the whole stack.
+ *
+ * **And a sticky element can drive its own view timeline** — `view()` tracks
+ * the element's flow position, not its stuck one. The wrapper an earlier draft
+ * introduced to work around that was unnecessary and fatal at once.
+ *
+ * Note the shape of the failure: in the broken version the recede ran perfectly
+ * on all four cards. Everything animated; nothing stacked. Only an assertion
+ * that a card's position FREEZES while the next advances catches it.
  */
-.room-slot {
-  view-timeline-name: --room-slot;
-  view-timeline-axis: block;
-  /* The slot is the scroll the card is read over. Its height IS the card's. */
-  height: var(--room-card-height);
-}
-
 .room-stack {
   /*
    * `--room-card-height` is solved, not chosen. `100svh` and not `100vh`:
    * on a phone the URL bar's collapse changes `vh` mid-scroll, which would
    * resize every card in the chapter while the visitor is reading one.
+   *
+   * `--room-count` falls back to 1 so a stack rendered without it degrades to a
+   * single-card deck depth rather than poisoning the whole `min()` — an invalid
+   * `var()` here would take `height` down with it.
    */
-  --room-deck-depth: calc(var(--room-deck-step) * (var(--room-count) - 1));
+  --room-deck-depth: calc(var(--room-deck-step) * (var(--room-count, 1) - 1));
   --room-card-height: min(
     calc(
       100svh - var(--header-height, 0px) - var(--property-bar-reserve) -
@@ -491,7 +497,7 @@ Append to `app/globals.css`, after the `.sticky-scene` rules:
   /* Scaling from the top keeps the deck's hairlines evenly spaced as cards recede. */
   transform-origin: top center;
   animation: room-recede linear both;
-  animation-timeline: --room-slot;
+  animation-timeline: view();
   animation-range: exit 0% exit 100%;
 }
 
@@ -707,7 +713,7 @@ export function RoomCard({
   const beside = layout === "beside";
 
   return (
-    <article
+    <li
       className={`room-card flex overflow-hidden ${
         beside ? "flex-col lg:flex-row lg:items-stretch" : "flex-col"
       }`}
@@ -763,7 +769,7 @@ export function RoomCard({
           </p>
         )}
       </div>
-    </article>
+    </li>
   );
 }
 ```
@@ -823,9 +829,8 @@ const CHAPTER: PropertyChapter = {
 const COPY = TOLA_COPY.showcaseCopy!["tola-rooms"];
 
 describe("RoomCardStack", () => {
-  it("gives every room a slot and a card, in order", () => {
+  it("gives every room a card, in order", () => {
     const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
-    expect(container.querySelectorAll(".room-slot")).toHaveLength(COPY.rooms.length);
     expect(container.querySelectorAll(".room-card")).toHaveLength(COPY.rooms.length);
     const indices = [...container.querySelectorAll<HTMLElement>(".room-card")].map((c) =>
       c.style.getPropertyValue("--i"),
@@ -834,15 +839,19 @@ describe("RoomCardStack", () => {
   });
 
   /**
-   * The card must be a child of the slot, not a sibling. A sticky element
-   * cannot drive an animation from its own position — merge or reorder these
-   * and the stack still stacks while the recede silently dies.
+   * Every card must be a DIRECT child of the stack. `position: sticky` is
+   * clamped to its containing block, so any wrapper between the two leaves the
+   * card no slack and it renders exactly as if it were `static` — measured at
+   * 0 of 4 cards ever pinned. The stack still looks alive, because the recede
+   * runs regardless; it simply never stacks.
    */
-  it("nests each card inside its own slot", () => {
+  it("makes every card a direct child of the stack", () => {
     const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
-    for (const slot of container.querySelectorAll(".room-slot")) {
-      expect(slot.children).toHaveLength(1);
-      expect(slot.firstElementChild).toHaveClass("room-card");
+    const stack = container.querySelector("ol.room-stack");
+    expect(stack.children).toHaveLength(COPY.rooms.length);
+    for (const child of stack.children) {
+      expect(child.tagName).toBe("LI");
+      expect(child).toHaveClass("room-card");
     }
   });
 
@@ -897,7 +906,7 @@ import type { RoomShowcaseCopy } from "./RoomShowcase.types";
  * dims so the deck reads as depth rather than as stacked paper.
  *
  * **It carries no JavaScript.** The stacking is `position: sticky`; the recede
- * is a CSS scroll-driven animation reading the slot's view timeline. There is
+ * is a CSS scroll-driven animation reading each card's own view timeline. There is
  * no hook here, no scroll listener and no `"use client"` — which is what let
  * this ship against 3.7 KB of budget headroom.
  *
@@ -946,9 +955,7 @@ export function RoomCardStack({
           style={{ "--room-count": String(copy.rooms.length) } as React.CSSProperties}
         >
           {copy.rooms.map((room, i) => (
-            <li key={room.name} className="room-slot">
-              <RoomCard room={room} index={i} onSurface={surface} />
-            </li>
+            <RoomCard key={room.name} room={room} index={i} onSurface={surface} />
           ))}
         </ol>
       </div>
@@ -1161,7 +1168,7 @@ Update the Status table (phase, tests count, evidence), add `check_card_stack.mj
 - [ ] **Step 2: `docs/DECISIONS.md`**
 
 Add the 11 Aug client rulings to the table: the card stack requested, and "pile up with recede" chosen over the alternatives. Add a new section covering, at minimum:
-- **why the slot/card split exists** — a sticky element cannot drive an animation from its own position, and merging them kills the recede while everything still stacks;
+- **why the cards must be direct children of the stack** — `position: sticky` is clamped to its containing block, so a wrapper of the card's own height leaves zero slack and the card renders as `static`. Measured: 0 of 4 cards pinned wrapped, 3 of 4 as direct children. **And the recede ran perfectly in the broken version** — everything animated, nothing stacked, which is why the assertion has to be that a card's position freezes while the next advances;
 - **why the booking bar's space is a constant and not its published height** — `PropertyBar` returns `null` over three regions, so a live value would resize every card mid-scroll;
 - **why reduced motion keeps the stack here but collapses `StickyScene`** — one reserves empty scroll, the other's scroll is the visitor's own movement;
 - **the phone as the binding case at 706px**, the first time on this project;
@@ -1188,7 +1195,7 @@ git commit -m "docs: the card stack, and the three things it was expensive to le
 
 ## Self-Review
 
-**Spec coverage.** §1 → Tasks 4, 5. §2 (measured envelope) → Task 3's `ROOM_STACK` and its test. §3 (photographs, layout rule, crop bound) → Tasks 1, 2, 4, and rig assertion 6. §4 (architecture, slot/card split) → Task 5 and its nesting test. §5 (bar reserve, no JS) → Task 3, rig assertion 3, Task 7's byte-identical budget check. §6 (stack mechanics) → Task 3. §7 (recede, dials in `lib/motion.ts`) → Task 3, rig assertion 5. §8 (degradation ladder) → Task 3's reduced-motion rule, Task 6's `--no-recede` arm. §9 (solved card height) → Task 3's CSS and its slack test; the projected section heights are confirmed in Task 7 Step 5. §10 (what must be proved) → Tasks 6 and 7. §11 (what is replaced) → Tasks 1, 5, 7. §12 (Tola's room count) → out of scope, unchanged.
+**Spec coverage.** §1 → Tasks 4, 5. §2 (measured envelope) → Task 3's `ROOM_STACK` and its test. §3 (photographs, layout rule, crop bound) → Tasks 1, 2, 4, and rig assertion 6. §4 (architecture, cards as direct children) → Task 5 and its direct-child test. §5 (bar reserve, no JS) → Task 3, rig assertion 3, Task 7's byte-identical budget check. §6 (stack mechanics) → Task 3. §7 (recede, dials in `lib/motion.ts`) → Task 3, rig assertion 5. §8 (degradation ladder) → Task 3's reduced-motion rule, Task 6's `--no-recede` arm. §9 (solved card height) → Task 3's CSS and its slack test; the projected section heights are confirmed in Task 7 Step 5. §10 (what must be proved) → Tasks 6 and 7. §11 (what is replaced) → Tasks 1, 5, 7. §12 (Tola's room count) → out of scope, unchanged.
 
 **Two gaps found and closed while reviewing.** The spec's §8 promises a "no `animation-timeline` support" fallback distinct from reduced motion, but no task tested support-absence separately — Task 6's break #3 (deleting the `animation-timeline` line) now covers it, which is the same observable state. And nothing initially asserted the *photo crop bound* the spec's §3 makes its central promise; that is now rig assertion 6.
 
