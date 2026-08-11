@@ -3,7 +3,9 @@ import { addMoney, nightsBetween, rupees, stayDate } from "./types";
 
 describe("Money", () => {
   it("holds integer paise and a currency", () => {
-    expect(rupees(1545000)).toEqual({ amount: 1545000, currency: "INR" });
+    const money = rupees(1545000);
+    expect(money.amount).toBe(1545000);
+    expect(money.currency).toBe("INR");
   });
 
   it("refuses a fractional amount — paise are the smallest unit there is", () => {
@@ -15,7 +17,15 @@ describe("Money", () => {
   });
 
   it("adds without leaving the integers", () => {
-    expect(addMoney(rupees(1545000), rupees(1930000))).toEqual({ amount: 3475000, currency: "INR" });
+    const sum = addMoney(rupees(1545000), rupees(1930000));
+    expect(sum.amount).toBe(3475000);
+    expect(sum.currency).toBe("INR");
+  });
+
+  it("cannot be forged — rupees() is the only way to make Money", () => {
+    // @ts-expect-error a bare object literal is not Money: the brand is unforgeable
+    const forged: Money = { amount: 100.5, currency: "INR" };
+    expect(forged).toBeTruthy();
   });
 });
 
@@ -43,5 +53,9 @@ describe("StayDate", () => {
 
   it("refuses a check-out that is not after check-in", () => {
     expect(() => nightsBetween(stayDate("2026-11-16"), stayDate("2026-11-16"))).toThrow(/after/i);
+  });
+
+  it("refuses a check-out before check-in, not merely one equal to it", () => {
+    expect(() => nightsBetween(stayDate("2026-11-16"), stayDate("2026-11-14"))).toThrow(/after/i);
   });
 });

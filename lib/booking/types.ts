@@ -4,6 +4,8 @@
  * the two primitives below are branded rather than plain.
  */
 
+const PAISE = Symbol('PAISE');
+
 /**
  * Integer minor units with an explicit currency. `{ amount: 1545000 }` is
  * ₹15,450.00.
@@ -11,8 +13,14 @@
  * **Never a float.** Binary floating point cannot hold 0.1, so a total summed
  * as rupees drifts by fractions of a paisa and a guest's bill stops matching
  * the arithmetic behind it. Integers make that impossible rather than unlikely.
+ *
+ * Unforgeable outside this module — `rupees()` is the only constructor.
  */
-export type Money = { readonly amount: number; readonly currency: "INR" };
+export type Money = {
+  readonly amount: number;
+  readonly currency: "INR";
+  readonly [PAISE]: true;
+};
 
 /** `YYYY-MM-DD` in the property's own calendar. Never a `Date` — see `stayDate`. */
 export type StayDate = string & { readonly __brand: "StayDate" };
@@ -20,7 +28,7 @@ export type StayDate = string & { readonly __brand: "StayDate" };
 export function rupees(paise: number): Money {
   if (!Number.isInteger(paise)) throw new Error(`Money must be an integer number of paise, got ${paise}`);
   if (paise < 0) throw new Error(`Money cannot be negative, got ${paise}`);
-  return { amount: paise, currency: "INR" };
+  return { amount: paise, currency: "INR", [PAISE]: true };
 }
 
 export function addMoney(a: Money, b: Money): Money {
