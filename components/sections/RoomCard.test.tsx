@@ -51,6 +51,18 @@ describe("RoomCard", () => {
     expect(screen.getByTestId("room-note")).toHaveTextContent("Shown: Suite.");
   });
 
+  it("carries no data-room-card-last attribute by default", () => {
+    const { container } = render(<RoomCard room={WIDE} index={0} onSurface={false} />);
+    expect(container.querySelector(".room-card")).not.toHaveAttribute("data-room-card-last");
+  });
+
+  it("marks itself data-room-card-last when told it is the deepest card", () => {
+    const { container } = render(
+      <RoomCard room={WIDE} index={2} onSurface={false} isLast />,
+    );
+    expect(container.querySelector(".room-card")).toHaveAttribute("data-room-card-last", "");
+  });
+
   it("takes the opposite paper to its section, both ways round", () => {
     // The deck is only legible if a card contrasts with what it sits on. Both
     // values are guarded surfaces in `lib/palette.test.ts`, so no contrast

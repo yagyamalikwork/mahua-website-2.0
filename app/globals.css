@@ -997,6 +997,25 @@ body {
 }
 
 /*
+ * The last card is never covered by anything, so it must never recede.
+ * `view()` tracks a sticky element's FLOW position, not its stuck one: for a
+ * covered card that is fine, because its exit phase plays out while an
+ * opaque later card already hides it. But the deepest card has no later
+ * sibling to hide behind — its own exit phase still fires as its flow
+ * position leaves the stack's containing block, so it dims and shrinks while
+ * it is still the visible top card, over the already-dimmed deck sitting
+ * behind it. Two translucent cards stacked on one another is the overlapping,
+ * illegible text seen in the last ~250-350px of every rooms chapter before
+ * this rule. `data-room-card-last` is a prop from `RoomCardStack` (which
+ * knows the room count), not an index comparison or `:last-child` here — the
+ * stack's children are exactly the cards today, but that is a markup
+ * coincidence this project has been bitten by before.
+ */
+.room-card[data-room-card-last] {
+  animation: none;
+}
+
+/*
  * Reduced motion keeps the stack and drops only the recede — deliberately
  * unlike `.sticky-scene` above, which collapses entirely.
  *

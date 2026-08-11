@@ -46,11 +46,22 @@ export function RoomCard({
   room,
   index,
   onSurface,
+  isLast = false,
 }: {
   room: RoomEntryCopy;
   index: number;
   /** True when the chapter itself is the deeper paper — the card then takes the lighter. */
   onSurface: boolean;
+  /**
+   * True when this is the deepest card in the stack. Nothing covers the last
+   * card, so it must not run the recede: `view()`'s exit phase tracks the
+   * card's own flow position, not its stuck one, and fires on the last card
+   * even though no sibling ever overlaps it, dropping it to the same reduced
+   * opacity as the already-dimmed deck behind it while it is still the
+   * visible top card — two translucent cards over one another, text bleeding
+   * through both. See `app/globals.css`'s `[data-room-card-last]` rule.
+   */
+  isLast?: boolean;
 }) {
   const layout = roomCardLayout(room.mediaId);
   const beside = layout === "beside";
@@ -61,6 +72,7 @@ export function RoomCard({
         beside ? "flex-col lg:flex-row lg:items-stretch" : "flex-col"
       }`}
       data-card-layout={layout}
+      data-room-card-last={isLast ? "" : undefined}
       style={
         {
           "--i": String(index),

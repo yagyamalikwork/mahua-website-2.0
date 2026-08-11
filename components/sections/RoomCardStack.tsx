@@ -64,7 +64,13 @@ export function RoomCardStack({
           style={{ "--room-count": String(copy.rooms.length) } as React.CSSProperties}
         >
           {copy.rooms.map((room, i) => (
-            <RoomCard key={room.name} room={room} index={i} onSurface={surface} />
+            <RoomCard
+              key={room.name}
+              room={room}
+              index={i}
+              onSurface={surface}
+              isLast={i === copy.rooms.length - 1}
+            />
           ))}
         </ol>
       </div>
