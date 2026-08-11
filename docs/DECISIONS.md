@@ -61,10 +61,11 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 11 Aug | **The lodges sit side by side in the menu, and much larger** | *"like The Sujan Life… bigger and placed side by side."* Each tile is now half the panel — ~650px at a 1440 screen, against the 208px thumbnail it replaced — photograph above, name and region beneath. Home stays what he asked for on 10 Aug, a plain type row, so the menu reads as one destination and two offers rather than three equal links. Below 640px they stack full-width: two columns on a phone would have made each tile *smaller* than the row it replaced, which is the opposite of the request |
 | 11 Aug | **A tile lifts toward the pointer — the "3D raise"** | Hand-caused motion, so it is exempt from "nothing moves unbidden" on the same footing as the lantern's swing and the films' hover-replay, and it is a transition with nothing left running. Genuinely dimensional (`rotateX`) rather than a slide, but 2.5° and 8px: the tile is a large photograph, so the angle that would vanish on a button is ample here. Under `prefers-reduced-motion` the movement goes and the shadow stays — a visitor who asked for less motion should still get an answer when they point at something |
 | 11 Aug | **The Website Directory is the brown of the logo's own wordmark** | *"the Muddy Brown color from the text on Mahua Resorts Logo."* `PALETTE.brand` (#7F5C24), which already existed for the header lockup and was sampled from the vector at 64,730 pixels of type rather than eyedropped. **A deliberate exception to non-negotiable #3** (cream throughout, no dark sections), and the shape that rule can bear: a terminal band, below everything, reached once. It is not licence to darken anything above it. Every colour in the footer inverted — `--dim` and `goldText` measure 1.1:1 and 2.0:1 on the brown — so cream carries what is read and the deeper paper carries the second rank, at 5.02:1 and 4.58:1, guarded by `palette.test.ts` as a third surface |
+| 11 Aug | **The rooms chapter becomes a card stack** on both property pages — each room a card that sticks below the header while the next rises over it, covered cards receding | Client request. Chosen over a plain pile-up and a peel-away deck: *"pile up, with recede."* Replaces `RoomShowcase`'s three-scale composition, which was cropping two of seven room photographs ~35% of their width and one (portrait) by half its height, all by hand-assigned `scale` values nothing in the codebase checked |
 
 ---
 
-## 2. The defect that keeps happening — thirty-nine instances
+## 2. The defect that keeps happening — forty-three instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -110,6 +111,10 @@ these passed its own gate while the thing it guarded was broken.
 | 37 | **A fix that existed only in a discarded working tree.** | `build_forest_overlay.mjs` never clamped alpha. It was found and fixed during a two-segment attempt the build itself rejected, and the `git checkout` that withdrew the attempt took the unrelated fix with it. The same bug then surfaced a second time on the new artwork — `rgb(-181,-174,-157)`, a contrast of −32:1 — because it had never been latent: it was invisible only while every solved strength stayed under 1. A fix living in a branch you are about to abandon is not a fix; lift it out first |
 | 38 | **An acceptance threshold that warned while its purpose was met.** | The re-render brief capped ink coverage at 45% and the drawing arrived at 47.3%, so the script warned. But coverage was only ever a proxy for *is the dark spread everywhere or concentrated*, and the deep-dark fraction — the thing that actually binds the contrast floor — had fallen 35.6% → 11.9%. The proxy was overruled deliberately. **A threshold that can fail while the property it stands for holds is measuring the wrong quantity**; if this is revisited, key it on deep darks |
 | 39 | **`check_image_resolution.mjs` reporting "0 under-served" about photographs it had never seen.** | The menu's two lodge tiles are gated behind `everOpened`, so they are not in the document until the panel has been opened once — and the rig only ever scrolled. On 11 Aug 2026 the tiles were rebuilt to half the panel each and their `sizes` rewritten from fixed 112/160/208px boxes to `calc()` of the viewport; the rig passed at all five viewports **without the new sizing being measured at any of them**. It now opens the menu first: 39 images became 41 |
+| 40 | **A check asking WHETHER the room card stack's recede ever ran, not WHEN, relative to being covered.** | Both a broken and a working construction "receded" eventually, so the first question passed on both. Card-as-a-direct-child, driving `animation-timeline: view()` off its own position, measured **opacity 1.00 throughout** the entire time a covered card was still the one being read — it only dimmed once already scrolled out of view, because a *stuck* element's own flow position barely advances until something dislodges it. Only sampling *while a card is on screen and pinned* told the two constructions apart. §17 |
+| 41 | **A flex item's `min-height: auto`**, resolving to a content-based minimum from the `<img>`'s own aspect. | Silently overrode a declared `aspect-ratio` for the one portrait photograph among seven rooms (`tola-room-family`) — it rendered 513px where 273.6 was intended at 390px, clipping its own words below the card's `overflow: hidden`. Six of seven rooms are wider than their box, so the same override never bound anywhere else and nothing had ever asserted the box's *height*, only its width-crop. §17 |
+| 42 | **An assertion bounding a room photograph's WIDTH crop to 25%.** | Said nothing about whether the photo FIT the card's own solved height. Five, then six, stacked cards' photo bands rendered 3–17px taller than their cards at 1440/1920 and the words landed entirely below `overflow: hidden` — and the diagnostic script built to confirm the fix shared the exact blind spot of the rig it was checking: it read the text rect against the *viewport*, never against the card's *own clip box*, and undercounted one card (Tola's Camping Hut) as legible when it was pure photograph. Reproduced in the very tool built to find the squeeze. §17 |
+| 43 | **A rig's first seven assertions, all measuring a room card's outer box.** | None ever looked at the words. A card could pass all seven while its text was entirely invisible, which is exactly what five (then six) cards were doing. Assertion 8 — a text-block sweep requiring a scroll position simultaneously inside `[header, bar]`, inside the card's own clip box, and at opacity ≥0.98 — closed it, watched failing on the reverted build with ten failures naming exactly the affected cards and widths. §17 |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
@@ -789,6 +794,18 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   pick it up again is in §13: why the supplied overlay films cannot be used, and the two routes that would
   work, one of them a re-render specification ready to hand to an illustrator. Nothing is owed until the
   client asks for it.
+- **The rooms card stack's measured mobile growth is larger than what the client accepted, and he has not
+  yet been told the real number.** He signed off on ~27% (Vann) and ~38% (Tola) on 11 Aug, from the design
+  spec's §9 projection; the shipped build measures **+35.9% (Vann) and +43.6% (Tola)** — about 9 and 5.6
+  points more. Corrected in the spec's own §9. See §17.
+- **`ROOM_CARD_BOXES` is a hand-derived minimum, not solved from `MEDIA` the way this project's other
+  generated artwork is.** `build_forest_overlay.mjs` and its siblings solve for their bound at build time;
+  `ROOM_CARD_BOXES.stacked`'s 2.0 aspect and `ROOM_STACK.textReserve`'s 185px are two hand-measured numbers,
+  checked against each other only by `check_card_stack.mjs`'s assertion 8 — and that rig is run by hand,
+  like every rig on this project, with no CI. A future room with a wider photograph, or a longer name or
+  description, could reopen the fix round's 1440/1920 text-clip defect (§17) silently. This project's own
+  "solve for the limit" convention would derive it from `MEDIA`'s worst-case aspect and content length per
+  layout, at build time. Not done; recorded as a candidate for whoever next adds a room.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---
@@ -969,3 +986,166 @@ else — and it would make the region labels a different colour here than anywhe
 Reclassifying the label as WCAG "large text" (a 3.0:1 floor the original 82% would already clear) was also
 not done: the label is 9.92–12px, nowhere near the 18px/14px-bold threshold, and lowering a floor to make a
 number pass is the one thing CLAUDE.md says never to do again.
+
+---
+
+## 17. The rooms card stack — sticky's view-timeline, wrong twice in opposite directions
+
+Client request, 11 Aug 2026: *"pile up, with recede"* — chosen over a plain pile-up and a peel-away deck —
+for the `rooms` chapter on both property pages. Each room becomes a card that sticks below the header while
+the next rises over it, and a covered card recedes (scales down, dims) so the deck reads as depth rather
+than as stacked paper. Full design in
+[`docs/superpowers/specs/2026-08-11-room-card-stack-design.md`](superpowers/specs/2026-08-11-room-card-stack-design.md);
+what follows is what the design got wrong, twice, in opposite directions, and why both wrong turns are the
+expensive part.
+
+### Three constructions, measured in Chrome 151 over four cards
+
+| construction | cards ever pinned | when a covered card dims |
+|---|---|---|
+| A — card inside a slot of the card's own height | 0 of 4 | while still fully visible, **0.58** — dims too early, because it never actually stays pinned: `position: sticky` is clamped to its containing block, and a slot exactly as tall as the card leaves zero slack |
+| B — card as a direct child, `animation-timeline: view()` on the card itself | 3 of 4 | **never** — opacity **1.00 throughout** the whole time it is the card being read |
+| **C — shipped: a non-sticky SIBLING slot, WITH real slack, naming the card's timeline via `timeline-scope`** | 3 of 4 | **0.77 when fully covered** — correctly, while still pinned |
+
+### Two premises, and getting either one wrong shipped a broken page
+
+The design's first draft (construction A) wrapped each card in a slot of exactly the card's own height,
+reasoning that a sticky element cannot drive a scroll-linked animation off its own position and therefore
+needs an external, non-sticky timeline source. Task 3 found two things wrong with that at once: mechanically,
+a slot exactly as tall as the card leaves `position: sticky` zero slack, so the card renders exactly as
+`static` — 0 of 4 ever pinned. And the reasoning behind the wrapper was also wrong: `animation-timeline:
+view()` tracks an element's own **flow** position, not its stuck one, so a sticky element *can* drive its own
+timeline. Both readings pointed the same way — delete the wrapper, attach `view()` straight to the card
+(construction B) — and by the only check that existed at the time ("does the card ever recede"), it worked:
+3 of 4 pinned, all four eventually dimmed. Shipped.
+
+**The second premise was also wrong, in the opposite direction, and the shape of the failure is this
+project's own catalogue entry (§2 #40): a check that confirms a mechanism runs, not that it runs *when it
+needs to*.** Everything about construction B "worked" by that first check — cards pinned, recede fired —
+except the recede only fired **after** a card had already scrolled out of view. A sticky element's own
+`view()` timeline does track flow position, but a *stuck* element's flow position, relative to the viewport,
+barely changes while it is actually stuck — that is the entire point of `position: sticky`. So its exit
+progress barely advances until something dislodges it: the next card's arrival, right at the very end of its
+stuck life, well past the point a visitor is still reading it. The wrapper's *premise* ("sticky can't drive
+itself") was too strong, but discarding the wrapper entirely threw away the one thing it accidentally
+supplied: a timeline source with real slack, so exit progress advances smoothly across the whole covered
+span instead of jumping at its final instant.
+
+**What shipped, construction C, is a third thing — not a reversion to A.** A non-sticky sibling
+`<li class="room-slot">`, `aria-hidden`, contributing zero net height to the stack's own flow (an
+equal-and-opposite `margin-bottom`, so a card's un-stuck position is unchanged from a stack with no slots in
+it at all), sized to exactly the remaining slack — `(room-count − i − 1) × card-height` — and carrying a
+unique `view-timeline-name` per card (`--room-slot-0`, `--room-slot-1`, …), published to the `<ol>` via
+`timeline-scope` because `view-timeline-name` resolves by tree order and every card sharing one name would
+all bind to the first slot in the list. The card itself reads that name, not `view()`. Cards remain direct
+children of `.room-stack` — that structural fact from the first draft was correct all along, and it stayed
+load-bearing for a second reason: `scripts/check_card_stack.mjs` selects `ol.room-stack > li.room-card`
+directly and reads that exact element's geometry for every assertion, so wrapping the card itself in
+anything would have made the rig measure the wrong box.
+
+### Why the flag on the last card is a prop and an attribute, not `:last-child`
+
+A card dims because something is covering it. Nothing covers the last one. Without an exemption, the tail of
+every chapter showed two translucent cards bleeding through each other for the final ~250–350px of scroll on
+both routes, at both 1440×900 and 390×844 — the already-dimmed deck visible through the last card while it
+was still the one being read. `data-room-card-last`, written from an `isLast` prop on `RoomCardStack` (the
+one place that knows the room count), turns `animation: none` on for exactly that card. Not `:last-child`:
+the stack's children are exactly the cards today only because nothing else has ever been added to the
+`<ol>`, and a selector standing in for that fact stops matching the day something else is, silently, in the
+tail of the page where nobody looks.
+
+### The bar reserve, and reduced motion — restated because both are load-bearing
+
+`PropertyBar` returns `null` over the hero, the invitation and the footer, so its own measured height flips
+between 0 and 69px as the visitor scrolls — and card height is computed from it, so a live value would
+resize every card in the chapter mid-read. `--property-bar-reserve: 72px` is a constant instead;
+`check_card_stack.mjs` assertion 3 measures the real bar at all four widths and fails if it ever grows past
+the reserve, so the drift a constant invites is caught rather than shipped.
+
+Reduced motion keeps the stack and drops only the recede — deliberately unlike `StickyScene`, which
+collapses entirely. The two are not alike: `StickyScene` reserves *empty* scroll that only means anything
+once something moves through it, so with motion off it is screens of nothing. A card stack's scroll is the
+visitor's own movement, 1:1, with nothing animating at them; what goes is the one part not under their hand.
+
+### The phone as the binding case, a first for this project
+
+Every measured dial in `ROOM_STACK` is spent against the *slack* between the sticky header and the booking
+bar — **706px on a 390×844 phone**, the tightest of the four review widths, against 724–904px on the other
+three. Every other signature effect on this page (the pin, the lantern, the collage) was designed against
+1440 first and checked on a phone after. This one had to be designed against the phone first, because it is
+the binding case.
+
+### The photographs the old design cropped, and the bound that was checked in only one dimension
+
+Two of the seven room photographs were being cropped ~35% of their width in the design this replaces (both
+Deluxes, 2.29:1 forced into a 3:2 box); one, `tola-room-family`, is portrait (0.67:1) and was losing about
+half its height. The new rule is a bound, not a hand-picked ratio: no photograph may lose more than 25% of
+its own width, at any of the four review widths — checked by `check_card_stack.mjs` assertion 6, comparing
+the loaded `<img>`'s natural aspect against its rendered box. Losing height is unbounded by design: every
+documented crop constraint on this page is about width, and a room interior tolerates a trimmed ceiling far
+better than a trimmed wall.
+
+**That last sentence turned out to be only half the story, twice, on two unrelated mechanisms — §2 #41 and
+#42.**
+
+- **`tola-room-family`, the one portrait photograph, hit a flex quirk the other six never triggered.** A
+  flex item's default `min-height: auto` resolves to the *larger* of any explicit minimum and an automatic,
+  content-based one; for a box whose only child is a replaced element (the `<img>`, sized by its own real
+  `width`/`height` attributes), that automatic minimum is derived from the image's *own* aspect, not the
+  wrapper's declared `aspect-ratio`. Six of seven room photographs are wider than their target box, so the
+  content-derived minimum never binds. The seventh is narrower — it is the one that needed the `beside`
+  layout at all — and the content-derived minimum won, silently overriding `aspect-ratio: 1.25`: the photo
+  wrapper rendered 513px at 390px width where 273.6 was intended, and the words, following it in flow,
+  landed under the card's own `overflow: hidden`. One class, `min-h-0`, fixed it.
+- **`ROOM_CARD_BOXES.stacked` (`aspect-ratio: 2.0`) was solved to keep width-crop inside the 25% bound, and
+  never checked against the card's own solved height.** At 1440/1920 the card is wide enough that a 2:1
+  photo band is *taller* than the card itself: measured live and unreceded, five stacked cards' photo
+  wrappers rendered 3–17px taller than their own cards, and the words fell entirely below the visible box.
+  **Not four cards but five, then six.** The diagnostic script built to confirm the fix
+  (`_sweep_text_legibility.mjs`, itself built in an earlier fix round) reported Tola's Camping Hut as
+  legible — 32 and 41 samples, indistinguishable from a healthy card — because its own criterion was "the
+  text rect sits inside `[0, innerHeight − barHeight]`," true by coincidence: the card's `overflow: hidden`
+  clips everything below its own edge, and the words rect never crosses back inside that clip once the photo
+  overflows. **The sweep checked the viewport; it never checked the card's own box — the exact defect shape
+  the fix's own new rig assertion exists to close, reproduced in the tool built to find it.** Fixed with a
+  height ceiling on the stacked photo wrapper (`ROOM_STACK.textReserve`, `app/globals.css`) plus a paired
+  `lg:`-only tightening of the words block's own padding (`RoomCard.tsx`) — the ceiling alone recovered
+  legibility but pushed both chapters' worst screen over the 45% density ceiling (below), and the padding
+  trim is what closed that gap without loosening the ceiling.
+
+**The rig's own gap, closed as assertion 8 (§2 #43):** `check_card_stack.mjs`'s first seven assertions all
+measured a card's outer box — position, clipping against the header/bar, deck visibility, recede magnitude,
+photograph crop. None of them ever looked at the words. A card could pass all seven while its text was
+entirely invisible, exactly the state five (then six) cards were shipping in. Assertion 8 sweeps every
+card's text block at 20px steps and requires a scroll position where it sits simultaneously inside
+`[header, bar]`, inside the card's *own* clip box, and at opacity ≥0.98 — the middle clause is the half the
+viewport-only check above lacked. Watched failing on the reverted build: ten failures, naming exactly the
+five affected cards at exactly the two affected widths.
+
+### The density cost of fixing it, and why the mid-plan figure is not a target
+
+Fixing the clip gives back to cream and type exactly the area an overflowing, unreadable photograph had been
+claiming as 100% imagery — `measure_density.mjs` hit-tests what is painted, and a photograph clipping past
+its own card's edge painted every pixel down to that edge regardless of whether a visitor could read
+anything. So the intermediate figures recorded mid-plan — `vann-rooms` 24.8% mean, `tola-rooms` 27.4%
+mean — were partly the defect's own side effect, not a real density win, and it is the same lesson this
+project already learned once from the forest tint (§15): a number that improved because something was
+broken is worth a warning, not a celebration. The honest figures, on the fixed build:
+
+| chapter | before this plan (`RoomShowcase`) | mid-plan, five/six cards illegible | shipped |
+|---|---|---|---|
+| `vann-rooms` mean / worst | 40.1% mean | 24.8% / 42.1% | **31.5% / 42.1%** |
+| `tola-rooms` mean / worst | 39.0% mean | 27.4% / 42.4% | **33.8% / 44.3%** |
+
+Both stay inside the 45% ceiling — `tola-rooms` by 0.7 points. Neither chapter's mean returns to its
+mid-plan figure, and per the finding above, it structurally cannot: that figure belonged to a page with
+illegible cards.
+
+### The mobile length the client has not yet been told
+
+The spec's §9 projected Vann's `rooms` chapter growing ~27% and Tola's ~38% on a phone, and the client
+accepted those numbers on 11 Aug. Measured on the shipped build (`#vann-rooms` / `#tola-rooms`'s own
+`getBoundingClientRect().height` at 390×844): **Vann +35.9% (1,738px → 2,362px), Tola +43.6% (2,035px →
+2,922px)** — about 9 and 5.6 points more than what he agreed to. The direction is right and desktop shrank
+as projected (Vann 2,437px → 2,371px, Tola 3,266px → 2,984px), but the specific mobile figure he signed off
+on undersells what shipped. Corrected in the spec's own §9; **not yet relayed to the client** — see §5.

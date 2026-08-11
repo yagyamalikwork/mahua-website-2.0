@@ -2,6 +2,28 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> ## ✅ Status, 11 Aug 2026 — the plan is closed. Read this before following any task below
+>
+> **All eight tasks shipped. Two of them — Task 3 and Task 6 — got the sticky/`view()`-timeline
+> construction wrong, in opposite directions, before Task 6 landed the construction that actually ships,
+> and Task 7 needed two further fix rounds for defects its own 390px read found.** This plan is kept for
+> its reasoning, not as a set of instructions to follow literally: its own §4/§6/§7 CSS samples describe
+> the construction Task 3 shipped and Task 6 replaced, and its §9 mobile-growth projection is smaller than
+> what was measured. The design spec this plan points to has been corrected to match; the full record,
+> including the two premises that were each wrong in a different direction and the catalogue instances
+> they produced, is [`docs/DECISIONS.md`](../../DECISIONS.md) §17.
+>
+> | Task | State |
+> |---|---|
+> | 1 · Lift the content types out of the component | ✅ shipped as written. `scale` retired from `RoomEntryCopy`; the JS baseline (172,209 bytes brotli) taken here is what every later task and this plan's own Task 7 assert against |
+> | 2 · `roomCardLayout` | ✅ shipped as written. `lib/room-card.ts`, the 1.9 threshold, 7 tests |
+> | 3 · The dials, and the CSS the stack runs on | ⚠️ **shipped, then found wrong twice more (Tasks 6 and 7).** The step list here wraps each card in a `.room-slot` of the card's *own height* — reviewed as broken (0 of 4 cards ever pinned, zero slack) and fixed in-task to the card driving `animation-timeline: view()` directly off itself. That fix is **also wrong**: Task 6 found it pins correctly but never dims a covered card while still visible (opacity 1.00 throughout). What ships is a third construction — see Task 6 |
+> | 4 · The card | ✅ shipped as written. `RoomCard.tsx`, both compositions |
+> | 5 · The stack, on both routes | ✅ shipped, plus one same-plan fix round the task list did not anticipate: the last card must not recede, or the tail of every chapter shows two translucent cards bleeding through each other |
+> | 6 · The rig | ⚠️ **shipped, and it is what caught Task 3's fix being wrong a second time.** Re-probing with three constructions (slot at card height / card's own `view()` / non-sticky sibling slot **with real slack**) found only the third dims a covered card *while it is covered* — 0.77 opacity, versus 1.00 throughout for the construction Task 3 shipped. Also found and fixed: `ROOM_CARD_BOXES.stacked`'s width-crop bound was never checked against the card's own solved height |
+> | 7 · Delete the old section, and prove the page | ⚠️ **shipped, then two further fix rounds, both found by reading 390px screenshots as this plan's own step instructs.** Fix 1: Tola's Family Suite was illegible at 390/768px (`min-height: auto` silently overriding a declared `aspect-ratio` on the one portrait room photograph). Fix 2: five, then six, stacked cards were illegible at 1440/1920 (the same width-crop-vs-height gap Task 6 partly addressed, still open at the wider widths) — closed with a height ceiling, a padding trim, and an eighth rig assertion sweeping each card's own text block, not just its outer box |
+> | 8 · Write it down | ✅ this task |
+
 **Goal:** Replace the rooms chapter on `/mahua-vann` and `/mahua-tola` with a card stack — each room a card that sticks below the header while the next rises over it, covered cards receding slightly — adding zero bytes of JavaScript.
 
 **Architecture:** A server-rendered `<ol>` whose `<li>` children ARE the cards, each `position: sticky` at a stepped offset so they pile up under the header, each running a recede off its own `view()` timeline. Card height is *calculated* from the measured slack between the sticky header and the booking bar, never hard-coded. Every dial (recede scale, dim, deck step) lives in `lib/motion.ts` and reaches CSS through `app/layout.tsx`, like every other number on this site.

@@ -111,42 +111,73 @@ they still lose none. This is strictly better than what ships today, where two o
 adds the crop bound beside it, and **fails rather than warns**. Hand-picking a photo aspect and hoping is
 how the 35% crops got there.
 
+**Added 11 Aug 2026, after shipping: a bound on width crop says nothing about whether the resulting photo
+box still fits inside the card.** `ROOM_CARD_BOXES.stacked` was solved to keep width-crop inside the 25%
+bound above and was never checked against the card's own solved height (§9); at 1440/1920 the photo band
+came out taller than the card itself, and the words fell below `overflow: hidden` on five, then six, cards
+before it was caught. Fixed with a height ceiling (`ROOM_STACK.textReserve`) plus a paired padding trim,
+and a rig assertion that sweeps each card's own text block, not just its outer box. Full working —
+including the diagnostic tool that shared the exact same blind spot as the rig it was checking —
+`docs/DECISIONS.md` §17.
+
 ---
 
 ## 4. Architecture
+
+**Corrected 11 Aug 2026, after shipping.** This section originally described the second of three
+constructions that were tried — the one below where a card drives `animation-timeline: view()` off its own
+position. That one pins correctly and was believed correct on the only check that had been run at the
+time ("does the card ever recede"). It is wrong, in a way that only shows up if you ask *when*: see the
+table below and `docs/DECISIONS.md` §17 for the full story, including the catalogue entries it produced.
 
 ```
 ChapterSurface  (existing — already overflow-x: clip, which is what lets sticky work)
 └── RoomCardStack                        server component, no "use client"
     ├── heading block                    ChapterMark + TwoToneHeading + intro — NOT sticky
     └── <ol class="room-stack">          tall: its height is the sum of its cards'
-        └── <li class="room-card">       position: sticky. The card IS the list item.
-            ├── Photo                    at the room's own aspect
-            └── words                    name, line, facts, optional note
+        ├── <li class="room-slot">       NON-sticky, aria-hidden, contributes ZERO net height
+        │                                 (equal-and-opposite margin-bottom) — the view-timeline
+        │                                 SOURCE for the card that follows it, one name per card
+        ├── <li class="room-card">       position: sticky. Reads its OWN slot's timeline, by name.
+        │   ├── Photo                    at the room's own aspect
+        │   └── words                    name, line, facts, optional note
+        ├── <li class="room-slot">       (repeats per card)
+        └── <li class="room-card">
 ```
 
-**The cards must be direct children of the stack, and this was learned the expensive way.** An earlier
-draft of this spec wrapped each card in a slot of exactly the card's height, on the theory that a sticky
-element cannot drive a scroll-linked animation from its own position. **Both halves of that were wrong,
-and the second one silently destroys the effect** — measured in Chrome 151 over four cards:
+**The cards must be direct children of the stack — that survived from the first draft.** What did not
+survive is how each card's recede is *driven*, and it took three attempts, all measured in Chrome 151 over
+four cards, to land on the one that works:
 
-| construction | cards ever simultaneously pinned | cards that receded |
+| construction | cards ever simultaneously pinned | when a covered card dims |
 |---|---|---|
-| card inside a slot of equal height | **0 of 4** | all four |
-| **card as a direct child, `animation-timeline: view()`** | **3 of 4** | all four |
+| A — card inside a WRAPPING slot of the card's own height | **0 of 4** | while still fully visible, **0.58** — never actually pins |
+| B — card driving `animation-timeline: view()` off its OWN position | **3 of 4** | **never** — opacity **1.00** for the entire time it is still the card being read |
+| **C — shipped: a non-sticky SIBLING slot, sized to the remaining slack, naming the card's timeline** | **3 of 4** | **0.77 when fully covered — correctly, while pinned** |
 
-`position: sticky` is clamped to its containing block, so a wrapper exactly as tall as the card leaves
-zero slack and the card renders exactly as if it were `static`. The deck needs each card to stay pinned
-while *later* cards scroll past it, which means the containing block has to be the whole stack.
+The first draft of this spec (construction A) wrapped each card in a slot exactly as tall as the card, on
+the theory that a sticky element cannot drive a scroll-linked animation off its own position. That theory
+is half right: `position: sticky` **is** clamped to its containing block, so a wrapper exactly as tall as
+the card leaves zero slack and the card renders exactly as if it were `static` — construction A's row
+above. But the fix that theory suggested — delete the wrapper, let `animation-timeline: view()` read the
+card's own flow position (construction B) — is **also** wrong, in the opposite direction: a sticky
+element's own `view()` timeline effectively **freezes while it is actually stuck**, because a stuck
+element's flow position, relative to the viewport, barely changes while it is pinned. Construction B pins
+correctly and does eventually recede, but only after the card has already scrolled out of view — never
+while a visitor is still reading it.
 
-And the premise that forced the wrapper is simply false: a sticky element's view timeline tracks its
-**flow** position, not its stuck one, so `animation-timeline: view()` on the card works. The wrapper was
-unnecessary and harmful at once.
+**What ships is construction C, a third thing, not a reversion to A.** A non-sticky sibling
+`<li class="room-slot">`, `aria-hidden`, contributing zero net height to the stack's own flow (an
+equal-and-opposite `margin-bottom`, so no card's un-stuck position changes), sized to exactly the remaining
+slack — `(room-count − i − 1) × card-height` — and carrying its own `view-timeline-name`
+(`--room-slot-0`, `--room-slot-1`, …), published to the `<ol>` via `timeline-scope` because
+`view-timeline-name` resolves by tree order and every card sharing one name would all bind to the first
+slot in the list. The card reads that name; it does not use `view()` at all.
 
-**Note the failure's shape, because it is this project's own:** in the broken construction the recede ran
-perfectly on all four cards. Everything animated; nothing stacked. A check that confirmed "the animation
-is running" would have passed it. What catches it is asserting that a card's position *freezes while the
-next one advances* — which is assertion 1 in §10.
+**Note the failure's shape, because it recurs on this project:** construction B's recede DID run —
+eventually, on all four cards — so a check asking only "does the recede ever happen" passes it. What
+catches it is sampling *while a card is on screen and pinned*, asking *when* rather than *whether* — see
+§10.
 
 **Nothing here is a client component.** No `"use client"`, no hooks, no scroll listener — and, after §5,
 no JavaScript anywhere in this design at all.
@@ -187,11 +218,23 @@ JavaScript is **byte-identical**.
 
 ## 6. The stack
 
+**Corrected 11 Aug 2026** — see §4 for why `.room-slot` exists and is a sibling, not a wrapper:
+
 ```css
+.room-slot {
+  /* NON-sticky, aria-hidden, sized to the SLACK ALONE — the timeline source §7 reads. */
+  height: calc((var(--room-count) - var(--i) - 1) * var(--card-height));
+  margin-bottom: calc(-1 * (var(--room-count) - var(--i) - 1) * var(--card-height));
+  view-timeline-axis: block;
+}
+
 .room-card {
   position: sticky;
   top: calc(var(--header-height, 0px) + var(--deck-step) * var(--i));
   height: var(--card-height);
+  /* Names THIS card's own slot — set per-instance, inline; a class cannot express a
+     value that must differ by index. See §7. */
+  animation-timeline: --room-slot-N;
 }
 ```
 
@@ -203,15 +246,24 @@ JavaScript is **byte-identical**.
 - The card's surface is the **opposite paper to its section** — `--surface` where the chapter is `--bg`,
   and the reverse — so a card is distinguishable from the page behind it without inventing a colour.
   Both surfaces are already guarded by `lib/palette.test.ts` for every text colour the card uses.
+- **`.room-slot` is a SIBLING immediately before its card, not a wrapping ancestor** — both are direct
+  children of the `<ol>`. It carries real height for exactly one purpose: to be the timeline source the
+  card beside it reads, sized to the remaining slack `(room-count − i − 1) × card-height` and contributing
+  zero net height to the stack's own layout (the `margin-bottom` above cancels the `height`). §4 explains
+  why the card cannot supply this timeline off its own position.
 
 ## 7. The recede
 
-Driven by the card's own view timeline, so it is CSS end to end:
+Sourced from the sibling slot's timeline (§6), not the card's own — a construction that took two more
+attempts than the one this section originally described (§4). CSS end to end, no JavaScript:
 
 ```css
 .room-card {
   animation: room-recede linear both;
-  animation-timeline: view();
+  /* animation-timeline names THIS card's own slot (--room-slot-0, --room-slot-1, …),
+     published through timeline-scope on the <ol> — not view(). A sticky element's
+     OWN view() timeline effectively freezes while it is actually stuck, which would
+     dim a covered card only after it has already scrolled out of view. See §4. */
   animation-range: exit 0% exit 100%;
 }
 
@@ -306,25 +358,28 @@ cards rather than as full-bleed bands. Below `md` the card takes the full column
 
 ### The consequence the client should see
 
-Section height becomes `heading block + rooms × card height`. The heading block is unchanged by this work;
-these use its present height, so the figures are projections and the first task to render a stack must
-confirm them:
+**Corrected 11 Aug 2026: this was a projection when the section below was first written; it is now
+measured on the shipped build, and the measured mobile figure is larger than what was projected and than
+what the client accepted.** Section height is `heading block + rooms × card height`. Measured directly
+(`#vann-rooms` / `#tola-rooms`'s own `getBoundingClientRect().height` at 390×844 and 1440×900 on the
+production build):
 
-| | card | today | as a stack | change |
-|---|---|---|---|---|
-| Vann @ 1440 | 672 × 3 | 2,437 | ~2,210 | **−227px** |
-| Tola @ 1440 | 658 × 4 | 3,266 | ~2,830 | **−436px** |
-| Vann @ 390 | 654 × 3 | 1,738 | ~2,210 | **+472px** |
-| Tola @ 390 | 640 × 4 | 2,035 | ~2,810 | **+775px** |
+| | before | as a stack | change |
+|---|---|---|---|
+| Vann @ 1440 | 2,437 | 2,371 | **−66px, −2.7%** |
+| Tola @ 1440 | 3,266 | 2,984 | **−282px, −8.6%** |
+| Vann @ 390 | 1,738 | 2,362 | **+624px, +35.9%** |
+| Tola @ 390 | 2,035 | 2,922 | **+887px, +43.6%** |
 
-**On desktop the section gets shorter; on a phone it gets meaningfully longer** — ~27% on Vann and ~38% on
-Tola —
-because today's mobile layout is a compact list and a card is close to a full screen. This was not
-apparent when the change was approved and it is the one number worth a second opinion. The trade being
-bought is that every phone screen in that chapter becomes mostly photograph, which is the direction
-non-negotiable #8 pushes and the direction the client's original density complaint pushed. **Recommendation:
-accept it.** If it is rejected, the lever is `--card-height-max` and a smaller `--deck-step` on mobile, not
-dropping the effect.
+**On desktop the section got shorter, as projected. On a phone it got meaningfully longer than what was
+projected and accepted** — **+35.9% on Vann and +43.6% on Tola, against the ~27% and ~38% this section
+originally projected and the client agreed to on 11 Aug** — because a phone's original layout was a
+compact list and a card is close to a full screen. The direction was right; the size of it undersold what
+shipped, by about 9 points on Vann and 5.6 on Tola. The trade is the same one reasoned through when this
+was still a projection: every phone screen in that chapter becomes mostly photograph, which is the
+direction non-negotiable #8 pushes and the direction the client's original density complaint pushed.
+**The client has not yet been told the measured figure** — see `docs/DECISIONS.md` §5 and §17. If it is
+rejected, the lever is `--card-height-max` and a smaller `--deck-step` on mobile, not dropping the effect.
 
 ---
 

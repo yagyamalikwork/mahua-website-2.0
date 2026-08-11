@@ -3,6 +3,48 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## The rooms card stack — complete, 11 Aug 2026
+
+Client request, the same day as the chrome's second pass below: *"pile up, with recede"* for the `rooms`
+chapter on `/mahua-vann` and `/mahua-tola`, chosen over a plain pile-up and a peel-away deck. Eight tasks
+(`docs/superpowers/plans/2026-08-11-room-card-stack.md`), on `feat/chapters-rebuild`, commits
+`460726b..ea7655b`.
+
+- **`RoomShowcase` is retired; `RoomCardStack` replaces it on both property routes.** Each room sticks
+  below the header while the next rises over it; a covered card scales down and dims so the deck reads as
+  depth. **Zero added JavaScript** — first-load stayed at 172,209 bytes brotli, delta 0, across every
+  round, against the baseline Task 1 took before touching anything.
+- **The construction was wrong twice, in opposite directions, before the third one shipped.** A card
+  wrapped in a slot of its own height leaves `position: sticky` no slack — 0 of 4 cards ever pinned. The
+  card driving its own `view()` timeline pins correctly but never dims while still visible — measured
+  opacity **1.00 throughout**, because a sticky element's own timeline effectively freezes while it is
+  stuck. What shipped is a third thing: a non-sticky sibling `<li class="room-slot">`, sized to the
+  remaining slack, naming the card's timeline through `timeline-scope`. Full working, and why it is this
+  project's own catalogued defect shape (a check confirming an effect ran, not *when*): `docs/DECISIONS.md`
+  §17.
+- **A photograph's width-crop bound said nothing about whether it fit the card's own height, and shipped
+  illegible on five, then six, cards at 1440/1920 before it was caught.** Fixed with a height ceiling
+  (`ROOM_STACK.textReserve`) and a paired padding trim; the rig gained an eighth assertion — sweeping each
+  card's own text block, not just its outer box — watched failing on the reverted build with ten failures
+  naming exactly the affected cards and widths. A second, unrelated bug (`min-height: auto` silently
+  overriding a declared `aspect-ratio`) clipped the one portrait room photograph's words below 1024px; one
+  Tailwind class fixed it.
+- **Density: `vann-rooms` 40.1% → 31.5% mean (42.1% worst); `tola-rooms` 39.0% → 33.8% mean (44.3% worst) —
+  both inside the 45% ceiling.** A figure recorded mid-plan (24.8%/27.4%) was inflated by the clipping
+  defect itself — an overflowing photograph scores as 100% imagery to `measure_density.mjs` — and must not
+  be quoted as current.
+- **Mobile growth is larger than what the client accepted, and he has not yet been told the real number.**
+  He signed off on ~27% (Vann) / ~38% (Tola) on 11 Aug; the shipped build measures **+35.9% (Vann) and
+  +43.6% (Tola)**. Corrected in the design spec's own §9 — see `docs/DECISIONS.md` §5.
+- **The rig**, `scripts/check_card_stack.mjs`, runs eight assertions on both routes at four widths: cards
+  pin and dim on time, no clipping by the header or booking bar, the bar's reserve really covers the
+  measured bar, the deck is visible, a covered card is measurably smaller and dimmer, no photograph crops
+  past 25% of its own width, the last card never recedes, and — the eighth, added in the fix round above —
+  a visitor can actually read every card. Watched failing against six deliberate breakages (Task 6) and
+  against the reverted build before assertion 8 existed (Task 7's second fix round).
+
+**Evidence:** `docs/reviews/2026-08-11-card-stack/`. **419 tests, all green.**
+
 ## The chrome's second pass — 11 Aug 2026, all four from the client
 
 He looked at the finished navigation and asked for four things. All are in, on `feat/chapters-rebuild`,
@@ -151,6 +193,7 @@ instances 26 and 27 from it. **When resuming an interrupted session, check the m
 | 6 · [The property pages](superpowers/plans/2026-08-08-property-pages.md) | ✅ (superseded by Plan 7) twelve tasks, then a full review-and-correction round (9 Aug). Library 34 → 53 photographs; the contrast rig made route-aware; GSAP's loader gated on the first scrolled pixel |
 | 7 · [The property pages redesign](superpowers/plans/2026-08-09-property-pages-redesign.md) | ✅ fifteen tasks. New shape vocabulary (`fullBleed`/`column`/`map`/`showcase`/`pair`/`press`/`invitation`) replaces Plan 6's structure; the client's Pench and Tadoba maps traced into cream field-guide artwork (`scripts/build_map.mjs`); Task 15 closed it out with both routes' rigs green and the home page proven untouched — `docs/reviews/2026-08-09-property-redesign/README.md` |
 | 8 · [Site navigation](superpowers/plans/2026-08-10-site-navigation.md) | ✅ six tasks. `SiteMenu` (places, not chapters) and `SiteFooter` (the Website Directory) ship on all three routes; `ChapterMenu` retired. Task 6 closed it out — found and fixed a real 4.5:1 contrast failure in the menu's glass wash that no earlier probe had looked for, plus three unnamed rig gaps and one instrument defect — `docs/reviews/2026-08-10-site-navigation/README.md`, `docs/DECISIONS.md` §16 |
+| 9 · [The rooms card stack](superpowers/plans/2026-08-11-room-card-stack.md) | ✅ eight tasks, two fix rounds on findings Task 7's own 390px read produced. `RoomShowcase` retired on both property routes; the sticky/`view()`-timeline construction was wrong twice in opposite directions before what shipped, and a photograph's width-crop bound shipped illegible on five (then six) cards before an eighth rig assertion closed the gap — `docs/reviews/2026-08-11-card-stack/README.md`, `docs/DECISIONS.md` §17 |
 
 ### Where Plan 5 actually got to
 
@@ -314,7 +357,7 @@ The page's emptiest screen is the `field-days / rooms` join at 73.1%. `rooted / 
 
 ## Where the durable record lives
 
-**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the twenty-eight-instance
+**[`docs/DECISIONS.md`](DECISIONS.md)** holds every client ruling with its reasoning, the forty-three-instance
 catalogue of this project's recurring defect, why the hero's budget is unreachable, and the things that look
 broken and are not. It exists because the per-task ledgers at `.superpowers/sdd/*/progress.md` are
 **git-ignored** — 335 lines across four plans that would not survive a fresh clone. Anything learned that
