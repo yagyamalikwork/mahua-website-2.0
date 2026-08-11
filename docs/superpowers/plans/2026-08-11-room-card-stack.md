@@ -1054,6 +1054,7 @@ Read `scripts/check_lantern.mjs` end to end. Match its argument parsing, its con
 4. **The deck is visible.** At the last card's resting position, assert *n* − 1 earlier cards have a visible strip ≥ 6px tall above it.
 5. **The recede happened.** At the same position, assert card 0's rendered width < card *n*−1's by ≥ 1.5%, and its computed `opacity` < 0.99. Read from `getBoundingClientRect()` and `getComputedStyle`, **never from the stylesheet** — a check that reads back the CSS it was given proves nothing.
 6. **No photograph loses more than 25% of its width.** For each card, compare the `<img>`'s `naturalWidth / naturalHeight` against its rendered box aspect; where the box is wider, the crop is vertical and passes. Fail naming the room otherwise.
+7. **The last card never recedes, and every other card does.** At every scroll position where the stack is on screen, the card carrying `data-room-card-last` must measure `opacity: 1` and no scale, while at least one covered card measures below both. **Both halves are required**: without the second, a build that switched the recede off entirely would pass. This is the assertion that guards the fix for the tail-bleed defect — see the spec's §7.
 
 Add a `--no-recede` flag that emulates `prefers-reduced-motion: reduce` and asserts 1, 2, 3, 4 and 6 still hold while 5 does not.
 
@@ -1075,8 +1076,10 @@ Expected: exit 0 both times.
 2. Set `ROOM_STACK.heightMax` to 1200 → assertion 2 must fail at 390 and 1440.
 3. Delete the `animation-timeline` line → assertion 5 must fail, and 1–4 and 6 must still pass.
 4. Set `ROOM_STACK.barReserve` to 40 → assertion 3 must fail.
+5. Delete the `.room-card[data-room-card-last] { animation: none; }` rule → assertion 7 must fail.
+6. Change the base `.room-card` animation to `none` as well → assertion 7 must **still** fail, on its second half. If it passes here, the assertion only checks that the last card is opaque and would bless a build with no recede at all.
 
-Restore all four and confirm exit 0.
+Restore all six and confirm exit 0.
 
 - [ ] **Step 5: Commit**
 
@@ -1168,6 +1171,8 @@ Update the Status table (phase, tests count, evidence), add `check_card_stack.mj
 - [ ] **Step 2: `docs/DECISIONS.md`**
 
 Add the 11 Aug client rulings to the table: the card stack requested, and "pile up with recede" chosen over the alternatives. Add a new section covering, at minimum:
+- **why the last card does not recede** — a card dims because something covers it, nothing covers the last one, and without the exemption the tail of every chapter shows two translucent cards bleeding through each other;
+- **why the flag is a prop and an attribute rather than `:last-child`** — the stack's children are exactly the cards today only by coincidence;
 - **why the cards must be direct children of the stack** — `position: sticky` is clamped to its containing block, so a wrapper of the card's own height leaves zero slack and the card renders as `static`. Measured: 0 of 4 cards pinned wrapped, 3 of 4 as direct children. **And the recede ran perfectly in the broken version** — everything animated, nothing stacked, which is why the assertion has to be that a card's position freezes while the next advances;
 - **why the booking bar's space is a constant and not its published height** — `PropertyBar` returns `null` over three regions, so a live value would resize every card mid-scroll;
 - **why reduced motion keeps the stack here but collapses `StickyScene`** — one reserves empty scroll, the other's scroll is the visitor's own movement;

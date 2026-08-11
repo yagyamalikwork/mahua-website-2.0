@@ -225,6 +225,27 @@ Driven by the card's own view timeline, so it is CSS end to end:
 | `--card-scale-min` | **0.94** | `lib/motion.ts` → `app/layout.tsx`, like every other number on this page |
 | `--card-dim` | **0.55** | same |
 
+**The last card never recedes, and this is not a special case — it is the rule stated properly.** A card
+dims *because something is covering it*. Nothing covers the last one. It carries `data-room-card-last`,
+written from an `isLast` prop, and `.room-card[data-room-card-last] { animation: none; }`.
+
+Without it the tail of every chapter breaks, and the break is ugly rather than subtle: the last card
+drops to 0.55 opacity while it is still the card being read, and the whole already-dimmed deck behind it
+bleeds through — measured over the final ~250-350px of the chapter's scroll, on both routes, at both
+1440x900 and 390x844, as overlapping illegible text.
+
+The cause is that `view()` tracks a sticky element's **flow** position, not its stuck one. For a card in
+the middle of the stack that behaves well — its exit phase begins about when the next card starts
+overlapping it, and full coverage lands at ~86% of the range, so it is hidden behind an opaque neighbour
+while it dims. The last card has no neighbour, so the same timeline dims it in full view.
+
+**The flag is a prop and an attribute, deliberately, not `:last-child`.** The stack's children are exactly
+the cards today, and that is a structural coincidence rather than a guarantee; a selector that depends on
+it stops matching the day anything else is added, silently and in the tail of the page where nobody looks.
+
+Measured after the fix: a covered card `opacity: 0.55` / `scale 0.94`, the last card `opacity: 1` /
+`transform: none`, swept end to end at 20px steps on both routes with zero deviations.
+
 Both are written from `lib/motion.ts` and not in the component, under the existing architecture rule: no
 component hard-codes a colour, a duration or a string of copy.
 
