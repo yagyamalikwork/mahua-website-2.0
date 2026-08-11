@@ -33,9 +33,12 @@ chapter on `/mahua-vann` and `/mahua-tola`, chosen over a plain pile-up and a pe
   both inside the 45% ceiling.** A figure recorded mid-plan (24.8%/27.4%) was inflated by the clipping
   defect itself — an overflowing photograph scores as 100% imagery to `measure_density.mjs` — and must not
   be quoted as current.
-- **Mobile growth is larger than what the client accepted, and he has not yet been told the real number.**
+- **Mobile growth is larger than what the client accepted. Told 12 Aug; he deferred the phone.**
   He signed off on ~27% (Vann) / ~38% (Tola) on 11 Aug; the shipped build measures **+35.9% (Vann) and
-  +43.6% (Tola)**. Corrected in the design spec's own §9 — see `docs/DECISIONS.md` §5.
+  +43.6% (Tola)**. Corrected in the design spec's own §9. His ruling: *"right now our only focus is how it
+  looks on a computer/laptop screen, we can workout and optimize mobile screens later."* Recorded, not
+  acted on — and **the phone stays in every rig**, because that is where this plan's two worst defects were
+  found. See `docs/DECISIONS.md` §1 and §5.
 - **The rig**, `scripts/check_card_stack.mjs`, runs eight assertions on both routes at four widths: cards
   pin and dim on time, no clipping by the header or booking bar, the bar's reserve really covers the
   measured bar, the deck is visible, a covered card is measurably smaller and dimmer, no photograph crops

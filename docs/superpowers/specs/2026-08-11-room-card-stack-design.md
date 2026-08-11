@@ -384,7 +384,11 @@ compact list and a card is close to a full screen. The direction was right; the 
 shipped, by about 9 points on Vann and 5.6 on Tola. The trade is the same one reasoned through when this
 was still a projection: every phone screen in that chapter becomes mostly photograph, which is the
 direction non-negotiable #8 pushes and the direction the client's original density complaint pushed.
-**The client has not yet been told the measured figure** — see `docs/DECISIONS.md` §5 and §17. If it is
+**Told 12 Aug, and deferred**: *"right now our only focus is how it looks on a computer/laptop screen, we
+can workout and optimize mobile screens later."* The figure stands as measured and unactioned.
+
+**The original note, kept because it is what the decision was made against:** the client had not been told
+the measured figure at the time he accepted the projection — see `docs/DECISIONS.md` §5 and §17. If it is
 rejected, the lever is `--card-height-max` and a smaller `--deck-step` on mobile, not dropping the effect.
 
 ---

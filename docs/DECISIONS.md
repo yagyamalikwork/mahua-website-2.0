@@ -48,6 +48,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 | 10 Aug | **`03 · The Forest`, not the lodge cards** | Corrected the same day. The right home twice over: that chapter's copy already counts "three hundred recorded birds" |
 | 10 Aug | **Stronger than the first attempt** | *"It is almost not visible."* The fault was the arithmetic, not the drawing — see §15 |
 | 10 Aug | **Re-render the forest drawing rather than push the dials** | *"Increase the opacity, and the birds are an important detail I want to show."* Both are unavailable by tuning — body copy sits on the drawing, so the contrast floor caps every pixel including the birds. Brief in §15 |
+| 12 Aug | **Desktop is the lens for now; the phone is a later pass** | *"Right now our only focus is how it looks on a computer/laptop screen, we can workout and optimize mobile screens later."* Given in answer to the card stack's mobile scroll growth (+35.9% / +43.6% against the ~27% / ~38% he had accepted), so it is a **sequencing** ruling, not a quality one. **It does not relax non-negotiable #6** — most traffic is still Indian mobile, the byte and arrival budgets still bind, and every rig still measures 390. What it defers is *tuning* the phone, not *checking* it: this plan's two worst defects were both found at 390, one by a human reading a screenshot, and the instruments that found them stay on |
 | 11 Aug | **The re-rendered forest ships, and the tint question is closed** | *"Looks fine, we can keep it for now."* Kept, not acclaimed — so it is settled unless he raises it. The new drawing delivered what the dials could not: foliage at **0.267** against the old 0.135 and the three hornbills reading as the chapter's darkest element, both under the *same* 4.5:1 guarantee. §15 |
 | 9 Aug | **Both property pages shipped** — `/mahua-vann` and `/mahua-tola`, every chapter inside the 45% ceiling, every rig green at the real routes | Built 8 Aug, then reviewed and corrected 9 Aug after the client found the build session had silently fallen back to a smaller model: the first pass had committed failing density and a failed contrast run as "verified". Evidence and the full correction story in `docs/reviews/2026-08-08-property-pages/README.md`. **Awaiting the client:** Tola's room count (12 vs 14), the home page's cottage/suite caption fix, Tola's hero swap, and a Nagpur distance |
 | 9 Aug | **Both property pages rebuilt in a "shape vocabulary"** — eight chapters each, no two adjacent chapters sharing a shape, mechanically enforced (`findRepeatedShape`) — replacing the first ship's `ChapterIntro`/`PlateGrid`/`RoomsIndex`/`FieldNotes` structure that read as a template | Three client decisions inside this redesign: **(1) a persistent booking bar**, quiet and always reachable, that slides in past the hero and steps aside over the closing invitation — *"a visitor on a property page has already chosen a lodge, so asking is fair here"*, distinct from the home page's "seduce, not convert" (non-negotiable #2), and built to fail towards absent with no JavaScript, the welcome screen's own contract (§14); **(2) six experiences per property, each given real space, plus one honest "also" line** naming what did not make the six (karaoke, the conference hall, wildlife documentaries, indoor games) rather than promoting or deleting them; **(3) the enquiry form dropped for plain contact details** — *"we don't need an enquiry form, for the enquiries we can just share the contact details in the Website Directory section when we build it later"* — which fixes the same defect a form would have (a bare `mailto:` doing nothing on a phone with no mail client) better than a form does: a real `tel:` link works on every device, with scripting off, with no third party and nothing to sign up for |
@@ -794,10 +795,12 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   pick it up again is in §13: why the supplied overlay films cannot be used, and the two routes that would
   work, one of them a re-render specification ready to hand to an illustrator. Nothing is owed until the
   client asks for it.
-- **The rooms card stack's measured mobile growth is larger than what the client accepted, and he has not
-  yet been told the real number.** He signed off on ~27% (Vann) and ~38% (Tola) on 11 Aug, from the design
-  spec's §9 projection; the shipped build measures **+35.9% (Vann) and +43.6% (Tola)** — about 9 and 5.6
-  points more. Corrected in the spec's own §9. See §17.
+- ~~**The rooms card stack's mobile growth.**~~ **Relayed and answered, 12 Aug.** He was given the real
+  figures — **+35.9% (Vann) and +43.6% (Tola)** against the ~27% and ~38% he had accepted — and ruled that
+  **the phone is not the current lens**: *"right now our only focus is how it looks on a computer/laptop
+  screen, we can workout and optimize mobile screens later."* The number is therefore recorded rather than
+  acted on. **This is a sequencing decision and not a licence to break a phone** — see the ruling in §1 and
+  the caveat under it.
 - **`ROOM_CARD_BOXES` is a hand-derived minimum, not solved from `MEDIA` the way this project's other
   generated artwork is.** `build_forest_overlay.mjs` and its siblings solve for their bound at build time;
   `ROOM_CARD_BOXES.stacked`'s 2.0 aspect and `ROOM_STACK.textReserve`'s 185px are two hand-measured numbers,
@@ -1152,11 +1155,19 @@ Both stay inside the 45% ceiling — `tola-rooms` by 0.7 points. Neither chapter
 mid-plan figure, and per the finding above, it structurally cannot: that figure belonged to a page with
 illegible cards.
 
-### The mobile length the client has not yet been told
+### The mobile length, relayed 12 Aug and deferred by the client
 
 The spec's §9 projected Vann's `rooms` chapter growing ~27% and Tola's ~38% on a phone, and the client
 accepted those numbers on 11 Aug. Measured on the shipped build (`#vann-rooms` / `#tola-rooms`'s own
 `getBoundingClientRect().height` at 390×844): **Vann +35.9% (1,738px → 2,362px), Tola +43.6% (2,035px →
 2,922px)** — about 9 and 5.6 points more than what he agreed to. The direction is right and desktop shrank
 as projected (Vann 2,437px → 2,371px, Tola 3,266px → 2,984px), but the specific mobile figure he signed off
-on undersells what shipped. Corrected in the spec's own §9; **not yet relayed to the client** — see §5.
+on undersells what shipped. Corrected in the spec's own §9.
+
+**Relayed 12 Aug, and he deferred it**: *"right now our only focus is how it looks on a computer/laptop
+screen, we can workout and optimize mobile screens later."* So the figure stands as measured and unactioned,
+and the lever if it is ever picked up is a shorter card at that width — `ROOM_STACK.heightMax` and a smaller
+`deckStep` below `md` — not dropping the effect. **What is deferred is optimising the phone, not measuring
+it.** Every rig here still runs at 390, and it must: the two worst defects this plan produced were both
+found at that width, one of them by a human reading a screenshot. Removing the phone from the instruments
+would remove the thing that has been catching the errors.

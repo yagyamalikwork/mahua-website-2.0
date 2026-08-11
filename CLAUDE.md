@@ -285,6 +285,14 @@ shipped on `/mahua-tola`. A rejected image is **deleted from `CURATION`**, not l
 id in the manifest is an id a later chapter reaches for by name, without ever seeing the face in it. Both
 instances are recorded in `scripts/build_images.mjs`'s own comment. Look at every frame before curating it.
 
+**Desktop is the client's lens as of 12 Aug 2026, and that is a sequencing ruling, not a relaxation.**
+*"Right now our only focus is how it looks on a computer/laptop screen, we can workout and optimize mobile
+screens later."* Judge and tune against a laptop; take a phone-only refinement as deferred rather than owed.
+**Non-negotiable #6 is untouched** — most traffic is still Indian mobile, and the byte and arrival budgets
+still bind. And **every rig still measures 390, deliberately**: the two worst defects the card stack
+produced were both found at that width, one of them by a human opening a screenshot and reading it. What is
+deferred is optimising the phone, not looking at it. `docs/DECISIONS.md` §1.
+
 **Every rig on this project measures at 1440×900, and type over cream is measured nowhere.** That shared
 blind spot let the redesign's signature element — the drawn park map — ship *illegible on a phone*, through
 fifteen task reviews and a whole-branch verification, because its labels were 4.3px at 390px and no
