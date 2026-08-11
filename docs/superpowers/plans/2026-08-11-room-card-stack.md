@@ -166,7 +166,7 @@ git add docs/reviews/2026-08-11-card-stack/js-baseline.json components/sections/
 git commit -m "refactor: lift the rooms content model out of its renderer
 
 `scale` goes with it. Its three values encoded crop decisions that the
-photographs state themselves — six of the seven room photographs are 2.29:1 or
+photographs state themselves — five of the seven room photographs are 2.29:1 or
 wider and four were being cropped ~35% to reach a squarer box. Deleting the
 field from the type first makes the compiler name all seven sites rather than
 trusting a grep.
@@ -274,8 +274,8 @@ import { MEDIA, type MediaId } from "@/lib/media";
  * rather than by hand.
  *
  * The section this replaces carried a `scale` field per room, set by a human
- * and justified in a comment. Six of the seven room photographs are 2.29:1 or
- * wider and four of them were being cropped by ~35% of their width to reach a
+ * and justified in a comment. Five of the seven room photographs are 2.29:1 or
+ * wider, and two of them were being cropped by ~35% of their width to reach a
  * squarer box — a decision nothing in the codebase could check. Deriving the
  * composition from the asset is the same rule the leaf, the lantern, the
  * welcome logo and the forest tint all follow.
@@ -319,7 +319,7 @@ Expected: FAIL on "keeps every room clear of the threshold" naming the 2.29:1 ro
 git add lib/room-card.ts lib/room-card.test.ts
 git commit -m "feat: decide a room card's composition from the photograph, not by hand
 
-Six of seven room photographs are 2.29:1 or wider; one is portrait. The
+Five of seven room photographs are 2.29:1 or wider; one is squarer and one is portrait. The
 threshold at 1.9 separates them with the widest margin available, and the test
 fails if any room drifts within 0.35 of it — so the number can only ever be
 crossed deliberately."
@@ -666,7 +666,7 @@ import type { RoomEntryCopy } from "./RoomShowcase.types";
  * rather than by a field in the content file:
  *
  * - **stacked** — the photograph lies across the top, words in a band beneath.
- *   Six of the seven rooms, all 2.29:1 or wider.
+ *   Five of the seven rooms, all 2.29:1 or wider.
  * - **beside** — the photograph stands next to the words from `lg` up, above
  *   them below it. `suite-tiger-painting` (1.50:1) and `tola-room-family`
  *   (0.67:1, portrait).
@@ -1165,7 +1165,7 @@ Add the 11 Aug client rulings to the table: the card stack requested, and "pile 
 - **why the booking bar's space is a constant and not its published height** — `PropertyBar` returns `null` over three regions, so a live value would resize every card mid-scroll;
 - **why reduced motion keeps the stack here but collapses `StickyScene`** — one reserves empty scroll, the other's scroll is the visitor's own movement;
 - **the phone as the binding case at 706px**, the first time on this project;
-- **that six of seven room photographs were being cropped ~35% of their width** by the design this replaced, and that the new crop bound is horizontal-only and asserted.
+- **that two of the five wide room photographs were being cropped ~35% of their width, and the one portrait photograph half its height,** by the design this replaced, and that the new crop bound is horizontal-only and asserted.
 
 Add any new defect instances to §2 with the count updated in its heading, in `CLAUDE.md`'s reading list, and in the memory index.
 

@@ -58,9 +58,9 @@ than hard-code a height. See §9.
 
 Two things follow, and both are arguments *for* this change rather than costs of it:
 
-**Six of the seven room photographs are 2.29:1 or wider.** The "three scales" that make the current
-section a composition are, for four of those six, achieved by cropping a wide photograph into a squarer
-box and throwing away a third of it. A card that shows a photograph closer to its own shape crops **less**
+**Five of the seven room photographs are 2.29:1 or wider.** The "three scales" that make the current
+section a composition are, for two of those five, achieved by cropping a wide photograph into a squarer
+box and throwing away a third of its width — the two Deluxe rooms, both 2.29:1 in a 3:2 box. A card that shows a photograph closer to its own shape crops **less**
 than what is on the page today.
 
 **One is portrait and is being cropped in half.** `tola-room-family` is 1440×2160 and sits in a 4:3 box,
@@ -72,8 +72,8 @@ artwork follows: derive from the asset, do not hard-code a number beside it.
 
 | photograph aspect | card layout |
 |---|---|
-| **≥ 1.9:1** (six of seven) | photograph across the top of the card, words in a band beneath it |
-| **< 1.9:1** (`suite-tiger-painting` 1.50, `tola-room-family` 0.67) | photograph beside the words from `lg` up; above them below `lg` |
+| **≥ 1.9:1** (five of seven) | photograph across the top of the card, words in a band beneath it |
+| **< 1.9:1** (two: `suite-tiger-painting` 1.50, `tola-room-family` 0.67) | photograph beside the words from `lg` up; above them below `lg` |
 
 1.9 is the threshold because it separates the two real populations — 2.29 and up against 1.50 and 0.67 —
 with the widest margin available, so no room sits near the boundary and a re-crop of any single photograph
@@ -97,14 +97,15 @@ The photo area's aspect is what satisfies that, and it differs by breakpoint bec
 
 | viewport | card | photo area | worst crop, of the seven |
 |---|---|---|---|
-| 390 | 342 × 640 | 342 × 190 (1.80:1) | 21% of width (`tola-room-family`, portrait — beside-layout, so exempt) / **0%** of the six wide ones' width |
+| 390 | 342 × 640 | 342 × 190 (1.80:1) | **0%** of the five wide ones' width (`tola-room-family` is portrait and takes the beside layout, so it is not in this box) |
 | 768 | 672 × 760 | 672 × 300 (2.24:1) | ~2% |
 | 1440 | 1,248 × 658 | 1,248 × 430 (2.90:1) | 0% — height is what goes |
 | 1920 | 1,504 × 760 | 1,504 × 520 (2.89:1) | 0% |
 
-**A wide photo area crops height, never width, and that is the point.** The six 2.29:1 photographs lose
+**A wide photo area crops height, never width, and that is the point.** The five wide photographs lose
 nothing horizontally at any width above 390, and at 390 the area is deliberately squarer than they are so
-they still lose none. This is strictly better than what ships today, where four of them lose 35%.
+they still lose none. This is strictly better than what ships today, where two of them lose 35% of their width and a third
+(`tola-room-family`, portrait) loses half its height.
 
 `scripts/check_image_resolution.mjs` already proves no photograph is served below its box; the new rig
 adds the crop bound beside it, and **fails rather than warns**. Hand-picking a photo aspect and hoping is
