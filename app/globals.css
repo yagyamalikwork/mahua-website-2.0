@@ -940,27 +940,33 @@ body {
 /*
  * The rooms card stack — `components/sections/RoomCardStack.tsx`.
  *
- * **The slot/card split is the mechanism, not tidiness.** A sticky element
- * cannot drive a scroll-linked animation from its own position: once it sticks
- * it stops moving, so its own view progress stops advancing and the recede
- * never runs. The slot stays in normal flow and scrolls normally; the card
- * inside reads the slot's timeline. Merge them and the recede silently dies
- * while everything still stacks — which looks almost right, which is worse.
+ * **The cards are direct children of the stack, and that is load-bearing.**
+ * `position: sticky` is clamped to its containing block, so wrapping each card
+ * in a slot of the card's own height leaves zero slack and the card renders
+ * exactly as if it were `static`. Measured in Chrome 151 over four cards:
+ * wrapped, **0 of 4** were ever simultaneously pinned; as direct children,
+ * **3 of 4**. The deck needs each card pinned while LATER cards scroll past it,
+ * so the containing block has to be the whole stack.
+ *
+ * **And a sticky element can drive its own view timeline** — `view()` tracks
+ * the element's flow position, not its stuck one. The wrapper an earlier draft
+ * introduced to work around that was unnecessary and fatal at once.
+ *
+ * Note the shape of the failure: in the broken version the recede ran perfectly
+ * on all four cards. Everything animated; nothing stacked. Only an assertion
+ * that a card's position FREEZES while the next advances catches it.
  */
-.room-slot {
-  view-timeline-name: --room-slot;
-  view-timeline-axis: block;
-  /* The slot is the scroll the card is read over. Its height IS the card's. */
-  height: var(--room-card-height);
-}
-
 .room-stack {
   /*
    * `--room-card-height` is solved, not chosen. `100svh` and not `100vh`:
    * on a phone the URL bar's collapse changes `vh` mid-scroll, which would
    * resize every card in the chapter while the visitor is reading one.
+   *
+   * `--room-count` falls back to 1 so a stack rendered without it degrades to a
+   * single-card deck depth rather than poisoning the whole `min()` — an invalid
+   * `var()` here would take `height` down with it.
    */
-  --room-deck-depth: calc(var(--room-deck-step) * (var(--room-count) - 1));
+  --room-deck-depth: calc(var(--room-deck-step) * (var(--room-count, 1) - 1));
   --room-card-height: min(
     calc(
       100svh - var(--header-height, 0px) - var(--property-bar-reserve) -
@@ -979,7 +985,7 @@ body {
   /* Scaling from the top keeps the deck's hairlines evenly spaced as cards recede. */
   transform-origin: top center;
   animation: room-recede linear both;
-  animation-timeline: --room-slot;
+  animation-timeline: view();
   animation-range: exit 0% exit 100%;
 }
 
