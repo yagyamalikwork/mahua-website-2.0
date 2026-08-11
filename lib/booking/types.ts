@@ -4,7 +4,7 @@
  * the two primitives below are branded rather than plain.
  */
 
-const PAISE = Symbol('PAISE');
+declare const PAISE: unique symbol;
 
 /**
  * Integer minor units with an explicit currency. `{ amount: 1545000 }` is
@@ -14,7 +14,8 @@ const PAISE = Symbol('PAISE');
  * as rupees drifts by fractions of a paisa and a guest's bill stops matching
  * the arithmetic behind it. Integers make that impossible rather than unlikely.
  *
- * Unforgeable outside this module — `rupees()` is the only constructor.
+ * Compile-time only — `declare const` emits no runtime property, so a Money
+ * survives JSON serialisation. `rupees()` is the sole constructor.
  */
 export type Money = {
   readonly amount: number;
@@ -28,7 +29,7 @@ export type StayDate = string & { readonly __brand: "StayDate" };
 export function rupees(paise: number): Money {
   if (!Number.isInteger(paise)) throw new Error(`Money must be an integer number of paise, got ${paise}`);
   if (paise < 0) throw new Error(`Money cannot be negative, got ${paise}`);
-  return { amount: paise, currency: "INR", [PAISE]: true };
+  return { amount: paise, currency: "INR" } as Money;
 }
 
 export function addMoney(a: Money, b: Money): Money {

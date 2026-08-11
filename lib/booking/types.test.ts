@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { Money } from "./types";
 import { addMoney, nightsBetween, rupees, stayDate } from "./types";
 
 describe("Money", () => {
