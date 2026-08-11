@@ -228,9 +228,28 @@ export const HOME = {
     // ── 05 · The Rooms ──────────────────────────────────────────────────────
     rooms: {
       heading: { text: "Rooms with the forest left in", dim: "forest" },
+      /*
+       * **"Fourteen at Tola" and "a camping hut" were both wrong, corrected
+       * 12 Aug 2026** — and each was wrong in a different way worth recording.
+       *
+       * The hut is a *retired product*, confirmed by the client that day. It
+       * appeared at none of five date ranges sampled across nine months in his
+       * own booking engine, while three Super Deluxe Cottages appeared at every
+       * one and were named nowhere on this page.
+       *
+       * Fourteen was a *future* number written in the present tense. The engine
+       * sells 5 Deluxe + 2 Suite + 3 Super Deluxe Cottage + 1 Family Suite =
+       * **eleven**; the brand record's fourteen counts three river-facing
+       * machaan rooms still under construction. Every source reconciles once
+       * both facts are in hand — see `content/mahua-tola.ts`'s own header —
+       * and nobody had put them together, so the home page has been quoting a
+       * count the property will not reach until those rooms open.
+       *
+       * Vann's twenty-six is right and was checked the same way: 13 + 8 + 5.
+       */
       intro:
-        "Twenty-six rooms at Vann, fourteen at Tola — deluxe rooms, cottages, suites and a " +
-        "camping hut, eight of the cottages with a deck over the seasonal river. All of them " +
+        "Twenty-six rooms at Vann, eleven at Tola — deluxe rooms, cottages, suites and a family " +
+        "suite, eight of the cottages with a deck over the seasonal river. All of them " +
         "handmade in mud and local wood. Air conditioning, a tea and coffee maker, a private " +
         "vanity area; and then the doors thrown open.",
       plates: [

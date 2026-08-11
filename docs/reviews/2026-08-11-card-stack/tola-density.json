@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T20:37:13.044Z",
+  "measuredAt": "2026-08-11T21:07:02.626Z",
   "url": "http://localhost:3100/mahua-tola",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
@@ -51,6 +51,11 @@
         "area": 558153
       },
       {
+        "id": "tola-room-super-deluxe",
+        "instances": 1,
+        "area": 558153
+      },
+      {
         "id": "tola-river-walk",
         "instances": 1,
         "area": 537920
@@ -76,11 +81,6 @@
         "area": 520210
       },
       {
-        "id": "tola-room-super-deluxe",
-        "instances": 1,
-        "area": 459658
-      },
-      {
         "id": "welcome-flower",
         "instances": 1,
         "area": 26044
@@ -104,14 +104,14 @@
   },
   "page": {
     "screens": 80,
-    "meanEmptyPercent": 31.2,
-    "medianEmptyPercent": 27.6,
+    "meanEmptyPercent": 30.1,
+    "medianEmptyPercent": 26.7,
     "bestEmptyPercent": 0.2,
     "worstEmptyPercent": 72.7,
     "worstAt": 10800,
-    "overBudget": 16,
-    "meanImagePercent": 62.2,
-    "meanTypePercent": 6.6
+    "overBudget": 12,
+    "meanImagePercent": 63.4,
+    "meanTypePercent": 6.5
   },
   "chapters": [
     {
@@ -180,14 +180,14 @@
       "screensTall": 3.32,
       "wholeScreensAvailable": true,
       "screens": 14,
-      "meanEmptyPercent": 37.1,
-      "medianEmptyPercent": 39.2,
-      "bestEmptyPercent": 17.9,
-      "worstEmptyPercent": 47.9,
-      "worstAt": 5250,
-      "overBudget": 4,
+      "meanEmptyPercent": 30.5,
+      "medianEmptyPercent": 33.6,
+      "bestEmptyPercent": 17.2,
+      "worstEmptyPercent": 44.7,
+      "worstAt": 3300,
+      "overBudget": 0,
       "passesMean": true,
-      "passesWorst": false
+      "passesWorst": true
     },
     {
       "id": "tola-table",
@@ -454,65 +454,65 @@
     },
     {
       "at": 4050,
-      "occupied": 60.8,
-      "empty": 39.2,
-      "imagePercent": 58.7,
+      "occupied": 64,
+      "empty": 36,
+      "imagePercent": 61.9,
       "typePercent": 2.1
     },
     {
       "at": 4200,
-      "occupied": 66.3,
-      "empty": 33.7,
-      "imagePercent": 64.9,
+      "occupied": 75.7,
+      "empty": 24.3,
+      "imagePercent": 74.3,
       "typePercent": 1.4
     },
     {
       "at": 4350,
-      "occupied": 68.8,
-      "empty": 31.2,
-      "imagePercent": 66.2,
-      "typePercent": 2.6
+      "occupied": 82.8,
+      "empty": 17.2,
+      "imagePercent": 81.8,
+      "typePercent": 1
     },
     {
       "at": 4500,
-      "occupied": 62.9,
-      "empty": 37.1,
-      "imagePercent": 59.9,
-      "typePercent": 3
+      "occupied": 77.1,
+      "empty": 22.9,
+      "imagePercent": 75.5,
+      "typePercent": 1.6
     },
     {
       "at": 4650,
-      "occupied": 56.1,
-      "empty": 43.9,
-      "imagePercent": 53.1,
+      "occupied": 64.8,
+      "empty": 35.2,
+      "imagePercent": 61.8,
       "typePercent": 3
     },
     {
       "at": 4800,
-      "occupied": 53.1,
-      "empty": 46.9,
-      "imagePercent": 49.8,
-      "typePercent": 3.3
+      "occupied": 64.8,
+      "empty": 35.2,
+      "imagePercent": 62.2,
+      "typePercent": 2.6
     },
     {
       "at": 4950,
-      "occupied": 53.1,
-      "empty": 46.9,
-      "imagePercent": 49.3,
-      "typePercent": 3.8
+      "occupied": 68.8,
+      "empty": 31.2,
+      "imagePercent": 66.9,
+      "typePercent": 1.9
     },
     {
       "at": 5100,
-      "occupied": 52.8,
-      "empty": 47.2,
-      "imagePercent": 49.3,
-      "typePercent": 3.5
+      "occupied": 63.3,
+      "empty": 36.7,
+      "imagePercent": 60.5,
+      "typePercent": 2.8
     },
     {
       "at": 5250,
-      "occupied": 52.1,
-      "empty": 47.9,
-      "imagePercent": 49.3,
+      "occupied": 57.4,
+      "empty": 42.6,
+      "imagePercent": 54.6,
       "typePercent": 2.8
     },
     {

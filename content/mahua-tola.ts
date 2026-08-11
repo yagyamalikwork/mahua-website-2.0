@@ -76,7 +76,7 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
     number: "03",
     label: "The Rooms",
     shape: "showcase",
-    media: ["tola-room-deluxe", "tola-room-suite", "tola-room-family", "tola-room-camping"],
+    media: ["tola-room-deluxe", "tola-room-suite", "tola-room-super-deluxe", "tola-room-family"],
   },
   {
     // tola-dining is 1440px wide and fullBleedSafe (non-negotiable #11) —
@@ -154,13 +154,26 @@ export const TOLA_CONTACT: PropertyContactCopy = {
  * `../Mahua_Resorts_Master_Brand_Record.md`, in the established brand voice —
  * British spelling, specificity over adjectives.
  *
- * **Room count: twelve, not fourteen.** The live site's own structured room
- * list (5 Deluxe + 2 Suite + 3 Super Deluxe Cottage + 1 Family Suite + 1
- * Camping Hut = 12) is what has real per-type facts. The brand record's
- * "growing to 14" refers to three new river-facing machaan rooms still under
- * construction, with no published size/bed/view for them yet — flagged here,
- * not resolved; it is the client's call, not a guess this file should make
- * (docs/copy-provenance.md, docs/superpowers/specs/2026-08-08-property-pages-design.md §8).
+ * **Room count: ELEVEN. Settled 12 Aug 2026, and every source now reconciles.**
+ * The client's own booking engine sells 5 Deluxe + 2 Suite + 3 Super Deluxe
+ * Cottage + 1 Family Suite — identical across five date ranges spanning nine
+ * months, including peak — and the client confirmed the same day that the
+ * Camping Hut is retired.
+ *
+ * That resolves a question this file has carried since the copy-provenance
+ * work, where it was recorded as "twelve, not fourteen" and flagged unresolved:
+ *
+ *   - The live site's **twelve** was eleven plus the Camping Hut. Right when
+ *     written; wrong now.
+ *   - The brand record's **fourteen** is eleven plus the three river-facing
+ *     machaan rooms still under construction. A future number, and the home
+ *     page was quoting it in the present tense until this date.
+ *
+ * So: eleven today, fourteen when the machaan rooms open, and the twelfth has
+ * been retired. Neither source was lying; neither had both halves. **Still
+ * worth the client's confirmation** — a booking engine reports what is
+ * *sellable*, which need not equal what is built.
+ * (docs/copy-provenance.md, docs/superpowers/specs/2026-08-08-property-pages-design.md §8.)
  *
  * **Tiger density is stated comparatively, not as the live site's specific
  * count.** The live site says "115 tigers" and "highest Sighting Rating Index
@@ -392,14 +405,23 @@ export const TOLA_COPY: PropertyPageCopy = {
 
   showcaseCopy: {
     "tola-rooms": {
-      heading: { text: "Twelve rooms, five shapes", dim: "shapes" },
-      // "Five shapes" names all five the live site's own structured list
-      // offers (Deluxe, Suite, Super Deluxe Cottage, Family Suite, Camping
-      // Hut) even though only four are shown below — see the note on the
-      // Suite entry's `note` field for why.
+      /*
+       * **Eleven, not twelve, since 12 Aug 2026 — and the number is now
+       * evidenced rather than inherited.** The client's own booking engine
+       * offers exactly Deluxe 5, Suite 2, Super Deluxe Cottages 3, Family Suite
+       * 1 — identical across five date ranges spanning nine months, including
+       * peak. The retired Camping Hut is the twelfth the old heading counted.
+       *
+       * This also settles the "12 or 14?" that sat open in `docs/DECISIONS.md`
+       * §5 from the copy provenance work: the live site's twelve was right and
+       * the brand record's fourteen is wrong, and neither source knew why.
+       * Confirm the figure with the client before treating it as final — an
+       * engine reports what is *sellable*, which need not equal what is built.
+       */
+      heading: { text: "Eleven rooms, four shapes", dim: "shapes" },
       intro:
-        "Deluxe rooms, suites, a family suite and a camping hut, each with its own forest view — " +
-        "and three Super Deluxe Cottages besides, similarly styled to the suites.",
+        "Deluxe rooms, suites, super deluxe cottages and one family suite — four shapes, each with " +
+        "its own view into the forest.",
       rooms: [
         {
           mediaId: "tola-room-deluxe",
@@ -414,28 +436,42 @@ export const TOLA_COPY: PropertyPageCopy = {
           facts: ["270 sq ft", "Queen bed", "Forest view"],
         },
         {
+          /*
+           * Added 12 Aug 2026, in the retired Camping Hut's place, and ordered
+           * by tariff like the three around it (11,440 / 12,650 / 14,300 /
+           * 16,500 a night at the breakfast rate).
+           *
+           * This row was impossible until the client supplied a photograph the
+           * same day: the previous note here recorded that no interior shot of
+           * a Super Deluxe Cottage existed anywhere in the live site's media,
+           * so the room could only be named in the intro. It is three real
+           * rooms, on sale every date sampled across nine months, and it had no
+           * picture while a retired hut had one.
+           *
+           * **No square footage, deliberately.** The other three rows carry one
+           * and this does not, which looks like an omission and is a refusal:
+           * nobody has told us the figure and the booking engine does not
+           * publish it. Inventing a plausible number to complete the pattern is
+           * exactly how a made-up capacity nearly shipped as a claim about this
+           * client's property once already. Ask, then add it.
+           */
+          mediaId: "tola-room-super-deluxe",
+          name: "Super Deluxe Cottage",
+          // Describes the SHIPPED crop, not the original photograph. The first
+          // draft said "under timber beams", which was true of the 3:2 the
+          // client sent and false of the 2:1 that renders — the crop trades
+          // ceiling for compliance with the card's stacked box. The stone
+          // headboard is in frame and is the more specific detail anyway.
+          line: "A king bed against a stone headboard, a sitting area by the window, and the bamboo close outside it.",
+          facts: ["King bed, sitting area", "Up to three adults", "Forest view"],
+        },
+        {
           mediaId: "tola-room-family",
           name: "Family Suite",
           line: "Two interconnected rooms under a terracotta-beamed roof, a Gond painting over the bed.",
           facts: ["450 sq ft, two interconnected rooms", "Queen and king bed", "Forest view"],
         },
-        {
-          mediaId: "tola-room-camping",
-          name: "Camping Hut",
-          line: "Four beds under one roof, built for a family or a group travelling together.",
-          facts: ["500 sq ft", "Four cemented single beds", "Forest view"],
-        },
       ],
-      // Super Deluxe Cottage is not its own row: the live site's media has
-      // no interior photograph of it anywhere (its own rooms tab shows the
-      // lodge exterior, same gap the pre-redesign file already found), and
-      // this component's contract — one row per photograph, `rooms.map(id)`
-      // matching the chapter's own `media` array exactly — has no way to
-      // give it a row that shares the Suite's photograph without either
-      // repeating a media id within one chapter (which
-      // content/mahua-tola.test.ts's "never shows the same photograph
-      // twice" forbids) or breaking that join. It is named instead in the
-      // intro above, honestly, as sharing the Suite's styling.
     } satisfies RoomShowcaseCopy,
   },
 

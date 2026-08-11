@@ -3,6 +3,39 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## Tola's rooms corrected — 12 Aug 2026, found while scoping the checkout
+
+Scoping the branded checkout meant reading the client's own AsiaTech booking engine, and that turned up two
+errors on live pages. Both are fixed; commit below.
+
+- **`/mahua-tola` was advertising a room nobody could book and hiding one on sale every day.** The Camping
+  Hut was the fourth room card; the engine offered no such room on **five date ranges sampled across nine
+  months**, while three Super Deluxe Cottages appeared at every one and were named nowhere but a half
+  sentence in the intro. The client confirmed on 12 Aug that the hut is **retired**, and supplied a
+  photograph of a Super Deluxe Cottage the same day — which removes the blocker the previous session had
+  recorded honestly: no interior shot of one existed anywhere in the live site's media.
+- **The home page stated a future room count in the present tense.** "Fourteen at Tola" is eleven plus three
+  river-facing machaans still under construction. The engine sells **eleven** (5 Deluxe + 2 Suite + 3 Super
+  Deluxe Cottage + 1 Family Suite), identical at every date sampled. The live site's *twelve* was those
+  eleven plus the retired hut. **Both sources held half the answer and neither knew it**; this closes the
+  "12 vs 14" that had sat open in `docs/DECISIONS.md` §5 since the copy-provenance work. Vann's twenty-six
+  is right and was checked the same way (13 + 8 + 5).
+
+**The swap was not like-for-like, and the test suite did not notice — `DECISIONS.md` §2 #46.**
+`roomCardLayout` derives a card's whole composition from its photograph's aspect: ≥1.9 is `stacked`, below
+is `beside`. The hut was 2.29 and the client's photograph is a true 3:2, so dropping it in flipped the
+card's layout and with it the chapter's height — `tola-rooms` went **33.8% → 37.1% mean and 44.3% → 47.9%
+worst**, over non-negotiable #8's 45% ceiling, with all 419 tests green. Nothing tests density; it was
+caught only by running `measure_density.mjs` on the route. Cropping to 2.00 (the stacked box exactly) was
+then rejected by `lib/room-card.test.ts`, which requires 0.35 of clearance from the threshold so no card is
+one re-encode from flipping. **2.29 shipped** — its siblings' own ratio — and `tola-rooms` is now **30.5%
+mean / 44.7% worst**, better than the baseline it started from. The uncropped original is kept beside the
+crop in `reference/client-photos/`.
+
+**Verified:** 419 tests, build, lint, `check_card_stack.mjs` (4 rooms, text legible 4/4 at all six widths),
+`check_image_resolution.mjs` (41 images, 0 under-served), density on the route, and the new card looked at
+by eye at 1440 and 390.
+
 ## The rooms card stack — complete, 11 Aug 2026
 
 Client request, the same day as the chrome's second pass below: *"pile up, with recede"* for the `rooms`

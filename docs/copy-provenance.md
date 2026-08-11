@@ -51,7 +51,7 @@ numbers now in the copy:
 | **Five kilometres from Turia Gate** (Vann) | **You, 3 and 4 Aug** | ✅ Confirmed twice. The live site publishes 3 km on the homepage and 4 km on About Us; the brand record says 4 km. All three are wrong and should be corrected wherever they still appear |
 | **Five kilometres from Kolara Gate** (Tola) | **You, 4 Aug** | ✅ Confirmed. The live site publishes 6 km, 10 km *and* 12 km across three places. All three are wrong |
 | Twenty-six rooms at Mahua Vann | Brand record | ⚠️ Cross-checks against the live site's own room list (13 + 5 + 8 = 26) |
-| Fourteen rooms at Mahua Tola | Brand record | ⚠️ The live site's list totals **twelve** (5 + 2 + 3 + 1 + 1). The record says "growing to 14" once the new machaans open. **Is fourteen true today?** |
+| ~~Fourteen~~ **Eleven** rooms at Mahua Tola | The client's own booking engine, 12 Aug 2026 | ✅ **Settled, and both sources were half-right.** The engine sells 5 Deluxe + 2 Suite + 3 Super Deluxe Cottage + 1 Family Suite = **eleven**, identical across five date ranges over nine months including peak. The live site's *twelve* was these eleven plus the **Camping Hut, which the client confirmed on 12 Aug is retired**. The record's *fourteen* is these eleven plus the three river-facing machaans still under construction — a future number the home page had been stating in the present tense. Corrected in `content/home.ts` and `content/mahua-tola.ts`. **Confirm with the client before treating as final:** an engine reports what is *sellable*, not what is built |
 | Eight cottages with a deck | Live site | ⚠️ Unverified |
 | More than a hundred Kumhar families at Pachdhar | Live site | ⚠️ Unverified |
 | Some three hundred recorded birds | Live site | ⚠️ Unverified |

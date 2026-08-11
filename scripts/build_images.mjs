@@ -546,9 +546,50 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
-    id: "tola-room-camping",
-    src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Camping-hut.jpg",
-    alt: "The camping hut at Mahua Tola, forest view.",
+    /*
+     * Replaced `tola-room-camping` on 12 Aug 2026, and the old id is DELETED
+     * rather than left curated-but-unused — the same rule the two consent
+     * rejections above follow, for the same reason: an id in this manifest is
+     * an id a later chapter reaches for by name, without ever seeing what is
+     * in it.
+     *
+     * **The camping hut is a retired product, confirmed by the client.** It was
+     * still the fourth card on `/mahua-tola` while the booking engine offered
+     * no such room on any of five date ranges sampled across nine months —
+     * whereas the Super Deluxe Cottages appear at every one, three of them, and
+     * had no photograph at all. The page was advertising something nobody could
+     * book and hiding something on sale every day.
+     *
+     * Client-supplied, 12 Aug 2026, 1500x1000 — checked with `sharp().metadata()`
+     * and looked at, not trusted from the filename. No people in frame.
+     *
+     * **Curated from the 2:1 crop, not the original, and the reason is layout
+     * rather than taste.** `roomCardLayout` picks a card's whole composition
+     * from its photograph's aspect: at or above `ROOM_CARD_ASPECT_THRESHOLD`
+     * (1.9) the card is `stacked` (photograph above the type), below it the card
+     * is `beside`. The retired camping hut was 2.29, so it was stacked; the
+     * original of this photograph is 1.50, so dropping it in **silently changed
+     * the card's composition** and with it the chapter's height — `tola-rooms`
+     * went from 33.8% mean / 44.3% worst empty to 37.1% / 47.9%, over
+     * non-negotiable #8's 45% ceiling, on what was meant to be a like-for-like
+     * swap.
+     *
+     * **2.29, not 2.00 — and the difference was caught by a test, not by eye.**
+     * 2.00 is `ROOM_CARD_BOXES.stacked` exactly, so it crops nothing, and it
+     * was the obvious choice. But `lib/room-card.test.ts` requires every room
+     * photograph to sit at least **0.35** clear of the 1.9 threshold, so that no
+     * card's composition is ever one re-encode away from flipping; 2.00 is only
+     * 0.10 clear and was rejected. 2.29 is exactly what `tola-room-deluxe` and
+     * `tola-room-suite` already are, clears by 0.39, and costs 12.6% of width to
+     * the 2.0 box at render — the same 12.6% those two have always paid.
+     *
+     * The uncropped original stays beside this file: it is the better photograph
+     * of the *room*, and if the card is ever given a `beside` composition it is
+     * already there.
+     */
+    id: "tola-room-super-deluxe",
+    src: "reference/client-photos/Super-Delux-Cottage-2-29.jpg",
+    alt: "A Super Deluxe Cottage at Mahua Tola: a king bed under timber beams, with a window onto the bamboo.",
     category: "lodgeLife",
     orientation: "landscape",
     fullBleedSafe: false,

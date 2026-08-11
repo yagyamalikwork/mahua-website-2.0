@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T20:16:07.373Z",
+  "measuredAt": "2026-08-11T21:07:03.394Z",
   "url": "http://localhost:3100",
   "noRecede": false,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
@@ -586,10 +586,10 @@
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 410,
-          "naturalHeight": 273,
+          "naturalWidth": 391,
+          "naturalHeight": 170,
           "boxWidth": 321.47998046875,
-          "boxHeight": 257.17822265625
+          "boxHeight": 160.73974609375
         },
         {
           "name": "Family Suite",
@@ -685,10 +685,10 @@
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 864,
-          "naturalHeight": 576,
+          "naturalWidth": 714,
+          "naturalHeight": 311,
           "boxWidth": 631.679931640625,
-          "boxHeight": 505.33837890625
+          "boxHeight": 315.84033203125
         },
         {
           "name": "Family Suite",
@@ -784,10 +784,10 @@
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 737,
-          "naturalHeight": 491,
-          "boxWidth": 523.3890380859375,
-          "boxHeight": 418.71142578125
+          "naturalWidth": 1007,
+          "naturalHeight": 439,
+          "boxWidth": 872.320068359375,
+          "boxHeight": 436.16015625
         },
         {
           "name": "Family Suite",
@@ -883,10 +883,10 @@
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 921,
-          "naturalHeight": 614,
-          "boxWidth": 667.7672119140625,
-          "boxHeight": 534.2138671875
+          "naturalWidth": 1300,
+          "naturalHeight": 568,
+          "boxWidth": 1112.9599609375,
+          "boxHeight": 540.5
         },
         {
           "name": "Family Suite",
@@ -982,10 +982,10 @@
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 1036,
-          "naturalHeight": 691,
-          "boxWidth": 758.0072021484375,
-          "boxHeight": 606.40283203125
+          "naturalWidth": 1483,
+          "naturalHeight": 648,
+          "boxWidth": 1263.35986328125,
+          "boxHeight": 441.80029296875
         },
         {
           "name": "Family Suite",
@@ -1081,10 +1081,10 @@
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 1382,
-          "naturalHeight": 921,
-          "boxWidth": 848.2471923828125,
-          "boxHeight": 678.591796875
+          "naturalWidth": 1722,
+          "naturalHeight": 752,
+          "boxWidth": 1413.760009765625,
+          "boxHeight": 540.5
         },
         {
           "name": "Family Suite",
