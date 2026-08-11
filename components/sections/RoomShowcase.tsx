@@ -4,37 +4,14 @@ import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
-import type { TwoTone } from "@/content/home";
 import type { PropertyChapter } from "@/content/property-chapters";
-import type { MediaId } from "@/lib/media";
 import { ENTER } from "@/lib/motion";
+import type { RoomEntryCopy, RoomScale, RoomShowcaseCopy } from "./RoomShowcase.types";
 
-/**
- * How much of the row a room's photograph claims.
- *
- * Three scales, not two, and no mirroring: the layout this replaces alternated
- * one band left and right and read as a ledger. Changing the *size* of the
- * photograph is what makes three rooms read as a composition.
- */
-export type RoomScale = "wide" | "offsetRight" | "offsetLeft";
+export type { RoomEntryCopy, RoomScale, RoomShowcaseCopy };
 
-export type RoomEntryCopy = {
-  readonly mediaId: MediaId;
-  readonly name: string;
-  /** One sentence. Not a description of the furniture. */
-  readonly line: string;
-  /** Set as a single letterspaced caption, joined by middots. */
-  readonly facts: readonly string[];
-  readonly scale: RoomScale;
-  /** Only when this room shares a photograph with another — "Shown: Suite." */
-  readonly note?: string;
-};
-
-export type RoomShowcaseCopy = {
-  readonly heading: TwoTone;
-  readonly intro: string;
-  readonly rooms: readonly RoomEntryCopy[];
-};
+/** Interim: `scale` left the content model in Task 1; this component dies in Task 7. */
+const INTERIM_SCALE: RoomScale = "wide";
 
 /** Exported for `lib/sizes.test.ts`, like every other section's. */
 export const ROOM_SIZES: Record<RoomScale, string> = {
@@ -109,13 +86,13 @@ export function RoomShowcase({
               key={room.name}
               className="grid grid-cols-1 gap-y-6 lg:grid-cols-12 lg:items-end lg:gap-x-10"
             >
-              <div className={LAYOUT[room.scale].photo}>
+              <div className={LAYOUT[INTERIM_SCALE].photo}>
                 <Enter>
-                  <ImageReveal className={`block w-full ${FRAME[room.scale]}`}>
+                  <ImageReveal className={`block w-full ${FRAME[INTERIM_SCALE]}`}>
                     <Photo
                       id={room.mediaId}
-                      sizes={ROOM_SIZES[room.scale]}
-                      box={ROOM_BOXES[room.scale]}
+                      sizes={ROOM_SIZES[INTERIM_SCALE]}
+                      box={ROOM_BOXES[INTERIM_SCALE]}
                       pictureClassName="block h-full w-full"
                       className="h-full w-full object-cover"
                     />
@@ -123,7 +100,7 @@ export function RoomShowcase({
                 </Enter>
               </div>
 
-              <div className={LAYOUT[room.scale].text}>
+              <div className={LAYOUT[INTERIM_SCALE].text}>
                 <Enter delay={ENTER.stagger}>
                   <div>
                     <h3 className="font-[family-name:var(--font-display)] text-2xl font-light leading-tight text-[color:var(--text)] md:text-3xl">

@@ -1,6 +1,6 @@
 import type { OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
-import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase";
+import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
 import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
 import type { FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
 import type { HeroCopy } from "@/components/sections/Hero";
@@ -406,59 +406,24 @@ export const TOLA_COPY: PropertyPageCopy = {
           name: "Deluxe",
           line: "Twin beds and a trunk at the foot of them, with the forest at the window.",
           facts: ["220 sq ft", "Twin beds", "Forest view"],
-          // 1163×508 (2.29:1) is close enough to wide's 21:9 (2.33:1) that
-          // either scale loses almost nothing; the alt text names no
-          // specific feature at risk in a narrower crop, so — same
-          // reasoning as Vann's own Deluxe room — this is the gentler-loss
-          // pick (offsetLeft's 3:2 crops ~35% of the width; offsetRight's
-          // 4:3 crops ~42%), not a hard constraint. Chosen over `wide`
-          // deliberately, so the three landscape rooms below don't all
-          // render as three consecutive full-width rows.
-          scale: "offsetLeft",
         },
         {
           mediaId: "tola-room-suite",
           name: "Suite",
           line: "A king bed under bamboo, seen through the glass doors that open onto it.",
           facts: ["270 sq ft", "Queen bed", "Forest view"],
-          // Hard constraint, checked against the photograph directly: the
-          // room's own French doors onto a bamboo grove — the "forest view"
-          // the alt text and facts both name — sit at the RIGHT edge of a
-          // 1163×508 frame. offsetRight (4:3) or offsetLeft (3:2) crop
-          // ~35-42% of the width from both sides equally and would cut into
-          // exactly that feature; wide (21:9) loses under 2%.
-          scale: "wide",
         },
         {
           mediaId: "tola-room-family",
           name: "Family Suite",
           line: "Two interconnected rooms under a terracotta-beamed roof, a Gond painting over the bed.",
           facts: ["450 sq ft, two interconnected rooms", "Queen and king bed", "Forest view"],
-          // The one portrait photograph among the four (1440×2160, 2:3) —
-          // every scale this component offers is a landscape box, so some
-          // height is always lost. offsetRight (4:3) keeps the most of any
-          // of them (50% of the height, centred, vs. 55.6% for offsetLeft
-          // and 71.4% for wide — arithmetic checked against the actual
-          // photograph, not assumed from the ratios alone). At that crop
-          // the bed and the Gond painting both stay in frame; the
-          // terracotta ceiling beams the alt text also names do not — no
-          // landscape box this component offers can keep both a feature at
-          // the top of a 2:3 portrait and one two-thirds of the way down it
-          // at once.
-          scale: "offsetRight",
         },
         {
           mediaId: "tola-room-camping",
           name: "Camping Hut",
           line: "Four beds under one roof, built for a family or a group travelling together.",
           facts: ["500 sq ft", "Four cemented single beds", "Forest view"],
-          // The room's whole point — four beds in a row — is what a
-          // narrower crop would cut into first. Same reasoning as the
-          // Suite: wide (21:9) is a hard constraint here, not a preference,
-          // because offsetRight/offsetLeft would plausibly crop a bed
-          // entirely off one end of a room whose fact line is specifically
-          // "four".
-          scale: "wide",
         },
       ],
       // Super Deluxe Cottage is not its own row: the live site's media has

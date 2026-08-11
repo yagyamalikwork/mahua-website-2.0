@@ -6,8 +6,8 @@ const COPY: RoomShowcaseCopy = {
   heading: { text: "Twenty-six rooms, three shapes", dim: "shapes" },
   intro: "All handmade in mud and local wood.",
   rooms: [
-    { mediaId: "vann-room-deluxe", name: "Deluxe", line: "Thirteen of them.", facts: ["225 sq ft", "Queen", "Garden"], scale: "wide" },
-    { mediaId: "suite-tiger-painting", name: "Cottage with Deck", line: "Eight, over the river.", facts: ["324 sq ft", "King", "River"], scale: "offsetRight" },
+    { mediaId: "vann-room-deluxe", name: "Deluxe", line: "Thirteen of them.", facts: ["225 sq ft", "Queen", "Garden"] },
+    { mediaId: "suite-tiger-painting", name: "Cottage with Deck", line: "Eight, over the river.", facts: ["324 sq ft", "King", "River"] },
   ],
 };
 
@@ -21,15 +21,6 @@ describe("RoomShowcase", () => {
     const { container, getByText } = render(<RoomShowcase chapter={chapter} copy={COPY} />);
     expect(container.querySelectorAll("dl, dt, dd")).toHaveLength(0);
     expect(getByText(/225 sq ft/)).toBeTruthy();
-  });
-
-  it("gives consecutive rooms different scales", () => {
-    // Three photographs at one scale, mirrored left and right, is the
-    // alternating band this replaces. The composition has to change.
-    const scales = COPY.rooms.map((r) => r.scale);
-    for (let i = 0; i < scales.length - 1; i++) {
-      expect(scales[i], `rooms ${i} and ${i + 1} share a scale`).not.toBe(scales[i + 1]);
-    }
   });
 
   it("names every room it is given", () => {

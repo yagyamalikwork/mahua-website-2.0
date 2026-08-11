@@ -1,6 +1,6 @@
 import type { OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
-import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase";
+import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
 import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
 import type { PressBandCopy } from "@/components/sections/PressBand";
 import type { FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
@@ -233,36 +233,18 @@ export const VANN_COPY: PropertyPageCopy = {
           name: "Deluxe",
           line: "Handmade in mud and local wood, with a queen bed and views that open from the garden into the jungle beyond.",
           facts: ["225 sq ft", "Queen bed", "Garden and jungle view"],
-          // 1163×508 (2.29:1) into offsetRight's 4:3 box would lose ~42% of
-          // the width; into offsetLeft's 3:2 box it loses ~35%. Neither crops
-          // a named feature (the alt text names none), so this is chosen for
-          // the gentler loss, not a hard constraint.
-          scale: "offsetLeft",
         },
         {
           mediaId: "vann-room-cottage-plain",
           name: "Cottage without Deck",
           line: "A private sit-out under cane, and the forest close enough to touch through the glass doors.",
           facts: ["324 sq ft", "King bed, private sit-out", "Jungle view"],
-          // Hard constraint (task brief, backed by scripts/build_images.mjs's
-          // own CURATION comment): 1931×789 (2.45:1) into offsetRight (4:3)
-          // or offsetLeft (3:2) crops ~46% of the width and puts the sit-out
-          // and cane chair — the features this entry's own alt text names —
-          // outside the frame. wide (21:9 = 2.33:1) loses under 5%.
-          scale: "wide",
         },
         {
           mediaId: "suite-tiger-painting",
           name: "Cottage with Deck",
           line: "A king bed, a private deck over the seasonal river, and the forest holding it on every side.",
           facts: ["324 sq ft", "King bed, private sit-out", "Jungle and seasonal river view"],
-          // 1440×961 (1.50:1) is almost exactly offsetLeft's own 3:2 box, so
-          // that scale was free; offsetRight's 4:3 box was the one left
-          // after giving offsetLeft to the Deluxe room's wider photograph.
-          // Checked by eye against the source: the painting and the open
-          // doors both sit well clear of the ~11% each side offsetRight
-          // trims off.
-          scale: "offsetRight",
         },
       ],
     } satisfies RoomShowcaseCopy,
