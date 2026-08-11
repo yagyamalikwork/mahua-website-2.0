@@ -123,3 +123,32 @@ a visitor owns.**
 One thing did go right, and it is worth keeping: the invalid `@custom-variant` shorthand
 `(@media A, B)` failed the build outright rather than emitting a subtly wrong selector. Loud is the good
 kind of wrong.
+
+---
+
+## The other half of the report: "wrap" — looked at, and accepted as-is
+
+The client's words were *"images wrap **or** squeeze"*. The squeeze is fixed above. The wrap was chased
+separately rather than assumed to be the same defect, and it turned out to be a real layout inconsistency
+that he then chose to keep.
+
+**`07 · The Details` is a 2-wide stack between 1024px and 1279px**, while `03 · The Forest` has already
+gone 3-across at 1024. The cause is a 256px band where two rules disagree: the stagger switches on at `lg`
+(1024) but a four-plate grid's fourth column only arrives at `xl` (1280), so for that band you get a tall
+2×2 with the right-hand column hanging 3.5rem low.
+
+Measured, columns against stagger:
+
+| width | forest | rooms | details |
+|---|---|---|---|
+| 900 | 2, no stagger | 2, no stagger | 2, no stagger |
+| 1024–1279 | 3, staggered | 2, staggered | **2, staggered** |
+| 1280+ | 3, staggered | 2, staggered | **4, staggered** |
+
+`rooms` is 2-column at every width by design, not by accident — `PlateGrid` gives a majority-landscape grid
+two columns deliberately, and four landscapes trip that rule.
+
+**Client ruling, 12 Aug: leave it.** *"It's fine."* The proposal on the table was to bring the fourth column
+in at `lg` so the board stays a board on a narrower laptop; he declined it. **Recorded here so it is
+looked-at-and-accepted rather than unexamined** — if a future session finds this band and reads it as a
+defect, it is not. Re-raising it needs a new reason, not a rediscovery.
