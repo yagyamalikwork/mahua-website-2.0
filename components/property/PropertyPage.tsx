@@ -4,7 +4,7 @@ import { Hero, type HeroCopy } from "@/components/sections/Hero";
 import { OpeningColumn, type OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import { PressBand, type PressBandCopy } from "@/components/sections/PressBand";
 import { PropertyMap, type PropertyMapCopy } from "@/components/sections/PropertyMap";
-import { RoomShowcase } from "@/components/sections/RoomShowcase";
+import { RoomCardStack } from "@/components/sections/RoomCardStack";
 import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
 import { PropertyBar } from "@/components/property/PropertyBar";
 import { PropertyInvitation, type PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
@@ -185,7 +185,7 @@ export function PropertyPage({
               const showcaseCopy = copy.showcaseCopy?.[chapter.id];
               if (!showcaseCopy) throw new Error(`No showcase copy for "${chapter.id}"`);
               return (
-                <RoomShowcase key={chapter.id} chapter={chapter} copy={showcaseCopy} surface={surface} />
+                <RoomCardStack key={chapter.id} chapter={chapter} copy={showcaseCopy} surface={surface} />
               );
             }
             case "pair": {

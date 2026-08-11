@@ -13,18 +13,16 @@ import {
   type ExperienceWeight,
 } from "@/components/sections/ExperiencePair";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
-import { ROOM_BOXES, ROOM_SIZES, type RoomScale } from "@/components/sections/RoomShowcase";
-// `RoomCard` (Task 4 of the room-card-stack plan) is not mounted on any route
-// yet — Task 5 builds the stack and mounts it, Task 7 retires `RoomShowcase`
-// above. The import below is imported-but-unused on purpose: the companion
-// check further down ("imports from every component that passes a sizes
-// prop") requires it the moment the file exists on disk, regardless of
-// whether it is live, and `LIVE_SLOTS` — which "covers every distinct sizes
-// string on the page" — must stay honest about what the page actually
-// serves today. Task 5 moves these two into `LIVE_SLOTS` and bumps the
-// distinct-string count when the stack goes live.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ROOM_CARD_BOXES, ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
+// `RoomShowcase.tsx` is unmounted from both routes as of this task (Task 5 of
+// the room-card-stack plan swaps it for `RoomCardStack` in `PropertyPage.tsx`)
+// but it is not deleted — Task 7 does that — and its own `ROOM_BOXES` still
+// has to agree with its own `aspect-*` classes, which the "cover boxes match
+// the markup they describe" suite below checks independently of whether a
+// component is live. `ROOM_SIZES` and `RoomScale` are dropped from this
+// import: nothing here uses them once the three `LIVE_SLOTS` rows below are
+// gone.
+import { ROOM_BOXES } from "@/components/sections/RoomShowcase";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
@@ -189,15 +187,15 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: TESTIMONIAL_SIZES[k],
     box: TESTIMONIAL_BOXES[k] as CoverBox,
   })),
-  // Three scales, so consecutive rooms never repeat a band's ledger rhythm.
-  // `RoomsIndex.band`, the component this replaced, is retired as of Task 14
-  // (9 Aug 2026) — deleted along with `FieldNotes.tsx`, and both slots below
-  // that described them are gone with it (see the distinct-string comment
-  // beneath the assertion this feeds).
-  ...(["wide", "offsetRight", "offsetLeft"] as const).map((k: RoomScale) => ({
-    name: `RoomShowcase.${k}`,
-    sizes: ROOM_SIZES[k],
-    box: ROOM_BOXES[k] as CoverBox,
+  // The rooms, as a stack of cards (Task 5 of the room-card-stack plan, 11
+  // Aug 2026), replacing `RoomShowcase`'s three-scale ledger of bands above
+  // (see the distinct-string comment beneath the assertion this feeds). Two
+  // compositions, not three: `stacked` (five of seven rooms) and `beside`
+  // (the two whose photograph does not read wide).
+  ...(["stacked", "beside"] as const).map((k) => ({
+    name: `RoomCard.${k}`,
+    sizes: ROOM_CARD_SIZES[k],
+    box: ROOM_CARD_BOXES[k],
   })),
   // The day's six experiences, two weights. `hero` repeats `PLATE_SIZES[1]`
   // and `quiet` repeats `PLATE_SIZES[2]` verbatim — same container, same
@@ -289,6 +287,14 @@ describe("the sizes the page actually serves", () => {
     // elements). Nothing else on the page is sized this small, so
     // `MENU_CARD_SIZES` is a genuinely new width list — read off this suite,
     // not guessed, per the same instruction.
+    // Still 24 as of Task 5 of the room-card-stack plan (11 Aug 2026), which
+    // swaps `RoomShowcase`'s three `LIVE_SLOTS` rows for `RoomCard`'s two:
+    // `offsetRight` and `offsetLeft` (2 distinct strings) come out, `stacked`
+    // and `beside` (2 distinct strings — neither repeats any surviving slot;
+    // `stacked` differs from `PLATE_SIZES[1]` by its 144px gutter, not 96px)
+    // go in. Two out, two in, read off this suite rather than assumed from
+    // the row count matching — per this task's own instruction not to guess
+    // it.
     expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
