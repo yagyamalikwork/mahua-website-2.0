@@ -17,8 +17,8 @@ as depth rather than as stacked paper.
 The client asked for it on 11 Aug 2026 and chose this variant ("pile up, with recede") over a plain
 pile-up and a peel-away deck.
 
-**It costs no JavaScript.** That is the reason this design is shaped the way it is, and §6 is where the
-constraint bites.
+**It costs no JavaScript** — not a byte, not a component. That is the reason this design is shaped the way
+it is; §5 and §7 are where the constraint bites.
 
 ---
 
@@ -130,23 +130,40 @@ animation from its own position — once stuck it stops moving, so its own view 
 The slot stays in normal flow and scrolls normally; its view timeline is what the card inside reads to
 know how far it has been covered. Collapsing the two into one element removes the recede entirely.
 
-**Nothing here is a client component.** No `"use client"`, no hooks, no scroll listener. The one JavaScript
-change in the whole design is in §5.
+**Nothing here is a client component.** No `"use client"`, no hooks, no scroll listener — and, after §5,
+no JavaScript anywhere in this design at all.
 
 ---
 
-## 5. `--property-bar-height`
+## 5. Clearing the booking bar, with no JavaScript at all
 
-`PropertyBar` gains one line: it writes its own measured height to `--property-bar-height` on the document
-element, exactly as `StickyHeader` already writes `--header-height`.
+The first draft of this section had `PropertyBar` publish its measured height to a custom property, the
+way `StickyHeader` already publishes `--header-height`. **That is wrong here, and the reason is worth
+keeping.**
 
-**The fallback is `0px` and it is load-bearing**, on precisely the same reasoning as `scroll-padding-top`
-in `app/globals.css`: the bar is a client component that fails towards absent, so a page with no
-JavaScript has no bar to avoid, and a card that reserves no space for one is correct there. The variable
-is only ever written while the bar is actually on screen.
+`PropertyBar` returns `null` when it is not visible — it stands down over the hero, the invitation and the
+footer. A published height would therefore flip between `0px` and `69px` as the visitor scrolls, and card
+height is computed from it, so every card in the chapter would resize at those moments. Resizing cards
+changes the page's height, which moves the scroll position under the visitor's hand. A measurement that is
+correct at every instant is the wrong input for a layout that must not move.
 
-This is the only JavaScript this design adds, it is ~4 lines inside an existing client component, and it
-adds no new bundle. The budget assertion in §10 is that the first-load JavaScript changes by **0 KB**.
+So the space is a **constant reservation** in `app/globals.css`:
+
+```css
+--property-bar-reserve: 72px;
+```
+
+against a bar measured at 63px (390) and 69px (768 and up). It never changes, so nothing ever resizes.
+
+The obvious objection to a constant is drift — a second copy of a number, free to disagree with the bar
+it describes, which is exactly what `StickyHeader`'s own comment warns against. **That is handled by
+assertion rather than by construction:** `check_card_stack.mjs` measures the real bar at all four widths
+and fails if it is taller than the reserve. Drift becomes a red test rather than a card hidden behind a
+booking bar on someone's phone.
+
+**The consequence is that this design adds no JavaScript whatsoever** — not a component, not a hook, not
+four lines inside an existing one. The budget assertion in §10 is not "small": it is that the first-load
+JavaScript is **byte-identical**.
 
 ---
 
@@ -208,7 +225,7 @@ CSS it was given proves nothing; this project has thirty-eight catalogued instan
 | Everything supported | Cards stack, deck of edges, covered cards recede |
 | **No `animation-timeline`** | Cards stack. No recede. A working card stack, one effect lighter |
 | **`prefers-reduced-motion: reduce`** | Cards stack. No recede — the keyframes are switched off explicitly |
-| **No JavaScript** | Cards stack, and recede. `--header-height` and `--property-bar-height` both fall back to `0px`, which is right: with no script there is no fixed header and no booking bar to clear |
+| **No JavaScript** | Cards stack, and recede. `--header-height` falls back to `0px`, which is right: with no script the header does not follow and there is nothing to clear. `--property-bar-reserve` is a constant, so the cards keep 72px they do not strictly need — 72px of cream on a page that has no bar, which is invisible and costs nothing |
 | **`position: sticky` unsupported** | Cards render as plain blocks down the page — today's layout, minus the varied scales |
 
 **Reduced motion keeps the stack.** That is a deliberate departure from `StickyScene`, which collapses
@@ -223,7 +240,7 @@ animating at them. What goes is the recede, which is the only part not under the
 
 ```
 --card-height: min(
-   calc(100svh - var(--header-height, 0px) - var(--property-bar-height, 0px)
+   calc(100svh - var(--header-height, 0px) - var(--property-bar-reserve)
         - var(--deck-depth) - var(--card-gutter)),
    var(--card-height-max)
 );
