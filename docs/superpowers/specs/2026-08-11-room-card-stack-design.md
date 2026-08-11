@@ -385,30 +385,64 @@ rejected, the lever is `--card-height-max` and a smaller `--deck-step` on mobile
 
 ## 10. What must be proved
 
+**Corrected 11 Aug 2026 — this section listed six assertions; the rig that shipped has eight.** Two were
+added after the first six were built and trusted, and the two are the ones worth reading closely: they
+exist because the first six all check a card's *outer box*, and neither of the defects in §3/§9 ever showed
+up as an outer-box failure.
+
 A new rig, `scripts/check_card_stack.mjs`, run against a production build at 390 / 768 / 1440 / 1920 on
-both routes. Every assertion is about observed behaviour, not about configuration:
+both routes. Eight assertions, every one about observed behaviour, not about configuration:
 
 1. **Cards stack.** Card *i*'s viewport position stops changing while the page scrolls and card *i+1*'s
    position is still advancing. Asserted as measured positions across a scroll sequence.
 2. **No card is clipped.** At every width, each card's rendered box sits inside the slack — below the
    header, above the booking bar. This is the assertion the whole of §9 exists to satisfy, and it is the
    one most likely to fail first on a phone.
-3. **The deck is visible.** At the end of the stack, *n* − 1 hairlines are on screen above the top card.
-4. **The recede happened.** A covered card measures a smaller rendered width and a lower opacity than the
-   top card, by a margin the rig states. Not read back from CSS.
-5. **It degrades.** Re-run with `animation-timeline` unsupported (a page-level `CSS.supports` stub or a
-   `prefers-reduced-motion` emulation): cards still stack, nothing receded, nothing clipped.
-6. **The JavaScript budget moves by 0 KB.** `measure_js_budget.mjs` before and after must be
-   byte-identical. There is 3.7 KB of headroom against the 175 KB ceiling; this design is entitled to none
-   of it.
+3. **The reserve covers the bar.** `[data-property-bar]`'s own measured height never exceeds the computed
+   `--property-bar-reserve` the deck was sized against — the assertion that makes `ROOM_STACK.barReserve` a
+   safe constant rather than a guess (§5).
+4. **The deck is visible.** At the last card's resting position, every earlier card shows a real strip of
+   itself, ≥6px tall, above it.
+5. **The recede happened.** A covered card measures a smaller rendered width (≥1.5% narrower) and a lower
+   opacity (<0.99) than the top card. Not read back from CSS.
+6. **No photograph loses more than 25% of its own width to the crop its card box imposes.** Compares the
+   loaded `<img>`'s natural aspect against its rendered box; a box wider than the photograph is a purely
+   vertical crop and always passes.
+7. **The last card never recedes, and at least one covered card does.** The card carrying
+   `data-room-card-last` must measure `opacity: 1` and no scale at every scroll position where the stack is
+   on screen — **and** a covered card must measure strictly dimmer and smaller somewhere in the same scan.
+   **Both halves are required: without the second, a build with the recede switched off entirely would
+   pass**, on the strength of the last card being trivially opaque. Guards the tail-bleed fix in §7.
+8. **A visitor can actually read every card.** Every card's text block (not the outer card) must, at some
+   scroll position, sit simultaneously (a) inside the visible band between the header and the booking bar —
+   not just inside the raw viewport, which is exactly the gap that let a still-clipped card look "on
+   screen"; (b) inside the card's *own* box, so a text rect that lands inside the visible band by
+   coincidence while sitting outside its own ancestor's `overflow: hidden` clip is still caught; and (c) at
+   opacity ≥ 0.98. A card that never manages all three at once fails, naming the room and the width.
+   **Watched failing on the reverted build with ten failures, naming exactly the five affected cards across
+   two widths.**
+
+**Assertions 1–7 all measure a card's outer box — position, clipping against the header and bar, the
+reserve, the deck's visibility, the recede's magnitude, the photograph's crop, and the last card's
+exemption. None of them ever looks at the words.** A card can pass every one of the first seven while its
+text is entirely invisible, which is exactly what five, then six, stacked cards were doing at 1440/1920
+before assertion 8 existed. **That is why the two defects in §3 and §9 reached a human eye reading a
+screenshot instead of a red test** — this is the single most useful sentence in this section, and the
+reason assertion 8 exists at all.
+
+Re-run with `--no-recede` (emulating `prefers-reduced-motion: reduce`): assertions 1, 2, 3, 4, 6 and 8 must
+still hold; assertion 5 must NOT (nothing receding is the point); assertion 7 does not run at all (nothing
+covers anything, so there is nothing to be exempt from).
 
 Plus the standing suite: `measure_density.mjs` on both routes against the 45% ceiling (39–40% today, and a
 card floating in cream is exactly how this design goes wrong), `check_contrast_over_photos.mjs`,
-`check_image_resolution.mjs`, `npm test`, `npm run lint`, `tsc --noEmit`.
+`check_image_resolution.mjs`, `npm test`, `npm run lint`, `tsc --noEmit`, and
+`measure_js_budget.mjs`/`npm run verify:budget` — before and after must be byte-identical. There is 3.7 KB
+of headroom against the 175 KB ceiling; this design is entitled to none of it.
 
 **Every rig is run against a deliberately broken build before it is trusted** — a stack with the sticky
-removed, a card height forced past the slack, the recede deleted. A guard nobody has watched fail is not a
-guard.
+removed, a card height forced past the slack, the recede deleted, the last-card exemption removed, the
+text-reserve height ceiling removed. A guard nobody has watched fail is not a guard.
 
 Unit tests (`RoomCardStack.test.tsx`): the layout chosen per room matches the threshold rule in §3 for
 every room in both content files; `--i` is written per card; the heading block is not inside the stack;

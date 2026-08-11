@@ -12,6 +12,20 @@ Full narrative and the two findings from Step 4 are in
 768px — is fixed. See "Family Suite fix" below; full narrative in
 `.superpowers/sdd/2026-08-11-room-card-stack/task-7-fix-report.md`.
 
+**Density correction, 11 Aug 2026 — read before trusting any density figure in this file.** The
+24.8%/27.4% mean-empty figures recorded below for `vann-rooms`/`tola-rooms` (in "Density — before/after"
+and again in "Family Suite fix") were not merely superseded — they were **wrong when measured**, inflated
+by a defect that was still live at the time: five, then six, stacked cards' photographs were overflowing
+their own cards at 1440/1920, a rendering defect a *later* fix round found and fixed
+(`.superpowers/sdd/2026-08-11-room-card-stack/task-7-fix2-report.md`, not narrated anywhere in this file).
+`measure_density.mjs` hit-tests what is painted, and an overflowing photograph scores as **100% imagery**
+whatever the words beside it were doing — including the exact defect this task's own Step 4 flagged as
+unresolved. Fixing the clip gave real area back to cream and type, so the honest figures are *higher* than
+what is recorded below, not the same: **`vann-rooms` 31.5% mean / 42.1% worst; `tola-rooms` 33.8% mean /
+44.3% worst — both still inside the 45% ceiling.** Marked at each point it appears below rather than
+rewritten, so this file still shows what was believed at the time alongside what is true. Full working:
+`docs/DECISIONS.md` §17.
+
 ## What was built
 
 Nothing new. This task is subtraction and proof: delete the section the card stack (Tasks 1–6) replaced,
@@ -61,6 +75,14 @@ node scripts/measure_density.mjs --url http://localhost:3100/mahua-tola --out do
 |---|---|---|---|---|
 | `vann-rooms` | 40.1% | **24.8%** | 42.1% | improved 15.3pt; inside 45% |
 | `tola-rooms` | 39.0% | **27.4%** | 42.4% | improved 11.6pt; inside 45% |
+
+> **Corrected 11 Aug 2026: the "mean empty (now)" figures above were inflated by a live defect, not a real
+> measure of this chapter's density.** Five, then six, stacked cards' photographs were overflowing their
+> own cards at 1440/1920 at this point in the plan, and `measure_density.mjs` scores an overflowing
+> photograph as 100% imagery. A later fix round closed the clip; the honest figures on the shipped page are
+> **`vann-rooms` 31.5% mean / 42.1% worst** and **`tola-rooms` 33.8% mean / 44.3% worst** — both still
+> inside 45%, but higher than what this table shows, because fixing the clip gave real area back to cream
+> and type. See `docs/DECISIONS.md` §17.
 
 Neither chapter regressed; both improved substantially and stay inside the ceiling on their worst screen.
 Both routes still carry their pre-existing, already-accepted over-budget chapters — `vann-forest` 55.8%,
@@ -142,8 +164,8 @@ to ~36%/~44%, and whether that is still acceptable is the client's call.
 |---|---|
 | tsc / tests / lint | clean / 419 passing / 0 errors |
 | Card-stack rig, 8 combos | all pass (0 failures) |
-| `vann-rooms` density | 40.1% → 24.8% mean (improved, inside 45%) |
-| `tola-rooms` density | 39.0% → 27.4% mean (improved, inside 45%) |
+| `vann-rooms` density | ~~40.1% → 24.8% mean (improved, inside 45%)~~ **Corrected 11 Aug: 24.8% was inflated by the photo-overflow defect (an overflowing photo scores as 100% imagery). Honest: 40.1% → 31.5% mean / 42.1% worst, inside 45%.** |
+| `tola-rooms` density | ~~39.0% → 27.4% mean (improved, inside 45%)~~ **Corrected 11 Aug: 27.4% was inflated the same way. Honest: 39.0% → 33.8% mean / 44.3% worst, inside 45%.** |
 | Contrast over photographs, both routes | all probes `ok` |
 | Image resolution | 0 under-served |
 | JS budget | 172,209 br, delta 0 (byte-identical) |
@@ -276,6 +298,12 @@ node scripts/measure_density.mjs --url http://localhost:3100/mahua-tola --out do
 |---|---|---|---|---|
 | `vann-rooms` | 24.8% | **24.8%** | 42.1% | unchanged, inside 45% |
 | `tola-rooms` | 27.4% | **27.4%** | 42.4% | unchanged, inside 45% |
+
+> **Corrected 11 Aug 2026 — see the note under "Density — before/after" above.** "Unchanged" is true of
+> this fix (Family Suite's own text-clip, at 390/768px) and nothing else: it did not touch the *separate*
+> 1440/1920 photo-overflow defect that was still inflating both figures at this point in the plan. A later
+> fix round closed that one too; the honest, final figures are **`vann-rooms` 31.5% mean / 42.1% worst** and
+> **`tola-rooms` 33.8% mean / 44.3% worst**, both inside 45%.
 
 Unchanged to one decimal place. `vann-forest`, `vann-press` and `tola-reserve` remain the pre-existing,
 already-accepted over-budget chapters (`docs/DECISIONS.md` §5), untouched by this fix.
