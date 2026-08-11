@@ -14,15 +14,6 @@ import {
 } from "@/components/sections/ExperiencePair";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_CARD_BOXES, ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
-// `RoomShowcase.tsx` is unmounted from both routes as of this task (Task 5 of
-// the room-card-stack plan swaps it for `RoomCardStack` in `PropertyPage.tsx`)
-// but it is not deleted — Task 7 does that — and its own `ROOM_BOXES` still
-// has to agree with its own `aspect-*` classes, which the "cover boxes match
-// the markup they describe" suite below checks independently of whether a
-// component is live. `ROOM_SIZES` and `RoomScale` are dropped from this
-// import: nothing here uses them once the three `LIVE_SLOTS` rows below are
-// gone.
-import { ROOM_BOXES } from "@/components/sections/RoomShowcase";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
@@ -439,7 +430,6 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/SplitFeature.tsx", declared: SPLIT_BOXES },
     { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
-    { file: "components/sections/RoomShowcase.tsx", declared: ROOM_BOXES },
     // The day's six experiences: `hero` at 2:1, `quiet` at 4:5 — new crops
     // even though both `sizes` strings are borrowed from `PlateGrid`.
     { file: "components/sections/ExperiencePair.tsx", declared: EXPERIENCE_BOXES },

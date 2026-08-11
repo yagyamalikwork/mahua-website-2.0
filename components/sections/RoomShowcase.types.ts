@@ -10,13 +10,6 @@ import type { TwoTone } from "@/content/home";
  * of unrelated import lines across `content/`.
  */
 
-/**
- * Retired 11 Aug 2026 and kept only as a type so a stale `scale:` in a content
- * file is a compile error naming this comment, rather than a silently ignored
- * property. Delete once both content files are clean — see Task 7.
- */
-export type RoomScale = "wide" | "offsetRight" | "offsetLeft";
-
 export type RoomEntryCopy = {
   readonly mediaId: MediaId;
   readonly name: string;
