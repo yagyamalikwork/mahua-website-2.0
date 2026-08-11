@@ -944,17 +944,62 @@ body {
  * `position: sticky` is clamped to its containing block, so wrapping each card
  * in a slot of the card's own height leaves zero slack and the card renders
  * exactly as if it were `static`. Measured in Chrome 151 over four cards:
- * wrapped, **0 of 4** were ever simultaneously pinned; as direct children,
- * **3 of 4**. The deck needs each card pinned while LATER cards scroll past it,
- * so the containing block has to be the whole stack.
+ * wrapped in a slot of its own height, **0 of 4** were ever simultaneously
+ * pinned; as flat direct children (no wrapper at all), **3 of 4**. The deck
+ * needs each card pinned while LATER cards scroll past it, so the containing
+ * block has to be the whole stack — and the flat, unwrapped structure already
+ * gets that slack for free from the other cards sharing the same `<ol>`. That
+ * part was never broken.
  *
- * **And a sticky element can drive its own view timeline** — `view()` tracks
- * the element's flow position, not its stuck one. The wrapper an earlier draft
- * introduced to work around that was unnecessary and fatal at once.
+ * **What WAS broken: a sticky element's `view()` timeline freezes while it is
+ * stuck** (fix round, 11 Aug 2026 — `docs/reviews/2026-08-11-card-stack/
+ * task-6-fix-report.md`'s "defect A"). `view()` is supposed to track the
+ * element's FLOW position, not its stuck one, but measured in Chrome 151 that
+ * is not what happens: while a card is genuinely pinned, its own exit-phase
+ * progress does not advance — opacity stays 1.00 at 50% covered and even at
+ * FULLY covered — and only "catches up" in one jump once the whole deck
+ * unsticks at the very end of the chapter. A visitor never sees a covered card
+ * visibly recede; they see a flat, undimmed deck that suddenly dims as it
+ * leaves. (An earlier round concluded the opposite from a probe that only
+ * asked "did it ever recede" — every construction says yes, eventually, after
+ * the deck leaves. That was the wrong question.)
  *
- * Note the shape of the failure: in the broken version the recede ran perfectly
- * on all four cards. Everything animated; nothing stacked. Only an assertion
- * that a card's position FREEZES while the next advances catches it.
+ * The fix needs a timeline SOURCE that is a genuinely different, non-sticky
+ * element from the card it animates — confirmed in Chrome 151 against a
+ * throwaway page before touching this file: giving a card a NAMED timeline
+ * sourced from its OWN box (self-reference, same freeze as `view()`) still
+ * froze; sourced from a plain, non-sticky sibling, it produced a smooth,
+ * gradual recede exactly while the card sat pinned.
+ *
+ * **That sibling is `.room-slot`, and it has to be a SIBLING, not a wrapping
+ * ANCESTOR, even though a wrapping ancestor is the natural construction for a
+ * "give this element slack" trick** (and is how `StickyScene` elsewhere on
+ * this page reserves its own scroll). The reason is `scripts/
+ * check_card_stack.mjs`, which this fix must not alter: it selects `ol.room-stack
+ * > li.room-card` DIRECTLY, reads that exact element's `getBoundingClientRect()`
+ * and `getComputedStyle()` for every assertion, and reads `firstElementChild`
+ * for the photograph. That element has to BE the sticky, correctly-sized card —
+ * wrapping it in a taller, non-sticky parent would mean the rig measures the
+ * WRONG (tall, never-frozen, never-pinned) box instead. So the slot sits
+ * BESIDE its card, one `<li class="room-slot">` immediately before each
+ * `<li class="room-card">`, both direct children of the `<ol>` — invisible
+ * (`aria-hidden`, no content, no visible box) but carrying real height for
+ * exactly this timeline purpose.
+ *
+ * A sibling can't supply an ancestor-only named timeline by ordinary CSS
+ * scoping, which is what `timeline-scope` on the `<ol>` (`RoomCardStack.tsx`)
+ * is for — it is the CSS mechanism for exactly this: a name declared on one
+ * element, consumed by another that is not its descendant, as long as a shared
+ * ancestor opts the name into scope. Every card gets its OWN name
+ * (`--room-slot-0`, `--room-slot-1`, …) rather than sharing one: `timeline-scope`
+ * resolves a name by tree order, so if every slot declared the same name every
+ * card would bind to the FIRST slot in the list, not its own.
+ *
+ * Note the shape of the ORIGINAL failure this replaced, for the record: in a
+ * flat, unwrapped, self-referencing `view()` construction, cards DID stack
+ * (position was fine) — only the recede was invisible while pinned. A check
+ * that only asks "did it ever recede" cannot catch that; only one that samples
+ * WHILE a card is on screen and pinned can.
  */
 .room-stack {
   /*
@@ -976,6 +1021,31 @@ body {
   );
 }
 
+/*
+ * The timeline source for `.room-card`'s recede — see the long comment above
+ * `.room-stack`. Height is the SLACK ALONE (not the card's own height too, the
+ * way a wrapping slot's formula would read): `(room-count − i − 1) ×
+ * card-height`, with an equal-and-opposite `margin-bottom` so its net
+ * contribution to the stack's flow height is exactly zero. That zero is what
+ * keeps `.room-card`'s own natural (unstuck) position at `i × card-height`,
+ * unchanged from a stack with no slots in it at all — the slot adds a timeline
+ * source, not a layout shift. The deepest card's own slot is 0×0, i.e. no
+ * slack, which is correct: nothing covers the deepest card, so it has nothing
+ * to recede against (see `[data-room-card-last]` below).
+ *
+ * `view-timeline-name` is set per-instance, inline, from `RoomCard.tsx`
+ * (`--room-slot-0`, `--room-slot-1`, …) — a class rule cannot express a value
+ * that must differ by index.
+ */
+.room-slot {
+  height: calc((var(--room-count, 1) - var(--i, 0) - 1) * var(--room-card-height));
+  margin-bottom: calc(-1 * (var(--room-count, 1) - var(--i, 0) - 1) * var(--room-card-height));
+  view-timeline-axis: block;
+  /* Empty and behind its sticky sibling in paint order regardless, but
+     defensive: nothing here is ever meant to receive a pointer event. */
+  pointer-events: none;
+}
+
 .room-card {
   position: sticky;
   top: calc(var(--header-height, 0px) + var(--room-deck-step) * var(--i));
@@ -985,7 +1055,13 @@ body {
   /* Scaling from the top keeps the deck's hairlines evenly spaced as cards recede. */
   transform-origin: top center;
   animation: room-recede linear both;
-  animation-timeline: view();
+  /*
+   * `animation-timeline` is set per-instance, inline, from `RoomCard.tsx`,
+   * naming that same card's own `.room-slot` (`--room-slot-0`, …) — not
+   * `view()`. See the comment above `.room-stack` for why `view()` (sourced
+   * from this element's own, sticky-and-therefore-frozen-while-stuck box) is
+   * exactly the bug this construction exists to avoid.
+   */
   animation-range: exit 0% exit 100%;
 }
 

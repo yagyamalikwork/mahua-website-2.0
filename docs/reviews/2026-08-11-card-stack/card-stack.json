@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T12:36:29.463Z",
+  "measuredAt": "2026-08-11T14:18:19.821Z",
   "url": "http://localhost:3100",
   "noRecede": false,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
@@ -32,13 +32,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.566977339181286,
+        "opacity": 0.582477,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -50,26 +50,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 342,
-          "naturalHeight": 149,
+          "naturalWidth": 391,
+          "naturalHeight": 171,
           "boxWidth": 321.47998046875,
-          "boxHeight": 391.12841796875
+          "boxHeight": 160.73974609375
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 342,
-          "naturalHeight": 139,
+          "naturalWidth": 418,
+          "naturalHeight": 170,
           "boxWidth": 321.47998046875,
-          "boxHeight": 391.12841796875
+          "boxHeight": 160.73974609375
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 595,
-          "naturalHeight": 397,
+          "naturalWidth": 410,
+          "naturalHeight": 273,
           "boxWidth": 342,
-          "boxHeight": 443.8125
+          "boxHeight": 273.59375
         }
       ]
     },
@@ -101,13 +101,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.421338762555804,
+        "opacity": 0.593399,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -119,26 +119,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 624,
-          "naturalHeight": 273,
+          "naturalWidth": 714,
+          "naturalHeight": 311,
           "boxWidth": 631.679931640625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 315.84033203125
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 624,
-          "naturalHeight": 254,
+          "naturalWidth": 763,
+          "naturalHeight": 312,
           "boxWidth": 631.679931640625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 315.84033203125
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 1254,
-          "naturalHeight": 837,
+          "naturalWidth": 863,
+          "naturalHeight": 576,
           "boxWidth": 672,
-          "boxHeight": 566.1875
+          "boxHeight": 537.59375
         }
       ]
     },
@@ -170,13 +170,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.6878952752976195,
+        "opacity": 0.573408,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -188,25 +188,25 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1296,
-          "naturalHeight": 566,
+          "naturalWidth": 1483,
+          "naturalHeight": 648,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 446.67626953125
+          "boxHeight": 631.68017578125
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 1296,
-          "naturalHeight": 529,
+          "naturalWidth": 1586,
+          "naturalHeight": 647,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 446.67626953125
+          "boxHeight": 631.68017578125
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 1153,
-          "naturalHeight": 770,
-          "boxWidth": 618.234375,
+          "naturalWidth": 1035,
+          "naturalHeight": 691,
+          "boxWidth": 806.390625,
           "boxHeight": 668
         }
       ]
@@ -239,13 +239,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.177923973570478,
+        "opacity": 0.611655,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -257,25 +257,25 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1504,
-          "naturalHeight": 656,
+          "naturalWidth": 1722,
+          "naturalHeight": 752,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 706.88037109375
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 1504,
-          "naturalHeight": 614,
+          "naturalWidth": 1840,
+          "naturalHeight": 751,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 706.88037109375
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 1538,
-          "naturalHeight": 1026,
-          "boxWidth": 691.828125,
+          "naturalWidth": 1381,
+          "naturalHeight": 921,
+          "boxWidth": 902.390625,
           "boxHeight": 759
         }
       ]
@@ -312,13 +312,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.427024796692251,
+        "opacity": 0.592974,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -330,18 +330,18 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 342,
-          "naturalHeight": 149,
+          "naturalWidth": 391,
+          "naturalHeight": 171,
           "boxWidth": 321.47998046875,
-          "boxHeight": 418.00634765625
+          "boxHeight": 160.73974609375
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 342,
-          "naturalHeight": 149,
+          "naturalWidth": 391,
+          "naturalHeight": 171,
           "boxWidth": 321.47998046875,
-          "boxHeight": 418.00634765625
+          "boxHeight": 160.73974609375
         },
         {
           "name": "Family Suite",
@@ -349,15 +349,15 @@
           "naturalWidth": 342,
           "naturalHeight": 513,
           "boxWidth": 321.47998046875,
-          "boxHeight": 377.96826171875
+          "boxHeight": 482.22021484375
         },
         {
           "name": "Camping Hut",
           "ok": true,
-          "naturalWidth": 342,
-          "naturalHeight": 149,
+          "naturalWidth": 391,
+          "naturalHeight": 171,
           "boxWidth": 342,
-          "boxHeight": 429.8125
+          "boxHeight": 171
         }
       ]
     },
@@ -393,13 +393,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.4569244384765625,
+        "opacity": 0.590731,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -411,18 +411,18 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 624,
-          "naturalHeight": 273,
+          "naturalWidth": 714,
+          "naturalHeight": 311,
           "boxWidth": 631.679931640625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 315.84033203125
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 624,
-          "naturalHeight": 273,
+          "naturalWidth": 714,
+          "naturalHeight": 311,
           "boxWidth": 631.679931640625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 315.84033203125
         },
         {
           "name": "Family Suite",
@@ -430,15 +430,15 @@
           "naturalWidth": 719,
           "naturalHeight": 1079,
           "boxWidth": 631.679931640625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 947.52001953125
         },
         {
           "name": "Camping Hut",
           "ok": true,
-          "naturalWidth": 624,
-          "naturalHeight": 273,
+          "naturalWidth": 714,
+          "naturalHeight": 311,
           "boxWidth": 672,
-          "boxHeight": 566.1875
+          "boxHeight": 336
         }
       ]
     },
@@ -474,13 +474,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.488332112630209,
+        "opacity": 0.588375,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -492,34 +492,34 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1296,
-          "naturalHeight": 566,
+          "naturalWidth": 1483,
+          "naturalHeight": 648,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 433.51611328125
+          "boxHeight": 631.68017578125
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 1296,
-          "naturalHeight": 566,
+          "naturalWidth": 1483,
+          "naturalHeight": 648,
           "boxWidth": 1263.35986328125,
-          "boxHeight": 433.51611328125
+          "boxHeight": 631.68017578125
         },
         {
           "name": "Family Suite",
           "ok": true,
-          "naturalWidth": 662,
-          "naturalHeight": 993,
-          "boxWidth": 581.1403198242188,
+          "naturalWidth": 864,
+          "naturalHeight": 1296,
+          "boxWidth": 758.0072021484375,
           "boxHeight": 614.76025390625
         },
         {
           "name": "Camping Hut",
           "ok": true,
-          "naturalWidth": 1296,
-          "naturalHeight": 566,
+          "naturalWidth": 1483,
+          "naturalHeight": 648,
           "boxWidth": 1344,
-          "boxHeight": 461.1875
+          "boxHeight": 672
         }
       ]
     },
@@ -555,13 +555,13 @@
         }
       ],
       "assertion5": {
-        "widthDiffPct": 0,
-        "opacity": 1,
-        "recededAtResting": false,
+        "widthDiffPct": 5.120882074883644,
+        "opacity": 0.615933,
+        "recededAtResting": true,
         "earlyOpacity": 1,
         "earlyScaleX": 1,
         "undimmedAtStart": true,
-        "receded": false
+        "receded": true
       },
       "assertion7": {
         "lastViolations": 0,
@@ -573,60 +573,38 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1504,
-          "naturalHeight": 656,
+          "naturalWidth": 1722,
+          "naturalHeight": 752,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 706.88037109375
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 1504,
-          "naturalHeight": 656,
+          "naturalWidth": 1722,
+          "naturalHeight": 752,
           "boxWidth": 1413.760009765625,
-          "boxHeight": 532.21630859375
+          "boxHeight": 706.88037109375
         },
         {
           "name": "Family Suite",
           "ok": true,
-          "naturalWidth": 883,
-          "naturalHeight": 1324,
-          "boxWidth": 650.3184204101562,
+          "naturalWidth": 1152,
+          "naturalHeight": 1728,
+          "boxWidth": 848.2471923828125,
           "boxHeight": 713.4599609375
         },
         {
           "name": "Camping Hut",
           "ok": true,
-          "naturalWidth": 1504,
-          "naturalHeight": 656,
+          "naturalWidth": 1722,
+          "naturalHeight": 752,
           "boxWidth": 1504,
-          "boxHeight": 566.1875
+          "boxHeight": 752
         }
       ]
     }
   ],
-  "failures": [
-    "vann@390x844: assertion 6: \"Deluxe\" loses 64.2% of its width — box 0.82:1 against a 2.30:1 photograph",
-    "vann@390x844: assertion 6: \"Cottage without Deck\" loses 66.6% of its width — box 0.82:1 against a 2.46:1 photograph",
-    "vann@390x844: assertion 6: \"Cottage with Deck\" loses 48.6% of its width — box 0.77:1 against a 1.50:1 photograph",
-    "vann@390x844: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "vann@768x1024: assertion 6: \"Deluxe\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
-    "vann@768x1024: assertion 6: \"Cottage without Deck\" loses 51.7% of its width — box 1.19:1 against a 2.46:1 photograph",
-    "vann@768x1024: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "vann@1440x900: assertion 6: \"Cottage with Deck\" loses 38.2% of its width — box 0.93:1 against a 1.50:1 photograph",
-    "vann@1440x900: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "vann@1920x1080: assertion 6: \"Cottage with Deck\" loses 39.2% of its width — box 0.91:1 against a 1.50:1 photograph",
-    "vann@1920x1080: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "tola@390x844: assertion 6: \"Deluxe\" loses 66.5% of its width — box 0.77:1 against a 2.30:1 photograph",
-    "tola@390x844: assertion 6: \"Suite\" loses 66.5% of its width — box 0.77:1 against a 2.30:1 photograph",
-    "tola@390x844: assertion 6: \"Camping Hut\" loses 65.3% of its width — box 0.80:1 against a 2.30:1 photograph",
-    "tola@390x844: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "tola@768x1024: assertion 6: \"Deluxe\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
-    "tola@768x1024: assertion 6: \"Suite\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
-    "tola@768x1024: assertion 6: \"Camping Hut\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
-    "tola@768x1024: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "tola@1440x900: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
-    "tola@1920x1080: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1"
-  ],
-  "verdict": "fail"
+  "failures": [],
+  "verdict": "pass"
 }

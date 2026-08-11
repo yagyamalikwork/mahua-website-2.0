@@ -58,10 +58,25 @@ export function RoomCardStack({
          * a number per property: Vann has three rooms and Tola four, so their
          * decks are 28px and 42px and their cards differ in height by 14px.
          * Written here because this is the only place that knows the count.
+         *
+         * `timelineScope` lists every card's own named view-timeline
+         * (`--room-slot-0`, `--room-slot-1`, …, one per room — `RoomCard.tsx`).
+         * Each is declared on a `.room-slot` sibling and consumed by its
+         * `.room-card` sibling, not by an ancestor — see `.room-slot`'s comment
+         * in `app/globals.css` for why siblings, and why this property is what
+         * lets a sibling's declaration reach a sibling's consumer at all.
          */}
         <ol
           className="room-stack mt-10 md:mt-12"
-          style={{ "--room-count": String(copy.rooms.length) } as React.CSSProperties}
+          style={
+            {
+              "--room-count": String(copy.rooms.length),
+              timelineScope: Array.from(
+                { length: copy.rooms.length },
+                (_, i) => `--room-slot-${i}`,
+              ).join(", "),
+            } as React.CSSProperties
+          }
         >
           {copy.rooms.map((room, i) => (
             <RoomCard

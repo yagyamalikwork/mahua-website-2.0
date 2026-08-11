@@ -28,16 +28,36 @@ describe("RoomCardStack", () => {
    * Every card must be a DIRECT child of the stack. `position: sticky` is
    * clamped to its containing block, so any wrapper between the two leaves the
    * card no slack and it renders exactly as if it were `static` — measured at
-   * 0 of 4 cards ever pinned. The stack still looks alive, because the recede
-   * runs regardless; it simply never stacks.
+   * 0 of 4 cards ever pinned.
+   *
+   * **Each card now has a `.room-slot` sibling immediately before it — also a
+   * direct child, not a wrapper.** Fix round, 11 Aug 2026
+   * (`docs/reviews/2026-08-11-card-stack/task-6-fix-report.md`, "defect A"):
+   * a plain, unwrapped stack pins its cards correctly (the paragraph above
+   * still holds), but a sticky element's own `view()` timeline was found to
+   * FREEZE while the element is stuck, so the recede was invisible for as
+   * long as a card was actually pinned — only "catching up" once the whole
+   * deck unstuck at the very end. The fix needs a genuinely different,
+   * non-sticky element to drive each card's timeline. It has to be a SIBLING
+   * rather than a wrapping ancestor (the more obvious construction) because
+   * `scripts/check_card_stack.mjs` measures `ol.room-stack > li.room-card`
+   * directly — nesting the card a level deeper would mean the rig measures
+   * the wrong, never-pinned box. Do not collapse the slot back into a single
+   * `<li>` per room, and do not turn it into a wrapper: both defeat the fix
+   * for different reasons (see `.room-slot`'s comment in `app/globals.css`).
    */
-  it("makes every card a direct child of the stack", () => {
+  it("gives every card a sibling slot, both direct children of the stack", () => {
     const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
     const stack = container.querySelector("ol.room-stack")!;
-    expect(stack.children).toHaveLength(COPY.rooms.length);
-    for (const child of stack.children) {
-      expect(child.tagName).toBe("LI");
-      expect(child).toHaveClass("room-card");
+    expect(stack.children).toHaveLength(COPY.rooms.length * 2);
+    for (let i = 0; i < COPY.rooms.length; i++) {
+      const slot = stack.children[i * 2];
+      const card = stack.children[i * 2 + 1];
+      expect(slot.tagName).toBe("LI");
+      expect(slot).toHaveClass("room-slot");
+      expect(slot).not.toHaveClass("room-card");
+      expect(card.tagName).toBe("LI");
+      expect(card).toHaveClass("room-card");
     }
   });
 
