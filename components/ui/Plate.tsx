@@ -37,7 +37,7 @@ export function Plate({
    * plates must match. Absent, the photograph keeps its own shape and its own
    * height, which is right for a grid whose plates already agree.
    *
-   * `className` is the ratio as a `tall:` Tailwind class and `ratio` is the same
+   * `className` is the ratio as a `roomy:` Tailwind class and `ratio` is the same
    * number for `sizes` (see `ui/Photo.tsx` on `box`); they are one object rather
    * than two props so a change to one cannot ship without the other.
    */
@@ -51,23 +51,36 @@ export function Plate({
           id={id}
           priority={priority}
           sizes={sizes}
-          // Deliberately unconditional, while the frame it describes is `tall:`
+          // Deliberately unconditional, while the frame it describes is `roomy:`
           // only. `CoverBox` speaks in viewport *widths* and this threshold is a
-          // height, so the honest options are to over-state the box or to leave
-          // short viewports under-served; `ui/Photo.tsx` says which way to round.
+          // height and a shape, so the honest options are to over-state the box
+          // or to leave landscape phones under-served; `ui/Photo.tsx` says which
+          // way to round.
           box={frame?.ratio}
           pictureClassName={`block${frame ? ` w-full ${frame.className}` : ""}`}
-          // `short:` (a viewport-height media variant, app/globals.css) caps a
-          // plate's rendered height at short viewports (landscape phones)
-          // instead of letting it hold its full width-derived height — a
-          // full-width plate is the single largest content contributor in any
-          // section that has one, and at short heights that height alone can
-          // overflow the section around it. `w-auto` keeps the aspect ratio
-          // intact; `mx-auto` recentres the now-narrower image under its
-          // full-width caption. `tall:` is the exact complement, so the framed
-          // and unframed rules below can never both apply.
-          className={`block h-auto w-full short:mx-auto short:h-auto short:max-h-[24vh] short:w-auto${
-            frame ? " tall:h-full tall:object-cover" : ""
+          /*
+           * Three states, and **every one of them names its own width**. That is
+           * the fix for the defect the client reported on 12 Aug 2026 ("images
+           * squeeze"), and it is not a style preference:
+           *
+           * this used to read `w-full … pocket:w-auto`, so on a short viewport
+           * BOTH applied and which won was decided by the order Tailwind
+           * happened to emit its variants in. `w-full` won, the 24vh cap
+           * clamped the height anyway, and the photograph was squashed —
+           * measured at up to **230% wider than its true shape** on a 1366x768
+           * laptop. It never looked like a cascade bug; it looked like a broken
+           * photograph. Keep the three states disjoint and no emission order can
+           * reproduce it.
+           *
+           * `pocket:` is a landscape phone (short AND at least 2:1 — see
+           * app/globals.css). There a full-width plate's own height can exceed
+           * the whole screen, so it is capped at 24vh; `w-auto` keeps the shape
+           * and `mx-auto` recentres it under its full-width caption. `roomy:` is
+           * the exact complement and covers every laptop, tablet and zoom level,
+           * where a plate is simply itself.
+           */
+          className={`block pocket:mx-auto pocket:h-auto pocket:max-h-[24vh] pocket:w-auto ${
+            frame ? "roomy:h-full roomy:w-full roomy:object-cover" : "roomy:h-auto roomy:w-full"
           }`}
         />
         {caption && (

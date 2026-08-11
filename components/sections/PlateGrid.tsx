@@ -66,9 +66,15 @@ const COLUMN_GAP: Record<number, string> = {
  * right of the screen empty. It is a density argument and a design argument at
  * the same time, which is the only kind worth acting on.
  *
- * **The frame is `tall:` only**, and `short:` is its exact complement, so on a
+ * **The frame is `roomy:` only**, and `pocket:` is its exact complement, so on a
  * landscape phone the plate keeps the auto height `ui/Plate.tsx` caps there
  * rather than fighting it. See `app/globals.css`.
+ *
+ * **It was `tall:` until 12 Aug 2026 and that was the bug the client reported.**
+ * `tall:` is `(min-height: 801px)`, so the frame switched OFF — and the 24vh cap
+ * switched on — on a 1366x768 laptop, a 1024x768 tablet and any browser zoomed
+ * past ~110%. `roomy:` is keyed to the viewport's shape instead, so only a phone
+ * held sideways gets the compact treatment.
  *
  * The portrait box is 5:8 rather than the 2:3 of the photographs that ask for
  * it, and that extra height is the difference between *details* measuring 45.7%
@@ -78,9 +84,9 @@ const COLUMN_GAP: Record<number, string> = {
  * without being served under its own box.
  */
 export const PLATE_FRAME = {
-  portrait: { className: "tall:aspect-[5/8]", ratio: 5 / 8 },
-  square: { className: "tall:aspect-square", ratio: 1 },
-  landscape: { className: "tall:aspect-[3/2]", ratio: 3 / 2 },
+  portrait: { className: "roomy:aspect-[5/8]", ratio: 5 / 8 },
+  square: { className: "roomy:aspect-square", ratio: 1 },
+  landscape: { className: "roomy:aspect-[3/2]", ratio: 3 / 2 },
 } as const;
 
 /**

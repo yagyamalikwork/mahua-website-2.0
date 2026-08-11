@@ -24,6 +24,55 @@
  */
 @custom-variant tall (@media (min-height: 801px));
 
+/*
+ * "pocket:" — a landscape PHONE, and "roomy:" its exact complement.
+ *
+ * These exist because `short:` above turned out to describe two different
+ * things, and one of them was wrong. Compacting *type and padding* on any short
+ * viewport is right — a 1366x768 laptop wants the hero's headline to fit, and
+ * `Hero`, `FullBleedQuote` and `Invitation` still use `short:` for exactly that.
+ * But `ui/Plate.tsx` also used it to cap a photograph's height at 24vh, and that
+ * was written for a phone held sideways. `(max-height: 800px)` alone fires on a
+ * 1366x768 laptop, a 1024x768 tablet, and any browser zoomed past ~110%, so on
+ * all of those a plate was squashed. Measured before the fix: photographs
+ * rendering up to **230% wider than their true shape** on the home page's
+ * forest, rooms and details grids — the client reported it as "images squeeze",
+ * 12 Aug 2026.
+ *
+ * **The discriminator is the viewport's shape, not its width**, and that is
+ * deliberate. A landscape phone is 844x390 or 932x430 — about 2.16:1. A 150%
+ * zoom on a 1440x900 screen is 960x600, which is 1.6:1 and only ~30px narrower
+ * than that phone, so a width threshold would have to thread a gap too small to
+ * be safe. Aspect separates them with room to spare: every landscape phone is
+ * at or above 2:1, and every short desktop case measured here is at or below
+ * 1.8:1 (1366x768 = 1.78, 1440x800 = 1.80, 1024x768 = 1.33, 960x600 = 1.60).
+ *
+ * They are exact complements — `(h <= 800 AND ratio >= 2)` against
+ * `(h >= 801 OR ratio < 2)` — for the same reason `short:`/`tall:` are: two
+ * rules matching the same element at the same time are resolved by whatever
+ * order Tailwind emits its variants in, and that is not a decision anyone
+ * should be making by accident. See the note on `tall:` above, and
+ * `docs/DECISIONS.md` §2 for the time this project shipped a 128px lantern
+ * where 200 was meant for precisely that reason.
+ */
+@custom-variant pocket (@media (max-height: 800px) and (min-aspect-ratio: 2/1));
+
+/*
+ * `roomy:` is an OR, so it is written in the block form with two `@slot`s.
+ * The shorthand `(@media A, B)` looks like it should work and does not — Tailwind
+ * splits on the comma and emits `.roomy\:w-full (max-aspect-ratio: …)`, a
+ * dangling combinator that fails the build outright. It fails loudly, which is
+ * the good kind of wrong, but the block form is the one that compiles.
+ */
+@custom-variant roomy {
+  @media (min-height: 801px) {
+    @slot;
+  }
+  @media (max-aspect-ratio: 1999/1000) {
+    @slot;
+  }
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);

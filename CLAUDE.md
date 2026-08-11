@@ -6,7 +6,7 @@ throughout, in the layout language of [thesujanlife.com](https://thesujanlife.co
 hand-drawn field-guide idiom.
 
 > **Read these four, in order, before doing any work:**
-> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the forty-three-instance defect
+> 0. [`docs/DECISIONS.md`](docs/DECISIONS.md) — **every client ruling, the forty-five-instance defect
 >    pattern, and the things that look broken and are not.** §5 carries the open questions the client
 >    still owns: three chapters above the 45% density ceiling and why two of them arguably cannot be
 >    fixed, plus the rooms card stack's mobile growth (measured larger than what he accepted). §7–§15 are
