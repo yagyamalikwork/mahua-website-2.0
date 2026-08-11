@@ -20,6 +20,9 @@ import type { Booking, GuestDetails, Quote, SearchQuery, SearchResult } from "./
  */
 export class AsiaTechProvider implements BookingProvider {
   private refuse(): never {
+    // "Online booking is not available yet." is an engineer-facing fallback,
+    // not reviewed guest copy — a UI must key its wording off `code` and take
+    // the actual sentence from `content/`. See BookingError's `message` doc.
     throw new BookingError(
       "PROVIDER_DOWN",
       "Online booking is not available yet.",

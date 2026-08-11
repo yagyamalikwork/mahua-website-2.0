@@ -76,6 +76,14 @@ describe("MockProvider.quote", () => {
     });
     expect(quote.total).toEqual(plan.total);
   });
+
+  it("will not quote one property's room against the other's search", async () => {
+    const provider = new MockProvider();
+    const tola = await provider.search(QUERY); // QUERY is mahua-tola
+    await expect(
+      provider.quote({ continuation: tola.continuation, roomId: "vann-cottage-deck", ratePlanId: "cp" }),
+    ).rejects.toMatchObject({ code: "SOLD_OUT" });
+  });
 });
 
 /**

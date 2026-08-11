@@ -17,6 +17,11 @@ import {
 /**
  * A provider with no engine behind it.
  *
+ * **Every `BookingError` message below is an engineer-facing fallback, not
+ * reviewed guest copy** — see `BookingError`'s `message` doc in `./errors`. A
+ * UI must key its wording off `code` and take the actual sentence from
+ * `content/`, where the client reviews every line.
+ *
  * **Room names, occupancy caps and counts are real** — read from the client's
  * own booking engine on 12 Aug 2026 and stable across five date ranges spanning
  * nine months (see the spec's §3).
@@ -144,12 +149,21 @@ export class MockProvider implements BookingProvider {
       );
     }
 
-    const shape = Object.values(ROOMS)
-      .flat()
-      .find((s) => s.id === input.roomId);
+    // Scoped to the property the search was for — a room id is unique within a
+    // property, not across both, and resolving it against every property's
+    // rooms let a Tola search quote (and book) a Vann room at Vann's rate
+    // while still reporting `property: "mahua-tola"`. See DECISIONS.md's
+    // booking-contract review.
+    const shape = ROOMS[context.query.property].find((s) => s.id === input.roomId);
     const plan = PLANS.find((p) => p.id === input.ratePlanId);
     if (!shape || !plan) {
-      throw new BookingError("SOLD_OUT", "That room is no longer available.", `mock: unknown ${input.roomId}`);
+      const otherProperty = (Object.keys(ROOMS) as PropertyId[]).find(
+        (property) => property !== context.query.property && ROOMS[property].some((s) => s.id === input.roomId),
+      );
+      const detail = otherProperty
+        ? `mock: ${input.roomId} belongs to ${otherProperty}, not ${context.query.property}`
+        : `mock: unknown ${input.roomId}`;
+      throw new BookingError("SOLD_OUT", "That room is no longer available.", detail);
     }
 
     // Priced exactly as `search` priced it — same per-night rate, same nights,

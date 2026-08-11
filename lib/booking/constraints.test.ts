@@ -17,9 +17,14 @@ describe("the booking module keeps its two load-bearing rules", () => {
   it("never reaches into the app — no component, content, or media-manifest import", () => {
     // The manifest carries a base64 blur URI per photograph; anything that
     // imports it drags all of them into whatever bundle it lands in.
+    //
+    // Matches both the `@/` alias and a relative escape (`../../content/home`)
+    // — the alias is house style, but a relative path reaches the exact same
+    // code and used to slip past this guard entirely, because the first
+    // alternation required the `@/` prefix.
     for (const { file, text } of sources) {
       expect(text, `${file} imports outside lib/booking`).not.toMatch(
-        /from\s+["']@\/(components|content)\/|media-manifest/,
+        /from\s+["'](?:@\/|(?:\.\.\/)+)(components|content)\/|media-manifest/,
       );
     }
   });

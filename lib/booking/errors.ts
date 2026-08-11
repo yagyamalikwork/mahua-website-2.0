@@ -28,6 +28,15 @@ export type BookingErrorCode = (typeof BOOKING_ERROR_CODES)[number];
 export class BookingError extends Error {
   constructor(
     readonly code: BookingErrorCode,
+    /**
+     * An ENGINEER-facing fallback, not approved guest copy. This module is
+     * `lib/`, not `content/` — the client reviews every word a visitor reads,
+     * and these sentences never have been. A UI must key its wording off
+     * `code` and take the actual words from `content/`; shipping `message` to
+     * a guest unchanged would put unreviewed copy on the page. Useful as a
+     * log line, a test assertion, or a placeholder before `content/` grows
+     * the real copy — never as what renders.
+     */
     message: string,
     /**
      * The provider's own message, kept for the log and deliberately NOT folded
