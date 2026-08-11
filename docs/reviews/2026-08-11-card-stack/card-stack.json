@@ -1,0 +1,632 @@
+{
+  "measuredAt": "2026-08-11T12:36:29.463Z",
+  "url": "http://localhost:3100",
+  "noRecede": false,
+  "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
+  "combos": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2637,
+        "height": 1935,
+        "count": 3
+      },
+      "samples": 24,
+      "restingScrollY": 3797,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 63.390625
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 55.46875
+        },
+        {
+          "i": 1,
+          "strip": 41.46875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 149,
+          "boxWidth": 321.47998046875,
+          "boxHeight": 391.12841796875
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 139,
+          "boxWidth": 321.47998046875,
+          "boxHeight": 391.12841796875
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 595,
+          "naturalHeight": 397,
+          "boxWidth": 342,
+          "boxHeight": 443.8125
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 768,
+      "height": 1024,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2867,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 4192,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 88.421875
+        },
+        {
+          "i": 1,
+          "strip": 74.421875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 624,
+          "naturalHeight": 273,
+          "boxWidth": 631.679931640625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 624,
+          "naturalHeight": 254,
+          "boxWidth": 631.679931640625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 1254,
+          "naturalHeight": 837,
+          "boxWidth": 672,
+          "boxHeight": 566.1875
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2525,
+        "height": 2007,
+        "count": 3
+      },
+      "samples": 25,
+      "restingScrollY": 3715,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 41.25
+        },
+        {
+          "i": 1,
+          "strip": 27.25
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1296,
+          "naturalHeight": 566,
+          "boxWidth": 1263.35986328125,
+          "boxHeight": 446.67626953125
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1296,
+          "naturalHeight": 529,
+          "boxWidth": 1263.35986328125,
+          "boxHeight": 446.67626953125
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 1153,
+          "naturalHeight": 770,
+          "boxWidth": 618.234375,
+          "boxHeight": 668
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1920,
+      "height": 1080,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2724,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 4004,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 133.3125
+        },
+        {
+          "i": 1,
+          "strip": 119.3125
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1504,
+          "naturalHeight": 656,
+          "boxWidth": 1413.760009765625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1504,
+          "naturalHeight": 614,
+          "boxWidth": 1413.760009765625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 1538,
+          "naturalHeight": 1026,
+          "boxWidth": 691.828125,
+          "boxHeight": 759
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3550,
+        "height": 2524,
+        "count": 4
+      },
+      "samples": 29,
+      "restingScrollY": 5295,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 63.390625
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 73.4375
+        },
+        {
+          "i": 1,
+          "strip": 59.4375
+        },
+        {
+          "i": 2,
+          "strip": 45.4375
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 149,
+          "boxWidth": 321.47998046875,
+          "boxHeight": 418.00634765625
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 149,
+          "boxWidth": 321.47998046875,
+          "boxHeight": 418.00634765625
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 513,
+          "boxWidth": 321.47998046875,
+          "boxHeight": 377.96826171875
+        },
+        {
+          "name": "Camping Hut",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 149,
+          "boxWidth": 342,
+          "boxHeight": 429.8125
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 768,
+      "height": 1024,
+      "roomCount": 4,
+      "geometry": {
+        "top": 4002,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 6092,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 82.984375
+        },
+        {
+          "i": 1,
+          "strip": 68.984375
+        },
+        {
+          "i": 2,
+          "strip": 54.984375
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 624,
+          "naturalHeight": 273,
+          "boxWidth": 631.679931640625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 624,
+          "naturalHeight": 273,
+          "boxWidth": 631.679931640625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 719,
+          "naturalHeight": 1079,
+          "boxWidth": 631.679931640625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Camping Hut",
+          "ok": true,
+          "naturalWidth": 624,
+          "naturalHeight": 273,
+          "boxWidth": 672,
+          "boxHeight": 566.1875
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3554,
+        "height": 2620,
+        "count": 4
+      },
+      "samples": 30,
+      "restingScrollY": 5344,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 67.625
+        },
+        {
+          "i": 1,
+          "strip": 53.625
+        },
+        {
+          "i": 2,
+          "strip": 39.625
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1296,
+          "naturalHeight": 566,
+          "boxWidth": 1263.35986328125,
+          "boxHeight": 433.51611328125
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1296,
+          "naturalHeight": 566,
+          "boxWidth": 1263.35986328125,
+          "boxHeight": 433.51611328125
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 662,
+          "naturalHeight": 993,
+          "boxWidth": 581.1403198242188,
+          "boxHeight": 614.76025390625
+        },
+        {
+          "name": "Camping Hut",
+          "ok": true,
+          "naturalWidth": 1296,
+          "naturalHeight": 566,
+          "boxWidth": 1344,
+          "boxHeight": 461.1875
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1920,
+      "height": 1080,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3997,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 6027,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 142.53125
+        },
+        {
+          "i": 1,
+          "strip": 128.53125
+        },
+        {
+          "i": 2,
+          "strip": 114.53125
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": {
+        "lastViolations": 0,
+        "worstLastOpacity": 1,
+        "worstLastScale": 1,
+        "anyCoveredReceded": true
+      },
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1504,
+          "naturalHeight": 656,
+          "boxWidth": 1413.760009765625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1504,
+          "naturalHeight": 656,
+          "boxWidth": 1413.760009765625,
+          "boxHeight": 532.21630859375
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 883,
+          "naturalHeight": 1324,
+          "boxWidth": 650.3184204101562,
+          "boxHeight": 713.4599609375
+        },
+        {
+          "name": "Camping Hut",
+          "ok": true,
+          "naturalWidth": 1504,
+          "naturalHeight": 656,
+          "boxWidth": 1504,
+          "boxHeight": 566.1875
+        }
+      ]
+    }
+  ],
+  "failures": [
+    "vann@390x844: assertion 6: \"Deluxe\" loses 64.2% of its width — box 0.82:1 against a 2.30:1 photograph",
+    "vann@390x844: assertion 6: \"Cottage without Deck\" loses 66.6% of its width — box 0.82:1 against a 2.46:1 photograph",
+    "vann@390x844: assertion 6: \"Cottage with Deck\" loses 48.6% of its width — box 0.77:1 against a 1.50:1 photograph",
+    "vann@390x844: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "vann@768x1024: assertion 6: \"Deluxe\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
+    "vann@768x1024: assertion 6: \"Cottage without Deck\" loses 51.7% of its width — box 1.19:1 against a 2.46:1 photograph",
+    "vann@768x1024: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "vann@1440x900: assertion 6: \"Cottage with Deck\" loses 38.2% of its width — box 0.93:1 against a 1.50:1 photograph",
+    "vann@1440x900: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "vann@1920x1080: assertion 6: \"Cottage with Deck\" loses 39.2% of its width — box 0.91:1 against a 1.50:1 photograph",
+    "vann@1920x1080: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "tola@390x844: assertion 6: \"Deluxe\" loses 66.5% of its width — box 0.77:1 against a 2.30:1 photograph",
+    "tola@390x844: assertion 6: \"Suite\" loses 66.5% of its width — box 0.77:1 against a 2.30:1 photograph",
+    "tola@390x844: assertion 6: \"Camping Hut\" loses 65.3% of its width — box 0.80:1 against a 2.30:1 photograph",
+    "tola@390x844: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "tola@768x1024: assertion 6: \"Deluxe\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
+    "tola@768x1024: assertion 6: \"Suite\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
+    "tola@768x1024: assertion 6: \"Camping Hut\" loses 48.1% of its width — box 1.19:1 against a 2.29:1 photograph",
+    "tola@768x1024: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "tola@1440x900: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1",
+    "tola@1920x1080: assertion 5: card 0 did not recede against the last card — width diff 0.00%, opacity 1"
+  ],
+  "verdict": "fail"
+}
