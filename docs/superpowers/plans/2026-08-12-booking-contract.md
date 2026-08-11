@@ -121,7 +121,19 @@ Expected: FAIL — `Failed to resolve import "./types"`.
  * as rupees drifts by fractions of a paisa and a guest's bill stops matching
  * the arithmetic behind it. Integers make that impossible rather than unlikely.
  */
-export type Money = { readonly amount: number; readonly currency: "INR" };
+declare const PAISE: unique symbol;
+
+export type Money = {
+  readonly amount: number;
+  readonly currency: "INR";
+  /**
+   * Compile-time only. A `declare`d symbol emits no runtime property, so a
+   * Money survives `JSON.stringify` — which a real `Symbol()` would not, and
+   * this is the one value here that crosses HTTP. `rupees()` is the sole
+   * constructor and carries the single `as Money`, after its validation.
+   */
+  readonly [PAISE]: true;
+};
 
 /** `YYYY-MM-DD` in the property's own calendar. Never a `Date` — see `stayDate`. */
 export type StayDate = string & { readonly __brand: "StayDate" };
@@ -129,7 +141,7 @@ export type StayDate = string & { readonly __brand: "StayDate" };
 export function rupees(paise: number): Money {
   if (!Number.isInteger(paise)) throw new Error(`Money must be an integer number of paise, got ${paise}`);
   if (paise < 0) throw new Error(`Money cannot be negative, got ${paise}`);
-  return { amount: paise, currency: "INR" };
+  return { amount: paise, currency: "INR" } as Money;
 }
 
 export function addMoney(a: Money, b: Money): Money {

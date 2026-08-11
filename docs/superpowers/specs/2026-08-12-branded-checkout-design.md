@@ -100,9 +100,26 @@ Two primitives set before anything else, because both are classic sources of sil
 **Money is integer minor units with an explicit currency. Never a float.**
 
 ```ts
-/** Paise for INR. `{ amount: 1545000, currency: "INR" }` is ₹15,450.00. */
-export type Money = { readonly amount: number; readonly currency: "INR" };
+declare const PAISE: unique symbol;
+
+/** Paise for INR. ₹15,450.00 is 1_545_000. Obtainable only from `rupees()`. */
+export type Money = {
+  readonly amount: number;
+  readonly currency: "INR";
+  readonly [PAISE]: true;
+};
 ```
+
+**The brand is not decoration, and this spec had it wrong first.** As originally written, `Money` was a
+plain `{ amount; currency }`, and review caught that `const m: Money = { amount: 100.5, currency: "INR" }`
+type-checked with **no cast at all** — walking straight past `rupees()`'s integer and negative checks, which
+is the entire reason the type exists. `StayDate` at least forced a visible `as`. The brand closes that.
+
+**`declare const`, not a real `Symbol()`.** A runtime symbol would put an actual property on every money
+value, and `JSON.stringify` drops symbol keys — so a `Money` arriving from a provider's JSON response would
+have lost its brand at runtime while the type still claimed it. `Money` is the one value here guaranteed to
+cross HTTP. A `declare`d symbol emits nothing, costs nothing, and cannot be named outside the module;
+`rupees()` carries the single `as Money` cast, after its validation.
 
 **A stay date is a civil calendar date, not an instant.** A hotel night is "the 14th of November" in the
 lodge's own reckoning; a `Date` carries a timezone and will shift the night under a guest in another one.
