@@ -141,7 +141,7 @@ had a footer, and with JavaScript off the menu could not open, leaving **no cros
 **Evidence:** `docs/reviews/2026-08-10-site-navigation/` — density, contrast (all three routes, before and
 after the glass fix), rule-in, header, the JS budget (159 KB untouched, unchanged), `check_menu.mjs`,
 `check_leaf_cursor.mjs`, and 20+ screenshots including the menu opened at 390 and 1440 on `/` and
-`/mahua-vann`, looked at rather than only captured. **396 tests, all green.**
+`/mahua-vann`, looked at rather than only captured. **396 tests at the time, all green** (419 now).
 
 ## Where we were before that
 
@@ -196,7 +196,7 @@ instances 26 and 27 from it. **When resuming an interrupted session, check the m
 | 6 · [The property pages](superpowers/plans/2026-08-08-property-pages.md) | ✅ (superseded by Plan 7) twelve tasks, then a full review-and-correction round (9 Aug). Library 34 → 53 photographs; the contrast rig made route-aware; GSAP's loader gated on the first scrolled pixel |
 | 7 · [The property pages redesign](superpowers/plans/2026-08-09-property-pages-redesign.md) | ✅ fifteen tasks. New shape vocabulary (`fullBleed`/`column`/`map`/`showcase`/`pair`/`press`/`invitation`) replaces Plan 6's structure; the client's Pench and Tadoba maps traced into cream field-guide artwork (`scripts/build_map.mjs`); Task 15 closed it out with both routes' rigs green and the home page proven untouched — `docs/reviews/2026-08-09-property-redesign/README.md` |
 | 8 · [Site navigation](superpowers/plans/2026-08-10-site-navigation.md) | ✅ six tasks. `SiteMenu` (places, not chapters) and `SiteFooter` (the Website Directory) ship on all three routes; `ChapterMenu` retired. Task 6 closed it out — found and fixed a real 4.5:1 contrast failure in the menu's glass wash that no earlier probe had looked for, plus three unnamed rig gaps and one instrument defect — `docs/reviews/2026-08-10-site-navigation/README.md`, `docs/DECISIONS.md` §16 |
-| 9 · [The rooms card stack](superpowers/plans/2026-08-11-room-card-stack.md) | ✅ eight tasks, two fix rounds on findings Task 7's own 390px read produced. `RoomShowcase` retired on both property routes; the sticky/`view()`-timeline construction was wrong twice in opposite directions before what shipped, and a photograph's width-crop bound shipped illegible on five (then six) cards before an eighth rig assertion closed the gap — `docs/reviews/2026-08-11-card-stack/README.md`, `docs/DECISIONS.md` §17 |
+| 9 · [The rooms card stack](superpowers/plans/2026-08-11-room-card-stack.md) | ✅ eight tasks and **six fix rounds** — Tasks 3, 5 and 6, twice on Task 7 from findings its own 390px read produced, and one after the whole-plan review found a Critical all eight tasks had missed (a photograph losing 51% of its width at 1024×1366, outside the four viewport shapes every rig samples). `RoomShowcase` retired on both property routes; the sticky/`view()`-timeline construction was wrong twice in opposite directions before what shipped, and a photograph's width-crop bound shipped illegible on five (then six) cards before an eighth rig assertion closed the gap — `docs/reviews/2026-08-11-card-stack/README.md`, `docs/DECISIONS.md` §17 |
 
 ### Where Plan 5 actually got to
 
@@ -284,7 +284,7 @@ never-check, so a shape with no renderer is a compile error:
 | `FullBleedQuote` (shared with the home page) | `fullBleed` (non-hero, with `quoteCopy`) | A photograph with one line of type on it |
 | `OpeningColumn` | `column` | The page's one held breath — heading and two paragraphs, no photograph by design |
 | `PropertyMap` | `map` | The client's own park artwork (`lib/vann-map-art.ts` / `lib/tola-map-art.ts`, built by `scripts/build_map.mjs`), gates/water/villages/safari zones, the getting-there facts |
-| `RoomShowcase` | `showcase` | Rooms at three photograph scales (`offsetLeft`/`wide`/`offsetRight`) so the rooms read as a composition, not a ledger |
+| `RoomCardStack` + `RoomCard` | `showcase` | **Replaced `RoomShowcase` on 11 Aug 2026.** Each room is a card that pins below the header while the next rises over it; covered cards recede. Zero JavaScript — `position: sticky` plus a scroll-driven animation off a non-sticky sibling slot's named timeline. The card's composition is derived from the photograph's own aspect (`lib/room-card.ts`), not hand-set. `docs/DECISIONS.md` §17 |
 | `ExperiencePair` | `pair` | Six experiences at two weights (`hero`/`quiet`) plus an optional `alsoLine` naming what did not make the six |
 | `PressBand` | `press` | Vann only — three real press citations, set as type, deliberately not as three foreign publications' logos |
 | `PropertyInvitation` | `invitation` | The closing ask: heading, the booking pill, `ContactBlock`, and a full-width photograph of the *other* lodge |
