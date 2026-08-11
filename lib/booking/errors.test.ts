@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BOOKING_ERROR_CODES, BookingError } from "./errors";
+import { BOOKING_ERROR_CODES, BookingError, type BookingErrorCode } from "./errors";
 
 describe("BookingError", () => {
   it("carries a code a caller can branch on", () => {
@@ -23,5 +23,18 @@ describe("BookingError", () => {
       "OCCUPANCY",
       "PROVIDER_DOWN",
     ]);
+  });
+
+  it("forwards the guest-facing message unchanged", () => {
+    const e = new BookingError("SOLD_OUT", "That room has just gone.", "upstream: RC=17");
+    expect(e.message).toBe("That room has just gone.");
+  });
+
+  it("keeps the code union narrow — a widened string would lose exhaustiveness", () => {
+    // @ts-expect-error "NOT_A_CODE" is not a BookingErrorCode. If BOOKING_ERROR_CODES
+    // lost its `as const`, the union would widen to `string` and this would compile,
+    // failing the directive instead.
+    const bad: BookingErrorCode = "NOT_A_CODE";
+    expect(bad).toBe("NOT_A_CODE");
   });
 });
