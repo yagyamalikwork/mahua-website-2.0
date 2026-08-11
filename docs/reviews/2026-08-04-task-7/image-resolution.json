@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-09T22:31:12.499Z",
+  "measuredAt": "2026-08-11T08:56:14.433Z",
   "url": "http://localhost:3100/",
   "densityCap": 2,
   "results": [
     {
       "viewport": "390x844@1x",
-      "images": 39,
+      "images": 41,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -62,6 +62,20 @@
           "drawnWidth": 26,
           "needed": 26,
           "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 344,
+          "needed": 344,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/tola-hero-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 344,
+          "needed": 344,
+          "ratio": 1.16
         },
         {
           "file": "/brand/emblem-80.webp",
@@ -319,7 +333,7 @@
     },
     {
       "viewport": "390x844@3x",
-      "images": 39,
+      "images": 41,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -408,6 +422,20 @@
           "ratio": 1.5
         },
         {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/tola-hero-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
           "file": "/brand/emblem-120.webp",
           "cssWidth": 19,
           "drawnWidth": 19,
@@ -478,11 +506,11 @@
           "ratio": 0.66
         },
         {
-          "file": "/brand/forest-overlay-paper-1024.webp",
+          "file": "/brand/forest-overlay-paper-1600.webp",
           "cssWidth": 390,
           "drawnWidth": 390,
           "needed": 780,
-          "ratio": 1.31
+          "ratio": 2.05
         },
         {
           "file": "/media/tiger-pair-profile-768.avif",
@@ -663,7 +691,7 @@
     },
     {
       "viewport": "768x1024@1x",
-      "images": 39,
+      "images": 41,
       "softestServed": {
         "file": "/media/potters-hands-700.avif",
         "fileWidth": 700,
@@ -678,7 +706,7 @@
       },
       "deviceDensity": {
         "worst": 0.68,
-        "median": 1.18,
+        "median": 1.19,
         "best": 1.9
       },
       "understatedSizes": [],
@@ -735,6 +763,20 @@
           "drawnWidth": 26,
           "needed": 26,
           "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-400.avif",
+          "cssWidth": 316,
+          "drawnWidth": 318,
+          "needed": 318,
+          "ratio": 1.26
+        },
+        {
+          "file": "/media/tola-hero-400.avif",
+          "cssWidth": 316,
+          "drawnWidth": 318,
+          "needed": 318,
+          "ratio": 1.26
         },
         {
           "file": "/brand/emblem-80.webp",
@@ -992,21 +1034,21 @@
     },
     {
       "viewport": "1440x900@1x",
-      "images": 39,
+      "images": 41,
       "softestServed": {
-        "file": "/brand/forest-overlay-paper-1024.webp",
-        "fileWidth": 1024,
-        "widestOffered": 1024,
-        "objectFit": "fill",
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
         "cssWidth": 1440,
-        "drawnWidth": 1440,
-        "needed": 1440,
-        "ratio": 0.71,
-        "ratioAtDeviceDensity": 0.71,
+        "drawnWidth": 1726,
+        "needed": 1726,
+        "ratio": 0.83,
+        "ratioAtDeviceDensity": 0.83,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.71,
+        "worst": 0.83,
         "median": 1.18,
         "best": 1.9
       },
@@ -1016,11 +1058,6 @@
           "file": "/media/tiger-golden-grass-1440.avif",
           "needed": 1726,
           "ratio": 0.83
-        },
-        {
-          "file": "/brand/forest-overlay-paper-1024.webp",
-          "needed": 1440,
-          "ratio": 0.71
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
@@ -1054,6 +1091,20 @@
           "drawnWidth": 26,
           "needed": 26,
           "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 652,
+          "drawnWidth": 654,
+          "needed": 654,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-hero-768.avif",
+          "cssWidth": 652,
+          "drawnWidth": 654,
+          "needed": 654,
+          "ratio": 1.17
         },
         {
           "file": "/brand/emblem-80.webp",
@@ -1126,11 +1177,11 @@
           "ratio": 1.45
         },
         {
-          "file": "/brand/forest-overlay-paper-1024.webp",
+          "file": "/brand/forest-overlay-paper-1600.webp",
           "cssWidth": 1440,
           "drawnWidth": 1440,
           "needed": 1440,
-          "ratio": 0.71
+          "ratio": 1.11
         },
         {
           "file": "/media/tiger-pair-profile-640.avif",
@@ -1311,22 +1362,22 @@
     },
     {
       "viewport": "1920x1080@1x",
-      "images": 39,
+      "images": 41,
       "softestServed": {
-        "file": "/brand/forest-overlay-paper-1024.webp",
-        "fileWidth": 1024,
-        "widestOffered": 1024,
-        "objectFit": "fill",
+        "file": "/media/tiger-golden-grass-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
         "cssWidth": 1920,
-        "drawnWidth": 1920,
-        "needed": 1920,
-        "ratio": 0.53,
-        "ratioAtDeviceDensity": 0.53,
+        "drawnWidth": 2070,
+        "needed": 2070,
+        "ratio": 0.7,
+        "ratioAtDeviceDensity": 0.7,
         "atLibraryCeiling": true
       },
       "deviceDensity": {
-        "worst": 0.53,
-        "median": 1.06,
+        "worst": 0.7,
+        "median": 1.05,
         "best": 1.9
       },
       "understatedSizes": [],
@@ -1347,9 +1398,9 @@
           "ratio": 0.98
         },
         {
-          "file": "/brand/forest-overlay-paper-1024.webp",
+          "file": "/brand/forest-overlay-paper-1600.webp",
           "needed": 1920,
-          "ratio": 0.53
+          "ratio": 0.83
         },
         {
           "file": "/media/guide-sunrise-1000.avif",
@@ -1393,6 +1444,20 @@
           "drawnWidth": 26,
           "needed": 26,
           "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/tola-hero-768.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.05
         },
         {
           "file": "/brand/emblem-80.webp",
@@ -1465,11 +1530,11 @@
           "ratio": 1.22
         },
         {
-          "file": "/brand/forest-overlay-paper-1024.webp",
+          "file": "/brand/forest-overlay-paper-1600.webp",
           "cssWidth": 1920,
           "drawnWidth": 1920,
           "needed": 1920,
-          "ratio": 0.53
+          "ratio": 0.83
         },
         {
           "file": "/media/tiger-pair-profile-640.avif",

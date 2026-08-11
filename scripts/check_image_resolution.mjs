@@ -196,6 +196,26 @@ async function main() {
     });
     await page.waitForLoadState("networkidle").catch(() => {});
 
+    // **Open the menu before reporting.** Its two lodge tiles are the largest
+    // photographs on the site after the hero — half the panel each since 11 Aug
+    // 2026 — and they are NOT in the document until the panel has been opened
+    // once (`SiteMenu` gates them behind `everOpened`, so a visitor who never
+    // opens the menu never pays for them). Scrolling the page cannot reveal
+    // them.
+    //
+    // Until this was added the rig reported "0 under-served" across five
+    // viewports on a build whose menu `sizes` had just been rewritten, and the
+    // figure was true and meaningless: it had never seen the images in
+    // question. That is this project's most-repeated defect — a check
+    // confirming a mechanism rather than the behaviour — and it very nearly
+    // banked a verification that had not happened. `docs/DECISIONS.md` §2.
+    const trigger = page.locator("[aria-controls='site-menu']").first();
+    if (await trigger.count()) {
+      await trigger.click();
+      await page.waitForTimeout(500);
+      await page.waitForLoadState("networkidle").catch(() => {});
+    }
+
     const images = await page.evaluate(REPORT);
     // The only failure this rig owns: a photograph served smaller than the
     // capped density asks for, while a wider file for it existed. That is an

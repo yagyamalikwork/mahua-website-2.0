@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-10T23:08:01.235Z",
+  "measuredAt": "2026-08-11T08:59:28.365Z",
   "url": "http://localhost:3100/mahua-vann",
   "widths": {
     "390": [
@@ -124,11 +124,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.07,
+        "worst": 6.22,
         "brightest": [
           200,
-          191,
-          175
+          194,
+          178
         ],
         "boxes": 3,
         "pass": true
@@ -137,10 +137,10 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.3,
+        "worst": 6.22,
         "brightest": [
-          203,
-          195,
+          201,
+          194,
           176
         ],
         "boxes": 2,
@@ -295,11 +295,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.1,
+        "worst": 6.17,
         "brightest": [
-          200,
-          192,
-          173
+          201,
+          193,
+          175
         ],
         "boxes": 3,
         "pass": true
@@ -308,11 +308,11 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.23,
+        "worst": 6.25,
         "brightest": [
-          202,
+          203,
           194,
-          175
+          176
         ],
         "boxes": 2,
         "pass": true
@@ -466,11 +466,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.22,
+        "worst": 6.27,
         "brightest": [
-          200,
+          203,
           194,
-          178
+          181
         ],
         "boxes": 3,
         "pass": true
@@ -479,11 +479,11 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.43,
+        "worst": 6.22,
         "brightest": [
-          204,
-          197,
-          180
+          200,
+          194,
+          179
         ],
         "boxes": 2,
         "pass": true
@@ -637,11 +637,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.48,
+        "worst": 6.3,
         "brightest": [
-          206,
-          198,
-          175
+          202,
+          195,
+          179
         ],
         "boxes": 3,
         "pass": true
@@ -650,11 +650,11 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.59,
+        "worst": 6.16,
         "brightest": [
-          209,
           199,
-          177
+          193,
+          178
         ],
         "boxes": 2,
         "pass": true

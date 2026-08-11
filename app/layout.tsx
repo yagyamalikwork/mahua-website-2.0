@@ -4,7 +4,7 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
-import { DURATION, ENTER, IMAGE_FROM, LIVING, WELCOME } from "@/lib/motion";
+import { DURATION, ENTER, IMAGE_FROM, LIVING, RAISE, WELCOME } from "@/lib/motion";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -76,6 +76,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // everything above it: the number lives in `lib/motion.ts`, the rule
           // lives in `app/globals.css`, and neither can drift from the other.
           "--rule-in-duration": `${DURATION.ruleIn}s`,
+          // The menu tiles' lift under the pointer, on the same terms: the five
+          // numbers live in `lib/motion.ts`, the transform lives in
+          // `app/globals.css`, and a component may not hard-code either.
+          "--raise-duration": `${RAISE.duration}s`,
+          "--raise-rise": `${RAISE.risePx}px`,
+          "--raise-tilt": `${RAISE.tiltDeg}deg`,
+          "--raise-perspective": `${RAISE.perspectivePx}px`,
+          "--raise-scale": String(RAISE.scale),
           // The tiger drawing itself. Same terms again: the numbers live in
           // `lib/motion.ts`, the transition lives in `app/globals.css`, and the
           // per-stroke delay is written by the component from its wave index.

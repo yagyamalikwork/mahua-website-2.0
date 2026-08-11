@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-08T09:07:15.272Z",
+  "measuredAt": "2026-08-11T09:05:36.501Z",
   "url": "http://localhost:3100/",
   "cursor": {
     "sizePx": 28,
@@ -27,12 +27,12 @@
     "excessOverTravelPx": 12,
     "clampPx": 12,
     "restErrorPx": 0,
-    "maxSwingDeg": 24.75,
-    "restSwingDeg": 0.14
+    "maxSwingDeg": 25.1,
+    "restSwingDeg": 0.11
   },
   "loop": {
-    "baselineFramesPerSecond": 58,
-    "framesPerSecondAfterResting": 61
+    "baselineFramesPerSecond": 59,
+    "framesPerSecondAfterResting": 60
   },
   "warm": {
     "overProse": {

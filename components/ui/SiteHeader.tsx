@@ -49,12 +49,29 @@ type HeaderChapter = {
 };
 
 /**
- * The menu's lodge cards, drawn at up to ~208px (`md:w-52`). Rendered HERE,
- * on the server, and handed to the client menu as elements — `SiteMenu` must
- * never import `Photo` (see the architecture rule; the manifest is the
- * payload). Exported for `lib/sizes.test.ts`.
+ * The menu's lodge cards. Rendered HERE, on the server, and handed to the
+ * client menu as elements — `SiteMenu` must never import `Photo` (see the
+ * architecture rule; the manifest is the payload). Exported for
+ * `lib/sizes.test.ts`.
+ *
+ * **These were fixed 112/160/208px boxes until 11 Aug 2026**, when the client
+ * asked for the tiles bigger and side by side. They are now half the panel, so
+ * the widths are derived from the panel's own geometry rather than picked:
+ * `SiteMenu`'s grid is one column below 640, two above it, inside
+ * `max-w-[1600px]` with `px-6`/`md:px-12` padding and `sm:gap-6`/`md:gap-10`.
+ *
+ *   ≥1696px  the panel is capped at 1600 → (1600 − 96 − 40) / 2 = 732px
+ *   ≥768px   (100vw − 96 − 40) / 2       = 50vw − 68px
+ *   ≥640px   (100vw − 48 − 24) / 2       = 50vw − 36px
+ *   below    one column, full width      = 100vw − 48px
+ *
+ * A card is ~652px at a 1440 viewport, so a 2× screen asks for ~1304px and the
+ * manifest's 1440 tier covers it. **If this grid's padding or gap changes,
+ * these change with it** — `check_image_resolution.mjs` is what catches it when
+ * they do not, by comparing each photograph's served width against its real box.
  */
-export const MENU_CARD_SIZES = "(min-width: 768px) 208px, (min-width: 640px) 160px, 112px";
+export const MENU_CARD_SIZES =
+  "(min-width: 1696px) 732px, (min-width: 768px) calc(50vw - 68px), (min-width: 640px) calc(50vw - 36px), calc(100vw - 48px)";
 export const MENU_CARD_BOX = 3 / 2;
 
 const menuCards = Object.fromEntries(

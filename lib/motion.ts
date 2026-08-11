@@ -168,6 +168,40 @@ export const CURSOR = {
 } as const;
 
 /**
+ * The menu tiles lifting under the pointer — the client's "3D raise effect",
+ * asked for on 11 Aug 2026.
+ *
+ * **Hand-caused, so law 1 does not forbid it**, on the same reasoning as the
+ * lantern's swing and the films' hover-replay: motion a visitor *asks for* by
+ * moving their pointer is an answer, not an interruption. Nothing here runs
+ * unbidden, and there is no loop to leave running — a CSS transition settles
+ * and stops.
+ *
+ * **It is genuinely dimensional and deliberately small.** `tilt` is what makes
+ * it read as 3D rather than as a card sliding upward, and 2.5° is about a
+ * third of what looks impressive in isolation. That is on purpose: the tile is
+ * a large photograph, so the same angle that would be invisible on a button is
+ * plenty here, and non-negotiable #4 governs — if you notice the animation
+ * rather than the lift, it is too much. Raise `tilt` and it starts to read as a
+ * novelty rather than as depth.
+ *
+ * `duration` matches `DURATION.ruleIn` so the lift and the hairline that slides
+ * in beneath the tile's name are one gesture, not two events.
+ */
+export const RAISE = {
+  /** Seconds. */
+  duration: 0.4,
+  /** CSS pixels the tile rises toward the viewer. */
+  risePx: 8,
+  /** Degrees the tile tips its top edge back. The 3D of the effect. */
+  tiltDeg: 2.5,
+  /** The perspective the tilt is read through. Larger is flatter; this is a gentle lens. */
+  perspectivePx: 900,
+  /** A hair of scale, so the lift reads as "nearer" and not only as "higher". */
+  scale: 1.015,
+} as const;
+
+/**
  * The welcome screen: the brand lockup on cream, the flower turning once, and
  * then it goes.
  *

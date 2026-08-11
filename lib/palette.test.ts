@@ -55,6 +55,28 @@ describe("PALETTE", () => {
     expect(contrastRatio(PALETTE.brand, PALETTE.paperDeep)).toBeGreaterThanOrEqual(4.5);
   });
 
+  it("keeps the Website Directory legible on the brand brown", () => {
+    // The brown stopped being only a *type* colour on 11 Aug 2026, when the
+    // client asked for the footer's background to be the brown of his logo's
+    // wordmark. It is now a SURFACE as well, and a surface has to be guarded
+    // from the other side — every earlier assertion in this file measures the
+    // brown as ink on cream, and not one of them would have objected to
+    // unreadable text laid on top of it.
+    //
+    // The two that carry the footer: `paper` for anything read or clicked,
+    // `paperDeep` for the quieter second rank.
+    expect(contrastRatio(PALETTE.paper, PALETTE.brand)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(PALETTE.paperDeep, PALETTE.brand)).toBeGreaterThanOrEqual(4.5);
+
+    // And the two that are deliberately NOT used there, asserted as failures so
+    // the reason is a measurement rather than a memory. `dim` was the footer's
+    // secondary text and `goldText` its labels while it sat on cream; carrying
+    // either across to the brown unchanged is the obvious mistake, and it would
+    // have shipped looking approximately fine.
+    expect(contrastRatio(PALETTE.dim, PALETTE.brand)).toBeLessThan(4.5);
+    expect(contrastRatio(PALETTE.goldText, PALETTE.brand)).toBeLessThan(4.5);
+  });
+
   it("keeps the brand's brown and our gold text colour apart", () => {
     // They look alike and they are not the same decision. `goldText` is ours,
     // invented so a gold-*looking* link stays legible; `brand` is the client's

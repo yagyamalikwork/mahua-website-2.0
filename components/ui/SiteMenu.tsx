@@ -64,6 +64,17 @@ export function SiteMenu({
   const [open, setOpen] = useState(false);
   const [everOpened, setEverOpened] = useState(false);
   const pathname = usePathname();
+
+  /*
+   * Split by whether a place has a photograph, not by index or by name. The
+   * dial decides what a place *is* — `content/site.ts` gives the two lodges a
+   * `cardMediaId` and Home none — so adding a third lodge there puts it in the
+   * grid automatically, and a fourth plain link lands in the row above it,
+   * without anyone editing this file. A hard-coded `places.slice(1)` would have
+   * been shorter and would have silently mis-sorted the first thing added.
+   */
+  const plainPlaces = places.filter((p) => !p.cardMediaId);
+  const cardPlaces = places.filter((p) => p.cardMediaId);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -208,9 +219,16 @@ export function SiteMenu({
           </div>
 
           <nav aria-label={SITE.nav.menuTitle} className="flex flex-1 flex-col justify-center py-12 short:py-6">
+            {/*
+             * Two lists, because the menu holds two kinds of thing. Home is a
+             * destination; the lodges are the offer. The client asked for
+             * exactly this split on 10 Aug ("For Home Page we can do a simple
+             * 'Home' tag") and for the lodges to sit side by side, larger, in
+             * the reference site's manner, on 11 Aug.
+             */}
             <ul>
-              {places.map((place) => (
-                <li key={place.href} className="border-t" style={{ borderColor: "var(--accent)" }}>
+              {plainPlaces.map((place) => (
+                <li key={place.href} className="border-y" style={{ borderColor: "var(--accent)" }}>
                   <a
                     href={place.href}
                     aria-current={current(place.href) ? "page" : undefined}
@@ -218,19 +236,53 @@ export function SiteMenu({
                       if (current(place.href)) e.preventDefault();
                       close();
                     }}
-                    className={`group flex items-center gap-6 py-5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)] md:gap-10 md:py-6 short:py-3 ${
+                    className={`inline-block py-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)] short:py-2 ${
+                      current(place.href) ? "opacity-50" : ""
+                    }`}
+                  >
+                    <span className="rule-in rule-in--fixed font-[family-name:var(--font-display)] text-[clamp(1.3rem,3vw,2rem)] font-light leading-[1.1] text-[color:var(--text)]">
+                      {place.label}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            {/*
+             * The lodges. `sm:grid-cols-2` and not sooner: at 390px two columns
+             * would put each photograph under ~170px wide, which is smaller than
+             * the row it replaced — the request was for *bigger*, so on a phone
+             * they stack and run full width instead.
+             */}
+            <ul className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 md:mt-10 md:gap-10 short:mt-5 short:gap-5">
+              {cardPlaces.map((place) => (
+                <li key={place.href}>
+                  <a
+                    href={place.href}
+                    aria-current={current(place.href) ? "page" : undefined}
+                    onClick={(e) => {
+                      if (current(place.href)) e.preventDefault();
+                      close();
+                    }}
+                    className={`group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)] ${
                       current(place.href) ? "opacity-50" : ""
                     }`}
                   >
                     {place.cardMediaId && (
-                      <span className="block w-28 shrink-0 overflow-hidden sm:w-40 md:w-52" aria-hidden="true">
+                      /*
+                       * `.raise` is the hover lift, and it sits on the
+                       * photograph rather than on the whole tile so the type
+                       * beneath stays put — a name that tips with its picture
+                       * reads as a wobble, not as depth.
+                       */
+                      <span className="raise block overflow-hidden" aria-hidden="true">
                         {/* 3:2 box; the server rendered the Photo, we only decide when
                             it enters the document. */}
                         {everOpened && cards[place.href]}
                       </span>
                     )}
-                    <span className="flex flex-col gap-1">
-                      <span className="rule-in font-[family-name:var(--font-display)] text-[clamp(1.6rem,4.6vw,3.2rem)] font-light leading-[1.1] text-[color:var(--text)] short:text-[clamp(1.2rem,3vw,1.8rem)]">
+                    <span className="mt-4 flex flex-col gap-2 md:mt-5">
+                      <span className="rule-in rule-in--fixed self-start font-[family-name:var(--font-display)] text-[clamp(1.6rem,3.4vw,2.6rem)] font-light leading-[1.1] text-[color:var(--text)] short:text-[clamp(1.2rem,3vw,1.8rem)]">
                         {place.label}
                       </span>
                       {place.region && (

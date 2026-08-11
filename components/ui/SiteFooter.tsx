@@ -17,7 +17,28 @@ import type { PropertyContactCopy } from "@/components/property/PropertyContact"
  * The lodges' contact details are imported from the dials' own constants,
  * not re-typed, so the footer can never disagree with the pages.
  *
- * A colophon, not a marketing band: the deeper paper, hairlines, small caps.
+ * A colophon, not a marketing band: hairlines, small caps, nothing selling.
+ *
+ * **It is the brand's brown, and it is the page's one dark band — the client
+ * asked for it on 11 Aug 2026**, naming the colour of the wordmark in his own
+ * logo. `PALETTE.brand` (#7F5C24) already existed for the header's lockup and
+ * was sampled from that artwork rather than eyedropped, so this is literally
+ * the ink of the logo's type.
+ *
+ * It is a deliberate, client-made exception to non-negotiable #3 ("cream is the
+ * page, throughout; no dark sections"), and it is the shape that rule can
+ * tolerate: a terminal band, below everything, that a visitor reaches once. **It
+ * is not licence to darken anything above it** — the rule stands for the rest of
+ * the site, and the last build that ignored it was rejected.
+ *
+ * **Every colour in here inverts, and none of it may be assumed.** On cream the
+ * quiet text was `--dim` and the labels were `--accent-text`; both are
+ * unreadable on brown (`--dim` at 1.1:1, gold at 2.0:1). So the hierarchy is
+ * carried by size and tracking instead of by colour, with only two values doing
+ * the work — `--bg` (cream, 5.02:1 on the brown) for anything a visitor reads or
+ * clicks, `--surface` (the deeper paper, 4.58:1) for the quieter second rank.
+ * Both floors are held by `lib/palette.test.ts`, which gained the brown as a
+ * third surface the day this shipped.
  */
 const LABEL =
   "font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]";
@@ -25,30 +46,36 @@ const LABEL =
 // this chapter's body-copy sizing on top of it; the legal links below compose
 // it with `LABEL` instead. Neither ever re-derives the ring, so a future
 // change to it cannot silently miss one or the other.
+//
+// The focus ring is cream here, not `--accent-text`: a goldText ring on brown
+// is the same 2.0:1 the labels were moved off, and a focus indicator nobody can
+// see is the accessibility failure that matters most on a keyboard.
 const RULE_IN_LINK =
-  "rule-in inline-block pb-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]";
+  "rule-in inline-block pb-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)]";
 const LINK = `${RULE_IN_LINK} font-[family-name:var(--font-body)] text-[0.98rem]`;
+/** The hairline between the bands. Gold vanishes on brown; cream at 22% reads as a rule and not as a line of type. */
+const RULE_ON_BROWN = "color-mix(in srgb, var(--bg) 22%, transparent)";
 
 function LodgeContact({ name, contact }: { name: string; contact: PropertyContactCopy }) {
   return (
     <div>
-      <p className={LABEL} style={{ color: "var(--accent-text)" }}>
+      <p className={LABEL} style={{ color: "var(--surface)" }}>
         {name}
       </p>
       <ul className="mt-3 space-y-1.5">
         <li>
-          <a href={contact.phone.href} className={LINK} style={{ color: "var(--text)" }}>
+          <a href={contact.phone.href} className={LINK} style={{ color: "var(--bg)" }}>
             {contact.phone.value}
           </a>
         </li>
         <li>
-          <a href={contact.email.href} className={LINK} style={{ color: "var(--text)" }}>
+          <a href={contact.email.href} className={LINK} style={{ color: "var(--bg)" }}>
             {contact.email.value}
           </a>
         </li>
         <li
           className="max-w-[36ch] font-[family-name:var(--font-body)] text-sm leading-relaxed"
-          style={{ color: "var(--dim)" }}
+          style={{ color: "var(--surface)" }}
         >
           {contact.address.value}
         </li>
@@ -62,21 +89,21 @@ export function SiteFooter() {
     <footer
       id={SITE_FOOTER_ID}
       className="border-t"
-      style={{ backgroundColor: "var(--surface)", borderColor: "var(--accent)" }}
+      style={{ backgroundColor: "var(--brand)", borderColor: RULE_ON_BROWN }}
     >
       <div className="mx-auto max-w-[1600px] px-6 py-14 md:px-12 md:py-16">
         <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-10">
           <div>
-            <p className={LABEL} style={{ color: "var(--accent-text)" }}>
+            <p className={LABEL} style={{ color: "var(--surface)" }}>
               {SITE.footer.placesLabel}
             </p>
             <ul className="mt-3 space-y-1.5">
               {SITE.places.map((place) => (
                 <li key={place.href}>
-                  <a href={place.href} className={LINK} style={{ color: "var(--text)" }}>
+                  <a href={place.href} className={LINK} style={{ color: "var(--bg)" }}>
                     {place.label}
                     {place.region && (
-                      <span className={`${LABEL} ml-2`} style={{ color: "var(--accent-text)" }}>
+                      <span className={`${LABEL} ml-2`} style={{ color: "var(--surface)" }}>
                         {place.region}
                       </span>
                     )}
@@ -90,12 +117,12 @@ export function SiteFooter() {
           <LodgeContact name={`${SITE.places[2].label} · ${SITE.places[2].region}`} contact={TOLA_CONTACT} />
 
           <div>
-            <p className={LABEL} style={{ color: "var(--accent-text)" }}>
+            <p className={LABEL} style={{ color: "var(--surface)" }}>
               {SITE.footer.officeLabel}
             </p>
             <p
               className="mt-3 max-w-[36ch] font-[family-name:var(--font-body)] text-sm leading-relaxed"
-              style={{ color: "var(--dim)" }}
+              style={{ color: "var(--surface)" }}
             >
               {SITE.footer.office}
             </p>
@@ -104,9 +131,9 @@ export function SiteFooter() {
 
         <div
           className="mt-12 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 border-t pt-6"
-          style={{ borderColor: "var(--accent)" }}
+          style={{ borderColor: RULE_ON_BROWN }}
         >
-          <p className="font-[family-name:var(--font-body)] text-sm" style={{ color: "var(--dim)" }}>
+          <p className="font-[family-name:var(--font-body)] text-sm" style={{ color: "var(--surface)" }}>
             {SITE.footer.copyright}
           </p>
           <ul className="flex flex-wrap gap-x-8 gap-y-2">
@@ -117,7 +144,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noreferrer noopener"
                   className={`${LABEL} ${RULE_IN_LINK}`}
-                  style={{ color: "var(--accent-text)" }}
+                  style={{ color: "var(--bg)" }}
                 >
                   {l.label}
                 </a>

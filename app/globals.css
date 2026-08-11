@@ -308,6 +308,26 @@ html {
 }
 
 /*
+ * The same hairline, offset in pixels instead of `em`.
+ *
+ * **`-0.28em` is a body-copy number and it does not survive display type.** The
+ * menu's place names run to `clamp(1.6rem, 4.6vw, 3.2rem)` — 51px at the top of
+ * the clamp — where 0.28em is **14px**, and the region label ("Pench",
+ * "Tadoba") sits directly beneath. The rule slid straight through the middle of
+ * it. The client reported it on 11 Aug 2026; the arithmetic, not the eye, is
+ * what identified it.
+ *
+ * A fixed offset is the fix rather than a smaller `em`, because the bug is
+ * precisely that the offset scaled with the font while the gap below it did
+ * not. 6px sits clear of the descenders on this face and inside the tile's
+ * `gap`, at every size in the clamp.
+ */
+.rule-in--fixed::after,
+.rule-in--fixed.rule-in--rest::before {
+  bottom: -6px;
+}
+
+/*
  * Focus as well as hover: an affordance only pointer users get is not an
  * affordance. `:focus-visible` rather than `:focus` so a mouse click does not
  * leave a rule stranded under whatever was last pressed.
@@ -323,6 +343,55 @@ a:focus-visible .rule-in::after,
 button:hover .rule-in::after,
 button:focus-visible .rule-in::after {
   transform: scaleX(1);
+}
+
+/*
+ * The menu tiles' 3D raise — the client's request, 11 Aug 2026.
+ *
+ * Hand-caused motion, so it is exempt from the "nothing moves unbidden" law the
+ * way the lantern's swing and the films' hover-replay are: it only ever happens
+ * because a visitor pointed at something. It is a transition, not a loop, so
+ * there is nothing left running when it finishes.
+ *
+ * Every number is `lib/motion.ts`'s `RAISE`, handed down as a custom property
+ * by `app/layout.tsx`. **`translateZ` is what makes `perspective()` bite** — the
+ * tilt alone would be a flat skew — and the shadow grows with the lift because
+ * a raise with no shadow reads as a glitch rather than as height.
+ *
+ * The shadow is `--overlay`, the palette's dark green, not black: a neutral
+ * shadow on this cream goes grey and cold, which is the one thing the page is
+ * not. It is mixed rather than hard-coded, the same way the glass wash is.
+ */
+.raise {
+  transition:
+    transform var(--raise-duration) var(--enter-ease),
+    box-shadow var(--raise-duration) var(--enter-ease);
+  transform: perspective(var(--raise-perspective)) translateZ(0);
+  will-change: transform;
+}
+a:hover .raise,
+a:focus-visible .raise {
+  transform: perspective(var(--raise-perspective)) translateY(calc(-1 * var(--raise-rise)))
+    rotateX(var(--raise-tilt)) scale(var(--raise-scale));
+  box-shadow: 0 22px 45px -20px color-mix(in srgb, var(--overlay) 45%, transparent);
+}
+
+/*
+ * Reduced motion takes the movement and keeps the answer. The tile still
+ * responds — the shadow alone says "this one" — because removing every trace of
+ * feedback would leave a visitor who asked for less motion with no hover state
+ * at all, which is a worse outcome than the one the setting is asking to avoid.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .raise {
+    transition: box-shadow var(--raise-duration) var(--enter-ease);
+    transform: none;
+  }
+  a:hover .raise,
+  a:focus-visible .raise {
+    transform: none;
+    box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--overlay) 35%, transparent);
+  }
 }
 
 /*
