@@ -945,9 +945,14 @@ ink**, not just the regions. Re-measured on the shipped build, all three routes,
 
 | Route | `menu · place` (floor 3.0) | `menu · region` (floor 4.5) | `menu · hint` (floor 4.5) |
 |---|---|---|---|
-| `/` | 6.02–6.17:1 | 6.09–6.29:1 | 6.09–6.28:1 |
-| `/mahua-vann` | 6.07–6.48:1 | 6.23–6.59:1 | 6.09–6.22:1 |
-| `/mahua-tola` | 6.08–6.46:1 | 6.37–6.63:1 | 6.20–6.40:1 |
+| `/` | 6.07–6.24:1 | 6.05–6.17:1 | 6.09–6.28:1 |
+| `/mahua-vann` | 6.17–6.30:1 | 6.16–6.25:1 | 6.09–6.22:1 |
+| `/mahua-tola` | 6.15–6.28:1 | 6.04–6.43:1 | 6.20–6.40:1 |
+
+**Re-measured 11 Aug after the tiles were rebuilt** (side by side, half the panel each — §1's ruling of the
+same day). The panel's geometry changed underneath these figures, so they were taken again rather than
+carried over; they moved by hundredths, which is the point — the wash and the ink are what set them, not the
+layout.
 
 Gold keeps this panel's hairline rules and its focus ring — non-text, a 3:1 floor, and clear of it even when
 gold *text* was failing. `GOLD_TEXT` in `check_contrast_over_photos.mjs` is now unused and deliberately

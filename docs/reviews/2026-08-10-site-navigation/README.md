@@ -254,14 +254,43 @@ below).
   such element, as §8's footer findings above describe. Recorded here because it is the same lesson as §6 in
   smaller clothes — a wrong-looking result from this task's own instrument, not the page.
 
+## 9. Closed by the client, 11 Aug — and what shipped after this review
+
+**The glass question below is answered.** The client chose **Variant A** — *"Lets go ahead with Option A and
+if in case we need to change it later we can do that."* Ink type on the 82% wash; the binary-searched 97% is
+kept on record only as the number to return to if gold text ever comes back to the panel. Implementing it
+took one thing this review had not covered: Variant A's figures were measured *before* the "Where next" hint
+had a probe, so shipping it with that hint still gold would have moved the failure rather than fixed it.
+**Option A means every text run in the panel is ink.**
+
+**He then asked for four more changes the same day**, all shipped in `80e7ddd` and verified against this
+same rig set:
+
+1. **The lodge tiles are side by side and much larger** — half the panel each, ~650px at 1440 against the
+   208px thumbnail, stacking full-width below 640px.
+2. **They lift toward the pointer** — 8px, a real 2.5° `rotateX`, shadow in `--overlay`; movement removed
+   and shadow kept under `prefers-reduced-motion`.
+3. **A hairline bug he found**: `.rule-in`'s `-0.28em` offset is 14px on a 51px display name and cut through
+   the region label. Fixed in pixels, because the fault was the offset scaling with the font while the gap
+   under it did not.
+4. **The Website Directory is `PALETTE.brand` (#7F5C24)**, the wordmark brown from his logo — the site's one
+   dark band and a deliberate exception to non-negotiable #3. Every colour inverted: `--dim` is 1.1:1 there
+   and `goldText` 2.0:1, so cream (5.02:1) and the deeper paper (4.58:1) carry it, guarded by
+   `lib/palette.test.ts` as a third surface.
+
+**A rig was found blind while checking (3) and (1)** — see §2 #39 in `DECISIONS.md`.
+`check_image_resolution.mjs` reported "0 under-served" at five viewports on the build whose menu `sizes` had
+just been rewritten: the tiles are gated behind `everOpened` and the rig only scrolled, so it had never seen
+them. It opens the menu now — **39 images became 41**, all clear.
+
+**Re-verified after all four: 398 tests, build, lint, `verify:budget` 159 KB unmoved, contrast on all three
+routes at four widths (6.04–6.43:1 on the menu), and the menu, rule-in, leaf-cursor and image-resolution
+rigs green.**
+
 ## Open
 
-- **Which variant of the glass ships — B (gold, 97%, currently in the tree) or A (ink, 82%, measured and
-  screenshotted but not applied) — has not been shown to the client.** Both clear the contrast floor; the
-  choice between them is a real, visible design trade (gold accent vs. genuine "Liquid Glass" transparency)
-  that only he can make. Both sets of figures and all eight menu screenshots are in this directory; full
-  reasoning in `docs/DECISIONS.md` §16, including the two further alternatives considered and rejected (a
-  one-off darker `goldText`; reclassifying the label as large text).
-- Everything else this task touched is closed: all three routes' rigs green, 396 tests, JS budget unchanged,
-  and the three chapters over the density ceiling are the same pre-existing ones `docs/reviews/
-  2026-08-09-property-redesign/README.md` already reported — untouched by this task.
+- Nothing from this task. Everything it touched is closed: all three routes' rigs green, 398 tests, JS
+  budget unchanged, and the three chapters over the density ceiling are the same pre-existing ones
+  `docs/reviews/2026-08-09-property-redesign/README.md` already reported — untouched by this task.
+- Still with the client, from earlier work: the density trade on those three chapters, Tola's room count
+  (12 vs 14), and a Nagpur distance. `docs/DECISIONS.md` §5.

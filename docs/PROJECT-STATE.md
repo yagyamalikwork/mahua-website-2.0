@@ -3,6 +3,51 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## The chrome's second pass — 11 Aug 2026, all four from the client
+
+He looked at the finished navigation and asked for four things. All are in, on `feat/chapters-rebuild`,
+commit `80e7ddd`. Verdict: *"It looks better now."*
+
+- **The lodge tiles are side by side and much larger**, in the reference site's manner — half the panel
+  each, ~650px at a 1440 screen against the **208px thumbnail** they replaced, photograph above with name
+  and region beneath. Home stays the plain type row he asked for on 10 Aug, so the menu reads as one
+  destination and two offers. **Below 640px they stack full-width**: two columns on a phone would have made
+  each tile *smaller* than the row it replaced, which is the opposite of the request. The split is by
+  `cardMediaId` presence, not by index, so a third lodge in `content/site.ts` lands in the grid on its own.
+- **The tiles lift toward the pointer** — his "3D raise". 8px, a real 2.5° `rotateX` so it is dimensional
+  rather than a slide, a hair of scale, and a shadow in `--overlay` (the palette's dark green) because a
+  neutral shadow on this cream goes grey and cold. All five numbers are `RAISE` in `lib/motion.ts`. It sits
+  on the *photograph*, not the whole tile, so the type beneath stays put — a name that tips with its
+  picture reads as a wobble. Under `prefers-reduced-motion` the movement goes and the shadow stays, so a
+  visitor who asked for less motion still gets an answer when they point at something.
+- **A hairline bug he spotted, and the cause was arithmetic.** `.rule-in`'s rule sits `-0.28em` below its
+  text — a body-copy number. On a place name running to 51px that is **14px**, against a 4px gap to the
+  region label, so it drew straight through "PENCH". Fixed with `.rule-in--fixed`, a **pixel** offset,
+  because the fault was precisely that the offset scaled with the font while the gap under it did not.
+- **The Website Directory is now `PALETTE.brand` (#7F5C24)**, the brown of the wordmark in his own logo —
+  which already existed in the palette, sampled from the vector at 64,730 pixels of that type rather than
+  eyedropped. **Every colour in the footer had to invert and none of it could be inherited**: `--dim`
+  measures 1.1:1 on that brown and `goldText` 2.0:1, and both were what the footer used on cream. Cream
+  (`--bg`, 5.02:1) now carries anything read or clicked, the deeper paper (`--surface`, 4.58:1) the second
+  rank, hierarchy coming from size and tracking rather than colour. The focus ring went cream too — a gold
+  ring on brown is the same 2.0:1. Verified from the rendered DOM, not from the source: `rgb(127,92,36)`
+  ground, `rgb(241,233,215)` links, `rgb(233,223,200)` labels.
+
+**This is a client-made exception to non-negotiable #3** (cream throughout, no dark sections), and the
+shape that rule can bear — a terminal band, below everything, reached once. It is **not** licence to darken
+anything above it. `lib/palette.test.ts` gained the brown as a third surface, asserting both the pairs that
+pass and the two that fail, so the reason is a measurement rather than a memory.
+
+**A rig was found blind in the process — `docs/DECISIONS.md` §2 #39.** `check_image_resolution.mjs`
+reported "0 under-served" across five viewports on the very build whose menu `sizes` had just been rewritten
+from fixed 112/160/208px boxes to `calc()` of the viewport. True and meaningless: the tiles are gated behind
+`everOpened`, so they are not in the document until the panel has been opened once, and the rig only ever
+scrolled. It opens the menu now — **39 images became 41**, and both tiles clear at every viewport.
+
+**398 tests, build, lint, `verify:budget` (159 KB, unmoved), and the contrast, menu, rule-in, leaf-cursor
+and image-resolution rigs all green.** Menu contrast re-measured on all three routes at four widths after
+the rebuild: 6.04–6.43:1.
+
 ## Site-wide navigation — complete 10-11 Aug 2026
 
 The three pages now behave as one website, closing the gap the client raised on 10 Aug: from `/mahua-vann`
