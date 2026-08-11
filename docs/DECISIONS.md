@@ -1045,14 +1045,25 @@ anything would have made the rig measure the wrong box.
 
 ### Why the flag on the last card is a prop and an attribute, not `:last-child`
 
-A card dims because something is covering it. Nothing covers the last one. Without an exemption, the tail of
-every chapter showed two translucent cards bleeding through each other for the final ~250–350px of scroll on
-both routes, at both 1440×900 and 390×844 — the already-dimmed deck visible through the last card while it
-was still the one being read. `data-room-card-last`, written from an `isLast` prop on `RoomCardStack` (the
-one place that knows the room count), turns `animation: none` on for exactly that card. Not `:last-child`:
-the stack's children are exactly the cards today only because nothing else has ever been added to the
-`<ol>`, and a selector standing in for that fact stops matching the day something else is, silently, in the
-tail of the page where nobody looks.
+**Corrected 11 Aug 2026, fix wave (Finding 4): this section previously said the break showed for "the final
+~250–350px of scroll" — measured false, along with the same claim in `app/globals.css`, `RoomCard.tsx` and
+the spec's own §7, all four corrected together.** A card dims because something is covering it. Nothing
+covers the last one. Without an exemption, a covered-card sweep with the exemption removed found the last
+card at `opacity: 0.55` / `scale: 0.94` for nearly the *entire* time it was on screen, not a brief tail —
+**35 of 36 on-screen samples at Vann@390, 37 of 38 at Tola@1440** — the already-dimmed deck visible through
+the last card the whole time it was still the one being read. The real mechanism: the last card's own
+`.room-slot` sibling is sized to `(room-count − i − 1) × card-height`, which is `0px` when `i = room-count −
+1`, and a named view-timeline with a zero-length range resolves to 100% progress immediately — the recede's
+end state applies from the first frame, not `view()` "tracking flow position" past the point the card is
+covered (that language described construction B, which this design does not ship — see above).
+
+`data-room-card-last`, written from an `isLast` prop on `RoomCardStack` (the one place that knows the room
+count), turns `animation: none` on for exactly that card. Not `:last-child`: the `<ol>`'s children today are
+not one-per-room — each room contributes an invisible `.room-slot` sibling immediately before its
+`.room-card` (§4 above), so the list is `slot, card, slot, card, …`, and only because tree order happens to
+end on a card does `:last-child` currently pick out the right element at all. A selector standing in for
+that coincidence stops matching the day the markup's shape changes, silently, in the tail of the page where
+nobody looks.
 
 ### The bar reserve, and reduced motion — restated because both are load-bearing
 

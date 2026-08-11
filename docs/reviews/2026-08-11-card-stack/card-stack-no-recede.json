@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T14:21:06.710Z",
+  "measuredAt": "2026-08-11T19:12:38.787Z",
   "url": "http://localhost:3100",
   "noRecede": true,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
@@ -41,6 +41,20 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -105,6 +119,20 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -129,6 +157,162 @@
           "naturalHeight": 576,
           "boxWidth": 672,
           "boxHeight": 537.59375
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1024,
+      "height": 1366,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2998,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 3993,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 417.8125
+        },
+        {
+          "i": 1,
+          "strip": 403.8125
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1007,
+          "naturalHeight": 440,
+          "boxWidth": 928,
+          "boxHeight": 464
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1077,
+          "naturalHeight": 439,
+          "boxWidth": 928,
+          "boxHeight": 464
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 736,
+          "naturalHeight": 491,
+          "boxWidth": 556.796875,
+          "boxHeight": 445.4375
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1280,
+      "height": 1024,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2711,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 4036,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 88
+        },
+        {
+          "i": 1,
+          "strip": 74
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1300,
+          "naturalHeight": 568,
+          "boxWidth": 1184,
+          "boxHeight": 575
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1390,
+          "naturalHeight": 567,
+          "boxWidth": 1184,
+          "boxHeight": 575
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 920,
+          "naturalHeight": 614,
+          "boxWidth": 710.390625,
+          "boxHeight": 568.3125
         }
       ]
     },
@@ -169,6 +353,20 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -176,7 +374,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1344,
-          "boxHeight": 672
+          "boxHeight": 484
         },
         {
           "name": "Cottage without Deck",
@@ -184,7 +382,7 @@
           "naturalWidth": 1586,
           "naturalHeight": 647,
           "boxWidth": 1344,
-          "boxHeight": 672
+          "boxHeight": 484
         },
         {
           "name": "Cottage with Deck",
@@ -192,7 +390,7 @@
           "naturalWidth": 1035,
           "naturalHeight": 691,
           "boxWidth": 806.390625,
-          "boxHeight": 668
+          "boxHeight": 645.109375
         }
       ]
     },
@@ -233,6 +431,20 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -240,7 +452,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1504,
-          "boxHeight": 752
+          "boxHeight": 575
         },
         {
           "name": "Cottage without Deck",
@@ -248,7 +460,7 @@
           "naturalWidth": 1840,
           "naturalHeight": 751,
           "boxWidth": 1504,
-          "boxHeight": 752
+          "boxHeight": 575
         },
         {
           "name": "Cottage with Deck",
@@ -256,7 +468,7 @@
           "naturalWidth": 1381,
           "naturalHeight": 921,
           "boxWidth": 902.390625,
-          "boxHeight": 759
+          "boxHeight": 721.90625
         }
       ]
     },
@@ -301,6 +513,24 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -324,7 +554,7 @@
           "naturalWidth": 342,
           "naturalHeight": 513,
           "boxWidth": 342,
-          "boxHeight": 513
+          "boxHeight": 273.59375
         },
         {
           "name": "Camping Hut",
@@ -377,6 +607,24 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -400,7 +648,7 @@
           "naturalWidth": 719,
           "naturalHeight": 1079,
           "boxWidth": 672,
-          "boxHeight": 1008
+          "boxHeight": 537.59375
         },
         {
           "name": "Camping Hut",
@@ -409,6 +657,194 @@
           "naturalHeight": 311,
           "boxWidth": 672,
           "boxHeight": 336
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1024,
+      "height": 1366,
+      "roomCount": 4,
+      "geometry": {
+        "top": 4409,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 6154,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 428.484375
+        },
+        {
+          "i": 1,
+          "strip": 414.484375
+        },
+        {
+          "i": 2,
+          "strip": 400.484375
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1007,
+          "naturalHeight": 440,
+          "boxWidth": 928,
+          "boxHeight": 464
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1007,
+          "naturalHeight": 440,
+          "boxWidth": 928,
+          "boxHeight": 464
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 614,
+          "naturalHeight": 921,
+          "boxWidth": 556.796875,
+          "boxHeight": 445.4375
+        },
+        {
+          "name": "Camping Hut",
+          "ok": true,
+          "naturalWidth": 1007,
+          "naturalHeight": 440,
+          "boxWidth": 928,
+          "boxHeight": 464
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1280,
+      "height": 1024,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3781,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 5871,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 82.671875
+        },
+        {
+          "i": 1,
+          "strip": 68.671875
+        },
+        {
+          "i": 2,
+          "strip": 54.671875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1300,
+          "naturalHeight": 568,
+          "boxWidth": 1184,
+          "boxHeight": 575
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1300,
+          "naturalHeight": 568,
+          "boxWidth": 1184,
+          "boxHeight": 575
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 768,
+          "naturalHeight": 1152,
+          "boxWidth": 710.390625,
+          "boxHeight": 568.3125
+        },
+        {
+          "name": "Camping Hut",
+          "ok": true,
+          "naturalWidth": 1300,
+          "naturalHeight": 568,
+          "boxWidth": 1184,
+          "boxHeight": 575
         }
       ]
     },
@@ -453,6 +889,24 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -460,7 +914,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1344,
-          "boxHeight": 672
+          "boxHeight": 470
         },
         {
           "name": "Suite",
@@ -468,7 +922,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1344,
-          "boxHeight": 672
+          "boxHeight": 470
         },
         {
           "name": "Family Suite",
@@ -476,7 +930,7 @@
           "naturalWidth": 864,
           "naturalHeight": 1296,
           "boxWidth": 806.390625,
-          "boxHeight": 654
+          "boxHeight": 645.109375
         },
         {
           "name": "Camping Hut",
@@ -484,7 +938,7 @@
           "naturalWidth": 1483,
           "naturalHeight": 648,
           "boxWidth": 1344,
-          "boxHeight": 672
+          "boxHeight": 470
         }
       ]
     },
@@ -529,6 +983,24 @@
         "receded": false
       },
       "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        },
+        {
+          "name": "Camping Hut",
+          "legible": true
+        }
+      ],
       "crops": [
         {
           "name": "Deluxe",
@@ -536,7 +1008,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1504,
-          "boxHeight": 752
+          "boxHeight": 575
         },
         {
           "name": "Suite",
@@ -544,7 +1016,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1504,
-          "boxHeight": 752
+          "boxHeight": 575
         },
         {
           "name": "Family Suite",
@@ -552,7 +1024,7 @@
           "naturalWidth": 1152,
           "naturalHeight": 1728,
           "boxWidth": 902.390625,
-          "boxHeight": 759
+          "boxHeight": 721.90625
         },
         {
           "name": "Camping Hut",
@@ -560,7 +1032,7 @@
           "naturalWidth": 1722,
           "naturalHeight": 752,
           "boxWidth": 1504,
-          "boxHeight": 752
+          "boxHeight": 575
         }
       ]
     }

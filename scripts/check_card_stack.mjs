@@ -8,13 +8,18 @@
 // Client request, 11 Aug 2026: "pile up, with recede" — each card sticks below
 // the header while the next rises over it, and a covered card scales down and
 // dims so the deck reads as depth rather than as stacked paper. Every claim
-// below is about what a visitor's own scrolling produces, read off the
-// rendered page with `getBoundingClientRect()` / `getComputedStyle()` — never
-// off `app/globals.css` or `lib/motion.ts`. A check that reads back the CSS it
-// was given proves nothing (`docs/DECISIONS.md` §2).
+// below is read off the rendered page with `getBoundingClientRect()` /
+// `getComputedStyle()` — never off `app/globals.css` or `lib/motion.ts`. A
+// check that reads back the CSS it was given proves nothing (`docs/DECISIONS.md`
+// §2). Almost all of it is about what a visitor's own scrolling produces — the
+// exception is assertion 3, a drift guard comparing the bar's measured height
+// against a computed custom property, not a behaviour a visitor's scrolling
+// itself produces.
 //
-// Seven assertions, on `/mahua-vann` (three rooms) and `/mahua-tola` (four
-// rooms), at 390x844, 768x1024, 1440x900 and 1920x1080:
+// Eight assertions, on `/mahua-vann` (three rooms) and `/mahua-tola` (four
+// rooms), at 390x844, 768x1024, 1024x1366, 1280x1024, 1440x900 and 1920x1080
+// (the last two added in the fix wave that closed Finding 1 — see `SHAPES`'s
+// own comment):
 //
 //   1. Cards stack — scrolling in ~120px steps, for every adjacent pair there
 //      is a window of three consecutive steps where the earlier card's own
@@ -94,6 +99,16 @@ const ROUTES = [
 const SHAPES = [
   [390, 844],
   [768, 1024],
+  // Added in the fix wave that closed Finding 1: the original four shapes all
+  // happen to be wide relative to their height, which is exactly the case
+  // `beside`'s `lg:items-stretch` box coincidentally clears without a real
+  // floor. iPad Pro portrait and a taller-than-wide desktop window are both
+  // real, reviewed device shapes on this project's own matrix elsewhere and
+  // neither one was ever sampled by this rig — 1024×1366 measured 51.1% of
+  // `suite-tiger-painting`'s width lost, 1280×1024 measured 37.5%, both past
+  // the 25% bound assertion 6 exists to enforce.
+  [1024, 1366],
+  [1280, 1024],
   [1440, 900],
   [1920, 1080],
 ];

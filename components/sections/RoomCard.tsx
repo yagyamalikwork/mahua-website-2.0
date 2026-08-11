@@ -66,6 +66,18 @@ export const ROOM_CARD_SIZES: Record<RoomCardLayout, string> = {
  * (0.86, the value this replaced on 11 Aug 2026, covered the portrait but not
  * `suite-tiger-painting` — up to 48.6% lost, one of `check_card_stack.mjs`'s
  * two original failures.)
+ *
+ * **"applied via CSS `aspect-ratio`" above is only the whole truth below `lg`.**
+ * At `lg` and up, `beside`'s wrapper switches to `lg:w-[60%]` of a card whose
+ * height is `lg:items-stretch`-ed to the card's own full (fixed) height —
+ * both axes definite, so the browser uses the stretched height and
+ * `aspect-ratio` is overridden outright, not just outweighed. That was never
+ * enforced at four review widths and failed hard outside them — 51.1% lost
+ * on an iPad Pro portrait (1024×1366), against the 25% bound this whole
+ * export exists to satisfy. `app/globals.css`'s `max-height` rule on the
+ * `beside` wrapper (scoped `@media (min-width: 1024px)`, reading this same
+ * number back through `--room-photo-aspect`, set below) is what makes the
+ * floor real at `lg` and up too — see that rule's comment for the mechanism.
  */
 export const ROOM_CARD_BOXES: Record<RoomCardLayout, number> = {
   stacked: 2.0,
@@ -84,12 +96,18 @@ export function RoomCard({
   onSurface: boolean;
   /**
    * True when this is the deepest card in the stack. Nothing covers the last
-   * card, so it must not run the recede: `view()`'s exit phase tracks the
-   * card's own flow position, not its stuck one, and fires on the last card
-   * even though no sibling ever overlaps it, dropping it to the same reduced
-   * opacity as the already-dimmed deck behind it while it is still the
-   * visible top card — two translucent cards over one another, text bleeding
-   * through both. See `app/globals.css`'s `[data-room-card-last]` rule.
+   * card, so it must not run the recede: this card's own `.room-slot` sibling
+   * is sized to `(room-count − i − 1) × card-height`, which is `0px` for the
+   * last card — a named view-timeline with a zero-length range has no
+   * progress to make, so it resolves to 100% immediately and the recede's END
+   * keyframe applies from the first frame, not `view()` tracking flow
+   * position (this card is never the timeline's own source; see
+   * `app/globals.css`'s comment above `.room-stack`). Measured with the
+   * exemption removed: the last card sat at `opacity: 0.55` / `scale: 0.94`
+   * for nearly the entire time it was on screen — 35/36 samples at Vann@390,
+   * 37/38 at Tola@1440, not a brief tail — with the already-dimmed deck
+   * behind it bleeding through the whole time. See `app/globals.css`'s
+   * `[data-room-card-last]` rule.
    */
   isLast?: boolean;
 }) {
@@ -179,7 +197,21 @@ export function RoomCard({
          */}
         <div
           className={`min-h-0 ${beside ? "flex-none lg:w-[60%]" : "flex-none"}`}
-          style={{ aspectRatio: String(ROOM_CARD_BOXES[layout]) } as React.CSSProperties}
+          style={
+            {
+              aspectRatio: String(ROOM_CARD_BOXES[layout]),
+              // Same number again, as a custom property: `app/globals.css`'s
+              // `lg`-and-up rule for `beside` cards reads it too, to cap this
+              // box's height once `lg:items-stretch` (the card's own class,
+              // above) takes over sizing this axis and `aspect-ratio` stops
+              // winning. One JS value feeding both is what keeps the inline
+              // `aspect-ratio` (below `lg`) and the CSS `max-height` (from
+              // `lg` up) from ever disagreeing about the bound — see that
+              // rule's own comment for why a second, independently-chosen
+              // number here reopened this exact defect once already.
+              "--room-photo-aspect": String(ROOM_CARD_BOXES[layout]),
+            } as React.CSSProperties
+          }
         >
           <Photo
             id={room.mediaId}

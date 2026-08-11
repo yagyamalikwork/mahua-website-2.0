@@ -1104,19 +1104,86 @@ body {
 }
 
 /*
+ * The `beside` photo's height-derived floor, above `lg` — where `RoomCard.tsx`'s
+ * `lg:items-stretch` (the card, in flex-row mode) makes the wrapper's cross
+ * size the ROW's own fixed height, and `aspect-ratio` (which governs
+ * correctly below `lg`, where the card is a column and the wrapper's width is
+ * its only definite axis) is overridden outright rather than merely
+ * outweighed — confirmed live: both axes are definite there, so nothing is
+ * left "auto" for `aspect-ratio` to compute.
+ *
+ * Left alone, the box's real aspect is whatever `lg:w-[60%]` and the card's
+ * own solved height happen to produce — which cleared the 25% width-crop
+ * bound (`ROOM_CARD_BOXES`'s own comment) only at the four widths this
+ * project routinely reviews, by coincidence, and failed hard outside them:
+ * **51.1% of `suite-tiger-painting`'s width lost at 1024×1366** (iPad Pro
+ * portrait), 37.5% at 1280×1024 — both worse than the ~11% the layout this
+ * design replaced was cropping. `docs/reviews/2026-08-11-card-stack/README.md`,
+ * "Finding 1."
+ *
+ * The fix caps the wrapper's height so its OWN aspect can never drop below
+ * `ROOM_CARD_BOXES.beside`, regardless of how the card's fixed height and the
+ * viewport's shape happen to interact — a `min-aspect-ratio`, expressed as a
+ * `max-height` because height, not width, is the axis actually free to move
+ * once the row's stretch has claimed it. `container-type: inline-size` on
+ * `.room-card` lets the wrapper reference the CARD's own resolved width in
+ * `cqw` units — safe (no circular dependency): the card's width comes from
+ * its flex/grid ancestor, never from its own content, so querying it from a
+ * descendant introduces nothing the card's own layout depends on. The wrapper
+ * is `lg:w-[60%]` of that width (also duplicated in `ROOM_CARD_SIZES.beside`'s
+ * `60vw` — the three must move together), so `60cqw` is that same 60%
+ * expressed as a length; dividing by `--room-photo-aspect` (set inline per
+ * card in `RoomCard.tsx`, from the very `ROOM_CARD_BOXES[layout]` value the
+ * width-crop bound is built from, so the two can never disagree) gives the
+ * tallest the box may be without its own aspect falling under the bound.
+ *
+ * When the row's stretch would have made the wrapper shorter than this cap
+ * anyway (a wide card relative to its height — most of the four originally
+ * reviewed widths), the cap never binds and the photo still fills the card
+ * top to bottom, unchanged. When it would not (the shapes above), the cap
+ * wins: the photo is shorter than the card, and cream shows beneath it. That
+ * band of cream — not a crop past the bound — is the honest cost of the
+ * floor at the shapes where 60%-of-width genuinely cannot reach the card's
+ * own height without violating it.
+ *
+ * `stacked` cards are untouched: `container-type` is scoped to
+ * `[data-card-layout="beside"]`, and the stacked ceiling above (this card's
+ * `max-height` on ITS photo wrapper) is a different mechanism solving a
+ * different problem (fit under the words, not width-crop).
+ */
+@media (min-width: 1024px) {
+  .room-card[data-card-layout="beside"] {
+    container-type: inline-size;
+  }
+
+  .room-card[data-card-layout="beside"] > :first-child {
+    max-height: calc(60cqw / var(--room-photo-aspect, 1.25));
+  }
+}
+
+/*
  * The last card is never covered by anything, so it must never recede.
- * `view()` tracks a sticky element's FLOW position, not its stuck one: for a
- * covered card that is fine, because its exit phase plays out while an
- * opaque later card already hides it. But the deepest card has no later
- * sibling to hide behind — its own exit phase still fires as its flow
- * position leaves the stack's containing block, so it dims and shrinks while
- * it is still the visible top card, over the already-dimmed deck sitting
- * behind it. Two translucent cards stacked on one another is the overlapping,
- * illegible text seen in the last ~250-350px of every rooms chapter before
- * this rule. `data-room-card-last` is a prop from `RoomCardStack` (which
- * knows the room count), not an index comparison or `:last-child` here — the
- * stack's children are exactly the cards today, but that is a markup
- * coincidence this project has been bitten by before.
+ *
+ * Not `view()` on the card itself — the shipped construction (see
+ * `.room-stack`'s comment above) reads a NAMED timeline sourced from this
+ * card's own `.room-slot` sibling, sized to `(room-count − i − 1) ×
+ * card-height`. For the last card, `i = room-count − 1`, so that slot is
+ * exactly `0px` tall: a named view-timeline with a zero-length scrollable
+ * range has no progress to make and resolves to 100% immediately, so
+ * `animation-range: exit 0% exit 100%` is already satisfied on the very
+ * first frame — the recede's END keyframe applies permanently, not "as the
+ * card leaves." Measured with this rule removed: the last card sat at
+ * `opacity: 0.55` / `scale: 0.94` for nearly the whole time it was on
+ * screen — **35 of 36 on-screen samples at Vann@390, 37 of 38 at
+ * Tola@1440** — bleeding the already-dimmed deck behind it through the card
+ * a visitor was actually reading, the entire time, not in some final stretch
+ * of scroll. `data-room-card-last` is a prop from `RoomCardStack` (which
+ * knows the room count), not an index comparison or `:last-child` here: the
+ * `<ol>`'s children today are `slot, card, slot, card, …`, not one-per-room,
+ * and only because tree order happens to end on a card would `:last-child`
+ * currently pick out the right element at all — a selector standing in for
+ * that coincidence stops matching the day the markup's shape changes,
+ * silently, in the tail of the page where nobody looks.
  */
 .room-card[data-room-card-last] {
   animation: none;

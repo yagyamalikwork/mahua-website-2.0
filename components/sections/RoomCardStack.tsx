@@ -15,9 +15,15 @@ import type { RoomShowcaseCopy } from "./RoomShowcase.types";
  * dims so the deck reads as depth rather than as stacked paper.
  *
  * **It carries no JavaScript.** The stacking is `position: sticky`; the recede
- * is a CSS scroll-driven animation reading each card's own view timeline. There is
- * no hook here, no scroll listener and no `"use client"` — which is what let
- * this ship against 3.7 KB of budget headroom.
+ * is a CSS scroll-driven animation, but not off each card's own view timeline —
+ * a sticky element's own `view()` timeline freezes while it is actually stuck,
+ * which would only let a covered card dim after it had already scrolled out of
+ * view (measured; see `app/globals.css`'s comment above `.room-stack`). Each
+ * card instead reads a NAMED timeline (`--room-slot-N`) sourced from its own
+ * non-sticky `.room-slot` sibling below, published into scope here via
+ * `timelineScope`. There is no hook here, no scroll listener and no
+ * `"use client"` — which is what let this ship against 3.7 KB of budget
+ * headroom.
  *
  * The mechanics live in `app/globals.css` under `.room-stack`; the numbers live
  * in `lib/motion.ts` as `ROOM_STACK`. Neither is written here.
