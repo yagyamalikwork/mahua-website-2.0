@@ -89,8 +89,8 @@ from fixed 112/160/208px boxes to `calc()` of the viewport. True and meaningless
 `everOpened`, so they are not in the document until the panel has been opened once, and the rig only ever
 scrolled. It opens the menu now — **39 images became 41**, and both tiles clear at every viewport.
 
-**398 tests, build, lint, `verify:budget` (159 KB, unmoved), and the contrast, menu, rule-in, leaf-cursor
-and image-resolution rigs all green.** Menu contrast re-measured on all three routes at four widths after
+**398 tests at the time (419 now, after the card stack), build, lint, `verify:budget` (159 KB,
+unmoved), and the contrast, menu, rule-in, leaf-cursor and image-resolution rigs all green.** Menu contrast re-measured on all three routes at four widths after
 the rebuild: 6.04–6.43:1.
 
 ## Site-wide navigation — complete 10-11 Aug 2026
