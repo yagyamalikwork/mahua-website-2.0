@@ -5,6 +5,7 @@ import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
 import { DURATION, ENTER, IMAGE_FROM, LIVING, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
+import { INDEXING_ALLOWED } from "@/lib/indexing";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
 import { body, display, label } from "./fonts";
@@ -13,6 +14,21 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: HOME.meta.title,
   description: HOME.meta.description,
+  /*
+   * The other half of `app/robots.ts`, and both are needed.
+   *
+   * `robots.txt` asks a crawler not to *fetch* a page. This tells one that
+   * fetched it anyway not to *index* it — which is the case that actually
+   * happens, because a page reached by a link from somewhere else is crawled
+   * without anyone reading `robots.txt` first.
+   *
+   * Default is no. Going live means setting `NEXT_PUBLIC_ALLOW_INDEXING=true`
+   * in the one environment that is the real site; see `lib/indexing.ts` for why
+   * the flag opens rather than closes.
+   */
+  robots: INDEXING_ALLOWED
+    ? undefined
+    : { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
