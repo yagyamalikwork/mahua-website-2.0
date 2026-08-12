@@ -1,0 +1,45 @@
+
+=== SEARCH: Mahua Tola, 14-16 Nov 2026, 1 room, 2 adults ===
+
+Deluxe Room  (5 left, max 3 adults)
+    Room with Breakfast                     Rs 16,000 for 2 nights   (Rs 8,000/night)
+    Room with Breakfast & Lunch/Dinner      Rs 18,000 for 2 nights   (Rs 9,000/night)
+    Room With All Meals                     Rs 22,000 for 2 nights   (Rs 11,000/night)
+
+Suite Room  (2 left, max 4 adults)
+    Room with Breakfast                     Rs 18,000 for 2 nights   (Rs 9,000/night)
+    Room with Breakfast & Lunch/Dinner      Rs 20,000 for 2 nights   (Rs 10,000/night)
+    Room With All Meals                     Rs 24,000 for 2 nights   (Rs 12,000/night)
+
+Super Deluxe Cottages  (3 left, max 3 adults)
+    Room with Breakfast                     Rs 20,000 for 2 nights   (Rs 10,000/night)
+    Room with Breakfast & Lunch/Dinner      Rs 22,000 for 2 nights   (Rs 11,000/night)
+    Room With All Meals                     Rs 26,000 for 2 nights   (Rs 13,000/night)
+
+Family Suite Room  (1 left, max 5 adults)
+    Room with Breakfast                     Rs 22,000 for 2 nights   (Rs 11,000/night)
+    Room with Breakfast & Lunch/Dinner      Rs 24,000 for 2 nights   (Rs 12,000/night)
+    Room With All Meals                     Rs 28,000 for 2 nights   (Rs 14,000/night)
+
+=== QUOTE: Super Deluxe Cottages / Room with Breakfast & Lunch/Dinner ===
+    total        Rs 22,000
+    held until   (this provider holds nothing — the UI must not promise it does)
+    policy       MOCK POLICY — not Mahua's terms. Replace with the provider's own wording.
+
+=== BOOKED ===
+    reference    MOCK-3
+    property     mahua-tola
+    dates        2026-11-14 -> 2026-11-16
+    total        Rs 22,000
+    payment      unpaid   <- no money moved; the type says so
+
+=== THE FAILURES A GUEST CAN MEET ===
+    SOLD_OUT        "That room has just gone."
+    PRICE_CHANGED   "The price for those dates has changed."
+    QUOTE_EXPIRED   "That hold has expired. Please search again."
+    OCCUPANCY       "No room here takes a party that size."
+    PROVIDER_DOWN   "We could not reach the booking system."
+
+=== THE REAL PROVIDER, TODAY ===
+    guest sees   "Online booking is not available yet."
+    log records  "AsiaTechProvider: not implemented — awaiting AsiaTech API documentation (spec §8)"
