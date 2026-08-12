@@ -29,6 +29,34 @@ git checkout feat/chapters-rebuild
 `--ff-only` is deliberate. If it refuses, `demo` has commits of its own — which it should never have.
 Nothing is ever committed *to* `demo`; it is a pointer, not a place to work.
 
+## It is live
+
+**https://mahua-resorts.vercel.app** — deployed 12 August 2026, project `mahua-resorts` under
+`yagyamalikworks-projects`.
+
+Verified from the public internet, not from a local build: all three routes and `robots.txt` return 200
+with no login wall, `robots.txt` is `Disallow: /`, every route carries `noindex, nofollow, nocache`, and a
+real browser loading each page found **41 / 16 / 18 images with none broken, two videos, and no failed
+requests**. Screenshots in `docs/reviews/2026-08-12-vercel-demo/`.
+
+### It is NOT git-connected yet, and that is deliberate
+
+This was deployed straight from the CLI, so **pushing to `demo` does not currently redeploy anything.**
+Re-publish with:
+
+```bash
+npx vercel --prod --yes      # from a checkout of what you want live
+```
+
+**To switch to auto-deploy, do both halves in the same visit:**
+
+1. Vercel dashboard → **Settings → Git → Connect** `yagyamalikwork/mahua-website-2.0`
+2. Vercel dashboard → **Settings → Git → Production Branch → `demo`**
+
+**Doing the first without the second would break the demo.** Vercel defaults the production branch to the
+repository's default branch, which here is `main` — and `main` is far behind this work. Connecting Git
+alone would point https://mahua-resorts.vercel.app at a stale site.
+
 ## Vercel setup, once
 
 1. **New Project** → import `yagyamalikwork/mahua-website-2.0`.
