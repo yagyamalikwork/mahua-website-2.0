@@ -1,7 +1,46 @@
-# Project state — 11 August 2026
+# Project state — 12 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
+
+## The plates that squeezed — fixed 12 Aug 2026
+
+**Client-reported, and the first defect on this project a visitor would have seen on an ordinary laptop.**
+He opened the site on a smaller screen and found the photographs in `03 · The Forest`, `05 · The Rooms` and
+`07 · The Details` squeezing — the only three chapters that use `PlateGrid`, so his own observation named
+the component.
+
+Two faults, stacked:
+
+- **A media query that said `max-height: 800px` and meant "a phone held sideways".** `ui/Plate.tsx` used
+  `short:` to cap a plate at 24vh. It fires on a 1366×768 laptop, a 1024×768 tablet, and any browser zoomed
+  past ~110%, because zoom shrinks the CSS viewport. A one-pixel cliff: at 1440×801 the forest plates are
+  701×686; at 1440×800 they are 701×356.
+- **And the cap squashed rather than scaled**, because `w-full` and `short:w-auto` both applied and the
+  winner was Tailwind's emission order. Photographs rendered **up to 230% wider than their true shape**.
+  Instance 22 in `DECISIONS.md` §2 — the 128px lantern — is the same cascade defect on a different element.
+
+Fixed with a `pocket:` / `roomy:` variant pair keyed to the viewport's **shape**, not its height, and with
+every state naming its own width so no emission order can reproduce the squash. **Aspect rather than width
+is the trick**: a landscape phone is ~2.16:1, while a 150% zoom on a 1440×900 screen is 960×600 — 1.60:1,
+and only ~30px narrower than that phone, so a width threshold would have had to thread a gap too small to
+be safe. `short:` / `tall:` are deliberately untouched; they still compact type and padding in `Hero`,
+`FullBleedQuote` and `Invitation`, which is right on a short laptop.
+
+**Measured 0% distortion at all thirteen viewports swept**, including both landscape phones where the
+compact treatment correctly still applies. Evidence and the full table:
+`docs/reviews/2026-08-12-plate-squeeze/README.md`.
+
+**Two client rulings came out of it** (`DECISIONS.md` §1): at deep zoom the plates keep full size and the
+visitor scrolls more — *"zoomed in, but the photographs got smaller"* is the wrong direction; and
+`07 · The Details` may stay a 2-wide stack between 1024 and 1279px, which was offered as a fix and
+declined — **looked at and accepted, not unexamined.**
+
+**The lesson, and it is the expensive one:** no rig here could have caught this. Every instrument samples
+390, 768, 1440 and 1920, and **768 is a width in all of them, never a height** — so nothing in the suite
+resembled an ordinary laptop. Catalogue instances 44 and 45. A grid of fixed shapes is not coverage.
+**Still unactioned: adding short-but-normal-width shapes (1366×768, 1024×768) to the rig suite**, which
+would close the class rather than the instance.
 
 ## The booking contract — built 12 Aug 2026, blocked on one vendor answer
 
