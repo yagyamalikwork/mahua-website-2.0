@@ -50,3 +50,5 @@ reference/video/
 # Python bytecode from the reference-harvesting scripts
 __pycache__/
 *.pyc
+
+.env*
