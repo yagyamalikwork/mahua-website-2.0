@@ -3,6 +3,31 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## The demo is live — 12 Aug 2026
+
+**https://mahua-resorts.vercel.app**, Vercel project `mahua-resorts` under `yagyamalikworks-projects`.
+Full detail in [`DEPLOY.md`](DEPLOY.md); the parts a returning session most needs:
+
+- **It is not git-connected.** Deployed straight from the CLI, so **pushing changes nothing on the demo
+  URL**. Republish with `npx vercel --prod --yes` from a checkout of what should be live. This is the safe
+  arrangement before a presentation and was chosen deliberately.
+- **Connecting the repo in Vercel is a two-part action or it is a defect.** Vercel defaults the production
+  branch to the repository's default; connecting without also setting Production Branch to `demo` points
+  the demo URL at whatever `main` holds.
+- **`main`, `demo` and `feat/chapters-rebuild` are all at the same commit**, local and origin, as of
+  12 Aug. `main` was **221 commits behind** and was fast-forwarded on the client's ruling, so a fresh clone
+  now gets the real site rather than the pre-rebuild one. Nothing was lost — it was a clean fast-forward.
+- **Nothing deployed is indexable, by construction.** `lib/indexing.ts` defaults closed; only the exact
+  string `NEXT_PUBLIC_ALLOW_INDEXING=true` opens it. Both layers ship — `robots.txt` to stop a fetch, a
+  `robots` meta tag to stop an index of a page fetched anyway. Verified in both directions on a production
+  build, and verified again against the live URL.
+- Verified live, not locally: three routes and `robots.txt` at 200 with no login wall, and a real browser
+  found **41 / 16 / 18 images with none broken, two videos, no failed requests**. Screenshots in
+  `docs/reviews/2026-08-12-vercel-demo/`.
+
+**Client's working arrangement, 12 Aug:** he does the Vercel dashboard; this side handles git, deploys and
+verification. He asked for the demo to be republished on request rather than automatically.
+
 ## The plates that squeezed — fixed 12 Aug 2026
 
 **Client-reported, and the first defect on this project a visitor would have seen on an ordinary laptop.**
