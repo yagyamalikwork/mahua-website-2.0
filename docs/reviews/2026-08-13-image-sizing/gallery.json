@@ -1,0 +1,430 @@
+{
+  "measuredAt": "2026-08-13T22:44:39.625Z",
+  "url": "http://localhost:3100",
+  "method": "Real Chromium, production build. Assertions 1-5 drive the popover through the same paths a visitor uses (Playwright's own .click(), page.keyboard.press('Escape'), page.mouse.click(x,y)) and read `naturalWidth` / `:popover-open` off the live DOM — never `hidePopover()`/`showPopover()`. Assertion 6 asserts ABSENCE of breakage without JavaScript, not that panels open.",
+  "combos": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-vann-rooms-0",
+            "cardSrc": "http://localhost:3100/media/vann-room-deluxe-400.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-deluxe-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-1",
+            "cardSrc": "http://localhost:3100/media/vann-room-cottage-plain-400.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-cottage-plain-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-2",
+            "cardSrc": "http://localhost:3100/media/suite-tiger-painting-400.avif",
+            "panelSrc": "http://localhost:3100/media/suite-tiger-painting-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "panelOpened": true,
+        "minWidth": 156,
+        "naturalWidth": 358,
+        "width": 343.15625
+      },
+      "assertion3": {
+        "navButtonCount": 3,
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "open": [
+              "room-gallery-vann-rooms-0",
+              "room-gallery-vann-rooms-1"
+            ]
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "open": [
+            "room-gallery-vann-rooms-0",
+            "room-gallery-vann-rooms-2"
+          ]
+        }
+      },
+      "assertion4": {
+        "openBeforeEsc": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "afterEsc": []
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          416
+        ],
+        "confirmedOutside": true
+      }
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-vann-rooms-0",
+            "cardSrc": "http://localhost:3100/media/vann-room-deluxe-762.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-deluxe-762.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-1",
+            "cardSrc": "http://localhost:3100/media/vann-room-cottage-plain-1184.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-cottage-plain-1184.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-2",
+            "cardSrc": "http://localhost:3100/media/suite-tiger-painting-1440.avif",
+            "panelSrc": "",
+            "naturalWidth": 0,
+            "sharedWithCard": null,
+            "requestCount": 0
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "panelOpened": true,
+        "minWidth": 576,
+        "naturalWidth": 1152,
+        "width": 1053
+      },
+      "assertion3": {
+        "navButtonCount": 3,
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "open": [
+              "room-gallery-vann-rooms-0",
+              "room-gallery-vann-rooms-1"
+            ]
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "open": [
+            "room-gallery-vann-rooms-0",
+            "room-gallery-vann-rooms-2"
+          ]
+        }
+      },
+      "assertion4": {
+        "openBeforeEsc": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "afterEsc": []
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          861
+        ],
+        "confirmedOutside": true
+      }
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-tola-rooms-0",
+            "cardSrc": "http://localhost:3100/media/tola-room-deluxe-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-deluxe-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-1",
+            "cardSrc": "http://localhost:3100/media/tola-room-suite-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-suite-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-2",
+            "cardSrc": "http://localhost:3100/media/tola-room-super-deluxe-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-super-deluxe-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-3",
+            "cardSrc": "http://localhost:3100/media/tola-room-family-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-family-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "panelOpened": true,
+        "minWidth": 156,
+        "naturalWidth": 358,
+        "width": 343.15625
+      },
+      "assertion3": {
+        "navButtonCount": 3,
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "open": [
+              "room-gallery-tola-rooms-0",
+              "room-gallery-tola-rooms-1"
+            ]
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "open": [
+            "room-gallery-tola-rooms-0",
+            "room-gallery-tola-rooms-3"
+          ]
+        }
+      },
+      "assertion4": {
+        "openBeforeEsc": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "afterEsc": []
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          416
+        ],
+        "confirmedOutside": true
+      }
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-tola-rooms-0",
+            "cardSrc": "http://localhost:3100/media/tola-room-deluxe-762.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-deluxe-762.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-1",
+            "cardSrc": "http://localhost:3100/media/tola-room-suite-762.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-suite-762.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-2",
+            "cardSrc": "http://localhost:3100/media/tola-room-super-deluxe-1440.avif",
+            "panelSrc": "",
+            "naturalWidth": 0,
+            "sharedWithCard": null,
+            "requestCount": 0
+          },
+          {
+            "id": "room-gallery-tola-rooms-3",
+            "cardSrc": "http://localhost:3100/media/tola-room-family-1440.avif",
+            "panelSrc": "",
+            "naturalWidth": 0,
+            "sharedWithCard": null,
+            "requestCount": 0
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "panelOpened": true,
+        "minWidth": 576,
+        "naturalWidth": 1152,
+        "width": 1053
+      },
+      "assertion3": {
+        "navButtonCount": 3,
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "open": [
+              "room-gallery-tola-rooms-0",
+              "room-gallery-tola-rooms-1"
+            ]
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "open": [
+            "room-gallery-tola-rooms-0",
+            "room-gallery-tola-rooms-3"
+          ]
+        }
+      },
+      "assertion4": {
+        "openBeforeEsc": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "afterEsc": []
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          861
+        ],
+        "confirmedOutside": true
+      }
+    }
+  ],
+  "noJs": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "stackHeight": 2160,
+      "triggerCount": 3,
+      "scrolled": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "stackHeight": 2280,
+      "triggerCount": 3,
+      "scrolled": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "stackHeight": 2824,
+      "triggerCount": 4,
+      "scrolled": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "stackHeight": 3040,
+      "triggerCount": 4,
+      "scrolled": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  ],
+  "watchedFailing": {},
+  "knownDefects": [
+    {
+      "id": "nested-popover-arrows",
+      "found": "2026-08-14",
+      "summary": "The gallery's \"next\"/\"previous\" arrows nest rather than replace: clicking \"next\" opens the neighbouring panel WITHOUT closing the current one, because both buttons live inside the panel they navigate away from, and the HTML Popover API's own \"topmost popover ancestor\" rule treats a popover invoked from inside another open popover as nested rather than a replacement.",
+      "confirmedBy": "An isolated two-popover HTML fixture outside this codebase, run in the same Chromium: an invoker INSIDE its sibling popover nests (both stay open); the identical markup with the invoker moved OUTSIDE both popovers replaces cleanly. Also reproduces on the real page with a full-page screenshot showing the covered panel's own text peeking out from behind the top one's edges.",
+      "consequences": "Assertions 3, 4 and 5 fail on the current, unmodified, already-shipped build for this reason: panel 0 never closes when \"next\" is clicked (assertion 3); Escape and a light-dismiss click each only close the TOPMOST nested panel, so stepping through more than one room needs one Escape/outside-click per accumulated panel to fully leave the gallery, not one (assertions 4, 5).",
+      "wronglyClaimedBy": [
+        "docs/superpowers/specs/2026-08-13-image-sizing-design.md §3 (\"popover `auto` guarantees at most one open panel — opening the neighbour closes the current one, which *is* the navigation\")",
+        "components/sections/RoomCardStack.tsx's own code comment (\"Because every panel is popover=\\\"auto\\\", the UA guarantees at most one such popover open — so invoking the neighbour's popover closes the current one as a side effect\")"
+      ],
+      "notFixedHere": "components/sections/RoomCardStack.tsx is outside this task's file list, and the working fix (move the invoking buttons outside the popover's own DOM) needs a real layout change — the panel is width:fit-content, sized by the photograph, and an external control row needs its own mechanism (CSS anchor positioning, or a different visual treatment) to match that width without JavaScript. Left failing rather than weakened — see task-7-report.md."
+    },
+    {
+      "id": "gallery-panel-not-centred",
+      "found": "2026-08-14",
+      "summary": "The gallery panel does not centre itself. getBoundingClientRect() reads {left:0, top:0} at every shape tried — the HTML Popover API's own UA stylesheet centres a popover via `margin: auto`, but Tailwind's preflight (`* { margin: 0 }`) is an author-origin rule and wins over a UA-origin one regardless of selector specificity, zeroing that margin out. The panel renders pinned to the viewport's top-left corner, sized to its own content (the photograph), rather than centred.",
+      "confirmedBy": "Direct getComputedStyle(panel).margin === \"0px\" at both 390x844 and 1440x900, with the panel's own rect confirming {left:0, top:0} in both cases (1440x900: 1103x841 from the corner; 390x844: 358.8x395.8 from the corner).",
+      "consequences": "Purely cosmetic at narrow viewports where the panel is small relative to the screen (390: the gap below/right of the panel is large enough that the brief's own fixed light-dismiss point still landed outside it by chance), but at 1440x900 the panel covers over half the screen from the corner rather than presenting as a centred lightbox — which is also why the brief's fixed (8, 450) light-dismiss point landed INSIDE the panel there, not outside it as assumed. Assertion 5 in this rig now measures the panel's own live geometry and picks a point proven outside it (see its own comment) so it tests the dismiss mechanism rather than this defect.",
+      "wronglyClaimedBy": [
+        "This task's own brief, assertion 5's own reasoning: \"the panel's max-width: min(92vw, 96rem) with margin: auto centring (the UA's own popover default) always leaves at least 4vw clear on each side\" — the margin:auto half of that premise does not hold on this build."
+      ],
+      "notFixedHere": "app/globals.css's `.room-gallery` rule and Tailwind's own preflight are both outside this task's file list. The likely fix is a one-line `margin: auto;` added to `.room-gallery` (author-origin, so it would win back the centring Tailwind's reset removed) but that is a visual change on already-shipped, already-reviewed markup and needs its own verification pass, not a same-task patch — see task-7-report.md."
+    }
+  ],
+  "failures": [
+    "vann@390x844: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
+    "vann@390x844: assertion 3: more than one panel open at once — [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1] — popover=\"auto\" should guarantee at most one",
+    "vann@390x844: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
+    "vann@390x844: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked",
+    "vann@1440x900: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
+    "vann@1440x900: assertion 3: more than one panel open at once — [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1] — popover=\"auto\" should guarantee at most one",
+    "vann@1440x900: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
+    "vann@1440x900: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked",
+    "tola@390x844: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
+    "tola@390x844: assertion 3: more than one panel open at once — [room-gallery-tola-rooms-0, room-gallery-tola-rooms-1] — popover=\"auto\" should guarantee at most one",
+    "tola@390x844: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
+    "tola@390x844: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked",
+    "tola@1440x900: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
+    "tola@1440x900: assertion 3: more than one panel open at once — [room-gallery-tola-rooms-0, room-gallery-tola-rooms-1] — popover=\"auto\" should guarantee at most one",
+    "tola@1440x900: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
+    "tola@1440x900: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked"
+  ],
+  "verdict": "fail"
+}

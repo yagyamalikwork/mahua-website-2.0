@@ -122,8 +122,14 @@ const VIEWPORTS = [
 // close enough to zero margin that it can cross the ceiling.
 // It falls back to the `width`/`height` attributes, which this site's
 // `<img>` always carries from the manifest, for a page that does not.
-const report = (cap) => `(() => {
+// \`selector\` narrows which \`<img>\`s this scan visits — the whole page by
+// default, or a single now-open gallery panel's own image (see the gallery
+// loop in \`main()\`, which needs this exact same measurement math run against
+// ONLY the panel it just opened, not a re-scan of the whole page mixed in
+// with it).
+const report = (cap, selector = "img") => `(() => {
   const CAP = ${cap};
+  const SELECTOR = ${JSON.stringify(selector)};
   const widthOf = (url) => {
     const m = /-(\\d+)\\.(?:avif|webp|jpg)$/.exec(new URL(url, location.href).pathname);
     return m ? Number(m[1]) : null;
@@ -145,7 +151,7 @@ const report = (cap) => `(() => {
   };
 
   const out = [];
-  for (const img of document.querySelectorAll("img")) {
+  for (const img of document.querySelectorAll(SELECTOR)) {
     if (!img.currentSrc) continue;
     const dpr = window.devicePixelRatio;
     const attrW = Number(img.getAttribute("width")) || 0;
@@ -234,7 +240,54 @@ async function main() {
       await page.waitForLoadState("networkidle").catch(() => {});
     }
 
-    const images = await page.evaluate(REPORT);
+    // **Open every room gallery panel before reporting — the exact same
+    // lesson, again (image-sizing Task 7, 14 Aug 2026, `docs/DECISIONS.md`
+    // §2 #39).** `RoomCardStack.tsx`'s enlarged photograph is deliberately
+    // NOT in the measured page until a panel is opened: it sits inside a
+    // native `[popover]`, `display: none` until shown, `loading="lazy"`, so
+    // scrolling the page — the only thing this rig otherwise does — can
+    // never reveal it, exactly like the menu's gated lodge tiles before this
+    // same fix. Opened with `showPopover()` in `page.evaluate` — deterministic,
+    // no scroll dance needed — because this rig only needs each image IN
+    // THE LAYOUT long enough to measure its real rendered box; the
+    // invoker-click path (does clicking the trigger actually open it, do
+    // the arrows navigate, does Esc close it) is `check_room_gallery.mjs`'s
+    // job, not this rig's.
+    //
+    // One panel at a time, not all at once: `popover="auto"` panels are
+    // mutually exclusive by the UA's own light-dismiss list (opening a
+    // second while a first is still shown can close or nest the first,
+    // `check_room_gallery.mjs`'s own finding), and — the more basic reason —
+    // a CLOSED panel's `<img>` has no rendered box (`clientWidth: 0`), so
+    // its row would be silently skipped (`drawnWidth` returns 0, `needed`
+    // resolves to 0, and the report's own `if (needed === 0) continue`
+    // drops it) unless it is measured WHILE open. That is why each
+    // measurement happens inside this loop, scoped to exactly the one panel
+    // that is open at that moment (`report`'s new `selector` parameter),
+    // rather than folded into the single whole-page scan below, which runs
+    // afterwards with every panel closed again and would count none of them.
+    const galleryPanelIds = await page.evaluate(() =>
+      [...document.querySelectorAll(".room-gallery")].map((el) => el.id),
+    );
+    const galleryImages = [];
+    for (const panelId of galleryPanelIds) {
+      await page.evaluate((id) => document.getElementById(id)?.showPopover(), panelId);
+      await page
+        .waitForFunction(
+          (id) => {
+            const img = document.querySelector(`#${id} img`);
+            return img ? img.complete && img.naturalWidth > 0 : false;
+          },
+          panelId,
+          { timeout: 5000 },
+        )
+        .catch(() => {});
+      const rows = await page.evaluate(report(CAP, `#${panelId} img`));
+      galleryImages.push(...rows);
+      await page.evaluate((id) => document.getElementById(id)?.hidePopover(), panelId);
+    }
+
+    const images = [...(await page.evaluate(REPORT)), ...galleryImages];
     // The only failure this rig owns: a photograph served smaller than the
     // capped density asks for, while a wider file for it existed. That is an
     // under-stated `sizes`.
