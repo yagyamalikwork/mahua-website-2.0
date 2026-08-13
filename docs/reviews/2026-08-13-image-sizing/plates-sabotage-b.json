@@ -1,0 +1,131 @@
+{
+  "measuredAt": "2026-08-13T17:17:16.076Z",
+  "url": "http://localhost:3100",
+  "method": "Swept every route's [data-plate-grid] boards continuously — 900-1920px wide in 16px steps at heights 900 and 768, plus the 13 named shapes from the plate-squeeze evidence table — in a real browser, reducedMotion, against a production build. Column count and pocket:/roomy: mode are both computed live from the sampled numbers, never read off CSS. The 1440x900 reference (each plate's own width and column count) is captured at the start of each route's run, not hard-coded.",
+  "shapesSwept": 141,
+  "routes": [
+    {
+      "route": "/",
+      "boardsFound": [
+        "forest",
+        "rooms",
+        "details"
+      ],
+      "samples": 141,
+      "pocketSamples": 26,
+      "roomyFloorSamples": 294,
+      "worstDistortionPct": 0.285,
+      "worstDistortion": {
+        "board": "rooms",
+        "plate": 1,
+        "width": 844,
+        "height": 390,
+        "pctOff": 0.285230518478663
+      },
+      "boards": {
+        "forest": {
+          "referenceColumns": 3,
+          "referenceWidths": [
+            421.328125,
+            421.328125,
+            421.34375
+          ],
+          "worstDistortionPct": 0.207,
+          "worstDistortionSample": {
+            "width": 964,
+            "height": 900
+          },
+          "worstFloorRatio": 0.8734,
+          "worstFloorSample": {
+            "width": 1280,
+            "height": 720,
+            "renderedWidth": 368,
+            "refWidth": 421.34375
+          },
+          "floorUsedAtWorst": 0.85,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        },
+        "rooms": {
+          "referenceColumns": 2,
+          "referenceWidths": [
+            652,
+            652,
+            652,
+            652
+          ],
+          "worstDistortionPct": 0.285,
+          "worstDistortionSample": {
+            "width": 844,
+            "height": 390
+          },
+          "worstFloorRatio": 0.681,
+          "worstFloorSample": {
+            "width": 1024,
+            "height": 768,
+            "renderedWidth": 444,
+            "refWidth": 652
+          },
+          "floorUsedAtWorst": 0.65,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        },
+        "details": {
+          "referenceColumns": 4,
+          "referenceWidths": [
+            318,
+            318,
+            318,
+            318
+          ],
+          "worstDistortionPct": 0.082,
+          "worstDistortionSample": {
+            "width": 932,
+            "height": 430
+          },
+          "worstFloorRatio": 0.8742,
+          "worstFloorSample": {
+            "width": 1280,
+            "height": 720,
+            "renderedWidth": 278,
+            "refWidth": 318
+          },
+          "floorUsedAtWorst": 0.85,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        }
+      }
+    },
+    {
+      "route": "/mahua-vann",
+      "boardsFound": [],
+      "samples": 141,
+      "pocketSamples": 26,
+      "roomyFloorSamples": 0,
+      "worstDistortionPct": 0,
+      "worstDistortion": null,
+      "boards": {}
+    },
+    {
+      "route": "/mahua-tola",
+      "boardsFound": [],
+      "samples": 141,
+      "pocketSamples": 26,
+      "roomyFloorSamples": 0,
+      "worstDistortionPct": 0,
+      "worstDistortion": null,
+      "boards": {}
+    }
+  ],
+  "failures": [
+    "/: assertion 1: board=\"details\" plate=2 at 964x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"details\" plate=3 at 1012x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"details\" plate=1 at 1204x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"details\" plate=2 at 1204x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"rooms\" plate=0 at 1540x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"rooms\" plate=1 at 1540x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"rooms\" plate=2 at 1540x900 — naturalWidth/Height is 0 — image never finished loading",
+    "/: assertion 1: board=\"rooms\" plate=3 at 1540x900 — naturalWidth/Height is 0 — image never finished loading"
+  ],
+  "verdict": "fail"
+}

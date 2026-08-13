@@ -1,0 +1,216 @@
+{
+  "measuredAt": "2026-08-13T17:14:32.035Z",
+  "url": "http://localhost:3100",
+  "method": "Swept every route's [data-plate-grid] boards continuously — 900-1920px wide in 16px steps at heights 900 and 768, plus the 13 named shapes from the plate-squeeze evidence table — in a real browser, reducedMotion, against a production build. Column count and pocket:/roomy: mode are both computed live from the sampled numbers, never read off CSS. The 1440x900 reference (each plate's own width and column count) is captured at the start of each route's run, not hard-coded.",
+  "shapesSwept": 141,
+  "routes": [
+    {
+      "route": "/",
+      "boardsFound": [
+        "forest",
+        "rooms",
+        "details"
+      ],
+      "samples": 141,
+      "pocketSamples": 26,
+      "roomyFloorSamples": 294,
+      "worstDistortionPct": 0.285,
+      "worstDistortion": {
+        "board": "rooms",
+        "plate": 1,
+        "width": 844,
+        "height": 390,
+        "pctOff": 0.285230518478663
+      },
+      "boards": {
+        "forest": {
+          "referenceColumns": 3,
+          "referenceWidths": [
+            421.328125,
+            421.328125,
+            421.34375
+          ],
+          "worstDistortionPct": 0.207,
+          "worstDistortionSample": {
+            "width": 964,
+            "height": 900
+          },
+          "worstFloorRatio": 0.6708,
+          "worstFloorSample": {
+            "width": 1024,
+            "height": 768,
+            "renderedWidth": 282.65625,
+            "refWidth": 421.34375
+          },
+          "floorUsedAtWorst": 0.85,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        },
+        "rooms": {
+          "referenceColumns": 2,
+          "referenceWidths": [
+            652,
+            652,
+            652,
+            652
+          ],
+          "worstDistortionPct": 0.285,
+          "worstDistortionSample": {
+            "width": 844,
+            "height": 390
+          },
+          "worstFloorRatio": 0.681,
+          "worstFloorSample": {
+            "width": 1024,
+            "height": 768,
+            "renderedWidth": 444,
+            "refWidth": 652
+          },
+          "floorUsedAtWorst": 0.65,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        },
+        "details": {
+          "referenceColumns": 4,
+          "referenceWidths": [
+            318,
+            318,
+            318,
+            318
+          ],
+          "worstDistortionPct": 0.082,
+          "worstDistortionSample": {
+            "width": 932,
+            "height": 430
+          },
+          "worstFloorRatio": 0.8742,
+          "worstFloorSample": {
+            "width": 1280,
+            "height": 720,
+            "renderedWidth": 278,
+            "refWidth": 318
+          },
+          "floorUsedAtWorst": 0.85,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        }
+      }
+    },
+    {
+      "route": "/mahua-vann",
+      "boardsFound": [],
+      "samples": 141,
+      "pocketSamples": 26,
+      "roomyFloorSamples": 0,
+      "worstDistortionPct": 0,
+      "worstDistortion": null,
+      "boards": {}
+    },
+    {
+      "route": "/mahua-tola",
+      "boardsFound": [],
+      "samples": 141,
+      "pocketSamples": 26,
+      "roomyFloorSamples": 0,
+      "worstDistortionPct": 0,
+      "worstDistortion": null,
+      "boards": {}
+    }
+  ],
+  "failures": [
+    "/: assertion 2: board=\"forest\" plate=0 at 1028x900 — floor ratio 0.674 < 0.85 (rendered 284.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1028x900 — floor ratio 0.674 < 0.85 (rendered 284.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1028x900 — floor ratio 0.674 < 0.85 (rendered 284.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1044x900 — floor ratio 0.687 < 0.85 (rendered 289.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1044x900 — floor ratio 0.687 < 0.85 (rendered 289.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1044x900 — floor ratio 0.687 < 0.85 (rendered 289.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1060x900 — floor ratio 0.699 < 0.85 (rendered 294.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1060x900 — floor ratio 0.699 < 0.85 (rendered 294.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1060x900 — floor ratio 0.699 < 0.85 (rendered 294.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1076x900 — floor ratio 0.712 < 0.85 (rendered 300.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1076x900 — floor ratio 0.712 < 0.85 (rendered 300.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1076x900 — floor ratio 0.712 < 0.85 (rendered 300.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1092x900 — floor ratio 0.725 < 0.85 (rendered 305.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1092x900 — floor ratio 0.725 < 0.85 (rendered 305.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1092x900 — floor ratio 0.725 < 0.85 (rendered 305.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1108x900 — floor ratio 0.737 < 0.85 (rendered 310.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1108x900 — floor ratio 0.737 < 0.85 (rendered 310.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1108x900 — floor ratio 0.737 < 0.85 (rendered 310.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1124x900 — floor ratio 0.750 < 0.85 (rendered 316.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1124x900 — floor ratio 0.750 < 0.85 (rendered 316.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1124x900 — floor ratio 0.750 < 0.85 (rendered 316.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1140x900 — floor ratio 0.763 < 0.85 (rendered 321.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1140x900 — floor ratio 0.763 < 0.85 (rendered 321.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1140x900 — floor ratio 0.763 < 0.85 (rendered 321.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1156x900 — floor ratio 0.775 < 0.85 (rendered 326.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1156x900 — floor ratio 0.775 < 0.85 (rendered 326.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1156x900 — floor ratio 0.775 < 0.85 (rendered 326.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1172x900 — floor ratio 0.788 < 0.85 (rendered 332.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1172x900 — floor ratio 0.788 < 0.85 (rendered 332.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1172x900 — floor ratio 0.788 < 0.85 (rendered 332.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1188x900 — floor ratio 0.801 < 0.85 (rendered 337.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1188x900 — floor ratio 0.801 < 0.85 (rendered 337.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1188x900 — floor ratio 0.801 < 0.85 (rendered 337.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1204x900 — floor ratio 0.813 < 0.85 (rendered 342.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1204x900 — floor ratio 0.813 < 0.85 (rendered 342.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1204x900 — floor ratio 0.813 < 0.85 (rendered 342.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1220x900 — floor ratio 0.826 < 0.85 (rendered 348.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1220x900 — floor ratio 0.826 < 0.85 (rendered 348.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1220x900 — floor ratio 0.826 < 0.85 (rendered 348.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1236x900 — floor ratio 0.839 < 0.85 (rendered 353.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1236x900 — floor ratio 0.839 < 0.85 (rendered 353.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1236x900 — floor ratio 0.839 < 0.85 (rendered 353.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1028x768 — floor ratio 0.674 < 0.85 (rendered 284.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1028x768 — floor ratio 0.674 < 0.85 (rendered 284.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1028x768 — floor ratio 0.674 < 0.85 (rendered 284.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1044x768 — floor ratio 0.687 < 0.85 (rendered 289.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1044x768 — floor ratio 0.687 < 0.85 (rendered 289.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1044x768 — floor ratio 0.687 < 0.85 (rendered 289.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1060x768 — floor ratio 0.699 < 0.85 (rendered 294.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1060x768 — floor ratio 0.699 < 0.85 (rendered 294.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1060x768 — floor ratio 0.699 < 0.85 (rendered 294.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1076x768 — floor ratio 0.712 < 0.85 (rendered 300.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1076x768 — floor ratio 0.712 < 0.85 (rendered 300.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1076x768 — floor ratio 0.712 < 0.85 (rendered 300.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1092x768 — floor ratio 0.725 < 0.85 (rendered 305.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1092x768 — floor ratio 0.725 < 0.85 (rendered 305.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1092x768 — floor ratio 0.725 < 0.85 (rendered 305.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1108x768 — floor ratio 0.737 < 0.85 (rendered 310.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1108x768 — floor ratio 0.737 < 0.85 (rendered 310.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1108x768 — floor ratio 0.737 < 0.85 (rendered 310.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1124x768 — floor ratio 0.750 < 0.85 (rendered 316.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1124x768 — floor ratio 0.750 < 0.85 (rendered 316.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1124x768 — floor ratio 0.750 < 0.85 (rendered 316.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1140x768 — floor ratio 0.763 < 0.85 (rendered 321.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1140x768 — floor ratio 0.763 < 0.85 (rendered 321.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1140x768 — floor ratio 0.763 < 0.85 (rendered 321.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1156x768 — floor ratio 0.775 < 0.85 (rendered 326.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1156x768 — floor ratio 0.775 < 0.85 (rendered 326.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1156x768 — floor ratio 0.775 < 0.85 (rendered 326.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1172x768 — floor ratio 0.788 < 0.85 (rendered 332.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1172x768 — floor ratio 0.788 < 0.85 (rendered 332.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1172x768 — floor ratio 0.788 < 0.85 (rendered 332.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1188x768 — floor ratio 0.801 < 0.85 (rendered 337.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1188x768 — floor ratio 0.801 < 0.85 (rendered 337.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1188x768 — floor ratio 0.801 < 0.85 (rendered 337.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1204x768 — floor ratio 0.813 < 0.85 (rendered 342.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1204x768 — floor ratio 0.813 < 0.85 (rendered 342.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1204x768 — floor ratio 0.813 < 0.85 (rendered 342.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1220x768 — floor ratio 0.826 < 0.85 (rendered 348.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1220x768 — floor ratio 0.826 < 0.85 (rendered 348.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1220x768 — floor ratio 0.826 < 0.85 (rendered 348.0px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1236x768 — floor ratio 0.839 < 0.85 (rendered 353.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1236x768 — floor ratio 0.839 < 0.85 (rendered 353.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1236x768 — floor ratio 0.839 < 0.85 (rendered 353.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1024x768 — floor ratio 0.671 < 0.85 (rendered 282.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1024x768 — floor ratio 0.671 < 0.85 (rendered 282.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1024x768 — floor ratio 0.671 < 0.85 (rendered 282.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1180x820 — floor ratio 0.794 < 0.85 (rendered 334.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1180x820 — floor ratio 0.794 < 0.85 (rendered 334.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1180x820 — floor ratio 0.794 < 0.85 (rendered 334.7px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=0 at 1152x720 — floor ratio 0.772 < 0.85 (rendered 325.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=1 at 1152x720 — floor ratio 0.772 < 0.85 (rendered 325.3px vs 1440 reference 421.3px, exempt=false)",
+    "/: assertion 2: board=\"forest\" plate=2 at 1152x720 — floor ratio 0.772 < 0.85 (rendered 325.3px vs 1440 reference 421.3px, exempt=false)"
+  ],
+  "verdict": "fail"
+}
