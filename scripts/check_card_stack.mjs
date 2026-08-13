@@ -16,7 +16,7 @@
 // against a computed custom property, not a behaviour a visitor's scrolling
 // itself produces.
 //
-// Eight assertions, on `/mahua-vann` (three rooms) and `/mahua-tola` (four
+// Nine assertions, on `/mahua-vann` (three rooms) and `/mahua-tola` (four
 // rooms), at 390x844, 768x1024, 1024x1366, 1280x1024, 1440x900 and 1920x1080
 // (the last two added in the fix wave that closed Finding 1 — see `SHAPES`'s
 // own comment):
@@ -77,6 +77,16 @@
 //      sitting outside its own ancestor's clip is still caught; (c) at
 //      opacity >= 0.98. A card that never manages all three at once fails,
 //      naming the room and the width.
+//   9. The photo's side alternates — even cards photo-left, odd photo-right —
+//      at `lg` and up (>=1024px). Measured off each card's RENDERED boxes
+//      (the photo wrapper's centre against the card's own centre), never off
+//      `data-card-layout` or the class list: `lg:flex-row-reverse` reorders
+//      the odd cards VISUALLY only, so the wrapper stays `card.firstElementChild`
+//      in the DOM on every card — a class or DOM-order check would pass even
+//      with the flex direction defeated by anything else in the cascade,
+//      which is exactly the failure mode this assertion exists to catch.
+//      Not run below 1024px, where the card is a column and there is no
+//      "side" for the photo to sit on.
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -94,7 +104,7 @@ const BASE = flag("url", `http://localhost:${PORT}`);
 const NO_RECEDE = has("no-recede");
 const OUT = flag(
   "out",
-  `docs/reviews/2026-08-11-card-stack/card-stack${NO_RECEDE ? "-no-recede" : ""}.json`,
+  `docs/reviews/2026-08-13-image-sizing/card-stack${NO_RECEDE ? "-no-recede" : ""}.json`,
 );
 
 /** Both properties' rooms chapters, and how many rooms each one really has. */
@@ -253,6 +263,36 @@ for (const route of ROUTES) {
       );
     }
     const count = geometry.count;
+
+    // --------------------------------------------------- assertion 9: alternation
+    // (spec 2026-08-13-image-sizing §2) At `lg` and up the photo stands BESIDE
+    // the words and the side alternates: even cards photo-left, odd photo-right
+    // — the client's own composition, verbatim ("room 1 image left / info
+    // right, room 2 image right / info left, and so on"). Measured off each
+    // card's rendered boxes, not off the class list: a class check would pass
+    // with the flex direction overridden by anything else in the cascade.
+    // Scroll-independent, like assertion 6: a uniform `scale()` never moves a
+    // box's centre relative to its own ancestor, so this is measured once,
+    // scoped to this route's own stack (`sel`, not a bare tag selector) the
+    // same way every other per-card assertion here is.
+    let sides = null;
+    if (width >= 1024) {
+      sides = await page.evaluate(
+        (selector) =>
+          [...document.querySelectorAll(selector)].map((card) => {
+            const photo = card.firstElementChild.getBoundingClientRect();
+            const box = card.getBoundingClientRect();
+            return photo.left + photo.width / 2 < box.left + box.width / 2 ? "left" : "right";
+          }),
+        sel,
+      );
+      sides.forEach((side, i) => {
+        const expected = i % 2 === 0 ? "left" : "right";
+        if (side !== expected) {
+          note(label, `assertion 9: card ${i}'s photo sits ${side} of centre, expected ${expected}`);
+        }
+      });
+    }
 
     // --------------------------------------------------- assertion 6: crops
     // Scroll-independent (a uniform CSS `scale()` on the card never changes
@@ -664,6 +704,7 @@ for (const route of ROUTES) {
       assertion5: recedeAt5,
       assertion7,
       assertion8: crops.map((c, i) => ({ name: c.name, legible: textLegible[i] })),
+      assertion9: sides ? sides.map((side, i) => ({ i, side, expected: i % 2 === 0 ? "left" : "right" })) : null,
       crops,
     });
 

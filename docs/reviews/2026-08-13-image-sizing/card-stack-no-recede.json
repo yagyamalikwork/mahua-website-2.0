@@ -1,0 +1,1202 @@
+{
+  "measuredAt": "2026-08-13T21:16:40.418Z",
+  "url": "http://localhost:3100",
+  "noRecede": true,
+  "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
+  "combos": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2637,
+        "height": 1935,
+        "count": 3
+      },
+      "samples": 24,
+      "restingScrollY": 3797,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 63.390625
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 55.46875
+        },
+        {
+          "i": 1,
+          "strip": 41.46875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "assertion9": null,
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
+          "boxWidth": 342,
+          "boxHeight": 228
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
+          "boxWidth": 342,
+          "boxHeight": 227.640625
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
+          "boxWidth": 342,
+          "boxHeight": 228
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 768,
+      "height": 1024,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2867,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 4192,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 88.421875
+        },
+        {
+          "i": 1,
+          "strip": 74.421875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "assertion9": null,
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
+          "boxWidth": 672,
+          "boxHeight": 448
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 719,
+          "naturalHeight": 479,
+          "boxWidth": 672,
+          "boxHeight": 447.296875
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 719,
+          "naturalHeight": 479,
+          "boxWidth": 672,
+          "boxHeight": 448
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1024,
+      "height": 1366,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2998,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 3993,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 417.8125
+        },
+        {
+          "i": 1,
+          "strip": 403.8125
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 556.796875,
+          "boxHeight": 488.40625
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 807,
+          "naturalHeight": 538,
+          "boxWidth": 556.796875,
+          "boxHeight": 487.65625
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 807,
+          "naturalHeight": 539,
+          "boxWidth": 556.796875,
+          "boxHeight": 488.40625
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1280,
+      "height": 1024,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2711,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 4036,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 88
+        },
+        {
+          "i": 1,
+          "strip": 74
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 769.59375,
+          "boxHeight": 675.078125
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1093,
+          "naturalHeight": 728,
+          "boxWidth": 769.59375,
+          "boxHeight": 674.03125
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 1093,
+          "naturalHeight": 729,
+          "boxWidth": 769.59375,
+          "boxHeight": 675.078125
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2525,
+        "height": 2007,
+        "count": 3
+      },
+      "samples": 25,
+      "restingScrollY": 3715,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 41.25
+        },
+        {
+          "i": 1,
+          "strip": 27.25
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 873.59375,
+          "boxHeight": 668
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1229,
+          "naturalHeight": 819,
+          "boxWidth": 873.59375,
+          "boxHeight": 668
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 1229,
+          "naturalHeight": 820,
+          "boxWidth": 873.59375,
+          "boxHeight": 668
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1920,
+      "height": 1080,
+      "roomCount": 3,
+      "geometry": {
+        "top": 2724,
+        "height": 2280,
+        "count": 3
+      },
+      "samples": 27,
+      "restingScrollY": 4004,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 133.3125
+        },
+        {
+          "i": 1,
+          "strip": 119.3125
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Cottage without Deck",
+          "legible": true
+        },
+        {
+          "name": "Cottage with Deck",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        },
+        {
+          "name": "Cottage without Deck",
+          "ok": true,
+          "naturalWidth": 1285,
+          "naturalHeight": 856,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        },
+        {
+          "name": "Cottage with Deck",
+          "ok": true,
+          "naturalWidth": 1285,
+          "naturalHeight": 857,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3522,
+        "height": 2524,
+        "count": 4
+      },
+      "samples": 29,
+      "restingScrollY": 5267,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 63.390625
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 72.546875
+        },
+        {
+          "i": 1,
+          "strip": 58.546875
+        },
+        {
+          "i": 2,
+          "strip": 44.546875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        }
+      ],
+      "assertion9": null,
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
+          "boxWidth": 342,
+          "boxHeight": 228
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
+          "boxWidth": 342,
+          "boxHeight": 228
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
+          "boxWidth": 342,
+          "boxHeight": 228
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 342,
+          "naturalHeight": 513,
+          "boxWidth": 342,
+          "boxHeight": 273.59375
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 768,
+      "height": 1024,
+      "roomCount": 4,
+      "geometry": {
+        "top": 4002,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 6092,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 82.984375
+        },
+        {
+          "i": 1,
+          "strip": 68.984375
+        },
+        {
+          "i": 2,
+          "strip": 54.984375
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        }
+      ],
+      "assertion9": null,
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
+          "boxWidth": 672,
+          "boxHeight": 448
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
+          "boxWidth": 672,
+          "boxHeight": 448
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "ok": true,
+          "naturalWidth": 719,
+          "naturalHeight": 479,
+          "boxWidth": 672,
+          "boxHeight": 448
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 719,
+          "naturalHeight": 1079,
+          "boxWidth": 672,
+          "boxHeight": 537.59375
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1024,
+      "height": 1366,
+      "roomCount": 4,
+      "geometry": {
+        "top": 4409,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 6154,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 428.484375
+        },
+        {
+          "i": 1,
+          "strip": 414.484375
+        },
+        {
+          "i": 2,
+          "strip": 400.484375
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 3,
+          "side": "right",
+          "expected": "right"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 556.796875,
+          "boxHeight": 488.40625
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 556.796875,
+          "boxHeight": 488.40625
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "ok": true,
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 556.796875,
+          "boxHeight": 488.40625
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 808,
+          "naturalHeight": 1212,
+          "boxWidth": 556.796875,
+          "boxHeight": 759
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1280,
+      "height": 1024,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3781,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 5871,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 82.671875
+        },
+        {
+          "i": 1,
+          "strip": 68.671875
+        },
+        {
+          "i": 2,
+          "strip": 54.671875
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 3,
+          "side": "right",
+          "expected": "right"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 769.59375,
+          "boxHeight": 675.078125
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 769.59375,
+          "boxHeight": 675.078125
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "ok": true,
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 769.59375,
+          "boxHeight": 675.078125
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 1094,
+          "naturalHeight": 1642,
+          "boxWidth": 769.59375,
+          "boxHeight": 759
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3554,
+        "height": 2620,
+        "count": 4
+      },
+      "samples": 30,
+      "restingScrollY": 5344,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 67.625
+        },
+        {
+          "i": 1,
+          "strip": 53.625
+        },
+        {
+          "i": 2,
+          "strip": 39.625
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 3,
+          "side": "right",
+          "expected": "right"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 873.59375,
+          "boxHeight": 654
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 873.59375,
+          "boxHeight": 654
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "ok": true,
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 873.59375,
+          "boxHeight": 654
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 1231,
+          "naturalHeight": 1847,
+          "boxWidth": 873.59375,
+          "boxHeight": 654
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1920,
+      "height": 1080,
+      "roomCount": 4,
+      "geometry": {
+        "top": 3997,
+        "height": 3040,
+        "count": 4
+      },
+      "samples": 34,
+      "restingScrollY": 6027,
+      "assertion3": {
+        "reservePx": 72,
+        "maxBar": 69
+      },
+      "assertion4Strips": [
+        {
+          "i": 0,
+          "strip": 142.53125
+        },
+        {
+          "i": 1,
+          "strip": 128.53125
+        },
+        {
+          "i": 2,
+          "strip": 114.53125
+        }
+      ],
+      "assertion5": {
+        "widthDiffPct": 0,
+        "opacity": 1,
+        "recededAtResting": false,
+        "earlyOpacity": 1,
+        "earlyScaleX": 1,
+        "undimmedAtStart": true,
+        "receded": false
+      },
+      "assertion7": null,
+      "assertion8": [
+        {
+          "name": "Deluxe",
+          "legible": true
+        },
+        {
+          "name": "Suite",
+          "legible": true
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "legible": true
+        },
+        {
+          "name": "Family Suite",
+          "legible": true
+        }
+      ],
+      "assertion9": [
+        {
+          "i": 0,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 1,
+          "side": "right",
+          "expected": "right"
+        },
+        {
+          "i": 2,
+          "side": "left",
+          "expected": "left"
+        },
+        {
+          "i": 3,
+          "side": "right",
+          "expected": "right"
+        }
+      ],
+      "crops": [
+        {
+          "name": "Deluxe",
+          "ok": true,
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        },
+        {
+          "name": "Suite",
+          "ok": true,
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        },
+        {
+          "name": "Super Deluxe Cottage",
+          "ok": true,
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        },
+        {
+          "name": "Family Suite",
+          "ok": true,
+          "naturalWidth": 1287,
+          "naturalHeight": 1930,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}
