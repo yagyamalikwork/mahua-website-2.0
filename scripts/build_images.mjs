@@ -723,19 +723,34 @@ const CURATION = [
     src: "reference/wp-media/property-pages/Mahua-Website-Images_TC.jpg",
     // 3:2 window per the 13 Aug 2026 ruling ("crop and zoom to fit their half");
     // offset chosen by eye — see docs/reviews/2026-08-13-image-sizing/crops/.
-    // left moved from the centred 373 to 650. This source is 1931px wide —
-    // the bed sits at its far left, the woven cane chair on its private
-    // sit-out at its far right, ~1740px apart, well over the 1184px window's
-    // reach: no offset holds both. The centred crop held neither well (a
-    // sliver of bed, the chair's arm cut at the frame edge). This room's own
-    // line never mentions the bed ("A private sit-out under cane, and the
-    // forest close enough to touch through the glass doors" —
-    // content/mahua-vann.ts) and the brief's own art-direction table names
-    // this photo's feature as "the cane sit-out under glass doors", so 650
-    // gives up the bed entirely for the glass double doors, both windows and
-    // the cane chair on the sit-out in full.
-    crop: { left: 650, top: 0, width: 1184, height: 789 },
-    alt: "A cottage at Mahua Vann — mud-plastered walls, a woven cane chair on the private sit-out, and the forest close through the glass doors.",
+    // This source is 1931px wide — the bed sits at its far left, the woven
+    // cane chair on its private sit-out at its far right, ~1740px apart,
+    // well over the 1184px window's reach. No offset holds both; every
+    // offset trades one for the other, and both trades were tried and
+    // shipped in turn.
+    //
+    // SUPERSEDED 13 Aug 2026: `left: 650` shipped first, on the reasoning
+    // that this room's own line never names the bed ("A private sit-out
+    // under cane, and the forest close enough to touch through the glass
+    // doors" — content/mahua-vann.ts) and the brief's own art-direction
+    // table names this photo's feature as "the cane sit-out under glass
+    // doors". That crop led with the AC unit and the back of the red
+    // armchair and showed no bed at all — a corner of a room, not a room,
+    // on a card whose one job is to sell the room.
+    //
+    // CURRENT as of 14 Aug 2026, art-direction correction: `left: 0`. Shows
+    // the bed with its red textile, the framed wall art, the lamp and the
+    // glass double doors onto the forest — the AC unit stays in frame at
+    // upper right, only the cane sit-out and its chair are given up. The
+    // bed wins because the card's job is to sell the room, not one amenity
+    // in it; the sit-out is a real fact about this room and still stated in
+    // its `facts` array in content/mahua-vann.ts, and the whole uncropped
+    // 1931×789 photograph remains on disk and reachable whole once a later
+    // task builds the room gallery.
+    crop: { left: 0, top: 0, width: 1184, height: 789 },
+    // Re-read against the left:0 frame, 14 Aug 2026: the sit-out and cane
+    // chair are no longer in view, so this no longer names them.
+    alt: "A cottage bedroom at Mahua Vann — a bed against mud-plastered walls, with the forest through the glass doors.",
     category: "lodgeLife",
     orientation: "landscape",
     // Was true when this source's uncropped 1931px width cleared the 1400px

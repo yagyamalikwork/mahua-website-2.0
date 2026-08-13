@@ -1132,13 +1132,13 @@ export const MANIFEST = [
   },
   {
     id: "vann-room-cottage-plain",
-    alt: "A cottage at Mahua Vann — mud-plastered walls, a woven cane chair on the private sit-out, and the forest close through the glass doors.",
+    alt: "A cottage bedroom at Mahua Vann — a bed against mud-plastered walls, with the forest through the glass doors.",
     width: 1184,
     height: 789,
     avif: "/media/vann-room-cottage-plain-1184.avif",
     webp: "/media/vann-room-cottage-plain-1184.webp",
     jpg: "/media/vann-room-cottage-plain-1184.jpg",
-    blur: "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAACwAwCdASoYABAAPu1iqk2ppaQiMAgBMB2JZACdIExC6/Po86vDAAD+d0gQFNxg4yElwcBtC6A1+L2P4pcSfSTinm+1uSXjdpXqyap1I5rvEeT+CJSuXGVxoJaBAt/BkrVCGp6Iov65V9gA",
+    blur: "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAACwBACdASoYABAAPu1iqk4ppaQiMAgBMB2JaACdMoLT9A4ibkHxs/u+QgvmfQeAAP7a0N6D28HXeWWxSxNCu4rjbOW9ozmpmbe/5w4VfBa7S/Njd9Iftbh6jVbgyIXoyO9u/bg4/oG0qDLiUdR1kYdgakdDdm26/QAAAA==",
     sources: [
       { width: 400, height: 267, avif: "/media/vann-room-cottage-plain-400.avif", webp: "/media/vann-room-cottage-plain-400.webp" },
       { width: 640, height: 426, avif: "/media/vann-room-cottage-plain-640.avif", webp: "/media/vann-room-cottage-plain-640.webp" },
