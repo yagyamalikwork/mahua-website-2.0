@@ -1287,6 +1287,28 @@ body {
 }
 
 /*
+ * The room gallery's panel — a native popover, so the open/close mechanics,
+ * Esc, light-dismiss and the one-at-a-time rule are all user-agent behaviour
+ * and cost no script. The panel is ink-on-paper (a popover carrying text never
+ * sits on a translucent wash — the §16 lesson); the backdrop is the page dimmed
+ * under a cream wash, decorative, carrying nothing.
+ *
+ * `::backdrop` inherits custom properties from the panel in current engines;
+ * where an older one does not, the backdrop simply stays transparent and the
+ * gallery is still a gallery — failure is absence.
+ */
+.room-gallery {
+  background: var(--paper);
+  border: 1px solid var(--accent);
+  padding: 1.5rem;
+  max-width: min(92vw, 96rem);
+}
+
+.room-gallery::backdrop {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+
+/*
  * The homepage's slow hover zoom — client request, 12 Aug 2026.
  *
  * The frame never moves. `ImageReveal` is already `position: relative` and

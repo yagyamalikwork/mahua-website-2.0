@@ -102,6 +102,16 @@ describe("RoomCard", () => {
     expect(container.querySelector("button")).toBeNull();
   });
 
+  it("renders the photo as the panel's trigger when given a galleryId", () => {
+    const { container } = render(
+      <RoomCard room={ROOM} index={0} onSurface={false} galleryId="room-gallery-test-0" />,
+    );
+    const button = container.querySelector(".room-card > :first-child > button");
+    expect(button?.getAttribute("popovertarget")).toBe("room-gallery-test-0");
+    expect(button?.getAttribute("type")).toBe("button");
+    expect(button?.querySelector("img")).not.toBeNull();
+  });
+
   it("renders the room's words", () => {
     render(<RoomCard room={ROOM} index={0} onSurface={false} />);
     expect(screen.getByRole("heading", { name: "Cottage without Deck" })).toBeInTheDocument();

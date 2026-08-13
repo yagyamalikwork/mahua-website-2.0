@@ -1,11 +1,26 @@
 import { Enter } from "@/components/motion/Enter";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
+import { Photo } from "@/components/ui/Photo";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { PropertyChapter } from "@/content/property-chapters";
+import { SITE } from "@/content/site";
 import { ENTER } from "@/lib/motion";
 import { RoomCard } from "./RoomCard";
 import type { RoomShowcaseCopy } from "./RoomShowcase.types";
+
+/** One id shape, composed in exactly one place. Task 7's rigs and the tests
+ * both re-derive it; a card's trigger and its panel can never disagree. */
+export function roomGalleryId(chapterId: string, index: number) {
+  return `room-gallery-${chapterId}-${index}`;
+}
+
+/** Exported for `lib/sizes.test.ts`. The enlarged photo is `object-contain`
+ * inside ~88vw x ~78svh, so its drawn width is min(88vw, 78svh x aspect) —
+ * ~80vw for the 3:2 rooms on a 1440x900 screen, less for the portrait; 80vw
+ * over-states the portrait's need, which is the safe direction (`ui/Photo.tsx`
+ * says which way to round). */
+export const GALLERY_SIZES = "(min-width: 768px) 80vw, calc(100vw - 32px)";
 
 /**
  * The rooms, as a stack of cards the visitor scrolls through.
@@ -91,9 +106,79 @@ export function RoomCardStack({
               index={i}
               onSurface={surface}
               isLast={i === copy.rooms.length - 1}
+              galleryId={roomGalleryId(chapter.id, i)}
             />
           ))}
         </ol>
+
+        {/* The gallery: one native-popover panel per room, in the top layer, so
+            no card's overflow/transform can clip it. `popover="auto"` gives
+            open/close, Esc, click-outside light-dismiss AND at-most-one-open —
+            which is what makes the arrows navigation: opening the neighbour
+            closes this panel. All user-agent behaviour; no script. The page can
+            still scroll behind an open panel (Lenis bypasses CSS locks, §2 #9)
+            — known, client-informed, accepted 13 Aug 2026. */}
+        {copy.rooms.map((room, i) => {
+          const n = copy.rooms.length;
+          return (
+            <div
+              key={`gallery-${room.name}`}
+              id={roomGalleryId(chapter.id, i)}
+              popover="auto"
+              role="dialog"
+              aria-label={`${room.name} — ${SITE.roomGallery.open}`}
+              className="room-gallery"
+            >
+              <figure>
+                <Photo
+                  id={room.mediaId}
+                  sizes={GALLERY_SIZES}
+                  pictureClassName="block"
+                  className="mx-auto h-auto max-h-[78svh] w-auto max-w-[88vw]"
+                />
+                <figcaption className="mt-4 flex items-baseline justify-between gap-6">
+                  <span className="font-[family-name:var(--font-display)] text-xl text-[color:var(--text)]">
+                    {room.name}
+                  </span>
+                  <span
+                    className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]"
+                    style={{ color: "var(--accent-text)" }}
+                  >
+                    {room.facts.join(" · ")}
+                  </span>
+                </figcaption>
+              </figure>
+              <div className="mt-4 flex justify-between gap-6 border-t pt-3" style={{ borderColor: "var(--accent)" }}>
+                {n > 1 && (
+                  <button
+                    type="button"
+                    popoverTarget={roomGalleryId(chapter.id, (i + n - 1) % n)}
+                    className="rule-in font-[family-name:var(--font-label)] text-xs uppercase tracking-[0.2em] text-[color:var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+                  >
+                    {SITE.roomGallery.previous}
+                  </button>
+                )}
+                {n > 1 && (
+                  <button
+                    type="button"
+                    popoverTarget={roomGalleryId(chapter.id, (i + 1) % n)}
+                    className="rule-in font-[family-name:var(--font-label)] text-xs uppercase tracking-[0.2em] text-[color:var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+                  >
+                    {SITE.roomGallery.next}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  popoverTarget={roomGalleryId(chapter.id, i)}
+                  popoverTargetAction="hide"
+                  className="rule-in font-[family-name:var(--font-label)] text-xs uppercase tracking-[0.2em] text-[color:var(--text)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+                >
+                  {SITE.roomGallery.close}
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </ChapterSurface>
   );

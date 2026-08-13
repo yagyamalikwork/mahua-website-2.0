@@ -14,6 +14,7 @@ import {
 } from "@/components/sections/ExperiencePair";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
+import { GALLERY_SIZES } from "@/components/sections/RoomCardStack";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
@@ -187,6 +188,10 @@ const LIVE_SLOTS: readonly Slot[] = [
   // rendered box is the card's own solved geometry now, and the widest photo
   // is the worst case `sizes` must cover under `cover`.
   { name: "RoomCard.beside", sizes: ROOM_CARD_SIZES, box: 1.51 as CoverBox },
+  // The room gallery's enlarged photograph (13 Aug 2026) — object-contain, so
+  // the box column is the widest room photo again; a genuinely new width list
+  // (nothing else on the page serves ~80vw).
+  { name: "RoomCardStack.gallery", sizes: GALLERY_SIZES, box: 1.51 as CoverBox },
   // The day's six experiences, two weights. `hero` repeats `PLATE_SIZES[1]`
   // and `quiet` repeats `PLATE_SIZES[2]` verbatim — same container, same
   // columns — so neither adds a distinct string; both still get their own
@@ -298,7 +303,13 @@ describe("the sizes the page actually serves", () => {
     // this suite by running it and reading the failure (`expected 23 to be
     // 24`) rather than computed by hand, per this task's own instruction not
     // to guess it.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(23);
+    // 23 → 24 since Task 6 of the image-sizing plan (13 Aug 2026), the room
+    // gallery's click-to-expand panel: `GALLERY_SIZES` (`(min-width: 768px)
+    // 80vw, calc(100vw - 32px)`) is a genuinely new width list — nothing else
+    // on the page serves ~80vw — read off this suite by running it and
+    // reading the failure (`expected 24 to be 23`), not computed by hand, per
+    // this task's own instruction not to guess it.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

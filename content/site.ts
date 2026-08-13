@@ -35,6 +35,15 @@ export const SITE = {
     { label: "Mahua Vann", href: "/mahua-vann", region: "Pench", cardMediaId: "vann-hero" },
     { label: "Mahua Tola", href: "/mahua-tola", region: "Tadoba", cardMediaId: "tola-hero" },
   ] as readonly SitePlace[],
+  /** The room gallery — the click-to-expand the client asked for on 13 Aug
+   * 2026 ("gallery-style"), with arrows. Labels only; the mechanism is the
+   * browser's own popover machinery and carries no script. */
+  roomGallery: {
+    open: "View larger",
+    previous: "Previous room",
+    next: "Next room",
+    close: "Close",
+  },
   footer: {
     placesLabel: "The places",
     officeLabel: "The office",

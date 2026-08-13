@@ -1,4 +1,5 @@
 import { Photo } from "@/components/ui/Photo";
+import { SITE } from "@/content/site";
 import { roomCardAspect } from "@/lib/room-card";
 import type { CoverBox } from "@/lib/sizes";
 import type { RoomEntryCopy } from "./RoomShowcase.types";
@@ -353,11 +354,24 @@ export function RoomCard({
             } as React.CSSProperties
           }
         >
-          {/* Task 6 wraps `photo` in the gallery's popover-trigger button when
-              `galleryId` is given (the copy for its aria-label arrives with
-              `SITE.roomGallery` in the same task). In THIS task, render the
-              photo bare — `galleryId` is never passed yet: */}
-          {photo}
+          {/* The photo IS the gallery's declarative trigger when a `galleryId`
+              is given: a plain `popovertarget` invoker, no listener. The
+              wrapper `<div>` stays `card.firstChild` either way — the button
+              sits inside it, not around it, so the CSS crop cap (keyed to
+              `> :first-child`) and the rig's `firstElementChild` read are
+              both untouched. */}
+          {galleryId ? (
+            <button
+              type="button"
+              popoverTarget={galleryId}
+              aria-label={`${SITE.roomGallery.open}: ${room.name}`}
+              className="block h-full w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+            >
+              {photo}
+            </button>
+          ) : (
+            photo
+          )}
         </div>
 
         {/*

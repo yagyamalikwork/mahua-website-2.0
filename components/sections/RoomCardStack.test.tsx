@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { RoomCardStack } from "./RoomCardStack";
+import { roomGalleryId, RoomCardStack } from "./RoomCardStack";
 import { VANN_COPY } from "@/content/mahua-vann";
 import { TOLA_COPY } from "@/content/mahua-tola";
 import type { PropertyChapter } from "@/content/property-chapters";
@@ -104,5 +104,40 @@ describe("RoomCardStack", () => {
     const flagged = cards.filter((c) => c.hasAttribute("data-room-card-last"));
     expect(flagged).toHaveLength(1);
     expect(flagged[0]).toBe(cards[cards.length - 1]);
+  });
+
+  it("renders one gallery panel per room, as a native popover dialog", () => {
+    const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
+    const panels = container.querySelectorAll(".room-gallery");
+    expect(panels.length).toBe(COPY.rooms.length);
+    panels.forEach((p, i) => {
+      expect(p.getAttribute("popover")).toBe("auto");
+      expect(p.getAttribute("role")).toBe("dialog");
+      expect(p.id).toBe(roomGalleryId(CHAPTER.id, i));
+      // Panels live OUTSIDE the <ol>: the stack's children stay slot,card,...
+      expect(p.closest("ol")).toBeNull();
+    });
+  });
+
+  it("wires every card's photo as its own panel's declarative trigger", () => {
+    const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
+    const triggers = container.querySelectorAll("ol.room-stack button[popovertarget]");
+    expect(triggers.length).toBe(COPY.rooms.length);
+    triggers.forEach((t, i) => {
+      expect(t.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, i));
+    });
+  });
+
+  it("steps through the rooms with arrows that wrap at both ends", () => {
+    const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
+    const n = COPY.rooms.length;
+    const panels = [...container.querySelectorAll(".room-gallery")];
+    panels.forEach((p, i) => {
+      const [prev, next, close] = [...p.querySelectorAll("button")];
+      expect(prev.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, (i + n - 1) % n));
+      expect(next.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, (i + 1) % n));
+      expect(close.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, i));
+      expect(close.getAttribute("popovertargetaction")).toBe("hide");
+    });
   });
 });
