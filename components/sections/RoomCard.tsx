@@ -96,15 +96,28 @@ export const ROOM_PHOTO_KEEP = 0.75;
  * measuring instrument.** Assertion 6 reads `img.naturalWidth`/
  * `naturalHeight` — and once a `w`-descriptor `srcset` has picked a
  * candidate, the HTML spec has the browser correct BOTH properties by that
- * candidate's own "used density" for this particular box
- * (`check_image_resolution.mjs`'s header comment names the same mechanism:
- * "naturalWidth comes back equal to the CSS layout width for every image").
- * The corrected pair is not any tier's real pixel dimensions — it is a
- * synthetic value, and each of the two numbers is independently rounded to
- * an integer before JS ever reads it. Dividing both by the same density
- * preserves their RATIO only up to that final, independent rounding; after
- * it, the measured ratio can drift from the served file's true aspect by a
- * residual no enumeration of `entry.sources` can see, because the number
+ * candidate's own "used density" for this particular box. The corrected pair
+ * is not any tier's real pixel dimensions — it is synthetic.
+ *
+ * **Citing `check_image_resolution.mjs` here, precisely (corrected 14 Aug
+ * 2026: an earlier draft of this comment quoted that file as agreeing with
+ * the next sentence — it does not).** Its header comment is right that
+ * `naturalWidth` ALONE is useless as an absolute — "comes back equal to the
+ * CSS layout width for every image" — which is why that rig reads the served
+ * file's width from its filename instead. It used to ALSO claim the RATIO
+ * `naturalWidth / naturalHeight` "is exact," reasoning that dividing both
+ * dimensions by one density preserves it. That reasoning stops at the
+ * division: `naturalWidth`/`naturalHeight` are each `unsigned long` (WebIDL),
+ * so each is rounded to an integer INDEPENDENTLY afterward, not kept as an
+ * exact pair — and the ratio two independently-rounded integers form can
+ * drift from the file's true aspect. One line proves it from this very
+ * measurement: `729 × 1.5 = 1093.5`, not an integer, so `729` and `1094`
+ * cannot both be `vann-room-deluxe`'s one real file (`762×508 = 1.5` exactly)
+ * divided by a single density and left otherwise alone.
+ * `check_image_resolution.mjs`'s own comment is corrected to match, same
+ * date — this project measured the claim wrong before repeating it here.
+ *
+ * It is a drift no enumeration of `entry.sources` can see, because the number
  * being measured was never one of those tiers' own dimensions to begin
  * with — this is why the fix above (worst-case tier) narrows but cannot
  * close the gap alone.

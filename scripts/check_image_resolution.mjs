@@ -100,9 +100,27 @@ const VIEWPORTS = [
 // derivative `<id>-<width>.<ext>` — and the widest candidate offered is read off
 // the `<source>`'s srcset, so a shortfall can be attributed to the right cause.
 //
-// The intrinsic *ratio* is a different matter and is trustworthy: the correction
-// divides both dimensions by the same density, so `naturalWidth / naturalHeight`
-// is exact. It falls back to the `width`/`height` attributes, which this site's
+// The intrinsic *ratio* is a different matter, and close enough for this rig's
+// purpose — but "is exact" (this comment's own claim until 14 Aug 2026) is
+// false, and this project has since measured the gap. The correction divides
+// both dimensions by the same density, but `naturalWidth`/`naturalHeight` are
+// each `unsigned long` (WebIDL), so each is rounded to an integer
+// INDEPENDENTLY after that division, not as a pair — and the ratio two
+// independently-rounded integers form can drift from the file's true aspect.
+// Measured, not assumed (`docs/reviews/2026-08-11-card-stack/card-stack.json`,
+// Vann@1280x1024/"Deluxe"): `naturalWidth`/`naturalHeight` read `1094`/`729`
+// for `vann-room-deluxe`, whose only file is `762x508` = exactly `1.5` — and
+// `729 × 1.5 = 1093.5`, not an integer, so both reported numbers cannot be
+// that one file's dimensions divided by a single common density and left
+// otherwise alone. The drift is small (`(1094/729 − 1.5) / 1.5 ≈ 4.6×10⁻⁴`,
+// about one part in 2,000) — small enough that `naturalWidth / naturalHeight`
+// stays the right tool for THIS rig's own purpose (a coarse under-served
+// check with tolerance to spare), which is why its behaviour is unchanged
+// here. It is not free everywhere: `components/sections/RoomCard.tsx`'s
+// `ROOM_PHOTO_MARGIN` exists specifically to absorb this exact drift, at the
+// one place on this page (`check_card_stack.mjs`'s 25% crop bound) solved
+// close enough to zero margin that it can cross the ceiling.
+// It falls back to the `width`/`height` attributes, which this site's
 // `<img>` always carries from the manifest, for a page that does not.
 const report = (cap) => `(() => {
   const CAP = ${cap};
