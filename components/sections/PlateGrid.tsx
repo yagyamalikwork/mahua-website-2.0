@@ -23,6 +23,12 @@ export type PlateGridCopy = {
  * single `sizes` string covering both would hand the small ones a file twice the
  * width they need. Measured off `ChapterSurface`'s container (`max-w-[1600px]`,
  * `px-6` / `md:px-12`) and this grid's `gap-x-8` / `lg:gap-x-10`, rounded up.
+ *
+ * **13 Aug 2026:** the 3-up tier begins at `xl` (1280px) now, not `lg` (1024px)
+ * (spec `2026-08-13-image-sizing-design.md` §1), so a plate may not render below
+ * 85% of its 1440-reference width unless the board is at its minimum column count.
+ * The `34vw` tier moves with it, and the 1024–1279 band is now honestly served by
+ * `50vw`.
  */
 export const PLATE_SIZES: Record<number, string> = {
   // A one-plate grid never splits into columns at any width (there is only
@@ -33,7 +39,7 @@ export const PLATE_SIZES: Record<number, string> = {
   // width below the 1600px cap and below `md`'s 768px, respectively.
   1: "(min-width: 1600px) 1504px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)",
   2: "(min-width: 1600px) 736px, (min-width: 640px) 50vw, calc(100vw - 48px)",
-  3: "(min-width: 1600px) 480px, (min-width: 1024px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
+  3: "(min-width: 1600px) 480px, (min-width: 1280px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
   // 4-up runs a tighter gutter than the other two (see `COLUMN_GAP`), so its
   // plates are wider than the 40px-gutter arithmetic would give: 360px inside
   // the 1504px container at 1600, not 352.
@@ -172,7 +178,7 @@ export function PlateGrid({
       : columns === 2
         ? "sm:grid-cols-2"
         : columns === 3
-          ? "sm:grid-cols-2 lg:grid-cols-3"
+          ? "sm:grid-cols-2 xl:grid-cols-3"
           : "sm:grid-cols-2 xl:grid-cols-4";
 
   // A chapter with five plates would fall through to the four-column rule,
@@ -212,6 +218,7 @@ export function PlateGrid({
         </div>
 
         <div
+          data-plate-grid={chapter.id}
           className={`mt-10 grid grid-cols-1 gap-y-12 md:mt-12 ${COLUMN_GAP[columns] ?? COLUMN_GAP[2]} ${columnClass}`}
         >
           {plates.map((plate, i) => (
