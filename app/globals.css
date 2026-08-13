@@ -1161,10 +1161,21 @@ body {
  * `ROOM_PHOTO_MARGIN`): solving against the canonical tier let a narrower,
  * independently-rounded tier the browser can actually serve push the real
  * crop to 25.08% (`vann-room-cottage-plain`, 1024×1366); solving with zero
- * margin left the bound exposed to the browser's own `calc()` rounding —
- * measured at 1280×1024, `25.0007%` against the 25% ceiling, a coin flip's
- * worth of `LayoutUnit` noise. Both are folded into the one value
- * `RoomCard.tsx` now solves and writes here.
+ * margin left the bound exposed to a SEPARATE gap — not, as an earlier draft
+ * of this comment and `ROOM_PHOTO_MARGIN`'s claimed, the browser's own
+ * `max-height` `calc()` rounding (reconstructed against the shipped geometry
+ * and it does not reproduce; Chromium floors there, which widens the box's
+ * aspect, not narrows it). The real gap is `check_card_stack.mjs`'s own
+ * measuring instrument: once a `w`-descriptor `srcset` has picked a
+ * candidate, the browser reports `img.naturalWidth`/`naturalHeight` as that
+ * candidate's dimensions corrected by its own "used density" for this box,
+ * and each of the two corrected numbers is independently rounded to an
+ * integer — so the RATIO the rig reads is not any tier's true aspect, by a
+ * measured `≈4.6×10⁻⁴` relative error no per-tier enumeration can see.
+ * `ROOM_PHOTO_MARGIN`'s own comment has the full reconstruction and the real
+ * safety factor (`~29×`, not the retired comment's overstated `~1,400×`).
+ * Both gaps are folded into the one value `RoomCard.tsx` now solves and
+ * writes here.
  *
  * When the row's stretch would have made the wrapper shorter than this cap
  * anyway (a wide card relative to its height — most of the four originally

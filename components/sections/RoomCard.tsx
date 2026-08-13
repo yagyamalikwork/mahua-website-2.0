@@ -71,35 +71,66 @@ export const ROOM_PHOTO_KEEP = 0.75;
 /**
  * Deliberate headroom on top of `ROOM_PHOTO_KEEP`, in the same units (a
  * fraction of the photograph's width). Solving `--room-photo-aspect` at
- * EXACTLY `ROOM_PHOTO_KEEP` and trusting the browser's own
- * `calc(60cqw / var(--room-photo-aspect))` to reproduce it losslessly does
- * not hold, even once `roomCardAspect` is solved against the worst emitted
- * tier (above) — a SEPARATE, smaller source of error survives that fix.
+ * EXACTLY `ROOM_PHOTO_KEEP` is not safe, even once `roomCardAspect` is solved
+ * against the worst emitted tier (above) — a SEPARATE, dominant source of
+ * error survives that fix, and it lives in the RIG, not in the CSS.
  *
- * **Measured, not assumed (image-sizing Task 4 review, Critical 1, 14 Aug
- * 2026).** Chromium lays out lengths as 1/64px `LayoutUnit`s, so a single
- * division inside that `calc()` can round the computed `max-height` UP by a
- * fraction of a `LayoutUnit` — which SHRINKS the box's own aspect ratio
- * (taller box, same width), never widens it. Worked case,
- * `tola-room-super-deluxe` at 1280x1024, where the served tier's aspect
- * happens to equal the solved one exactly (its 960-wide tier is 960x640 =
- * 1.5, so this is NOT a tier-mismatch case — `ROOM_PHOTO_MARGIN` is closing a
- * different gap than `roomCardAspect`'s worst-tier fix does): the exact
- * target height is `769.6 / 1.125 = 684.0888px`; the nearest value Chromium
- * can represent is `684.09375px`, about 0.005px away — a fraction of one
- * `LayoutUnit`. That alone drops the rendered box aspect to
- * `769.6 / 684.09375 = 1.1249899` and the width lost to `(1 − 1.1249899 /
- * 1.5) × 100 = 25.0007%` — over the rig's 25% ceiling by a coin flip's worth
- * of floating-point noise, not by any real crop.
+ * **Corrected 14 Aug 2026 (image-sizing Task 4 review, second fix round): the
+ * first version of this comment blamed Chromium's `LayoutUnit` (1/64px)
+ * rounding `max-height` UP, which would shrink the box's aspect — wrong
+ * mechanism, wrong sign, and ~64x too small. Reconstructed against the real,
+ * committed geometry and it does not reproduce.** `docs/reviews/
+ * 2026-08-11-card-stack/card-stack.json`'s Vann@1280x1024/"Deluxe" row is the
+ * clean case: box `723.4181518554688 x 634.57373046875` (the SHIPPED,
+ * margined box — read to confirm which card and shape this works from, not
+ * as the zero-margin figure itself). Chromium in fact FLOORS the
+ * `calc()`, not rounds up — a zero-margin target height of `723.4181.../
+ * 1.125 = 643.0384px` floors to `643.03125px`, giving box aspect `1.1250124`
+ * and, measured against the served file's TRUE aspect (`vann-room-deluxe`
+ * only emits three tiers, 400/640/762, and at this width the widest — 762x508
+ * = exactly 1.5 — is what serves it): `(1 −
+ * 1.1250124/1.5) × 100 = 24.9992%` — a PASS, by a hair. Quantisation is
+ * neutral-to-helpful here, not the failure mode.
  *
- * The relative error involved there is `0.005 / 684.0888 ≈ 7.2×10⁻⁶`. `0.01`
- * (one percentage point of the photograph's width) is roughly **1,400 times**
- * that — comfortably large enough to absorb that rounding, several more
- * `LayoutUnit` roundings stacked the same way, and any other single-`calc()`
- * quantisation of similar size, while costing at most 1% more of a
- * photograph's own width than the bound strictly requires — invisible at the
- * crop levels already in play (12–21% before this margin, on the current
- * library).
+ * **What actually breaks a zero-margin build is `check_card_stack.mjs`'s own
+ * measuring instrument.** Assertion 6 reads `img.naturalWidth`/
+ * `naturalHeight` — and once a `w`-descriptor `srcset` has picked a
+ * candidate, the HTML spec has the browser correct BOTH properties by that
+ * candidate's own "used density" for this particular box
+ * (`check_image_resolution.mjs`'s header comment names the same mechanism:
+ * "naturalWidth comes back equal to the CSS layout width for every image").
+ * The corrected pair is not any tier's real pixel dimensions — it is a
+ * synthetic value, and each of the two numbers is independently rounded to
+ * an integer before JS ever reads it. Dividing both by the same density
+ * preserves their RATIO only up to that final, independent rounding; after
+ * it, the measured ratio can drift from the served file's true aspect by a
+ * residual no enumeration of `entry.sources` can see, because the number
+ * being measured was never one of those tiers' own dimensions to begin
+ * with — this is why the fix above (worst-case tier) narrows but cannot
+ * close the gap alone.
+ *
+ * Measured, not assumed: the SAME Vann@1280x1024/"Deluxe" row's own
+ * `naturalWidth`/`naturalHeight` are `1094`/`729` — `1.5006859`, not the
+ * file's real `1.5`. Zero margin against the worst emitted tier (`1.5`,
+ * correctly solved) but the RIG's measured aspect (`1.5006859`): the SAME
+ * floored box aspect (`1.1250124`) now reads `(1 − 1.1250124/1.5006859) ×
+ * 100 = 25.0334%` — over the ceiling, on the geometry the rig actually
+ * reads, not on the geometry the CSS actually produces.
+ *
+ * The relative error is `(1.5006859 − 1.5) / 1.5 ≈ 4.573×10⁻⁴` — roughly
+ * **64 times** the `7.2×10⁻⁶` the retired comment computed from a mechanism
+ * that never reproduced. Absorbing it needs `margin ≥ ROOM_PHOTO_KEEP × ε ≈
+ * 0.75 × 4.573×10⁻⁴ ≈ 3.43×10⁻⁴` (the `× ROOM_PHOTO_KEEP` matters: at the
+ * worst tier, `widthKept = (KEEP + margin) / (1 + ε)`, and staying `≥ KEEP`
+ * needs `margin ≥ KEEP × ε`, not `margin ≥ ε` alone). `0.01` clears that by
+ * **~29×** — not the "~1,400×" the retired comment claimed, which combined
+ * both errors (the wrong ε and the missing `× KEEP`) into a number ~50x more
+ * generous than the real one. 29x is still ample against a single
+ * measurement's own rounding noise, and `0.01` costs at most 1% more of a
+ * photograph's own width than the bound strictly requires — invisible
+ * against the review's own live measurement (12–24% crop across the current
+ * library, worst case 24.03%, comfortably under the 25% ceiling at both
+ * binding shapes).
  */
 export const ROOM_PHOTO_MARGIN = 0.01;
 
@@ -171,10 +202,27 @@ export function RoomCard({
       // matching the CSS cap's own `(min-width: 1024px)` turn-on, tells
       // `coverSizes` to assume the WORST case (the cap's own ratio) for every
       // width the cap can apply to, rather than the box's true — and always
-      // wider — un-capped aspect; over-assuming crop can only over-serve a
-      // tier, never under-serve one (`lib/sizes.ts`'s own `grow()` rounds up
-      // only). Below `lg` this is unchanged: the wrapper's aspect IS
-      // `Math.max(aspect, ROOM_CARD_MIN_BOX)`, no assumption involved.
+      // wider — un-capped aspect. Corrected 14 Aug 2026 (image-sizing Task 4
+      // review, second fix round): this used to say over-assuming crop "can
+      // only over-serve a tier, never under-serve one" because `grow()`
+      // "rounds up only" — false. `lib/sizes.ts`'s `scale()` applies an
+      // ordinary `Math.round` to 3dp, which rounds down as readily as up
+      // (`lib/sizes.ts:176`); the growth factor here can land marginally
+      // under the true worst case. Also true and worth stating plainly: this
+      // `box` solves from `roomCardAspect`'s WORST-TIER aspect, but
+      // `Photo.tsx`'s `servedSizes` (which this feeds) computes its own
+      // `imageAspect` from `media(id).width/height` — the CANONICAL tier,
+      // `components/ui/Photo.tsx:15` — so the requested growth sits ~0.11%
+      // below the true worst-tier case for a photograph whose tiers disagree
+      // (`vann-room-cottage-plain`'s own worked case: worst tier 1.502347 vs
+      // canonical 1.500634). Neither gap is being ignored, only sized: both
+      // are two-orders-of-magnitude smaller than the review's own measured
+      // 1.108 headroom at the tighter binding shape, so the guarantee this
+      // comment makes is "asks for enough resolution with wide margin," not
+      // "asks for the mathematically maximal amount" — this comment used to
+      // promise the stronger claim the code does not deliver. Below `lg` this
+      // is unchanged: the wrapper's aspect IS `Math.max(aspect,
+      // ROOM_CARD_MIN_BOX)`, no assumption involved.
       box={
         [
           [1024, photoTarget * aspect],
