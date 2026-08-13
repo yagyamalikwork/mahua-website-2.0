@@ -46,7 +46,10 @@
 // `app/globals.css`.** A check that reads back the mechanism it was given
 // proves nothing (`docs/DECISIONS.md` §2, the project's single most-repeated
 // defect shape) — the formula below is a transcription of the CSS custom
-// variants in `app/globals.css`, not a reference to them.
+// variants in `app/globals.css`, not a reference to them. It is `pocket`, else
+// `roomy` — NOT-`pocket`, not a transcription of the CSS's own `roomy:` — see
+// `computeMode`'s own comment for the one narrow band where that distinction
+// matters and why it never fires here.
 //
 // Routes: `/`, `/mahua-vann`, `/mahua-tola` — every `[data-plate-grid]` on
 // each. Only the home page carries any today (`forest`, `rooms`, `details`);
@@ -88,6 +91,13 @@ function buildShapes() {
   };
   for (const h of [900, 768]) {
     for (let w = 900; w <= 1920; w += 16) push(w, h);
+    // 900 and 1920 differ by 1020, not a multiple of the 16px step, so the loop
+    // above lands on ...1892, 1908 and stops — 1920 itself is never swept at
+    // either height, and the named shapes below supply only 1920x1080, not
+    // 1920x900 or 1920x768. Pushed explicitly so the range is genuinely closed,
+    // matching this plan's own rationale for sweeping continuously rather than
+    // trusting a grid of points not to have gaps at its own edges.
+    push(1920, h);
   }
   const NAMED = [
     [1920, 1080],
@@ -109,7 +119,27 @@ function buildShapes() {
 }
 const SHAPES = buildShapes();
 
-/** `app/globals.css`'s `pocket:` / `roomy:` pair, transcribed, not read back. */
+/**
+ * `app/globals.css`'s `pocket:` / `roomy:` pair, transcribed, not read back.
+ *
+ * `pocket` is exactly `app/globals.css`'s own `(max-height: 800px) and
+ * (min-aspect-ratio: 2/1)`. `roomy` here is "else" — NOT-`pocket` — which is
+ * `height > 800 OR width/height < 2`. That is **not** a literal transcription
+ * of the CSS's own `roomy:` variant, which is `(min-height: 801px) OR
+ * (max-aspect-ratio: 1999/1000)` — i.e. `height > 800 OR aspect <= 1.999`. The
+ * two disagree on the half-open aspect band `[1.999, 2.0)` at `height <= 800`:
+ * a viewport there is NOT-`pocket` (aspect < 2 fails `pocket`'s own `>= 2`) but
+ * also fails the real `roomy:`'s `<= 1.999` bound, so `app/globals.css`
+ * matches NEITHER variant and this function calls it `roomy` anyway.
+ *
+ * Left as "else roomy" rather than a third `unknown` mode because the band is
+ * unreachable at any INTEGER viewport size: for a band width of
+ * `0.001 * height` to contain an integer, `height` would need to exceed 1000,
+ * and `pocket`'s own `height <= 800` caps it well below that — confirmed
+ * against every shape this rig actually sweeps, none of which lands there.
+ * If a future sweep ever adds a height above 1000, this stops being safe to
+ * assume and the band needs its own branch.
+ */
 function computeMode(width, height) {
   return height <= 800 && width / height >= 2 ? "pocket" : "roomy";
 }
@@ -182,19 +212,23 @@ async function waitForPlateImages(page, timeoutMs = 8000) {
 }
 
 /**
- * Distortion, per plate. `object-fit: cover` is the deliberate `plateFrame`
- * crop and always passes; otherwise the rendered box's aspect must equal the
- * photograph's own natural aspect within `DISTORTION_PCT`.
+ * Distortion, per plate. The rendered box must be real (non-zero) before
+ * anything else is asked of it — checked first, ahead of the `object-fit`
+ * branch below, so a collapsed `<picture>` box on a framed board (`details`
+ * today) cannot pass by virtue of never being inspected. `object-fit: cover`
+ * is then the deliberate `plateFrame` crop and passes outright; otherwise the
+ * rendered box's aspect must equal the photograph's own natural aspect within
+ * `DISTORTION_PCT`.
  */
 function checkDistortion(plate) {
   if (!plate) return { ok: false, reason: "no <img> in this plate cell" };
   if (!plate.naturalWidth || !plate.naturalHeight) {
     return { ok: false, reason: "naturalWidth/Height is 0 — image never finished loading" };
   }
-  if (plate.objectFit === "cover") return { ok: true, framed: true, pctOff: 0 };
   if (!plate.width || !plate.height) {
     return { ok: false, reason: "rendered width/height is 0" };
   }
+  if (plate.objectFit === "cover") return { ok: true, framed: true, pctOff: 0 };
   const naturalAspect = plate.naturalWidth / plate.naturalHeight;
   const renderedAspect = plate.width / plate.height;
   const pctOff = Math.abs(renderedAspect / naturalAspect - 1) * 100;
@@ -349,7 +383,19 @@ for (const routePath of ROUTES) {
           const refWidth = refBoard.widths[i];
           const exempt = refBoard.columns === 2 && boardSample.columns === 2;
           const floor = exempt ? FLOOR_MIN_COUNT : FLOOR_ROOMY;
-          if (refWidth) {
+          if (!refWidth) {
+            // A falsy reference width (no <img> in that cell at 1440x900, or a
+            // reference-pass rect.width of 0) used to mean this plate's floor
+            // was never checked at any of the 141 samples, with nothing in the
+            // output to say so — the same "?? 0" / "0 under-served" shape this
+            // project has shipped before. A skipped plate is now a failure, not
+            // a silent pass.
+            note(
+              label,
+              `assertion 2: ${plateLabel} — no usable 1440x900 reference width (refWidth=${refWidth}) — ` +
+                "floor cannot be checked at any sample",
+            );
+          } else {
             const ratio = plate.width / refWidth;
             if (stats.worstFloorRatio === null || ratio < stats.worstFloorRatio) {
               stats.worstFloorRatio = ratio;

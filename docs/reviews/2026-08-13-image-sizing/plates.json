@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-08-13T17:22:51.184Z",
+  "measuredAt": "2026-08-13T17:45:00.633Z",
   "url": "http://localhost:3100",
   "method": "Swept every route's [data-plate-grid] boards continuously — 900-1920px wide in 16px steps at heights 900 and 768, plus the 13 named shapes from the plate-squeeze evidence table — in a real browser, reducedMotion, against a production build. Column count and pocket:/roomy: mode are both computed live from the sampled numbers, never read off CSS. The 1440x900 reference (each plate's own width and column count) is captured at the start of each route's run, not hard-coded.",
-  "shapesSwept": 141,
+  "shapesSwept": 143,
   "routes": [
     {
       "route": "/",
@@ -11,9 +11,9 @@
         "rooms",
         "details"
       ],
-      "samples": 141,
-      "pocketSamples": 26,
-      "roomyFloorSamples": 294,
+      "samples": 143,
+      "pocketSamples": 27,
+      "roomyFloorSamples": 297,
       "worstDistortionPct": 0.285,
       "worstDistortion": {
         "board": "rooms",
@@ -99,8 +99,8 @@
     {
       "route": "/mahua-vann",
       "boardsFound": [],
-      "samples": 141,
-      "pocketSamples": 26,
+      "samples": 143,
+      "pocketSamples": 27,
       "roomyFloorSamples": 0,
       "worstDistortionPct": 0,
       "worstDistortion": null,
@@ -109,8 +109,8 @@
     {
       "route": "/mahua-tola",
       "boardsFound": [],
-      "samples": 141,
-      "pocketSamples": 26,
+      "samples": 143,
+      "pocketSamples": 27,
       "roomyFloorSamples": 0,
       "worstDistortionPct": 0,
       "worstDistortion": null,
