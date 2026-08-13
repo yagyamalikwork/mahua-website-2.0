@@ -1,26 +1,23 @@
 import { Photo } from "@/components/ui/Photo";
-import { roomCardLayout, type RoomCardLayout } from "@/lib/room-card";
+import { roomCardAspect } from "@/lib/room-card";
 import type { RoomEntryCopy } from "./RoomShowcase.types";
 
 /**
  * One room, as a card in the stack.
  *
- * Two compositions, chosen by `roomCardLayout` from the photograph's own aspect
- * rather than by a field in the content file:
+ * Every card is the same composition — the photograph stands beside the
+ * words from `lg` up, above them below it — alternating which side the
+ * photograph sits on (even cards left, odd cards right). Client ruling, 13
+ * Aug 2026: the earlier two-composition design (`stacked`/`beside`, chosen
+ * from the photograph's own aspect) is retired. See `docs/DECISIONS.md`
+ * §17/§18 for the history and the ruling that ended it.
  *
- * - **stacked** — the photograph lies across the top, words in a band beneath.
- *   Five of the seven rooms, all 2.29:1 or wider.
- * - **beside** — the photograph stands next to the words from `lg` up, above
- *   them below it. `suite-tiger-painting` (1.50:1) and `tola-room-family`
- *   (0.67:1, portrait).
- *
- * **The photo area's aspect ratio is enforced, not left to whatever the flex
- * layout leaves over** (fix round, 11 Aug 2026 — `docs/reviews/2026-08-11-card-stack/
- * task-6-fix-report.md`'s "defect B"). Before this, `ROOM_CARD_BOXES` only fed
- * `sizes` (which *file* to fetch); nothing constrained the rendered box, and up to
- * 66.6% of a photograph's width was being cropped away. See `ROOM_CARD_BOXES`'s own
- * comment for the exact numbers and why both values are the minimum that clears the
- * 25% bound, not "as wide as possible".
+ * **The photo area's aspect ratio is SOLVED per card, not hand-picked.**
+ * `ROOM_CARD_MIN_BOX` bounds the floor below `lg` (a portrait photograph's
+ * height crop) and `ROOM_PHOTO_KEEP` bounds the 25% width-crop rule
+ * (`check_card_stack.mjs` assertion 6) above it, both read off the
+ * photograph's own aspect (`roomCardAspect`) rather than a constant per
+ * layout — see each export's own comment.
  *
  * Renders TWO `<li>` elements per room — a `.room-slot` and, immediately after it,
  * the `.room-card` itself — both **direct children** of `<ol class="room-stack">`.
@@ -33,62 +30,38 @@ import type { RoomEntryCopy } from "./RoomShowcase.types";
  * reasons (see `app/globals.css`).
  */
 
-/** Exported for `lib/sizes.test.ts`, like every other section's. */
-export const ROOM_CARD_SIZES: Record<RoomCardLayout, string> = {
-  stacked: "(min-width: 1600px) 1504px, (min-width: 768px) calc(100vw - 144px), calc(100vw - 48px)",
-  beside: "(min-width: 1024px) 60vw, calc(100vw - 48px)",
-};
+/** Exported for `lib/sizes.test.ts`. One string now: every card is `beside`
+ * (client ruling, 13 Aug 2026). 60% of the card at lg, 65% at xl — named
+ * breakpoints in ascending order, never arbitrary `min-[...]` variants
+ * (`docs/DECISIONS.md` §2 #23); 978px is 65% of the 1504px container cap.
+ * The share appears in three places that must move together: here, the
+ * `lg:w-[60%] xl:w-[65%]` classes below, and the `60cqw`/`65cqw` blocks in
+ * `app/globals.css`. */
+export const ROOM_CARD_SIZES =
+  "(min-width: 1600px) 978px, (min-width: 1280px) 65vw, (min-width: 1024px) 60vw, calc(100vw - 48px)";
 
-/**
- * The photo area's ENFORCED MINIMUM aspect ratio per composition, applied to
- * the rendered box via CSS `aspect-ratio` (not just fed to `sizes` as before —
- * fix round, 11 Aug 2026, "defect B"). A box at least this wide (relative to
- * its height) loses no more than 25% of a photograph's width to crop — the
- * bound `docs/superpowers/specs/2026-08-11-room-card-stack-design.md` §3 sets.
- *
- * **Both values are the minimum that satisfies that 25% bound for the widest
- * photograph in the layout, not "wider than everything" the way the retired
- * 2.9/0.86 pair was** (2.9 covered every stacked photo with room to spare, but
- * spare room is exactly what created a large gap between the photo and the
- * words at narrow widths — see the note on `RoomCard`'s photo wrapper for why
- * a looser bound was the fix, not a tighter one).
- *
- * `stacked: 2.0` — widest stacked photograph is `vann-room-cottage-plain` at
- * 2.45:1 (1440×588). `1 − 2.0/2.45 = 18.3%` lost, inside the 25% bound with
- * margin; `vann-room-deluxe`/`tola-room-deluxe`/`tola-room-suite`/
- * `tola-room-camping` (all 2.29:1) lose 12.6%.
- *
- * `beside: 1.25` — widest `beside` photograph is `suite-tiger-painting` at
- * 1.50:1 (1440×961). `1 − 1.25/1.50 = 16.7%` lost. `tola-room-family` (0.67:1,
- * portrait) is already narrower than 1.25, so it crops height only regardless
- * — unaffected by this number.
- *
- * (0.86, the value this replaced on 11 Aug 2026, covered the portrait but not
- * `suite-tiger-painting` — up to 48.6% lost, one of `check_card_stack.mjs`'s
- * two original failures.)
- *
- * **"applied via CSS `aspect-ratio`" above is only the whole truth below `lg`.**
- * At `lg` and up, `beside`'s wrapper switches to `lg:w-[60%]` of a card whose
- * height is `lg:items-stretch`-ed to the card's own full (fixed) height —
- * both axes definite, so the browser uses the stretched height and
- * `aspect-ratio` is overridden outright, not just outweighed. That was never
- * enforced at four review widths and failed hard outside them — 51.1% lost
- * on an iPad Pro portrait (1024×1366), against the 25% bound this whole
- * export exists to satisfy. `app/globals.css`'s `max-height` rule on the
- * `beside` wrapper (scoped `@media (min-width: 1024px)`, reading this same
- * number back through `--room-photo-aspect`, set below) is what makes the
- * floor real at `lg` and up too — see that rule's comment for the mechanism.
- */
-export const ROOM_CARD_BOXES: Record<RoomCardLayout, number> = {
-  stacked: 2.0,
-  beside: 1.25,
-};
+/** Below `lg` the card is a column and the wrapper's `aspect-ratio` is its only
+ * definite axis: a landscape photograph shows whole (its own aspect), and the
+ * one portrait is held to this floor so the words keep their room on a phone —
+ * a height crop, unbounded by design (every documented crop constraint on this
+ * page is about width). */
+export const ROOM_CARD_MIN_BOX = 1.25;
+
+/** The 25% width-crop bound (`check_card_stack.mjs` assertion 6), as the
+ * fraction of a photograph's width that must survive. `--room-photo-aspect` is
+ * SOLVED per card as `ROOM_PHOTO_KEEP x the photo's own aspect`, so the
+ * `max-height` cap in `app/globals.css` holds the bound at every viewport
+ * shape by construction — the 1024x1366 class of failure (§2 #42) cannot be
+ * re-created by a new photograph or a new screen shape. A hand-picked
+ * per-layout number is exactly what §2 #42 shipped. */
+export const ROOM_PHOTO_KEEP = 0.75;
 
 export function RoomCard({
   room,
   index,
   onSurface,
   isLast = false,
+  galleryId,
 }: {
   room: RoomEntryCopy;
   index: number;
@@ -110,14 +83,29 @@ export function RoomCard({
    * `[data-room-card-last]` rule.
    */
   isLast?: boolean;
+  /** The id of this room's gallery panel (`RoomCardStack` composes it). When
+   * given, the photo becomes the panel's declarative popover trigger; when
+   * absent the photo is just a photo. No listener either way. Task 6 wires
+   * this — it is unused here, and no button may render before it: the
+   * trigger's copy comes from `SITE.roomGallery`, which does not exist yet. */
+  galleryId?: string;
 }) {
-  const layout = roomCardLayout(room.mediaId);
-  const beside = layout === "beside";
+  const aspect = roomCardAspect(room.mediaId);
 
   // Unique per card, not shared — see `.room-slot`'s comment in
   // `app/globals.css` for why every card needs its own named timeline rather
   // than all of them sharing one.
   const slotTimelineName = `--room-slot-${index}`;
+
+  const photo = (
+    <Photo
+      id={room.mediaId}
+      sizes={ROOM_CARD_SIZES}
+      box={Math.max(aspect, ROOM_CARD_MIN_BOX)}
+      pictureClassName="block h-full w-full"
+      className="h-full w-full object-cover"
+    />
+  );
 
   return (
     <>
@@ -132,10 +120,10 @@ export function RoomCard({
         }
       />
       <li
-        className={`room-card flex overflow-hidden ${
-          beside ? "flex-col lg:flex-row lg:items-stretch" : "flex-col"
+        className={`room-card flex flex-col overflow-hidden lg:flex-row lg:items-stretch${
+          index % 2 === 1 ? " lg:flex-row-reverse" : ""
         }`}
-        data-card-layout={layout}
+        data-card-layout="beside"
         data-room-card-last={isLast ? "" : undefined}
         style={
           {
@@ -150,21 +138,19 @@ export function RoomCard({
         }
       >
         {/*
-         * `flex-none` (not the old `flex-1`): the aspect-ratio, not
-         * flex-grow, decides this box's height below `lg` (and its width
-         * above it for `stacked`, which is always this shape). `flex-1` and
-         * `aspect-ratio` fight over a flex item's main-size — flex-1 usually
-         * wins, which is exactly how this box got tall enough to crop a wide
-         * photograph's width in the first place.
+         * `flex-none` (not `flex-1`): the aspect-ratio, not flex-grow,
+         * decides this box's height below `lg` (and drops out of the running
+         * above it, where `lg:items-stretch` on the card takes over sizing
+         * this axis). `flex-1` and `aspect-ratio` fight over a flex item's
+         * main-size — flex-1 usually wins, which is exactly how this box got
+         * tall enough to crop a wide photograph's width in the first place.
          *
-         * `beside` widens to 60% of the card at `lg` and up (from the 46%
-         * every earlier draft used) and drops the aspect-ratio there in favour
-         * of `lg:items-stretch` on the card (unchanged, above): at 60% wide and
-         * the card's own full height, the box's OWN aspect already clears the
-         * 25% bound (≈19–21% lost across the four review widths — see
-         * `ROOM_CARD_BOXES`'s comment) with no shrinking needed, so the
-         * photograph fills the card top-to-bottom instead of leaving a band of
-         * plain paper beneath it. Below `lg` it still needs the aspect-ratio:
+         * The wrapper is 60% of the card at `lg`, 65% at `xl` (`ROOM_CARD_SIZES`'s
+         * own comment). At that width and the card's own full (stretched)
+         * height, the box's OWN aspect can drop under the 25% width-crop
+         * bound depending on the card's shape — see the `max-height` rule
+         * this feeds, in `app/globals.css`, for the failure that solves and
+         * the numbers behind it. Below `lg` it still needs the aspect-ratio:
          * there the card is a column and the photo would otherwise be full
          * height again.
          *
@@ -178,48 +164,45 @@ export function RoomCard({
          * `lg`, with width stretched to the card's full width, that content
          * minimum only exceeds the `aspect-ratio`-derived height for a
          * PORTRAIT photograph narrower than the box ratio — `tola-room-family`
-         * (0.67:1) is the only one; every other room, `beside` or `stacked`,
-         * is wider than its own box and never triggers it. Measured on the
-         * live page before this line existed: at 390px the wrapper rendered
-         * 513px tall against the 273.6px `aspect-ratio: 1.25` was supposed to
-         * produce (342 / 1.25) — 239px of photograph eating into the card's
-         * fixed height where the text block was budgeted to sit, and at 768px
-         * the wrapper alone (1008px) already exceeded the entire 760px card.
-         * That is `docs/reviews/2026-08-11-card-stack/README.md`'s "Family Suite
-         * fix" section's defect: Family Suite's text was never both on screen and undimmed,
-         * because `overflow-hidden` on `.room-card` was clipping it every
-         * time. `min-h-0` removes the automatic minimum and lets the declared
-         * `aspect-ratio` govern for every photograph, portrait included —
-         * confirmed live: with it, the same wrapper renders 273.6px, exactly
-         * `342 / 1.25`. At `lg` and up this is a no-op: both axes are already
-         * definite there (`lg:w-[60%]` and the card's own `lg:items-stretch`
-         * height), and a definite size leaves nothing for min-height to clamp.
+         * (0.67:1) is the only one; every other room is wider than its own
+         * box and never triggers it. Measured on the live page before this
+         * line existed: at 390px the wrapper rendered 513px tall against the
+         * 273.6px `aspect-ratio: 1.25` was supposed to produce (342 / 1.25) —
+         * 239px of photograph eating into the card's fixed height where the
+         * text block was budgeted to sit, and at 768px the wrapper alone
+         * (1008px) already exceeded the entire 760px card. That is
+         * `docs/reviews/2026-08-11-card-stack/README.md`'s "Family Suite fix"
+         * section's defect: Family Suite's text was never both on screen and
+         * undimmed, because `overflow-hidden` on `.room-card` was clipping it
+         * every time. `min-h-0` removes the automatic minimum and lets the
+         * declared `aspect-ratio` govern for every photograph, portrait
+         * included — confirmed live: with it, the same wrapper renders
+         * 273.6px, exactly `342 / 1.25`. At `lg` and up this is a no-op: both
+         * axes are already definite there (`lg:w-[60%]` and the card's own
+         * `lg:items-stretch` height), and a definite size leaves nothing for
+         * min-height to clamp.
          */}
         <div
-          className={`min-h-0 ${beside ? "flex-none lg:w-[60%]" : "flex-none"}`}
+          className="min-h-0 flex-none lg:w-[60%] xl:w-[65%]"
           style={
             {
-              aspectRatio: String(ROOM_CARD_BOXES[layout]),
-              // Same number again, as a custom property: `app/globals.css`'s
-              // `lg`-and-up rule for `beside` cards reads it too, to cap this
-              // box's height once `lg:items-stretch` (the card's own class,
-              // above) takes over sizing this axis and `aspect-ratio` stops
-              // winning. One JS value feeding both is what keeps the inline
+              aspectRatio: String(Math.max(aspect, ROOM_CARD_MIN_BOX)),
+              // Same shape again, as a custom property: `app/globals.css`'s
+              // `lg`-and-up rules for this box read it too, to cap this box's
+              // height once `lg:items-stretch` (the card's own class, above)
+              // takes over sizing this axis and `aspect-ratio` stops winning.
+              // One JS value feeding both is what keeps the inline
               // `aspect-ratio` (below `lg`) and the CSS `max-height` (from
-              // `lg` up) from ever disagreeing about the bound — see that
-              // rule's own comment for why a second, independently-chosen
-              // number here reopened this exact defect once already.
-              "--room-photo-aspect": String(ROOM_CARD_BOXES[layout]),
+              // `lg` up) from ever disagreeing about the bound.
+              "--room-photo-aspect": String(ROOM_PHOTO_KEEP * aspect),
             } as React.CSSProperties
           }
         >
-          <Photo
-            id={room.mediaId}
-            sizes={ROOM_CARD_SIZES[layout]}
-            box={ROOM_CARD_BOXES[layout]}
-            pictureClassName="block h-full w-full"
-            className="h-full w-full object-cover"
-          />
+          {/* Task 6 wraps `photo` in the gallery's popover-trigger button when
+              `galleryId` is given (the copy for its aria-label arrives with
+              `SITE.roomGallery` in the same task). In THIS task, render the
+              photo bare — `galleryId` is never passed yet: */}
+          {photo}
         </div>
 
         {/*
@@ -230,27 +213,11 @@ export function RoomCard({
          * rejected — it stretches this block to fill the whole remainder and
          * `justify-center` then centres the words inside it, which reads as
          * text floating in a void rather than a caption under a photograph.
-         * `lg:flex-1` on `beside` is unrelated: at `lg` and up the card is a
-         * ROW, so this governs the WIDTH left over beside the photo, not
-         * height, and stays needed.
+         * `lg:flex-1` is unrelated: at `lg` and up the card is a ROW, so this
+         * governs the WIDTH left over beside the photo, not height, and stays
+         * needed.
          */}
-        <div
-          className={
-            beside
-              ? "flex shrink-0 flex-col justify-center gap-3 px-6 py-6 md:px-10 lg:flex-1"
-              : // Tighter at `lg` and up ONLY — see `ROOM_STACK.textReserve` in
-                // `lib/motion.ts`: the photo's height ceiling frees a fixed
-                // budget for this block, and every px this padding gives up is
-                // a px the photo gets back. `gap-3`/`py-6` (this block's
-                // ordinary size, unchanged below `lg`, where the ceiling never
-                // binds) versus `lg:gap-2 lg:py-4` measured a 24px saving —
-                // recovered as photograph, not spent on more cream, and it is
-                // that recovery, not the reserve number alone, that gets
-                // `vann-rooms`/`tola-rooms` back under the 45% ceiling
-                // (non-negotiable #8) after the photo stopped over-cropping.
-                "flex shrink-0 flex-col justify-center gap-3 py-6 px-6 md:px-10 lg:gap-2 lg:py-4"
-          }
-        >
+        <div className="flex shrink-0 flex-col justify-center gap-3 px-6 py-6 md:px-10 lg:flex-1">
           <h3 className="font-[family-name:var(--font-display)] text-2xl font-light leading-tight text-[color:var(--text)] md:text-3xl">
             {room.name}
           </h3>

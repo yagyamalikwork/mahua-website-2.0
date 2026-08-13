@@ -1,63 +1,47 @@
 import { describe, expect, it } from "vitest";
 import { MEDIA } from "./media";
-import { ROOM_CARD_ASPECT_THRESHOLD, roomCardAspect, roomCardLayout } from "./room-card";
+import { roomCardAspect } from "./room-card";
 import { VANN_COPY } from "@/content/mahua-vann";
 import { TOLA_COPY } from "@/content/mahua-tola";
 
-describe("roomCardLayout", () => {
-  it("gives a wide photograph the stacked card — photo above the words", () => {
-    // Repointed 13 Aug 2026: vann-room-cottage-plain was 1440x588 = 2.45:1 and
-    // stacked, but Task 3's crop (the 13 Aug "crop and zoom to fit their half"
-    // ruling) now ships it at 1184x789 = 1.50:1, so it moved to the `beside`
-    // population and can no longer stand for the `stacked` one. pool-daylight-forest
-    // (home page, untouched by that crop) is 1163x510 = 2.28:1 and stacked.
-    expect(roomCardLayout("pool-daylight-forest")).toBe("stacked");
-  });
+// Every room across both content files — reused by the population guard
+// below. MEDIA is an array (of MediaEntry, each carrying its own `id`), not a
+// map — Object.keys(MEDIA) would yield array indices ("0", "1", ...) and make
+// a coverage loop vacuous, so this collects ids straight off the content
+// files instead of guessing at MEDIA's shape.
+const EVERY_ROOM_MEDIA_ID = [
+  ...VANN_COPY.showcaseCopy!["vann-rooms"].rooms.map((r) => r.mediaId),
+  ...TOLA_COPY.showcaseCopy!["tola-rooms"].rooms.map((r) => r.mediaId),
+];
 
-  it("gives a squarer photograph the beside card", () => {
-    // suite-tiger-painting is 1440x961 = 1.50:1
-    expect(roomCardLayout("suite-tiger-painting")).toBe("beside");
-  });
-
-  it("gives a portrait photograph the beside card", () => {
-    // tola-room-family is 1440x2160 = 0.67:1 — the one room that needs it
-    expect(roomCardLayout("tola-room-family")).toBe("beside");
-  });
-
+describe("roomCardAspect", () => {
   it("reports the photograph's real aspect, not the card's", () => {
-    expect(roomCardAspect("tola-room-family")).toBeCloseTo(1440 / 2160, 3);
+    expect(roomCardAspect("tola-room-family")).toBeCloseTo(1707 / 2560, 3);
   });
-
-  it("throws on an unknown id rather than defaulting to a layout", () => {
-    // A silent default would put a portrait photograph in a 2.9:1 box and crop
-    // 70% of it, with every test still green.
-    expect(() => roomCardLayout("not-a-real-id" as never)).toThrow(/unknown media/i);
+  it("throws on an unknown id rather than defaulting", () => {
+    expect(() => roomCardAspect("no-such-photo" as never)).toThrow(/Unknown media id/);
   });
+});
 
-  /**
-   * The threshold's whole justification is that no room sits near it. If a
-   * future re-crop moves one, this fails and the choice gets re-argued rather
-   * than drifting.
-   */
-  it("keeps every room clear of the threshold by at least 0.35", () => {
-    const ids = [
-      ...VANN_COPY.showcaseCopy!["vann-rooms"].rooms.map((r) => r.mediaId),
-      ...TOLA_COPY.showcaseCopy!["tola-rooms"].rooms.map((r) => r.mediaId),
-    ];
-    expect(ids.length).toBe(7);
-    for (const id of ids) {
-      const gap = Math.abs(roomCardAspect(id) - ROOM_CARD_ASPECT_THRESHOLD);
-      expect(gap, `${id} sits too close to the layout threshold`).toBeGreaterThan(0.35);
+describe("the beside population", () => {
+  // The composition is the client's own ruling (13 Aug 2026) and no longer
+  // derived from the photograph — but the geometry still assumes no room
+  // photograph reads wide. The solved bound keeps the CROP legal at any
+  // aspect; what it cannot do is stop a 2.3:1 letterbox floating in a band of
+  // cream inside its half (the exact look the ruling replaced). §2 #46 is the
+  // history: a like-for-like photo swap silently reshaping a chapter. 1.6 is
+  // 1.50 (the widest current room, cottage-plain's 1184/789) plus margin.
+  it("keeps every room photograph at or under 1.6:1, in both content files", () => {
+    expect(EVERY_ROOM_MEDIA_ID.length).toBe(7);
+    for (const id of EVERY_ROOM_MEDIA_ID) {
+      expect(roomCardAspect(id), id).toBeLessThanOrEqual(1.6);
     }
   });
 
   it("covers every room in both content files", () => {
-    // MEDIA is an array (of MediaEntry, each carrying its own `id`), not a
-    // map — Object.keys(MEDIA) would yield array indices ("0", "1", ...) and
-    // make this loop vacuous. Iterate the entries themselves instead.
     for (const { id } of MEDIA) {
       if (!id.includes("room") && id !== "suite-tiger-painting") continue;
-      expect(() => roomCardLayout(id as never)).not.toThrow();
+      expect(() => roomCardAspect(id as never)).not.toThrow();
     }
   });
 });

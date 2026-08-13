@@ -13,7 +13,7 @@ import {
   type ExperienceWeight,
 } from "@/components/sections/ExperiencePair";
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
-import { ROOM_CARD_BOXES, ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
+import { ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
@@ -180,14 +180,13 @@ const LIVE_SLOTS: readonly Slot[] = [
   })),
   // The rooms, as a stack of cards (Task 5 of the room-card-stack plan, 11
   // Aug 2026), replacing `RoomShowcase`'s three-scale ledger of bands above
-  // (see the distinct-string comment beneath the assertion this feeds). Two
-  // compositions, not three: `stacked` (five of seven rooms) and `beside`
-  // (the two whose photograph does not read wide).
-  ...(["stacked", "beside"] as const).map((k) => ({
-    name: `RoomCard.${k}`,
-    sizes: ROOM_CARD_SIZES[k],
-    box: ROOM_CARD_BOXES[k],
-  })),
+  // (see the distinct-string comment beneath the assertion this feeds).
+  // Every room card is `beside` since the client's 13 Aug 2026 ruling — one
+  // composition, one string. The box column carries the widest current room
+  // photograph (~1.50, rounded up to 1.51) rather than a layout constant: the
+  // rendered box is the card's own solved geometry now, and the widest photo
+  // is the worst case `sizes` must cover under `cover`.
+  { name: "RoomCard.beside", sizes: ROOM_CARD_SIZES, box: 1.51 as CoverBox },
   // The day's six experiences, two weights. `hero` repeats `PLATE_SIZES[1]`
   // and `quiet` repeats `PLATE_SIZES[2]` verbatim — same container, same
   // columns — so neither adds a distinct string; both still get their own
@@ -286,7 +285,20 @@ describe("the sizes the page actually serves", () => {
     // go in. Two out, two in, read off this suite rather than assumed from
     // the row count matching — per this task's own instruction not to guess
     // it.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
+    // 24 → 23 since Task 4 of the image-sizing plan (13 Aug 2026), the
+    // client's ruling that retired the `stacked`/`beside` choice: every room
+    // card is now `beside`, one composition, one row. `ROOM_CARD_SIZES` is a
+    // single string now, not a record — both old strings (`stacked`'s and
+    // the old `beside`'s `(min-width: 1024px) 60vw, calc(100vw - 48px)`) go
+    // out (2 distinct strings lost), and the new single string — `(min-width:
+    // 1600px) 978px, (min-width: 1280px) 65vw, (min-width: 1024px) 60vw,
+    // calc(100vw - 48px)`, carrying the new 65%-at-xl tier — comes in as one
+    // genuinely new string (nothing else on the page reaches for 978px or
+    // this exact width list). Two out, one in: net −1, 24 → 23 — read off
+    // this suite by running it and reading the failure (`expected 23 to be
+    // 24`) rather than computed by hand, per this task's own instruction not
+    // to guess it.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(23);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

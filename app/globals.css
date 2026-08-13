@@ -1122,37 +1122,6 @@ body {
 }
 
 /*
- * The photo area's HEIGHT CEILING for a `stacked` card — the words block's
- * floor. `RoomCard.tsx`'s `ROOM_CARD_BOXES.stacked` (`aspect-ratio: 2`) bounds
- * the photograph's WIDTH crop (assertion 6's 25% rule) and was never checked
- * against the card's own height. At 1440/1920 a 2:1 band across a ~1,248–
- * 1,504px-wide card is 624–752px tall against a 655–669px card — the words
- * block, which follows it in flow inside `.room-card`'s `overflow: hidden`,
- * landed entirely below the visible box. See `ROOM_STACK.textReserve` in
- * `lib/motion.ts` for the measurement, the paired `lg:`-only padding change
- * in `RoomCard.tsx` this dial depends on, and why 185px is the value that
- * clears both the legibility rig and the 45% density ceiling (non-negotiable
- * #8) — a looser value passed the former alone and pushed `tola-rooms` over
- * the latter.
- *
- * `:first-child` (not a dedicated class) because the wrapper's only marker is
- * position — it is always the card's first child, `RoomCard.tsx`'s own
- * comment says so, and `[data-card-layout="stacked"]` (already written by the
- * component, read by `check_card_stack.mjs`'s crop assertion) already scopes
- * this to the layout that needs it. `beside` cards are untouched: their photo
- * takes the card's own full height (`lg:items-stretch`) or a portrait aspect,
- * and never measured a negative `leftover` at any reviewed width.
- *
- * `aspect-ratio` still supplies the PREFERRED height — this only caps it.
- * Capping height can only widen a box's effective aspect (more height lost,
- * never more width), so this can only improve assertion 6's width-crop
- * figure, never worsen it.
- */
-.room-card[data-card-layout="stacked"] > :first-child {
-  max-height: calc(var(--room-card-height) - var(--room-text-reserve));
-}
-
-/*
  * The `beside` photo's height-derived floor, above `lg` — where `RoomCard.tsx`'s
  * `lg:items-stretch` (the card, in flex-row mode) makes the wrapper's cross
  * size the ROW's own fixed height, and `aspect-ratio` (which governs
@@ -1161,30 +1130,29 @@ body {
  * outweighed — confirmed live: both axes are definite there, so nothing is
  * left "auto" for `aspect-ratio` to compute.
  *
- * Left alone, the box's real aspect is whatever `lg:w-[60%]` and the card's
- * own solved height happen to produce — which cleared the 25% width-crop
- * bound (`ROOM_CARD_BOXES`'s own comment) only at the four widths this
- * project routinely reviews, by coincidence, and failed hard outside them:
- * **51.1% of `suite-tiger-painting`'s width lost at 1024×1366** (iPad Pro
- * portrait), 37.5% at 1280×1024 — both worse than the ~11% the layout this
- * design replaced was cropping. `docs/reviews/2026-08-11-card-stack/README.md`,
+ * Left alone, the box's real aspect is whatever `lg:w-[60%]`/`xl:w-[65%]` and
+ * the card's own solved height happen to produce — which cleared the 25%
+ * width-crop bound only at the four widths this project routinely reviews, by
+ * coincidence, and failed hard outside them: **51.1% of
+ * `suite-tiger-painting`'s width lost at 1024×1366** (iPad Pro portrait),
+ * 37.5% at 1280×1024 — both worse than the ~11% the layout this design
+ * replaced was cropping. `docs/reviews/2026-08-11-card-stack/README.md`,
  * "Finding 1."
  *
  * The fix caps the wrapper's height so its OWN aspect can never drop below
- * `ROOM_CARD_BOXES.beside`, regardless of how the card's fixed height and the
- * viewport's shape happen to interact — a `min-aspect-ratio`, expressed as a
- * `max-height` because height, not width, is the axis actually free to move
- * once the row's stretch has claimed it. `container-type: inline-size` on
- * `.room-card` lets the wrapper reference the CARD's own resolved width in
- * `cqw` units — safe (no circular dependency): the card's width comes from
- * its flex/grid ancestor, never from its own content, so querying it from a
- * descendant introduces nothing the card's own layout depends on. The wrapper
- * is `lg:w-[60%]` of that width (also duplicated in `ROOM_CARD_SIZES.beside`'s
- * `60vw` — the three must move together), so `60cqw` is that same 60%
- * expressed as a length; dividing by `--room-photo-aspect` (set inline per
- * card in `RoomCard.tsx`, from the very `ROOM_CARD_BOXES[layout]` value the
- * width-crop bound is built from, so the two can never disagree) gives the
- * tallest the box may be without its own aspect falling under the bound.
+ * `ROOM_PHOTO_KEEP × the photo's own aspect` (`RoomCard.tsx`), regardless of
+ * how the card's fixed height and the viewport's shape happen to interact —
+ * a `min-aspect-ratio`, expressed as a `max-height` because height, not
+ * width, is the axis actually free to move once the row's stretch has
+ * claimed it. `container-type: inline-size` on `.room-card` lets the wrapper
+ * reference the CARD's own resolved width in `cqw` units — safe (no circular
+ * dependency): the card's width comes from its flex/grid ancestor, never
+ * from its own content, so querying it from a descendant introduces nothing
+ * the card's own layout depends on. `--room-photo-aspect` is set inline per
+ * card in `RoomCard.tsx`, from the very `ROOM_PHOTO_KEEP × aspect` value the
+ * width-crop bound is built from, so the two can never disagree — dividing
+ * by it gives the tallest the box may be without its own aspect falling
+ * under the bound.
  *
  * When the row's stretch would have made the wrapper shorter than this cap
  * anyway (a wide card relative to its height — most of the four originally
@@ -1192,21 +1160,48 @@ body {
  * top to bottom, unchanged. When it would not (the shapes above), the cap
  * wins: the photo is shorter than the card, and cream shows beneath it. That
  * band of cream — not a crop past the bound — is the honest cost of the
- * floor at the shapes where 60%-of-width genuinely cannot reach the card's
- * own height without violating it.
+ * floor at the shapes where the wrapper's own share of the card's width
+ * genuinely cannot reach the card's own height without violating it.
  *
- * `stacked` cards are untouched: `container-type` is scoped to
- * `[data-card-layout="beside"]`, and the stacked ceiling above (this card's
- * `max-height` on ITS photo wrapper) is a different mechanism solving a
- * different problem (fit under the words, not width-crop).
+ * **Two DISJOINT closed intervals, not one open-ended rule — 13 Aug 2026.**
+ * Every card is now `beside` (the client's ruling that retired the `stacked`
+ * composition and the height ceiling that used to sit here for it), and the
+ * wrapper's own width share changes at `xl` (`lg:w-[60%] xl:w-[65%]`), so the
+ * `cqw` multiplier the cap divides by has to change with it — `60cqw` is
+ * wrong once the wrapper is actually 65% of the card. Two overlapping rules
+ * resolved only by framework emission order is this project's own repeated
+ * defect shape (`docs/DECISIONS.md` §2 #23 and the stacked-ceiling collision
+ * above, now retired): a single `@media (min-width: 1024px)` block followed
+ * by a hypothetical `@media (min-width: 1280px)` override would depend on
+ * *source order*, not on which query is more specific, to decide which
+ * `max-height` wins — fragile the moment either block is reordered. Disjoint
+ * closed intervals (`1024–1279.98px` and `1280px+`) make at most one block
+ * ever match, so there is nothing for emission order to resolve.
+ *
+ * The `var()` fallback, `1.125`, is `0.75 × 1.5` — `ROOM_PHOTO_KEEP` times
+ * 1.6's own margin-adjusted worst case, `room-card.test.ts`'s "the beside
+ * population" guard (1.50, the widest current room, rounded to a 1.6 bound).
+ * It is only ever read if `--room-photo-aspect` is somehow unset; every real
+ * card sets it inline, so the fallback exists for defensive completeness, not
+ * because any shipped card relies on it.
  */
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 1279.98px) {
   .room-card[data-card-layout="beside"] {
     container-type: inline-size;
   }
 
   .room-card[data-card-layout="beside"] > :first-child {
-    max-height: calc(60cqw / var(--room-photo-aspect, 1.25));
+    max-height: calc(60cqw / var(--room-photo-aspect, 1.125));
+  }
+}
+
+@media (min-width: 1280px) {
+  .room-card[data-card-layout="beside"] {
+    container-type: inline-size;
+  }
+
+  .room-card[data-card-layout="beside"] > :first-child {
+    max-height: calc(65cqw / var(--room-photo-aspect, 1.125));
   }
 }
 
