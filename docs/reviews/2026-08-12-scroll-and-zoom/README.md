@@ -88,3 +88,42 @@ present and read correctly.
 That is this project's most-catalogued defect: two rules matching one element, resolved by something other
 than intent. The fix repeats the hover selector exactly and wins on document order. **Nothing would have
 caught this except running it with reduced motion on** — the CSS reads as though it works.
+
+
+---
+
+## The caption zoomed too — client report, 12 Aug, fixed
+
+> *"In sections 03-The Forest, 05-The Rooms and 07-Details the images have text written under them. The
+> zoom works perfectly, but in these sections the text under these images also zooms in and out with the
+> image."*
+
+Right, and the cause is structural: `ui/Plate.tsx` puts a `<figure>` inside the frame holding the
+photograph **and** its caption. The first rule scaled the frame's child — which is that whole figure — so
+the type went with the picture. Only the three `PlateGrid` chapters have captions inside a frame, which is
+exactly the three he named.
+
+**Fixed by naming the `<picture>`** rather than the frame's child, so the effect reaches the photograph and
+nothing else whatever a component wraps it in. `img:not(picture img)` catches a bare `<img>` in a frame
+with no `<picture>`, without double-scaling the one inside a picture that already scales.
+
+Measured with the page held still and the caption read **relative to its own frame**, so page scroll
+cannot contaminate it:
+
+| chapter | caption width | caption offset in frame | picture scale |
+|---|---|---|---|
+| forest | 416.37 → 416.16 | 613.91 → 613.77 | **1.06** |
+| rooms | 416.32 → 416.16 | 427.82 → 427.75 | **1.06** |
+| details | 358.21 → 358.00 | 588.96 → 588.80 | **1.06** |
+
+Sub-pixel differences are rounding. The caption does not move; the photograph does.
+
+Captionless frames still zoom — `lodges` 1.06, and all three of `rooted`'s collage photographs 1.06.
+Reduced motion remains 1 everywhere. 453 tests green.
+
+**Two instrument errors on the way, both mine, both worth the warning.** The first reading said "still
+wrong" on all three chapters: it measured the caption in *viewport* coordinates while the page was still
+gliding from a smooth scroll, so ordinary scrolling looked like the caption moving. The second said
+`rooted` did not zoom at all: it hovered a point 40px below a frame's top edge, which on a tall pinned
+frame is not necessarily over the photograph. **Both times the page was right and the measurement was
+wrong** — the failure this project has catalogued more than any other.

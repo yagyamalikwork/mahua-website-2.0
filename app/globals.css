@@ -1263,8 +1263,17 @@ body {
  * and only the photograph breathes. Nothing here changes layout, so nothing here
  * can reflow the page.
  *
- * **It scales the frame's grandchild, not `[data-image-inner]`, and that is
- * deliberate.** The arrival animation already owns `[data-image-inner]` — it
+ * **It scales the `<picture>`, not the frame's child, and the client found out why.**
+ * `ui/Plate.tsx` puts a `<figure>` inside the frame holding the photograph AND its
+ * caption, so scaling the frame's child scaled the caption with it — the type under
+ * every plate in `03 · The Forest`, `05 · The Rooms` and `07 · The Details` grew and
+ * shrank with the picture. Reported 12 Aug 2026. Naming the picture means the effect
+ * reaches the photograph and nothing else, whatever a component wraps it in.
+ *
+ * `img:not(picture img)` catches a bare `<img>` in a frame that has no `<picture>`,
+ * without double-scaling the `<img>` inside one that does.
+ *
+ * **It also stays off `[data-image-inner]`, and that is deliberate.** The arrival animation already owns `[data-image-inner]` — it
  * animates the `scale` *property* there, with its own transition and delay (see
  * `[data-image-enter]` above). A `transition` declared on the same element with
  * higher specificity would replace that shorthand wholesale and quietly break how
@@ -1279,13 +1288,13 @@ body {
  * `:hover` only, never `:focus-within` — a keyboard visitor tabbing through links
  * would otherwise set photographs moving they never pointed at.
  */
-[data-hover-zoom] [data-image-frame]:not([data-no-zoom]) [data-image-inner] > * {
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]) :is(picture, img:not(picture img)) {
   transition: transform var(--photo-zoom-back) var(--photo-zoom-ease);
   /* Its own layer, so the browser is not repainting a 200 KB photograph per frame. */
   will-change: transform;
 }
 
-[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover [data-image-inner] > * {
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover :is(picture, img:not(picture img)) {
   transform: scale(var(--photo-zoom));
   /* Slow going out, quicker coming back — see `PHOTO_ZOOM` in `lib/motion.ts`. */
   transition-duration: var(--photo-zoom-out);
@@ -1309,8 +1318,8 @@ body {
    * matching one element, resolved by something other than intent. So this one
    * repeats the hover selector exactly and wins on document order instead.
    */
-  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover [data-image-inner] > *,
-  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]) [data-image-inner] > * {
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover :is(picture, img:not(picture img)),
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]) :is(picture, img:not(picture img)) {
     transform: none;
     transition: none;
   }
