@@ -457,12 +457,15 @@ export const TOLA_COPY: PropertyPageCopy = {
            */
           mediaId: "tola-room-super-deluxe",
           name: "Super Deluxe Cottage",
-          // Describes the SHIPPED crop, not the original photograph. The first
-          // draft said "under timber beams", which was true of the 3:2 the
-          // client sent and false of the 2:1 that renders — the crop trades
-          // ceiling for compliance with the card's stacked box. The stone
-          // headboard is in frame and is the more specific detail anyway.
-          line: "A king bed against a stone headboard, a sitting area by the window, and the bamboo close outside it.",
+          // Re-read 13 Aug 2026 against the SHIPPED frame, which changed under
+          // this line twice now. It was written for the original 3:2 ("under
+          // timber beams"); the 2.29 stacked crop then cut the ceiling off, so
+          // the line was rewritten to "a stone headboard" — true of that crop,
+          // false of the source. The beside composition ships the uncropped
+          // 1500x1000 today, which restores the ceiling: the timber beams are
+          // back in frame, alongside the stone headboard, not instead of it —
+          // both are named now rather than the line trading one for the other.
+          line: "A king bed against a stone headboard, under a timber-beamed ceiling, with a sitting area by the window and the bamboo close outside it.",
           facts: ["King bed, sitting area", "Up to three adults", "Forest view"],
         },
         {

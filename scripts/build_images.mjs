@@ -382,6 +382,12 @@ const CURATION = [
   {
     id: "vann-room-deluxe",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Deluxe.jpg",
+    // 3:2 window per the 13 Aug 2026 ruling ("crop and zoom to fit their half");
+    // offset chosen by eye — see docs/reviews/2026-08-13-image-sizing/crops/.
+    // left shifted from the centred 200 to 150: at 200 the buffalo painting and
+    // headboard rack sat right at the frame edge; 150 gives them a full margin
+    // and still carries the caned chair and glass table into frame on the right.
+    crop: { left: 150, top: 0, width: 762, height: 508 },
     alt: "A Deluxe room at Mahua Vann, garden and jungle view.",
     category: "lodgeLife",
     orientation: "landscape",
@@ -532,6 +538,13 @@ const CURATION = [
   {
     id: "tola-room-deluxe",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Deluxe-room.jpg",
+    // 3:2 window per the 13 Aug 2026 ruling ("crop and zoom to fit their half");
+    // offset chosen by eye — see docs/reviews/2026-08-13-image-sizing/crops/.
+    // The centred 200 held up against 100 and 250 by eye: both twin beds and
+    // the trunk at their foot stay whole, and — since the copy's own line
+    // names it ("the forest at the window") — the window and its curtain stay
+    // in frame, which 250 alone cropped away entirely.
+    crop: { left: 200, top: 0, width: 762, height: 508 },
     alt: "A Deluxe room at Mahua Tola, forest view.",
     category: "lodgeLife",
     orientation: "landscape",
@@ -540,6 +553,13 @@ const CURATION = [
   {
     id: "tola-room-suite",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_Tadoba_Suite-room.jpg",
+    // 3:2 window per the 13 Aug 2026 ruling ("crop and zoom to fit their half");
+    // offset chosen by eye — see docs/reviews/2026-08-13-image-sizing/crops/.
+    // left shifted from the centred 200 to 300: it drops a bedside kettle
+    // table nobody's copy names and, in exchange, gives the glass double
+    // doors and the bamboo beyond them — the alt's "window onto bamboo" —
+    // the whole frame, doors uncut, rather than sharing it with a table.
+    crop: { left: 300, top: 0, width: 762, height: 508 },
     alt: "A Suite room at Mahua Tola, forest view.",
     category: "lodgeLife",
     orientation: "landscape",
@@ -586,9 +606,17 @@ const CURATION = [
      * The uncropped original stays beside this file: it is the better photograph
      * of the *room*, and if the card is ever given a `beside` composition it is
      * already there.
+     *
+     * **13 Aug 2026: the `beside` composition arrived, and the uncropped
+     * original — kept beside the 2.29 file for exactly this day, per the
+     * paragraph above — is now what ships.** No `crop` here: the source is
+     * already the room's own 1500x1000 (1.50:1), inside Task 4's ≤1.51
+     * landscape ceiling with no cropping needed. Everything above this
+     * paragraph is history — the 2.29 stacked derivation it fed retires in
+     * `lib/room-card.ts` the same day.
      */
     id: "tola-room-super-deluxe",
-    src: "reference/client-photos/Super-Delux-Cottage-2-29.jpg",
+    src: "reference/client-photos/Super-Delux-Cottage.jpg",
     alt: "A Super Deluxe Cottage at Mahua Tola: a king bed under timber beams, with a window onto the bamboo.",
     category: "lodgeLife",
     orientation: "landscape",
@@ -687,12 +715,36 @@ const CURATION = [
     // takes the sit-out and cane chair this alt text names out of the
     // visible crop entirely. Use the "wide" scale (21:9 = 2.33:1) — under
     // 5% width loss, keeps the whole room including the sit-out and chair.
+    // HISTORICAL as of 13 Aug 2026: RoomShowcase is retired and the crop
+    // below now happens in the pipeline itself, ahead of every derivative —
+    // the manifest's width/height are the cropped 1184x789 (1.50:1), so the
+    // constraint above no longer binds whatever reads this entry next.
     id: "vann-room-cottage-plain",
     src: "reference/wp-media/property-pages/Mahua-Website-Images_TC.jpg",
+    // 3:2 window per the 13 Aug 2026 ruling ("crop and zoom to fit their half");
+    // offset chosen by eye — see docs/reviews/2026-08-13-image-sizing/crops/.
+    // left moved from the centred 373 to 650. This source is 1931px wide —
+    // the bed sits at its far left, the woven cane chair on its private
+    // sit-out at its far right, ~1740px apart, well over the 1184px window's
+    // reach: no offset holds both. The centred crop held neither well (a
+    // sliver of bed, the chair's arm cut at the frame edge). This room's own
+    // line never mentions the bed ("A private sit-out under cane, and the
+    // forest close enough to touch through the glass doors" —
+    // content/mahua-vann.ts) and the brief's own art-direction table names
+    // this photo's feature as "the cane sit-out under glass doors", so 650
+    // gives up the bed entirely for the glass double doors, both windows and
+    // the cane chair on the sit-out in full.
+    crop: { left: 650, top: 0, width: 1184, height: 789 },
     alt: "A cottage at Mahua Vann — mud-plastered walls, a woven cane chair on the private sit-out, and the forest close through the glass doors.",
     category: "lodgeLife",
     orientation: "landscape",
-    fullBleedSafe: true,
+    // Was true when this source's uncropped 1931px width cleared the 1400px
+    // full-bleed floor (non-negotiable #11). The 13 Aug crop's largest
+    // derivative is 1184px — this id is a room-card photograph, never
+    // rendered full-bleed, and the pipeline throws rather than let a false
+    // claim through (grep-verified: no full-bleed use exists — RoomCard.tsx,
+    // content/mahua-vann.ts).
+    fullBleedSafe: false,
   },
   // No Conference-hall entry. Looked at Mahua-Website-Images_Pench_Conference.jpg
   // (an empty multipurpose hall — beamed ceiling, pendant lights, a handful
@@ -807,6 +859,26 @@ async function buildOne(entry) {
     throw new Error(`${entry.id}: could not read dimensions of ${entry.src}`);
   }
 
+  // An editorial crop, in SOURCE pixels, applied before every derivative —
+  // tiers, JPG fallback and blur all come from the same window, and the
+  // manifest's width/height are the window's, so everything downstream that
+  // reads an aspect (RoomCard's solved crop bound, the orientation field,
+  // `sizes` math) sees the crop as the photograph. Client ruling 13 Aug 2026:
+  // "You can crop and zoom into them to fit their half" — the spec's §2 table
+  // says which entries and why.
+  let baseBuffer = srcBuffer;
+  let baseMeta = srcMeta;
+  if (entry.crop) {
+    const { left, top, width, height } = entry.crop;
+    if (left + width > srcMeta.width || top + height > srcMeta.height || left < 0 || top < 0) {
+      throw new Error(
+        `${entry.id}: crop ${JSON.stringify(entry.crop)} exceeds the ${srcMeta.width}x${srcMeta.height} source`,
+      );
+    }
+    baseBuffer = await sharp(srcBuffer).extract(entry.crop).toBuffer();
+    baseMeta = { ...srcMeta, width, height };
+  }
+
   // Never upscale: only emit tiers that fit within the source's native width.
   // `maxWidth` is a per-entry escape valve for a source that cannot be served
   // at a given tier inside the 200 KB budget without dropping below its quality
@@ -824,7 +896,7 @@ async function buildOne(entry) {
   // true when both get smaller together. Offering the native width rather than
   // falling back to it makes the tier list purely additive.
   const largestTier = WIDTHS[WIDTHS.length - 1];
-  const ceiling = Math.min(srcMeta.width, entry.maxWidth ?? Number.POSITIVE_INFINITY);
+  const ceiling = Math.min(baseMeta.width, entry.maxWidth ?? Number.POSITIVE_INFINITY);
   const fittingWidths = WIDTHS.filter((w) => w <= ceiling);
   const widthsToGenerate = [
     ...new Set([...fittingWidths, Math.min(ceiling, largestTier)]),
@@ -832,7 +904,7 @@ async function buildOne(entry) {
 
   const produced = [];
   for (const width of widthsToGenerate) {
-    const resized = sharp(srcBuffer).resize({ width, withoutEnlargement: true });
+    const resized = sharp(baseBuffer).resize({ width, withoutEnlargement: true });
 
     // `.metadata()` reads the *input* header and never runs the pixel
     // pipeline, so it cannot be used to learn what a queued `.resize()`
@@ -881,7 +953,7 @@ async function buildOne(entry) {
   // encoded (captured above), not from re-reading the source.
   const largest = produced.reduce((a, b) => (b.width > a.width ? b : a));
 
-  const jpgResized = sharp(srcBuffer).resize({ width: largest.width, withoutEnlargement: true });
+  const jpgResized = sharp(baseBuffer).resize({ width: largest.width, withoutEnlargement: true });
   const jpgResult = await encodeUnderBudget(jpgResized, "jpeg", JPG_QUALITY, JPG_QUALITY_FLOOR, {
     mozjpeg: true,
   });
@@ -895,7 +967,7 @@ async function buildOne(entry) {
     overBudgetFiles.push({ name: jpgName, bytes: jpgBuffer.length, quality: jpgResult.quality });
   }
 
-  const blurBuffer = await sharp(srcBuffer)
+  const blurBuffer = await sharp(baseBuffer)
     .resize({ width: BLUR_WIDTH, withoutEnlargement: true })
     .blur()
     .webp({ quality: 40 })

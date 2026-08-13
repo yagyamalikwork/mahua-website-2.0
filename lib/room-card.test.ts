@@ -6,8 +6,12 @@ import { TOLA_COPY } from "@/content/mahua-tola";
 
 describe("roomCardLayout", () => {
   it("gives a wide photograph the stacked card — photo above the words", () => {
-    // vann-room-cottage-plain is 1440x588 = 2.45:1
-    expect(roomCardLayout("vann-room-cottage-plain")).toBe("stacked");
+    // Repointed 13 Aug 2026: vann-room-cottage-plain was 1440x588 = 2.45:1 and
+    // stacked, but Task 3's crop (the 13 Aug "crop and zoom to fit their half"
+    // ruling) now ships it at 1184x789 = 1.50:1, so it moved to the `beside`
+    // population and can no longer stand for the `stacked` one. pool-daylight-forest
+    // (home page, untouched by that crop) is 1163x510 = 2.28:1 and stacked.
+    expect(roomCardLayout("pool-daylight-forest")).toBe("stacked");
   });
 
   it("gives a squarer photograph the beside card", () => {

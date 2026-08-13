@@ -3,8 +3,15 @@ import { describe, expect, it } from "vitest";
 import { RoomCard } from "./RoomCard";
 import type { RoomEntryCopy } from "./RoomShowcase.types";
 
+// Repointed 13 Aug 2026: vann-room-cottage-plain was 1440x588 = 2.45:1 (stacked)
+// until Task 3's crop (the "crop and zoom to fit their half" ruling) shipped it
+// at 1184x789 = 1.50:1 — now in the `beside` population, so it can no longer
+// stand for a wide/stacked fixture. pool-daylight-forest (home page, untouched
+// by that crop) is 1163x510 = 2.28:1; the name/line/facts below are this
+// fixture's own invented copy, unrelated to that photograph's real content —
+// only the aspect ratio is under test here.
 const WIDE: RoomEntryCopy = {
-  mediaId: "vann-room-cottage-plain",
+  mediaId: "pool-daylight-forest",
   name: "Cottage without Deck",
   line: "A private sit-out under cane.",
   facts: ["324 sq ft", "King bed"],
