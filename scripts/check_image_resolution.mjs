@@ -242,36 +242,48 @@ async function main() {
 
     // **Open every room gallery panel before reporting — the exact same
     // lesson, again (image-sizing Task 7, 14 Aug 2026, `docs/DECISIONS.md`
-    // §2 #39).** `RoomCardStack.tsx`'s enlarged photograph is deliberately
-    // NOT in the measured page until a panel is opened: it sits inside a
-    // native `[popover]`, `display: none` until shown, `loading="lazy"`, so
-    // scrolling the page — the only thing this rig otherwise does — can
-    // never reveal it, exactly like the menu's gated lodge tiles before this
-    // same fix. Opened with `showPopover()` in `page.evaluate` — deterministic,
-    // no scroll dance needed — because this rig only needs each image IN
-    // THE LAYOUT long enough to measure its real rendered box; the
-    // invoker-click path (does clicking the trigger actually open it, do
-    // the arrows navigate, does Esc close it) is `check_room_gallery.mjs`'s
-    // job, not this rig's.
+    // §2 #39 and §18).** `RoomCardStack.tsx`'s enlarged photograph is
+    // deliberately NOT in the measured page until a panel is opened: it is
+    // `display: none` until targeted, `loading="lazy"`, so scrolling the
+    // page — the only thing this rig otherwise does — can never reveal it,
+    // exactly like the menu's gated lodge tiles before this same fix.
     //
-    // One panel at a time, not all at once: `popover="auto"` panels are
-    // mutually exclusive by the UA's own light-dismiss list (opening a
-    // second while a first is still shown can close or nest the first,
-    // `check_room_gallery.mjs`'s own finding), and — the more basic reason —
-    // a CLOSED panel's `<img>` has no rendered box (`clientWidth: 0`), so
-    // its row would be silently skipped (`drawnWidth` returns 0, `needed`
-    // resolves to 0, and the report's own `if (needed === 0) continue`
-    // drops it) unless it is measured WHILE open. That is why each
-    // measurement happens inside this loop, scoped to exactly the one panel
-    // that is open at that moment (`report`'s new `selector` parameter),
-    // rather than folded into the single whole-page scan below, which runs
-    // afterwards with every panel closed again and would count none of them.
+    // **Mechanism changed under this rig's own feet, 14 Aug 2026** (§18): the
+    // gallery was `popover`, opened here with `showPopover()`; measured to
+    // nest its arrows rather than replace panels, and rebuilt on CSS
+    // `:target` instead, which cannot nest by construction. Opened here now
+    // by setting `location.hash` directly in `page.evaluate` — the same
+    // deterministic, no-scroll-dance approach `showPopover()` was standing in
+    // for, not a new one: this rig only needs each image IN THE LAYOUT long
+    // enough to measure its real rendered box, never the click-through path
+    // (does the trigger link actually open it, do the arrows navigate, does
+    // the close control work) — that is `check_room_gallery.mjs`'s job, and
+    // it is the one that holds itself to real clicks only. Closed again with
+    // the same sentinel `RoomCardStack.tsx` uses (`ROOM_GALLERY_CLOSED`,
+    // re-derived here as a literal string, same convention as `panelId()`
+    // elsewhere in this project's rigs) so the loop's own state never leaks
+    // into whichever panel comes next.
+    //
+    // One panel at a time, not all at once: `:target` only ever matches one
+    // element (this is now load-bearing, not merely convenient — §18), and —
+    // the more basic reason — a CLOSED panel's `<img>` has no rendered box
+    // (`clientWidth: 0`), so its row would be silently skipped (`drawnWidth`
+    // returns 0, `needed` resolves to 0, and the report's own `if (needed
+    // === 0) continue` drops it) unless it is measured WHILE open. That is
+    // why each measurement happens inside this loop, scoped to exactly the
+    // one panel that is open at that moment (`report`'s own `selector`
+    // parameter), rather than folded into the single whole-page scan below,
+    // which runs afterwards with every panel closed again and would count
+    // none of them.
+    const ROOM_GALLERY_CLOSED = "room-gallery-closed";
     const galleryPanelIds = await page.evaluate(() =>
       [...document.querySelectorAll(".room-gallery")].map((el) => el.id),
     );
     const galleryImages = [];
     for (const panelId of galleryPanelIds) {
-      await page.evaluate((id) => document.getElementById(id)?.showPopover(), panelId);
+      await page.evaluate((id) => {
+        window.location.hash = `#${id}`;
+      }, panelId);
       await page
         .waitForFunction(
           (id) => {
@@ -284,7 +296,9 @@ async function main() {
         .catch(() => {});
       const rows = await page.evaluate(report(CAP, `#${panelId} img`));
       galleryImages.push(...rows);
-      await page.evaluate((id) => document.getElementById(id)?.hidePopover(), panelId);
+      await page.evaluate((closedId) => {
+        window.location.hash = `#${closedId}`;
+      }, ROOM_GALLERY_CLOSED);
     }
 
     const images = [...(await page.evaluate(REPORT)), ...galleryImages];

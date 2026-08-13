@@ -176,10 +176,11 @@ export function RoomCard({
    */
   isLast?: boolean;
   /** The id of this room's gallery panel (`RoomCardStack` composes it). When
-   * given, the photo becomes the panel's declarative popover trigger; when
-   * absent the photo is just a photo. No listener either way. Task 6 wires
-   * this — it is unused here, and no button may render before it: the
-   * trigger's copy comes from `SITE.roomGallery`, which does not exist yet. */
+   * given, the photo becomes an `<a href={"#"+galleryId}>` — the gallery's
+   * declarative trigger under the `:target` mechanism (image-sizing Task 7
+   * fix, 14 Aug 2026; was a `popover` invoker button until the arrows were
+   * measured to nest rather than replace — see `RoomCardStack.tsx`'s own
+   * comment). When absent the photo is just a photo. No listener either way. */
   galleryId?: string;
 }) {
   const aspect = roomCardAspect(room.mediaId);
@@ -355,20 +356,20 @@ export function RoomCard({
           }
         >
           {/* The photo IS the gallery's declarative trigger when a `galleryId`
-              is given: a plain `popovertarget` invoker, no listener. The
-              wrapper `<div>` stays `card.firstChild` either way — the button
-              sits inside it, not around it, so the CSS crop cap (keyed to
-              `> :first-child`) and the rig's `firstElementChild` read are
-              both untouched. */}
+              is given: a plain `<a href="#…">` fragment link, no listener —
+              was a `popover` invoker button; see `RoomCardStack.tsx`'s own
+              comment for why that changed. The wrapper `<div>` stays
+              `card.firstChild` either way — the link sits inside it, not
+              around it, so the CSS crop cap (keyed to `> :first-child`) and
+              the rig's `firstElementChild` read are both untouched. */}
           {galleryId ? (
-            <button
-              type="button"
-              popoverTarget={galleryId}
+            <a
+              href={`#${galleryId}`}
               aria-label={`${SITE.roomGallery.open}: ${room.name}`}
               className="block h-full w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
             >
               {photo}
-            </button>
+            </a>
           ) : (
             photo
           )}

@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { roomGalleryId, RoomCardStack } from "./RoomCardStack";
+import { ROOM_GALLERY_CLOSED, roomGalleryId, RoomCardStack } from "./RoomCardStack";
 import { VANN_COPY } from "@/content/mahua-vann";
 import { TOLA_COPY } from "@/content/mahua-tola";
 import type { PropertyChapter } from "@/content/property-chapters";
@@ -106,38 +106,62 @@ describe("RoomCardStack", () => {
     expect(flagged[0]).toBe(cards[cards.length - 1]);
   });
 
-  it("renders one gallery panel per room, as a native popover dialog", () => {
+  // Was `popover="auto"` until image-sizing Task 7's fix (14 Aug 2026):
+  // measured, in a real browser, to nest the gallery's arrows rather than
+  // replace panels — the mechanism is `RoomCardStack.tsx`'s own comment.
+  // `:target` needs no `popover` attribute at all; the panel's `id` alone is
+  // what a fragment link addresses.
+  it("renders one gallery panel per room, shown by :target", () => {
     const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
     const panels = container.querySelectorAll(".room-gallery");
     expect(panels.length).toBe(COPY.rooms.length);
     panels.forEach((p, i) => {
-      expect(p.getAttribute("popover")).toBe("auto");
+      expect(p.getAttribute("popover")).toBeNull();
       expect(p.getAttribute("role")).toBe("dialog");
+      expect(p.getAttribute("tabindex")).toBe("-1");
       expect(p.id).toBe(roomGalleryId(CHAPTER.id, i));
       // Panels live OUTSIDE the <ol>: the stack's children stay slot,card,...
       expect(p.closest("ol")).toBeNull();
     });
   });
 
-  it("wires every card's photo as its own panel's declarative trigger", () => {
+  it("wires every card's photo as its own panel's declarative fragment link", () => {
     const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
-    const triggers = container.querySelectorAll("ol.room-stack button[popovertarget]");
+    const triggers = container.querySelectorAll("ol.room-stack a[href^='#room-gallery-']");
     expect(triggers.length).toBe(COPY.rooms.length);
     triggers.forEach((t, i) => {
-      expect(t.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, i));
+      expect(t.getAttribute("href")).toBe(`#${roomGalleryId(CHAPTER.id, i)}`);
     });
   });
 
-  it("steps through the rooms with arrows that wrap at both ends", () => {
+  it("gives every panel a real light-dismiss backdrop, hidden from assistive tech and the tab order", () => {
+    const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
+    const backdrops = container.querySelectorAll(".room-gallery-backdrop");
+    expect(backdrops.length).toBe(COPY.rooms.length);
+    backdrops.forEach((b) => {
+      expect(b.tagName).toBe("A");
+      expect(b.getAttribute("href")).toBe(`#${ROOM_GALLERY_CLOSED}`);
+      expect(b.getAttribute("aria-hidden")).toBe("true");
+      expect(b.getAttribute("tabindex")).toBe("-1");
+    });
+  });
+
+  it("steps through the rooms with arrows that wrap at both ends, and closes to a sentinel no element carries", () => {
     const { container } = render(<RoomCardStack chapter={CHAPTER} copy={COPY} />);
     const n = COPY.rooms.length;
     const panels = [...container.querySelectorAll(".room-gallery")];
     panels.forEach((p, i) => {
-      const [prev, next, close] = [...p.querySelectorAll("button")];
-      expect(prev.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, (i + n - 1) % n));
-      expect(next.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, (i + 1) % n));
-      expect(close.getAttribute("popovertarget")).toBe(roomGalleryId(CHAPTER.id, i));
-      expect(close.getAttribute("popovertargetaction")).toBe("hide");
+      const [prev, next, close] = [...p.querySelectorAll(".room-gallery-box a")];
+      expect(prev.getAttribute("href")).toBe(`#${roomGalleryId(CHAPTER.id, (i + n - 1) % n)}`);
+      expect(next.getAttribute("href")).toBe(`#${roomGalleryId(CHAPTER.id, (i + 1) % n)}`);
+      expect(close.getAttribute("href")).toBe(`#${ROOM_GALLERY_CLOSED}`);
+      // Not "#" alone (which the fragment-navigation algorithm special-cases
+      // to "scroll to the top of the document") and not any room's own id
+      // (which would just reopen that room instead of closing anything).
+      expect(close.getAttribute("href")).not.toBe("#");
+      expect(
+        [...container.querySelectorAll(".room-gallery")].some((el) => el.id === ROOM_GALLERY_CLOSED),
+      ).toBe(false);
     });
   });
 });

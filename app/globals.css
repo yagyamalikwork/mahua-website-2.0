@@ -1287,25 +1287,86 @@ body {
 }
 
 /*
- * The room gallery's panel — a native popover, so the open/close mechanics,
- * Esc, light-dismiss and the one-at-a-time rule are all user-agent behaviour
- * and cost no script. The panel is ink-on-paper (a popover carrying text never
- * sits on a translucent wash — the §16 lesson); the backdrop is the page dimmed
- * under a cream wash, decorative, carrying nothing.
+ * The room gallery's panel — CSS `:target`, not `popover` (image-sizing Task
+ * 7 fix, 14 Aug 2026; the full "why" is `RoomCardStack.tsx`'s own comment
+ * above where this markup is composed — read it first if this file is all
+ * you have open). `popover="auto"` shipped first and was measured, in a real
+ * browser, to nest the gallery's arrows rather than replace panels: an
+ * invoker button living INSIDE the popover it targets a sibling of makes the
+ * browser treat the newly-shown popover as nested inside the one still open,
+ * not a replacement for it. `:target` cannot fail that way — `location.hash`
+ * is one string, so at most one element in the document can ever match
+ * `:target`, regardless of where the link that set it lives.
  *
- * `::backdrop` inherits custom properties from the panel in current engines;
- * where an older one does not, the backdrop simply stays transparent and the
- * gallery is still a gallery — failure is absence.
+ * **No top layer, so this file owns clipping and stacking that `popover` gave
+ * away for free.** `.room-gallery` is `position: fixed` itself (its own
+ * containing block, for the two `position: absolute` children below) rather
+ * than relying on any ancestor: `ChapterSurface`'s section carries
+ * `overflow-x-clip`, and `position: fixed` genuinely escapes an ancestor's
+ * `overflow` clipping as long as that ancestor has no `transform`/`filter`/
+ * `will-change: transform` of its own to intercept it (checked: it does not).
+ * `z-index: 100` is deliberately above every other fixed/sticky chrome on
+ * this page — `[data-site-header]` is `z-index: 90` (this file, above), the
+ * property booking bar is `z-40` (`PropertyBar.tsx`) — so an open panel
+ * always sits over both, not under the header the way an unstacked `position:
+ * fixed` div would by paint order alone if it happened to come first in the
+ * DOM (it does; `.room-gallery` is the LAST thing `RoomCardStack` renders,
+ * but relying on source order for stacking is exactly the "a check that
+ * reads back the mechanism it was given proves nothing" trap this project
+ * keeps a catalogue of — the z-index is explicit so it stays true if that
+ * ever changes).
+ *
+ * **Centred with `transform: translate(-50%, -50%)`, deliberately not
+ * `margin: auto`.** The latter is what the popover version relied on (the UA
+ * popover stylesheet's own default), and it is exactly what broke: Tailwind's
+ * preflight (`* { margin: 0 }`) is an AUTHOR-origin rule, and author origin
+ * always wins over UA origin regardless of selector specificity, so the
+ * reset silently zeroed the popover's centring margin and every panel
+ * rendered pinned to the viewport's top-left corner instead (Finding 2 of
+ * the same fix round — confirmed live: `getComputedStyle(panel).margin` read
+ * `"0px"` at every shape tried). A translate never touches `margin` at all,
+ * so the same reset cannot reach it a second time. If a future edit is
+ * tempted to "simplify" this back to `margin: auto`, this paragraph is why
+ * not — Tailwind's own preflight is still loaded on every page.
+ *
+ * The panel is ink-on-paper (a lightbox carrying text never sits on a
+ * translucent wash — the §16 lesson); the backdrop link is the page dimmed
+ * under a cream wash, decorative, carrying nothing (a REAL element now, not
+ * `::backdrop` — that pseudo-element only exists for popover/dialog top-layer
+ * elements, which this construction deliberately no longer is).
  */
 .room-gallery {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.room-gallery:target {
+  display: block;
+}
+
+.room-gallery-backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+
+.room-gallery-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: min(92vw, 96rem);
+  /* The popover UA stylesheet also carried `overflow: auto` — replicated
+     here, not assumed unnecessary, so a room whose figure + caption + nav
+     together exceed a short viewport scrolls inside the box rather than
+     overflowing it or the box overflowing the screen. */
+  max-height: 92vh;
+  overflow-y: auto;
   background: var(--paper);
   border: 1px solid var(--accent);
   padding: 1.5rem;
-  max-width: min(92vw, 96rem);
-}
-
-.room-gallery::backdrop {
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
 }
 
 /*

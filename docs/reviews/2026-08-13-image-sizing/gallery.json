@@ -1,7 +1,10 @@
 {
-  "measuredAt": "2026-08-13T22:44:39.625Z",
+  "measuredAt": "2026-08-13T23:28:47.168Z",
   "url": "http://localhost:3100",
-  "method": "Real Chromium, production build. Assertions 1-5 drive the popover through the same paths a visitor uses (Playwright's own .click(), page.keyboard.press('Escape'), page.mouse.click(x,y)) and read `naturalWidth` / `:popover-open` off the live DOM — never `hidePopover()`/`showPopover()`. Assertion 6 asserts ABSENCE of breakage without JavaScript, not that panels open.",
+  "mechanism": ":target — see this file's own header comment for the full history (popover -> :target, 14 Aug 2026)",
+  "method": "Real Chromium, production build. Every assertion drives the page through the same paths a visitor uses (Playwright's own .click(), page.mouse.click(x,y)) and reads computed `display` / `document.activeElement` / `window.scrollY` off the live DOM — never `location.hash = ...` set directly. Assertion 6 additionally proves the mechanism works with javaScriptEnabled:false, not only that nothing errors.",
+  "esc": "NOT supported by this construction — a deliberate trade, not an oversight. See the header comment.",
+  "backButton": "steps back through opened rooms (a real :target/history side effect) — checked per combo, not pass/fail.",
   "combos": [
     {
       "route": "vann",
@@ -38,37 +41,65 @@
       },
       "assertion2": {
         "clickedTrigger0": true,
-        "panelOpened": true,
+        "visibleAfterOpen": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 2293,
+        "scrollAfterOpen": 2293,
+        "activeElementId": "room-gallery-vann-rooms-0",
         "minWidth": 156,
         "naturalWidth": 358,
         "width": 343.15625
       },
       "assertion3": {
-        "navButtonCount": 3,
         "steps": [
           {
             "clicked": "next",
             "from": 0,
             "clickSucceeded": true,
-            "open": [
-              "room-gallery-vann-rooms-0",
+            "visible": [
               "room-gallery-vann-rooms-1"
-            ]
+            ],
+            "scrollBefore": 2293,
+            "scrollAfter": 2293
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-2"
+            ],
+            "scrollBefore": 2293,
+            "scrollAfter": 2293
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-0"
+            ],
+            "scrollBefore": 2293,
+            "scrollAfter": 2293
           }
         ],
         "previousFromZero": {
           "clicked": true,
-          "open": [
-            "room-gallery-vann-rooms-0",
+          "visible": [
             "room-gallery-vann-rooms-2"
-          ]
+          ],
+          "scrollBeforePrev": 2293,
+          "scrollAfterPrev": 2293
         }
       },
       "assertion4": {
-        "openBeforeEsc": [
+        "openBeforeClose": [
           "room-gallery-vann-rooms-0"
         ],
-        "afterEsc": []
+        "closeClicked": true,
+        "afterClose": []
       },
       "assertion5": {
         "openBeforeDismiss": [
@@ -77,9 +108,17 @@
         "afterDismiss": [],
         "point": [
           8,
-          416
+          640
         ],
         "confirmedOutside": true
+      },
+      "backButton": {
+        "beforeBack": [
+          "room-gallery-vann-rooms-1"
+        ],
+        "afterBack": [
+          "room-gallery-vann-rooms-0"
+        ]
       }
     },
     {
@@ -117,37 +156,65 @@
       },
       "assertion2": {
         "clickedTrigger0": true,
-        "panelOpened": true,
+        "visibleAfterOpen": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 2357,
+        "scrollAfterOpen": 2357,
+        "activeElementId": "room-gallery-vann-rooms-0",
         "minWidth": 576,
         "naturalWidth": 1152,
         "width": 1053
       },
       "assertion3": {
-        "navButtonCount": 3,
         "steps": [
           {
             "clicked": "next",
             "from": 0,
             "clickSucceeded": true,
-            "open": [
-              "room-gallery-vann-rooms-0",
+            "visible": [
               "room-gallery-vann-rooms-1"
-            ]
+            ],
+            "scrollBefore": 2357,
+            "scrollAfter": 2357
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-2"
+            ],
+            "scrollBefore": 2357,
+            "scrollAfter": 2357
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-0"
+            ],
+            "scrollBefore": 2357,
+            "scrollAfter": 2357
           }
         ],
         "previousFromZero": {
           "clicked": true,
-          "open": [
-            "room-gallery-vann-rooms-0",
+          "visible": [
             "room-gallery-vann-rooms-2"
-          ]
+          ],
+          "scrollBeforePrev": 2357,
+          "scrollAfterPrev": 2357
         }
       },
       "assertion4": {
-        "openBeforeEsc": [
+        "openBeforeClose": [
           "room-gallery-vann-rooms-0"
         ],
-        "afterEsc": []
+        "closeClicked": true,
+        "afterClose": []
       },
       "assertion5": {
         "openBeforeDismiss": [
@@ -156,9 +223,17 @@
         "afterDismiss": [],
         "point": [
           8,
-          861
+          882
         ],
         "confirmedOutside": true
+      },
+      "backButton": {
+        "beforeBack": [
+          "room-gallery-vann-rooms-1"
+        ],
+        "afterBack": [
+          "room-gallery-vann-rooms-0"
+        ]
       }
     },
     {
@@ -204,37 +279,75 @@
       },
       "assertion2": {
         "clickedTrigger0": true,
-        "panelOpened": true,
+        "visibleAfterOpen": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 3177,
+        "scrollAfterOpen": 3177,
+        "activeElementId": "room-gallery-tola-rooms-0",
         "minWidth": 156,
         "naturalWidth": 358,
         "width": 343.15625
       },
       "assertion3": {
-        "navButtonCount": 3,
         "steps": [
           {
             "clicked": "next",
             "from": 0,
             "clickSucceeded": true,
-            "open": [
-              "room-gallery-tola-rooms-0",
+            "visible": [
               "room-gallery-tola-rooms-1"
-            ]
+            ],
+            "scrollBefore": 3177,
+            "scrollAfter": 3177
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-2"
+            ],
+            "scrollBefore": 3177,
+            "scrollAfter": 3177
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-3"
+            ],
+            "scrollBefore": 3177,
+            "scrollAfter": 3177
+          },
+          {
+            "clicked": "next",
+            "from": 3,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-0"
+            ],
+            "scrollBefore": 3177,
+            "scrollAfter": 3177
           }
         ],
         "previousFromZero": {
           "clicked": true,
-          "open": [
-            "room-gallery-tola-rooms-0",
+          "visible": [
             "room-gallery-tola-rooms-3"
-          ]
+          ],
+          "scrollBeforePrev": 3177,
+          "scrollAfterPrev": 3177
         }
       },
       "assertion4": {
-        "openBeforeEsc": [
+        "openBeforeClose": [
           "room-gallery-tola-rooms-0"
         ],
-        "afterEsc": []
+        "closeClicked": true,
+        "afterClose": []
       },
       "assertion5": {
         "openBeforeDismiss": [
@@ -243,9 +356,17 @@
         "afterDismiss": [],
         "point": [
           8,
-          416
+          640
         ],
         "confirmedOutside": true
+      },
+      "backButton": {
+        "beforeBack": [
+          "room-gallery-tola-rooms-1"
+        ],
+        "afterBack": [
+          "room-gallery-tola-rooms-0"
+        ]
       }
     },
     {
@@ -291,37 +412,75 @@
       },
       "assertion2": {
         "clickedTrigger0": true,
-        "panelOpened": true,
+        "visibleAfterOpen": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 3378,
+        "scrollAfterOpen": 3378,
+        "activeElementId": "room-gallery-tola-rooms-0",
         "minWidth": 576,
         "naturalWidth": 1152,
         "width": 1053
       },
       "assertion3": {
-        "navButtonCount": 3,
         "steps": [
           {
             "clicked": "next",
             "from": 0,
             "clickSucceeded": true,
-            "open": [
-              "room-gallery-tola-rooms-0",
+            "visible": [
               "room-gallery-tola-rooms-1"
-            ]
+            ],
+            "scrollBefore": 3378,
+            "scrollAfter": 3378
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-2"
+            ],
+            "scrollBefore": 3378,
+            "scrollAfter": 3378
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-3"
+            ],
+            "scrollBefore": 3378,
+            "scrollAfter": 3378
+          },
+          {
+            "clicked": "next",
+            "from": 3,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-0"
+            ],
+            "scrollBefore": 3378,
+            "scrollAfter": 3378
           }
         ],
         "previousFromZero": {
           "clicked": true,
-          "open": [
-            "room-gallery-tola-rooms-0",
+          "visible": [
             "room-gallery-tola-rooms-3"
-          ]
+          ],
+          "scrollBeforePrev": 3378,
+          "scrollAfterPrev": 3378
         }
       },
       "assertion4": {
-        "openBeforeEsc": [
+        "openBeforeClose": [
           "room-gallery-tola-rooms-0"
         ],
-        "afterEsc": []
+        "closeClicked": true,
+        "afterClose": []
       },
       "assertion5": {
         "openBeforeDismiss": [
@@ -330,9 +489,17 @@
         "afterDismiss": [],
         "point": [
           8,
-          861
+          882
         ],
         "confirmedOutside": true
+      },
+      "backButton": {
+        "beforeBack": [
+          "room-gallery-tola-rooms-1"
+        ],
+        "afterBack": [
+          "room-gallery-tola-rooms-0"
+        ]
       }
     }
   ],
@@ -345,6 +512,8 @@
       "stackHeight": 2160,
       "triggerCount": 3,
       "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
       "pageErrors": [],
       "consoleErrors": []
     },
@@ -356,6 +525,8 @@
       "stackHeight": 2280,
       "triggerCount": 3,
       "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
       "pageErrors": [],
       "consoleErrors": []
     },
@@ -367,6 +538,8 @@
       "stackHeight": 2824,
       "triggerCount": 4,
       "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
       "pageErrors": [],
       "consoleErrors": []
     },
@@ -378,53 +551,24 @@
       "stackHeight": 3040,
       "triggerCount": 4,
       "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
       "pageErrors": [],
       "consoleErrors": []
     }
   ],
-  "watchedFailing": {},
   "knownDefects": [
     {
-      "id": "nested-popover-arrows",
-      "found": "2026-08-14",
-      "summary": "The gallery's \"next\"/\"previous\" arrows nest rather than replace: clicking \"next\" opens the neighbouring panel WITHOUT closing the current one, because both buttons live inside the panel they navigate away from, and the HTML Popover API's own \"topmost popover ancestor\" rule treats a popover invoked from inside another open popover as nested rather than a replacement.",
-      "confirmedBy": "An isolated two-popover HTML fixture outside this codebase, run in the same Chromium: an invoker INSIDE its sibling popover nests (both stay open); the identical markup with the invoker moved OUTSIDE both popovers replaces cleanly. Also reproduces on the real page with a full-page screenshot showing the covered panel's own text peeking out from behind the top one's edges.",
-      "consequences": "Assertions 3, 4 and 5 fail on the current, unmodified, already-shipped build for this reason: panel 0 never closes when \"next\" is clicked (assertion 3); Escape and a light-dismiss click each only close the TOPMOST nested panel, so stepping through more than one room needs one Escape/outside-click per accumulated panel to fully leave the gallery, not one (assertions 4, 5).",
-      "wronglyClaimedBy": [
-        "docs/superpowers/specs/2026-08-13-image-sizing-design.md §3 (\"popover `auto` guarantees at most one open panel — opening the neighbour closes the current one, which *is* the navigation\")",
-        "components/sections/RoomCardStack.tsx's own code comment (\"Because every panel is popover=\\\"auto\\\", the UA guarantees at most one such popover open — so invoking the neighbour's popover closes the current one as a side effect\")"
-      ],
-      "notFixedHere": "components/sections/RoomCardStack.tsx is outside this task's file list, and the working fix (move the invoking buttons outside the popover's own DOM) needs a real layout change — the panel is width:fit-content, sized by the photograph, and an external control row needs its own mechanism (CSS anchor positioning, or a different visual treatment) to match that width without JavaScript. Left failing rather than weakened — see task-7-report.md."
+      "id": "arrows-nest-instead-of-replacing",
+      "status": "FIXED 14 Aug 2026",
+      "summary": "Was: the gallery's popover-based arrows nested rather than replaced, because the invoking button lived inside the popover it targeted a sibling of. Fixed by switching the whole mechanism to CSS `:target`, which cannot nest by construction (`location.hash` is one string). See RoomCardStack.tsx."
     },
     {
       "id": "gallery-panel-not-centred",
-      "found": "2026-08-14",
-      "summary": "The gallery panel does not centre itself. getBoundingClientRect() reads {left:0, top:0} at every shape tried — the HTML Popover API's own UA stylesheet centres a popover via `margin: auto`, but Tailwind's preflight (`* { margin: 0 }`) is an author-origin rule and wins over a UA-origin one regardless of selector specificity, zeroing that margin out. The panel renders pinned to the viewport's top-left corner, sized to its own content (the photograph), rather than centred.",
-      "confirmedBy": "Direct getComputedStyle(panel).margin === \"0px\" at both 390x844 and 1440x900, with the panel's own rect confirming {left:0, top:0} in both cases (1440x900: 1103x841 from the corner; 390x844: 358.8x395.8 from the corner).",
-      "consequences": "Purely cosmetic at narrow viewports where the panel is small relative to the screen (390: the gap below/right of the panel is large enough that the brief's own fixed light-dismiss point still landed outside it by chance), but at 1440x900 the panel covers over half the screen from the corner rather than presenting as a centred lightbox — which is also why the brief's fixed (8, 450) light-dismiss point landed INSIDE the panel there, not outside it as assumed. Assertion 5 in this rig now measures the panel's own live geometry and picks a point proven outside it (see its own comment) so it tests the dismiss mechanism rather than this defect.",
-      "wronglyClaimedBy": [
-        "This task's own brief, assertion 5's own reasoning: \"the panel's max-width: min(92vw, 96rem) with margin: auto centring (the UA's own popover default) always leaves at least 4vw clear on each side\" — the margin:auto half of that premise does not hold on this build."
-      ],
-      "notFixedHere": "app/globals.css's `.room-gallery` rule and Tailwind's own preflight are both outside this task's file list. The likely fix is a one-line `margin: auto;` added to `.room-gallery` (author-origin, so it would win back the centring Tailwind's reset removed) but that is a visual change on already-shipped, already-reviewed markup and needs its own verification pass, not a same-task patch — see task-7-report.md."
+      "status": "FIXED 14 Aug 2026",
+      "summary": "Was: Tailwind's preflight (`* { margin: 0 }`) defeated the popover UA stylesheet's `margin: auto` centring. Fixed by centring the panel's own box explicitly with `transform: translate(-50%, -50%)`, which never touches `margin` at all. See app/globals.css's `.room-gallery-box`."
     }
   ],
-  "failures": [
-    "vann@390x844: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
-    "vann@390x844: assertion 3: more than one panel open at once — [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1] — popover=\"auto\" should guarantee at most one",
-    "vann@390x844: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
-    "vann@390x844: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked",
-    "vann@1440x900: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
-    "vann@1440x900: assertion 3: more than one panel open at once — [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1] — popover=\"auto\" should guarantee at most one",
-    "vann@1440x900: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
-    "vann@1440x900: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked",
-    "tola@390x844: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
-    "tola@390x844: assertion 3: more than one panel open at once — [room-gallery-tola-rooms-0, room-gallery-tola-rooms-1] — popover=\"auto\" should guarantee at most one",
-    "tola@390x844: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
-    "tola@390x844: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked",
-    "tola@1440x900: assertion 3: panel 0 still matches :popover-open after \"next\" was clicked",
-    "tola@1440x900: assertion 3: more than one panel open at once — [room-gallery-tola-rooms-0, room-gallery-tola-rooms-1] — popover=\"auto\" should guarantee at most one",
-    "tola@1440x900: assertion 3: navigation chain broke at step 0 (from panel 0) — stopped walking forward rather than clicking a panel that may not actually be open",
-    "tola@1440x900: assertion 3: panel 0 still matches :popover-open after \"previous\" was clicked"
-  ],
-  "verdict": "fail"
+  "failures": [],
+  "verdict": "pass"
 }

@@ -1201,3 +1201,87 @@ and the lever if it is ever picked up is a shorter card at that width — `ROOM_
 it.** Every rig here still runs at 390, and it must: the two worst defects this plan produced were both
 found at that width, one of them by a human reading a screenshot. Removing the phone from the instruments
 would remove the thing that has been catching the errors.
+
+## 18. The room gallery's arrows nested instead of replacing — `popover` swapped for `:target`, 14 Aug 2026
+
+Image-sizing Task 7 was scoped as pure verification: prove, in a browser, the one claim Task 6's own code
+review had flagged as reasoned rather than measured (does the enlarged photograph really stay deferred until
+a visitor opens it). Building the rig to prove that one thing found two more, unasked, both stated as fact —
+not measured — in the original spec and in `RoomCardStack.tsx`'s own code comment.
+
+### What the rig found, watching its own first assertion pass
+
+The deferred-image claim held, once the rig was corrected for a real, benign confound: every gallery
+`<Photo>` shares its media id with its own room card's `<Photo>` — the enlarged view is the same photograph,
+by design — so at some viewports the two components' different `sizes` strings resolve to the identical
+candidate file, and Chromium serves the closed panel's `naturalWidth` from its own in-memory decoded-image
+cache with zero new network requests. A blanket `naturalWidth === 0` cannot tell that apart from a genuine
+early fetch; the corrected check additionally requires the shared file to be byte-identical to the card's own
+and requested exactly once across the page.
+
+While proving that, the rig's own click-through of the arrows surfaced something the spec never checked:
+clicking "next" opened the neighbouring panel **without** closing the one still open. Both panels stayed
+`:popover-open` simultaneously. Confirmed before trusting it, with a two-element fixture outside this
+codebase — two sibling `[popover=auto]` divs; a button *inside* the first, targeting the second, nests (both
+end up open); the identical markup with the invoking button moved *outside* both popovers replaces cleanly.
+**Mechanism:** the HTML Popover API's "topmost popover ancestor" rule treats a popover invoked from a button
+that is itself a descendant of an *already open* popover as nested inside it rather than a replacement — the
+same rule that lets a menu button open a submenu without closing its parent, working exactly as specified
+against markup that never asked for a submenu. `RoomCardStack.tsx`'s arrows have to live inside their own
+panel to sit beside its own figure, so every "next"/"previous" click was, by construction, an invoker inside
+an open popover targeting a sibling.
+
+**A second, independent finding from the same pass: the panel was never actually centred.**
+`getComputedStyle(panel).margin` read `"0px"` at every shape tried; `getBoundingClientRect()` showed
+`{left: 0, top: 0}` — pinned to the viewport's corner. Tailwind's own preflight (`* { margin: 0 }`) is an
+author-origin rule, and author origin always wins over the popover UA stylesheet's own `margin: auto`
+centring, regardless of selector specificity. At 390×844 the panel happened to be short enough that a probe
+point chosen assuming centring still landed outside it by luck; at 1440×900 the same point landed inside the
+panel, which is what actually exposed the bug — a fixed test point can pass or fail for a reason that has
+nothing to do with the thing it means to test, the same lesson §2 #45 already paid for once.
+
+Both were **the plan's own defect, not the implementer's**: the spec (`2026-08-13-image-sizing-design.md`
+§3) states outright, *"`popover="auto"` guarantees at most one open panel — opening the neighbour closes the
+current one, which *is* the navigation"* and *"the panel's `max-width` ... with `margin: auto` centring (the
+UA's own popover default) always leaves at least 4vw clear."* Both sentences were written from how the
+mechanism is *supposed* to work, not from a browser. Task 6's code carried the same premise into its own
+comment. Read together with §2's own catalogue, this is the forty-ninth and fiftieth instances of the one
+defect shape this whole document exists to name: a claim about a mechanism, stated with confidence, never
+run.
+
+### The fix: CSS `:target`, which cannot nest by construction
+
+Rather than patch the popover version (harden the invoker, add a script listener to force-close siblings —
+both reintroduce the JavaScript this whole gallery was built to avoid), the mechanism changed outright.
+`location.hash` is one string, so at most one element in a document can ever match `:target` — there is no
+"nested" state for it to fall into, independent of where the link that set it lives in the DOM. Confirmed
+live, both routes, both widths, before trusting it: clicking "next" from an open panel now leaves *exactly*
+one `.room-gallery` with a computed `display` other than `none` at every step of a full wraparound walk (`n`
+clicks returns to panel 0; "previous" from panel 0 wraps to the last panel) — checked by rendered visibility,
+deliberately, not by `:target` itself, because `:target`'s own "exactly one" guarantee is unfalsifiable by
+construction and could never have caught a broken CSS author rule the way it caught the popover's nesting.
+Centring moved to the panel's own box, `transform: translate(-50%, -50%)`, which never reads `margin` at all
+— the same preflight reset cannot reach it a second time.
+
+**What the swap costs, plainly, not glossed over: `:target` has no Escape key.** Popover's Esc-to-close was
+free UA behaviour; a keyboard binding for a pure CSS/URL mechanism would need a `keydown` listener, which
+this construction deliberately still has none of. `scripts/check_room_gallery.mjs`'s own "Esc closes"
+assertion is retired, not silently deleted — replaced with one that proves the close control and the real,
+now-addressable backdrop link each independently work. A visitor without a mouse can still reach either by
+Tab and Enter/Space; what is gone is closing from anywhere with one keypress.
+
+**A genuine, arguably-a-feature side effect that came free: the back button now steps back through opened
+rooms.** Every fragment navigation is a real history entry, so a visitor who has looked at three rooms can
+leave them one at a time with Back — a lightbox behaviour the popover version never had, unasked for.
+
+**Also newly, genuinely provable: the mechanism needs no script at all**, unlike the popover version, whose
+invoker attributes still depended on native browser support even though this codebase never wired a
+listener to them. `check_room_gallery.mjs` now opens and closes a panel with `javaScriptEnabled: false` and
+asserts it worked, not merely that nothing broke — the first time this gallery's "zero JavaScript" claim was
+checked as a positive capability rather than only as an absence of errors.
+
+Full assertion design, sabotage-arm output (including a new one — deliberately removing `.room-gallery`'s
+own `display: none` default, to prove the "exactly one visible" check is sensitive to a broken CSS author
+rule and not merely restating `:target`'s own unfalsifiable guarantee), and the scroll-jump / focus-landing
+measurements are in `.superpowers/sdd/2026-08-13-image-sizing/task-7-report.md` and
+`docs/reviews/2026-08-13-image-sizing/gallery.json`.

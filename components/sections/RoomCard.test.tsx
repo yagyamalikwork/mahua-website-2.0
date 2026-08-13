@@ -99,17 +99,20 @@ describe("RoomCard", () => {
 
   it("renders no gallery trigger when no galleryId is given", () => {
     const { container } = render(<RoomCard room={ROOM} index={0} onSurface={false} />);
-    expect(container.querySelector("button")).toBeNull();
+    expect(container.querySelector('a[href^="#"]')).toBeNull();
   });
 
+  // Was a `popover` invoker `<button>` until image-sizing Task 7's fix (14 Aug
+  // 2026): measured, in a real browser, to nest the gallery's arrows rather
+  // than replace panels (RoomCardStack.tsx's own comment has the mechanism).
+  // `:target` needs a real `<a href="#…">`, not a script-free button.
   it("renders the photo as the panel's trigger when given a galleryId", () => {
     const { container } = render(
       <RoomCard room={ROOM} index={0} onSurface={false} galleryId="room-gallery-test-0" />,
     );
-    const button = container.querySelector(".room-card > :first-child > button");
-    expect(button?.getAttribute("popovertarget")).toBe("room-gallery-test-0");
-    expect(button?.getAttribute("type")).toBe("button");
-    expect(button?.querySelector("img")).not.toBeNull();
+    const link = container.querySelector(".room-card > :first-child > a");
+    expect(link?.getAttribute("href")).toBe("#room-gallery-test-0");
+    expect(link?.querySelector("img")).not.toBeNull();
   });
 
   it("renders the room's words", () => {
