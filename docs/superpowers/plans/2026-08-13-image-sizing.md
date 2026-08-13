@@ -1123,7 +1123,16 @@ node scripts/check_image_resolution.mjs --port 3100
 node scripts/measure_density.mjs                 # home — chapters table
 node scripts/measure_density.mjs --url /mahua-vann
 node scripts/measure_density.mjs --url /mahua-tola
+node scripts/measure_page.mjs                    # transfer + hero responseEnd
 ```
+
+**`measure_page.mjs` is in this list because of a defect this plan's own review found.** Task 4's
+`box` fix makes every room photograph request roughly 1.31× more width at `lg` and up — about 1.7×
+the pixels — and nothing else in this plan measures bytes. The room photographs are below the fold,
+so they land in *whole page scrolled* rather than *initial load*, which is the reading the client
+ruled on 4 Aug; but CLAUDE.md publishes both figures per width and they are now stale for the two
+property routes. Record the new numbers, and if **initial load** moved at either width, that is a
+finding against non-negotiable #6, not a footnote.
 
 (Confirm `measure_density.mjs`'s actual route flag by reading its header first — §2 #26/#28 are
 both stories about a rig pointed at a route it wasn't built for.) Then, separately:
