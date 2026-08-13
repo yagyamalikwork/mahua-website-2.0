@@ -109,7 +109,7 @@ export function Hero({
       style={{ backgroundColor: "var(--overlay)" }}
     >
       <div className="absolute inset-0 -z-10">
-        <ImageReveal static className="h-full w-full">
+        <ImageReveal static noZoom className="h-full w-full">
           <Photo
             id={chapter.media[0]}
             decorative

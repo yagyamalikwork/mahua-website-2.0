@@ -396,6 +396,60 @@ export const IMAGE_FROM = { scale: 1.08 } as const;
  * empty. A pinned scene is the one remaining construct that can do that again,
  * so its rope is short and `StickyScene` clamps to it.
  */
+/**
+ * The page's scroll feel — `components/motion/SmoothScroll.tsx`.
+ *
+ * These were hard-coded in the component until 12 Aug 2026, which is the one thing
+ * this project's architecture rule forbids: no component holds a duration. Moved
+ * here when the client asked for the scroll to be "smoother and softer".
+ *
+ * `duration` is how long the page keeps gliding after the wheel stops. It is the
+ * dial that decides whether scrolling feels soft or feels *late*: too long and the
+ * page carries on after the reader has stopped asking, which reads as lag rather
+ * than as smoothness. 1.1 was brisk; 1.4 is soft and still arrives when you expect.
+ *
+ * `ease` replaces Lenis's default exponential-out, which starts abruptly and then
+ * has a very long tail. A quartic-out leaves at a gentler rate and settles sooner,
+ * which is the shape "softer" actually describes.
+ *
+ * `wheelMultiplier` below 1 takes the edge off each wheel notch, so a single
+ * aggressive flick travels less far. This is the part that makes a trackpad feel
+ * unhurried rather than skittish.
+ */
+export const SCROLL = {
+  duration: 1.4,
+  wheelMultiplier: 0.9,
+  /** Quartic out: leaves gently, settles without a long tail. */
+  ease: (t: number) => 1 - Math.pow(1 - t, 4),
+} as const;
+
+/**
+ * The slow zoom a homepage photograph makes while the pointer is on it.
+ *
+ * Client request, 12 Aug 2026: *"very smooth, slow and soft zoom in… the border or
+ * outline size remain the same and the image zooms inside the same boundary."* So
+ * the frame never moves — `ImageReveal` is already `overflow-hidden` — and only the
+ * picture inside it grows.
+ *
+ * **1.06 and not more.** Non-negotiable #4 says if you notice the animation it is
+ * too fast, and a zoom is noticed by its *rate*, not its distance: 6% over nearly
+ * two seconds is a photograph breathing, while the same 6% in 300ms is a twitch.
+ * The long `out` duration is what makes it read as soft; the shorter `back` is
+ * because a photograph should return promptly once the pointer leaves rather than
+ * following the visitor around the page.
+ *
+ * Hand-caused motion, so it is exempt from the page's restraint rules in the same
+ * way the lantern's swing is — nothing moves until a visitor asks. It still goes
+ * under `prefers-reduced-motion`, because the visitor asking for less motion is a
+ * different request from the visitor pointing at a photograph.
+ */
+export const PHOTO_ZOOM = {
+  scale: 1.06,
+  out: 1.8,
+  back: 0.9,
+  ease: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+} as const;
+
 export const STICKY_SCREENS_MAX = 3;
 
 /**

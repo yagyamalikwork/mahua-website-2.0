@@ -4,7 +4,7 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
-import { DURATION, ENTER, IMAGE_FROM, LIVING, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
+import { DURATION, ENTER, IMAGE_FROM, LIVING, PHOTO_ZOOM, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
 import { INDEXING_ALLOWED } from "@/lib/indexing";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
@@ -93,6 +93,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // `app/globals.css`, and neither can drift from the other. Published
           // on `<html>` rather than on the section because `--property-bar-reserve`
           // describes a bar that is fixed to the viewport, not to any chapter.
+          // The homepage's hover zoom. Same terms as everything else here: the
+          // numbers live in `lib/motion.ts`, the rule lives in `app/globals.css`,
+          // and neither can drift from the other.
+          "--photo-zoom": String(PHOTO_ZOOM.scale),
+          "--photo-zoom-out": `${PHOTO_ZOOM.out}s`,
+          "--photo-zoom-back": `${PHOTO_ZOOM.back}s`,
+          "--photo-zoom-ease": PHOTO_ZOOM.ease,
           "--room-deck-step": `${ROOM_STACK.deckStep}px`,
           "--room-card-gutter": `${ROOM_STACK.gutter}px`,
           "--room-card-height-max": `${ROOM_STACK.heightMax}px`,

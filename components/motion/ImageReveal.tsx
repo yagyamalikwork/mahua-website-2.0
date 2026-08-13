@@ -27,11 +27,21 @@ export function ImageReveal({
   className,
   delay = 0,
   static: skipTween = false,
+  noZoom = false,
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   static?: boolean;
+  /**
+   * Opt out of the homepage's hover zoom (`app/globals.css`, `[data-hover-zoom]`).
+   *
+   * For photographs that are a *backdrop* rather than an object — the hero, which
+   * carries the headline on top of it. A background that reacts to the pointer is
+   * restless, and non-negotiable #4 is that restraint is a requirement. Everything
+   * that reads as a discrete photograph keeps the zoom.
+   */
+  noZoom?: boolean;
 }) {
   const { ref, state } = useInView<HTMLDivElement>();
   const driven = !skipTween && state !== "rest";
@@ -39,6 +49,15 @@ export function ImageReveal({
   return (
     <div
       ref={skipTween ? undefined : ref}
+      /*
+       * `data-image-frame` is the hover-zoom's hook, and it is an attribute rather
+       * than a structural selector on purpose: this project has twice had a rule
+       * silently stop matching when markup moved (`DECISIONS.md` §2, #10 and #33).
+       * The frame is already `overflow-hidden`, which is what lets a photograph
+       * grow inside a boundary that does not move.
+       */
+      data-image-frame=""
+      {...(noZoom ? { "data-no-zoom": "" } : {})}
       className={`relative overflow-hidden ${className ?? ""}`}
       {...(driven ? { "data-image-enter": state } : {})}
       style={delay ? ({ "--image-delay": `${delay}s` } as React.CSSProperties) : undefined}

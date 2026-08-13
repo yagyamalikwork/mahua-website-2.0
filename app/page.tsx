@@ -232,7 +232,14 @@ export default function Home() {
           the chapter that actually invites you — the last one, which carries the
           real link out to the booking site. */}
       <SiteHeader ctaHref={`#${CHAPTERS[CHAPTERS.length - 1].id}`} />
-      <main>
+      {/*
+       * `data-hover-zoom` scopes the slow zoom-on-hover to this page and no other.
+       * The client asked for it on the homepage (12 Aug 2026) and asked for nothing
+       * else to change, so the property pages are deliberately untouched. One
+       * attribute here beats threading a prop through six section components, and
+       * `components/motion/ImageReveal.tsx` carries the per-photograph opt-out.
+       */}
+      <main data-hover-zoom>
         {CHAPTERS.map((chapter) =>
           renderChapter(chapter, {
             intro: INTRO_KINDS.includes(chapter.kind) ? intro++ : 0,

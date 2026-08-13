@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import Lenis from "lenis";
-import { prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, SCROLL } from "@/lib/motion";
 
 /**
  * Freeze and unfreeze the page. Anything that covers the viewport — the chapter
@@ -55,7 +55,16 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    // Every number here is `SCROLL` in `lib/motion.ts`; none is written in this
+    // file. The client asked for "smoother and softer" on 12 Aug 2026 and the
+    // trade is recorded there — a longer glide reads as soft up to a point and as
+    // lag past it.
+    const lenis = new Lenis({
+      duration: SCROLL.duration,
+      easing: SCROLL.ease,
+      wheelMultiplier: SCROLL.wheelMultiplier,
+      smoothWheel: true,
+    });
     lenisRef.current = lenis;
 
     // `requestAnimationFrame` hands milliseconds, which is the unit `raf` wants.

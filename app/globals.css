@@ -1253,3 +1253,65 @@ body {
     animation: none;
   }
 }
+
+/*
+ * The homepage's slow hover zoom — client request, 12 Aug 2026.
+ *
+ * The frame never moves. `ImageReveal` is already `position: relative` and
+ * `overflow: hidden`, so growing the picture *inside* it is the whole effect: the
+ * boundary, the caption beneath and every neighbour stay exactly where they were,
+ * and only the photograph breathes. Nothing here changes layout, so nothing here
+ * can reflow the page.
+ *
+ * **It scales the frame's grandchild, not `[data-image-inner]`, and that is
+ * deliberate.** The arrival animation already owns `[data-image-inner]` — it
+ * animates the `scale` *property* there, with its own transition and delay (see
+ * `[data-image-enter]` above). A `transition` declared on the same element with
+ * higher specificity would replace that shorthand wholesale and quietly break how
+ * every photograph on the page arrives. Scaling the `<picture>` inside it keeps the
+ * two effects on separate elements, where neither can reach the other.
+ *
+ * Scoped to `[data-hover-zoom]`, which only `app/page.tsx` sets — the client asked
+ * for the homepage and asked for nothing else to change, so the property pages do
+ * not get this. `[data-no-zoom]` is the per-photograph opt-out and the hero uses
+ * it: a backdrop carrying a headline should not stir when the pointer crosses it.
+ *
+ * `:hover` only, never `:focus-within` — a keyboard visitor tabbing through links
+ * would otherwise set photographs moving they never pointed at.
+ */
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]) [data-image-inner] > * {
+  transition: transform var(--photo-zoom-back) var(--photo-zoom-ease);
+  /* Its own layer, so the browser is not repainting a 200 KB photograph per frame. */
+  will-change: transform;
+}
+
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover [data-image-inner] > * {
+  transform: scale(var(--photo-zoom));
+  /* Slow going out, quicker coming back — see `PHOTO_ZOOM` in `lib/motion.ts`. */
+  transition-duration: var(--photo-zoom-out);
+}
+
+/*
+ * A visitor who asked for less motion gets none of this. That is a different
+ * request from pointing at a photograph, so unlike the lantern's swing this one
+ * does not survive reduced motion — there is no information in it, only pleasure.
+ */
+@media (prefers-reduced-motion: reduce) {
+  /*
+   * **The selector has to match the hover rule's specificity, and the first
+   * attempt did not.** `[data-hover-zoom] [data-image-frame] [data-image-inner] > *`
+   * is (0,3,0); the hover rule is (0,5,0) because of `:not([data-no-zoom])` and
+   * `:hover`. The weaker rule lost inside the media query and a reduced-motion
+   * visitor still got the zoom — measured at scale 1.06 on a build where this
+   * block was already present and looked right.
+   *
+   * That is this project's most-catalogued defect (`DECISIONS.md` §2): two rules
+   * matching one element, resolved by something other than intent. So this one
+   * repeats the hover selector exactly and wins on document order instead.
+   */
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover [data-image-inner] > *,
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]) [data-image-inner] > * {
+    transform: none;
+    transition: none;
+  }
+}
