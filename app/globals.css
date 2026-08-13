@@ -1140,19 +1140,31 @@ body {
  * "Finding 1."
  *
  * The fix caps the wrapper's height so its OWN aspect can never drop below
- * `ROOM_PHOTO_KEEP × the photo's own aspect` (`RoomCard.tsx`), regardless of
- * how the card's fixed height and the viewport's shape happen to interact —
- * a `min-aspect-ratio`, expressed as a `max-height` because height, not
- * width, is the axis actually free to move once the row's stretch has
- * claimed it. `container-type: inline-size` on `.room-card` lets the wrapper
- * reference the CARD's own resolved width in `cqw` units — safe (no circular
- * dependency): the card's width comes from its flex/grid ancestor, never
- * from its own content, so querying it from a descendant introduces nothing
- * the card's own layout depends on. `--room-photo-aspect` is set inline per
- * card in `RoomCard.tsx`, from the very `ROOM_PHOTO_KEEP × aspect` value the
+ * `(ROOM_PHOTO_KEEP + ROOM_PHOTO_MARGIN) × the photo's own WORST-CASE aspect`
+ * (`RoomCard.tsx`), regardless of how the card's fixed height and the
+ * viewport's shape happen to interact — a `min-aspect-ratio`, expressed as a
+ * `max-height` because height, not width, is the axis actually free to move
+ * once the row's stretch has claimed it. `container-type: inline-size` on
+ * `.room-card` lets the wrapper reference the CARD's own resolved width in
+ * `cqw` units — safe (no circular dependency): the card's width comes from
+ * its flex/grid ancestor, never from its own content, so querying it from a
+ * descendant introduces nothing the card's own layout depends on.
+ * `--room-photo-aspect` is set inline per card in `RoomCard.tsx`, from the
+ * very `(ROOM_PHOTO_KEEP + ROOM_PHOTO_MARGIN) × aspect` value the
  * width-crop bound is built from, so the two can never disagree — dividing
  * by it gives the tallest the box may be without its own aspect falling
  * under the bound.
+ *
+ * **Neither `ROOM_PHOTO_KEEP` alone, nor the manifest's canonical aspect,
+ * corrected 14 Aug 2026 (image-sizing Task 4 review).** Two Criticals, both
+ * with worked arithmetic in `RoomCard.tsx`'s own comments (`roomCardAspect`,
+ * `ROOM_PHOTO_MARGIN`): solving against the canonical tier let a narrower,
+ * independently-rounded tier the browser can actually serve push the real
+ * crop to 25.08% (`vann-room-cottage-plain`, 1024×1366); solving with zero
+ * margin left the bound exposed to the browser's own `calc()` rounding —
+ * measured at 1280×1024, `25.0007%` against the 25% ceiling, a coin flip's
+ * worth of `LayoutUnit` noise. Both are folded into the one value
+ * `RoomCard.tsx` now solves and writes here.
  *
  * When the row's stretch would have made the wrapper shorter than this cap
  * anyway (a wide card relative to its height — most of the four originally
@@ -1163,7 +1175,7 @@ body {
  * floor at the shapes where the wrapper's own share of the card's width
  * genuinely cannot reach the card's own height without violating it.
  *
- * **Two DISJOINT closed intervals, not one open-ended rule — 13 Aug 2026.**
+ * **Two DISJOINT ranges, not one open-ended rule — 13 Aug 2026.**
  * Every card is now `beside` (the client's ruling that retired the `stacked`
  * composition and the height ceiling that used to sit here for it), and the
  * wrapper's own width share changes at `xl` (`lg:w-[60%] xl:w-[65%]`), so the
@@ -1174,34 +1186,48 @@ body {
  * above, now retired): a single `@media (min-width: 1024px)` block followed
  * by a hypothetical `@media (min-width: 1280px)` override would depend on
  * *source order*, not on which query is more specific, to decide which
- * `max-height` wins — fragile the moment either block is reordered. Disjoint
- * closed intervals (`1024–1279.98px` and `1280px+`) make at most one block
- * ever match, so there is nothing for emission order to resolve.
+ * `max-height` wins — fragile the moment either block is reordered.
  *
- * The `var()` fallback, `1.125`, is `0.75 × 1.5` — `ROOM_PHOTO_KEEP` times
- * 1.6's own margin-adjusted worst case, `room-card.test.ts`'s "the beside
- * population" guard (1.50, the widest current room, rounded to a 1.6 bound).
- * It is only ever read if `--room-photo-aspect` is somehow unset; every real
- * card sets it inline, so the fallback exists for defensive completeness, not
- * because any shipped card relies on it.
+ * **Corrected 14 Aug 2026 (image-sizing Task 4 review, Minor 5): the first
+ * attempt at "disjoint" used `(min-width: 1024px) and (max-width:
+ * 1279.98px)` paired with `(min-width: 1280px)`, and those two do not
+ * actually tile the line — nothing matches the real number line between
+ * 1279.98px and 1280px, so a viewport landing there (reachable under
+ * fractional zoom or a fractional DPR scale) got NEITHER block: no
+ * `container-type`, no cap, the pre-11-Aug uncapped geometry.** Media Queries
+ * Level 4 range syntax closes this exactly, with no decimal to guess at:
+ * `(1024px <= width < 1280px)` and `(width >= 1280px)` are genuine
+ * complements over the reals, so calling this pair disjoint is no longer an
+ * approximation.
+ *
+ * The `var()` fallback is `(ROOM_PHOTO_KEEP + ROOM_PHOTO_MARGIN) × 1.6` —
+ * `0.76 × 1.6 = 1.216` — where `1.6` is `room-card.test.ts`'s "the beside
+ * population" guard: the worst aspect the design ALLOWS any room photograph
+ * to have (today's actual worst is cottage-plain's own 640-wide tier,
+ * 1.502347, comfortably under it). It is only ever read if
+ * `--room-photo-aspect` is somehow unset; every real card sets it inline, so
+ * the fallback exists for defensive completeness, not because any shipped
+ * card relies on it — but it is sized to the bound the test enforces, not to
+ * today's specific widest photograph, so a future room within that bound
+ * still falls back safely if it ever needs to.
  */
-@media (min-width: 1024px) and (max-width: 1279.98px) {
+@media (1024px <= width < 1280px) {
   .room-card[data-card-layout="beside"] {
     container-type: inline-size;
   }
 
   .room-card[data-card-layout="beside"] > :first-child {
-    max-height: calc(60cqw / var(--room-photo-aspect, 1.125));
+    max-height: calc(60cqw / var(--room-photo-aspect, 1.216));
   }
 }
 
-@media (min-width: 1280px) {
+@media (width >= 1280px) {
   .room-card[data-card-layout="beside"] {
     container-type: inline-size;
   }
 
   .room-card[data-card-layout="beside"] > :first-child {
-    max-height: calc(65cqw / var(--room-photo-aspect, 1.125));
+    max-height: calc(65cqw / var(--room-photo-aspect, 1.216));
   }
 }
 

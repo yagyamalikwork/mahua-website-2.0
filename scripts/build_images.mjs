@@ -614,6 +614,20 @@ const CURATION = [
      * landscape ceiling with no cropping needed. Everything above this
      * paragraph is history — the 2.29 stacked derivation it fed retires in
      * `lib/room-card.ts` the same day.
+     *
+     * **14 Aug 2026, finishing that annotation (image-sizing Task 4 review,
+     * Important 4): the clearance test the "2.29, not 2.00" paragraph cites is
+     * ALSO gone, not merely the export it measured.** `roomCardLayout`,
+     * `ROOM_CARD_ASPECT_THRESHOLD` and `ROOM_CARD_BOXES` no longer exist —
+     * `lib/room-card.test.ts`'s "keeps every room clear of the threshold by at
+     * least 0.35" test went with them, so the 2.29-vs-2.00 argument above no
+     * longer has anything enforcing it; it survives here only as the record of
+     * why 2.29 was chosen at the time. `lib/room-card.ts` now only reads a
+     * photograph's own worst-case aspect (`roomCardAspect`, corrected the same
+     * day to read every emitted tier, not just the canonical one — Critical 1
+     * of that review), and the live guard on any room's aspect is
+     * `lib/room-card.test.ts`'s "the beside population" describe block: every
+     * room, in both content files, at or under 1.6:1.
      */
     id: "tola-room-super-deluxe",
     src: "reference/client-photos/Super-Delux-Cottage.jpg",

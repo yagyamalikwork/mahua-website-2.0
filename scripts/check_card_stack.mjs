@@ -60,7 +60,14 @@
 //      shipped on five stacked cards at 1440/1920 (fix round, 11 Aug 2026,
 //      `.superpowers/sdd/2026-08-11-room-card-stack/task-7-fix2-report.md`):
 //      `ROOM_CARD_BOXES` bounds the photo's WIDTH crop and was never checked
-//      against the card's own height. For every card, a fine (20px) sweep
+//      against the card's own height. (`ROOM_CARD_BOXES` and the `stacked`
+//      composition it belonged to are both retired since 13-14 Aug 2026 —
+//      the client's ruling made every card `beside`, and the width-crop bound
+//      is now `RoomCard.tsx`'s `ROOM_PHOTO_KEEP`/`ROOM_PHOTO_MARGIN`, solved
+//      per photograph. The mechanism this assertion guards against — a photo
+//      area tall enough to push the words below the card's own clip — is
+//      unchanged by that rename; only the export that used to bound it is
+//      gone.) For every card, a fine (20px) sweep
 //      across the chapter's scroll range checks whether its TEXT BLOCK
 //      (`card.children[1]`, not the card) is ever simultaneously (a) inside
 //      the visible band — below the header, above the booking bar, not just

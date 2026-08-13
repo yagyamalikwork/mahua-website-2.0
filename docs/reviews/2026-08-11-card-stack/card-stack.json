@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-11T21:07:03.394Z",
+  "measuredAt": "2026-08-13T19:46:26.618Z",
   "url": "http://localhost:3100",
   "noRecede": false,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
@@ -64,26 +64,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 391,
-          "naturalHeight": 171,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
           "boxWidth": 321.47998046875,
-          "boxHeight": 160.73974609375
+          "boxHeight": 214.31982421875
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 418,
-          "naturalHeight": 170,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
           "boxWidth": 321.47998046875,
-          "boxHeight": 160.73974609375
+          "boxHeight": 213.98193359375
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 410,
-          "naturalHeight": 273,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
           "boxWidth": 342,
-          "boxHeight": 273.59375
+          "boxHeight": 228
         }
       ]
     },
@@ -147,26 +147,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 714,
-          "naturalHeight": 311,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
           "boxWidth": 631.679931640625,
-          "boxHeight": 315.84033203125
+          "boxHeight": 421.1201171875
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 763,
-          "naturalHeight": 312,
+          "naturalWidth": 719,
+          "naturalHeight": 479,
           "boxWidth": 631.679931640625,
-          "boxHeight": 315.84033203125
+          "boxHeight": 420.458984375
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 863,
-          "naturalHeight": 576,
+          "naturalWidth": 719,
+          "naturalHeight": 479,
           "boxWidth": 672,
-          "boxHeight": 537.59375
+          "boxHeight": 448
         }
       ]
     },
@@ -230,26 +230,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1007,
-          "naturalHeight": 440,
-          "boxWidth": 872.320068359375,
-          "boxHeight": 436.16015625
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 523.3890380859375,
+          "boxHeight": 459.10205078125
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 1077,
-          "naturalHeight": 439,
-          "boxWidth": 872.320068359375,
-          "boxHeight": 436.16015625
+          "naturalWidth": 807,
+          "naturalHeight": 538,
+          "boxWidth": 523.3890991210938,
+          "boxHeight": 458.39697265625
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 736,
-          "naturalHeight": 491,
+          "naturalWidth": 807,
+          "naturalHeight": 539,
           "boxWidth": 556.796875,
-          "boxHeight": 445.4375
+          "boxHeight": 488.40625
         }
       ]
     },
@@ -313,26 +313,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1300,
-          "naturalHeight": 568,
-          "boxWidth": 1112.9599609375,
-          "boxHeight": 540.5
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 723.4181518554688,
+          "boxHeight": 634.57373046875
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 1390,
-          "naturalHeight": 567,
-          "boxWidth": 1112.9599609375,
-          "boxHeight": 540.5
+          "naturalWidth": 1093,
+          "naturalHeight": 728,
+          "boxWidth": 723.4180908203125,
+          "boxHeight": 633.58935546875
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 920,
-          "naturalHeight": 614,
-          "boxWidth": 710.390625,
-          "boxHeight": 568.3125
+          "naturalWidth": 1093,
+          "naturalHeight": 729,
+          "boxWidth": 769.59375,
+          "boxHeight": 675.078125
         }
       ]
     },
@@ -396,26 +396,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1483,
-          "naturalHeight": 648,
-          "boxWidth": 1263.35986328125,
-          "boxHeight": 454.9599609375
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 821.1781005859375,
+          "boxHeight": 627.919921875
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 1586,
-          "naturalHeight": 647,
-          "boxWidth": 1263.35986328125,
-          "boxHeight": 454.9599609375
+          "naturalWidth": 1229,
+          "naturalHeight": 819,
+          "boxWidth": 821.1780395507812,
+          "boxHeight": 627.919921875
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 1035,
-          "naturalHeight": 691,
-          "boxWidth": 806.390625,
-          "boxHeight": 645.109375
+          "naturalWidth": 1229,
+          "naturalHeight": 820,
+          "boxWidth": 873.59375,
+          "boxHeight": 668
         }
       ]
     },
@@ -479,26 +479,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1722,
-          "naturalHeight": 752,
-          "boxWidth": 1413.760009765625,
-          "boxHeight": 540.5
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 918.9381103515625,
+          "boxHeight": 713.4599609375
         },
         {
           "name": "Cottage without Deck",
           "ok": true,
-          "naturalWidth": 1840,
-          "naturalHeight": 751,
-          "boxWidth": 1413.760009765625,
-          "boxHeight": 540.5
+          "naturalWidth": 1285,
+          "naturalHeight": 856,
+          "boxWidth": 918.9381103515625,
+          "boxHeight": 713.4599609375
         },
         {
           "name": "Cottage with Deck",
           "ok": true,
-          "naturalWidth": 1381,
-          "naturalHeight": 921,
-          "boxWidth": 902.390625,
-          "boxHeight": 721.90625
+          "naturalWidth": 1285,
+          "naturalHeight": 857,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
         }
       ]
     },
@@ -570,26 +570,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 391,
-          "naturalHeight": 171,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
           "boxWidth": 321.47998046875,
-          "boxHeight": 160.73974609375
+          "boxHeight": 214.31982421875
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 391,
-          "naturalHeight": 171,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
           "boxWidth": 321.47998046875,
-          "boxHeight": 160.73974609375
+          "boxHeight": 214.31982421875
         },
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 391,
-          "naturalHeight": 170,
+          "naturalWidth": 342,
+          "naturalHeight": 228,
           "boxWidth": 321.47998046875,
-          "boxHeight": 160.73974609375
+          "boxHeight": 214.31982421875
         },
         {
           "name": "Family Suite",
@@ -669,26 +669,26 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 714,
-          "naturalHeight": 311,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
           "boxWidth": 631.679931640625,
-          "boxHeight": 315.84033203125
+          "boxHeight": 421.1201171875
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 714,
-          "naturalHeight": 311,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
           "boxWidth": 631.679931640625,
-          "boxHeight": 315.84033203125
+          "boxHeight": 421.1201171875
         },
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 714,
-          "naturalHeight": 311,
+          "naturalWidth": 719,
+          "naturalHeight": 479,
           "boxWidth": 631.679931640625,
-          "boxHeight": 315.84033203125
+          "boxHeight": 421.1201171875
         },
         {
           "name": "Family Suite",
@@ -768,34 +768,34 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1007,
-          "naturalHeight": 440,
-          "boxWidth": 872.320068359375,
-          "boxHeight": 436.16015625
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 523.3890380859375,
+          "boxHeight": 459.10205078125
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 1007,
-          "naturalHeight": 440,
-          "boxWidth": 872.320068359375,
-          "boxHeight": 436.16015625
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 523.3890991210938,
+          "boxHeight": 459.10205078125
         },
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 1007,
-          "naturalHeight": 439,
-          "boxWidth": 872.320068359375,
-          "boxHeight": 436.16015625
+          "naturalWidth": 808,
+          "naturalHeight": 539,
+          "boxWidth": 523.3890380859375,
+          "boxHeight": 459.10205078125
         },
         {
           "name": "Family Suite",
           "ok": true,
-          "naturalWidth": 614,
-          "naturalHeight": 921,
+          "naturalWidth": 808,
+          "naturalHeight": 1212,
           "boxWidth": 556.796875,
-          "boxHeight": 445.4375
+          "boxHeight": 759
         }
       ]
     },
@@ -867,34 +867,34 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1300,
-          "naturalHeight": 568,
-          "boxWidth": 1112.9599609375,
-          "boxHeight": 540.5
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 723.4181518554688,
+          "boxHeight": 634.57373046875
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 1300,
-          "naturalHeight": 568,
-          "boxWidth": 1112.9599609375,
-          "boxHeight": 540.5
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 723.4180908203125,
+          "boxHeight": 634.57373046875
         },
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 1300,
-          "naturalHeight": 568,
-          "boxWidth": 1112.9599609375,
-          "boxHeight": 540.5
+          "naturalWidth": 1094,
+          "naturalHeight": 729,
+          "boxWidth": 723.4181518554688,
+          "boxHeight": 634.57373046875
         },
         {
           "name": "Family Suite",
           "ok": true,
-          "naturalWidth": 768,
-          "naturalHeight": 1152,
-          "boxWidth": 710.390625,
-          "boxHeight": 568.3125
+          "naturalWidth": 1094,
+          "naturalHeight": 1642,
+          "boxWidth": 769.59375,
+          "boxHeight": 759
         }
       ]
     },
@@ -966,34 +966,34 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1483,
-          "naturalHeight": 648,
-          "boxWidth": 1263.35986328125,
-          "boxHeight": 441.80029296875
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 821.1781005859375,
+          "boxHeight": 614.76025390625
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 1483,
-          "naturalHeight": 648,
-          "boxWidth": 1263.35986328125,
-          "boxHeight": 441.80029296875
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 821.1780395507812,
+          "boxHeight": 614.76025390625
         },
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 1483,
-          "naturalHeight": 648,
-          "boxWidth": 1263.35986328125,
-          "boxHeight": 441.80029296875
+          "naturalWidth": 1231,
+          "naturalHeight": 821,
+          "boxWidth": 821.1781005859375,
+          "boxHeight": 614.76025390625
         },
         {
           "name": "Family Suite",
           "ok": true,
-          "naturalWidth": 864,
-          "naturalHeight": 1296,
-          "boxWidth": 806.390625,
-          "boxHeight": 645.109375
+          "naturalWidth": 1231,
+          "naturalHeight": 1847,
+          "boxWidth": 873.59375,
+          "boxHeight": 654
         }
       ]
     },
@@ -1065,34 +1065,34 @@
         {
           "name": "Deluxe",
           "ok": true,
-          "naturalWidth": 1722,
-          "naturalHeight": 752,
-          "boxWidth": 1413.760009765625,
-          "boxHeight": 540.5
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 918.9381103515625,
+          "boxHeight": 713.4599609375
         },
         {
           "name": "Suite",
           "ok": true,
-          "naturalWidth": 1722,
-          "naturalHeight": 752,
-          "boxWidth": 1413.760009765625,
-          "boxHeight": 540.5
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 918.9381103515625,
+          "boxHeight": 713.4599609375
         },
         {
           "name": "Super Deluxe Cottage",
           "ok": true,
-          "naturalWidth": 1722,
-          "naturalHeight": 752,
-          "boxWidth": 1413.760009765625,
-          "boxHeight": 540.5
+          "naturalWidth": 1287,
+          "naturalHeight": 858,
+          "boxWidth": 918.9381103515625,
+          "boxHeight": 713.4599609375
         },
         {
           "name": "Family Suite",
           "ok": true,
-          "naturalWidth": 1152,
-          "naturalHeight": 1728,
-          "boxWidth": 902.390625,
-          "boxHeight": 721.90625
+          "naturalWidth": 1287,
+          "naturalHeight": 1930,
+          "boxWidth": 977.59375,
+          "boxHeight": 759
         }
       ]
     }
