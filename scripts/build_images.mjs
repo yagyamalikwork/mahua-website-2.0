@@ -758,9 +758,19 @@ const CURATION = [
     // upper right, only the cane sit-out and its chair are given up. The
     // bed wins because the card's job is to sell the room, not one amenity
     // in it; the sit-out is a real fact about this room and still stated in
-    // its `facts` array in content/mahua-vann.ts, and the whole uncropped
-    // 1931×789 photograph remains on disk and reachable whole once a later
-    // task builds the room gallery.
+    // its `facts` array in content/mahua-vann.ts.
+    //
+    // CORRECTED 14 Aug 2026: the sentence that stood here claimed the whole
+    // uncropped 1931×789 photograph "remains on disk and reachable whole
+    // once a later task builds the room gallery." That was true when
+    // written and false two tasks later — image-sizing Tasks 6-7 built the
+    // gallery the same day, and it opens the SAME cropped derivative as the
+    // card (`RoomCardStack.tsx`'s gallery `<Photo id={room.mediaId}>`,
+    // enlarged, not a second uncropped source). The cane sit-out and chair
+    // this crop gave up are reachable nowhere on the site; only this
+    // 1184-wide, left:0 window of the source ever ships. The uncropped
+    // original stays on disk only as raw material for a future crop
+    // decision, not as a visitor-reachable image.
     crop: { left: 0, top: 0, width: 1184, height: 789 },
     // Re-read against the left:0 frame, 14 Aug 2026: the sit-out and cane
     // chair are no longer in view, so this no longer names them.

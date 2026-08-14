@@ -237,6 +237,23 @@ export const VANN_COPY: PropertyPageCopy = {
         {
           mediaId: "vann-room-cottage-plain",
           name: "Cottage without Deck",
+          // Re-read 14 Aug 2026 against the shipped crop (`left: 0`,
+          // scripts/build_images.mjs) — flagged rather than silently fixed,
+          // the same way that file's own comment on this entry flags it.
+          // This line's opening clause names the cane sit-out and its
+          // chair; the crop that ships today shows neither. The pipeline
+          // chose a bed-first, `left: 0` window over the sit-out because
+          // the card's one job is to sell the room, not one amenity in it
+          // — the source is 1931px wide with the bed and the sit-out chair
+          // ~1740px apart, and no 1184px window can hold both. The room
+          // itself still has a private sit-out under cane; it is real and
+          // still named two lines below, in this room's own `facts`
+          // ("King bed, private sit-out") — so nothing false is claimed
+          // about the ROOM, only about what this specific PHOTOGRAPH now
+          // shows. Left deliberately untouched: whether to lead with the
+          // bed instead is a copy decision, and the client reviews every
+          // line — a controller does not rewrite it unilaterally. Open
+          // item awaiting the client: docs/DECISIONS.md §5.
           line: "A private sit-out under cane, and the forest close enough to touch through the glass doors.",
           facts: ["324 sq ft", "King bed, private sit-out", "Jungle view"],
         },

@@ -36,8 +36,11 @@ export const SITE = {
     { label: "Mahua Tola", href: "/mahua-tola", region: "Tadoba", cardMediaId: "tola-hero" },
   ] as readonly SitePlace[],
   /** The room gallery — the click-to-expand the client asked for on 13 Aug
-   * 2026 ("gallery-style"), with arrows. Labels only; the mechanism is the
-   * browser's own popover machinery and carries no script. */
+   * 2026 ("gallery-style"), with arrows. Labels only; the mechanism is CSS
+   * `:target` (a first attempt on the browser's own popover machinery was
+   * measured, in a browser, to nest its arrows instead of replacing them —
+   * see docs/DECISIONS.md §18 — and was replaced same-day). Still carries
+   * no script. */
   roomGallery: {
     open: "View larger",
     previous: "Previous room",

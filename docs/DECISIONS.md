@@ -787,6 +787,20 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   numbered chapter.** Recommendation put to the client: **fold them into `vann-invitation` as a ruled strip
   above the sibling photograph** — credibility beside the ask, the weakest band on either page gone, no
   content lost, and Vann keeps an asymmetry Tola does not have.
+- **A fourth, fifth and sixth join the open count, on the HOME page** — found by image-sizing Task 8's
+  whole-plan verification (14 Aug 2026) and confirmed pre-existing, not caused by that plan. Read on the
+  same worst-screen statistic as the three above (the ceiling is a per-screen bound; `passesMean` is
+  informative, `passesWorst` is the rule): `lodges` **48.6%** worst (44.7% mean), `field-days` **57.9%**
+  worst (43.9% mean), `rooms` **47.2%** worst (36.9% mean) — all `passesMean: true, passesWorst: false`
+  in `docs/reviews/2026-08-03-chapters/density.json`. Verified against the merge base rather than
+  assumed: `git show 995697e:docs/reviews/2026-08-03-chapters/density.json` — `feat/chapters-rebuild`'s
+  own HEAD, the exact commit `feat/image-sizing` was cut from — reports the identical three chapters at
+  the identical figures. Nothing in the image-sizing plan's seven tasks touches `lodges`, `field-days`
+  or `rooms`; they are pre-existing and open, unrelated to that plan's own work. Not yet put to the
+  client in these terms — CLAUDE.md's non-negotiable #8 table has read "all twelve chapters inside it"
+  since 5 Aug 2026, which was true then and had stopped being true by at least 11 Aug (identical figures
+  already sit at `995697e`); nobody had re-checked `passesWorst` specifically against the twelve-chapter
+  claim until this review. Full derivation: `docs/reviews/2026-08-13-image-sizing/README.md` §2.2.
 - **Fresh evidence captures for the property pages.** The screenshots and density JSON under
   `docs/reviews/2026-08-09-property-redesign/` predate the bonfire swap, and a re-capture on 10 Aug was
   deliberately *not* committed: the working tree carried another session's in-progress forest-overlay work
@@ -856,6 +870,25 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   `check_card_stack.mjs` (9/9, both arms) and `check_image_resolution.mjs` (0 under-served) both re-pass.
   Full sweep table and the screenshot comparison: `docs/reviews/2026-08-13-image-sizing/README.md` §2.5;
   the retirement/solve context: `docs/DECISIONS.md` §18.
+- **`vann-room-cottage-plain`'s copy line no longer matches its shipped photograph, deliberately left
+  unfixed pending the client (14 Aug 2026).** Image-sizing Task 3's crop correction moved the room card's
+  photograph to `left: 0` (`scripts/build_images.mjs`), which shows the bed, the framed print, the lamp
+  and the glass doors onto the forest — and drops the cane sit-out and its chair, the source's two
+  features being ~1740px apart in a 1931px frame with no 1184px window able to hold both. The card's own
+  copy (`content/mahua-vann.ts`, `vann-room-cottage-plain`'s `line`) still opens "A private sit-out under
+  cane..." — the feature the photograph no longer shows. This was a controller decision, not an oversight:
+  the bed wins the crop because the card's one job is to sell the room, not one amenity in it, and the
+  words were deliberately left alone because the sit-out is real (still named in the room's own `facts`
+  array, "King bed, private sit-out") and the client reviews every line — a copy rewrite is his call, not
+  a controller's to make unilaterally on an image trade-off. Compare `content/mahua-tola.ts`'s
+  `tola-room-super-deluxe` line, which DID get a full re-read and rewrite the same day, because that
+  room's crop change added a feature (the timber-beamed ceiling) back into frame rather than removing one
+  the line depended on. Recorded here because the only prior record was
+  `.superpowers/sdd/2026-08-13-image-sizing/task-3-report.md`, which `.gitignore` excludes and does not
+  survive a clone; also recorded at the line itself, `content/mahua-vann.ts`'s comment above the `line`
+  field. Options for the client, for when he is asked: accept the mismatch (the words are still true of
+  the room, only not of this specific photograph); rewrite the line to lead with the bed instead; or
+  re-open the crop trade if the sit-out matters enough to the sell to be worth losing the bed for it.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---
@@ -1300,6 +1333,21 @@ that room's own trigger; they restart Tab from the top of the page. Not fixed (t
 construction deliberately has none of) but no longer only a claim: `check_room_gallery.mjs` reads
 `document.activeElement` after the close control fires, the same way it already did after opening, and
 `RoomCardStack.tsx`'s own comment records it beside the Esc trade rather than only here.
+
+**A third cost in the same family, found on the whole-plan review (14 Aug 2026) and also not fixed: no
+focus containment.** Tab from the panel's own Close link walks into the page behind the backdrop;
+Shift+Tab from the panel's first focusable element walks back into the room-card triggers underneath
+it. This is not a new gap the `:target` swap introduced on its own — the popover version never had a
+trap either, top-layer stacking just made the reachable surface smaller — but it is real, and the
+brief that commissioned this review classed it non-blocking rather than something to fix here. A real
+trap needs a `keydown` listener cycling focus at the panel's own edges, which is exactly the script this
+whole construction was built to avoid, so closing it would mean reopening the same trade the Esc-key and
+focus-restore costs above already accepted. The honest description is a non-modal dialog with an escape
+hatch either direction, which is correctly what this is — **do not add `aria-modal`/`role="dialog"` to
+paper over this entry**; either would assert a containment guarantee the markup does not provide, making
+the accessibility tree lie rather than fixing the gap it describes. Recorded in three places, matching
+the pattern §18 already uses for the Esc and focus-restore costs: `RoomCardStack.tsx`'s own comment,
+`docs/reviews/2026-08-13-image-sizing/gallery.json`'s `knownDefects` (`no-focus-containment`), and here.
 
 **A genuine, arguably-a-feature side effect — measured three deep, not extrapolated from one Back press.**
 Every fragment navigation is a real history entry. The first draft of this section claimed "a visitor who

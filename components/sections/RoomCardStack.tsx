@@ -186,6 +186,22 @@ export function RoomCardStack({
          * way it already does after opening, so this is visible in the rig's
          * own output rather than only in this paragraph.
          *
+         * **A third cost, recorded rather than fixed: no focus containment.**
+         * Popover's top-layer semantics never gave this page a focus trap
+         * either, but the visible surface area was smaller; `:target` opens
+         * a plain in-flow `display: block` element, and Tab from the panel's
+         * own Close link walks straight into the page behind the backdrop —
+         * Shift+Tab from the first focusable element in the panel walks back
+         * into the room-card triggers underneath it. A real trap needs a
+         * `keydown` listener cycling focus at the panel's edges, which is
+         * exactly the script this whole construction was built to avoid; a
+         * non-modal dialog with an escape hatch either direction is the
+         * honest, static-CSS outcome, not a broken one — this is NOT `role`/
+         * `aria-modal="dialog"`, since it correctly is not modal. Classed
+         * non-blocking on review (14 Aug 2026) and recorded, not fixed:
+         * `docs/reviews/2026-08-13-image-sizing/gallery.json`'s
+         * `knownDefects` and `docs/DECISIONS.md` §18.
+         *
          * **A genuine side effect, arguably a feature: the back button steps
          * back through opened rooms.** Every fragment navigation is a real
          * history entry. Measured three deep, not merely once: open room 0,

@@ -1,5 +1,21 @@
 # Image sizing — Task 8, the whole-plan verification sweep
 
+**MERGE NOTICE, read before approving — this branch also carries a sibling session's feature, not
+only the image-sizing plan.** `feat/image-sizing` was cut from `feat/chapters-rebuild` at `995697e`.
+The very next two commits made on this branch — `e12af07` ("a softer scroll, and a slow zoom inside
+a frame that never moves") and `c4752e7` (a caption-clip fix for the same effect) — are a **different
+session's** work, landed here before this plan's own design doc (`834760c`) or any of its seven task
+commits. `git branch --contains e12af07 --all` returns only `feat/image-sizing`: those two commits
+never reached `feat/chapters-rebuild`, `main` or `demo` (all three sit at `995697e`, confirmed by
+`git rev-parse`). **Merging this branch is what lands that sibling feature on the shared branch for
+the first time** — a softer Lenis scroll (`SCROLL` in `lib/motion.ts`) and a hover-zoom on the home
+page's plate photographs (`PHOTO_ZOOM`, `ImageReveal.tsx`). Files it touches: `app/globals.css`,
+`app/layout.tsx`, `app/page.tsx`, `components/motion/ImageReveal.tsx`,
+`components/motion/SmoothScroll.tsx`, `components/sections/Hero.tsx`, `lib/motion.ts`, and its own
+`docs/reviews/2026-08-12-scroll-and-zoom/`. None of this plan's own seven tasks reviewed it — its
+only appearances below are the +63 bytes it costs (§1.8) and the density figure it moved (§2.2), both
+now attributed correctly rather than described as "outside this plan's scope."
+
 14 August 2026. Closes out `docs/superpowers/plans/2026-08-13-image-sizing.md` (`feat/image-sizing`,
 cut from `feat/chapters-rebuild`). What shipped, in one paragraph: the home page's three-column plate
 board now holds two columns until 1280px so plates keep their size on smaller laptops and at zoom
@@ -139,9 +155,10 @@ next session doesn't have to re-derive them.
 
 ### 1.6 `measure_density.mjs` — all three routes
 
-See §2 in full; the summary line: **home page inside the ceiling everywhere (unchanged verdict, one
-attributable drift); both property pages' rooms chapters breach the plan's own ceiling and, on their
-worst screen, the general one.**
+See §2 in full; the summary line: **home page unchanged from the merge base, including three
+pre-existing worst-screen overages this plan did not touch and did not cause (`lodges`, `field-days`,
+`rooms` — see §2.2); both property pages' rooms chapters breach the plan's own ceiling and, on their
+worst screen, the general one (resolved same day, §2.5).**
 
 ### 1.7 `measure_page.mjs` — transfer, all three routes
 
@@ -195,22 +212,33 @@ rather than waved through:
   one grew 23,312→23,459 raw bytes (+147, +41 br) and the other 15,498→15,560 raw bytes (+62, +22 br) —
   **41 + 22 = 63**, the whole delta, on chunks whose content hash also changed (confirming real content
   moved, not just a renumbered build artefact).
-- **Not this task's doing, and not even this plan's.** `git log` shows `feat/image-sizing` was cut from
-  `feat/chapters-rebuild` *after* two commits from a sibling session's own work landed there —
-  `e12af07` ("a softer scroll, and a slow zoom inside a frame that never moves") and `c4752e7` (a caption
-  fix for the same zoom). `e12af07`'s own commit message states its cost outright: *"+63 bytes of
-  first-load JavaScript."* Byte-for-byte the same number. Both commits touch only `app/globals.css` (plus
-  `lib/motion.ts`'s new `SCROLL` dial) — never `PlateGrid.tsx`, `RoomCard.tsx`, `RoomCardStack.tsx`, or
-  any file this plan's own tasks changed. Task 6's own report had already flagged the shape of this gap
-  without chasing it (*"this session's verify:budget reads 168.2 KB br rather than CLAUDE.md's cited
-  172,209 B — that gap predates this task"*) — it predates Task 6 too, for the same reason: it was already
-  sitting on the shared branch base before Task 4 or Task 6 ever ran.
+- **Not this task's doing, and not this plan's authorship — but it DOES land with this merge.**
+  `git branch --contains e12af07 --all` returns only `feat/image-sizing`: these two commits are not on
+  `feat/chapters-rebuild`, `main` or `demo` (all three sit at `995697e`). They are, however, squarely
+  IN this branch's own commit range — `git log --oneline 995697e..58158f3` puts `e12af07` and `c4752e7`
+  as the very first two commits after the branch point, landing *before* this plan's own design doc
+  (`834760c`) and every one of its seven task commits. So the earlier framing here — "cut from
+  `feat/chapters-rebuild` after two sibling commits landed there" — had it backwards: the branch was cut
+  *before* those commits existed, and they were then added to this same branch, not inherited from the
+  one it was cut from. `e12af07`'s own commit message states its cost outright: *"+63 bytes of
+  first-load JavaScript."* Byte-for-byte the same number. Both commits touch `app/globals.css`,
+  `app/layout.tsx`, `app/page.tsx`, `components/motion/ImageReveal.tsx`,
+  `components/motion/SmoothScroll.tsx`, `components/sections/Hero.tsx` and `lib/motion.ts`'s new
+  `SCROLL`/`PHOTO_ZOOM` dials — never `PlateGrid.tsx`, `RoomCard.tsx`, `RoomCardStack.tsx`, or any file
+  this plan's own tasks changed. Task 6's own report had already flagged the shape of this gap without
+  chasing it (*"this session's verify:budget reads 168.2 KB br rather than CLAUDE.md's cited
+  172,209 B — that gap predates this task"*) — it predates Task 6 too, for the same reason: it was
+  already sitting on this branch, two commits in, before Task 4 or Task 6 ever ran.
 
-**Verdict: the +63 bytes is real, explained, and belongs to work outside this plan's scope** (the other
-session's hover-zoom feature, explicitly scoped to `app/page.tsx`'s home route and stated by its own
-author to cost exactly this). CLAUDE.md's cited 172,209 figure needs updating to 172,272 with this
-attribution, not chased as a defect of this plan. Comfortably under the 175 KB ceiling either way
-(168.23 KiB against 175 KiB, 96.1% headroom used).
+**Verdict: the +63 bytes is real, explained by authorship — and lands inside this merge regardless.**
+It is a different session's hover-zoom/scroll feature, not written by this plan's own seven tasks, and
+that is the true half of the original verdict. The false half was "belongs to work outside this plan's
+scope," which reads as though the bytes stay outside what gets merged — they do not. Whoever merges
+`feat/image-sizing` merges `e12af07`/`c4752e7` along with it, on the same commit range, and the +63
+bytes ships the moment that merge does. See the MERGE NOTICE at the top of this document for the full
+list of what that sibling feature touches. CLAUDE.md's cited 172,209 figure is updated to 172,272 with
+this attribution. Comfortably under the 175 KB ceiling either way (168.23 KiB against 175 KiB, 96.1%
+headroom used).
 
 ### 1.9 Screenshots — look with your eyes
 
@@ -280,14 +308,43 @@ close-out (`docs/DECISIONS.md` §1, Task 15 entry), untouched by this plan, not 
 
 ### 2.2 The home page, for completeness
 
-Page mean moved **36.6% → 37.9%** (+1.3 pp), worst screen unchanged at **73.4%** (still the
-`field-days`/`rooms` join), all twelve chapters still inside the 45% ceiling, imagery share unchanged at
+**The 45% ceiling binds on a chapter's WORST sampled screen, not its mean.** Non-negotiable #8 reads "no
+section may render more than 45% empty space" — a per-screen bound — and `passesWorst` is the
+`density.json` field that actually encodes it; `passesMean` is informative, not the rule. This is the
+same statistic §2.1, two paragraphs above, judges the rooms chapters on ("also +4.4pp over the general 45%
+ceiling," "also +5.1pp over the general 45% ceiling" — both worst-screen readings) — so the same standard
+applies here. Read on it, **not** all twelve home chapters clear the ceiling: `lodges` **48.6%** worst
+(44.7% mean), `field-days` **57.9%** worst (43.9% mean) and `rooms` **47.2%** worst (36.9% mean) all read
+`passesMean: true, passesWorst: false` in `docs/reviews/2026-08-03-chapters/density.json`, committed in
+this branch. The remaining nine clear it on both statistics.
+
+**Pre-existing, verified against the merge base rather than assumed.**
+`git show 995697e:docs/reviews/2026-08-03-chapters/density.json` — `feat/chapters-rebuild`'s own HEAD, the
+exact commit `feat/image-sizing` was cut from — reports the identical three chapters at the identical
+figures (`lodges` 48.6%, `field-days` 57.9%, `rooms` 47.2% worst, all `passesWorst: false`). Nothing in
+this plan's seven tasks touches those chapters: none of `PlateGrid.tsx`, `RoomCard.tsx` or
+`RoomCardStack.tsx`'s home-page callers were changed, and `lodges`/`field-days`/`rooms` are chapters this
+plan never opens. These are pre-existing open items, not a new finding of this task or this branch —
+recorded in `docs/DECISIONS.md` §5, beside the three already-accepted property-page overages
+(`vann-forest`, `tola-reserve`, `vann-press`).
+
+**The page mean did not move within this branch — the earlier "36.6% → 37.9%" framing compared against
+the wrong baseline.** `density.json`'s `page.meanEmptyPercent` reads 37.9% on the tree this task measured,
+and `git show 995697e:docs/reviews/2026-08-03-chapters/density.json` — the same merge-base commit —
+already reads 37.9% too, identically. There is no move inside `feat/image-sizing` to explain: the real
+comparison was always CLAUDE.md's own prose (36.6%, dated 11 Aug 2026 under non-negotiable #8) against the
+JSON file it describes, which already read 37.9% at that same commit. CLAUDE.md's figure was stale against
+its own committed evidence *before* `feat/image-sizing` was ever cut, not something `e12af07`/`c4752e7` or
+anything else on this branch caused — the earlier attribution here ("the small page-mean drift traces to
+the same sibling commits... landed on `feat/chapters-rebuild` before this plan's branch point") had both
+the direction and the cause wrong (§1.8's own correction covers where those two commits actually sit).
+CLAUDE.md's 36.6% is corrected to 37.9% with this note, not chased as a regression.
+
+Worst screen unchanged at **73.4%** (still the `field-days`/`rooms` join), imagery share unchanged at
 54.2%. Per-chapter figures that can be cross-checked against CLAUDE.md's own table are unchanged to within
 rounding (`forest` 12.4% exact; `lantern-hour` 36.5% vs 36.4%; `rooted` 39.8%/44.5% vs 39.7%/44.5%) —
 **Task 1's own reflow moves nothing at 1440×900**, exactly as the brief predicted, because the reflow only
-changes column count in the 1024–1279 band and density is measured at a fixed 1440×900. The small page-mean
-drift traces to the same sibling commits identified in §1.8 (`e12af07`/`c4752e7`, CSS-only, landed on
-`feat/chapters-rebuild` before this plan's branch point) rather than to anything in this plan.
+changes column count in the 1024–1279 band and density is measured at a fixed 1440×900.
 
 ### 2.3 The levers, pulled in the brief's own order, each measured
 
