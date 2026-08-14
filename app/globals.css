@@ -1421,26 +1421,53 @@ body {
    *   - `w ≥ ~1690.9`: both formulas saturate at the same 1536px ceiling —
    *     equal again.
    *
-   * **This band is untested by every fixed-shape sample this project's rigs
-   * take (390/768/1440/1920 — the §2 #45 gap, recurring), and the 1440×900
-   * measurement above (`0px` overflow) is silent about it for an unrelated
-   * reason: at 1440 the image is HEIGHT-constrained by its own `max-h-[78svh]`
-   * before its width ever reaches 88vw, so neither this cap nor the old one
-   * ever actually binds there — a true measurement that happens to prove
-   * nothing about which formula is wider.** `check_room_gallery.mjs`'s own
-   * `checkBoxOverflowBand` samples `1500×900` — inside the narrowed band, at
-   * the coordinator's own example width — for every room, both routes.
-   * **Measured 14 Aug 2026: `0px` on every room, both properties (7 rooms
-   * total)** — the box narrowing by 12px at this one width never reaches the
-   * point where a room's own photograph is both wide enough to need the
-   * box's full former room AND positioned at a viewport width where the new
-   * formula is the tighter one. `docs/reviews/2026-08-13-image-sizing/
-   * gallery.json`'s own `boxOverflowBand` carries the live figures. This is
-   * a statement about the ONE sampled point inside the band, not a proof
-   * about the whole ~490px range — the same distinction this comment's own
-   * retired sentence collapsed once already; a future photograph closer to
-   * the 88vw cap than any current one could still overflow somewhere else
-   * in (1200px, 1690.9px) that this one sample does not cover.
+   * **Corrected again, 14 Aug 2026 (third review pass): the check built to
+   * probe this band — `checkBoxOverflowBand`, sampling `1500×900` — was
+   * itself a no-op, and not for the reason its own comment (and this one)
+   * used to give. The 1440×900/1500×900 readings above are silent about the
+   * band for an unrelated, more precise reason than "the wrong height was
+   * sampled": it is not that NO height was tall enough — it is that NO
+   * height in this band, however tall, can ever make this cap bind, because
+   * a SEPARATE constraint gets there first. The gallery `<Photo>`'s own
+   * `sizes` (`RoomCardStack.tsx`'s `GALLERY_SIZES`,
+   * `"(min-width: 768px) 80vw, calc(100vw - 32px)"`) governs the img's
+   * effective rendered width at any viewport ≥768px wide — `srcset` `w`
+   * descriptors make the browser treat the img's DENSITY-CORRECTED intrinsic
+   * width (what `width:auto` layout, and `naturalWidth`, actually read) as
+   * exactly the `sizes`-resolved value, not the real fetched file's pixel
+   * count (confirmed against `sharp`'s own read of the on-disk AVIF bytes,
+   * which does not move with the viewport the way the reported "natural"
+   * width does). `80vw` is strictly narrower than this rule's own
+   * `max-w-[88vw]` for every viewport ≥768px, so `max-w-[88vw]` — and by
+   * extension the cap above, sized to hold exactly an 88vw-wide image plus
+   * its own padding — is dead code there: the photo can never reach 88vw for
+   * the cap to ever need to hold, at ANY height. Verified empirically:
+   * sweeping height 400→1400px at 1250/1440/1500px width left every
+   * landscape room's rendered width flat at its own `sizes`-implied 80vw;
+   * sweeping width 400→1200px at a height chosen to rule out
+   * `max-h-[78svh]` ever binding found `0px` overflow throughout, both
+   * routes, all seven rooms. **`checkBoxOverflowBand` was therefore DELETED
+   * rather than fixed** — the accurate statement is not "we only sampled one
+   * width in the band," it is "no height at any width in this band can ever
+   * make this cap bind." Below 768px, `sizes` switches to
+   * `calc(100vw - 32px)`, which DOES exceed 88vw, so the cap genuinely binds
+   * there — that regime is real, already fixed (the 10px-at-390×844 finding
+   * above), and remains tested by `check_room_gallery.mjs`'s own
+   * `assertion2.boxOverflow` at 390×844, unaffected by any of this.
+   *
+   * **Not the whole story: going WIDER than this band reaches genuine,
+   * unfixed overflow, left deliberately unwired from any check.** Past
+   * ≈1858px of viewport width, paired with a viewport taller than a plain
+   * 16:9/16:10 monitor's own ratio (a window snapped to half of a 4K/
+   * ultrawide display; a portrait-oriented external monitor — both real,
+   * neither exotic), `GALLERY_SIZES`'s `80vw` term keeps growing past the
+   * point where this cap itself SATURATES at `96rem` (1536px, ~1690.9px of
+   * viewport width) — the two diverge. Measured on the current, unmodified
+   * build: 26px of overflow at 1920×1500, 90px at 2000×1500, 250px at
+   * 2200×1600, ~480px at 2560×1700, ~713px at 3000×1900. A different
+   * mechanism from the ~1200–1690.9px story above (not the old-vs-new
+   * formula comparison), out of scope for the task that found it, and not
+   * silently fixed here — see `docs/DECISIONS.md` §18.
    */
   max-width: min(calc(88vw + 3rem), 96rem);
   /* The popover UA stylesheet also carried `overflow: auto` — replicated

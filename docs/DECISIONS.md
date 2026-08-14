@@ -1365,14 +1365,59 @@ unrelated reason: at 1440 the photograph is height-constrained by its own `max-h
 ever reaches 88vw, so neither cap, old or new, actually binds there. A true measurement that happened to
 prove nothing about which formula is wider, cited as though it did.
 
-**Corrected by measuring inside the band, not by restating the claim a second time.** A new check,
-`checkBoxOverflowBand`, samples 1500×900 — the coordinator's own worked example — for every room on both
-routes: **`0px` of overflow, all seven rooms.** The 12px narrowing at that width never reaches the point
-where a room's own photograph is both wide enough to need the box's full former room and positioned at a
-width where the new formula is the tighter one. That is a measured absence of a defect at the one sampled
-point inside the ~490px band, not a proof that none exists across the whole range — the distinction the
-retired sentence collapsed the first time. `check_room_gallery.mjs` now measures this on every run rather
-than trusting either version of this comment to stay true.
+**Corrected by measuring inside the band, not by restating the claim a second time (14 Aug 2026, third
+pass).** A new check, `checkBoxOverflowBand`, sampled 1500×900 — the coordinator's own worked example — for
+every room on both routes: `0px` of overflow, all seven rooms. Read at the time as "a measured absence of a
+defect at the one sampled point inside the ~490px band, not a proof that none exists across the whole
+range" — true as far as it went, but under-specified in exactly the shape `docs/DECISIONS.md`'s own
+[[mahua-measure-the-right-question]] lesson warns about: it read like a check that could, in principle, have
+caught something, when actually sampled a point that COULD NOT FAIL.
+
+**A fourth pass (image-sizing Task 7, narrow follow-up) found the check could never have failed at any
+height, and deleted it rather than widen the sample.** `checkBoxOverflowBand`'s own hardcoded `900` height
+was the first, surface symptom, and the obvious fix looked like "sample a taller height." Deriving that
+height honestly — `78svh × aspect ≥ 88vw`, solved for `h` — predicts the cap should start binding above
+roughly 1128px of height at 1500px width. It does not, at any height: the gallery `<Photo>`'s own `sizes`
+(`RoomCardStack.tsx`'s `GALLERY_SIZES`, `"(min-width: 768px) 80vw, calc(100vw - 32px)"`) independently caps
+the img's effective rendered width at exactly its own `sizes`-resolved value for any viewport ≥768px wide —
+a `srcset` with `w` descriptors makes the browser report the img's DENSITY-CORRECTED intrinsic width (what
+`width:auto` layout, and `naturalWidth`, actually read) as the `sizes` value, not the real fetched file's
+pixel count. Confirmed against `sharp`'s own read of the on-disk AVIF bytes, which stayed fixed while the
+browser's reported "natural" width moved with the viewport — the tell that something other than the file
+itself was setting that number. `80vw` is strictly narrower than the same `<img>`'s own `max-w-[88vw]` for
+every viewport ≥768px, so `max-w-[88vw]` — and the box's cap, built to hold exactly an 88vw-wide image — is
+dead code in that whole regime: the photo can never reach 88vw for the cap to need to hold, at any height.
+
+Verified empirically, not only algebraically: sweeping height 400→1400px at 1250/1440/1500px width left
+every landscape room's rendered width flat at its own `sizes`-implied 80vw, never climbing toward 88vw no
+matter how tall the sample; sweeping width 400→1200px at a height chosen to rule out `max-h-[78svh]` ever
+binding found `0px` overflow throughout, both routes, all seven rooms — including 700–767px, where `sizes`
+genuinely does exceed 88vw (the regime the original Minor 6 fix covers, still correctly tested at 390×844 by
+`assertion2.boxOverflow`, unaffected by any of this).
+
+**The corrected framing is not "we only sampled one width in the band" — it is "no height at any width in
+this band can ever make the cap bind."** `checkBoxOverflowBand` was deleted rather than kept as a
+now-provably-permanent no-op. `app/globals.css`'s own comment on `.room-gallery-box` carries the full
+derivation; `scripts/check_room_gallery.mjs` carries the same reasoning where the deleted function used to
+live, plus the corrected `boxOverflow` summary field.
+
+**A genuinely different, reachable overflow exists WIDER than this band, and is deliberately left unfixed
+and unwired from any check — flagged here rather than hidden.** Past ≈1858px of viewport width, paired with
+a viewport taller than a plain 16:9/16:10 monitor's own ratio (a browser window snapped to half of a 4K or
+ultrawide display; a portrait-oriented external monitor — both real, neither exotic), `GALLERY_SIZES`'s
+`80vw` term keeps growing past the point where the box's own cap SATURATES at `96rem` (1536px, ~1690.9px of
+viewport width) — the two diverge. Measured on the current, unmodified, already-shipped build: 26px of
+overflow at 1920×1500, 90px at 2000×1500, 250px at 2200×1600, ~480px at 2560×1700, ~713px at 3000×1900 — all
+landscape rooms, both routes, growing without bound as the viewport widens further. This is a different
+mechanism from the ~1200–1690.9px story above (not an old-vs-new cap-formula comparison — the shipped cap
+has always behaved this way), was outside the scope of the task that found it, and was not silently patched:
+fixing it means changing `RoomCardStack.tsx`'s `GALLERY_SIZES` and/or the box's own saturation ceiling, a
+layout change to already-shipped, client-approved chrome that this project's own convention (Findings 1–2,
+above) holds needs its own review pass rather than a same-task patch. Left for a dedicated follow-up.
+
+No new `watchedFailing` arm accompanies this fix — deletion, not repair, is the outcome the task's own
+brief calls for once "no reachable viewport can make the cap bind" is genuinely established, and there is
+nothing left in the rig to sabotage-and-revert.
 
 **The scroll-jump check had never been watched failing.** Every clean run reported `window.scrollY`
 unmoved, which is exactly what a correctly-fixed build should report and indistinguishable, on its own, from

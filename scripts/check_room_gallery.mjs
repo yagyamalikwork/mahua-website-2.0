@@ -941,62 +941,65 @@ async function checkWelcomeCollision(browser, route, width, height) {
 }
 
 /**
- * **The box-overflow band (image-sizing Task 7, second review pass, 14 Aug
- * 2026).** `.room-gallery-box`'s own cap (`app/globals.css`) is WIDER than
- * the old `92vw` below 1200px of viewport width — Minor 6's own fix, and the
- * only range its `10px`-at-390×844 measurement needed closed — but genuinely
- * NARROWER than the old cap between ~1200px and ~1690.9px, solved (not
- * assumed) in that CSS rule's own comment: equal at the two endpoints,
- * narrowest by ~19px around 1670px, 12px narrower at 1500px specifically.
- * Every fixed-shape rig on this project samples 390/768/1440/1920 — never
- * inside that band — so whether anything actually clips there was
- * unmeasured in either direction until now. `1500` is the coordinator's own
- * worked example; sampled here for every room, both routes, real clicks
- * (the trigger, then the close link), not reasoned about a second time.
+ * **`checkBoxOverflowBand` — DELETED 14 Aug 2026 (image-sizing Task 7, third
+ * review pass). It sampled 1500×900 and could not fail: 900 is a HEIGHT the
+ * gallery photo never approaches its width cap at, so this note used to say
+ * "the check hardcodes 900, sample a taller height." That framing was itself
+ * incomplete — measured, not merely re-derived: no height at 1500px width
+ * (or anywhere in the ~1200–1690.9px band this check existed to probe) can
+ * EVER make `.room-gallery-box`'s cap bind, because a DIFFERENT, independent
+ * constraint gets there first.
+ *
+ * The gallery photo's `sizes` (`RoomCardStack.tsx`'s `GALLERY_SIZES`,
+ * `"(min-width: 768px) 80vw, calc(100vw - 32px)"`) is not decoration — a
+ * `srcset` with `w` descriptors makes the browser treat the img's
+ * DENSITY-CORRECTED intrinsic width (what `naturalWidth`/`getBoundingClientRect`
+ * report, and what `width:auto` layout is computed from) as EXACTLY the
+ * `sizes`-resolved value, regardless of which candidate file was actually
+ * fetched — confirmed against `sharp`'s own read of the real AVIF bytes on
+ * disk, which does not move as the viewport does, while the browser's
+ * reported "natural" width did. At any viewport ≥768px wide, that resolves to
+ * `80vw` — strictly narrower than the `max-w-[88vw]` Tailwind class on the
+ * same `<img>`, for every w>0 — so `max-w-[88vw]` is dead code at desktop
+ * widths: the photo can never actually reach 88vw for the box's own cap
+ * (`min(calc(88vw + 3rem), 96rem)`, sized to hold exactly an 88vw-wide image)
+ * to ever need to hold. Verified empirically, not only algebraically:
+ * sweeping height 400→1400px at 1250/1440/1500px width left every landscape
+ * room's rendered width flat at its own `sizes`-implied 80vw, never climbing
+ * toward 88vw no matter how tall the sample; sweeping width 400→1200px at a
+ * height chosen to rule out `max-h-[78svh]` ever binding found 0px overflow
+ * throughout, both routes, all seven rooms — including 700–767px, where
+ * `sizes` genuinely does exceed 88vw (the regime the ORIGINAL Minor 6 fix
+ * covers, still correctly tested at 390×844 by `runRouteShape`'s own
+ * `assertion2.boxOverflow`, unaffected by any of this).
+ *
+ * **Below 768px, `sizes` switches to `calc(100vw - 32px)`, which DOES exceed
+ * 88vw for any real viewport, so the box's cap genuinely binds there — that
+ * regime is real, already fixed, and already tested elsewhere (the 390×844
+ * sample above). This deletion is scoped to the ~1200–1690.9px band
+ * `checkBoxOverflowBand` specifically existed to probe, which sits entirely
+ * ≥768px wide and is therefore permanently unreachable by this mechanism, at
+ * any height.**
+ *
+ * **Not the whole story, and flagged rather than silently dropped: going
+ * WIDER than that band (empirically, past ≈1858px of viewport width, paired
+ * with a viewport TALLER than a plain 16:9/16:10 monitor's own ratio — e.g. a
+ * window snapped to half of a 4K/ultrawide display, or a portrait-oriented
+ * external monitor) does reach genuine, growing overflow: the box's own cap
+ * SATURATES at `96rem` (1536px) past ~1690.9px of viewport width, but
+ * `GALLERY_SIZES`'s `80vw` term keeps growing unboundedly past that point, so
+ * the two diverge. Measured on the current, unmodified build: 26px at
+ * 1920×1500, 90px at 2000×1500, 250px at 2200×1600, ~480px at 2560×1700,
+ * ~713px at 3000×1900 — all landscape rooms, both routes. This is a
+ * genuinely different mechanism from the one this check was built around
+ * (not the old-vs-new cap-formula story), was never in this task's scope to
+ * fix (a change to `RoomCardStack.tsx`/`GALLERY_SIZES`/the box's own
+ * saturation ceiling is exactly the kind of already-shipped-chrome layout
+ * change this project's own convention holds for a dedicated review pass —
+ * see Findings 1–2 above), and is NOT wired into this rig's pass/fail for
+ * that reason. Recorded here, in `docs/DECISIONS.md` §18, and flagged to the
+ * coordinator so it is not lost, not silently fixed and not silently hidden.
  */
-async function checkBoxOverflowBand(browser, route) {
-  const width = 1500;
-  const height = 900;
-  const label = `${route.label}@${width}x${height} (box overflow band)`;
-  const context = await browser.newContext({ viewport: { width, height } });
-  const page = await context.newPage();
-  await page.goto(`${BASE}${route.path}`, { waitUntil: "load" });
-  await page.waitForTimeout(WELCOME_WAIT);
-
-  const triggerSel = `#${route.chapterId} ol.room-stack > li.room-card > :first-child a`;
-  const rows = [];
-  for (let i = 0; i < route.expectedRooms; i++) {
-    const id = panelId(route.chapterId, i);
-    const trigger = page.locator(triggerSel).nth(i);
-    await scrollTriggerIntoView(page, trigger);
-    await trigger.click({ timeout: CLICK_TIMEOUT }).catch(() => {});
-    await page.waitForTimeout(300);
-    const measure = await page.evaluate((panelIdStr) => {
-      const box = document.querySelector(`#${panelIdStr} .room-gallery-box`);
-      if (!box) return null;
-      return { scrollWidth: box.scrollWidth, clientWidth: box.clientWidth };
-    }, id);
-    const overflowPx = measure ? measure.scrollWidth - measure.clientWidth : null;
-    rows.push({ room: id, ...measure, overflowPx });
-    if (measure === null) {
-      note(label, `box overflow band: could not find panel "${id}"'s own .room-gallery-box to measure`);
-    } else if (overflowPx > 1) {
-      note(
-        label,
-        `box overflow band: panel "${id}"'s box scrolls horizontally by ${overflowPx}px at 1500x900 ` +
-          `(scrollWidth ${measure.scrollWidth}px vs clientWidth ${measure.clientWidth}px) — inside the range ` +
-          "app/globals.css's own comment documents as narrower than the pre-fix cap",
-      );
-    }
-    await navLink(page, id, COPY.close).click({ timeout: CLICK_TIMEOUT }).catch(() => {});
-    await page.waitForTimeout(150);
-  }
-
-  console.log(`${label.padEnd(30)} ${rows.map((r) => `${r.room}:${r.overflowPx}px`).join(" ")}`);
-
-  await context.close();
-  return { route: route.label, path: route.path, width, height, rows };
-}
 
 const browser = await chromium.launch();
 
@@ -1027,9 +1030,14 @@ const report = {
   backButton: "steps back through opened rooms — measured THREE deep (open room 0, 1, 2 in sequence; " +
     "press Back three times) per route, in backButtonDeep, not extrapolated from one step.",
   boxOverflow: "measured per combo in assertion2.boxOverflow (scrollWidth vs clientWidth on the panel's " +
-    "own .room-gallery-box) — Minor 6, fixed in app/globals.css. The fix is wider than the old cap below " +
-    "1200px but genuinely narrower between ~1200px and ~1690.9px (solved in that CSS rule's own comment); " +
-    "boxOverflowBand samples 1500px, inside that band, per room per route — see that field.",
+    "own .room-gallery-box) — Minor 6, fixed in app/globals.css, still 0px at 390x844/1440x900 on every " +
+    "room, both routes. `checkBoxOverflowBand` (which sampled 1500x900, inside the ~1200-1690.9px band " +
+    "where the fixed cap is genuinely narrower than the pre-fix one) was DELETED 14 Aug 2026, third review " +
+    "pass: no height at that width, or anywhere in that band, can ever make the cap bind — GALLERY_SIZES's " +
+    "own 80vw sizes-hint caps the photo narrower than max-w-[88vw] for any viewport >=768px wide, so the " +
+    "box's 88vw-sized cap is structurally unreachable there. See the deleted function's own comment, just " +
+    "above this object, for the full derivation, the empirical sweep that confirmed it, and a separate, " +
+    "genuinely reachable overflow found (and deliberately left unfixed and unwired) at much wider viewports.",
   combos: [],
   noJs: [],
   welcomeCollision: [],
@@ -1064,12 +1072,17 @@ const report = {
     },
     {
       id: "gallery-box-horizontal-overflow",
-      status: "FIXED 14 Aug 2026",
+      status: "FIXED 14 Aug 2026 for the regime this fix actually covers (<768px viewport width)",
       summary:
         "Was: the panel's box capped at min(92vw, 96rem) while the image inside is max-w-[88vw] plus 3rem " +
         "of the box's own padding — real horizontal overflow (10px, measured, every room, both routes) at " +
-        "390x844; 0px at 768x1024 and 1440x900. Fixed: box cap widened to min(calc(88vw + 3rem), 96rem), " +
-        "which is provably never narrower than the old cap below 1200px and unchanged above it.",
+        "390x844; 0px at 768x1024 and 1440x900. Fixed: box cap widened to min(calc(88vw + 3rem), 96rem). " +
+        "CORRECTED 14 Aug 2026 (this task) — 'provably never narrower than the old cap below 1200px and " +
+        "unchanged above it' was false on both halves: it is genuinely narrower than the old cap between " +
+        "~1200-1690.9px (harmlessly, since GALLERY_SIZES's own 80vw sizes-hint keeps the photo under 88vw " +
+        "there regardless, so the cap never binds either way — see the deleted checkBoxOverflowBand's own " +
+        "comment, just above this array), and past ~1858px of viewport width (paired with a tall enough " +
+        "aspect) it diverges the OTHER way and genuinely overflows, unfixed — see DECISIONS.md §18.",
     },
   ],
   // **Five arms, every one rebuilt/measured/reverted for real (14 Aug 2026),
@@ -1175,11 +1188,6 @@ for (const route of ROUTES) {
     report.welcomeCollision.push(await checkWelcomeCollision(browser, route, width, height));
   }
 }
-report.boxOverflowBand = [];
-for (const route of ROUTES) {
-  report.boxOverflowBand.push(await checkBoxOverflowBand(browser, route));
-}
-
 await browser.close();
 
 report.failures = failures;
