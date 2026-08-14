@@ -23,15 +23,37 @@
 //      "framed" case in the plate-squeeze README) and passes outright — a
 //      framed board is SUPPOSED to crop. Otherwise the rendered box's aspect
 //      ratio must equal the img's own natural aspect within 2%.
-//   2. The floor, at samples >=1024px wide that compute to `roomy:`: each
-//      plate's rendered width must be >= 0.85x that SAME plate's width at
-//      1440x900 — measured live at the start of THIS run, never a number
-//      written into this file. One exemption, from the spec: a board
-//      rendering 2 columns at BOTH 1440 and the sample (a board already at
-//      its minimum column count — today, the home Rooms board) uses floor
-//      0.65 instead. Both the "2 columns" facts are read off the live page,
-//      never off `PlateGrid.tsx`'s own `columns` logic — the rig cannot see
-//      that variable, only what the browser painted.
+//   2. The floor — 14 Aug 2026, the real rule, replacing the 85%/65%
+//      tolerance that let the client's re-test fail: at every sample
+//      >=470px wide that computes to `roomy:`, EVERY plate's rendered width
+//      must be >= that SAME plate's width at 1440x900 — measured live at
+//      the start of THIS run, never a number written into this file. No
+//      exemption for a board at its minimum column count: under the new
+//      flex-wrap construction (`PlateGrid.tsx` — `flex: 1 1 REFpx` per
+//      plate; CSS Grid's `auto-fit` was tried first and rejected, see that
+//      file's own comment) a board that cannot hold a column at its
+//      1440-reference width simply drops to fewer, wider columns, so a
+//      board "already at 2" is not a special case any more — if one still
+//      needs an exemption, that is itself a finding, not something to
+//      preserve.
+//
+//      `FLOOR_EPS` is 0.004 (0.4 percentage points), not the old 0.003 —
+//      widened by a documented, computed amount, not loosened to make a
+//      build pass. `PlateGrid.tsx`'s `referenceWidth` rounds a board's CSS
+//      floor DOWN from the exact per-column width at 1440 (to a whole pixel,
+//      and clear of the tie `DECISIONS.md` §2 #45 already paid for once) —
+//      which means the CSS floor itself, by construction, sits slightly
+//      BELOW the width the browser actually renders at 1440 (the exact
+//      value, with 1440's own small leftover redistributed across the
+//      columns by `1fr`). A plate sampled right at the bottom of its
+//      column-count band — one pixel short of dropping a column — legitimately
+//      renders at that lower CSS floor, not at the exact 1440 figure. Worked
+//      from the real numbers: Forest's floor is 420px against a 421.33px
+//      live 1440 width (0.3165% short); Details' is 317px against 318px
+//      (0.3145% short). Both exceed the old 0.003 epsilon; neither is a
+//      shrink the client complained about — it is a sub-pixel artefact of
+//      using a whole-pixel CSS value at all. 0.004 clears both with a small
+//      margin to spare, nothing more.
 //   3. The pocket cap, at samples that compute to `pocket:` (height <= 800 AND
 //      width/height >= 2 — a sweep at height 768 legitimately crosses 2:1 past
 //      1536px wide, where this is the assertion in force instead of the
@@ -144,9 +166,20 @@ function computeMode(width, height) {
   return height <= 800 && width / height >= 2 ? "pocket" : "roomy";
 }
 
-const FLOOR_ROOMY = 0.85;
-const FLOOR_MIN_COUNT = 0.65;
-const FLOOR_EPS = 0.003; // ~0.3 percentage points of slack for subpixel layout
+/**
+ * A plate may never render narrower than its own width at 1440x900 — the
+ * client's 14 Aug 2026 ruling, replacing the 85%/65% tolerance that shipped
+ * a board he could still watch shrink. No exemption: see assertion 2's own
+ * comment above for why a board at its minimum column count is no longer a
+ * special case, and for exactly what `FLOOR_EPS` covers and why it moved.
+ */
+const FLOOR_ROOMY = 1;
+const FLOOR_EPS = 0.004; // ~0.4 percentage points — see assertion 2's own comment for the derivation
+/** Below this, no board's own container can hold even one column at its
+ * reference width — Forest's own floor (420px) plus the narrowest gutter
+ * (48px) is 468px, rounded up. The continuous sweep never samples below
+ * 900px wide anyway; this guards a future sweep that does. */
+const MIN_FLOOR_SAMPLE_WIDTH = 470;
 const DISTORTION_PCT = 2;
 const DISTORTION_EPS = 0.05;
 const POCKET_CAP_EPS = 1; // px of slack for subpixel layout
@@ -352,7 +385,7 @@ for (const routePath of ROUTES) {
         worstPocketSample: null,
       };
       const stats = boardStats[boardId];
-      if (width >= 1024 && mode === "roomy") roomyFloorSamples++;
+      if (width >= MIN_FLOOR_SAMPLE_WIDTH && mode === "roomy") roomyFloorSamples++;
 
       boardSample.plates.forEach((plate, i) => {
         const plateLabel = `board="${boardId}" plate=${i}`;
@@ -379,10 +412,9 @@ for (const routePath of ROUTES) {
         if (!plate) return; // nothing further to measure for a cell with no <img>
 
         // --------------------------------------------------- assertion 2
-        if (width >= 1024 && mode === "roomy") {
+        if (width >= MIN_FLOOR_SAMPLE_WIDTH && mode === "roomy") {
           const refWidth = refBoard.widths[i];
-          const exempt = refBoard.columns === 2 && boardSample.columns === 2;
-          const floor = exempt ? FLOOR_MIN_COUNT : FLOOR_ROOMY;
+          const floor = FLOOR_ROOMY;
           if (!refWidth) {
             // A falsy reference width (no <img> in that cell at 1440x900, or a
             // reference-pass rect.width of 0) used to mean this plate's floor
@@ -406,8 +438,7 @@ for (const routePath of ROUTES) {
               note(
                 label,
                 `assertion 2: ${plateLabel} at ${width}x${height} — floor ratio ${ratio.toFixed(3)} < ` +
-                  `${floor} (rendered ${plate.width.toFixed(1)}px vs 1440 reference ${refWidth.toFixed(1)}px, ` +
-                  `exempt=${exempt})`,
+                  `${floor} (rendered ${plate.width.toFixed(1)}px vs 1440 reference ${refWidth.toFixed(1)}px)`,
               );
             }
           }

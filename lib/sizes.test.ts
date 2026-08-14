@@ -314,7 +314,23 @@ describe("the sizes the page actually serves", () => {
     // on the page serves ~80vw — read off this suite by running it and
     // reading the failure (`expected 24 to be 23`), not computed by hand, per
     // this task's own instruction not to guess it.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
+    // 24 → 25 since the plate-reflow rework (14 Aug 2026), which replaced
+    // `PlateGrid`'s fixed breakpoints with a flex-wrap reflow (CSS Grid
+    // `auto-fit` was tried first and rejected — see `PlateGrid.tsx`'s own
+    // comment), each board's `sizes` now built from its own solved REF
+    // rather than a hand-picked `vw` fraction. `PLATE_SIZES[2]`'s new value
+    // is not the same string as
+    // before — and `ExperiencePair.quiet`'s `EXPERIENCE_SIZES.quiet` is a
+    // hardcoded, independent COPY of the OLD `PLATE_SIZES[2]` string (never
+    // an import; `ExperiencePair.tsx`'s own layout is unrelated to
+    // `PlateGrid`'s reflow and did not change), so the coincidence that let
+    // five rows (`PlateGrid.2-up` and its three framed variants, plus
+    // `ExperiencePair.quiet`) share one distinct string now breaks: the four
+    // `PlateGrid.2-up*` rows move to the new string together, and
+    // `ExperiencePair.quiet` is left holding the old one alone. One string
+    // becomes two — net +1, 24 → 25 — read off this suite by running it and
+    // reading the failure (`expected 25 to be 24`), not computed by hand.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(25);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(

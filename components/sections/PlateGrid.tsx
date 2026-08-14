@@ -15,36 +15,90 @@ export type PlateGridCopy = {
 };
 
 /**
- * A plate's real width, per column count, for `srcset` (see `ui/Photo.tsx`).
+ * A board's column reflow — 14 Aug 2026, replacing a fixed breakpoint
+ * (`sm:grid-cols-2 xl:grid-cols-3`, etc.) that only ever moved once (13 Aug)
+ * and still let every plate keep shrinking continuously as the window
+ * narrowed or the browser zoomed, because between whichever two breakpoints
+ * were current a plate's width was still `N%` of the viewport. The client's
+ * own re-test caught it — *"the images … still shrink with the smaller
+ * screen size … also shrink when zoom value reaches 150% and above"* — and
+ * his ruling replaces the tolerance entirely:
  *
- * This has to be derived alongside `columns` below rather than written once,
- * which is the whole reason the rule lives here: a plate in the four-up *details*
- * grid is ~346px at 1600 and a plate in the two-up *rooms* grid is ~732px, and a
- * single `sizes` string covering both would hand the small ones a file twice the
- * width they need. Measured off `ChapterSurface`'s container (`max-w-[1600px]`,
- * `px-6` / `md:px-12`) and this grid's `gap-x-8` / `lg:gap-x-10`, rounded up.
+ * **"A plate may never render narrower than its own width at 1440x900. A
+ * board drops a column the moment holding that column count would take a
+ * plate below that reference, and at one column the plate fills the
+ * container."**
  *
- * **13 Aug 2026:** the 3-up tier begins at `xl` (1280px) now, not `lg` (1024px)
- * (spec `2026-08-13-image-sizing-design.md` §1), so a plate may not render below
- * 85% of its 1440-reference width unless the board is at its minimum column count.
- * The `34vw` tier moves with it, and the 1024–1279 band is now honestly served by
- * `50vw`.
+ * **This is built on flexbox wrap, not CSS Grid's `auto-fit`, and that was
+ * not the first thing tried.** `grid-template-columns: repeat(auto-fit,
+ * minmax(min(REFpx, 100%), 1fr))` states the rule just as directly and was
+ * the first build — one rule, immune to the defect shape `DECISIONS.md` §2
+ * #23 and #44 both are (two rules on one element, resolved by framework
+ * emission order). It measured correctly and it looked wrong: **Grid,
+ * `auto-fit` collapses only the TRACKS that hold no item, and a track is
+ * shared by every row** — so when a board's plate count is not a multiple of
+ * its current column count, the trailing plate lands alone in a new row,
+ * inside a track exactly as wide as its neighbours above, and every OTHER
+ * track in that row still exists and is simply empty. Screenshotted at
+ * 1024px: Forest (3 plates) at 2 columns left its third plate beside a bare
+ * cream cell exactly as wide as the plate itself — non-negotiable #8's
+ * "every screen must carry weight," failed by the fix meant to satisfy it.
+ * Details (4 plates) at 3 columns did the same with its fourth. Neither is
+ * hypothetical; both were seen, not merely reasoned about.
+ *
+ * Flexbox wrap does not have this failure mode, because it has no shared
+ * track model at all: a wrapped line is sized independently of every other
+ * line, so a lone trailing item is the ONLY thing on its line and
+ * `flex-grow` gives it that whole line's leftover width. Each plate gets
+ * `flex: 1 1 REFpx` — grow and shrink from a `REFpx` basis — on a
+ * `flex flex-wrap` container:
+ *
+ *   - A line holds as many plates as fit at `REFpx` each before the next one
+ *     would overflow, which is the identical arithmetic `grid-auto-fit` used
+ *     for deciding a column count, so `referenceWidth`/`columnThreshold`/
+ *     `plateSizesFor` below did not need to change at all — only the CSS
+ *     property that consumes their output did.
+ *   - Within a line, `flex-grow: 1` distributes any leftover width evenly —
+ *     the same thing `1fr` did in the grid version, including the 1440px
+ *     case where `REF` is deliberately a little under the exact fit.
+ *   - A plate ALONE on its own line — the case that broke — has nothing to
+ *     share the line with, so it alone receives 100% of the leftover width.
+ *     A full-width orphan is not a stretch to disguise a bug; it is what
+ *     "fills the container" already meant for the one-column case, now
+ *     applied consistently to a partial last row too.
+ *   - `flex-shrink: 1` from the same shorthand is what gets a board down to
+ *     one full-width plate on a narrow phone: once `REFpx` would exceed the
+ *     container, wrapping cannot help (there is nowhere to move a lone item
+ *     to), so the item shrinks to the container's own width instead —
+ *     literally the "fills the container" half of the client's ruling, the
+ *     same outcome `min(REFpx, 100%)` gave under Grid, reached a different
+ *     way. `min-width: 0` on each item is what lets that shrink go all the
+ *     way down rather than stopping at the item's own content-based minimum,
+ *     which is otherwise `auto` (i.e. "whatever the content needs") for a
+ *     flex item by default.
+ *
+ * `REF` is derived below, per board, from the column count `plateColumns`
+ * already computes and the real gap `COLUMN_GAP` renders at `lg` — and the
+ * SAME `REF` feeds both each plate's `flex-basis` and `sizes`
+ * (`plateSizesFor`), computed once per render in `PlateGrid` itself, so the
+ * box a photograph is fetched for and the box it is laid out in cannot drift
+ * apart.
  */
-export const PLATE_SIZES: Record<number, string> = {
-  // A one-plate grid never splits into columns at any width (there is only
-  // ever one `grid-cols-1` cell), so this is the container's own width, full
-  // stop — no `50vw` tier, because there is no breakpoint at which this plate
-  // shares its row. 1504px is `ChapterSurface`'s 1600px cap minus its
-  // `md:px-12` gutter; the two narrower tiers are that same container's own
-  // width below the 1600px cap and below `md`'s 768px, respectively.
-  1: "(min-width: 1600px) 1504px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)",
-  2: "(min-width: 1600px) 736px, (min-width: 640px) 50vw, calc(100vw - 48px)",
-  3: "(min-width: 1600px) 480px, (min-width: 1280px) 34vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
-  // 4-up runs a tighter gutter than the other two (see `COLUMN_GAP`), so its
-  // plates are wider than the 40px-gutter arithmetic would give: 360px inside
-  // the 1504px container at 1600, not 352.
-  4: "(min-width: 1600px) 360px, (min-width: 1280px) 26vw, (min-width: 640px) 50vw, calc(100vw - 48px)",
-};
+
+/**
+ * `ChapterSurface`'s own container geometry, as numbers. `ChapterSurface`
+ * only expresses this as Tailwind classes (`max-w-[1600px] px-6 md:px-12`),
+ * and this file needs the pixel arithmetic those classes produce, not the
+ * class names — if `ChapterSurface`'s own numbers ever move, these must move
+ * with them; there is no way to derive one from the other.
+ */
+const CONTAINER_AT_1440 = 1344; // 1440 − md:px-12's 96px (48px each side)
+const CONTAINER_CAP = 1504; // ChapterSurface's 1600px cap − the same 96px
+const CONTAINER_CAP_VIEWPORT = 1600;
+const MD_BREAKPOINT = 768; // px-6 (24px/side) becomes md:px-12 (48px/side) here
+const LG_BREAKPOINT = 1024; // COLUMN_GAP's base gap becomes its `lg:` gap here
+const PAD_BASE = 48; // px-6, both sides, below `md`
+const PAD_MD = 96; // md:px-12, both sides, at/above `md`
 
 /**
  * The gutter, per column count.
@@ -60,6 +114,173 @@ const COLUMN_GAP: Record<number, string> = {
   2: "gap-x-8 lg:gap-x-10",
   3: "gap-x-8 lg:gap-x-10",
   4: "gap-x-5 lg:gap-x-6",
+};
+
+/**
+ * `COLUMN_GAP`'s own two gap widths, in real pixels — PARSED out of its own
+ * Tailwind class string rather than duplicated by hand. Two catalogued
+ * defects on this project (`DECISIONS.md` §2 #23, #44) were exactly the shape
+ * a hand-duplicated number invites: two descriptions of the same rule, one
+ * edited and the other not. There is only one number here now — `COLUMN_GAP`'s
+ * own string — and this reads it rather than repeating it.
+ *
+ * Falls back to `COLUMN_GAP[2]`'s gap for a column count this file has no
+ * entry for, matching `PLATE_SIZES`'s own historical fallback: the 2-column
+ * tier is the widest (safest) of the three, so an unrecognised column count
+ * is over-served rather than under-served.
+ */
+export function gapPx(columns: number): { readonly base: number; readonly lg: number } {
+  const classes = COLUMN_GAP[columns] ?? COLUMN_GAP[2];
+  const base = /(?:^|\s)gap-x-(\d+)(?:\s|$)/.exec(classes);
+  const lg = /(?:^|\s)lg:gap-x-(\d+)(?:\s|$)/.exec(classes);
+  if (!base || !lg) {
+    throw new Error(`gapPx: could not parse a base and an lg: gap out of ${JSON.stringify(classes)}`);
+  }
+  // Tailwind's default spacing scale: token N is N × 0.25rem = N × 4px.
+  return { base: Number(base[1]) * 4, lg: Number(lg[1]) * 4 };
+}
+
+/**
+ * A board's plate width at 1440×900 — the client's own reference viewport —
+ * rounded so the CSS floor built from it can never tie the line-wrap
+ * boundary math at 1440 itself (the width at which `columns` plates first
+ * fit on one flex line together — see `columnThreshold` below).
+ *
+ * `exact` is the width `columns` plates would have if they divided
+ * `CONTAINER_AT_1440` with zero slack. When it is fractional (three columns:
+ * 421.33px) a bare `Math.floor` already buys real headroom below the tie —
+ * `(1344 + 40) / (421 + 40) = 3.0022`, comfortably clear of 3.0, not merely
+ * equal to it. When it is a WHOLE number (two columns: 652px flat; four:
+ * 318px flat — both today) a bare floor is a no-op, and the boundary sits
+ * EXACTLY on `columns.0` — the identical tie a fractional value would sit on
+ * if used unrounded, just arrived at a different way. Subtracting one more
+ * pixel after the floor closes that gap in both cases the same way, rather
+ * than only in the case that happens to need it least.
+ *
+ * **This is `Math.floor(exact) - 1`, not `Math.ceil(exact) - 2`.** Both give
+ * the identical 420px for three columns (floor(421.33) = ceil(421.33) - 1).
+ * They diverge only where `exact` is already whole, and there `-1` is the
+ * smaller, sufficient step: it still clears the tie with real margin
+ * (`(1344 + 40) / (651 + 40) = 2.0029` for two columns; `(1344 + 24) / (317 +
+ * 24) = 4.0117` for four), and it halves how far the CSS floor sits
+ * below the width the browser actually renders at 1440 — which matters
+ * because `scripts/check_plates.mjs` asserts a plate is never narrower than
+ * THAT rendered width, not narrower than this constant. See its own comment
+ * on `FLOOR_EPS` for the exact shortfall this leaves and why it is
+ * unavoidable at a whole pixel, not a rounding choice made carelessly.
+ */
+export function referenceWidth(columns: number, gapLg: number): number {
+  if (columns < 2) {
+    throw new Error(`referenceWidth: only meaningful for a board that can drop a column, got ${columns}`);
+  }
+  const exact = (CONTAINER_AT_1440 - gapLg * (columns - 1)) / columns;
+  return Math.floor(exact) - 1;
+}
+
+/**
+ * The viewport width at which a board FIRST holds `columns` columns — the
+ * smallest viewport whose container can fit `columns` plates at `ref`px with
+ * `columns - 1` real gaps between them, `ChapterSurface`'s own container
+ * padding (steps at `md`, 768) and the gap this column count really renders
+ * at that viewport (steps at `lg`, 1024).
+ *
+ * A container's width only ever increases with viewport width, and does so
+ * linearly within each padding/gap regime, so exactly one of the three
+ * regimes below is ever self-consistent for a given target — tried widest
+ * viewport range first only for readability; the loop finds whichever one
+ * actually contains its own answer.
+ */
+export function columnThreshold(
+  columns: number,
+  ref: number,
+  gap: { readonly base: number; readonly lg: number },
+): number {
+  const regimes: readonly (readonly [pad: number, g: number, lo: number, hi: number])[] = [
+    [PAD_BASE, gap.base, 0, MD_BREAKPOINT],
+    [PAD_MD, gap.base, MD_BREAKPOINT, LG_BREAKPOINT],
+    [PAD_MD, gap.lg, LG_BREAKPOINT, CONTAINER_CAP_VIEWPORT],
+  ];
+  for (const [pad, g, lo, hi] of regimes) {
+    const v = columns * ref + (columns - 1) * g + pad;
+    if (v >= lo && v < hi) return v;
+  }
+  throw new Error(
+    `columnThreshold: ${columns} columns at ref=${ref} never fits below the 1600px container cap`,
+  );
+}
+
+/**
+ * `sizes`, built from the SAME `ref`/`gap` each plate's `flex-basis` uses
+ * (the caller computes both once and passes them in — see `PlateGrid`
+ * below) — the standing rule that a layout and its `sizes` cannot describe
+ * different boxes.
+ *
+ * Real, regime-aware thresholds (`columnThreshold`) mark where each
+ * column-count band genuinely begins. The WIDTH inside a band is
+ * deliberately NOT regime-aware: it always assumes the smaller padding
+ * (48px) and this board's smaller, below-`lg` gap, even across the part of
+ * the band where the real values are larger. Both real values can only make
+ * the true container SMALLER than this assumes, never bigger, so the claimed
+ * width is always >= the real rendered width — `ui/Photo.tsx`'s "round up,
+ * never down" rule, carried through a continuously-reflowing board rather
+ * than a fixed breakpoint. It is not the tightest possible ladder (a fully
+ * regime-aware version would add an entry at every `md`/`lg` crossing inside
+ * every band too); it is provably safe and short enough to read.
+ *
+ * The topmost entry (`>= 1600px`) is the one exception: `ChapterSurface`'s
+ * container is capped there and never grows further, so there is no further
+ * regime left to be safe against, and this uses the REAL `lg` gap for a
+ * tight, exact value instead of the safe approximation.
+ */
+export function plateSizesFor(
+  columns: number,
+  ref: number,
+  gap: { readonly base: number; readonly lg: number },
+): string {
+  const entries: string[] = [];
+
+  const capWidth = (CONTAINER_CAP - gap.lg * (columns - 1)) / columns;
+  entries.push(`(min-width: ${CONTAINER_CAP_VIEWPORT}px) ${Math.ceil(capWidth)}px`);
+
+  for (let k = columns; k >= 2; k--) {
+    const threshold = columnThreshold(k, ref, gap);
+    const x = PAD_BASE + gap.base * (k - 1);
+    entries.push(`(min-width: ${threshold}px) calc((100vw - ${x}px) / ${k})`);
+  }
+
+  entries.push(`calc(100vw - ${PAD_BASE}px)`);
+  return entries.join(", ");
+}
+
+/**
+ * A board's plate width at 1440×900, per column count — see `referenceWidth`
+ * for how each is derived. Precomputed here, for the boards that exist today
+ * (2, 3, 4 columns), purely so external code — `lib/sizes.test.ts`'s coverage
+ * sweep, this file's own unit test — can import a value rather than call a
+ * function; `PlateGrid` itself computes the identical number live, from the
+ * chapter it is actually rendering, with this exact function, so the two can
+ * never drift apart.
+ */
+export const PLATE_REF: Record<number, number> = Object.fromEntries(
+  [2, 3, 4].map((columns) => [columns, referenceWidth(columns, gapPx(columns).lg)]),
+);
+
+/**
+ * A plate's real `sizes`, per column count — see `plateSizesFor` for how each
+ * is built. `1` is the one case that is NOT reflow-eligible at all: a
+ * single-plate grid never splits into columns at any width (there is only
+ * ever one `grid-cols-1` cell), so it keeps the container's own width, full
+ * stop — no `50vw` tier, because there is no breakpoint at which it shares
+ * its row. 1504px is `ChapterSurface`'s 1600px cap minus its `md:px-12`
+ * gutter; the two narrower tiers are that same container's own width below
+ * the 1600px cap and below `md`'s 768px, respectively. See `PlateGrid`'s own
+ * `columns === 1` branch.
+ */
+export const PLATE_SIZES: Record<number, string> = {
+  1: "(min-width: 1600px) 1504px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 48px)",
+  ...Object.fromEntries(
+    [2, 3, 4].map((columns) => [columns, plateSizesFor(columns, PLATE_REF[columns], gapPx(columns))]),
+  ),
 };
 
 /**
@@ -115,6 +336,24 @@ export function plateFrame(
 }
 
 /**
+ * The column count a board's photographs earn — never a constant. Three 2:3
+ * portraits of cats want three columns; four 16:9 room interiors in four
+ * columns are 330px wide and read as thumbnails, so those get two.
+ *
+ * A single landscape plate still passed `landscapes > orientations.length / 2`
+ * (1 > 0.5), which reserved two columns for one photograph and left the
+ * second sitting empty — measured on Mahua Vann's one-plate `vann-dining` at
+ * 78% empty screen (`docs/reviews/2026-08-08-property-pages/`). Every other
+ * caller already has `orientations.length >= columns`, because the "else"
+ * branch below sets `columns` to `orientations.length` itself; one plate is
+ * the only count the "if" branch's fixed `2` could ever exceed.
+ */
+export function plateColumns(orientations: readonly ("landscape" | "portrait" | "square")[]): number {
+  const landscapes = orientations.filter((o) => o === "landscape").length;
+  return orientations.length === 1 ? 1 : landscapes > orientations.length / 2 ? 2 : orientations.length;
+}
+
+/**
  * Numbered, captioned plates in the field-guide idiom — the guidelines' own move
  * rather than the reference's, and the page uses it three times.
  *
@@ -157,33 +396,33 @@ export function PlateGrid({
   const { plates } = resolvedCopy;
 
   const orientations = plates.map((p) => media(p.mediaId).orientation);
-  const landscapes = orientations.filter((o) => o === "landscape").length;
-  // A single landscape plate still passed `landscapes > plates.length / 2`
-  // (1 > 0.5), which reserved two columns for one photograph and left the
-  // second sitting empty — measured on Mahua Vann's one-plate `vann-dining`
-  // at 78% empty screen (docs/reviews/2026-08-08-property-pages/). Every
-  // other caller already has `plates.length >= columns`, because the "else"
-  // branch below sets `columns` to `plates.length` itself; one plate is the
-  // only count the "if" branch's fixed `2` could ever exceed.
-  const columns = plates.length === 1 ? 1 : landscapes > plates.length / 2 ? 2 : plates.length;
+  const columns = plateColumns(orientations);
   const frame = plateFrame(orientations);
 
-  // `columns === 1` adds no breakpoint override at all: the grid's own base
-  // class is already `grid-cols-1`, and a real column split at `sm`/`lg`/`xl`
-  // for a single plate would reopen the same empty-cell bug the `columns`
-  // clamp above exists to close.
-  const columnClass =
-    columns === 1
-      ? ""
-      : columns === 2
-        ? "sm:grid-cols-2"
-        : columns === 3
-          ? "sm:grid-cols-2 xl:grid-cols-3"
-          : "sm:grid-cols-2 xl:grid-cols-4";
-
-  // A chapter with five plates would fall through to the four-column rule,
-  // the widest of the four and therefore the safe miss.
-  const plateSizes = PLATE_SIZES[columns] ?? PLATE_SIZES[2];
+  /**
+   * `columns === 1` keeps its own simple path — a one-plate grid never splits
+   * into columns at any width (there is only ever one `grid-cols-1` cell), so
+   * it has no column to drop and none of the reflow machinery below applies:
+   * `plateSizes` is the container's own width, full stop, and `itemFlexBasis`
+   * stays undefined so the container keeps its base `grid grid-cols-1`
+   * classes rather than becoming a flex-wrap row.
+   *
+   * For every other board, `ref`/`gap` are computed exactly once and feed
+   * BOTH `itemFlexBasis` (each plate's `flex-basis`, below) and `plateSizes`
+   * (`plateSizesFor`) from the same value — the standing rule that a layout
+   * and its `sizes` cannot be allowed to describe different boxes.
+   */
+  let plateSizes: string;
+  let itemFlexBasis: number | undefined;
+  if (columns === 1) {
+    plateSizes = PLATE_SIZES[1];
+    itemFlexBasis = undefined;
+  } else {
+    const gap = gapPx(columns);
+    const ref = referenceWidth(columns, gap.lg);
+    plateSizes = plateSizesFor(columns, ref, gap);
+    itemFlexBasis = ref;
+  }
 
   return (
     <ChapterSurface id={chapter.id} surface={surface} backdrop={backdrop}>
@@ -219,15 +458,38 @@ export function PlateGrid({
 
         <div
           data-plate-grid={chapter.id}
-          className={`mt-10 grid grid-cols-1 gap-y-12 md:mt-12 ${COLUMN_GAP[columns] ?? COLUMN_GAP[2]} ${columnClass}`}
+          // `gap-y-12`/`COLUMN_GAP`'s `gap-x-*` are display-mode-agnostic —
+          // the same `gap`/`column-gap`/`row-gap` properties space a
+          // `flex-wrap` row exactly as they spaced a grid, so only the
+          // display mode itself needs to switch. `columns === 1` keeps
+          // `grid grid-cols-1` (there is only ever one cell, nothing to
+          // wrap); every other board is `flex flex-wrap` — see the module
+          // comment above for why that, and not `grid-template-columns:
+          // repeat(auto-fit, …)`, is what ships.
+          className={`mt-10 gap-y-12 md:mt-12 ${COLUMN_GAP[columns] ?? COLUMN_GAP[2]} ${
+            itemFlexBasis === undefined ? "grid grid-cols-1" : "flex flex-wrap"
+          }`}
         >
           {plates.map((plate, i) => (
             <div
               key={plate.mediaId}
-              // Every other plate hangs lower. An inline custom property rather
-              // than a class, because the offset is per-index and Tailwind only
-              // ships classes it can see written out in full.
-              style={{ "--stagger": i % 2 === 1 ? "3.5rem" : "0rem" } as React.CSSProperties}
+              style={
+                {
+                  // Every other plate hangs lower. An inline custom property
+                  // rather than a class, because the offset is per-index and
+                  // Tailwind only ships classes it can see written out in full.
+                  "--stagger": i % 2 === 1 ? "3.5rem" : "0rem",
+                  // `flex-grow: 1` (from the `1` in `flex: 1 1 …`) is what a
+                  // plate stranded alone on the last line needs to fill it —
+                  // see the module comment. `minWidth: 0` overrides a flex
+                  // item's default `min-width: auto`, which would otherwise
+                  // floor this at the plate's own content size and block the
+                  // shrink a narrow phone needs.
+                  ...(itemFlexBasis !== undefined
+                    ? { flex: `1 1 ${itemFlexBasis}px`, minWidth: 0 }
+                    : {}),
+                } as React.CSSProperties
+              }
               className="lg:mt-[var(--stagger)]"
             >
               <Plate

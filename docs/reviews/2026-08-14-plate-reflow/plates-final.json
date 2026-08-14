@@ -1,0 +1,122 @@
+{
+  "measuredAt": "2026-08-14T09:44:32.281Z",
+  "url": "http://localhost:3100",
+  "method": "Swept every route's [data-plate-grid] boards continuously — 900-1920px wide in 16px steps at heights 900 and 768, plus the 13 named shapes from the plate-squeeze evidence table — in a real browser, reducedMotion, against a production build. Column count and pocket:/roomy: mode are both computed live from the sampled numbers, never read off CSS. The 1440x900 reference (each plate's own width and column count) is captured at the start of each route's run, not hard-coded.",
+  "shapesSwept": 143,
+  "routes": [
+    {
+      "route": "/",
+      "boardsFound": [
+        "forest",
+        "rooms",
+        "details"
+      ],
+      "samples": 143,
+      "pocketSamples": 27,
+      "roomyFloorSamples": 348,
+      "worstDistortionPct": 0.25,
+      "worstDistortion": {
+        "board": "rooms",
+        "plate": 0,
+        "width": 1440,
+        "height": 900,
+        "pctOff": 0.2497121401752178
+      },
+      "boards": {
+        "forest": {
+          "referenceColumns": 3,
+          "referenceWidths": [
+            421.328125,
+            421.34375,
+            421.328125
+          ],
+          "worstDistortionPct": 0.217,
+          "worstDistortionSample": {
+            "width": 1492,
+            "height": 900
+          },
+          "worstFloorRatio": 1,
+          "worstFloorSample": {
+            "width": 1440,
+            "height": 900,
+            "renderedWidth": 421.328125,
+            "refWidth": 421.328125
+          },
+          "floorUsedAtWorst": 1,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        },
+        "rooms": {
+          "referenceColumns": 2,
+          "referenceWidths": [
+            652,
+            652,
+            652,
+            652
+          ],
+          "worstDistortionPct": 0.25,
+          "worstDistortionSample": {
+            "width": 1440,
+            "height": 900
+          },
+          "worstFloorRatio": 1,
+          "worstFloorSample": {
+            "width": 1440,
+            "height": 900,
+            "renderedWidth": 652,
+            "refWidth": 652
+          },
+          "floorUsedAtWorst": 1,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        },
+        "details": {
+          "referenceColumns": 4,
+          "referenceWidths": [
+            318,
+            318,
+            318,
+            318
+          ],
+          "worstDistortionPct": 0.169,
+          "worstDistortionSample": {
+            "width": 1588,
+            "height": 768
+          },
+          "worstFloorRatio": 1,
+          "worstFloorSample": {
+            "width": 1440,
+            "height": 900,
+            "renderedWidth": 318,
+            "refWidth": 318
+          },
+          "floorUsedAtWorst": 1,
+          "worstPocketOverPx": 0,
+          "worstPocketSample": null
+        }
+      }
+    },
+    {
+      "route": "/mahua-vann",
+      "boardsFound": [],
+      "samples": 143,
+      "pocketSamples": 27,
+      "roomyFloorSamples": 0,
+      "worstDistortionPct": 0,
+      "worstDistortion": null,
+      "boards": {}
+    },
+    {
+      "route": "/mahua-tola",
+      "boardsFound": [],
+      "samples": 143,
+      "pocketSamples": 27,
+      "roomyFloorSamples": 0,
+      "worstDistortionPct": 0,
+      "worstDistortion": null,
+      "boards": {}
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}
