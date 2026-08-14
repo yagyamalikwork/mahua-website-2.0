@@ -1,0 +1,41 @@
+# What Vercel does NOT need to build this site.
+#
+# Written 14 Aug 2026, after a CLI deploy sat at "Uploading (0.0B/882.6MB)" and
+# never finished. 882 MB is not this site — it is the repository's *history* and
+# its raw materials. Vercel installs its own dependencies and runs its own build,
+# so everything below is uploaded for nothing and, at this size, is the difference
+# between a deploy that lands in a minute and one that never does.
+#
+#   .git          926 MB   every version of every photograph ever committed
+#   node_modules  582 MB   Vercel runs its own `npm install`
+#   .next         172 MB   Vercel runs its own `next build`
+#   reference      77 MB   crawled source material, never shipped
+#
+# The site itself is `public/` at 46 MB plus the source, and that is all that
+# should ever go up.
+#
+# **If a build starts failing on a missing file, look here first.** Excluding
+# something the build needs fails loudly at build time, which is the good kind of
+# wrong — but it will look like a code error rather than an ignore-file error.
+
+.git
+node_modules
+.next
+
+# Raw materials and working files — none of it is imported by the app.
+reference
+docs
+.superpowers
+Mahua-property-logos
+Forest-illustrations
+
+# The measurement rigs and the image pipeline. They generate committed artefacts
+# (`lib/*-art.ts`, `lib/media-manifest.ts`, `public/media`) and are never run at
+# build time — `package.json`'s build script is a bare `next build`.
+scripts
+
+# Test files. The suite runs here, not on Vercel.
+**/*.test.ts
+**/*.test.tsx
+vitest.config.ts
+vitest.setup.ts
