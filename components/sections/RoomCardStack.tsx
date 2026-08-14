@@ -33,7 +33,17 @@ export const ROOM_GALLERY_CLOSED = "room-gallery-closed";
  * inside ~88vw x ~78svh, so its drawn width is min(88vw, 78svh x aspect) —
  * ~80vw for the 3:2 rooms on a 1440x900 screen, less for the portrait; 80vw
  * over-states the portrait's need, which is the safe direction (`ui/Photo.tsx`
- * says which way to round). */
+ * says which way to round).
+ *
+ * **Deliberately left as `80vw`, not widened, by the image-sizing Task 8 fix
+ * below (14 Aug 2026).** This string governs which FILE `srcset` selects, not
+ * layout — the `<Photo>`'s own CSS `max-width` (see its `className`, below)
+ * is what actually bounds the rendered width now, so a viewport wide enough
+ * to overflow `.room-gallery-box` can no longer do so regardless of what this
+ * constant says. `ui/Photo.tsx`'s own comment states the rounding direction
+ * this relies on: over-stating a `sizes` box costs a tier of bytes at worst;
+ * under-stating it ships a visibly soft photograph, the one failure mode this
+ * page cannot afford. */
 export const GALLERY_SIZES = "(min-width: 768px) 80vw, calc(100vw - 32px)";
 
 /**
@@ -264,11 +274,41 @@ export function RoomCardStack({
               />
               <div className="room-gallery-box">
                 <figure>
+                  {/*
+                   * `max-w-[min(88vw,93rem)]`, not the bare `max-w-[88vw]`
+                   * this shipped with until this measured fix (image-sizing
+                   * Task 8, 14 Aug 2026). `.room-gallery-box`'s own
+                   * `max-width` (`app/globals.css`) is `min(calc(88vw +
+                   * 3rem), 96rem)` — it SATURATES at `96rem` past ~1690.9px
+                   * of viewport width and stops growing. This image's old
+                   * bound, a bare `88vw`, had no matching ceiling and kept
+                   * growing past that point, so a wide-enough, tall-enough
+                   * viewport (a window snapped to half a 4K/ultrawide
+                   * display; a portrait monitor) pushed the photograph past
+                   * its own box — measured, before this fix, at 26px of
+                   * overflow at 1920x1500, growing to 410px+ beyond it.
+                   *
+                   * The fix makes this bound and the box's own INNER width
+                   * (its cap minus its `3rem` of padding) the same formula,
+                   * not merely "wide enough": `min(88vw + 3rem, 96rem) -
+                   * 3rem = min(88vw, 96rem - 3rem) = min(88vw, 93rem)`. The
+                   * two are then IDENTICALLY EQUAL at every viewport width —
+                   * `88vw` below ~1690.9px (neither side has saturated),
+                   * `93rem` above it (both have) — not merely never-smaller,
+                   * so no future viewport shape can pull them apart again.
+                   * `GALLERY_SIZES` (above) is deliberately left at `80vw` —
+                   * it picks a FILE, this picks a LAYOUT WIDTH, and the two
+                   * no longer need to agree for this overflow to stay closed.
+                   * Full derivation: `scripts/check_room_gallery.mjs`'s own
+                   * `checkWideOverflow` comment; measured proof:
+                   * `docs/reviews/2026-08-13-image-sizing/gallery.json`'s
+                   * `wideOverflow` field; narrative: `docs/DECISIONS.md` §18.
+                   */}
                   <Photo
                     id={room.mediaId}
                     sizes={GALLERY_SIZES}
                     pictureClassName="block"
-                    className="mx-auto h-auto max-h-[78svh] w-auto max-w-[88vw]"
+                    className="mx-auto h-auto max-h-[78svh] w-auto max-w-[min(88vw,93rem)]"
                   />
                   <figcaption className="mt-4 flex items-baseline justify-between gap-6">
                     <span className="font-[family-name:var(--font-display)] text-xl text-[color:var(--text)]">

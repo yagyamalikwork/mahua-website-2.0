@@ -1401,23 +1401,54 @@ now-provably-permanent no-op. `app/globals.css`'s own comment on `.room-gallery-
 derivation; `scripts/check_room_gallery.mjs` carries the same reasoning where the deleted function used to
 live, plus the corrected `boxOverflow` summary field.
 
-**A genuinely different, reachable overflow exists WIDER than this band, and is deliberately left unfixed
-and unwired from any check — flagged here rather than hidden.** Past ≈1858px of viewport width, paired with
-a viewport taller than a plain 16:9/16:10 monitor's own ratio (a browser window snapped to half of a 4K or
-ultrawide display; a portrait-oriented external monitor — both real, neither exotic), `GALLERY_SIZES`'s
-`80vw` term keeps growing past the point where the box's own cap SATURATES at `96rem` (1536px, ~1690.9px of
-viewport width) — the two diverge. Measured on the current, unmodified, already-shipped build: 26px of
-overflow at 1920×1500, 90px at 2000×1500, 250px at 2200×1600, ~480px at 2560×1700, ~713px at 3000×1900 — all
-landscape rooms, both routes, growing without bound as the viewport widens further. This is a different
-mechanism from the ~1200–1690.9px story above (not an old-vs-new cap-formula comparison — the shipped cap
-has always behaved this way), was outside the scope of the task that found it, and was not silently patched:
-fixing it means changing `RoomCardStack.tsx`'s `GALLERY_SIZES` and/or the box's own saturation ceiling, a
-layout change to already-shipped, client-approved chrome that this project's own convention (Findings 1–2,
-above) holds needs its own review pass rather than a same-task patch. Left for a dedicated follow-up.
+**A genuinely different, reachable overflow existed WIDER than this band — FIXED, image-sizing Task 8,
+14 Aug 2026 (was: deliberately left unfixed and unwired from any check, flagged rather than hidden).** Past
+≈1858px of viewport width, paired with a viewport taller than a plain 16:9/16:10 monitor's own ratio (a
+browser window snapped to half of a 4K or ultrawide display; a portrait-oriented external monitor — both
+real, neither exotic), the box's own cap SATURATES at `96rem` (1536px, ~1690.9px of viewport width) and
+stops growing, while the gallery `<Photo>`'s own `max-width` had no matching ceiling — a bare `max-w-[88vw]`,
+unbounded — so past that point the two diverged and the image pushed past its own box. Measured on the
+pre-fix, already-shipped build: 26px of overflow at 1920×1500, 90px at 2000×1500, 250px at 2200×1600,
+~480px at 2560×1700, ~713px at 3000×1900 — all landscape rooms, both routes, growing without bound as the
+viewport widened further. This is a different mechanism from the ~1200–1690.9px story above (not an
+old-vs-new cap-formula comparison — the shipped cap had always behaved this way).
 
-No new `watchedFailing` arm accompanies this fix — deletion, not repair, is the outcome the task's own
-brief calls for once "no reachable viewport can make the cap bind" is genuinely established, and there is
-nothing left in the rig to sabotage-and-revert.
+**The fix: the image's own CSS `max-width` and the box's own inner width, made the identical formula, by
+construction, rather than fixed at a value chosen to clear the samples measured.** The box's inner (content)
+width is its own outer cap minus its `3rem` of horizontal padding: `min(88vw + 3rem, 96rem) − 3rem =
+min(88vw, 96rem − 3rem) = min(88vw, 93rem)`. `RoomCardStack.tsx`'s gallery `<Photo className>` changed from
+`max-w-[88vw]` to `max-w-[min(88vw,93rem)]` — solved, not assumed, for both regimes: below ~1690.9px
+(`93rem ÷ 0.88` = `1690.9px`), neither side has saturated and the two formulas are both `88vw`, exactly
+equal; above it, both have saturated and the two are both `93rem`, exactly equal again. The two bounds are
+therefore identical at every viewport width, not merely "never smaller" — the image cannot exceed the box's
+inner width again regardless of how the viewport is shaped, the same discipline CLAUDE.md's own "the one to
+copy" (`build_forest_overlay.mjs`) uses for a different problem: solve for the bound, don't hand-pick a
+number under it.
+
+`GALLERY_SIZES`'s own `80vw` term was deliberately left unchanged — a considered choice, stated rather than
+silently decided. It governs which FILE `srcset` selects (via the density-corrected "intrinsic" size the
+browser reports), not the rendered layout width; the fixed CSS `max-width` above is a hard layout constraint
+that always wins over what `sizes` implies is wanted, so the image's actual on-screen width can no longer
+exceed `min(88vw,93rem)` regardless of what `GALLERY_SIZES` says. `ui/Photo.tsx`'s own comment states which
+way a `sizes` mismatch is safe to round — over-stating a box costs a tier of bytes at worst, under-stating it
+ships a visibly soft photograph — and `80vw` already rounds down relative to the new cap, the conservative
+direction.
+
+Verified in a browser, both directions, not merely computed: `scripts/check_room_gallery.mjs`'s new
+`checkWideOverflow` opened every room, both routes, at 1920×1500 and 2400×1800 (the shape the defect was
+originally measured at, and one wider/taller case past it) against the pre-fix build FIRST — the exact
+figures above reproduced live (26px at 1920×1500, growing to 410px at 2400×1800, on every landscape room;
+the one portrait room, `tola-rooms-3`, read 0px throughout, both before and after, since its own height
+constraint binds before either width cap does) — then again after the fix, reading 0px at every room, both
+shapes, both routes. Recorded verbatim in `docs/reviews/2026-08-13-image-sizing/gallery.json`'s own
+`watchedFailing` field (`f-wide-viewport-overflow-prefix`) and `wideOverflow` field (the clean, post-fix
+readings), not only in this paragraph.
+
+**No new `watchedFailing` arm accompanies `checkBoxOverflowBand`'s own deletion specifically** (a separate
+question from the wide-viewport fix just above, which does have one — `f-wide-viewport-overflow-prefix`,
+cited above) — deletion, not repair, is the outcome the task's own brief calls for once "no reachable
+viewport can make the cap bind" is genuinely established for that band, and there is nothing left in the
+rig to sabotage-and-revert for a check that no longer exists.
 
 **The scroll-jump check had never been watched failing.** Every clean run reported `window.scrollY`
 unmoved, which is exactly what a correctly-fixed build should report and indistinguishable, on its own, from

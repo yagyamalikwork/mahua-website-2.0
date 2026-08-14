@@ -127,10 +127,12 @@
 //      not merely that nothing errors. A real capability the new mechanism
 //      gives that the old one couldn't promise, proven rather than assumed.
 //
-// Plus two checks outside the six, run once per route/shape but not folded
+// Plus three checks outside the six, run once per route/shape but not folded
 // into the numbering above: `backButtonDeep` (three opens, three Back
-// presses, per route — see above) and `checkWelcomeCollision` (the welcome
-// screen, per route/shape — see its own comment).
+// presses, per route — see above), `checkWelcomeCollision` (the welcome
+// screen, per route/shape — see its own comment), and `checkWideOverflow`
+// (box overflow at wide-and-tall viewports, image-sizing Task 8, 14 Aug
+// 2026 — see its own comment, just above `const browser = ...` below).
 //
 // Real user paths only: every click goes through Playwright's own
 // `Locator.click()` / `page.mouse.click(x, y)`, which dispatch real pointer
@@ -999,7 +1001,142 @@ async function checkWelcomeCollision(browser, route, width, height) {
  * see Findings 1–2 above), and is NOT wired into this rig's pass/fail for
  * that reason. Recorded here, in `docs/DECISIONS.md` §18, and flagged to the
  * coordinator so it is not lost, not silently fixed and not silently hidden.
+ *
+ * **RESOLVED — image-sizing Task 8, 14 Aug 2026.** The paragraph above is the
+ * flag that started this task; the fix and its own check (`checkWideOverflow`,
+ * just below) are recorded together in the next comment rather than folded
+ * into this historical one, so the "what was found" and "what closed it"
+ * stories stay readable as two separate, dated things.
  */
+
+/**
+ * **Wide-viewport overflow — FIXED, image-sizing Task 8, 14 Aug 2026.** The
+ * flagged-but-unfixed finding immediately above this comment, closed.
+ *
+ * **The mechanism, unchanged from how it was found:** `.room-gallery-box`'s
+ * own `max-width` (`min(calc(88vw + 3rem), 96rem)`) SATURATES at `96rem`
+ * (1536px) past ~1690.9px of viewport width — it stops growing. The gallery
+ * `<Photo>`'s CSS max-width did not: it was a bare `max-w-[88vw]`, with no
+ * matching rem ceiling at all, so past that same point the box held still
+ * while the image kept growing with the viewport, and the image pushed past
+ * its own box. Real cases: a browser window snapped to half of a 4K or
+ * ultrawide display; a portrait-oriented external monitor. Not a plain 16:9
+ * monitor at any resolution (its height:width ratio never reaches the
+ * ~0.684 the mechanism needs). Measured on the pre-fix, shipped build: 26px
+ * of overflow at 1920×1500, growing to ~713px at 3000×1900 — both landscape
+ * rooms, both routes. See the `f-wide-viewport-overflow-prefix` entry in
+ * `report.watchedFailing` (below) for this rig's own pre-fix run, quoted
+ * verbatim, before any code changed.
+ *
+ * **The fix: make the image's own bound agree with the box's INNER width by
+ * construction, so no viewport can pull them apart again.** The box's inner
+ * (content) width is its own outer cap minus its `3rem` of horizontal
+ * padding (`1.5rem` a side — `app/globals.css`'s `.room-gallery-box`):
+ *
+ *   inner = min(88vw + 3rem, 96rem) − 3rem = min(88vw, 96rem − 3rem) = min(88vw, 93rem)
+ *
+ * (96rem − 3rem = 93rem, exactly — both sides of the `min()` shed the same
+ * constant.) `RoomCardStack.tsx`'s gallery `<Photo className>` changed from
+ * `max-w-[88vw]` to `max-w-[min(88vw,93rem)]` — the identical formula, not
+ * merely a "wide enough" guess. Solved for both regimes, not assumed equal
+ * from one:
+ *
+ *   - `w ≤ ~1690.9px` (`93rem / 0.88` = `105.68rem` = `1690.9px`, neither
+ *     side of either `min()` has saturated yet): image cap = `88vw` = box's
+ *     own `88vw` — EQUAL, exactly, the same way the box's own cap was
+ *     already sized to hold precisely an 88vw-wide image plus its padding.
+ *   - `w > ~1690.9px` (both saturated): image cap = `93rem` (since
+ *     `88vw > 93rem` here) = box's inner width, also saturated at `93rem` —
+ *     EQUAL again.
+ *
+ * The two formulas are identical at every viewport width, not merely
+ * "never smaller" — the image can never exceed the box's inner width again,
+ * by construction, the same discipline `build_forest_overlay.mjs` (CLAUDE.md's
+ * own "the one to copy") uses for a tint instead of a crop.
+ *
+ * (A 1px border each side, `app/globals.css`'s `.room-gallery-box`, is left
+ * out of the arithmetic above — 2px total, the same simplification the box's
+ * own CSS comment already makes for its `88vw + 3rem` derivation. Where it
+ * matters at all, it makes the true fit ~2px TIGHTER than the formula says,
+ * which is the safe direction: the image ends up marginally narrower than
+ * the box, never wider.)
+ *
+ * **`GALLERY_SIZES`'s own `80vw` term is deliberately UNCHANGED, and that is
+ * a considered choice, not an oversight.** It governs which FILE is fetched
+ * (the `sizes` attribute feeds the browser's `srcset` candidate-selection and
+ * the density-corrected "intrinsic" size it reports), not layout. The fixed
+ * CSS `max-width` above is a hard layout constraint — browsers always cap the
+ * rendered width at `max-width` regardless of what `sizes` implies is
+ * "wanted" — so the image's actual on-screen width can never exceed
+ * `min(88vw,93rem)` again no matter what `GALLERY_SIZES` says. Leaving
+ * `80vw` in place cannot reopen this overflow. `ui/Photo.tsx`'s own comment
+ * states which way a `sizes` mismatch is safe to round: *"over-stating a box
+ * costs a tier at worst; under-stating it ships a visibly soft
+ * photograph"* — `80vw` already rounds down relative to the new `88vw`/`93rem`
+ * cap, which is the conservative direction for bytes, not the dangerous one
+ * for legibility, so there is nothing here worth spending a second change on.
+ *
+ * **Measured, not merely computed — `checkWideOverflow`, below, samples every
+ * room, both routes, at 1920×1500 and 2400×1800** (the shape the defect was
+ * originally measured at, and one wider/taller case past it). Real user path:
+ * each room is opened by clicking its own trigger link, the same as every
+ * other assertion in this rig — never a synthetic viewport picked to "prove"
+ * the formula without touching the actual page.
+ */
+const WIDE_SHAPES = [
+  [1920, 1500],
+  [2400, 1800],
+];
+
+async function checkWideOverflow(browser, route, width, height) {
+  const label = `${route.label}@${width}x${height} (box overflow, wide)`;
+  const context = await browser.newContext({ viewport: { width, height } });
+  const page = await context.newPage();
+  await page.goto(`${BASE}${route.path}`, { waitUntil: "load" });
+  await page.waitForTimeout(WELCOME_WAIT);
+
+  const n = route.expectedRooms;
+  const triggerSel = `#${route.chapterId} ol.room-stack > li.room-card > :first-child a`;
+  const rooms = [];
+
+  for (let i = 0; i < n; i++) {
+    const id = panelId(route.chapterId, i);
+    const trigger = page.locator(triggerSel).nth(i);
+    await scrollTriggerIntoView(page, trigger);
+    let opened = true;
+    try {
+      await trigger.click({ timeout: CLICK_TIMEOUT });
+    } catch {
+      opened = false;
+    }
+    await page.waitForTimeout(200);
+    const overflow = await page.evaluate((id2) => {
+      const box = document.querySelector(`#${id2} .room-gallery-box`);
+      if (!box) return null;
+      return { scrollWidth: box.scrollWidth, clientWidth: box.clientWidth };
+    }, id);
+    const overflowPx = overflow ? overflow.scrollWidth - overflow.clientWidth : null;
+    rooms.push({ id, opened, overflow, overflowPx });
+    if (!opened) {
+      note(label, `box overflow (wide): could not open room ${i}'s trigger to measure its panel`);
+    } else if (overflow === null) {
+      note(label, `box overflow (wide): could not find room ${i}'s own .room-gallery-box to measure`);
+    } else if (overflowPx > 1) {
+      note(
+        label,
+        `box overflow (wide): panel "${id}"'s box scrolls horizontally by ${overflowPx}px ` +
+          `(scrollWidth ${overflow.scrollWidth}px vs clientWidth ${overflow.clientWidth}px)`,
+      );
+    }
+    await closeWhatsOpen(page);
+  }
+
+  const result = { route: route.label, path: route.path, width, height, rooms };
+  console.log(`${label.padEnd(34)} ` + rooms.map((r) => `${r.id}:${r.overflowPx ?? "?"}px`).join(" "));
+
+  await context.close();
+  return result;
+}
 
 const browser = await chromium.launch();
 
@@ -1035,12 +1172,19 @@ const report = {
     "where the fixed cap is genuinely narrower than the pre-fix one) was DELETED 14 Aug 2026, third review " +
     "pass: no height at that width, or anywhere in that band, can ever make the cap bind — GALLERY_SIZES's " +
     "own 80vw sizes-hint caps the photo narrower than max-w-[88vw] for any viewport >=768px wide, so the " +
-    "box's 88vw-sized cap is structurally unreachable there. See the deleted function's own comment, just " +
-    "above this object, for the full derivation, the empirical sweep that confirmed it, and a separate, " +
-    "genuinely reachable overflow found (and deliberately left unfixed and unwired) at much wider viewports.",
+    "box's 88vw-sized cap is structurally unreachable there. A genuinely different, WIDER overflow (past " +
+    "~1858px of viewport width, paired with a tall-enough viewport) was found the same pass and left " +
+    "unfixed — CLOSED 14 Aug 2026, image-sizing Task 8: the gallery Photo's max-w-[88vw] had no rem " +
+    "ceiling to match the box's own saturating one, so past ~1690.9px the box stopped growing while the " +
+    "image kept growing. Fixed by changing the image's own CSS max-width to max-w-[min(88vw,93rem)] — " +
+    "identically equal to the box's inner width (its own cap minus 3rem of padding) at every viewport, in " +
+    "both regimes, not merely 'wide enough.' Measured per combo in `report.wideOverflow` (1920x1500 and " +
+    "2400x1800, both routes, every room) — see checkWideOverflow's own comment, just above `const browser " +
+    "= ...`, for the full derivation and why GALLERY_SIZES's own 80vw term did not need to change.",
   combos: [],
   noJs: [],
   welcomeCollision: [],
+  wideOverflow: [],
   knownDefects: [
     {
       id: "arrows-nest-instead-of-replacing",
@@ -1072,17 +1216,22 @@ const report = {
     },
     {
       id: "gallery-box-horizontal-overflow",
-      status: "FIXED 14 Aug 2026 for the regime this fix actually covers (<768px viewport width)",
+      status: "FIXED 14 Aug 2026, both regimes (narrow AND wide) — see image-sizing Task 8",
       summary:
         "Was: the panel's box capped at min(92vw, 96rem) while the image inside is max-w-[88vw] plus 3rem " +
         "of the box's own padding — real horizontal overflow (10px, measured, every room, both routes) at " +
-        "390x844; 0px at 768x1024 and 1440x900. Fixed: box cap widened to min(calc(88vw + 3rem), 96rem). " +
-        "CORRECTED 14 Aug 2026 (this task) — 'provably never narrower than the old cap below 1200px and " +
-        "unchanged above it' was false on both halves: it is genuinely narrower than the old cap between " +
-        "~1200-1690.9px (harmlessly, since GALLERY_SIZES's own 80vw sizes-hint keeps the photo under 88vw " +
-        "there regardless, so the cap never binds either way — see the deleted checkBoxOverflowBand's own " +
-        "comment, just above this array), and past ~1858px of viewport width (paired with a tall enough " +
-        "aspect) it diverges the OTHER way and genuinely overflows, unfixed — see DECISIONS.md §18.",
+        "390x844; 0px at 768x1024 and 1440x900. Fixed (Minor 6): box cap widened to min(calc(88vw + 3rem), " +
+        "96rem). That fix's own write-up then repeated the same unread-confidence mistake it corrected — " +
+        "'provably never narrower than the old cap below 1200px and unchanged above it' was false on both " +
+        "halves (see DECISIONS.md §18) — and a SECOND, wider, genuinely reachable overflow was found past " +
+        "~1858px of viewport width (paired with a tall-enough viewport): 26px at 1920x1500, growing to " +
+        "~713px at 3000x1900, because the box's own cap saturates at 96rem past ~1690.9px of viewport " +
+        "width while the image's max-w-[88vw] had no matching ceiling and kept growing. CLOSED 14 Aug 2026 " +
+        "(image-sizing Task 8): the image's own CSS max-width changed to max-w-[min(88vw,93rem)] — " +
+        "identically equal to the box's own inner width (its cap minus 3rem of padding) at every viewport " +
+        "width, in both regimes, by construction. Measured 0px at every sampled shape after the fix, " +
+        "including the two the defect was originally found at — see report.wideOverflow and " +
+        "checkWideOverflow's own comment for the full derivation.",
     },
   ],
   // **Five arms, every one rebuilt/measured/reverted for real (14 Aug 2026),
@@ -1169,6 +1318,33 @@ const report = {
       sabotaged: "not a sabotage — a real process error, recorded here because it shaped every revert after it",
       note: "After watching sabotage (d) fail in an earlier pass, `git checkout -- app/globals.css` was used to revert it — safe for the ORIGINAL Task 7's three arms (no other uncommitted work in those files at the time), wrong here: this file carried substantial uncommitted, legitimate `:target` CSS on top of the sabotage, and `git checkout --` reverts to the last COMMIT, not \"one edit back\" — it silently wiped the whole CSS fix. Caught immediately by the harness's own external-change warning, confirmed with `git diff` (empty — matching HEAD, the old popover CSS), recovered by re-applying the exact `:target` CSS from the session's own record. Every sabotage revert after this one — and both review passes' worth, all five arms above — used a targeted `Edit` on the one sabotaged line instead.",
     },
+    {
+      id: "f-wide-viewport-overflow-prefix",
+      sabotaged:
+        "not a synthetic sabotage — this is the shipped, unmodified build itself, run BEFORE the image-sizing " +
+        "Task 8 fix below existed. RoomCardStack.tsx's gallery <Photo> carried a bare, unbounded " +
+        "`max-w-[88vw]` while .room-gallery-box's own max-width (`min(calc(88vw + 3rem), 96rem)`) saturates " +
+        "at 96rem past ~1690.9px of viewport width — the box stops growing, the image does not.",
+      expected:
+        "checkWideOverflow reports real, nonzero overflow at 1920x1500 and 2400x1800, both routes, on every " +
+        "landscape room (a portrait room's own height constraint can keep it under either cap regardless)",
+      failedAssertions: ["box overflow (wide)"],
+      quotedOutput: [
+        'vann@1920x1500 (box overflow, wide): box overflow (wide): panel "room-gallery-vann-rooms-0"\'s box scrolls horizontally by 26px (scrollWidth 1560px vs clientWidth 1534px)',
+        'vann@2400x1800 (box overflow, wide): box overflow (wide): panel "room-gallery-vann-rooms-0"\'s box scrolls horizontally by 410px (scrollWidth 1944px vs clientWidth 1534px)',
+        'tola@1920x1500 (box overflow, wide): box overflow (wide): panel "room-gallery-tola-rooms-0"\'s box scrolls horizontally by 26px (scrollWidth 1560px vs clientWidth 1534px)',
+        'tola@2400x1800 (box overflow, wide): box overflow (wide): panel "room-gallery-tola-rooms-2"\'s box scrolls horizontally by 410px (scrollWidth 1944px vs clientWidth 1534px)',
+      ],
+      note:
+        "12 failures total (3 landscape rooms x 2 shapes x 2 routes) — every landscape room on both properties, " +
+        "growing with the viewport (26px at 1920x1500, 410px at 2400x1800), exactly the shape DECISIONS.md §18 " +
+        "already documented from a manual sweep (26px at 1920x1500, ~713px at 3000x1900). tola-rooms-3 (the " +
+        "one portrait room) read 0px at every shape, both before and after the fix — its own max-h-[78svh] " +
+        "height constraint binds before its width ever reaches either cap, so it was never exposed to this " +
+        "defect and is not evidence the check is insensitive. After the fix (RoomCardStack.tsx's gallery " +
+        "<Photo> changed to `max-w-[min(88vw,93rem)]`), the identical rebuild-and-rerun read 0px at every " +
+        "room, both shapes, both routes — the clean run below.",
+    },
   ],
 };
 
@@ -1186,6 +1362,11 @@ report.welcomeCollision = [];
 for (const route of ROUTES) {
   for (const [width, height] of SHAPES) {
     report.welcomeCollision.push(await checkWelcomeCollision(browser, route, width, height));
+  }
+}
+for (const route of ROUTES) {
+  for (const [width, height] of WIDE_SHAPES) {
+    report.wideOverflow.push(await checkWideOverflow(browser, route, width, height));
   }
 }
 await browser.close();

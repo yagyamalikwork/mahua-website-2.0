@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-08-14T02:27:01.495Z",
+  "measuredAt": "2026-08-14T02:55:38.620Z",
   "url": "http://localhost:3100",
   "mechanism": ":target — see this file's own header comment for the full history (popover -> :target, 14 Aug 2026)",
   "method": "Real Chromium, production build. Every assertion drives the page through the same paths a visitor uses (Playwright's own .click(), page.mouse.click(x,y)) and reads computed `display` / `document.activeElement` / `window.scrollY` off the live DOM — never `location.hash = ...` set directly. Assertion 6 additionally proves the mechanism works with javaScriptEnabled:false, not only that nothing errors.",
   "esc": "NOT supported by this construction — a deliberate trade, not an oversight. Reached from the keyboard via Tab then ENTER ONLY (Space scrolls the page, it does not activate a link). See the header comment.",
   "focusOnClose": "NOT returned to the trigger — closing navigates to a fragment matching no element, so no focusing steps run, and focus drops to <body>. A real regression from the popover version (whose hide algorithm restored it), not fixed (would need a listener this construction deliberately has none of), measured per combo in assertion4.activeElementAfterClose.",
   "backButton": "steps back through opened rooms — measured THREE deep (open room 0, 1, 2 in sequence; press Back three times) per route, in backButtonDeep, not extrapolated from one step.",
-  "boxOverflow": "measured per combo in assertion2.boxOverflow (scrollWidth vs clientWidth on the panel's own .room-gallery-box) — Minor 6, fixed in app/globals.css, still 0px at 390x844/1440x900 on every room, both routes. `checkBoxOverflowBand` (which sampled 1500x900, inside the ~1200-1690.9px band where the fixed cap is genuinely narrower than the pre-fix one) was DELETED 14 Aug 2026, third review pass: no height at that width, or anywhere in that band, can ever make the cap bind — GALLERY_SIZES's own 80vw sizes-hint caps the photo narrower than max-w-[88vw] for any viewport >=768px wide, so the box's 88vw-sized cap is structurally unreachable there. See the deleted function's own comment, just above this object, for the full derivation, the empirical sweep that confirmed it, and a separate, genuinely reachable overflow found (and deliberately left unfixed and unwired) at much wider viewports.",
+  "boxOverflow": "measured per combo in assertion2.boxOverflow (scrollWidth vs clientWidth on the panel's own .room-gallery-box) — Minor 6, fixed in app/globals.css, still 0px at 390x844/1440x900 on every room, both routes. `checkBoxOverflowBand` (which sampled 1500x900, inside the ~1200-1690.9px band where the fixed cap is genuinely narrower than the pre-fix one) was DELETED 14 Aug 2026, third review pass: no height at that width, or anywhere in that band, can ever make the cap bind — GALLERY_SIZES's own 80vw sizes-hint caps the photo narrower than max-w-[88vw] for any viewport >=768px wide, so the box's 88vw-sized cap is structurally unreachable there. A genuinely different, WIDER overflow (past ~1858px of viewport width, paired with a tall-enough viewport) was found the same pass and left unfixed — CLOSED 14 Aug 2026, image-sizing Task 8: the gallery Photo's max-w-[88vw] had no rem ceiling to match the box's own saturating one, so past ~1690.9px the box stopped growing while the image kept growing. Fixed by changing the image's own CSS max-width to max-w-[min(88vw,93rem)] — identically equal to the box's inner width (its own cap minus 3rem of padding) at every viewport, in both regimes, not merely 'wide enough.' Measured per combo in `report.wideOverflow` (1920x1500 and 2400x1800, both routes, every room) — see checkWideOverflow's own comment, just above `const browser = ...`, for the full derivation and why GALLERY_SIZES's own 80vw term did not need to change.",
   "combos": [
     {
       "route": "vann",
@@ -689,6 +689,166 @@
       }
     }
   ],
+  "wideOverflow": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1920,
+      "height": 1500,
+      "rooms": [
+        {
+          "id": "room-gallery-vann-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 2400,
+      "height": 1800,
+      "rooms": [
+        {
+          "id": "room-gallery-vann-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1920,
+      "height": 1500,
+      "rooms": [
+        {
+          "id": "room-gallery-tola-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-3",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 828,
+            "clientWidth": 828
+          },
+          "overflowPx": 0
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 2400,
+      "height": 1800,
+      "rooms": [
+        {
+          "id": "room-gallery-tola-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-3",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 984,
+            "clientWidth": 984
+          },
+          "overflowPx": 0
+        }
+      ]
+    }
+  ],
   "knownDefects": [
     {
       "id": "arrows-nest-instead-of-replacing",
@@ -707,8 +867,8 @@
     },
     {
       "id": "gallery-box-horizontal-overflow",
-      "status": "FIXED 14 Aug 2026 for the regime this fix actually covers (<768px viewport width)",
-      "summary": "Was: the panel's box capped at min(92vw, 96rem) while the image inside is max-w-[88vw] plus 3rem of the box's own padding — real horizontal overflow (10px, measured, every room, both routes) at 390x844; 0px at 768x1024 and 1440x900. Fixed: box cap widened to min(calc(88vw + 3rem), 96rem). CORRECTED 14 Aug 2026 (this task) — 'provably never narrower than the old cap below 1200px and unchanged above it' was false on both halves: it is genuinely narrower than the old cap between ~1200-1690.9px (harmlessly, since GALLERY_SIZES's own 80vw sizes-hint keeps the photo under 88vw there regardless, so the cap never binds either way — see the deleted checkBoxOverflowBand's own comment, just above this array), and past ~1858px of viewport width (paired with a tall enough aspect) it diverges the OTHER way and genuinely overflows, unfixed — see DECISIONS.md §18."
+      "status": "FIXED 14 Aug 2026, both regimes (narrow AND wide) — see image-sizing Task 8",
+      "summary": "Was: the panel's box capped at min(92vw, 96rem) while the image inside is max-w-[88vw] plus 3rem of the box's own padding — real horizontal overflow (10px, measured, every room, both routes) at 390x844; 0px at 768x1024 and 1440x900. Fixed (Minor 6): box cap widened to min(calc(88vw + 3rem), 96rem). That fix's own write-up then repeated the same unread-confidence mistake it corrected — 'provably never narrower than the old cap below 1200px and unchanged above it' was false on both halves (see DECISIONS.md §18) — and a SECOND, wider, genuinely reachable overflow was found past ~1858px of viewport width (paired with a tall-enough viewport): 26px at 1920x1500, growing to ~713px at 3000x1900, because the box's own cap saturates at 96rem past ~1690.9px of viewport width while the image's max-w-[88vw] had no matching ceiling and kept growing. CLOSED 14 Aug 2026 (image-sizing Task 8): the image's own CSS max-width changed to max-w-[min(88vw,93rem)] — identically equal to the box's own inner width (its cap minus 3rem of padding) at every viewport width, in both regimes, by construction. Measured 0px at every sampled shape after the fix, including the two the defect was originally found at — see report.wideOverflow and checkWideOverflow's own comment for the full derivation."
     }
   ],
   "watchedFailing": [
@@ -811,6 +971,21 @@
       "id": "git-checkout-mistake",
       "sabotaged": "not a sabotage — a real process error, recorded here because it shaped every revert after it",
       "note": "After watching sabotage (d) fail in an earlier pass, `git checkout -- app/globals.css` was used to revert it — safe for the ORIGINAL Task 7's three arms (no other uncommitted work in those files at the time), wrong here: this file carried substantial uncommitted, legitimate `:target` CSS on top of the sabotage, and `git checkout --` reverts to the last COMMIT, not \"one edit back\" — it silently wiped the whole CSS fix. Caught immediately by the harness's own external-change warning, confirmed with `git diff` (empty — matching HEAD, the old popover CSS), recovered by re-applying the exact `:target` CSS from the session's own record. Every sabotage revert after this one — and both review passes' worth, all five arms above — used a targeted `Edit` on the one sabotaged line instead."
+    },
+    {
+      "id": "f-wide-viewport-overflow-prefix",
+      "sabotaged": "not a synthetic sabotage — this is the shipped, unmodified build itself, run BEFORE the image-sizing Task 8 fix below existed. RoomCardStack.tsx's gallery <Photo> carried a bare, unbounded `max-w-[88vw]` while .room-gallery-box's own max-width (`min(calc(88vw + 3rem), 96rem)`) saturates at 96rem past ~1690.9px of viewport width — the box stops growing, the image does not.",
+      "expected": "checkWideOverflow reports real, nonzero overflow at 1920x1500 and 2400x1800, both routes, on every landscape room (a portrait room's own height constraint can keep it under either cap regardless)",
+      "failedAssertions": [
+        "box overflow (wide)"
+      ],
+      "quotedOutput": [
+        "vann@1920x1500 (box overflow, wide): box overflow (wide): panel \"room-gallery-vann-rooms-0\"'s box scrolls horizontally by 26px (scrollWidth 1560px vs clientWidth 1534px)",
+        "vann@2400x1800 (box overflow, wide): box overflow (wide): panel \"room-gallery-vann-rooms-0\"'s box scrolls horizontally by 410px (scrollWidth 1944px vs clientWidth 1534px)",
+        "tola@1920x1500 (box overflow, wide): box overflow (wide): panel \"room-gallery-tola-rooms-0\"'s box scrolls horizontally by 26px (scrollWidth 1560px vs clientWidth 1534px)",
+        "tola@2400x1800 (box overflow, wide): box overflow (wide): panel \"room-gallery-tola-rooms-2\"'s box scrolls horizontally by 410px (scrollWidth 1944px vs clientWidth 1534px)"
+      ],
+      "note": "12 failures total (3 landscape rooms x 2 shapes x 2 routes) — every landscape room on both properties, growing with the viewport (26px at 1920x1500, 410px at 2400x1800), exactly the shape DECISIONS.md §18 already documented from a manual sweep (26px at 1920x1500, ~713px at 3000x1900). tola-rooms-3 (the one portrait room) read 0px at every shape, both before and after the fix — its own max-h-[78svh] height constraint binds before its width ever reaches either cap, so it was never exposed to this defect and is not evidence the check is insensitive. After the fix (RoomCardStack.tsx's gallery <Photo> changed to `max-w-[min(88vw,93rem)]`), the identical rebuild-and-rerun read 0px at every room, both shapes, both routes — the clean run below."
     }
   ],
   "failures": [],

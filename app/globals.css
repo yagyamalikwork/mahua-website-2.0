@@ -1455,19 +1455,37 @@ body {
    * above), and remains tested by `check_room_gallery.mjs`'s own
    * `assertion2.boxOverflow` at 390×844, unaffected by any of this.
    *
-   * **Not the whole story: going WIDER than this band reaches genuine,
-   * unfixed overflow, left deliberately unwired from any check.** Past
-   * ≈1858px of viewport width, paired with a viewport taller than a plain
-   * 16:9/16:10 monitor's own ratio (a window snapped to half of a 4K/
-   * ultrawide display; a portrait-oriented external monitor — both real,
-   * neither exotic), `GALLERY_SIZES`'s `80vw` term keeps growing past the
-   * point where this cap itself SATURATES at `96rem` (1536px, ~1690.9px of
-   * viewport width) — the two diverge. Measured on the current, unmodified
-   * build: 26px of overflow at 1920×1500, 90px at 2000×1500, 250px at
-   * 2200×1600, ~480px at 2560×1700, ~713px at 3000×1900. A different
-   * mechanism from the ~1200–1690.9px story above (not the old-vs-new
-   * formula comparison), out of scope for the task that found it, and not
-   * silently fixed here — see `docs/DECISIONS.md` §18.
+   * **Went WIDER than this band, past this cap's own saturation point —
+   * FIXED, image-sizing Task 8, 14 Aug 2026 (was: genuine, unfixed
+   * overflow, left deliberately unwired from any check).** Past ≈1858px of
+   * viewport width, paired with a viewport taller than a plain 16:9/16:10
+   * monitor's own ratio (a window snapped to half of a 4K/ultrawide
+   * display; a portrait-oriented external monitor — both real, neither
+   * exotic), this cap SATURATES at `96rem` (1536px, ~1690.9px of viewport
+   * width) and stops growing, while `RoomCardStack.tsx`'s gallery `<Photo>`
+   * had no matching ceiling on ITS OWN `max-width` — a bare `max-w-[88vw]`,
+   * unbounded — so past that point the two diverged and the image pushed
+   * past its own box. Measured on the pre-fix build: 26px of overflow at
+   * 1920×1500, 90px at 2000×1500, 250px at 2200×1600, ~480px at 2560×1700,
+   * ~713px at 3000×1900.
+   *
+   * **The fix made the image's own bound and this box's own INNER width
+   * (its cap, above, minus its `3rem` of padding) the identical formula, by
+   * construction**, rather than picking a wide-enough sample point: inner
+   * width = `min(88vw + 3rem, 96rem) − 3rem = min(88vw, 96rem − 3rem) =
+   * min(88vw, 93rem)`. `RoomCardStack.tsx`'s `<Photo className>` now reads
+   * `max-w-[min(88vw,93rem)]` — equal to this box's own inner width at
+   * every viewport width, in both regimes (`88vw` below ~1690.9px, where
+   * neither side has saturated; `93rem` above it, where both have), not
+   * merely never-smaller. `GALLERY_SIZES` (`RoomCardStack.tsx`) was
+   * deliberately left at `80vw`: it picks which FILE loads, not the
+   * rendered width, and a CSS `max-width` always wins over a `sizes`-implied
+   * "intrinsic" size regardless of what `sizes` says, so leaving it alone
+   * cannot reopen this. Measured 0px at every previously-overflowing shape
+   * after the fix, both routes, every room — `scripts/check_room_gallery.mjs`'s
+   * `checkWideOverflow` now measures this on every run rather than trusting
+   * the two formulas to stay in step; full derivation there and in
+   * `docs/DECISIONS.md` §18.
    */
   max-width: min(calc(88vw + 3rem), 96rem);
   /* The popover UA stylesheet also carried `overflow: auto` — replicated
