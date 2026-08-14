@@ -2,10 +2,11 @@
 
 **MERGE NOTICE, read before approving — this branch also carries a sibling session's feature, not
 only the image-sizing plan.** `feat/image-sizing` was cut from `feat/chapters-rebuild` at `995697e`.
-The very next two commits made on this branch — `e12af07` ("a softer scroll, and a slow zoom inside
-a frame that never moves") and `c4752e7` (a caption-clip fix for the same effect) — are a **different
-session's** work, landed here before this plan's own design doc (`834760c`) or any of its seven task
-commits. `git branch --contains e12af07 --all` returns only `feat/image-sizing`: those two commits
+Two commits on this branch — `e12af07` ("a softer scroll, and a slow zoom inside a frame that never
+moves") and `c4752e7` (a caption-clip fix for the same effect) — are a **different session's** work.
+They interleave with this plan's own opening commits rather than preceding them: `e12af07` (21:32)
+landed first, then this plan's design doc `834760c` (21:53), then `c4752e7` (22:06), then this plan's
+task list `85345fd` (22:07) and its seven task commits. None of them is this plan's work. `git branch --contains e12af07 --all` returns only `feat/image-sizing`: those two commits
 never reached `feat/chapters-rebuild`, `main` or `demo` (all three sit at `995697e`, confirmed by
 `git rev-parse`). **Merging this branch is what lands that sibling feature on the shared branch for
 the first time** — a softer Lenis scroll (`SCROLL` in `lib/motion.ts`) and a hover-zoom on the home
@@ -314,7 +315,7 @@ section may render more than 45% empty space" — a per-screen bound — and `pa
 same statistic §2.1, two paragraphs above, judges the rooms chapters on ("also +4.4pp over the general 45%
 ceiling," "also +5.1pp over the general 45% ceiling" — both worst-screen readings) — so the same standard
 applies here. Read on it, **not** all twelve home chapters clear the ceiling: `lodges` **48.6%** worst
-(44.7% mean), `field-days` **57.9%** worst (43.9% mean) and `rooms` **47.2%** worst (36.9% mean) all read
+(43.7% mean), `field-days` **57.9%** worst (43.9% mean) and `rooms` **47.2%** worst (36.9% mean) all read
 `passesMean: true, passesWorst: false` in `docs/reviews/2026-08-03-chapters/density.json`, committed in
 this branch. The remaining nine clear it on both statistics.
 

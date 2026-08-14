@@ -790,7 +790,7 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 - **A fourth, fifth and sixth join the open count, on the HOME page** — found by image-sizing Task 8's
   whole-plan verification (14 Aug 2026) and confirmed pre-existing, not caused by that plan. Read on the
   same worst-screen statistic as the three above (the ceiling is a per-screen bound; `passesMean` is
-  informative, `passesWorst` is the rule): `lodges` **48.6%** worst (44.7% mean), `field-days` **57.9%**
+  informative, `passesWorst` is the rule): `lodges` **48.6%** worst (43.7% mean), `field-days` **57.9%**
   worst (43.9% mean), `rooms` **47.2%** worst (36.9% mean) — all `passesMean: true, passesWorst: false`
   in `docs/reviews/2026-08-03-chapters/density.json`. Verified against the merge base rather than
   assumed: `git show 995697e:docs/reviews/2026-08-03-chapters/density.json` — `feat/chapters-rebuild`'s
