@@ -471,13 +471,47 @@ export function PropertyMap({
                   );
                 })}
 
-                {/* The lodge: a hairline ring where the client's artwork had an
-                    orange callout. The mark is drawn, not the emblem raster —
-                    at this size a 40px PNG would be the only bitmap on an
-                    otherwise resolution-independent drawing. */}
+                {/* The lodge: the brand's own flower, at exactly the size the two
+                    concentric circles it replaces occupied — client request,
+                    15 Aug 2026.
+
+                    **This overrides the note that used to sit here**, which said
+                    the mark was drawn rather than rastered because "at this size a
+                    40px PNG would be the only bitmap on an otherwise
+                    resolution-independent drawing". That was a fair call while the
+                    marker was two circles; it is not a reason to redraw the
+                    client's own emblem by hand, and a redraw is what this project
+                    refuses everywhere else (see `ui/BrandMark.tsx`: the flower is
+                    his artwork, not an approximation of it).
+
+                    **`emblem-120` is chosen from a measurement, not by eye.** The
+                    marker renders 40.5px at 1920 and 36.1px at 1440 — measured on
+                    the running page, both routes — and `lib/sizes.ts` caps this
+                    project at DPR 2, so the widest real demand is ~81px. 120
+                    clears it with room; 160 would be 2.6 KB more for pixels
+                    nothing asks for, and 80 would sit a hair under. It is also the
+                    tier the header itself loads on a DPR-2 desktop, so this is
+                    often a cache hit rather than a request.
+
+                    The box is square while the artwork is 1.0026:1. That is
+                    deliberate: SVG's default `preserveAspectRatio` letterboxes
+                    rather than stretches, so the mark keeps its own shape here and
+                    would keep it again if the emblem were ever rebuilt to a
+                    different aspect. Sizing the box off `EMBLEM.aspectRatio`
+                    instead would couple this file to a generated module to move a
+                    rendered edge by less than a tenth of a pixel. */}
                 <g transform={`translate(${copy.lodge.x * width} ${copy.lodge.y * height})`}>
-                  <circle r="13" fill="none" stroke="var(--accent)" strokeWidth="1.2" />
-                  <circle r="4.5" fill="var(--accent)" />
+                  <image
+                    href="/brand/emblem-120.webp"
+                    x="-13"
+                    y="-13"
+                    width="26"
+                    height="26"
+                    /* The map's own `aria-label` already names the lodge, and the
+                       lodge's name is drawn as real <text> beside this. A second
+                       announcement here would read the brand twice. */
+                    aria-hidden="true"
+                  />
                   <text
                     x="19"
                     y="4"
