@@ -103,11 +103,40 @@ const VIEWPORTS = [
  * (needed === 0) continue`. Both are exactly the failure shape the 35-line
  * comment above this rig's gallery loop describes for the MENU'S own gated
  * images (§2 #39) — reproduced underneath the very comment that named it.
- * A route not in this table (`/`, which has no rooms chapter) is not
- * checked — there is genuinely nothing to expect there, which is different
- * from expecting something and silently finding nothing.
  */
 const EXPECTED_GALLERY_PANELS = { "/mahua-vann": 3, "/mahua-tola": 4 };
+
+/**
+ * Routes known, by inspection (`content/chapters.ts` — the home page's own
+ * spine — carries no rooms chapter), to genuinely have NO gallery at all —
+ * not merely absent from `EXPECTED_GALLERY_PANELS` above.
+ *
+ * **This table exists to close a residual gap in the fix above (image-sizing
+ * Task 7 second review, 14 Aug 2026): `EXPECTED_GALLERY_PANELS[pathname]`
+ * alone cannot tell "a route that legitimately has zero panels" apart from
+ * "a route string that failed to match the table" — a trailing slash, a
+ * typo, a new route nobody added here — because both read `undefined` and
+ * both were, until this fix, silently skipped.** That is the exact §2 #39
+ * shape one level up: the check that exists specifically to catch "found
+ * fewer panels than expected" had its own blind spot where "expected" was
+ * never established at all. Now: a pathname in `EXPECTED_GALLERY_PANELS` is
+ * checked against that count; a pathname in THIS list is checked against
+ * zero; anything in neither is an unrecognised route and a **failure**, not
+ * a skip — silence is no longer available as an outcome.
+ */
+const ROUTES_WITH_NO_GALLERY = ["/"];
+
+/**
+ * `URL.prototype.pathname` never carries the query string or fragment, but
+ * it DOES preserve a trailing slash exactly as written — `/mahua-vann/`
+ * would otherwise fail to match `/mahua-vann` in either table above and
+ * fall into the "unrecognised route" failure for a reason that has nothing
+ * to do with a real defect. Normalised once, here, rather than trusting
+ * every future entry in both tables to be written both ways.
+ */
+function normalizePathname(pathname) {
+  return pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+}
 
 // `img.naturalWidth` is useless as an absolute here: once an image is chosen from
 // a `srcset` with `w` descriptors, the HTML spec has the browser correct the
@@ -301,22 +330,46 @@ async function main() {
     );
 
     // **The count assertion the brief asked for by name, not a loop that
-    // silently does nothing if it comes back empty.** Checked against the
-    // route's own pathname, not the full `URL` (which carries the host and
-    // port).
+    // silently does nothing if it comes back empty — and not silent about an
+    // UNRECOGNISED route either (second review pass, 14 Aug 2026).** Checked
+    // against the route's own pathname, not the full `URL` (which carries
+    // the host and port).
     // `globalThis.URL`, explicitly — this module's own `const URL` (the
     // flag-derived string, line 82) shadows the global constructor, so a
     // bare `new URL(URL)` calls the STRING as a constructor and throws
     // `TypeError: URL is not a constructor`. Caught by actually running
     // this against the sabotaged selector before trusting the fix — the
     // same "watch it fail for real" standard this whole review is about.
-    const pathname = new globalThis.URL(URL).pathname;
-    const expectedPanels = EXPECTED_GALLERY_PANELS[pathname];
-    if (expectedPanels !== undefined && galleryPanelIds.length !== expectedPanels) {
+    const pathname = normalizePathname(new globalThis.URL(URL).pathname);
+    if (pathname in EXPECTED_GALLERY_PANELS) {
+      const expectedPanels = EXPECTED_GALLERY_PANELS[pathname];
+      if (galleryPanelIds.length !== expectedPanels) {
+        galleryFailures.push(
+          `${vp.width}x${vp.height}@${vp.dpr}x ${pathname}: expected ${expectedPanels} .room-gallery panels, ` +
+            `found ${galleryPanelIds.length} — the gallery-open loop below would silently measure fewer ` +
+            "images than exist, not zero images but not the truth either",
+        );
+      }
+    } else if (ROUTES_WITH_NO_GALLERY.includes(pathname)) {
+      if (galleryPanelIds.length !== 0) {
+        galleryFailures.push(
+          `${vp.width}x${vp.height}@${vp.dpr}x ${pathname}: this route is listed as having NO room gallery, ` +
+            `but found ${galleryPanelIds.length} .room-gallery panel(s) — either a gallery was added here and ` +
+            "EXPECTED_GALLERY_PANELS was not updated, or ROUTES_WITH_NO_GALLERY is stale",
+        );
+      }
+    } else {
+      // Neither table recognises this pathname — an unmatched route string
+      // (a trailing slash normalisation gap, a typo, a new route nobody
+      // added here) is indistinguishable, without this branch, from a route
+      // that legitimately has zero panels. Both used to read `undefined` and
+      // both were silently skipped — exactly the blind spot the count
+      // assertion above exists to close, one level up from where it first
+      // closed it.
       galleryFailures.push(
-        `${vp.width}x${vp.height}@${vp.dpr}x ${pathname}: expected ${expectedPanels} .room-gallery panels, ` +
-          `found ${galleryPanelIds.length} — the gallery-open loop below would silently measure fewer ` +
-          "images than exist, not zero images but not the truth either",
+        `${vp.width}x${vp.height}@${vp.dpr}x ${pathname}: unrecognised route — not in EXPECTED_GALLERY_PANELS ` +
+          `or ROUTES_WITH_NO_GALLERY, so whether its ${galleryPanelIds.length} .room-gallery panel(s) is right ` +
+          "cannot be determined; add it to one of the two tables",
       );
     }
 

@@ -940,6 +940,64 @@ async function checkWelcomeCollision(browser, route, width, height) {
   return result;
 }
 
+/**
+ * **The box-overflow band (image-sizing Task 7, second review pass, 14 Aug
+ * 2026).** `.room-gallery-box`'s own cap (`app/globals.css`) is WIDER than
+ * the old `92vw` below 1200px of viewport width — Minor 6's own fix, and the
+ * only range its `10px`-at-390×844 measurement needed closed — but genuinely
+ * NARROWER than the old cap between ~1200px and ~1690.9px, solved (not
+ * assumed) in that CSS rule's own comment: equal at the two endpoints,
+ * narrowest by ~19px around 1670px, 12px narrower at 1500px specifically.
+ * Every fixed-shape rig on this project samples 390/768/1440/1920 — never
+ * inside that band — so whether anything actually clips there was
+ * unmeasured in either direction until now. `1500` is the coordinator's own
+ * worked example; sampled here for every room, both routes, real clicks
+ * (the trigger, then the close link), not reasoned about a second time.
+ */
+async function checkBoxOverflowBand(browser, route) {
+  const width = 1500;
+  const height = 900;
+  const label = `${route.label}@${width}x${height} (box overflow band)`;
+  const context = await browser.newContext({ viewport: { width, height } });
+  const page = await context.newPage();
+  await page.goto(`${BASE}${route.path}`, { waitUntil: "load" });
+  await page.waitForTimeout(WELCOME_WAIT);
+
+  const triggerSel = `#${route.chapterId} ol.room-stack > li.room-card > :first-child a`;
+  const rows = [];
+  for (let i = 0; i < route.expectedRooms; i++) {
+    const id = panelId(route.chapterId, i);
+    const trigger = page.locator(triggerSel).nth(i);
+    await scrollTriggerIntoView(page, trigger);
+    await trigger.click({ timeout: CLICK_TIMEOUT }).catch(() => {});
+    await page.waitForTimeout(300);
+    const measure = await page.evaluate((panelIdStr) => {
+      const box = document.querySelector(`#${panelIdStr} .room-gallery-box`);
+      if (!box) return null;
+      return { scrollWidth: box.scrollWidth, clientWidth: box.clientWidth };
+    }, id);
+    const overflowPx = measure ? measure.scrollWidth - measure.clientWidth : null;
+    rows.push({ room: id, ...measure, overflowPx });
+    if (measure === null) {
+      note(label, `box overflow band: could not find panel "${id}"'s own .room-gallery-box to measure`);
+    } else if (overflowPx > 1) {
+      note(
+        label,
+        `box overflow band: panel "${id}"'s box scrolls horizontally by ${overflowPx}px at 1500x900 ` +
+          `(scrollWidth ${measure.scrollWidth}px vs clientWidth ${measure.clientWidth}px) — inside the range ` +
+          "app/globals.css's own comment documents as narrower than the pre-fix cap",
+      );
+    }
+    await navLink(page, id, COPY.close).click({ timeout: CLICK_TIMEOUT }).catch(() => {});
+    await page.waitForTimeout(150);
+  }
+
+  console.log(`${label.padEnd(30)} ${rows.map((r) => `${r.room}:${r.overflowPx}px`).join(" ")}`);
+
+  await context.close();
+  return { route: route.label, path: route.path, width, height, rows };
+}
+
 const browser = await chromium.launch();
 
 for (const route of ROUTES) {
@@ -969,7 +1027,9 @@ const report = {
   backButton: "steps back through opened rooms — measured THREE deep (open room 0, 1, 2 in sequence; " +
     "press Back three times) per route, in backButtonDeep, not extrapolated from one step.",
   boxOverflow: "measured per combo in assertion2.boxOverflow (scrollWidth vs clientWidth on the panel's " +
-    "own .room-gallery-box) — Minor 6, fixed in app/globals.css.",
+    "own .room-gallery-box) — Minor 6, fixed in app/globals.css. The fix is wider than the old cap below " +
+    "1200px but genuinely narrower between ~1200px and ~1690.9px (solved in that CSS rule's own comment); " +
+    "boxOverflowBand samples 1500px, inside that band, per room per route — see that field.",
   combos: [],
   noJs: [],
   welcomeCollision: [],
@@ -1114,6 +1174,10 @@ for (const route of ROUTES) {
   for (const [width, height] of SHAPES) {
     report.welcomeCollision.push(await checkWelcomeCollision(browser, route, width, height));
   }
+}
+report.boxOverflowBand = [];
+for (const route of ROUTES) {
+  report.boxOverflowBand.push(await checkBoxOverflowBand(browser, route));
 }
 
 await browser.close();

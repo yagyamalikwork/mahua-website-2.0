@@ -1351,10 +1351,28 @@ plus the box's own `3rem` of horizontal padding; arithmetic alone predicts overf
 of viewport width. Measured instead of trusted: `box.scrollWidth − box.clientWidth` was exactly `10px` at
 390×844, on every room, both routes — and `0px` at 768×1024 and 1440×900, narrower than the arithmetic's own
 prediction (a `<Photo>`'s real sizing has more give across most rooms than either bare cap alone suggests).
-Fixed by widening the box's own cap to `min(calc(88vw + 3rem), 96rem)` — provably never smaller than the old
-`92vw` below 1200px and identical above it, so nothing that fit before can now be tighter — and re-measured
-at `0px` on every room, both routes, at 390×844. `check_room_gallery.mjs` now measures this on every run
-rather than trusting the CSS comment to stay true.
+Fixed by widening the box's own cap to `min(calc(88vw + 3rem), 96rem)`.
+
+**A third review pass (14 Aug 2026) found the fix's own write-up repeating the exact mistake it was
+correcting.** This section originally said the new cap is "provably never smaller than the old `92vw` below
+1200px (equal to it above)" — written without solving the second half, and false: the two formulas are
+equal only AT 1200px (both 1104px) and again from `w ≈ 1690.9px` upward, where both saturate at the shared
+`96rem` (1536px) ceiling. **Between roughly 1200px and 1690.9px the new cap is strictly SMALLER than the
+old one** — at 1500px, old `0.92 × 1500 = 1380px` against new `0.88 × 1500 + 48 = 1368px`, 12px narrower;
+the gap peaks around 1670px at roughly 19px. Every fixed-shape rig on this project samples
+390/768/1440/1920 — never inside that band — and the `0px` reading at 1440×900 is silent about it for an
+unrelated reason: at 1440 the photograph is height-constrained by its own `max-h-[78svh]` before its width
+ever reaches 88vw, so neither cap, old or new, actually binds there. A true measurement that happened to
+prove nothing about which formula is wider, cited as though it did.
+
+**Corrected by measuring inside the band, not by restating the claim a second time.** A new check,
+`checkBoxOverflowBand`, samples 1500×900 — the coordinator's own worked example — for every room on both
+routes: **`0px` of overflow, all seven rooms.** The 12px narrowing at that width never reaches the point
+where a room's own photograph is both wide enough to need the box's full former room and positioned at a
+width where the new formula is the tighter one. That is a measured absence of a defect at the one sampled
+point inside the ~490px band, not a proof that none exists across the whole range — the distinction the
+retired sentence collapsed the first time. `check_room_gallery.mjs` now measures this on every run rather
+than trusting either version of this comment to stay true.
 
 **The scroll-jump check had never been watched failing.** Every clean run reported `window.scrollY`
 unmoved, which is exactly what a correctly-fixed build should report and indistinguishable, on its own, from

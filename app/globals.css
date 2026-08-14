@@ -1398,13 +1398,49 @@ body {
    * `10px` at 390×844, on every room, both routes, and `0` at 768×1024 and
    * 1440×900 — real, but narrower than either number in isolation implied.
    * `88vw + 3rem` clears it (391px of room against 367px of real content at
-   * 390px) without changing the image's own resolution contract at all: the
-   * box merely gets more ROOM at the one width that needed it, and this
-   * formula is provably never SMALLER than the old `92vw` below 1200px
-   * (equal to it above), so nothing that fit before can now be tighter.
-   * `check_room_gallery.mjs`'s own overflow check is what re-derives the
-   * `10px` / `0px` figures above on demand, rather than trusting this
-   * comment to stay true.
+   * 390px) without changing the image's own resolution contract at all.
+   *
+   * **Corrected 14 Aug 2026 (second review pass): the sentence that stood
+   * here — "provably never smaller than the old `92vw` below 1200px (equal
+   * to it above)" — was written without solving the second half, and it is
+   * false. Solving both formulas as functions of viewport width `w` (96rem =
+   * 1536px, 3rem = 48px, both at the default 16px root):**
+   *
+   *   - `w ≤ 1200`: `0.88w + 48 ≥ 0.92w` — the new cap is wider or equal,
+   *     which is the real fix and the only range Minor 6's own measurement
+   *     (10px of overflow at 390×844) needed closed.
+   *   - **`1200 < w < ~1690.9`: the new cap is STRICTLY NARROWER than the
+   *     old one** — both formulas are equal only at the two endpoints
+   *     (1200px, where each reads 1104px, and ~1690.9px, where each
+   *     saturates at the shared 1536px ceiling). The gap is widest around
+   *     `w ≈ 1669.6px` (where `0.92w` itself first reaches 1536px): old
+   *     1536px, new ≈1517px, an ~19px narrowing. At `w = 1500`, the
+   *     coordinator's own worked example: old `0.92 × 1500 = 1380px`, new
+   *     `0.88 × 1500 + 48 = 1368px` — **12px narrower**, measured below, not
+   *     merely computed.
+   *   - `w ≥ ~1690.9`: both formulas saturate at the same 1536px ceiling —
+   *     equal again.
+   *
+   * **This band is untested by every fixed-shape sample this project's rigs
+   * take (390/768/1440/1920 — the §2 #45 gap, recurring), and the 1440×900
+   * measurement above (`0px` overflow) is silent about it for an unrelated
+   * reason: at 1440 the image is HEIGHT-constrained by its own `max-h-[78svh]`
+   * before its width ever reaches 88vw, so neither this cap nor the old one
+   * ever actually binds there — a true measurement that happens to prove
+   * nothing about which formula is wider.** `check_room_gallery.mjs`'s own
+   * `checkBoxOverflowBand` samples `1500×900` — inside the narrowed band, at
+   * the coordinator's own example width — for every room, both routes.
+   * **Measured 14 Aug 2026: `0px` on every room, both properties (7 rooms
+   * total)** — the box narrowing by 12px at this one width never reaches the
+   * point where a room's own photograph is both wide enough to need the
+   * box's full former room AND positioned at a viewport width where the new
+   * formula is the tighter one. `docs/reviews/2026-08-13-image-sizing/
+   * gallery.json`'s own `boxOverflowBand` carries the live figures. This is
+   * a statement about the ONE sampled point inside the band, not a proof
+   * about the whole ~490px range — the same distinction this comment's own
+   * retired sentence collapsed once already; a future photograph closer to
+   * the 88vw cap than any current one could still overflow somewhere else
+   * in (1200px, 1690.9px) that this one sample does not cover.
    */
   max-width: min(calc(88vw + 3rem), 96rem);
   /* The popover UA stylesheet also carried `overflow: auto` — replicated
