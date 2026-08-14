@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-14T03:39:02.960Z",
+  "measuredAt": "2026-08-14T06:45:31.802Z",
   "url": "http://localhost:3100/mahua-tola",
   "densityCap": 2,
   "results": [
@@ -674,13 +674,13 @@
         },
         {
           "file": "/media/tola-room-deluxe-762.avif",
-          "needed": 981,
-          "ratio": 0.78
+          "needed": 1008,
+          "ratio": 0.76
         },
         {
           "file": "/media/tola-room-suite-762.avif",
-          "needed": 981,
-          "ratio": 0.78
+          "needed": 1008,
+          "ratio": 0.76
         },
         {
           "file": "/media/tola-dining-1440.avif",
@@ -782,31 +782,31 @@
         },
         {
           "file": "/media/tola-room-deluxe-762.avif",
-          "cssWidth": 874,
-          "drawnWidth": 981,
-          "needed": 981,
-          "ratio": 0.78
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 0.76
         },
         {
           "file": "/media/tola-room-suite-762.avif",
-          "cssWidth": 874,
-          "drawnWidth": 981,
-          "needed": 981,
-          "ratio": 0.78
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 0.76
         },
         {
           "file": "/media/tola-room-super-deluxe-1440.avif",
-          "cssWidth": 874,
-          "drawnWidth": 981,
-          "needed": 981,
-          "ratio": 1.47
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 1.43
         },
         {
           "file": "/media/tola-room-family-1440.avif",
-          "cssWidth": 874,
-          "drawnWidth": 874,
-          "needed": 874,
-          "ratio": 1.65
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 1.43
         },
         {
           "file": "/media/tola-dining-1440.avif",
@@ -1046,31 +1046,31 @@
         },
         {
           "file": "/media/tola-room-deluxe-762.avif",
-          "cssWidth": 978,
+          "cssWidth": 1128,
           "drawnWidth": 1139,
           "needed": 1139,
           "ratio": 0.67
         },
         {
           "file": "/media/tola-room-suite-762.avif",
-          "cssWidth": 978,
+          "cssWidth": 1128,
           "drawnWidth": 1139,
           "needed": 1139,
           "ratio": 0.67
         },
         {
           "file": "/media/tola-room-super-deluxe-1440.avif",
-          "cssWidth": 978,
+          "cssWidth": 1128,
           "drawnWidth": 1139,
           "needed": 1139,
           "ratio": 1.26
         },
         {
           "file": "/media/tola-room-family-1440.avif",
-          "cssWidth": 978,
-          "drawnWidth": 978,
-          "needed": 978,
-          "ratio": 1.47
+          "cssWidth": 1128,
+          "drawnWidth": 1128,
+          "needed": 1128,
+          "ratio": 1.28
         },
         {
           "file": "/media/tola-dining-1440.avif",

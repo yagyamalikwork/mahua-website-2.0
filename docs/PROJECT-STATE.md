@@ -15,19 +15,26 @@ edited), the per-card solved crop bound, the plate floor rule, and the gallery's
 (Popover API → CSS `:target`, because the arrows nested instead of replacing — measured, not assumed).
 Full evidence: `docs/reviews/2026-08-13-image-sizing/README.md`.
 
-**One item is open and unresolved, and needs the client's own ruling before it can be closed.** The
-side-by-side room cards now measure **`vann-rooms` 43.9% mean / 49.4% worst, `tola-rooms` 44.3% / 50.1%
-empty** — over the plan's own ceiling (31.5%/42.1%, 33.8%/44.3%) and, on the worst screen of each, over
-non-negotiable #8's general 45% ceiling too. This is the direct cost of the client's own 13 Aug
-composition choice (photo beside words, not stacked) measured against his own 4 Aug density rule — the
-two disagree, and every lever the plan named to close the gap (the photo's width share, the words
-block's padding, the card's own height cap) was pulled and measured, with **zero effect from any of
-them**. Nothing was changed to paper over it — the composition ships exactly as he asked for it on 13
-Aug, and the number is reported rather than hidden. **Ask him**: accept the density as the cost of the
-composition, shorten the rooms' own copy so it fills more of the fixed card height, or reopen the
-fixed-height card mechanism itself (the larger option). Numbers, the exhausted-lever proof and the
-screenshots that show it by eye: `docs/reviews/2026-08-13-image-sizing/README.md` §2;
-`docs/DECISIONS.md` §5 carries the same item.
+**The rooms-chapter density breach found by this task's own verification is resolved, same day (14
+Aug).** The side-by-side room cards had measured **`vann-rooms` 43.9% mean / 49.4% worst, `tola-rooms`
+44.3% / 50.1% empty** — over the plan's own ceiling (31.5%/42.1%, 33.8%/44.3%) and, on the worst screen
+of each, over non-negotiable #8's general 45% ceiling too, the direct cost of the client's own 13 Aug
+composition choice (photo beside words, not stacked) measured against his own 4 Aug density rule. Of the
+three levers the plan named, two were genuinely inert (the words block's padding, the card's own height
+cap), but the first — the photo's own width share — had been declared spent at 65% without ever being
+swept: 65% was the plan's worked example, not a measured limit, and non-negotiable #8 bounds a value the
+same way the forest tint's tint-strength did, which this project's own standing rule says to solve for
+rather than accept the first number under. Swept upward (68/70/72/75/78%, `lg` held 5 points below `xl`)
+and re-measured on both routes at each step: `lg:w-[70%] xl:w-[75%]` is the chosen value — the first to
+clear the ceiling with real margin, and the most margin of any candidate that still reads as a text
+column beside a photograph rather than a caption stuck to one (78% passed with more room to spare but was
+rejected on sight, screenshotted at three widths on both routes: a room's facts line wrapped from 4 lines
+to 5 and broke a word mid-wrap). Now measures **`vann-rooms` 36.0% mean / 43.2% worst, `tola-rooms` 36.3%
+/ 43.5% worst** — both inside 45% worst. `check_card_stack.mjs` (9/9 assertions, both arms, both routes,
+all six shapes) and `check_image_resolution.mjs` (0 images under-served, both routes) both re-pass
+against the shipped build. Full sweep table, the cap arithmetic that predicted the fix was safe before it
+was swept, and the screenshot comparison: `docs/reviews/2026-08-13-image-sizing/README.md` §2.5;
+`docs/DECISIONS.md` §18 and §5 carry the same resolution.
 
 **Also found and explained, not a defect of this plan**: `verify:budget` now reads 172,272 bytes brotli
 against the 172,209 CLAUDE.md cites, +63 bytes. Traced to two specific chunks, confirmed deterministic

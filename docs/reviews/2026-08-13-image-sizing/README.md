@@ -11,10 +11,15 @@ built — first on the Popover API, which a rig proved could not work because ar
 replacing, then rebuilt on CSS `:target` (Tasks 6–7), costing zero JavaScript. Full narrative for Tasks
 6–7's own findings: `docs/DECISIONS.md` §18.
 
-**This task's own finding is the headline, not a footnote: `vann-rooms` and `tola-rooms` now measure well
-over the plan's own density ceiling — and, on their worst screen, over non-negotiable #8's general 45%
-ceiling too — and all three levers the plan named are spent with zero measured effect. This is now an open
-question for the client, recorded but not resolved. See §2.**
+**This task originally found `vann-rooms` and `tola-rooms` measuring well over the plan's own density
+ceiling — and, on their worst screen, over non-negotiable #8's general 45% ceiling too — with all three
+levers the plan named spent at zero measured effect. That finding stood as an open question for the client
+until 14 Aug 2026, when a follow-up review re-examined the third lever (the photo's own width share) and
+found it had been declared spent at its planned value (65%) rather than at its actual ceiling — 65% was a
+number the spec chose, never a bound the build had solved for. Swept upward and re-measured, both chapters
+now clear the ceiling with real margin: `vann-rooms` 36.0% mean / 43.2% worst, `tola-rooms` 36.3% / 43.5%
+worst. See §2.5 for the sweep and the fix; §2.1–§2.4 are kept as the original, honest record of what was
+found and why it looked exhausted at the time.**
 
 Every number below is re-derivable: `npm run build && npx next start -p 3100`, warm with one navigation
 per route, then the commands in each section. Raw evidence lives beside this file — `plates.json`,
@@ -349,12 +354,94 @@ side-by-side composition he chose; shorten the text column's content (fewer fact
 fills more of the fixed height; or revisit the fixed-height card mechanism itself (a larger, more invasive
 change than anything this task is scoped to make unilaterally).
 
+### 2.5 The fix, 14 Aug 2026: the photo share was never solved for its own bound
+
+§2.3's lever 1 was dismissed with *"already true, nothing to give"* — true of the number the spec named
+(65%), false of the rule the spec was chasing. Non-negotiable #8 bounds a value (45% worst-screen empty);
+this project's own standing rule for that shape of rule (`docs/DECISIONS.md`, the forest tint's two-segment
+solve) is to solve for the bound rather than ship the first hand-picked number under it. 65% had never been
+swept — it was the plan's own worked example, not a measured limit.
+
+**Why widening the share is safe in both directions that matter, confirmed from the cap arithmetic before
+sweeping anything.** The `beside` wrapper's `lg`/`xl` `max-height` cap (`app/globals.css`, above
+`.room-card[data-card-layout="beside"]`) is `calc(<share>cqw / var(--room-photo-aspect))`, so whenever it
+binds the wrapper's own aspect is *exactly* `--room-photo-aspect` (`photoTarget × aspect`) — independent of
+the share. At a fixed card height, raising the share can only raise the wrapper's *un-capped* aspect
+(`share × cardWidth / cardHeight`), so the cap either still binds at the same guaranteed floor or stops
+binding and the real box gets wider still — the 25%-width-crop bound (`ROOM_PHOTO_KEEP`) can only be helped
+by widening the share, never hurt. Separately, the words column narrows as the share widens, so its copy
+wraps onto more lines and fills more of its own fixed-height box — the density mechanism directly. Both
+predictions held under measurement; neither was taken on faith.
+
+**Swept upward from 65%, `lg` kept 5 percentage points below `xl`** (the baseline's own relationship,
+`60/65`), all three copies moved together every time — the Tailwind classes on the photo wrapper
+(`RoomCard.tsx`), the `cqw` caps in `app/globals.css`, and `ROOM_CARD_SIZES`' `vw`/`px` tiers — rebuilt and
+re-measured with `measure_density.mjs` against both property routes at each step:
+
+| `lg` / `xl` | `vann-rooms` mean / worst | `tola-rooms` mean / worst | inside 45% worst? |
+|---|---|---|---|
+| 60 / 65 (shipped, §2.1) | 43.9% / 49.4% | 44.3% / 50.1% | **no** |
+| 63 / 68 | 41.8% / 47.8% | 42.2% / 48.4% | no |
+| 65 / 70 | 40.0% / 46.2% | 40.4% / 46.8% | no |
+| 67 / 72 | 38.5% / 45.2% | 38.8% / 45.6% | no (barely) |
+| **70 / 75** | **36.0% / 43.2%** | **36.3% / 43.5%** | **yes — chosen** |
+| 73 / 78 | 33.6% / 41.2% | 33.8% / 41.5% | yes — more margin, rejected on sight (below) |
+
+Every candidate from 60/65 through 67/72 stayed over the ceiling; 70/75 is the first value in the sweep
+that clears it, and 73/78 clears it with still more room. Both 70/75 and 73/78 were then run through the
+expensive rigs in full, since either could plausibly be "the" answer:
+
+- **`check_card_stack.mjs`, both `70/75` and `73/78`, default and `--no-recede` arms, both routes, all six
+  review shapes (390×844 through 1920×1080): PASS, 9/9 assertions, both candidates.** Assertion 8 (text
+  legibility) never failed at either value — 3/3 Vann, 4/4 Tola throughout — so this lever's ceiling, if
+  there is one inside a reasonable range, sits above 78%; it was not what stopped this sweep.
+- **`check_image_resolution.mjs`, both routes, both candidates: 0 images under-served by `sizes` at every
+  viewport (390@1x/3x, 768, 1440, 1920)**, same image counts as the 65%-share baseline (21 Vann, 24 Tola) —
+  the wider box asks `sizes` for more width and `ROOM_CARD_SIZES` (moved in step) supplies it.
+
+**Both candidates pass every mechanical constraint. They were told apart by looking, not by a number.**
+Screenshots at 1440×900, 1024×768 and 390×844 on both routes, both candidates
+(`docs/reviews/2026-08-13-image-sizing/screens/`, and the direct side-by-side was Tola's Family Suite at
+1024×768): at 70/75 the words column reads as a proper text block beside the photograph — a 2–3-line
+heading, a 3-line description, a 3–4-line facts row, comparable to how the shipped 65%-share build read,
+just narrower. **At 73/78 the same card's description wraps to 4 lines and the facts row to 5, breaking
+"terracotta-" across a line and stranding "ROOMS ·" alone on its own** — the column has crossed from
+"narrower" to "a caption stuck to a photograph." Below `lg` (390×844) both candidates are identical to the
+baseline, since the width share only applies once the card becomes a row. 73/78's extra ~2.4pp of density
+margin is not worth that cost, so **70/75 was chosen: the value with the most margin that still reads as a
+text column, not the largest value that merely passes.**
+
+**Chosen: `lg:w-[70%] xl:w-[75%]`**, all three copies moved together (`RoomCard.tsx`'s Tailwind classes and
+`ROOM_CARD_SIZES`, `app/globals.css`'s `70cqw`/`75cqw` caps). Final figures on the shipped build:
+`vann-rooms` **36.0% mean / 43.2% worst**, `tola-rooms` **36.3% mean / 43.5% worst** — both inside
+non-negotiable #8's 45% ceiling with 1.5–1.8 percentage points of margin, and both closer to the
+image-sizing plan's own pre-breach ceiling (31.5%/42.1%, 33.8%/44.3%) than the shipped 65%-share build was,
+though not back inside it — the `beside` composition's own text-column cost (§2.4) is real and this lever
+narrows it, it does not erase it. Full gate re-run clean on this build: `npm test -- --run` (461/461),
+`npx tsc --noEmit`, `npm run lint` (same 5 pre-existing warnings), `npm run build`. `ROOM_PHOTO_KEEP`/
+`ROOM_PHOTO_MARGIN` (the separate 25%-width-crop bound) are untouched — they were never the lever.
+
+`docs/DECISIONS.md` §18 and its §5 open item are updated to match; the open item is removed, not left
+standing, since the breach it recorded is resolved.
+
 ---
 
 ## 3. What was NOT touched
 
-`components/ui/Plate.tsx` and `components/ui/Photo.tsx` — confirmed untouched (`git diff` against the
-Task 5 commit for both files is empty). The two padding-trim experiments in §2.3 were both reverted;
-`components/sections/RoomCard.tsx` is byte-identical to its Task 5 commit at the point this task's own
-commit is made. No component, dial, or content file was changed by this task — only the evidence in this
-directory, `docs/DECISIONS.md`, `docs/PROJECT-STATE.md` and `CLAUDE.md`.
+**As of the original 14 Aug verification pass (§1–§2.4):** `components/ui/Plate.tsx` and
+`components/ui/Photo.tsx` — confirmed untouched (`git diff` against the Task 5 commit for both files is
+empty). The two padding-trim experiments in §2.3 were both reverted; `components/sections/RoomCard.tsx` was
+byte-identical to its Task 5 commit at the point that task's own commit was made. No component, dial, or
+content file was changed by that pass — only the evidence in this directory, `docs/DECISIONS.md`,
+`docs/PROJECT-STATE.md` and `CLAUDE.md`.
+
+**The §2.5 follow-up (same day) is the one exception, by design: it changes the photo share, and nothing
+else.** `components/ui/Plate.tsx` and `components/ui/Photo.tsx` remain untouched. `components/sections/
+RoomCard.tsx` and `app/globals.css` are touched **only** at the three co-ordinated spots the share's own
+contract names (the Tailwind `lg:w-[…] xl:w-[…]` classes and `ROOM_CARD_SIZES` in the former, the two
+`NNcqw` caps in the latter) plus their own explanatory comments, which were rewritten wherever they quoted
+the old 60%/65% numbers so no comment is left teaching a value the code no longer has.
+`ROOM_PHOTO_KEEP`/`ROOM_PHOTO_MARGIN` (the separate 25%-width-crop bound) and `ROOM_STACK` are untouched —
+neither was the lever. `lib/sizes.test.ts` gained one clarifying sentence on a comment that quoted the old
+`ROOM_CARD_SIZES` string verbatim as history; its assertions were not changed and needed no change (the
+string is still one genuinely distinct entry, so the count they guard is unaffected).

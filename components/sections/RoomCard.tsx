@@ -38,14 +38,36 @@ import type { RoomEntryCopy } from "./RoomShowcase.types";
  */
 
 /** Exported for `lib/sizes.test.ts`. One string now: every card is `beside`
- * (client ruling, 13 Aug 2026). 60% of the card at lg, 65% at xl — named
+ * (client ruling, 13 Aug 2026). 70% of the card at lg, 75% at xl — named
  * breakpoints in ascending order, never arbitrary `min-[...]` variants
- * (`docs/DECISIONS.md` §2 #23); 978px is 65% of the 1504px container cap.
+ * (`docs/DECISIONS.md` §2 #23); 1128px is 75% of the 1504px container cap.
  * The share appears in three places that must move together: here, the
- * `lg:w-[60%] xl:w-[65%]` classes below, and the `60cqw`/`65cqw` blocks in
- * `app/globals.css`. */
+ * `lg:w-[70%] xl:w-[75%]` classes below, and the `70cqw`/`75cqw` blocks in
+ * `app/globals.css`.
+ *
+ * **Widened from 60%/65% to 70%/75% on 14 Aug 2026 (image-sizing Task 8's
+ * own review), to close a density breach the 65%-share build shipped:**
+ * `vann-rooms`/`tola-rooms` measured 49.4%/50.1% worst-screen empty against
+ * non-negotiable #8's 45% ceiling, and 65% was a number the original spec
+ * chose, not a limit — it had never been swept. Solved for the bound
+ * (`docs/DECISIONS.md`'s own rule for a value a rule bounds, restated at
+ * §18): widening the photo's share at a fixed card height only ever helps
+ * the crop bound (a wider box's own aspect can only rise, never fall — see
+ * `ROOM_PHOTO_KEEP`'s comment) and only ever helps density (the words
+ * column narrows, wraps more, and fills more of its own fixed height). Swept
+ * 65/68/70/72/73/75/78 (`lg` moved 5 points below `xl` throughout, the
+ * baseline's own relationship); 68 and 70 still breached 45% worst, 72 was
+ * inside by a hair (45.2%/45.6% — over), 75 was the first genuine pass
+ * (43.2%/43.5%, both routes), 78 passed with more margin still
+ * (41.2%/41.5%) but was rejected on sight: at 1024×768 its ~22%-of-card
+ * words column wrapped a room's description to 4 lines and its facts line
+ * to 5, breaking mid-word ("terracotta-") in a way 75% does not. 75%/70% is
+ * the chosen value — the most margin of any candidate that still reads as a
+ * text column beside a photograph rather than a caption stuck to one.
+ * `docs/reviews/2026-08-13-image-sizing/README.md` §2 carries the whole
+ * swept table. */
 export const ROOM_CARD_SIZES =
-  "(min-width: 1600px) 978px, (min-width: 1280px) 65vw, (min-width: 1024px) 60vw, calc(100vw - 48px)";
+  "(min-width: 1600px) 1128px, (min-width: 1280px) 75vw, (min-width: 1024px) 70vw, calc(100vw - 48px)";
 
 /** Below `lg` the card is a column and the wrapper's `aspect-ratio` is its only
  * definite axis: a landscape photograph shows whole (its own aspect), and the
@@ -206,7 +228,7 @@ export function RoomCard({
       // wrapper carries, but wrong from `lg` up, where the wrapper is capped
       // to `photoTarget × aspect` (or, when the cap does not bind, the card's
       // own stretched shape — always narrower than the photograph's aspect
-      // either way, since the wrapper is only 60–65% of the card's width).
+      // either way, since the wrapper is only 70–75% of the card's width).
       // `cover` then draws the photograph WIDER than the box regardless, and
       // `sizes` described only the box, not the draw — under-serving
       // resolution by up to `1/ROOM_PHOTO_KEEP ≈ 1.33×` (33%) in the worst
@@ -297,7 +319,7 @@ export function RoomCard({
          * main-size — flex-1 usually wins, which is exactly how this box got
          * tall enough to crop a wide photograph's width in the first place.
          *
-         * The wrapper is 60% of the card at `lg`, 65% at `xl` (`ROOM_CARD_SIZES`'s
+         * The wrapper is 70% of the card at `lg`, 75% at `xl` (`ROOM_CARD_SIZES`'s
          * own comment). At that width and the card's own full (stretched)
          * height, the box's OWN aspect can drop under the 25% width-crop
          * bound depending on the card's shape — see the `max-height` rule
@@ -330,12 +352,12 @@ export function RoomCard({
          * declared `aspect-ratio` govern for every photograph, portrait
          * included — confirmed live: with it, the same wrapper renders
          * 273.6px, exactly `342 / 1.25`. At `lg` and up this is a no-op: both
-         * axes are already definite there (`lg:w-[60%]` and the card's own
+         * axes are already definite there (`lg:w-[70%]` and the card's own
          * `lg:items-stretch` height), and a definite size leaves nothing for
          * min-height to clamp.
          */}
         <div
-          className="min-h-0 flex-none lg:w-[60%] xl:w-[65%]"
+          className="min-h-0 flex-none lg:w-[70%] xl:w-[75%]"
           style={
             {
               aspectRatio: String(Math.max(aspect, ROOM_CARD_MIN_BOX)),

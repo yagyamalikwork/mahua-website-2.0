@@ -842,22 +842,20 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   (`RoomCard.tsx`'s `ROOM_PHOTO_KEEP`/`ROOM_PHOTO_MARGIN`), exactly the "solve for the limit" shape this
   note was asking for — see `docs/DECISIONS.md` §18's "per-card crop bound" subsection for the full
   derivation and the two Criticals a review found and fixed in it.
-- **THE ROOMS-CHAPTER DENSITY LINE IS BROKEN, AWAITING THE CLIENT (14 Aug 2026).** `vann-rooms` now
-  measures 43.9% mean / 49.4% worst and `tola-rooms` 44.3% / 50.1%, against the image-sizing plan's own
-  ceiling of 31.5%/42.1% and 33.8%/44.3% — both chapters' worst screen is also over non-negotiable #8's
-  general 45% ceiling, not merely over their own prior figures. This is the direct, measured cost of the
-  client's own 13 Aug composition ruling (every room card `beside`, alternating) against his own 4 Aug
-  density ceiling, and the two now disagree. All three levers the image-sizing spec named — the `xl`
-  photo share (already at its named value, nothing to give), the words block's padding (`py-6`→`py-5`→
-  `py-4`, rebuilt and measured twice, zero effect both times), and `ROOM_STACK.heightMax` (proven inert
-  at the review's own 1440×900 by the real, measured card height — 669px/655px, both already below the
-  720/760 the lever would move between) — are spent. **No lever left; the working tree ships with the
-  composition unchanged and the padding experiments reverted.** Full numbers, the padding-trim rebuilds,
-  and the `heightMax` proof: `docs/reviews/2026-08-13-image-sizing/README.md` §2; the retirement/solve
-  context: `docs/DECISIONS.md` §18. His options, for when he is asked: accept the density as the cost of
-  the composition he chose; shorten the rooms' own facts/description copy so it fills more of the fixed
-  card height; or reopen the fixed-height card mechanism itself, which is a larger change than this task
-  is scoped to make unilaterally.
+- ~~**THE ROOMS-CHAPTER DENSITY LINE IS BROKEN, AWAITING THE CLIENT (14 Aug 2026).**~~ **Resolved, same
+  day.** `vann-rooms` and `tola-rooms` had measured 43.9%/49.4% and 44.3%/50.1%, over the image-sizing
+  plan's own ceiling and, on their worst screen, over non-negotiable #8's general 45% ceiling too — the
+  direct, measured cost of the client's own 13 Aug composition ruling (every room card `beside`,
+  alternating) against his own 4 Aug density ceiling. The first of the spec's three named levers, the `xl`
+  photo share, had been declared spent at 65% — the spec's own worked example, never actually swept to
+  find its real ceiling. Swept upward (68/70/72/75/78, `lg` held 5 points below `xl`) and re-measured:
+  75%/70% is the first value that clears the ceiling with real margin and still reads as a text column
+  beside the photograph rather than a caption stuck to one (78% passed with more margin but was rejected
+  on sight — a 4→5-line facts row breaking a word mid-wrap). Shipped: `lg:w-[70%] xl:w-[75%]`,
+  `vann-rooms` **36.0%/43.2%**, `tola-rooms` **36.3%/43.5%**, both inside 45% worst.
+  `check_card_stack.mjs` (9/9, both arms) and `check_image_resolution.mjs` (0 under-served) both re-pass.
+  Full sweep table and the screenshot comparison: `docs/reviews/2026-08-13-image-sizing/README.md` §2.5;
+  the retirement/solve context: `docs/DECISIONS.md` §18.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---
@@ -1592,3 +1590,21 @@ README.md` §2. This is the spec's own named contingency (§2: *"if every lever 
 cannot be held, the numbers go to the client with the choice"*), not a defect in what Tasks 4–5 built —
 the composition is exactly what he asked for on 13 Aug, measuring against the ceiling he separately set on
 4 Aug, and the two now disagree. Recorded as open in §5, not decided here.
+
+**RESOLVED, 14 Aug 2026, same day — the first lever was declared spent at the wrong number.** The line
+above reads "the `xl` photo share... were pulled" as though 65% was the share's own limit; it was the
+plan's own worked example, never swept, never solved for the bound the way this project's own rule for a
+bounded value requires (`§15`'s forest-tint solve is the standing example). Swept upward from 65% with
+`lg` held 5 points below `xl` (the baseline's own relationship) — 68, 70, 72, 75, 78 — and re-measured
+against both routes at every step: 68 through 72 stayed over the ceiling, 75 was the first clear pass
+(**`vann-rooms` 36.0%/43.2%, `tola-rooms` 36.3%/43.5%**, both inside 45% worst with 1.5–1.8pp to spare),
+and 78 passed with still more margin (33.6%/41.2%, 33.8%/41.5%) but was rejected on sight — screenshotted
+and opened at 1440×900/1024×768/390×844 on both routes, its words column had crossed from "narrower" to
+"a caption stuck to a photograph" (Tola's Family Suite at 1024×768 wrapped to a 4-line description and a
+5-line facts row, breaking "terracotta-" mid-word). **`lg:w-[70%] xl:w-[75%]`** is what shipped: the
+candidate with the most margin that still reads as a text column, not the largest that merely cleared the
+line. `check_card_stack.mjs` (9/9, both arms, both routes, all six shapes) and `check_image_resolution.mjs`
+(0 under-served, both routes) both re-passed at this value. Full sweep table, the cap arithmetic that
+predicted widening could only help (never hurt) the crop bound, and the screenshot comparison:
+`docs/reviews/2026-08-13-image-sizing/README.md` §2.5. The §5 open item this raised is now closed, not
+left standing.

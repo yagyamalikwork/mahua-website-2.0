@@ -302,7 +302,12 @@ describe("the sizes the page actually serves", () => {
     // this exact width list). Two out, one in: net −1, 24 → 23 — read off
     // this suite by running it and reading the failure (`expected 23 to be
     // 24`) rather than computed by hand, per this task's own instruction not
-    // to guess it.
+    // to guess it. **The share widened again on 14 Aug 2026 (image-sizing
+    // Task 8's own review, `RoomCard.tsx`'s `ROOM_CARD_SIZES` comment), to
+    // `1128px`/`75vw`/`70vw` — the count this test guards is unaffected
+    // (still one genuinely new string, still distinct from every other
+    // slot), so only the literal numbers quoted above are now history, not
+    // the assertion.
     // 23 → 24 since Task 6 of the image-sizing plan (13 Aug 2026), the room
     // gallery's click-to-expand panel: `GALLERY_SIZES` (`(min-width: 768px)
     // 80vw, calc(100vw - 32px)`) is a genuinely new width list — nothing else

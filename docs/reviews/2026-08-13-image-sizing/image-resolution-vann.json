@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-14T03:39:00.412Z",
+  "measuredAt": "2026-08-14T06:44:55.198Z",
   "url": "http://localhost:3100/mahua-vann",
   "densityCap": 2,
   "results": [
@@ -591,7 +591,7 @@
       "atLibraryCeiling": [
         {
           "file": "/media/vann-room-deluxe-762.avif",
-          "needed": 1002,
+          "needed": 1008,
           "ratio": 0.76
         },
         {
@@ -687,24 +687,24 @@
         },
         {
           "file": "/media/vann-room-deluxe-762.avif",
-          "cssWidth": 874,
-          "drawnWidth": 1002,
-          "needed": 1002,
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
           "ratio": 0.76
         },
         {
           "file": "/media/vann-room-cottage-plain-1184.avif",
-          "cssWidth": 874,
-          "drawnWidth": 1002,
-          "needed": 1002,
-          "ratio": 1.18
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 1.17
         },
         {
           "file": "/media/suite-tiger-painting-1440.avif",
-          "cssWidth": 874,
-          "drawnWidth": 1001,
-          "needed": 1001,
-          "ratio": 1.44
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 1.43
         },
         {
           "file": "/media/lawn-picnic-golden-hour-1440.avif",
@@ -920,23 +920,23 @@
         },
         {
           "file": "/media/vann-room-deluxe-762.avif",
-          "cssWidth": 978,
+          "cssWidth": 1128,
           "drawnWidth": 1139,
           "needed": 1139,
           "ratio": 0.67
         },
         {
           "file": "/media/vann-room-cottage-plain-1184.avif",
-          "cssWidth": 978,
-          "drawnWidth": 1139,
-          "needed": 1139,
+          "cssWidth": 1128,
+          "drawnWidth": 1140,
+          "needed": 1140,
           "ratio": 1.04
         },
         {
           "file": "/media/suite-tiger-painting-1440.avif",
-          "cssWidth": 978,
-          "drawnWidth": 1138,
-          "needed": 1138,
+          "cssWidth": 1128,
+          "drawnWidth": 1137,
+          "needed": 1137,
           "ratio": 1.27
         },
         {

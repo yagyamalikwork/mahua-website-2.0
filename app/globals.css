@@ -1130,14 +1130,20 @@ body {
  * outweighed — confirmed live: both axes are definite there, so nothing is
  * left "auto" for `aspect-ratio` to compute.
  *
- * Left alone, the box's real aspect is whatever `lg:w-[60%]`/`xl:w-[65%]` and
- * the card's own solved height happen to produce — which cleared the 25%
- * width-crop bound only at the four widths this project routinely reviews, by
- * coincidence, and failed hard outside them: **51.1% of
- * `suite-tiger-painting`'s width lost at 1024×1366** (iPad Pro portrait),
- * 37.5% at 1280×1024 — both worse than the ~11% the layout this design
- * replaced was cropping. `docs/reviews/2026-08-11-card-stack/README.md`,
- * "Finding 1."
+ * Left alone, the box's real aspect is whatever the wrapper's own `lg:w-[…]`/
+ * `xl:w-[…]` share and the card's own solved height happen to produce — which
+ * cleared the 25% width-crop bound only at the four widths this project
+ * routinely reviews, by coincidence, and failed hard outside them, measured
+ * at the share in effect then (`lg:w-[60%] xl:w-[65%]`, since widened —
+ * see below): **51.1% of `suite-tiger-painting`'s width lost at 1024×1366**
+ * (iPad Pro portrait), 37.5% at 1280×1024 — both worse than the ~11% the
+ * layout this design replaced was cropping. `docs/reviews/
+ * 2026-08-11-card-stack/README.md`, "Finding 1." The mechanism this cap
+ * fixes is unaffected by the share's own value — that is the whole point of
+ * capping the wrapper's height to a fixed multiple of the photo's aspect
+ * rather than to a number tied to one share — so this finding still explains
+ * why the cap exists even though the share it was measured against is not
+ * today's.
  *
  * The fix caps the wrapper's height so its OWN aspect can never drop below
  * `(ROOM_PHOTO_KEEP + ROOM_PHOTO_MARGIN) × the photo's own WORST-CASE aspect`
@@ -1189,9 +1195,11 @@ body {
  * **Two DISJOINT ranges, not one open-ended rule — 13 Aug 2026.**
  * Every card is now `beside` (the client's ruling that retired the `stacked`
  * composition and the height ceiling that used to sit here for it), and the
- * wrapper's own width share changes at `xl` (`lg:w-[60%] xl:w-[65%]`), so the
- * `cqw` multiplier the cap divides by has to change with it — `60cqw` is
- * wrong once the wrapper is actually 65% of the card. Two overlapping rules
+ * wrapper's own width share changes at `xl` (`lg:w-[70%] xl:w-[75%]`,
+ * widened from `60%`/`65%` on 14 Aug 2026 — see `RoomCard.tsx`'s
+ * `ROOM_CARD_SIZES` comment for the density sweep that widened it), so the
+ * `cqw` multiplier the cap divides by has to change with it — `70cqw` is
+ * wrong once the wrapper is actually 75% of the card. Two overlapping rules
  * resolved only by framework emission order is this project's own repeated
  * defect shape (`docs/DECISIONS.md` §2 #23 and the stacked-ceiling collision
  * above, now retired): a single `@media (min-width: 1024px)` block followed
@@ -1228,7 +1236,7 @@ body {
   }
 
   .room-card[data-card-layout="beside"] > :first-child {
-    max-height: calc(60cqw / var(--room-photo-aspect, 1.216));
+    max-height: calc(70cqw / var(--room-photo-aspect, 1.216));
   }
 }
 
@@ -1238,7 +1246,7 @@ body {
   }
 
   .room-card[data-card-layout="beside"] > :first-child {
-    max-height: calc(65cqw / var(--room-photo-aspect, 1.216));
+    max-height: calc(75cqw / var(--room-photo-aspect, 1.216));
   }
 }
 
