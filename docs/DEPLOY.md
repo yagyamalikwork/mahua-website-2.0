@@ -57,6 +57,58 @@ npx vercel --prod --yes      # from a checkout of what you want live
 repository's default branch, which here is `main` — and `main` is far behind this work. Connecting Git
 alone would point https://mahua-resorts.vercel.app at a stale site.
 
+## The three things that blocked a deploy on 14 Aug, and how to clear each
+
+All three were hit in one session. None is obvious from the error it produces.
+
+### 1. The commit author email — this one blocks *Git* deployments entirely
+
+Vercel refuses a Git deployment whose commit author it cannot identify:
+
+> *The commit author email (yagyamalikwork@gmail.com) is not a valid email address. This prevents Vercel
+> from identifying the commit author and allowing the deployment.*
+
+The repository's `git config` carried **`yagyamalikwork@gmail.com`** while the client's GitHub account is
+**`yagyamalik.work@gmail.com`** — one missing dot. Every commit before 14 Aug carries the wrong one.
+
+Corrected with `git config --global user.email "yagyamalik.work@gmail.com"`. **Past commits are not
+rewritten and do not need to be** — Vercel only checks the commit that triggers a deployment, so the next
+push is enough. The client found this himself from Vercel's own message.
+
+### 2. The CLI's auth token expires, and the failure says "Not authorized"
+
+`vercel link` writes `.env.local` with a `VERCEL_OIDC_TOKEN` that lives for hours, not days. A two-day-old
+one produced `Not authorized` on `vercel --prod` while `vercel whoami`, `vercel project ls` and
+`vercel ls` all still worked — reads kept working, writes did not, which reads like a permissions problem
+and is not.
+
+```bash
+rm -f .env.local && npx vercel link --yes --project mahua-resorts
+```
+
+### 3. No `.vercelignore`, so the upload was 882 MB
+
+A deploy sat at `Uploading (0.0B/882.6MB)` and never finished. That is not the site — it is the
+repository's history and raw materials:
+
+| | |
+|---|---|
+| `.git` | 926 MB — every version of every photograph ever committed |
+| `node_modules` | 582 MB — Vercel runs its own `npm install` |
+| `.next` | 172 MB — Vercel runs its own `next build` |
+| `reference` | 77 MB — crawled source material, never shipped |
+
+`.vercelignore` now excludes all of it. **882 MB → 133 MB.** If a build ever fails on a missing file, look
+there first: excluding something the build needs fails loudly, but it looks like a code error rather than
+an ignore-file one.
+
+### The way to stop hitting any of this
+
+**Connect Git.** Vercel then clones from GitHub on its own — no upload, no CLI, no token to expire, and a
+push is the whole deploy. The email fix above is exactly what was blocking that route. It remains a
+two-part action: **connect the repo AND set Production Branch to `demo`**, or the demo URL follows the
+default branch instead.
+
 ## Vercel setup, once
 
 1. **New Project** → import `yagyamalikwork/mahua-website-2.0`.
