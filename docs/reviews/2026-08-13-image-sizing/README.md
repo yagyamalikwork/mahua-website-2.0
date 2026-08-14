@@ -66,6 +66,17 @@ Task 5 commit. Both green, 461/461.
 
 ### 1.2 `check_plates.mjs` — Task 1/2's own rig
 
+**SUPERSEDED, 14 Aug 2026, the same day this section was written — read
+`docs/reviews/2026-08-14-plate-reflow/README.md` and `docs/DECISIONS.md` §19 instead of trusting what
+follows.** The breakpoint move and the 85%/65% floor described below did not fix what the client had
+reported: he re-tested this exact build himself, resizing his own browser window rather than jumping
+between fixed presets, and found the same shrink still there — a moved breakpoint cannot answer a defect
+that was continuous, and the rig's own 85% tolerance is what let it certify a page that still shrank every
+photograph (watched failing against this build: 483 failures). The real rule shipped 14 Aug: a plate may
+never render narrower than its own 1440×900 width, no tolerance, no exemption, and `check_plates.mjs`'s
+floor assertion now reads 1.0. Left below as the honest, historical record of what this task actually
+built and measured, not as current behaviour.
+
 ```
 node scripts/check_plates.mjs --port 3100
 ```

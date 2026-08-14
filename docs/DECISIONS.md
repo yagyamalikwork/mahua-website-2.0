@@ -71,7 +71,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 
 ---
 
-## 2. The defect that keeps happening — fifty-one instances
+## 2. The defect that keeps happening — fifty-three instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -129,6 +129,8 @@ these passed its own gate while the thing it guarded was broken.
 | 49 | **A code comment and a spec both asserting `popover="auto"` guarantees at most one open panel.** | The HTML Popover API's own rule treats a popover invoked from a button INSIDE another open one as nested rather than replaced — and the gallery's arrows have to live inside their own panel to sit beside its own figure, so this was true of every single click, not an edge case. `RoomCardStack.tsx`'s own comment and `2026-08-13-image-sizing-design.md` §3 both stated the opposite as fact, unmeasured; the spec shipped the markup that guaranteed the bug it claimed could not happen. §18 |
 | 50 | **A code comment asserting the popover's own `margin: auto` centres the panel.** | Tailwind's preflight (`* { margin: 0 }`) — author-origin — silently zeroed it; author origin always beats UA origin regardless of selector specificity. Every panel rendered pinned to the viewport's own top-left corner, `{left: 0, top: 0}`, confirmed live. A fixed test point (the gallery's own light-dismiss probe) passed at one width and failed at another for a reason that had nothing to do with dismiss — the same "a fixed point cannot see a distinction across shapes" lesson instance 44/45 already paid for once. §18 |
 | 51 | **A CSS comment naming `[data-site-header]`'s z-index as 90, to justify the gallery's own 100 — written to avoid exactly this failure, and committing it anyway.** | The header carries `z-40` (`StickyHeader.tsx`); `[data-site-header]`'s own rules in `app/globals.css` set no z-index at all. The real `z-index: 90` belongs to `[data-welcome]`, the opaque welcome screen — which the gallery's own `100` then sat ABOVE, newly reachable because `:target` applies on first paint and every gallery open is now a real history entry, so a reload, a bookmarked link, or Back can load a room fragment straight into the URL before the welcome has finished its ~2.1s hold. Found only by reading every stacked value in the file instead of trusting the one already written down. §18 |
+| 52 | **A fix that moved a breakpoint to answer a defect that was continuous.** | The plate boards shrank between whichever two breakpoints were current, at any window width or zoom level — moving the three-column tier from `lg` to `xl` could only relocate where that was visible, never remove it. The rig built alongside that fix then certified it anyway, because its own floor assertion carried an 85% shrink tolerance (plus a 65% exemption for a board at minimum columns) rather than a real floor — 483 failures were sitting behind a green rig. Found by the client resizing his own browser window a day later. §19 |
+| 53 | **A layout that passed every rig and was visibly wrong.** | CSS Grid's `auto-fit` states a reflowing board's rule as directly as CSS can, and measured 0% distortion and the correct floor at every sampled width. It still stranded a trailing plate beside an empty, plate-width cell of bare cream, because a Grid track is shared across every row and an under-full row leaves its other tracks simply unoccupied — non-negotiable #8's own language, failed by the fix meant to satisfy it. No assertion this project has ever written checks for a bare cell beside a filled one; found only by opening a screenshot. §19 |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
@@ -749,6 +751,16 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 
 ## 5. Owed, and open
 
+- **HIGHER-RESOLUTION ORIGINALS ARE NEEDED FOR SEVEN PHOTOGRAPHS, AWAITING THE CLIENT (14 Aug).** The
+  plate-reflow fix (§19) lets a board's one-column state draw a plate at up to ~864px instead of ~421px,
+  and at device pixel ratio ≥2 (a Retina Mac, an iPad, a Windows laptop at 150% scaling) that state now
+  falls **22–46% short** of the pixels it needs. The three Forest cats (`tiger-pair-profile`,
+  `leopard-on-rock`, `melanistic-leopard`) are curated at **900px** wide; the four Rooms photographs top out
+  at **1440px** — neither was ever asked to fill a whole container's width before this fix. Not caught by
+  `check_image_resolution.mjs`, whose DPR sweep never samples a wide viewport at DPR above 1, exactly the
+  combination this fix introduces. **The ask: uncropped originals, roughly 1800px wide for the three Forest
+  cats and 2600px wide for the four Rooms photographs.** Full derivation: `docs/reviews/
+  2026-08-14-plate-reflow/README.md` §8.
 - **THE CHECKOUT IS BLOCKED ON ASIATECH, AND THE ASK IS WRITTEN (12 Aug).** The client wants a Mahua-branded
   checkout where the guest pays on our site and never sees AsiaTech. Nothing visitor-facing can be built until
   they answer, and the interim fallback was **tested and does not work**: their engine cannot be pre-filled
@@ -1656,3 +1668,168 @@ line. `check_card_stack.mjs` (9/9, both arms, both routes, all six shapes) and `
 predicted widening could only help (never hurt) the crop bound, and the screenshot comparison:
 `docs/reviews/2026-08-13-image-sizing/README.md` §2.5. The §5 open item this raised is now closed, not
 left standing.
+
+---
+
+## 19. The plates that still shrank — a breakpoint moved when the defect was continuous, 14 Aug 2026
+
+`docs/reviews/2026-08-13-image-sizing/README.md` §1.2 records the 13 Aug fix for the plate boards as
+closed: the three-column tier's breakpoint moved from `lg` (1024px) to `xl` (1280px), and
+`check_plates.mjs` passed. It was not closed. The client re-tested it inside a day, on his own machine, and
+found the exact defect he had reported once already — recorded here in full because §2's own catalogue
+exists to stop this shape of failure from being learned twice.
+
+### The re-test
+
+His words, 14 Aug 2026:
+
+> "The images on all three section i told you on homepage (03, 05 and 07) still shrink with the smaller
+> screen size as well as i checked and tested it by just transforming the size of Google Chrome window on
+> which the link is open reducing it rather than on a full screen mode, also shrink when zoom value reaches
+> 150% and above when tested on the chrome browser. We need to fix this, as it will tamper with the
+> viewers experience."
+
+He added that everything else the same plan shipped — the alternating room cards, the click-to-expand
+gallery — "looks and feels perfect, no changes there." The finding is scoped to the three `PlateGrid`
+boards (`03 · The Forest`, `05 · The Rooms`, `07 · The Details`) alone, exactly as his first report on 12
+Aug had been (`docs/reviews/2026-08-12-plate-squeeze/README.md`).
+
+### Why the 13 Aug fix was inadequate
+
+Moving a breakpoint answers a defect that fires at a fixed point. This defect was never that: between
+whichever two breakpoints were current, every plate was still `N%` of the viewport, so it kept shrinking
+continuously as the window narrowed or the browser zoomed. Relocating the breakpoint could only move where
+the shrink started being visible, never remove it.
+
+The rig built alongside that fix then certified it anyway, because its own floor assertion carried an 85%
+shrink tolerance — with a further 65% exemption for a board already at its minimum column count — rather
+than asserting a real floor. Measured on that build, the Forest board across a continuous width sweep:
+
+| viewport width | 1440 | 1366 | 1280 | 1200 | 1100 | 1024 | 960 | 900 | 700 |
+|---|---|---|---|---|---|---|---|---|---|
+| Forest plate width | 421px | 397px | 368px | 532px | 482px | 444px | 416px | 386px | 310px |
+
+960px is 150% zoom on a 1440 screen — still shrinking, exactly as the client reported. And the 1280→1200
+jump is worth reading closely: the board holds three columns from 1440 down to 1280px, and every plate in
+that band is *smaller* than at 1440 — a trough sitting inside a single column-count tier, not a gap between
+tiers a breakpoint move could ever reach. A rig tolerating an 85% shrink cannot see either shape as a
+failure; a client dragging his own browser's edge could not miss them. Watched failing against the exact
+13 Aug build, before anything changed: **483 failures across the three boards**, e.g. `forest:
+worstFloorRatio=0.8734 (368px vs 421.34px reference, at 1280x720)` —
+`docs/reviews/2026-08-14-plate-reflow/plates-before.json`. This is catalogue instance **§2 #52**: a fix
+that moved a threshold to answer a defect that was continuous, certified by a rig built for the same
+mistaken premise.
+
+### The rule that replaced it
+
+**A plate may never render narrower than its own width at 1440×900. A board drops a column the moment
+holding that count would take a plate below that reference, and at one column the plate fills the
+container.**
+
+No tolerance, no exemption for a board already at its minimum column count — the 65% carve-out in the 13
+Aug rig existed for exactly the case (`vann-dining`-style boards already at two columns) that this rule now
+covers unconditionally. Under the new construction (below) a board that cannot hold a column at its
+1440-reference width simply drops to fewer, wider columns, so "already at minimum columns" stopped being a
+special case that needed protecting.
+
+### The fill-the-width ruling
+
+Put to the client and answered the same day: when a board drops to one photograph per row, does the
+photograph fill the container's width, or hold at its full-screen size with cream either side? He chose
+**fill the width** — at a ~1000px window a Forest plate is now ~880px, more than double its full-screen
+size, and the chapter runs taller for it. The reason given, and accepted: holding the plate at its 1440
+size inside a narrower one-column container would leave roughly half the screen bare, breaching
+non-negotiable #8's 45% empty-space ceiling. This continues his 12 Aug ruling on the same board family —
+*"at deep zoom the plates keep full size and the visitor scrolls more"* — extended from zoom specifically to
+narrow windows generally: the plate never shrinks below its 1440 width, and the page is free to grow taller
+and let a visitor scroll for it, rather than shrinking the plate to fit.
+
+### Implementation, and two things that are load-bearing
+
+`PlateGrid.tsx` lays a board out on `flex flex-wrap`, not CSS Grid. Each plate carries `flex: 1 1 REFpx`
+— grow and shrink from a solved `REFpx` basis, per board. A line holds as many plates as fit at `REFpx`
+each before the next would overflow; within a line, `flex-grow` distributes any leftover width evenly; a
+plate stranded alone on its own line has nothing to share the line with, so it receives the whole line's
+leftover width — "fills the container," extended from the one-column case to a lone trailing plate on a
+partial row too. `flex-shrink` with `min-width: 0` is what lets a board collapse all the way to one
+full-width plate once `REFpx` itself would exceed the container.
+
+- **`REF` is rounded DOWN to a whole pixel** (420 / 650 / 316 for the three boards' three/two/four-column
+  tiers). At exactly 1440px the column arithmetic sits precisely on a whole number of columns for two of
+  the three boards (`3.0`, `4.0`) — a floating-point `REF` used unrounded would tie the line-wrap boundary
+  exactly at the client's own reference viewport, and a single hair of floating-point error either way
+  could silently drop a board to fewer columns at the one width that matters most. `referenceWidth`'s own
+  comment in `PlateGrid.tsx` works this arithmetic for all three boards, including why `Math.floor(exact) -
+  1` rather than a bare floor.
+- **CSS Grid `auto-fit` was built first, passed every rig, and was visibly wrong.**
+  `grid-template-columns: repeat(auto-fit, minmax(min(REFpx, 100%), 1fr))` states the client's rule about
+  as directly as CSS can, and it measured 0% distortion and the correct floor at every sampled width. It
+  still shipped a bare cell of cream: a Grid track is shared across every row, so when a board's plate
+  count is not a multiple of its current column count, the trailing plate lands alone in a new row inside
+  a track sized like its neighbours — and every OTHER track in that row still exists, simply empty.
+  Screenshotted at 1024px on both Forest (3 plates, 2 columns) and Details (4 plates, 3 columns) before
+  switching away from it — found by opening the image, not by any assertion, and non-negotiable #8's own
+  language ("every screen must carry weight") failed by the fix meant to satisfy it. Flexbox has no
+  shared-track model: a wrapped line is sized independently of every other line, so a lone trailing plate
+  is the only thing on its line and grows to fill it. This is catalogue instance **§2 #53**: a layout that
+  passed every mechanical rig and was visibly wrong, found only by looking.
+
+### Measured after the fix
+
+Plate width and column count, independently re-derived against the running production build:
+
+| window | Forest | Rooms | Details |
+|---|---|---|---|
+| 1440 | 421px, 3 | 652px, 2 | 318px, 4 |
+| 1366 | 615px, 2 | 1270px, 1 | 407px, 3 |
+| 1280 | 572px, 2 | 1184px, 1 | 379px, 3 |
+| 1024 | 444px, 2 | 928px, 1 | 452px, 2 |
+| 960 | 864px, 1 | 864px, 1 | 422px, 2 |
+| 900 | 804px, 1 | 804px, 1 | 392px, 2 |
+| 700 | 652px, 1 | 652px, 1 | 652px, 1 |
+
+No plate is below its own 1440 width at any window ≥ 470px, with one geometric exception: the Rooms board
+below a ~700px window, whose reference plate is 652px and simply cannot fit two-up in a viewport that
+narrow — a physical limit of the rule as stated (a board at one column already fills the container), not a
+defect.
+
+### The rig
+
+`scripts/check_plates.mjs`'s floor assertion moved from 0.85 to **1.0**, and the 65% minimum-column-count
+exemption is removed outright. Watched failing first against the unmodified 13 Aug build — **483
+failures**, matching the client's own reported numbers — then passing against the fix: `forest:floor=1
+rooms:floor=1 details:floor=1` on all three boards, `/mahua-vann` and `/mahua-tola` unaffected (neither
+route carries a `PlateGrid` board). Both runs committed: `docs/reviews/2026-08-14-plate-reflow/
+plates-before.json` and `plates-final.json`.
+
+### A new owed item for the client — the only thing outstanding
+
+Because a plate can now be drawn at up to ~864px instead of ~421px, it asks its source photograph for far
+more detail than the 13 Aug build ever did. At device pixel ratio 2 or above — a Retina Mac, an iPad, a
+Windows laptop at 150% display scaling — the one-column state falls **22–46% short** of the pixels it
+needs. The three Forest cats (`tiger-pair-profile`, `leopard-on-rock`, `melanistic-leopard`) are curated
+into `lib/media-manifest.ts` at **900px** wide; the four Rooms photographs top out at **1440px**. Neither
+was ever asked to fill a whole container's width before this fix — the Rooms board was two-column at every
+width under the old construction, so it never drew a full-container box at all. This is new exposure, not
+a pre-existing one.
+
+**Not caught by `check_image_resolution.mjs`**, and not because the rig is broken: its DPR sweep is
+390@1x, 390@3x, 768@1x, 1440@1x and 1920@1x, and it reports **0 under-served images on all three routes at
+every one of those combinations**. It never samples a wide viewport (900–1100px, where the one-column state
+actually renders) at a DPR above 1 — the exact combination this fix newly introduces. A true reading of a
+question the rig was never built to ask at this width, the same shape §2 #8, #29 and #45 already catalogue.
+
+**The ask, for when the client is next in touch:** uncropped originals, roughly **1800px wide** for the
+three Forest cats and **2600px wide** for the four Rooms photographs. Not fixed here — it needs source
+material this session does not have. Recorded in §5 and in
+`docs/reviews/2026-08-14-plate-reflow/README.md` §8 so it is not lost.
+
+### Verified unchanged
+
+Density at the fixed 1440×900 measurement point is unchanged on all three routes and no chapter newly
+exceeds 45% worst (home mean 37.9%, Vann mean 35.3%, Tola mean 30.9% — all matching the last recorded
+figures within rounding, because this fix only changes column count in the 1024–1279px band and density is
+measured at a fixed 1440×900). Initial-load transfer is unchanged and under 1.5 MB at both widths on all
+three routes. **467 tests**, `tsc`, `lint` and `build` all green. `components/ui/Plate.tsx` and
+`components/ui/Photo.tsx` — the other session's files — remain untouched. Full working:
+`docs/reviews/2026-08-14-plate-reflow/README.md`.

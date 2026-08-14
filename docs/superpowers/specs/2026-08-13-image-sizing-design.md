@@ -35,6 +35,15 @@ Three decisions were put to him on 13 Aug 2026, and all three are now his ruling
 
 ## 1. The plate boards — a floor under a photograph's rendered size
 
+**SUPERSEDED, 14 Aug 2026.** The 85%-of-1440 floor (with a 65% exemption for a board at minimum columns)
+this section specifies shipped, passed its own rig, and the client re-tested it himself within a day and
+found the same shrink still there — a moved breakpoint cannot fix a defect that is continuous between
+breakpoints, which this floor was. The rule that replaced it: a plate may never render narrower than its
+own width at 1440×900, no tolerance, no exemption; a board drops a column rather than shrink below it, and
+at one column the plate fills the container. See `docs/DECISIONS.md` §19 and
+`docs/reviews/2026-08-14-plate-reflow/README.md`. Left below as the historical record of what this section
+originally specified, not as current behaviour.
+
 ### The defect being fixed
 
 `PlateGrid`'s three-column tier begins at `lg` (1024px). A Forest plate that is ~421px wide at 1440

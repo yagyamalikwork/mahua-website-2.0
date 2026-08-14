@@ -3,6 +3,51 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## The plate boards, fixed a second time — 14 Aug 2026, superseding the entry below
+
+The section immediately below this one ("Image sizing — reflow, beside cards, gallery") describes a 13 Aug
+fix for the home page's three `PlateGrid` boards as complete. It was not: the client re-tested it himself
+within a day, on his own machine, and the shrink he had already reported once was still there. This entry
+is the fix that actually closed it, `commit d88c0e6`, `docs/DECISIONS.md` §19,
+`docs/reviews/2026-08-14-plate-reflow/README.md`.
+
+**His words:** *"The images on all three section i told you on homepage (03, 05 and 07) still shrink with
+the smaller screen size as well as i checked and tested it by just transforming the size of Google Chrome
+window on which the link is open reducing it rather than on a full screen mode, also shrink when zoom
+value reaches 150% and above when tested on the chrome browser."* Everything else the same plan shipped —
+the alternating room cards, the gallery — he confirmed as "perfect, no changes there."
+
+**Why the 13 Aug fix missed it.** It moved the three-column tier's breakpoint from `lg` to `xl` — a fix for
+a defect that fires at one point, aimed at a defect that was continuous: between whichever two breakpoints
+were current, every plate was still `N%` of the viewport, so it kept shrinking as the window narrowed or
+the page zoomed. The rig built alongside it certified the fix anyway, because its own floor assertion
+carried an 85% shrink tolerance (65% exemption for a board at minimum columns) rather than a real floor.
+Watched failing against that build: **483 failures**, e.g. Forest at 368px against a 421px reference at
+1280×720 — matching the client's own report exactly.
+
+**The rule that replaced it:** a plate may never render narrower than its own width at 1440×900; a board
+drops a column the moment holding it would breach that floor; at one column the plate fills the container.
+Put to the client and answered the same day: fill-the-width was his choice over holding the plate's
+full-screen size with cream either side, because holding size would leave roughly half the screen bare —
+over non-negotiable #8's ceiling. Built on `flex flex-wrap` with a solved, whole-pixel `flex-basis` per
+board (420/650/316px) — **not** CSS Grid's `auto-fit`, which was built first, passed every rig, and was
+visibly wrong: a Grid track is shared across every row, so a trailing plate that doesn't fill a full row
+was stranded beside an empty, plate-width cell of bare cream (screenshotted on Forest and Details at
+1024px before switching away from it — found by looking, not by any assertion). `check_plates.mjs`'s floor
+assertion moved from 0.85 to 1.0, exemption removed.
+
+**One new owed item, and it is the only thing outstanding.** A one-column board can now draw a plate at up
+to ~864px, more than double the old ~421px, and at device pixel ratio ≥2 (Retina Mac, iPad, a Windows
+laptop at 150% scaling) that falls **22–46% short** of the pixels it needs. The three Forest cats are
+curated at 900px wide, the four Rooms photographs at 1440px — neither was ever asked to fill a whole
+container before this fix. Not caught by `check_image_resolution.mjs`, whose DPR sweep never samples a
+wide viewport at DPR above 1. **The ask: uncropped originals, ~1800px for the three Forest cats and
+~2600px for the four Rooms photographs.** `docs/DECISIONS.md` §5, §19.
+
+**Verified unchanged:** density at the fixed 1440×900 point on all three routes (no chapter newly over
+45%), initial-load transfer under 1.5 MB at both widths on all three routes, `components/ui/Plate.tsx` and
+`components/ui/Photo.tsx` (the other session's files) untouched. Suite is **467** tests, all green.
+
 ## Image sizing — reflow, beside cards, gallery, all measured — 13-14 Aug 2026
 
 Eight tasks on `feat/image-sizing` (cut from `feat/chapters-rebuild`), answering the client's own two
