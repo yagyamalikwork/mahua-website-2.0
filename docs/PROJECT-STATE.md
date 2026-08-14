@@ -1,7 +1,50 @@
-# Project state — 14 August 2026
+# Project state — 15 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
+
+## The lodge marker is the brand's flower — 15 Aug 2026
+
+Client request. Both property maps marked the resort with a solid dot inside a hairline ring; that pair is
+now `<image href="/brand/emblem-120.webp">` in the same 26×26 viewBox-unit box the outer ring occupied.
+The lodge's name and the group transform are untouched, and the legend needed no change because `SWATCH`
+has no `lodge` entry — nothing in the key ever described this marker.
+
+**It overrides a decision that was recorded in the code**, and the override is the interesting part: the
+old comment said the mark was drawn rather than rastered because *"at this size a 40px PNG would be the
+only bitmap on an otherwise resolution-independent drawing."* True while the marker was two circles — and
+not a reason to hand-redraw the client's emblem, which is exactly what this project refuses everywhere
+else (`ui/BrandMark.tsx`: the flower is his artwork, not an approximation).
+
+**`emblem-120` was chosen from a measurement, not by eye.** The marker renders 40.5px at 1920 and 36.1px at
+1440 (49.1px on Tola, whose map draws wider at the same viewBox); `lib/sizes.ts` caps this project at DPR 2,
+so the widest real demand is ~81px. 80 would sit a hair under, 160 is 2.6 KB for pixels nothing asks for,
+and 120 is the tier the header itself loads on a DPR-2 desktop — a cache hit there rather than a request.
+
+Verified on the live deployment, not just locally: flower present at both sizes, **zero old circles left**,
+no failed requests, initial transfer 496/538 KB against a 1,500 KB budget, still `noindex`. 467 tests, tsc,
+lint and build green. `docs/reviews/2026-08-15-map-emblem/README.md`.
+
+## Three things blocked deployment on 14 Aug, and all three are fixed
+
+Recorded in full in [`DEPLOY.md`](DEPLOY.md); named here because none is guessable from the error it
+produces, and a returning session will hit them again otherwise.
+
+1. **The commit author email.** Commits carried `yagyamalikwork@gmail.com` against a GitHub account of
+   `yagyamalik.work@gmail.com` — one missing dot — and Vercel refuses a Git deployment whose author it
+   cannot identify. **The client found this himself** from Vercel's own message. `git config --global
+   user.email` is corrected; past commits are not rewritten and do not need to be, since only the
+   triggering commit is checked.
+2. **The CLI's auth token expires in hours, not days.** A two-day-old one fails as `Not authorized` while
+   `whoami`, `project ls` and `ls` all keep working — reads fine, writes refused, which reads like a
+   permissions problem and is not. Fix: `rm -f .env.local && npx vercel link --yes --project mahua-resorts`.
+3. **No `.vercelignore`, so a deploy sat at 882.6 MB and never finished** — `.git` 926 MB, `node_modules`
+   582 MB, `.next` 172 MB, `reference` 77 MB, none of which Vercel needs since it installs and builds its
+   own. Now **882 MB → 133 MB**, and a deploy lands in under a minute.
+
+**Connecting Git in Vercel removes all three at once**, and the email fix was exactly what had been
+blocking that route. It remains a two-part action — connect the repo *and* set Production Branch to
+`demo` — or the demo URL follows the default branch instead.
 
 ## The plate boards, fixed a second time — 14 Aug 2026, superseding the entry below
 
