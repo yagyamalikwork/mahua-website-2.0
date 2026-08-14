@@ -1,7 +1,45 @@
-# Project state — 12 August 2026
+# Project state — 14 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
+
+## Image sizing — reflow, beside cards, gallery, all measured — 13-14 Aug 2026
+
+Eight tasks on `feat/image-sizing` (cut from `feat/chapters-rebuild`), answering the client's own two
+requests of 13 Aug: the home page's plate boards were shrinking on smaller laptops and at zoom, and he
+wanted the room cards side-by-side with an alternating photo side, plus a click-to-expand gallery. All
+three are built. **Read `docs/DECISIONS.md` §18 before touching `PlateGrid.tsx`, `RoomCard.tsx`,
+`RoomCardStack.tsx` or the room gallery** — it carries the three 13 Aug rulings verbatim, the retirement
+of `ROOM_STACK.textReserve`/`ROOM_CARD_BOXES` (§17's stacked-layout machinery, superseded, not merely
+edited), the per-card solved crop bound, the plate floor rule, and the gallery's own mechanism swap
+(Popover API → CSS `:target`, because the arrows nested instead of replacing — measured, not assumed).
+Full evidence: `docs/reviews/2026-08-13-image-sizing/README.md`.
+
+**One item is open and unresolved, and needs the client's own ruling before it can be closed.** The
+side-by-side room cards now measure **`vann-rooms` 43.9% mean / 49.4% worst, `tola-rooms` 44.3% / 50.1%
+empty** — over the plan's own ceiling (31.5%/42.1%, 33.8%/44.3%) and, on the worst screen of each, over
+non-negotiable #8's general 45% ceiling too. This is the direct cost of the client's own 13 Aug
+composition choice (photo beside words, not stacked) measured against his own 4 Aug density rule — the
+two disagree, and every lever the plan named to close the gap (the photo's width share, the words
+block's padding, the card's own height cap) was pulled and measured, with **zero effect from any of
+them**. Nothing was changed to paper over it — the composition ships exactly as he asked for it on 13
+Aug, and the number is reported rather than hidden. **Ask him**: accept the density as the cost of the
+composition, shorten the rooms' own copy so it fills more of the fixed card height, or reopen the
+fixed-height card mechanism itself (the larger option). Numbers, the exhausted-lever proof and the
+screenshots that show it by eye: `docs/reviews/2026-08-13-image-sizing/README.md` §2;
+`docs/DECISIONS.md` §5 carries the same item.
+
+**Also found and explained, not a defect of this plan**: `verify:budget` now reads 172,272 bytes brotli
+against the 172,209 CLAUDE.md cites, +63 bytes. Traced to two specific chunks, confirmed deterministic
+across two independent clean rebuilds, and matched byte-for-byte to a sibling session's own commit
+message (`e12af07`, "a softer scroll, and a slow zoom inside a frame that never moves" — client requests
+3/4, 12 Aug, landed on `feat/chapters-rebuild` before this plan's branch point): *"+63 bytes of
+first-load JavaScript."* Not this plan's cost; CLAUDE.md's cited figure needs updating with this
+attribution. Full chunk-level tracing in the review README §1.8.
+
+Suite is **461** tests, green throughout (was 453 before this plan; Tasks 2, 4, 5, 6 and 7 each added
+coverage). `components/ui/Plate.tsx` and `components/ui/Photo.tsx` — the other session's files — are
+untouched, confirmed by `git diff` at every task's own close and again at this one's.
 
 ## The demo is live — 12 Aug 2026
 

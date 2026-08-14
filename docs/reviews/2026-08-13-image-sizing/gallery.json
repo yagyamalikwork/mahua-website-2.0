@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-14T02:55:38.620Z",
+  "measuredAt": "2026-08-14T03:34:03.220Z",
   "url": "http://localhost:3100",
   "mechanism": ":target — see this file's own header comment for the full history (popover -> :target, 14 Aug 2026)",
   "method": "Real Chromium, production build. Every assertion drives the page through the same paths a visitor uses (Playwright's own .click(), page.mouse.click(x,y)) and reads computed `display` / `document.activeElement` / `window.scrollY` off the live DOM — never `location.hash = ...` set directly. Assertion 6 additionally proves the mechanism works with javaScriptEnabled:false, not only that nothing errors.",

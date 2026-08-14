@@ -834,14 +834,30 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
   screen, we can workout and optimize mobile screens later."* The number is therefore recorded rather than
   acted on. **This is a sequencing decision and not a licence to break a phone** — see the ruling in §1 and
   the caveat under it.
-- **`ROOM_CARD_BOXES` is a hand-derived minimum, not solved from `MEDIA` the way this project's other
-  generated artwork is.** `build_forest_overlay.mjs` and its siblings solve for their bound at build time;
-  `ROOM_CARD_BOXES.stacked`'s 2.0 aspect and `ROOM_STACK.textReserve`'s 185px are two hand-measured numbers,
-  checked against each other only by `check_card_stack.mjs`'s assertion 8 — and that rig is run by hand,
-  like every rig on this project, with no CI. A future room with a wider photograph, or a longer name or
-  description, could reopen the fix round's 1440/1920 text-clip defect (§17) silently. This project's own
-  "solve for the limit" convention would derive it from `MEDIA`'s worst-case aspect and content length per
-  layout, at build time. Not done; recorded as a candidate for whoever next adds a room.
+- ~~**`ROOM_CARD_BOXES` is a hand-derived minimum, not solved from `MEDIA`.**~~ **Done, 13–14 Aug 2026, as
+  a side effect of the client's own composition ruling, not as a direct answer to this note.** The
+  client's 13 Aug decision that every card is `beside` retired `ROOM_CARD_BOXES` and
+  `ROOM_STACK.textReserve` outright rather than fixing them in place — the crop bound is now solved per
+  card, at build/render time, from `roomCardAspect`'s worst-emitted-tier read of `MEDIA`
+  (`RoomCard.tsx`'s `ROOM_PHOTO_KEEP`/`ROOM_PHOTO_MARGIN`), exactly the "solve for the limit" shape this
+  note was asking for — see `docs/DECISIONS.md` §18's "per-card crop bound" subsection for the full
+  derivation and the two Criticals a review found and fixed in it.
+- **THE ROOMS-CHAPTER DENSITY LINE IS BROKEN, AWAITING THE CLIENT (14 Aug 2026).** `vann-rooms` now
+  measures 43.9% mean / 49.4% worst and `tola-rooms` 44.3% / 50.1%, against the image-sizing plan's own
+  ceiling of 31.5%/42.1% and 33.8%/44.3% — both chapters' worst screen is also over non-negotiable #8's
+  general 45% ceiling, not merely over their own prior figures. This is the direct, measured cost of the
+  client's own 13 Aug composition ruling (every room card `beside`, alternating) against his own 4 Aug
+  density ceiling, and the two now disagree. All three levers the image-sizing spec named — the `xl`
+  photo share (already at its named value, nothing to give), the words block's padding (`py-6`→`py-5`→
+  `py-4`, rebuilt and measured twice, zero effect both times), and `ROOM_STACK.heightMax` (proven inert
+  at the review's own 1440×900 by the real, measured card height — 669px/655px, both already below the
+  720/760 the lever would move between) — are spent. **No lever left; the working tree ships with the
+  composition unchanged and the padding experiments reverted.** Full numbers, the padding-trim rebuilds,
+  and the `heightMax` proof: `docs/reviews/2026-08-13-image-sizing/README.md` §2; the retirement/solve
+  context: `docs/DECISIONS.md` §18. His options, for when he is asked: accept the density as the cost of
+  the composition he chose; shorten the rooms' own facts/description copy so it fills more of the fixed
+  card height; or reopen the fixed-height card mechanism itself, which is a larger change than this task
+  is scoped to make unilaterally.
 - Then Tripadvisor wiring, the SEO redirect map, Sanity.
 
 ---
@@ -1483,3 +1499,96 @@ URL(URL).pathname` collided with this module's pre-existing `const URL = flag("u
 the global constructor. Fixed with `new globalThis.URL(URL)`, confirmed to correctly report "expected 3
 .room-gallery panels, found 0" at every viewport once the shadowing bug itself was out of the way, and
 confirmed clean (21 images, unchanged) once the selector typo was reverted.
+
+### The 13 Aug rulings this whole plan was built on, verbatim
+
+Three decisions, put to the client on 13 Aug 2026, all now his rulings — the ones Tasks 1–7 were scoped
+against:
+
+1. **Boards reflow.** He asked first whether any image would be removed (no) and whether his own 1440+
+   view would change (no). With both answered: *"Yes — go ahead."* This is Task 1/2 — the plate board's
+   three-column tier now begins at `xl` (1280px), not `lg` (1024px).
+2. **Crop the room photographs from the files already on hand, softness accepted.** *"You can crop and
+   zoom into them to fit their half and if they still look blurry on large screen I'll let you [know] and
+   we can fix it then but for now I feel that it'll not be an issue."* Told plainly that three sources
+   (both Deluxes, the Tola Suite — 1163px web exports) would serve soft once cropped and enlarged; his own
+   words are the accepted-risk record. Measured 14 Aug: those three serve at **0.60–0.67** of ideal
+   resolution at 1920px in the shipped `beside` composition (softer than the spec's own worked 1.11×/1.28×
+   estimate, because the composition's `xl:65%` share draws a wider box than that estimate assumed) —
+   still correctly bucketed by `check_image_resolution.mjs` as *at the library's ceiling*, not
+   *under-served*, which is the failure mode that would actually need the exemption list the spec
+   anticipated. None was needed.
+3. **Gallery: expand plus next/previous arrows, zero JavaScript, page scrolls behind it.** Built first on
+   the HTML Popover API (§18 above, this same section), found to nest rather than replace, rebuilt on CSS
+   `:target` the same day. The zero-JavaScript promise held through the rebuild: `check_room_gallery.mjs`
+   now proves it as a positive capability (opens and closes with `javaScriptEnabled: false`), not merely as
+   an absence of errors.
+
+### The retirement of aspect-derived layout, and that §17's stacked machinery is gone with it
+
+Before 13 Aug, a room card's composition (`stacked` vs `beside`) was **derived** from its photograph's own
+aspect ratio (`roomCardLayout`, `ROOM_CARD_ASPECT_THRESHOLD`, §17's own subject) — a photograph at or above
+1.9:1 got `stacked`, below it `beside`. The client's 13 Aug ruling supersedes the derivation outright: every
+card is `beside` now, by his own choice, not by measurement of the photograph. `lib/room-card.ts` lost the
+whole derivation (`RoomCardLayout`, `ROOM_CARD_ASPECT_THRESHOLD`, `roomCardLayout`) and kept only
+`roomCardAspect`, which the solved crop bound (below) still needs. **Gone with it, because the mechanism it
+existed for no longer ships:** `ROOM_STACK.textReserve` (the ~65-line comment and the constant both, from
+`lib/motion.ts`), the `.room-card[data-card-layout="stacked"] > :first-child` height ceiling in
+`app/globals.css`, the `lg:gap-2 lg:py-4` padding trim that was paired with it, and
+`lib/room-card.test.ts`'s threshold-clearance test. **A future session reading §17 for "how the card stack
+works" needs this paragraph first** — §17's own three-construction history (the sticky `view()` timeline
+freeze, the non-sticky sibling slot) is still exactly how the stack *pins and recedes*, unchanged by any of
+this; only the *stacked* composition's own machinery, which sat on top of that pinning mechanism, is gone.
+`ROOM_CARD_BOXES` (the two-layout constant pair) is retired the same way, replaced by the per-card solve
+below.
+
+### The per-card crop bound, solved rather than hand-picked
+
+The 25%-width-crop rule (`check_card_stack.mjs` assertion 6) used to be a hand-picked constant per layout
+(`ROOM_CARD_BOXES.stacked`/`.beside`). It is now **solved per photograph**: `--room-photo-aspect` is set
+inline per card as `(ROOM_PHOTO_KEEP + ROOM_PHOTO_MARGIN) × roomCardAspect(mediaId)` —
+`roomCardAspect` reading the *worst-case* aspect across every emitted tier a photograph has, not only its
+canonical (largest) one, because `check_card_stack.mjs` measures whichever tier the browser actually
+loaded and a photograph's tiers do not all share exactly the same ratio (each is independently rounded to a
+whole pixel by `build_images.mjs`). Two Criticals were found and fixed in this solve, both worked in full
+in `RoomCard.tsx`'s own comments and not repeated here: solving against the canonical tier alone let a
+narrower, independently-rounded tier the browser can actually serve push the real crop to 25.08% — over
+the ceiling, zero margin; and a *separate* gap survives even the worst-tier fix, not in the CSS but in the
+rig's own measuring instrument (`img.naturalWidth`/`naturalHeight` reports a `srcset` candidate's
+*density-corrected* size, each dimension independently rounded to an integer afterward — not the file's
+true aspect). `ROOM_PHOTO_MARGIN` (`0.01`) absorbs that second gap with roughly a 29× safety factor,
+re-derived and corrected twice over — an earlier draft of the same comment claimed ~1,400× from a
+mechanism (`LayoutUnit` rounding) that does not reproduce against the shipped geometry; the real
+mechanism, the real sign, and the real safety factor are all in `ROOM_PHOTO_MARGIN`'s own comment,
+corrected in place rather than left to mislead the next reader. Worst crop measured across the whole
+14 Aug sweep: **24.034%** (Tola's Suite at 1280px), comfortably inside the 25% ceiling.
+
+### The plate floor rule, and its one exemption
+
+**A board may not hold a column count that renders its plates below 85% of their 1440-reference width,
+unless it is already at its minimum column count** — Task 1's rule, closing the client's own 12 Aug
+report that photographs rendered up to 230% wider than their true shape at some widths (a *different*,
+now-fixed defect; §2 #44–45) and, separately, that plates simply shrank too far between 1024 and 1279px.
+`forest`'s three-column tier now begins at `xl` (1280px); `details` (four columns) and `rooms` (two
+columns, already minimum) are untouched — `details` never fell below 87% of reference and `rooms` cannot
+reflow further without becoming a different composition. **The one exemption**: a board already at its
+minimum column count (`rooms`, landscape-majority, minimum 2) is held to a lower floor, 65% rather than
+85%, because its own measured worst (444/652 = 68%, at 1024px) is what the client looked at and accepted
+on 12 Aug rather than a number invented for this rule — `check_plates.mjs` encodes it as one hard-coded
+exemption, carrying a comment naming this spec, not a general escape hatch. Measured 14 Aug:
+`forest`'s worst floor ratio is 87.34% (at 1280×720), `details`'s is 87.42%, `rooms`'s exempted worst is
+68.1% — all three independently reproduce the spec's own hand-derived arithmetic to within rounding.
+
+### The open question this task's own measurement raised, and did not answer
+
+Every ruling above was the client's to make and he made it. **One more number now needs the same
+treatment, and this task stops short of it on purpose**: `vann-rooms` measures 43.9% mean / 49.4% worst
+and `tola-rooms` 44.3% / 50.1%, against the plan's own ceiling of 31.5%/42.1% and 33.8%/44.3% — and on
+their worst screen, over non-negotiable #8's general 45% ceiling too. All three levers the spec named
+(the `xl` photo share, the words block's padding, `ROOM_STACK.heightMax`) were pulled and measured; none
+moved the number. Full working — the exact figures, the padding-trim rebuilds, and the geometric proof
+that `heightMax` cannot bind at the review's own 1440×900 — is `docs/reviews/2026-08-13-image-sizing/
+README.md` §2. This is the spec's own named contingency (§2: *"if every lever is spent and the line still
+cannot be held, the numbers go to the client with the choice"*), not a defect in what Tasks 4–5 built —
+the composition is exactly what he asked for on 13 Aug, measuring against the ceiling he separately set on
+4 Aug, and the two now disagree. Recorded as open in §5, not decided here.
