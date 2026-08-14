@@ -1305,16 +1305,43 @@ body {
  * `overflow-x-clip`, and `position: fixed` genuinely escapes an ancestor's
  * `overflow` clipping as long as that ancestor has no `transform`/`filter`/
  * `will-change: transform` of its own to intercept it (checked: it does not).
- * `z-index: 100` is deliberately above every other fixed/sticky chrome on
- * this page — `[data-site-header]` is `z-index: 90` (this file, above), the
- * property booking bar is `z-40` (`PropertyBar.tsx`) — so an open panel
- * always sits over both, not under the header the way an unstacked `position:
- * fixed` div would by paint order alone if it happened to come first in the
- * DOM (it does; `.room-gallery` is the LAST thing `RoomCardStack` renders,
- * but relying on source order for stacking is exactly the "a check that
- * reads back the mechanism it was given proves nothing" trap this project
- * keeps a catalogue of — the z-index is explicit so it stays true if that
- * ever changes).
+ * **`z-index: 60`, chosen by READING every other stacked element on this
+ * page, not by guessing — an earlier draft of this comment claimed
+ * `[data-site-header]` was `z-index: 90` and never checked (§2 #51 — read
+ * the mistake there, not repeated here). The real values: the header carries
+ * `z-40` as a Tailwind class (`StickyHeader.tsx`, NOT a rule in this file —
+ * `[data-site-header]`'s own block here sets none), the property booking bar
+ * is `z-40` (`PropertyBar.tsx`), the site menu is `z-50`
+ * (`SiteMenu.tsx`), and the grain overlay is `z-50`
+ * (`Grain.tsx`). The ONE `z-index: 90` in this file belongs to
+ * `[data-welcome]`, below — the welcome screen, opaque cream, `fixed
+ * inset-0`, covering the whole viewport for its ~2.1s hold+fade
+ * (`WELCOME.hold` + `WELCOME.fade`, `lib/motion.ts`).**
+ *
+ * `60` sits deliberately above every one of those persistent-chrome values
+ * (40, 40, 50, 50) and deliberately below the welcome's 90. The second half
+ * is not a hypothetical: `:target` applies on FIRST PAINT, needing no load
+ * event and no script, so a page requested with a room's own fragment
+ * already in the URL — a reload with a panel open, a bookmarked or copied
+ * link, the browser's own Back into a page that had one open (§18 — every
+ * fragment navigation is a real history entry) — opens that panel from the
+ * very first frame, while the welcome screen is still holding. At the
+ * z-index this used to carry (100, above the welcome's 90), that panel would
+ * have painted OVER the welcome intro. At 60, the opaque welcome instead
+ * covers it for the whole hold, and the panel is sitting there, already
+ * correctly open, the moment the welcome clears — "deep link opens the room"
+ * survives as a real, kept capability, and the collision is gone, both by
+ * construction and by measurement (`check_room_gallery.mjs`'s own
+ * "welcome collision" check loads a route with a room fragment already in
+ * the URL and reads what is actually painted mid-hold, not just the
+ * z-index numbers on paper).
+ *
+ * Relying on DOM source order instead of an explicit z-index was considered
+ * and rejected for the usual reason: `.room-gallery` happens to be the LAST
+ * thing `RoomCardStack` renders today, but a check — or a comment — that
+ * reads back the mechanism it was given proves nothing (§2's own catalogue),
+ * and stacking on source order would make this correct by accident rather
+ * than by construction.
  *
  * **Centred with `transform: translate(-50%, -50%)`, deliberately not
  * `margin: auto`.** The latter is what the popover version relied on (the UA
@@ -1339,7 +1366,7 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 60;
 }
 
 .room-gallery:target {
@@ -1357,7 +1384,29 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: min(92vw, 96rem);
+  /*
+   * `88vw + 3rem`, not the bare `92vw` this shipped with until this measured
+   * fix (image-sizing Task 7 review, 14 Aug 2026, Minor 6). The image inside
+   * (`RoomCardStack.tsx`) is `max-w-[88vw]`; this box's own horizontal
+   * padding is `1.5rem` a side, `3rem` total — so whenever a landscape photo
+   * genuinely reaches its own 88vw cap, the box needs `88vw + 3rem` of room
+   * to hold it without clipping, and `92vw` is narrower than that below
+   * `3rem ÷ 4vw = 1200px` of viewport width. Measured, not reasoned from the
+   * arithmetic alone (the arithmetic alone over-predicted the range — actual
+   * `<Photo>` sizing has more give than the two bare caps suggest except at
+   * the narrowest shape): `box.scrollWidth − box.clientWidth` was exactly
+   * `10px` at 390×844, on every room, both routes, and `0` at 768×1024 and
+   * 1440×900 — real, but narrower than either number in isolation implied.
+   * `88vw + 3rem` clears it (391px of room against 367px of real content at
+   * 390px) without changing the image's own resolution contract at all: the
+   * box merely gets more ROOM at the one width that needed it, and this
+   * formula is provably never SMALLER than the old `92vw` below 1200px
+   * (equal to it above), so nothing that fit before can now be tighter.
+   * `check_room_gallery.mjs`'s own overflow check is what re-derives the
+   * `10px` / `0px` figures above on demand, rather than trusting this
+   * comment to stay true.
+   */
+  max-width: min(calc(88vw + 3rem), 96rem);
   /* The popover UA stylesheet also carried `overflow: auto` — replicated
      here, not assumed unnecessary, so a room whose figure + caption + nav
      together exceed a short viewport scrolls inside the box rather than

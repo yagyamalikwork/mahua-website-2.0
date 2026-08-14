@@ -159,9 +159,13 @@ describe("RoomCardStack", () => {
       // to "scroll to the top of the document") and not any room's own id
       // (which would just reopen that room instead of closing anything).
       expect(close.getAttribute("href")).not.toBe("#");
-      expect(
-        [...container.querySelectorAll(".room-gallery")].some((el) => el.id === ROOM_GALLERY_CLOSED),
-      ).toBe(false);
     });
+    // The sentinel's own contract, checked against the WHOLE document the way
+    // the live-page rig does (`document.getElementById`), not narrowed to
+    // `.room-gallery` elements only — a sentinel claimed by, say, a chapter
+    // wrapper or an unrelated future element would defeat "close" exactly as
+    // badly as one claimed by another gallery panel, and a scoped query
+    // could not see that.
+    expect(container.querySelector(`#${ROOM_GALLERY_CLOSED}`)).toBeNull();
   });
 });

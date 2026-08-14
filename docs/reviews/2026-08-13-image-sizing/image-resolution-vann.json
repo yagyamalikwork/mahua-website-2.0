@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-13T23:44:09.938Z",
+  "measuredAt": "2026-08-14T01:14:42.593Z",
   "url": "http://localhost:3100/mahua-vann",
   "densityCap": 2,
   "results": [
@@ -1018,5 +1018,6 @@
         }
       ]
     }
-  ]
+  ],
+  "galleryFailures": []
 }

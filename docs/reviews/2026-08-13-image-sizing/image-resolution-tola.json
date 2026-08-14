@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-13T23:43:33.021Z",
+  "measuredAt": "2026-08-14T01:15:20.191Z",
   "url": "http://localhost:3100/mahua-tola",
   "densityCap": 2,
   "results": [
@@ -1158,5 +1158,6 @@
         }
       ]
     }
-  ]
+  ],
+  "galleryFailures": []
 }

@@ -90,6 +90,25 @@ const VIEWPORTS = [
   { width: 1920, height: 1080, dpr: 1 },
 ];
 
+/**
+ * How many `.room-gallery` panels each route is actually supposed to have —
+ * `RoomCardStack.tsx` renders one per room, `check_card_stack.mjs`'s own
+ * table has the same numbers. Checked by NAME (`image-sizing Task 7 review,
+ * Important 2, 14 Aug 2026`), not just counted and trusted: the gallery-open
+ * loop below used to be able to silently do nothing — an empty
+ * `galleryPanelIds` (a selector drifted, the markup changed) meant zero
+ * iterations and zero images, no error, exit 0 — and separately, a panel
+ * whose image never finished loading was swallowed by a bare
+ * `.catch(() => {})` and then dropped a second time by `report`'s own `if
+ * (needed === 0) continue`. Both are exactly the failure shape the 35-line
+ * comment above this rig's gallery loop describes for the MENU'S own gated
+ * images (§2 #39) — reproduced underneath the very comment that named it.
+ * A route not in this table (`/`, which has no rooms chapter) is not
+ * checked — there is genuinely nothing to expect there, which is different
+ * from expecting something and silently finding nothing.
+ */
+const EXPECTED_GALLERY_PANELS = { "/mahua-vann": 3, "/mahua-tola": 4 };
+
 // `img.naturalWidth` is useless as an absolute here: once an image is chosen from
 // a `srcset` with `w` descriptors, the HTML spec has the browser correct the
 // intrinsic dimensions by the selected candidate's density, so `naturalWidth`
@@ -202,6 +221,7 @@ async function main() {
   const REPORT = report(CAP);
   const browser = await chromium.launch();
   const results = [];
+  const galleryFailures = [];
 
   for (const vp of VIEWPORTS) {
     const context = await browser.newContext({
@@ -279,12 +299,33 @@ async function main() {
     const galleryPanelIds = await page.evaluate(() =>
       [...document.querySelectorAll(".room-gallery")].map((el) => el.id),
     );
+
+    // **The count assertion the brief asked for by name, not a loop that
+    // silently does nothing if it comes back empty.** Checked against the
+    // route's own pathname, not the full `URL` (which carries the host and
+    // port).
+    // `globalThis.URL`, explicitly — this module's own `const URL` (the
+    // flag-derived string, line 82) shadows the global constructor, so a
+    // bare `new URL(URL)` calls the STRING as a constructor and throws
+    // `TypeError: URL is not a constructor`. Caught by actually running
+    // this against the sabotaged selector before trusting the fix — the
+    // same "watch it fail for real" standard this whole review is about.
+    const pathname = new globalThis.URL(URL).pathname;
+    const expectedPanels = EXPECTED_GALLERY_PANELS[pathname];
+    if (expectedPanels !== undefined && galleryPanelIds.length !== expectedPanels) {
+      galleryFailures.push(
+        `${vp.width}x${vp.height}@${vp.dpr}x ${pathname}: expected ${expectedPanels} .room-gallery panels, ` +
+          `found ${galleryPanelIds.length} — the gallery-open loop below would silently measure fewer ` +
+          "images than exist, not zero images but not the truth either",
+      );
+    }
+
     const galleryImages = [];
     for (const panelId of galleryPanelIds) {
       await page.evaluate((id) => {
         window.location.hash = `#${id}`;
       }, panelId);
-      await page
+      const loaded = await page
         .waitForFunction(
           (id) => {
             const img = document.querySelector(`#${id} img`);
@@ -293,7 +334,21 @@ async function main() {
           panelId,
           { timeout: 5000 },
         )
-        .catch(() => {});
+        .then(() => true)
+        .catch(() => false);
+      // **Not swallowed.** A panel whose image never loads used to fall
+      // through silently here (the `.catch` had nothing in it) and then a
+      // SECOND time inside `report` itself, whose own `if (needed === 0)
+      // continue` drops any row with no rendered box — two silent
+      // eliminations stacked on top of each other, for a defect that should
+      // have been the loudest thing in the run.
+      if (!loaded) {
+        galleryFailures.push(
+          `${vp.width}x${vp.height}@${vp.dpr}x ${pathname}: panel "${panelId}"'s image never reached ` +
+            "naturalWidth > 0 within 5s after its fragment was set — it will be measured as zero images, " +
+            "not reported as a failure, unless recorded here",
+        );
+      }
       const rows = await page.evaluate(report(CAP, `#${panelId} img`));
       galleryImages.push(...rows);
       await page.evaluate((closedId) => {
@@ -349,7 +404,11 @@ async function main() {
   await mkdir(path.dirname(OUT), { recursive: true });
   await writeFile(
     OUT,
-    `${JSON.stringify({ measuredAt: new Date().toISOString(), url: URL, densityCap: CAP, results }, null, 2)}\n`,
+    `${JSON.stringify(
+      { measuredAt: new Date().toISOString(), url: URL, densityCap: CAP, results, galleryFailures },
+      null,
+      2,
+    )}\n`,
     "utf8",
   );
   console.log(`Wrote ${OUT}`);
@@ -357,6 +416,11 @@ async function main() {
   const total = results.reduce((n, r) => n + r.understatedSizes.length, 0);
   if (total > 0) {
     console.error(`FAILED: ${total} photograph(s) served below their box with a wider file available.`);
+    process.exitCode = 1;
+  }
+  if (galleryFailures.length > 0) {
+    console.error(`FAILED: ${galleryFailures.length} room-gallery count/load failure(s):`);
+    for (const f of galleryFailures) console.error(`  - ${f}`);
     process.exitCode = 1;
   }
 }

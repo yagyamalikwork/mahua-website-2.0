@@ -151,17 +151,39 @@ export function RoomCardStack({
          * gave Esc for free (UA behaviour); `:target` is a URL/CSS mechanism
          * with no keyboard binding at all, and adding one back would need a
          * `keydown` listener — script this construction deliberately has none
-         * of. Closing is by the close control or the backdrop only. Not a
-         * silent regression: recorded here, in `check_room_gallery.mjs`'s own
+         * of. Closing is by the close control or the backdrop only — either
+         * reached from the keyboard by Tab then Enter (an `<a href>`
+         * activates on ENTER ONLY; Space scrolls the page, it does not
+         * activate a link — said precisely because an earlier draft of this
+         * comment said "Enter/Space" and that is wrong). Not a silent
+         * regression: recorded here, in `check_room_gallery.mjs`'s own
          * header (which replaces its old "Esc closes" assertion with one that
          * tests the close control and the backdrop instead, rather than
          * quietly deleting the check), and in `docs/DECISIONS.md`.
          *
-         * **A genuine side effect, arguably a feature: the back button now
-         * steps back through opened rooms.** Every fragment navigation is a
-         * real history entry, so a visitor who has looked at three rooms can
-         * back out of them one at a time — a lightbox behaviour `popover`
-         * never gave this page, unasked for but free.
+         * **A second cost in the same family, also not free: closing does not
+         * return focus.** The popover version's hide algorithm restored focus
+         * to whichever element had opened it — UA behaviour, free. `:target`
+         * has nothing equivalent: closing navigates to `ROOM_GALLERY_CLOSED`,
+         * a fragment matching no element, so no "focusing steps" run at all
+         * (see the panel's own `tabIndex={-1}` note above for what DOES run
+         * them on OPEN) and the previously-focused link — now inside a
+         * `display: none` subtree — is dropped by the browser to `<body>`. A
+         * keyboard visitor who opens the third room and closes it does not
+         * land back on that room's own trigger; they restart Tab from the top
+         * of the page. Measured, not assumed: `check_room_gallery.mjs` reads
+         * `document.activeElement` after the close control fires, the same
+         * way it already does after opening, so this is visible in the rig's
+         * own output rather than only in this paragraph.
+         *
+         * **A genuine side effect, arguably a feature: the back button steps
+         * back through opened rooms.** Every fragment navigation is a real
+         * history entry. Measured three deep, not merely once: open room 0,
+         * then 1, then 2, then press Back three times — each step returns to
+         * the previous room in turn and the fourth lands on the page with
+         * nothing open, on both routes (`check_room_gallery.mjs`'s own
+         * `backButtonDeep` check) — a lightbox behaviour `popover` never gave
+         * this page, unasked for but free.
          *
          * **Structure, per panel:**
          * - The panel itself (`id={roomGalleryId(...)}`) is `display: none`
@@ -204,6 +226,24 @@ export function RoomCardStack({
          * the indicated part into view" step should be a no-op against a
          * `position: fixed` element (its box is already viewport-relative,
          * independent of document scroll), but that is measured, not assumed.
+         *
+         * **`:target` applies on first paint, which reaches the welcome
+         * screen.** A room's own fragment can already be in the URL before
+         * this component ever mounts — a reload, a bookmarked or copied
+         * link, Back into a page that had a panel open (every open is a real
+         * history entry, per the paragraph above) — so the panel can be
+         * showing from the very first frame, while `WelcomeScreen` is still
+         * holding. `.room-gallery`'s own `z-index: 60` in `app/globals.css`
+         * is chosen so the (opaque, full-viewport) welcome screen's `z-index:
+         * 90` sits above it for that whole hold, deliberately, and that
+         * file's own comment reads every other stacked value on the page
+         * rather than stating one — an earlier draft of it stated
+         * `[data-site-header]` as `z-index: 90` without checking, and it is
+         * not (§2 #51). Deep-link-opens is kept as a real, working capability
+         * — the panel is correctly open the moment the welcome clears — and
+         * `check_room_gallery.mjs`'s "welcome collision" check loads a route
+         * with a room fragment already in the URL and reads what is actually
+         * painted mid-hold, not just the z-index numbers on paper.
          */}
         {copy.rooms.map((room, i) => {
           const n = copy.rooms.length;

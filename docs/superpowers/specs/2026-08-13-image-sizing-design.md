@@ -192,6 +192,20 @@ alternating down the stack. Watched failing against a build with `flex-row-rever
 
 ## 3. The gallery — click to expand, zero JavaScript
 
+> **SUPERSEDED, 14 Aug 2026 — read `docs/DECISIONS.md` §18 before trusting anything below this
+> line.** This section's central claim — `popover="auto"` guarantees at most one open panel, so
+> opening the neighbour closes the current one — was never measured and is false: an invoker button
+> living inside the popover it targets a sibling of makes the HTML Popover API treat the newly-shown
+> popover as NESTED rather than a replacement, confirmed in a real browser. The gallery shipped on
+> this mechanism (image-sizing Task 6), the defect was found while proving a different, narrower
+> claim (Task 7's own code-review follow-up), and the whole mechanism was replaced with CSS
+> `:target` the same day — see `RoomCardStack.tsx` and `app/globals.css`'s own comments for the
+> replacement, and `scripts/check_room_gallery.mjs` for what is now actually measured. The text
+> below is kept, uncorrected, as the record of what was believed and shipped — not as current
+> instruction. A future brief that reads only this section, per CLAUDE.md's own rule that a spec
+> still holds wherever a later plan does not touch it, would reintroduce the bug this note exists to
+> stop.
+
 ### Mechanism
 
 The browser's **native popover machinery** (HTML `popover` attribute + `popovertarget` invokers —

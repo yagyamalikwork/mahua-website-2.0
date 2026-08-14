@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-13T23:36:53.839Z",
+  "measuredAt": "2026-08-14T01:06:32.036Z",
   "url": "http://localhost:3100",
   "noRecede": true,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",

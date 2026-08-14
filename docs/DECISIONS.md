@@ -71,7 +71,7 @@ Each of these was a real decision with a real trade. Do not reopen one without b
 
 ---
 
-## 2. The defect that keeps happening — forty-eight instances
+## 2. The defect that keeps happening — fifty-one instances
 
 **A check confirmed that a mechanism was configured, rather than that behaviour had changed.** Every one of
 these passed its own gate while the thing it guarded was broken.
@@ -126,6 +126,9 @@ these passed its own gate while the thing it guarded was broken.
 | 46 | **A like-for-like photograph swap that silently changed a component's composition.** | `roomCardLayout` derives a room card's whole layout from its photograph's aspect ratio — at or above 1.9 the card is `stacked`, below it `beside`. The retired Camping Hut was 2.29; the client's replacement was a true 3:2. Dropping it in flipped the card's composition, and with it the chapter's height: `tola-rooms` went 33.8% → **37.1% mean, 44.3% → 47.9% worst**, breaking non-negotiable #8's 45% ceiling. **The full suite stayed green** — nothing tests a chapter's density. Caught only by running `measure_density.mjs` on the route, which nothing obliged me to do. **An image's aspect ratio can be an input to layout logic, not just to cropping; check what reads it before swapping one.** The first fix, cropping to 2.00 (the stacked box exactly, so zero render crop), was then rejected by `lib/room-card.test.ts` — it requires 0.35 of clearance from the threshold so no card is one re-encode from flipping, and 2.00 clears by 0.10. 2.29, its siblings' own ratio, is what shipped |
 | 47 | **A guard that suppressed the wrong error, in the test written to prove the guard.** | `Money` was branded and a `@ts-expect-error` test was added to prove a forged literal would not compile. The test never imported `Money`, so the directive was suppressing `TS2304: Cannot find name` — and with the brand **deleted** the project type-check still exited 0. The implementer's own verification used `tsc --strict` on the single file, outside `tsconfig.json`, which hid it. **Check a guard under the same config as the build, and in both directions** |
 | 48 | **A deferral falsified by a later fix, with nobody re-reading it.** | `MockProvider.quote()` resolving a room id across both properties was correctly parked as unfixable — `BookingProvider.quote` carries no property. Task 4's own fix then threaded the search query through the continuation, putting `context.query.property` in reach, and the parked note was never revisited. The final review's probe quoted and booked `vann-cottage-deck` at Vann's rate under a Tola search. **A parked finding's rationale is a claim about the code; when that code changes, the parking expires** |
+| 49 | **A code comment and a spec both asserting `popover="auto"` guarantees at most one open panel.** | The HTML Popover API's own rule treats a popover invoked from a button INSIDE another open one as nested rather than replaced — and the gallery's arrows have to live inside their own panel to sit beside its own figure, so this was true of every single click, not an edge case. `RoomCardStack.tsx`'s own comment and `2026-08-13-image-sizing-design.md` §3 both stated the opposite as fact, unmeasured; the spec shipped the markup that guaranteed the bug it claimed could not happen. §18 |
+| 50 | **A code comment asserting the popover's own `margin: auto` centres the panel.** | Tailwind's preflight (`* { margin: 0 }`) — author-origin — silently zeroed it; author origin always beats UA origin regardless of selector specificity. Every panel rendered pinned to the viewport's own top-left corner, `{left: 0, top: 0}`, confirmed live. A fixed test point (the gallery's own light-dismiss probe) passed at one width and failed at another for a reason that had nothing to do with dismiss — the same "a fixed point cannot see a distinction across shapes" lesson instance 44/45 already paid for once. §18 |
+| 51 | **A CSS comment naming `[data-site-header]`'s z-index as 90, to justify the gallery's own 100 — written to avoid exactly this failure, and committing it anyway.** | The header carries `z-40` (`StickyHeader.tsx`); `[data-site-header]`'s own rules in `app/globals.css` set no z-index at all. The real `z-index: 90` belongs to `[data-welcome]`, the opaque welcome screen — which the gallery's own `100` then sat ABOVE, newly reachable because `:target` applies on first paint and every gallery open is now a real history entry, so a reload, a bookmarked link, or Back can load a room fragment straight into the URL before the welcome has finished its ~2.1s hold. Found only by reading every stacked value in the file instead of trusting the one already written down. §18 |
 
 **The rule this bought:** *run every guard against the broken state before trusting it to pass.* A guard
 nobody has watched fail is not a guard. Several were caught only because someone did exactly that —
@@ -1263,16 +1266,34 @@ construction and could never have caught a broken CSS author rule the way it cau
 Centring moved to the panel's own box, `transform: translate(-50%, -50%)`, which never reads `margin` at all
 — the same preflight reset cannot reach it a second time.
 
-**What the swap costs, plainly, not glossed over: `:target` has no Escape key.** Popover's Esc-to-close was
-free UA behaviour; a keyboard binding for a pure CSS/URL mechanism would need a `keydown` listener, which
-this construction deliberately still has none of. `scripts/check_room_gallery.mjs`'s own "Esc closes"
-assertion is retired, not silently deleted — replaced with one that proves the close control and the real,
-now-addressable backdrop link each independently work. A visitor without a mouse can still reach either by
-Tab and Enter/Space; what is gone is closing from anywhere with one keypress.
+**What the swap costs — TWO separate things, not one, and both measured rather than only described.**
 
-**A genuine, arguably-a-feature side effect that came free: the back button now steps back through opened
-rooms.** Every fragment navigation is a real history entry, so a visitor who has looked at three rooms can
-leave them one at a time with Back — a lightbox behaviour the popover version never had, unasked for.
+(1) `:target` has no Escape key. Popover's Esc-to-close was free UA behaviour; a keyboard binding for a pure
+CSS/URL mechanism would need a `keydown` listener, which this construction deliberately still has none of.
+`scripts/check_room_gallery.mjs`'s own "Esc closes" assertion is retired, not silently deleted — replaced
+with one that proves the close control and the real, now-addressable backdrop link each independently work.
+A visitor without a mouse can still reach either by Tab then **Enter only** — an `<a href>` activates on
+Enter, not Space (Space scrolls the page); an earlier draft of this section said "Enter/Space" and that was
+wrong, corrected the same review pass that caught it. What is gone is closing from anywhere with one
+keypress.
+
+(2) **Closing does not return focus — a real regression, found on review, not by the original fix.** The
+popover version's hide algorithm restored focus to the invoker, free UA behaviour; `:target` has nothing
+equivalent. Closing navigates to `ROOM_GALLERY_CLOSED`, a fragment matching no element, so no HTML "focusing
+steps" run at all, and the previously-focused link — now inside a `display: none` subtree — is dropped by
+the browser to `<body>`. A keyboard visitor who opens the third room and closes it does not land back on
+that room's own trigger; they restart Tab from the top of the page. Not fixed (the fix needs a listener this
+construction deliberately has none of) but no longer only a claim: `check_room_gallery.mjs` reads
+`document.activeElement` after the close control fires, the same way it already did after opening, and
+`RoomCardStack.tsx`'s own comment records it beside the Esc trade rather than only here.
+
+**A genuine, arguably-a-feature side effect — measured three deep, not extrapolated from one Back press.**
+Every fragment navigation is a real history entry. The first draft of this section claimed "a visitor who
+has looked at three rooms can back out of them one at a time" from a single measured step — exactly the
+unread-confidence shape §2 exists to catalogue, caught on the SAME review that found the two z-index
+mistakes below. Corrected by actually opening three rooms in sequence and pressing Back three times, on both
+routes: each press correctly returns to the previous room, and the fourth would land on the page with
+nothing open. `check_room_gallery.mjs`'s own `backButtonDeep`.
 
 **Also newly, genuinely provable: the mechanism needs no script at all**, unlike the popover version, whose
 invoker attributes still depended on native browser support even though this codebase never wired a
@@ -1280,8 +1301,91 @@ listener to them. `check_room_gallery.mjs` now opens and closes a panel with `ja
 asserts it worked, not merely that nothing broke — the first time this gallery's "zero JavaScript" claim was
 checked as a positive capability rather than only as an absence of errors.
 
-Full assertion design, sabotage-arm output (including a new one — deliberately removing `.room-gallery`'s
-own `display: none` default, to prove the "exactly one visible" check is sensitive to a broken CSS author
-rule and not merely restating `:target`'s own unfalsifiable guarantee), and the scroll-jump / focus-landing
-measurements are in `.superpowers/sdd/2026-08-13-image-sizing/task-7-report.md` and
-`docs/reviews/2026-08-13-image-sizing/gallery.json`.
+### The z-index was wrong twice over, and the second time collided with the welcome screen
+
+A code-review pass on the fix above (14 Aug 2026) came back with two more findings, both in the same CSS
+comment, both instances of §2's own defect shape — **§2 #51**, and both corrected here rather than left as
+a private fix, because the wrong version had already been committed once.
+
+**The comment claimed `[data-site-header]` was `z-index: 90`. It never was.** The header carries `z-40` as
+a Tailwind class (`StickyHeader.tsx`), and `[data-site-header]`'s own rules in `app/globals.css` set no
+z-index at all. The one `z-index: 90` in the whole file belongs to `[data-welcome]` — the welcome screen,
+opaque cream, `fixed inset-0`, covering the entire viewport for its ~2.1s hold (`WELCOME.hold` +
+`WELCOME.fade`, `lib/motion.ts`). A comment written specifically to avoid citing an unread value cited one
+anyway, in the same fix round that names the failure mode.
+
+**And the gallery's own `z-index: 100` — chosen to sit "above" that misremembered 90 — actually sat above
+the REAL 90, the welcome screen itself.** This was not cosmetic: `:target` applies on first paint, needing
+no load event and no script, so a page requested with a room's own fragment already in the URL — a reload
+with a panel open, a bookmarked or copied link, the browser's own Back into a page that had one open (every
+open is now a real history entry, per the paragraph above) — opens that panel from the very first frame,
+while the welcome screen is still holding. At `z-index: 100`, the gallery would have painted OVER the
+welcome intro on every one of those paths, all of them newly reachable because of the very fix this section
+describes.
+
+**Fixed by reading every stacked value in the file instead of trusting the one already written down**: header
+and booking bar `z-40`, site menu and grain `z-50`, welcome `z-90` — confirmed live with
+`getComputedStyle`, not assumed from the source. `.room-gallery` moved to `z-index: 60`, deliberately above
+every persistent-chrome value and deliberately below the welcome's 90. Deep-link-opens is kept as a real,
+working capability rather than suppressed: the opaque welcome screen now correctly covers the panel for the
+whole hold, and the panel is already sitting there, correctly open, the instant the welcome clears.
+
+**Proven, not merely reasoned about — and the proof itself needed a second fix.** `check_room_gallery.mjs`'s
+`checkWelcomeCollision` loads a route with a room fragment already in the URL and samples what is actually
+painted partway through the welcome's hold. Its first version used `document.elementFromPoint` at the
+viewport's centre and reported the welcome screen was NOT on top — on a build where it demonstrably was
+(z-index 90 > 60). Cause: `WelcomeScreen` is deliberately `pointer-events-none` (a curtain a click should
+pass through), and `elementFromPoint` — like `elementsFromPoint` — skips elements with `pointer-events: none`
+when hit-testing, **the exact mechanism §2 #21 already catalogued for `measure_density.mjs` and the hanging
+lantern, tripped a second time by this rig's own first draft of its own review-response fix.** Corrected the
+same way #21 was: the welcome element is switched hit-testable for the instant of the sample, then restored.
+Confirmed both ways after the fix: passes on the current (60) build at all four route/width combinations,
+and — reverting `z-index` to the old 100 as a standalone check — fails cleanly on both its own sub-checks
+(the numeric ordering and the paint hit-test) at all four, then passes again once reverted.
+
+### Two more real defects the same review pass measured and fixed
+
+**The panel's box overflowed horizontally at the narrowest shape — Minor 6, real but narrower than the
+arithmetic alone suggested.** The box capped at `min(92vw, 96rem)` while the image inside is `max-w-[88vw]`
+plus the box's own `3rem` of horizontal padding; arithmetic alone predicts overflow anywhere below ~1200px
+of viewport width. Measured instead of trusted: `box.scrollWidth − box.clientWidth` was exactly `10px` at
+390×844, on every room, both routes — and `0px` at 768×1024 and 1440×900, narrower than the arithmetic's own
+prediction (a `<Photo>`'s real sizing has more give across most rooms than either bare cap alone suggests).
+Fixed by widening the box's own cap to `min(calc(88vw + 3rem), 96rem)` — provably never smaller than the old
+`92vw` below 1200px and identical above it, so nothing that fit before can now be tighter — and re-measured
+at `0px` on every room, both routes, at 390×844. `check_room_gallery.mjs` now measures this on every run
+rather than trusting the CSS comment to stay true.
+
+**The scroll-jump check had never been watched failing.** Every clean run reported `window.scrollY`
+unmoved, which is exactly what a correctly-fixed build should report and indistinguishable, on its own, from
+a check that could never report anything else. Fixed by adding a fifth sabotage arm — `position: fixed`
+dropped from `.room-gallery` — which produced real, large jumps (~2,200–2,700px) on every route and width:
+without fixed positioning the panel flows into the normal document at its point in the DOM, and `:target`'s
+own "scroll the indicated part into view" step must move the page to reach it, exactly the behaviour fixed
+positioning exists to avoid.
+
+### The evidence, and where it actually lives
+
+**Every one of the five sabotage arms above — plus the two supplementary ones (the old `z-index: 100`, and
+the `.room-gallery-SABOTAGE` selector typo that caught a real bug in `check_image_resolution.mjs`, below) —
+is recorded in `docs/reviews/2026-08-13-image-sizing/gallery.json`'s own `watchedFailing` field**: what was
+sabotaged, which assertions fell, and the actual failing output quoted verbatim. This task's own prose
+report (`.superpowers/sdd/2026-08-13-image-sizing/task-7-report.md`) has the full narrative, but
+`.superpowers/` is git-ignored — the JSON this rig writes on every run is the one copy of this evidence that
+survives a clone, which is why it carries the primary record now rather than a pointer to a path that does
+not.
+
+### A silent-failure bug in the resolution rig's own gallery-opening code, found by the same review
+
+`check_image_resolution.mjs`'s gallery-opening loop (added earlier the same day, to keep counting the
+enlarged photographs after the mechanism swap) had two gaps of exactly the shape its own 35-line comment
+describes for the menu (§2 #39): an empty `galleryPanelIds` would silently iterate zero times and report
+fewer images with exit 0, and a panel whose image never finished loading was swallowed by a bare
+`.catch(() => {})` and then dropped a second time by the shared `report` helper's own `if (needed === 0)
+continue`. Fixed with a per-route expected-panel-count table and a recorded failure (not a silent skip) for
+either gap — then watched failing for real: a deliberately typo'd selector (`.room-gallery-SABOTAGE`)
+produced `TypeError: URL is not a constructor` on the FIRST attempt, because the new count-check's own `new
+URL(URL).pathname` collided with this module's pre-existing `const URL = flag("url", ...)`, which shadows
+the global constructor. Fixed with `new globalThis.URL(URL)`, confirmed to correctly report "expected 3
+.room-gallery panels, found 0" at every viewport once the shadowing bug itself was out of the way, and
+confirmed clean (21 images, unchanged) once the selector typo was reverted.
