@@ -3,6 +3,46 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## The close chooses a lodge, and the plates float — 15 Aug 2026
+
+Two client requests, both shipped and measured; `docs/reviews/2026-08-15-close-and-float/README.md`.
+
+**The closing section.** The header's "Plan your stay" already pointed at `#invitation`, so only that
+section's own button changed — one external link to `mahuaresorts.com` became two internal ones to
+`/mahua-vann` and `/mahua-tola`, same `PillButton`, `size="large"`, plus a 3D raise. Landing under *"Two
+forests are expecting you"* only to meet a second "Plan your stay" asked the visitor to choose nothing.
+
+- **No lodge name is written in `Invitation.tsx`.** `content/site.ts` already carries label, region and
+  route for both, and `SiteMenu`'s tiles read the same three fields.
+- **They wrapped at every width at first** — the prose column is `max-w-[60ch]` (~530px) and the pair needs
+  slightly more. The row sizes to its own content now, and wraps only at 390 where it genuinely cannot fit.
+- **`.raise` could not be reused.** It is written `a:hover .raise`, so the raised thing is a child *inside*
+  a link, and a `PillButton` **is** the link. `.pill-raise` is the same `--raise-*` numbers with the pill
+  itself as the subject. Its shadow barely reads here — these sit on `--overlay` and the shadow is
+  `--overlay` — and is kept because the class is not section-specific.
+
+**The float.** `FLOAT` in `lib/motion.ts` is `RAISE` with the rotation removed: **6px rise, no tilt**, plus
+a soft `--overlay` shadow, which is what sells *toward the viewer* rather than merely *upward*. The lift is
+on the frame while the zoom stays on the `<picture>` inside it, so the two never touch the same element and
+cannot compose into a transform neither was measured at.
+
+| | rise | tilt | zoom |
+|---|---|---|---|
+| normal motion | **6px** | 0 | 1.06 |
+| reduced motion | 0 | 0 | 1 |
+
+**The float is the home page's only, by his ruling the same day** — offered for the property pages and
+declined. `[data-hover-zoom]` living on `app/page.tsx` alone is a decision, not an oversight.
+
+**First-load JavaScript delta 0** — both effects are CSS, the buttons are two links. 467 tests, tsc, lint
+and build green.
+
+**Three instrument errors on the way, all mine**, recorded in the review because the page was right every
+time and the measurement was not: a probe that hovered one plate and read another, a "fully visible" filter
+that excluded plates taller than the viewport, and coordinates taken while the smooth scroll was still
+moving. What settled it was reading `document.querySelector("[data-image-frame]:hover")` — the element the
+browser itself considers hovered — rather than one chosen by arithmetic.
+
 ## The lodge marker is the brand's flower — 15 Aug 2026
 
 Client request. Both property maps marked the resort with a solid dot inside a hairline ring; that pair is
