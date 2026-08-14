@@ -4,7 +4,7 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
-import { DURATION, ENTER, IMAGE_FROM, LIVING, PHOTO_ZOOM, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
+import { DURATION, ENTER, FLOAT, IMAGE_FROM, LIVING, PHOTO_ZOOM, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
 import { INDEXING_ALLOWED } from "@/lib/indexing";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
@@ -122,6 +122,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // The menu tiles' lift under the pointer, on the same terms: the five
           // numbers live in `lib/motion.ts`, the transform lives in
           // `app/globals.css`, and a component may not hard-code either.
+          // The homepage photographs' float — `FLOAT` in `lib/motion.ts`. Same
+          // terms as every other number here: written once, read by
+          // `app/globals.css`, and neither can drift from the other.
+          "--float-rise": `${FLOAT.risePx}px`,
+          "--float-out": `${FLOAT.out}s`,
+          "--float-back": `${FLOAT.back}s`,
+          "--float-shadow-alpha": String(FLOAT.shadowAlpha),
+          "--float-shadow-blur": `${FLOAT.shadowBlurPx}px`,
+          "--float-shadow-drop": `${FLOAT.shadowDropPx}px`,
           "--raise-duration": `${RAISE.duration}s`,
           "--raise-rise": `${RAISE.risePx}px`,
           "--raise-tilt": `${RAISE.tiltDeg}deg`,

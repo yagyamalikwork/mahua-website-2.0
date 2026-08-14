@@ -1577,3 +1577,86 @@ body {
     transition: none;
   }
 }
+
+
+/*
+ * The pill's own 3D raise — client request, 15 Aug 2026, for the two lodge
+ * buttons that close the home page.
+ *
+ * `.raise` above cannot serve here. It is written as `a:hover .raise`, i.e. the
+ * raised thing is a child *inside* a link; a `PillButton` **is** the link, and
+ * putting `.raise` on a span within it would lift the label out of its own gold
+ * shape. Same numbers, different subject — every value below is a `--raise-*`
+ * property, so the pill and the menu tiles can never drift apart.
+ *
+ * **The shadow is deliberately kept even though it barely reads here.** These
+ * two pills sit on `--overlay`, and the shadow is also `--overlay`, so on this
+ * one section it contributes almost nothing — the rise, the tilt and the scale
+ * carry the effect. It stays because the class is not section-specific: the next
+ * pill that opts in may well sit on cream, where the shadow is what stops a
+ * raise reading as a glitch rather than as height (the finding recorded on
+ * `.raise` itself).
+ */
+.pill-raise {
+  transition:
+    transform var(--raise-duration) var(--enter-ease),
+    box-shadow var(--raise-duration) var(--enter-ease);
+  transform: perspective(var(--raise-perspective)) translateZ(0);
+}
+
+.pill-raise:hover,
+.pill-raise:focus-visible {
+  transform: perspective(var(--raise-perspective)) translateY(calc(-1 * var(--raise-rise)))
+    rotateX(var(--raise-tilt)) scale(var(--raise-scale));
+  box-shadow: 0 var(--float-shadow-drop) var(--float-shadow-blur)
+    color-mix(in srgb, var(--overlay) calc(var(--float-shadow-alpha) * 100%), transparent);
+}
+
+/*
+ * The homepage photographs' float — client request, 15 Aug 2026:
+ * *"very slightly lift and rise towards the viewer and no tilt"*.
+ *
+ * **On the frame, while the zoom is on the picture inside it.** That separation
+ * is the point: the two effects never touch the same element, so they cannot
+ * compose into a transform neither was measured at, and either can be changed
+ * without disturbing the other. It is also why the whole plate rises together —
+ * in `ui/Plate.tsx` the caption lives inside this frame, and a photograph that
+ * floated away from its own caption would read as a layout fault rather than as
+ * depth.
+ *
+ * No `rotateX`. `RAISE`'s tilt is what makes a menu tile read as a card being
+ * picked up; these are meant to read as lifting off the paper, which is quieter
+ * and is what the client asked for.
+ *
+ * Scoped exactly like the zoom — `[data-hover-zoom]`, set only by `app/page.tsx`
+ * — and honouring the same `[data-no-zoom]` opt-out, so the hero stays still.
+ */
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]) {
+  transition:
+    transform var(--float-back) var(--photo-zoom-ease),
+    box-shadow var(--float-back) var(--photo-zoom-ease);
+}
+
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover {
+  transform: translateY(calc(-1 * var(--float-rise)));
+  box-shadow: 0 var(--float-shadow-drop) var(--float-shadow-blur)
+    color-mix(in srgb, var(--overlay) calc(var(--float-shadow-alpha) * 100%), transparent);
+  transition-duration: var(--float-out);
+}
+
+/*
+ * Reduced motion: no lift, on either. The selectors repeat the hover form
+ * exactly, because the first reduced-motion rule written for the zoom lost a
+ * specificity contest to its own hover rule and shipped a zoom to visitors who
+ * had asked for none — measured, not theorised. See the note there.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .pill-raise,
+  .pill-raise:hover,
+  .pill-raise:focus-visible,
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]),
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover {
+    transform: none;
+    transition: none;
+  }
+}

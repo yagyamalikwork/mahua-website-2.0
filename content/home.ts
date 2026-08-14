@@ -377,8 +377,6 @@ export const HOME = {
           "choose.",
         "Write to us and we will tell you honestly which of the two is right for what you want.",
       ],
-      cta: "Plan your stay",
-      href: "https://mahuaresorts.com/",
     },
   },
 } as const satisfies {

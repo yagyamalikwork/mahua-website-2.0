@@ -23,11 +23,20 @@ export function PillButton({
   children,
   size = "small",
   external = false,
+  raise = false,
 }: {
   href: string;
   children: React.ReactNode;
   size?: "small" | "large";
   external?: boolean;
+  /**
+   * The menu tiles' 3D raise, on the pill itself — client request, 15 Aug 2026,
+   * for the two lodge buttons that close the home page.
+   *
+   * Off by default. The header's pill sits over a photograph and is the one
+   * thing on the page that must never move while a visitor is reading past it.
+   */
+  raise?: boolean;
 }) {
   return (
     <a
@@ -58,6 +67,7 @@ export function PillButton({
         // happened to emit them — the small variant's 0.12em never applied at
         // all, and a later attempt to tighten it made the pill *wider*.
         "whitespace-nowrap hover:opacity-90",
+        raise ? "pill-raise" : "",
         "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]",
         size === "large"
           ? "px-7 py-3.5 text-xs tracking-[0.18em] sm:px-9 sm:py-4 sm:text-sm short:px-7 short:py-3 short:text-xs"

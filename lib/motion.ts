@@ -450,6 +450,41 @@ export const PHOTO_ZOOM = {
   ease: "cubic-bezier(0.22, 0.61, 0.36, 1)",
 } as const;
 
+/**
+ * The homepage photographs' float — the client's request, 15 Aug 2026.
+ *
+ * *"Very slightly lift and rise towards the viewer and no tilt, which will give
+ * the images a float like effect."* So this is `RAISE` with the rotation taken
+ * out: a plate rises toward the reader and casts a little more shadow, and never
+ * tips. The tilt is what makes the menu's lodge tiles read as *cards being
+ * picked up*; a photograph on this page is meant to read as lifting off the
+ * paper, which is a different gesture and a quieter one.
+ *
+ * **It rides on top of the hover zoom rather than replacing it** — the client
+ * kept that explicitly. The zoom is on the `<picture>` inside the frame and this
+ * is on the frame itself, so the two never touch the same element and cannot
+ * compose into something neither was measured at.
+ *
+ * `rise` is 6px against `RAISE`'s 8: "very slightly" was the brief, and the
+ * frames here are far larger than a menu tile, so the same distance reads as
+ * more movement. The shadow is what sells *toward the viewer* rather than merely
+ * *upward* — in `--overlay`, the palette's dark green, because a neutral shadow
+ * on this cream goes grey and cold (the same finding as `RAISE`'s own).
+ *
+ * Slower than `RAISE`'s 0.4s, because a float is a drift and a card being picked
+ * up is not; quicker on the way back, so a photograph settles rather than
+ * following the visitor around the page — the same asymmetry as `PHOTO_ZOOM`.
+ */
+export const FLOAT = {
+  risePx: 6,
+  out: 0.7,
+  back: 0.5,
+  /** Opacity of the `--overlay` shadow at full lift. */
+  shadowAlpha: 0.18,
+  shadowBlurPx: 28,
+  shadowDropPx: 14,
+} as const;
+
 export const STICKY_SCREENS_MAX = 3;
 
 /**

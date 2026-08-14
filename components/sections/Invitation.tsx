@@ -1,6 +1,7 @@
 import { Enter } from "@/components/motion/Enter";
 import { FullBleed } from "@/components/ui/FullBleed";
 import { PillButton } from "@/components/ui/PillButton";
+import { SITE } from "@/content/site";
 import { Scrim } from "@/components/ui/Scrim";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
@@ -26,8 +27,6 @@ import { chapterCopy, type ChapterCopyKey, type TwoTone } from "@/content/home";
 type InvitationCopy = {
   readonly heading: TwoTone;
   readonly body: readonly string[];
-  readonly cta: string;
-  readonly href: string;
 };
 
 export function Invitation({ chapter }: { chapter: Chapter }) {
@@ -76,10 +75,41 @@ export function Invitation({ chapter }: { chapter: Chapter }) {
               </p>
             ))}
           </div>
-          <div className="mt-10 short:mt-6">
-            <PillButton href={copy.href} size="large" external>
-              {copy.cta}
-            </PillButton>
+          {/*
+            * The close offers the two lodges, not a second "Plan your stay".
+            *
+            * Client request, 15 Aug 2026: the header's pill already scrolls here,
+            * and landing under "Two forests are expecting you" only to meet
+            * another button off to mahuaresorts.com asked the visitor to choose
+            * nothing. These two do the choosing, and they go to our own property
+            * pages rather than off the site.
+            *
+            * **Read off `content/site.ts`, so no lodge name is written here.**
+            * That file already carries the name, the region and the route for
+            * both, and the menu draws its tiles from the same three fields — so
+            * a third lodge, or a renamed one, arrives in both places at once and
+            * cannot disagree with itself. The comma is punctuation joining two
+            * names already supplied, not new copy.
+            */}
+          {/*
+            * `w-max` so the row sizes to the two pills rather than to the prose
+            * column above it. The parent is `max-w-[60ch]` — about 530px — and
+            * the pair needs a little more than that, so inside it they wrapped
+            * onto two lines at every width. The parent is `items-center`, so a
+            * `w-max` child still centres.
+            *
+            * `flex-wrap` with a viewport cap is what puts them back on two lines
+            * where they genuinely do not fit — a phone — rather than letting
+            * them run off the edge of a section that clips its overflow.
+            */}
+          <div className="mt-10 flex w-max max-w-[92vw] flex-wrap justify-center gap-4 short:mt-6">
+            {SITE.places
+              .filter((place) => place.region)
+              .map((place) => (
+                <PillButton key={place.href} href={place.href} size="large" raise>
+                  {`${place.label}, ${place.region}`}
+                </PillButton>
+              ))}
           </div>
         </div>
       </Enter>
