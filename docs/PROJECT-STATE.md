@@ -3,6 +3,32 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## NEXT UP — approved, not yet built: `04 · Days in the Field` becomes a coverflow
+
+**Design approved by the client 16 Aug 2026 and no code written yet.** Full spec:
+[`superpowers/specs/2026-08-16-field-days-coverflow-design.md`](superpowers/specs/2026-08-16-field-days-coverflow-design.md).
+
+His words: *"Section 04 looks flat even though it has beautiful images."* The measurements agree — that
+chapter is **43.9% mean / 57.9% worst empty over 2.93 screens**, one of only three failing the 45% ceiling
+on their worst screen. It already holds six photographs and six activities, one-to-one.
+
+It becomes a **pinned coverflow**: the section holds still while six cards advance, centre card in focus,
+neighbours behind at left and right. **Driven by the visitor's own scroll, with arrows — deliberately not
+autoplay**, which he was offered and which was presented with its conflict named: an auto-rotating carousel
+is the permanent peripheral motion non-negotiable #5 exists to forbid.
+
+**No JavaScript is the target.** Cards advance on CSS scroll-driven animations offset by index; the arrows
+are anchor links to invisible targets at each card's scroll offset, which is also what makes the loop free
+(card 6's arrow points at card 1). Headroom if any is truly needed: **6,928 bytes**.
+
+Card shape is photo-above-text rather than the property pages' beside layout — raised with him and
+accepted, because a coverflow card is seen at an angle and partly overlapped. Reduced motion drops to a
+plain vertical list with no pin at all.
+
+**The one thing to measure rather than assume:** this is expected to make the section *denser and shorter*,
+which is the opposite of what a pin normally costs. Non-negotiable #9 requires that a pin earn its scroll,
+so `imagesPerScreen` and the page mean must be taken before and after.
+
 ## The close chooses a lodge, and the plates float — 15 Aug 2026
 
 Two client requests, both shipped and measured; `docs/reviews/2026-08-15-close-and-float/README.md`.
