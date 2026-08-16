@@ -193,6 +193,22 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    /*
+     * **Guest consent: GRANTED by the client, 17 Aug 2026, and the reason it
+     * had to be asked is worth keeping.**
+     *
+     * This frame ships a safari vehicle with six or seven guests in it, and
+     * until 17 Aug it was served at 541px, where nobody in it is identifiable.
+     * The coverflow's card is 1344px. **The same photograph at 2.5× the size is
+     * a different consent question**, and it was put to the client with the two
+     * withdrawn images below cited: he confirmed consent.
+     *
+     * The lesson generalises past this file: the rule at the head of this
+     * script ("look at every frame before curating it") is not only about
+     * *whether* a face is in shot but about *how large it will be drawn*. A
+     * frame cleared at one size is not cleared at every size, and enlarging a
+     * photograph is enough on its own to reopen it.
+     */
     id: "tiger-crossing-track",
     src: "reference/wp-media/Mahua-Website-Images_Homepage_Pench.jpg",
     alt: "A tiger crossing the track ahead of a safari jeep and its watching guests.",
