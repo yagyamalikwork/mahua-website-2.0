@@ -13,6 +13,12 @@ ghosts move `field-days`' worst screen by **−9.3 points**, and the tiger's fix
 a little more. The two are independent — the ghosts are not the thing that cost it — and the trade the
 tiger's fix carries is stated in §5 so it can be taken rather than assumed.
 
+> **§1's "B — shipped" row and the whole of §5 were superseded later the same day. Do not quote either
+> as current.** The tiger's band was fixed properly rather than traded away: the film is in the header
+> band now, `field-days` reads **48.1% mean / 55.0% worst** and the page's worst screen is **67.0%**, not
+> 48.6% / 62.3% / 77.1%. Both candidates §5 named were built and measured. **§9 is the live answer**, and
+> everything about the film's placement in §3 and §5 is history.
+
 ---
 
 ## 1. The three arms
@@ -259,3 +265,187 @@ Nothing else moved:
 - **The stale `560px` / `608px` comments** in `CoverflowCard.tsx` and `lib/sizes.test.ts` are corrected to
   948px / 900px, with a line saying why they moved without anyone editing the expression that produces
   them.
+
+---
+
+# 9. The tiger's band, fixed properly — the third placement (16 Aug 2026)
+
+§5 above left a trade "for the client to take": the film's own band is 78% cream, it lands on the join
+with `05 · Rooms`, and it made **77.1%** the emptiest screen on the whole site. That is not a trade worth
+handing over, and it is now closed. Two candidates were built and measured; a third arm of the second is
+what ships.
+
+**Every figure below is `node scripts/measure_density.mjs --port 3110` against a production build, one
+build and one fresh server per arm** — the same instrument and the same procedure as §1.
+
+## 9.1 The table
+
+| arm | `field-days` mean | worst | chapter | page mean | page worst | images/screen | screens over 45% | a card's arc |
+|---|---|---|---|---|---|---|---|---|
+| **B — as §5 shipped it** (film in a band at the tail) | 48.6% | 62.3% | 3.67 | 39.2% | **77.1%** | 2.23 | 44 | 576px |
+| **C1 — the band taken out of the pin** | 48.8% | 61.7% | **3.34** | 39.1% | 76.3% | 2.16 | 42 | **406px** |
+| **C2 — the film into the header band, below `guide-sunrise`** | 51.6% | 65.3% | 3.57 | 38.9% | 67.0% | 2.29 | 41 | 576px |
+| **C2-top — the film into the header band, ABOVE `guide-sunrise`** | **48.1%** | **55.0%** | 3.57 | **38.9%** | **67.0%** | **2.29** | **41** | 576px |
+
+**C2-top ships.** It is the only arm that beats B on all three figures the bar was set against — chapter
+mean, chapter worst, page worst — and it does so while leaving the pin untouched, so the wrap-around
+ghosts keep the whole of their gain.
+
+## 9.2 Candidate 1: take the band out of the pin — measured, and rejected
+
+Built exactly as §5 described it: `.coverflow-track`'s height and `--cf-pin-len` both lose
+`--cf-band` = `filmHeight + 2.5rem − cardFoot`, so the wrapper measures exactly `screens × 100svh` and
+the chapter is the height it was before the film needed clearance. Confirmed in the browser: wrapper
+**1800px** at every 900px-tall viewport (2160 at 1080), track **1503px**, section 3003px against B's
+3299px.
+
+It works. It is not worth what it costs:
+
+- **It does not touch the defect.** The film's band is still 297px of 78% cream at the chapter's tail —
+  the same band, 297px earlier in the document. The join screen's *composition* is identical, and it
+  measured identical: **76.3%** against 77.1%, which is the sampling grid landing differently and nothing
+  else. That was predicted from the geometry before the arm was built; the number is here because a
+  prediction is not a measurement.
+- **The chapter's mean gets slightly worse**, 48.6% → **48.8%**. Removing 297px of *pin* removes screens
+  that were scoring **below** the chapter's mean, so the mean rises. Everything C1 wins is at page level
+  and comes from the document simply being 297px shorter.
+- **`imagesPerScreen` reads 2.16 against 2.23**, and that is this rig's known `currentSrc` flake
+  (`density-sweep.md` §5): 40 distinct against 45 `<img>` elements in this arm, 42 in B, 43 in C2. Read it
+  as 2.27. Neither a regression nor a gain.
+- **It costs 29% of the carousel's pace**, exactly as §5 predicted: `--cf-pin-len` 1007 → 710px, step
+  143.9 → 101.5px, a card's arc 576 → 406px, on a page whose brief is unhurried.
+- **And it eats most of the centring rig's margin.** `check_coverflow.mjs` PASSes, but worst centring goes
+  **2.82px → 6.62px** against an 8px tolerance, because the same absolute error is a larger share of a
+  shorter pin. A future `screens` change would have half the headroom it has today.
+
+`--cf-band` also needed a floor: at 844×390 a 796px card in a 283px stage makes `--cf-card-foot`
+**−82px**, the raw band 496px, and an unclamped subtraction leaves a pin **1.3px long** — six cards
+through a slit. It was capped at half the pin. All of that machinery is reverted; it is written down here
+so nobody builds it a second time.
+
+**On the coupling §5 warned about:** it is real, and the answer is not to document it twice but to remove
+it. The stylesheet needs the film's *height*; `app/page.tsx` was writing its *width*. The arm put a single
+`--cf-film-w` in `app/globals.css` with `--cf-film-h` derived from it and pointed `app/page.tsx` at a
+`.coverflow-film` class — one declaration, two consumers, nothing that can drift. That is the shape any
+future version of this should take. It went with the rest of the arm.
+
+## 9.3 Candidate 2, as briefed: dead — and here is the measurement that kills it
+
+> *"If the text column bottoms out shorter than the photograph column at any width, that slack is a hole
+> the film can fill for free."*
+
+**It does not, at any width. The text column is the taller of the two everywhere**, measured on the
+shipped build at the four review widths:
+
+| viewport | text column (`col-span-5`) | photograph column (`col-span-7`) | slack in the TEXT column |
+|---|---|---|---|
+| 1024×900 | **698px** | 345px | **0** — it is 353px taller |
+| 1280×900 | **756px** | 445px | **0** — 311px taller |
+| 1440×900 | **729px** | 507px | **0** — 222px taller |
+| 1920×1080 | **729px** | 569px | **0** — 160px taller |
+
+The reason predates this work and is in `Coverflow.tsx`'s own comment: the `tiger-crossing-track` square
+joined the text column when it came off the cards, and 277px of type + 32px + a 420px square is taller
+than a 3:2 frame in the wider column at every width. So the band does not "bottom out level" — it bottoms
+out with the hole on the **other** side, at the top of the photograph column, which is exactly where
+`items-end` was putting it on purpose.
+
+**That hole is real, and it is 353 / 311 / 222 / 160px — none of which fits a 400px film.** So this
+placement is not free either. What it is, is *cheaper*: the row grows by the difference —
+**79 / 121 / 210 / 272px** — where a band at the tail costs 297px, and it grows at the chapter's dense
+head instead of at its empty join. Measured after the change: row 1 is 777 / 877 / 939 / 1001px tall, and
+the photograph column is now the taller one by exactly those figures.
+
+`lg:items-end` became **`lg:items-start`** for that reason and not for taste: with the film in it the
+photograph column wins, and bottom-aligning would push the chapter mark and the heading 210px down the
+page at 1440. Top-aligning moves the slack to the foot of the text column, under the safari square.
+
+## 9.4 Which end of that column — one line of markup, ten points
+
+C2 and C2-top differ by moving one `<div>` above the `ImageReveal` instead of below it, and `margin-top`
+→ `margin-bottom`. **48.1% / 55.0% against 51.6% / 65.3%.**
+
+The mechanism generalises, so it is worth keeping. Whichever end the film takes, the row's growth leaves
+the *same* strip of cream at the foot of the text column; the only thing that changes is what that strip's
+neighbour is across the gutter. Put the film at the bottom and the neighbour is a 300px drawing, and a
+900px screen catches the two together — that screen measured **65.3% empty** at `y = 7050` and became the
+chapter's worst. Put the film at the top and the neighbour is `guide-sunrise`, 761px wide, and the
+chapter's worst screen goes back inside the pin where it was before any of this.
+
+## 9.5 The accounting trick in the chapter's own mean, stated so nobody re-reads it wrong
+
+B's chapter mean (48.6%) is **flattered**; C2-top's (48.1%) is honest. In B the film's band sits on the
+boundary, so the screens carrying its cream are scored as `field-days / rooms` **joins** and are excluded
+from the chapter's own mean — they surface only as the page's worst screen. In C2-top the film is inside
+the chapter, so the chapter pays for its own figure. C2-top wins the comparison anyway, which is the
+point; but the page-level figures are the ones free of this artefact, and they are unambiguous:
+
+| | page mean | page worst | images/screen | screens over 45% |
+|---|---|---|---|---|
+| B | 39.2% | 77.1% | 2.23 | 44 |
+| **C2-top** | **38.9%** | **67.0%** | **2.29** | **41** |
+
+The page's emptiest screen is `field-days / rooms` either way — but it is now the pin's own ride-out plus
+the join's 160px of stacked padding, which is the shape that scored ≤58.3% before the tiger's band ever
+landed there, and not a strip of cream with a drawing in one corner.
+
+## 9.6 Read by eye, at 1024 / 1280 / 1440 / 1920
+
+Not "it looks fine" — what was on the screen. Frames in the session scratchpad,
+`tiger/final-<width>-{band,band2,tail}.png`.
+
+- **1024 and 1280 are the best of the four.** The drawn tiger sits at the top right, directly above
+  `guide-sunrise` — the photograph of a naturalist scanning with binoculars — with the safari square
+  below-left. The adjacency does real work: the drawn animal is what the man with the binoculars is
+  looking for. It reads as a field-guide plate at the head of a chapter about going out to look for
+  animals, not as a drawing parked where there happened to be room.
+- **1440 holds.** More air around it, because the gutter between a `col-span-5` and a `col-span-7` is what
+  it is, but the reading is the same and the tiger is unmistakably part of the band.
+- **1920 is where the cost is visible**, and it is visible as one thing: a 594 × 272px block of cream
+  below the safari square, between it and the hammocks of row 2. It reads as a pause rather than as a
+  hole — the composition is asymmetric by design and the right-hand column is full — but this is the
+  widest it gets, and it is the first thing to look at if this is ever revisited. See §9.8.
+- **The chapter's tail, at 1440 and 1920.** The carousel rides out with a full card on the stage and
+  nothing beneath it. The orphaned strip §5 shipped is gone, and that is the 10 points.
+- **The tiger no longer closes the chapter — it opens it.** Non-negotiable #5 is about behaviour rather
+  than position: it arrives, performs once, dozes, and hover still replays it. What changes is that it
+  performs as the chapter arrives instead of as it ends. That is a real change to the reading and it is
+  the client's to reject; the alternative is `B`, and `B`'s number is 77.1%.
+
+## 9.7 The gates, on the shipped build
+
+| | |
+|---|---|
+| `check_films.mjs` | **PASS at all six widths** — 0/12 covered positions for both films at 390 / 1024 / 1280 / 1366×768 / 1440 / 1920, corners within 0–1 levels of cream against a tolerance of 6. Plays once, holds at 10.00s, hover replays (10 → 0.86s), hover ignored mid-play, a parked pointer does not re-fire, reduced motion plays nothing, no-JS stills present, neither film in the first load. |
+| `check_coverflow.mjs` | **PASS** — 8 cards, order 0→7 at both shapes, worst centring **1.85px** at 1440×900 and 5.92px at 390×844, plus the reduced-motion arm (6 of 8 rendered, stage static, animations none). The pin is byte-identical to B, which is why these are B's own numbers. |
+| `measure_density.mjs` | `field-days` **48.1% / 55.0%**, page mean **38.9%**, page worst **67.0%**, 2.29 images per screen, 41 screens over 45%. |
+| `check_image_resolution.mjs` | **PASS** — 0 under-served at 390@1×, 390@3×, 768@1×, 1440@1×, 1920@1×. Unchanged, as expected: no column width and no `sizes` string moved, only vertical order. |
+| `npm test` | **492 passed**, unchanged. |
+| `npm run build` | pass. |
+| `npm run lint` | 0 errors, the same 5 pre-existing warnings. |
+| `npm run verify:budget` | **PASS — 168.2 KB brotli first-load JS, delta 0.** The change is a moved `<div>` in a server component and three CSS rules. |
+
+## 9.8 What this leaves, honestly
+
+- **The chapter still does not meet non-negotiable #8.** 55.0% worst against a 45% ceiling. The cause is
+  unchanged and is not this: `density-sweep.md` §7 established that 45% worst needs a ~1,090px card and
+  the photographs run out at 903px. Higher-resolution originals are still the lever, and the ask is still
+  the one in §7.
+- **At 1920×1080 the chapter is 65px *taller* than B**, not shorter — the header band grows by 272px there
+  while the tail band it replaces only cost 207px at that viewport height. At 1440×900, this project's
+  measuring shape, it is 86px shorter (3213 against 3299px). Both were measured; neither changes a verdict
+  above.
+- **One lever was found and deliberately not pulled**, because it is a different decision and belongs to
+  whoever owns the photographs. `SIZES.track` caps the safari square at **420px** against a 541px file,
+  chosen "with room to spare". Letting it fill its column instead would take the text column to 770 / 850px
+  at 1280 / 1920 and cut the cream block below it from 121 / 272px to about **107 / 151px**, while adding
+  real imagery — at the cost of drawing a 541px file at 527px at 1440, i.e. spending the whole of that
+  margin at DPR 1. It needs `lib/sizes.test.ts`'s registered count updated and `check_image_resolution.mjs`
+  re-run. Not taken here; the number is recorded so that it can be.
+- **`--cf-card-foot` is gone from `app/globals.css`.** Nothing consumed it once the footer left, and a
+  declared-but-unused custom property invites a later reader to conclude it does something. Its expression
+  and its landscape-phone sign flip are written into the comment that replaced it.
+- **The slot is `figure`, not `footer`, on `Coverflow`.** `SplitFeature` can put a drawing at the foot of a
+  chapter because a prose band leaves cream there. A pinned stage does not: at 1440×900 a centred card is
+  506px of a 793px stage and the film is 400px tall, so there is no scroll position at which both fit one
+  screen. The name now says which of the two this is.

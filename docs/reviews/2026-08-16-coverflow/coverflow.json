@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-16T16:04:24.216Z",
+  "measuredAt": "2026-08-16T18:11:53.917Z",
   "url": "http://localhost:3110",
   "assertion": "At every sampled scroll position inside the pin: at most one card is within 8px of the stage's horizontal centre, exactly one card's arrows are hit-testable, and that card is the one nearest the centre. Across the pin the card in charge advances 0 -> 7 hitting every index, and every card is bisected to its own centred moment and must land inside 8px. The deck is the six activities plus the two wrap-around ghosts, which must be aria-hidden, id-less and out of the tab order.",
   "shapes": [
@@ -7,15 +7,15 @@
       "width": 1440,
       "height": 900,
       "geometry": {
-        "top": 7602,
-        "height": 2097,
+        "top": 7812,
+        "height": 1800,
         "cards": 8,
         "targets": 6,
         "ghostCards": 2,
         "tabbableArrows": 12,
         "duplicateIds": []
       },
-      "samples": 125,
+      "samples": 113,
       "pinnedSamples": 43,
       "inChargeOrder": [
         0,
@@ -30,66 +30,66 @@
       "centreHits": [
         {
           "card": 0,
-          "scrollY": 6702,
+          "scrollY": 6912,
           "offset": 0,
           "pinned": false,
           "byHold": true
         },
         {
           "card": 1,
-          "scrollY": 7638,
-          "offset": 2.818267822265625,
+          "scrollY": 7848,
+          "offset": 1.848541259765625,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 2,
-          "scrollY": 7782,
-          "offset": 2.272796630859375,
+          "scrollY": 7992,
+          "offset": 1.303070068359375,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 3,
-          "scrollY": 7926,
-          "offset": 1.696990966796875,
+          "scrollY": 8136,
+          "offset": 0.727264404296875,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 4,
-          "scrollY": 8070,
-          "offset": 1.151519775390625,
+          "scrollY": 8280,
+          "offset": 0.181793212890625,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 5,
-          "scrollY": 8214,
-          "offset": 0.606048583984375,
+          "scrollY": 8424,
+          "offset": -0.363677978515625,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 6,
-          "scrollY": 8358,
-          "offset": 0.030303955078125,
+          "scrollY": 8568,
+          "offset": -0.939422607421875,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 7,
-          "scrollY": 8502,
+          "scrollY": 8712,
           "offset": 0,
           "pinned": true,
           "byHold": true
         }
       ],
       "firstSample": {
-        "scrollY": 7494,
+        "scrollY": 7704,
         "innerHeight": 900,
         "headerHeight": 107,
-        "stageTop": 107.84375,
+        "stageTop": 107.625,
         "stageCentre": 720,
         "pinned": true,
         "cards": [
@@ -125,8 +125,8 @@
           },
           {
             "i": 1,
-            "centre": 1282.2508544921875,
-            "offset": 562.2508544921875,
+            "centre": 1281.0308837890625,
+            "offset": 561.0308837890625,
             "width": 738,
             "opacity": 1,
             "zIndex": "1",
@@ -134,7 +134,7 @@
             "arrows": [
               {
                 "href": "#field-days-card-5",
-                "x": 963,
+                "x": 962,
                 "y": 683,
                 "inside": true,
                 "reachable": false,
@@ -143,7 +143,7 @@
               },
               {
                 "href": "#field-days-card-1",
-                "x": 1614,
+                "x": 1613,
                 "y": 683,
                 "inside": false,
                 "reachable": false,
@@ -340,15 +340,15 @@
       "width": 390,
       "height": 844,
       "geometry": {
-        "top": 9431,
-        "height": 1760,
+        "top": 9783,
+        "height": 1688,
         "cards": 8,
         "targets": 6,
         "ghostCards": 2,
         "tabbableArrows": 12,
         "duplicateIds": []
       },
-      "samples": 109,
+      "samples": 106,
       "pinnedSamples": 39,
       "inChargeOrder": [
         0,
@@ -363,60 +363,60 @@
       "centreHits": [
         {
           "card": 0,
-          "scrollY": 8587,
+          "scrollY": 8939,
           "offset": 0,
           "pinned": false,
           "byHold": true
         },
         {
           "card": 1,
-          "scrollY": 9487,
+          "scrollY": 9839,
           "offset": -0.164031982421875,
           "pinned": true
         },
         {
           "card": 2,
-          "scrollY": 9619,
+          "scrollY": 9971,
           "offset": -1.299652099609375,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 3,
-          "scrollY": 9749,
+          "scrollY": 10101,
           "offset": 0.7696990966796875,
           "pinned": true
         },
         {
           "card": 4,
-          "scrollY": 9883,
+          "scrollY": 10235,
           "offset": -3.6213836669921875,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 5,
-          "scrollY": 10012,
+          "scrollY": 10364,
           "offset": 0.0756988525390625,
           "pinned": true
         },
         {
           "card": 6,
-          "scrollY": 10147,
+          "scrollY": 10499,
           "offset": -5.9178619384765625,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 7,
-          "scrollY": 10291,
+          "scrollY": 10643,
           "offset": 0,
           "pinned": false,
           "byHold": true
         }
       ],
       "firstSample": {
-        "scrollY": 9355,
+        "scrollY": 9707,
         "innerHeight": 844,
         "headerHeight": 75.390625,
         "stageTop": 75.59375,

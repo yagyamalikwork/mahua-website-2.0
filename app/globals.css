@@ -1606,12 +1606,15 @@ body {
  *   itself once on page load.
  * - **`.coverflow` must never be given a `z-index`.** It is `position: relative`
  *   with `z-index: auto`, which is not a stacking context — and it has to stay
- *   that way, because the tiger film in `.coverflow-footer` erases its own white
- *   ground with `mix-blend-mode: darken` against the chapter's cream, and a
- *   stacking context between the two is what breaks it (`DECISIONS.md` §14,
- *   asserted as PIXELS by `scripts/check_films.mjs`). The same reasoning is why
- *   the footer is a sibling of the stage rather than a child: `position: sticky`
- *   *does* create a stacking context.
+ *   that way, because the tiger film erases its own white ground with
+ *   `mix-blend-mode: darken` against the chapter's cream, and a stacking context
+ *   anywhere between the film and that cream is what breaks it (`DECISIONS.md`
+ *   §14, asserted as PIXELS at six widths by `scripts/check_films.mjs`). The film
+ *   is no longer inside this wrapper at all — it moved to the header band on
+ *   16 Aug 2026, see `.coverflow-figure` — but the rule survives it: making the
+ *   wrapper a stacking context would be a change nothing here needs, and
+ *   `position: sticky` on the stage below already *is* one, which is why no film
+ *   may ever be put inside it.
  * - **The `z-index` and `pointer-events` stops at 37.4/37.6% and 62.4/62.6% are
  *   tight pairs on purpose.** Both properties interpolate discretely, flipping at
  *   the midpoint between two keyframes, so a lone stop at 37.5% would flip at
@@ -1627,15 +1630,14 @@ body {
 .coverflow {
   /* NOT sticky: it declares the timeline, and `relative` so the six zero-size
      scroll targets can be positioned inside it — and `z-index: auto`, see above.
-     Its HEIGHT is the track's plus the film's band; the reserved scroll itself
-     belongs to `.coverflow-track`. */
+     Its height is the track's; the reserved scroll itself belongs to
+     `.coverflow-track`, and since 16 Aug 2026 nothing else lives in here. */
   position: relative;
 }
 
 /* `.coverflow-track` is a plain static block in flow and needs no rule of its
    own here — it is the pin's box and gets its height inside `@supports`, where
-   the comment above it explains what it is for. Deliberately NOT positioned: a
-   positioned box paints after its static siblings, and the film is a sibling. */
+   the comment above it explains what it is for. */
 
 /* In flow this is simply the list of cards. `position: sticky` and the absolute
    children arrive in the `@supports` block. */
@@ -1684,10 +1686,36 @@ body {
   top: calc(var(--i) * 100% / var(--coverflow-count, 1));
 }
 
-.coverflow-footer {
+/*
+ * The tiger's own row, in the header band's photograph column — NOT at the foot
+ * of the chapter, and not inside `.coverflow` at all.
+ *
+ * **Three placements were built and measured, 16 Aug 2026**, and the full table
+ * is in `docs/reviews/2026-08-16-coverflow/flanks-and-tiger.md` §9-§11.
+ * Absolutely positioned at the wrapper's foot, it cost no height and the card
+ * painted over the tiger's head below ~1430px. In flow below the track, it was
+ * clear of every card and cost a 297px band that is 78% cream, landing on the
+ * join with `05 · Rooms` and making 77.1% the emptiest screen on the site. Here,
+ * it spends slack the header band already had: `field-days` reads
+ * **48.1% mean / 55.0% worst** against 48.6% / 62.3%, and the page's worst
+ * screen is **67.0%** against 77.1%.
+ *
+ * `margin-bottom`, not `margin-top`, and the direction is worth 10 points. The
+ * film goes ABOVE `guide-sunrise`: either end of the column leaves the same
+ * strip of cream at the foot of the text column, and the question is only what
+ * that strip's neighbour is — a 761px photograph, or the 300px drawing.
+ * Measured at 48.1% / 55.0% against 51.6% / 65.3%.
+ *
+ * Flush right, so the drawing sits at the outer edge of the band. **No
+ * `position`, no `transform`, no `opacity`, no `filter`, no `isolation`**: every
+ * one of those creates a stacking context, and this element is the film's last
+ * ancestor before the chapter's cream. `scripts/check_films.mjs` samples the
+ * result as pixels at six widths and is the gate.
+ */
+.coverflow-figure {
   display: flex;
   justify-content: flex-end;
-  margin-top: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 @supports (animation-timeline: view()) {
@@ -1701,8 +1729,10 @@ body {
        last card's closes at exactly the offset where it lets go.
 
        These are measured against the TRACK's height, which is why it is written
-       as `--coverflow-screens * 100svh` and not as `100%`: the wrapper is taller
-       than the track by the film's band, and the pin is the track. */
+       as `--coverflow-screens * 100svh` and not as `100%`: the pin is the track,
+       and `100%` would silently follow the wrapper if anything were ever laid
+       out beside it again — which is exactly what the tiger's second placement
+       did between 16 Aug's two fixes. */
     --cf-pin-start: calc(100svh - var(--header-height, 0px));
     --cf-pin-len: calc(var(--coverflow-screens) * 100svh - 100svh + var(--header-height, 0px));
     --cf-step: calc(var(--cf-pin-len) / (var(--coverflow-count) + 1));
@@ -1712,7 +1742,7 @@ body {
     --cf-off: calc(50vw + 60%);
 
     /*
-     * The centred card's own drawn size, and the cream it leaves beneath itself.
+     * The centred card's own drawn size, and the stage it is centred in.
      *
      * **The width expression is `CoverflowCard`'s, deliberately repeated rather
      * than shared**, because there is nowhere to share it from: the card writes
@@ -1722,46 +1752,38 @@ body {
      * one arithmetic, all derived from `COVERFLOW` — if one moves they all must,
      * and `lib/sizes.test.ts` holds the aspect ratio to the markup's own class.
      *
-     * `--cf-card-foot` is the gap between the bottom of a centred card and the
-     * bottom of the stage, and it is what the film's band is bought with below.
-     * It goes NEGATIVE on a viewport short enough that the card is taller than
-     * the stage (a landscape phone: 844x390 gives a 448px card in a 313px
-     * stage), which is why the footer's margin is a plain subtraction and not a
-     * `max()` — there the film has to be pushed DOWN, past a card that is
-     * overflowing its own stage, and the same expression does it.
+     * **A fourth reader of these two, `--cf-card-foot`, existed for one day and
+     * is gone.** It measured the cream a centred card leaves beneath itself
+     * (143px at 1440x900) and the tiger's band was bought out of it. The arm
+     * that needed it is `docs/reviews/2026-08-16-coverflow/flanks-and-tiger.md`
+     * §9-§10: 143px of clearance against a 400px film is not a fit, and the film
+     * is in the header band now. If a later figure is ever put back at the foot
+     * of this wrapper, that number is `(--cf-stage-h − --cf-card-h) / 2` and it
+     * goes NEGATIVE on a landscape phone, where a 796px card overflows a 283px
+     * stage.
      */
     --cf-card-w: min(var(--coverflow-card-max), 100vw - 2 * var(--coverflow-gutter));
     --cf-card-h: calc(var(--cf-card-w) * 9 / 16);
     --cf-stage-h: calc(100svh - var(--header-height, 0px));
-    --cf-card-foot: calc((var(--cf-stage-h) - var(--cf-card-h)) / 2);
   }
 
   /*
    * The pin's own box — tall, not sticky, and the sticky stage's containing
    * block.
    *
-   * **It exists to put a floor under the stage, 16 Aug 2026.** `position: sticky`
-   * stops when the sticky box's bottom meets its containing block's bottom, so
-   * anything laid out below THIS element is somewhere no card can ever reach.
-   * The tiger sits there.
+   * **It was added on 16 Aug 2026 to put a floor under the stage, and it is kept
+   * on 16 Aug 2026 for a different reason.** `position: sticky` stops when the
+   * sticky box's bottom meets its containing block's bottom, so anything laid out
+   * below THIS element is somewhere no card can ever reach — which is what the
+   * tiger needed for one afternoon, before that band was measured at 78% cream on
+   * the chapter's own join and the film moved into the header instead
+   * (`.coverflow-figure`). Nothing is laid out below it now.
    *
-   * Before this the film was `position: absolute; bottom: 0` inside the wrapper
-   * — which cost no height, and put the stage's own footprint straight over it:
-   * the card covered the tiger at every viewport below ~1430px, and at 1280 the
-   * tiger was headless (`docs/reviews/2026-08-16-coverflow/density-sweep.md` §9;
-   * it was already true below ~1090px at the card's previous width, and no rig
-   * ever looked because `check_films.mjs` only measured 1440). Ordering the film
-   * OVER the stage instead is not available: the film erases its own white
-   * ground with `mix-blend-mode: darken` against the chapter's cream, so it has
-   * to paint BEFORE the stage and may never be given a stacking context of its
-   * own (`DECISIONS.md` §14). Geometry is the only fix, and this is it.
-   *
-   * The card timings do not move by a pixel. `animation-range` offsets here are
-   * LENGTHS from the start of `cover`, and `cover` starts when the WRAPPER's top
-   * edge enters the scrollport — which this change does not touch. Growing the
-   * wrapper at its foot lengthens `cover` past every offset in use and shifts
-   * none of them. Watched, not assumed: `check_coverflow.mjs` bisects every
-   * card to its own centred moment.
+   * It stays because collapsing it back would re-couple two separate quantities:
+   * the wrapper is what `cover` is measured against and the track is what the pin
+   * is measured against, and they were the same box only by accident. The pin's
+   * lengths above say `--coverflow-screens * 100svh` rather than `100%` for the
+   * same reason — one of the two has to be named, and it is this one.
    */
   .coverflow-track {
     height: calc(var(--coverflow-screens) * 100svh);
@@ -1771,25 +1793,23 @@ body {
     position: sticky;
     top: var(--header-height, 0px);
     /* The header comes out of the stage's own height — fact 3 above. Read from
-       `--cf-stage-h` rather than written out again: the footer's margin is
-       computed from the cream a centred card leaves inside THIS box, so the two
-       must agree, and one place is the only way that stays true. */
+       `--cf-stage-h` rather than written out again, so anything else that has to
+       reason about the cream a centred card leaves inside THIS box reads the same
+       declaration rather than a second copy of it. */
     height: var(--cf-stage-h);
     /*
-     * Above the tiger, and only that. `position: sticky` already makes this a
-     * stacking context, so this changes nothing about the stage itself — it
-     * changes which of two siblings paints second. Measured: without it the
-     * footer's box answered `elementFromPoint` at the last card's own arrows for
-     * the final ten sampled positions of the pin at 1440x900, and the film sits
-     * over a card's arrows at 390 whatever width its own box is.
+     * Above whatever else this wrapper holds. `position: sticky` already makes
+     * this a stacking context, so this changes nothing about the stage itself —
+     * it only orders it against its siblings.
      *
-     * **Safe for the film's blend, and worth knowing why.** `mix-blend-mode`
-     * composites against everything painted *below* it inside its own stacking
-     * context, which for the tiger is the root — `.coverflow` is
-     * `position: relative; z-index: auto` and must stay that way. Ordering the
-     * stage AFTER the film takes the stage out of the film's backdrop
-     * altogether, so the film blends against the chapter's bare cream, which is
-     * what `scripts/check_films.mjs` samples in pixels.
+     * **Its original reason is spent and it is kept deliberately.** It was added
+     * when the tiger was a sibling below the stage and the footer's box answered
+     * `elementFromPoint` at the last card's own arrows for the final ten sampled
+     * positions of the pin at 1440x900. The film is in the header band now, so
+     * there is nothing left to be above; what this still guarantees is that a
+     * later sibling put in here cannot paint over the cards by tree order alone,
+     * which is precisely how the tiger got over them. `check_coverflow.mjs`'s
+     * "exactly one card answers a hit test" is the assertion that would notice.
      */
     z-index: 1;
     /*
@@ -1800,14 +1820,14 @@ body {
      * which of them answer is exactly what `@keyframes coverflow-arrows`
      * controls.
      *
-     * It is here because of the line above it. Ordering the stage over the
-     * footer also put an 823px-tall `<ul>` over the tiger, and
-     * `check_films.mjs` caught it at once: hovering the film hit the stage
-     * instead and the replay the client asked for on 6 Aug stopped working
-     * (10s → 10s, twice). A card carries no interactive content of its own, so
-     * standing the whole stage down costs only text selection on a card that is
-     * sliding past — and buys back the guarantee that nothing in this chapter
-     * can swallow a pointer it was not built to receive.
+     * It arrived with the line above it, and it outlives the same way. An
+     * 823px-tall `<ul>` ordered over the tiger is what `check_films.mjs` caught
+     * first: hovering the film hit the stage instead and the replay the client
+     * asked for on 6 Aug stopped working (10s → 10s, twice). A card carries no
+     * interactive content of its own, so standing the whole stage down costs only
+     * text selection on a card that is sliding past — and buys the guarantee that
+     * nothing in this chapter can swallow a pointer it was not built to receive,
+     * whatever is put beside it later.
      */
     pointer-events: none;
   }
@@ -1960,46 +1980,6 @@ body {
      1440x760, 1280x1024, 1920x1080 and 390x844. */
   .coverflow-target {
     top: calc((var(--i) + 1) * var(--cf-step));
-  }
-
-  /*
-   * The tiger, below the track — in flow, and pulled back up into the cream the
-   * centred card leaves beneath itself.
-   *
-   * **Almost all of its height is still free, and the part that is not is the
-   * price of the fix.** The film is 400px tall at `lg`; a centred card leaves
-   * `--cf-card-foot` of empty stage below it (158px at 1440x900), and this rule
-   * spends every pixel of that on the film, keeping only a 2.5rem gap so the two
-   * do not touch. What the chapter actually pays is `filmHeight − cardFoot +
-   * 2.5rem` — 281px at 1440x900, against 400px for the naive in-flow version and
-   * 0px for the absolute one that put the card over the tiger's head.
-   *
-   * **That 281px is not free and it was measured, 16 Aug 2026.** The chapter
-   * goes 3.34 → 3.67 screens and 46.2% / 52.2% → 48.6% / 62.3% empty, because
-   * the band is a 1344 × 281 strip carrying one 300px-wide drawing — 78% cream —
-   * and it lands on the chapter's own tail. It gives back the whole of what the
-   * wrap-around ghosts had just won. The alternative is to take the band out of
-   * the PIN rather than add it to the chapter (shorten `--cf-pin-len` by the same
-   * amount, keeping the chapter exactly as tall as before), and it is not taken
-   * here because it is not free either: it speeds the carousel by 29%, from a
-   * 279px arc per card to 199px, on a page whose whole brief is unhurried. The
-   * numbers for both are in `docs/reviews/2026-08-16-coverflow/
-   * flanks-and-tiger.md`; the trade is the client's.
-   *
-   * A plain subtraction rather than a clamped one, on purpose: on a viewport
-   * short enough that the card is taller than the stage, `--cf-card-foot` is
-   * negative and this becomes a positive margin that pushes the film clear of a
-   * card overflowing its own stage. One expression, both directions.
-   *
-   * It is still a full-width flex row, and that is still safe for the reason the
-   * previous note gave: an invisible band at the foot of the wrapper swallows
-   * clicks it was never meant to see, so it must not lie over a card's arrows.
-   * It cannot — its top edge is 2.5rem BELOW the centred card's bottom edge at
-   * every viewport, by the arithmetic above, and the arrows sit inside the card
-   * above that edge. `check_coverflow.mjs` measures it rather than trusting it.
-   */
-  .coverflow-footer {
-    margin-top: calc(2.5rem - var(--cf-card-foot));
   }
 
   @keyframes coverflow-pass {
@@ -2232,10 +2212,6 @@ body {
 
     .coverflow-target {
       top: calc(var(--i) * 100% / var(--coverflow-count, 1));
-    }
-
-    .coverflow-footer {
-      margin-top: 2.5rem;
     }
   }
 }

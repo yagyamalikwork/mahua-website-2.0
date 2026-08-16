@@ -229,16 +229,25 @@ function renderChapter(chapter: Chapter, at: Position) {
            * this arm exists because `field-days` changed shape on 16 Aug 2026,
            * not because the film did.
            *
-           * **Where it hangs is load-bearing and the component owns it.** The
-           * film erases its own white ground with `mix-blend-mode: darken`
-           * against the chapter's cream, and `position: sticky` creates a
-           * stacking context — so inside `Coverflow`'s sticky stage the white
-           * box comes back (`DECISIONS.md` §14, asserted as pixels by
-           * `scripts/check_films.mjs`). `Coverflow` hangs this slot off its own
-           * non-sticky wrapper for exactly that reason. Nothing about that is
-           * visible from here, which is why it is written down in both places.
+           * **The prop is `figure`, not `footer`, and that word is the finding.**
+           * `SplitFeature` puts its slot at the foot of the chapter, where a
+           * prose band leaves cream to hang a drawing in. A pinned stage leaves
+           * none: at 1440x900 a centred card is 506px of a 793px stage, the film
+           * is 400px tall, and there is no scroll position at which both fit one
+           * screen. `Coverflow` therefore puts this into the slack its own header
+           * band already has — measured, and measured against the two
+           * alternatives, in `docs/reviews/2026-08-16-coverflow/
+           * flanks-and-tiger.md`. Nothing about that is visible from here, which
+           * is why it is written down in both places.
+           *
+           * **Two things about the film are still load-bearing wherever it goes.**
+           * It erases its own white ground with `mix-blend-mode: darken` against
+           * the chapter's cream, so no ancestor between it and that cream may
+           * become a stacking context (`DECISIONS.md` §14, asserted as pixels at
+           * six widths by `scripts/check_films.mjs`); and nothing may paint over
+           * its box, which is the same rig's separate geometric assertion.
            */
-          footer={
+          figure={
             chapter.id === "field-days" ? (
               /* Sized here rather than in the component, because how large the
                  tiger should be is a question about this chapter's column and not

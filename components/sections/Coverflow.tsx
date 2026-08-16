@@ -191,42 +191,82 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.5 };
  *   *different* card.
  * - **The six scrims.** See `CARD_SCRIM`.
  *
- * ## The tiger, and why it hangs off the wrapper
+ * ## The tiger, and why it opens the chapter instead of closing it
  *
- * `field-days` closes with the tiger film, whose white ground is erased by
- * `mix-blend-mode: darken` against the chapter's cream — asserted **as pixels**
- * by `scripts/check_films.mjs`, and `docs/DECISIONS.md` §14 records that a
- * stacking context between the film and that cream is what breaks it.
- * `position: sticky` creates a stacking context, so a film inside
- * `.coverflow-stage` would blend against the stage's own transparent backdrop
- * and the white box would come back.
+ * **16 Aug 2026, third placement, and the first one that is not a compromise.**
+ * The film is in the header band's photograph column, above `guide-sunrise`,
+ * and it is nowhere near `.coverflow` at all. Two constraints put it there and
+ * both were measured rather than argued:
  *
- * It therefore sits in `.coverflow-footer`, a sibling of the stage, absolutely
- * positioned at the wrapper's foot — under no sticky ancestor, and costing no
- * height. That last part is measured rather than tidy: in flow this film took
- * `field-days` from 41.5% to 44.4% mean empty when it first landed, which is why
- * `SplitFeature` anchored it too. **`.coverflow` must never be given a
- * `z-index`** — that would make the wrapper a stacking context and reintroduce
- * the same bug one level up.
+ * 1. **It cannot be inside the pinned viewport at any desktop shape.** A centred
+ *    card is 506px tall in a 793px stage at 1440x900, leaving 143px of cream
+ *    beneath it; the film is 400px tall. 506 + 400 + a gap does not fit in 793,
+ *    so there is no scroll position at which a card and this film are both on a
+ *    900px screen without touching. Its two earlier homes were the two ways of
+ *    losing that argument: absolutely positioned at the wrapper's foot, where it
+ *    cost no height and the card painted over the tiger's head below ~1430px;
+ *    and in flow below the track, clear of every card and costing the chapter a
+ *    297px band that is **78% cream** and lands on the join with `05 · Rooms` —
+ *    which made 77.1% the emptiest screen on the whole site.
+ * 2. **The band it needs already exists here, and nowhere else in the chapter.**
+ *    Measured at 1024 / 1280 / 1440 / 1920, the header band's text column is the
+ *    *taller* of the two by 353 / 311 / 222 / 160px, so its photograph column
+ *    carries that much unused height. The film does not fit it outright — it is
+ *    400px — but the row grows by only the difference (79 / 121 / 210 / 272px)
+ *    where a tail band cost 297, and it grows at the chapter's dense head rather
+ *    than at its empty join. Measured on this build: `field-days` 48.6% / 62.3%
+ *    → **48.1% / 55.0%** empty, page worst **77.1% → 67.0%**, page mean 39.2% →
+ *    38.9%, images per screen 2.23 → 2.29, and the pin is untouched, so the
+ *    wrap-around ghosts keep every point they won.
+ *
+ * **Above `guide-sunrise` rather than below it, and that is worth 10 points.**
+ * Whichever end of the column the film takes, the row's growth leaves the same
+ * strip of cream at the foot of the *text* column. Put the film at the bottom
+ * and that strip's neighbour is a 300px drawing; put it at the top and the
+ * strip's neighbour is a 761px photograph. Same markup, one line apart:
+ * 51.6% / 65.3% against 48.1% / 55.0%.
+ *
+ * **The row is `lg:items-start` because of this and not by taste.** It was
+ * `items-end`, which put the band's slack in one place at the top right; with
+ * the film in that column the photograph column becomes the taller one, and
+ * bottom-aligning would push the chapter mark and the heading 210px down the
+ * page. Top-aligning moves the slack to the foot of the text column instead,
+ * where the paragraph above is what it is spacing.
+ *
+ * **The blend is still the thing that can break, and the reason is unchanged.**
+ * The film's white ground is erased by `mix-blend-mode: darken` against the
+ * chapter's cream — asserted **as pixels, at six widths**, by
+ * `scripts/check_films.mjs`, and `docs/DECISIONS.md` §14 records that a stacking
+ * context between the film and that cream is what breaks it. Nothing between
+ * this element and the root may become one: not `.coverflow-figure`, not the
+ * grid row, not `ChapterSurface`'s container. `position: sticky` creates one,
+ * which is why the film may never be moved into `.coverflow-stage`, and
+ * **`.coverflow` must never be given a `z-index`** for the same reason one level
+ * up. The gate is that rig passing on pixels, never a reading of the markup.
  */
 export function Coverflow({
   chapter,
   surface = false,
-  footer,
+  figure,
 }: {
   chapter: Chapter;
   surface?: boolean;
   /**
-   * Rendered at the foot of the section. `field-days` passes the ink tiger;
-   * nothing else uses it.
+   * The chapter's drawn figure. `field-days` passes the ink tiger; nothing else
+   * uses it.
    *
    * The same slot shape `SplitFeature` had, on purpose — mounting the coverflow
    * is one component name in `app/page.tsx` and nothing else. A slot rather than
    * a `chapter.id` check in here: every chapter section is self-contained, and
    * *which* chapter carries the tiger belongs to the page's spine, beside the
    * density figures that chose it.
+   *
+   * **It is called `figure` and not `footer`, and the rename is the finding.**
+   * `SplitFeature` could put it at the foot of the chapter because a prose band
+   * leaves cream there; a pinned stage does not — see the note on this component
+   * for where it goes instead and what the alternative measured.
    */
-  footer?: React.ReactNode;
+  figure?: React.ReactNode;
 }) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as CoverflowCopy;
   // The first four photographs are the header band's, in the order the band
@@ -285,12 +325,15 @@ export function Coverflow({
           tiger crossing the track under the paragraph that says the gates open
           before the light does.
 
-          `items-end` rather than `items-center`: the two columns are different
-          heights (the text column is the taller one since the track frame joined
-          it) and hanging both from one baseline puts the band's slack in a single
-          place — the top right, beside the chapter mark — rather than splitting
-          it above and below. */}
-      <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-x-14">
+          `items-start` since 16 Aug 2026, and it was `items-end` until the tiger
+          moved into the photograph column. The two columns are different heights
+          either way; what changed is WHICH is taller. With the film in it the
+          photograph column wins by 79 / 121 / 210 / 272px at 1024 / 1280 / 1440 /
+          1920, and bottom-aligning would then push the chapter mark and the
+          heading that far down the page. Top-aligning puts the band's slack at
+          the foot of the text column, under the safari square, where the row's
+          own imagery is what it neighbours. See the note on this component. */}
+      <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-x-14">
         <div className="lg:col-span-5">
           <Enter>
             <div>
@@ -325,6 +368,13 @@ export function Coverflow({
         </div>
 
         <div className="lg:col-span-7">
+          {/* The tiger, in the slack this column already had — see the note on
+              this component for the measurement, and for why it is ABOVE
+              `guide-sunrise` rather than below it (10 points of the chapter's
+              worst screen). Deliberately NOT wrapped in `ImageReveal`: that is a
+              masked entrance, and a mask is a stacking context, which is what
+              erases this film's white ground. */}
+          {figure && <div className="coverflow-figure">{figure}</div>}
           <ImageReveal className="block aspect-[3/2] w-full">
             <Photo
               id={dawn}
@@ -408,10 +458,13 @@ export function Coverflow({
         ))}
 
         {/* The pin's own box. It carries the reserved scroll and it is the sticky
-            stage's containing block, which is the whole reason it exists: sticky
-            stops when the stage's bottom meets THIS element's bottom, so a band
-            below it is a band the stage can never reach. The tiger lives in that
-            band — see the note on `.coverflow-footer` below. */}
+            stage's containing block: sticky stops when the stage's bottom meets
+            THIS element's bottom. It was added so a band below it could be a band
+            no card could reach, and the tiger lived there for one afternoon —
+            until that band was measured at 78% cream on the chapter's own join.
+            Nothing is laid out below it now; see `.coverflow-track` in
+            `app/globals.css` for why it is still a separate box from the
+            wrapper. */}
         <div className="coverflow-track">
           <ul className="coverflow-stage">
             {stageCards.map(({ experience, source, slot, ghost }) => {
@@ -434,13 +487,6 @@ export function Coverflow({
           </ul>
         </div>
 
-        {/* In flow, below the track, and pulled back up by `app/globals.css` into
-            the cream the centred card leaves beneath itself — so it still costs
-            almost none of its own height, and no card can reach it. It was
-            `position: absolute; bottom: 0` inside the wrapper until 16 Aug 2026,
-            which cost nothing at all and put the card over the tiger's head at
-            every viewport below ~1430px. See `.coverflow-footer`. */}
-        {footer && <div className="coverflow-footer">{footer}</div>}
       </div>
     </ChapterSurface>
   );
