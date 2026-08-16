@@ -182,6 +182,77 @@ const MENU_RUNS = (heroId) => [
   },
 ];
 
+/**
+ * `04 · Days in the Field`'s six coverflow cards — added 16 Aug 2026 with the
+ * coverflow itself (the plan's Task 8, Step 1b).
+ *
+ * Every card is cream type laid straight onto a photograph, which is the exact
+ * case CLAUDE.md says must be measured against the rendered result rather than
+ * assumed. All six shipped a deliberate `{ flat: 0.5 }` placeholder until this
+ * table learned about them, and **this table discovers nothing** — a card absent
+ * from it is a card nobody has checked.
+ *
+ * Four things about these runs are not the file's usual shape, and each is
+ * load-bearing:
+ *
+ * 1. **`anchor: true`.** The other runs scroll their target to the very top of
+ *    the viewport, which is fine for a section whose type is hundreds of px
+ *    further down. A coverflow target is a zero-size box placed at exactly the
+ *    scroll offset where its card is centred, and that placement is measured
+ *    against an ANCHOR CLICK — which honours the scroll container's
+ *    `scroll-padding-top` (`app/globals.css`, the header's own height). Ignore
+ *    it and every run lands ~77px past its card's centred moment.
+ * 2. **`card`.** The run then checks it got what it asked for: the named card is
+ *    within 8px of the stage's centre, is the nearest card to it, and its
+ *    `.coverflow-veil` is off. A contrast figure read off the wrong card, or off
+ *    a veiled one, is a confident number about something nobody looks at — and
+ *    the veil is what makes the CENTRED card the worst case (a flanking card
+ *    gets scrim ADDED over its own, which raises cream type's contrast rather
+ *    than lowering it, which is the whole reason the recede is a veil and not an
+ *    opacity — the plan's correction C). Failing to place is fatal, like a
+ *    missing target.
+ * 3. **`lines: true`.** Every element on a card is block-level, so its own rect
+ *    is the card's full content width — 844px at 1440, with "Jungle safari"
+ *    sitting in the left third of it. Cropping that reports a blown-out pixel in
+ *    the empty gutter as the worst case for type that is nowhere near it: it
+ *    measured 1.00:1 on a card whose glyphs were at 1.33:1, and it moved the
+ *    solved figures by whole steps. `lines` takes a `Range` over the text nodes
+ *    instead and gets one rect per LINE BOX, tight to the glyph run — the same
+ *    thing `[data-word]` does for the headlines above, without needing markup
+ *    the cards do not have.
+ * 4. **The selector is both text blocks, not just the words.** The two arrows
+ *    are the same cream on the same photograph, they sit in the card's two
+ *    bottom corners, and nothing else on this project measures them. A wash
+ *    solved on the words alone leaves "NEXT" unchecked in the one corner a
+ *    bottom-left wedge never reaches.
+ *
+ * `min` is **4.5, not the 3 the quote runs above use**, and that is the
+ * convention rather than a departure from it: 3 is WCAG's large-text floor and
+ * the quotes are display type set at 40px and up. A card's body is
+ * `clamp(0.76rem, 1.32vw, 0.98rem)` — 12.2px on a phone — its number and its
+ * arrows are 9.9px, and its heading is 18.4px at 390 where the `clamp()` floors
+ * out. None of that is large text at any width this rig samples.
+ */
+const COVERFLOW_RUNS = Array.from({ length: 6 }, (_, i) => {
+  // The deck opens with the wrap-around ghost of the last activity, so activity
+  // `i` is the `i + 2`-th card. Positional, and deliberately so: the ghosts
+  // carry no id (a duplicate would send half the arrows to the wrong element),
+  // so there is nothing else to name them by. `check_coverflow.mjs` is what
+  // holds that ordering — it fails if the deck is ever not eight cards with the
+  // two ghosts at its ends.
+  const card = `#field-days ul.coverflow-stage > li.coverflow-card:nth-child(${i + 2})`;
+  return {
+    name: `coverflow · card ${String(i + 1).padStart(2, "0")}`,
+    min: 4.5,
+    at: `#field-days-card-${i}`,
+    anchor: true,
+    card,
+    lines: true,
+    container: card,
+    sel: `${card} [data-contrast="coverflow-card"], ${card} nav.coverflow-arrows a`,
+  };
+});
+
 const HOME_RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='site-menu']" },
   {
@@ -264,6 +335,7 @@ const HOME_RUNS = [
   },
   { name: "quote · why-you-came", min: 3, at: "#why-you-came", container: "#why-you-came", sel: "#why-you-came [data-word]" },
   { name: "quote · after-dark", min: 3, at: "#after-dark", container: "#after-dark", sel: "#after-dark [data-word]" },
+  ...COVERFLOW_RUNS,
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },
   ...MENU_RUNS("arrival"),
@@ -345,6 +417,32 @@ const RUN_SETS = {
   ],
 };
 
+/** Past this the scroll is treated as settled — see `scrollToAndSettle`. */
+const SETTLE_TOLERANCE = 0.5;
+
+/**
+ * Scroll to `y` and wait for the position to actually stop changing.
+ *
+ * Lenis is running on this page and interpolates toward its target, so a fixed
+ * wait after `window.scrollTo` can read a position the page has not reached.
+ * Every other rig on this project polls instead (`check_card_stack.mjs` solved
+ * it first and `check_coverflow.mjs` copied it); this file waited a flat 1500ms,
+ * which was long enough for a section but is not a promise. The wait below is
+ * kept ON TOP of this, because parallax and the entrance reveals settle after
+ * the scroll does and the measurement is of the frame a visitor reads.
+ */
+async function scrollToAndSettle(page, y) {
+  await page.evaluate((yy) => window.scrollTo(0, yy), y);
+  let prev = null;
+  for (let i = 0; i < 40; i++) {
+    await page.waitForTimeout(30);
+    const cur = await page.evaluate(() => window.scrollY);
+    if (prev !== null && Math.abs(cur - prev) < SETTLE_TOLERANCE) return cur;
+    prev = cur;
+  }
+  return prev;
+}
+
 async function measure(page, run) {
   // A missing scroll anchor is a missing target, full stop. Until 9 Aug 2026
   // this fell through to `?? 0` and measured wherever the page already was —
@@ -352,16 +450,60 @@ async function measure(page, run) {
   // /mahua-vann where `#why-you-came` does not exist, asserted the scrolled
   // palette against the un-scrolled hero and reported 1.04:1 "failures" for
   // a header that was actually fine.
-  const anchored = await page.evaluate((sel) => {
-    const el = document.querySelector(sel);
-    if (!el) return false;
-    window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY);
-    return true;
-  }, run.at);
-  if (!anchored) return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
+  const target = await page.evaluate(
+    ({ sel, anchor }) => {
+      const el = document.querySelector(sel);
+      if (!el) return null;
+      // `anchor` reproduces what a click on this hash does, which includes the
+      // scroll container's `scroll-padding-top`. Only the coverflow runs need
+      // it: their targets are placed at the offsets an anchor click lands a
+      // card centred at, and without the inset every one of them lands a
+      // header's height past its own card.
+      const pad = anchor
+        ? Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+        : 0;
+      return el.getBoundingClientRect().top + window.scrollY - pad;
+    },
+    { sel: run.at, anchor: Boolean(run.anchor) },
+  );
+  if (target === null) return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
+  await scrollToAndSettle(page, target);
   // Long enough for parallax and any reveal to have finished; the measurement is
   // of the settled frame, which is the one the visitor reads.
   await page.waitForTimeout(1500);
+
+  /**
+   * Did the scroll land where the run says it did?
+   *
+   * Only asked of a run that names a `card`, and fatal when it fails. A contrast
+   * figure read off the wrong card of a carousel — or off a card wearing a
+   * neighbour's veil — is a confident number about something no visitor looks
+   * at, which is worse than no number at all.
+   */
+  let placement = null;
+  if (run.card) {
+    placement = await page.evaluate((sel) => {
+      const card = document.querySelector(sel);
+      const stage = card ? card.closest("ul.coverflow-stage") : null;
+      if (!card || !stage) return { found: false };
+      const sr = stage.getBoundingClientRect();
+      const mid = sr.left + sr.width / 2;
+      const own = card.getBoundingClientRect();
+      const nearest = Math.min(
+        ...[...stage.querySelectorAll("li.coverflow-card")].map((el) => {
+          const r = el.getBoundingClientRect();
+          return Math.abs(r.left + r.width / 2 - mid);
+        }),
+      );
+      const veilEl = card.querySelector(".coverflow-veil");
+      return {
+        found: true,
+        offset: Number((own.left + own.width / 2 - mid).toFixed(2)),
+        nearest: Number(nearest.toFixed(2)),
+        veil: veilEl ? Number(getComputedStyle(veilEl).opacity) : null,
+      };
+    }, run.card);
+  }
 
   /**
    * `pre: "menu"` opens the site menu over whatever photograph `run.at`
@@ -383,27 +525,54 @@ async function measure(page, run) {
   }
 
   const boxes = await page.evaluate(
-    ({ sel }) =>
-      Array.from(document.querySelectorAll(sel))
-        .map((e) => e.getBoundingClientRect())
+    ({ sel, lines }) => {
+      const rects = [];
+      for (const el of document.querySelectorAll(sel)) {
+        if (!lines) {
+          rects.push(el.getBoundingClientRect());
+          continue;
+        }
+        // One rect per LINE BOX rather than one per element. A block-level
+        // element's own rect is its container's full width, so a short heading
+        // drags a wide strip of untyped photograph into the crop and the
+        // brightest pixel in it is reported as the worst case for glyphs that
+        // are nowhere near it. A `Range` over the element's text nodes is tight
+        // to the run of glyphs, which is what `[data-word]` gives the headlines
+        // and what nothing gave these.
+        const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+          if (!n.textContent.trim()) continue;
+          const range = document.createRange();
+          range.selectNodeContents(n);
+          rects.push(...range.getClientRects());
+        }
+      }
+      return rects
         .filter((r) => r.width > 2 && r.height > 2 && r.top >= 0 && r.bottom <= window.innerHeight)
         .map((r) => ({
           x: Math.max(0, Math.floor(r.x)),
           y: Math.max(0, Math.floor(r.y)),
           w: Math.ceil(r.width),
           h: Math.ceil(r.height),
-        })),
-    { sel: run.sel },
+        }));
+    },
+    { sel: run.sel, lines: Boolean(run.lines) },
   );
   if (boxes.length === 0) {
     await closeMenu();
-    return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null };
+    return { name: run.name, min: run.min, worst: null, boxes: 0, pass: null, placement };
   }
 
   await page.evaluate(({ container, hide }) => {
     // `button` matters: the header's own run *is* a button, and leaving it
     // visible measures its cream label against cream and reports 1.06:1.
-    const tags = ["h1", "h2", "p", "span", "a", "cite", "button"];
+    // `h3` since 16 Aug 2026: a coverflow card's title is one, and leaving it
+    // visible would have measured its own cream glyphs as the background under
+    // itself — the same 1:1 reading, on the biggest word on the card. Nothing
+    // else in this table has an `h3` inside a measured crop, so no committed
+    // figure moves; hiding more type is only ever more correct here, because
+    // every run in this file measures what is BEHIND type.
+    const tags = ["h1", "h2", "h3", "p", "span", "a", "cite", "button"];
     for (const e of document.querySelectorAll(tags.map((t) => `${container} ${t}`).join(", "))) {
       // The exact inline style, kept so it can be put back exactly. Clearing the
       // properties this script sets is not the same thing: `PillButton` carries
@@ -456,8 +625,61 @@ async function measure(page, run) {
     brightest,
     boxes: boxes.length,
     pass: worst >= run.min,
+    placement,
   };
 }
+
+/**
+ * Whether a run that named a card sampled it at its own centred moment.
+ *
+ * Returns `null` when the run made no such claim, and a reason string when the
+ * claim failed.
+ *
+ * **The test is the VEIL, not the card's x position, and that distinction was
+ * earned on 16 Aug 2026.** The obvious form — "the card's centre is within 8px
+ * of the stage's centre", `check_coverflow.mjs`'s own tolerance — fired on all
+ * six cards at 768px, and the cause turned out to be a layout defect rather than
+ * a mis-timed scroll: between 768px and 948px the card is *wider than its own
+ * stage*, so its auto margins resolve to `0 / -48px` and every card sits ~24px
+ * right of centre at every scroll position, centred moment or not (see
+ * `docs/reviews/2026-08-16-coverflow/scrims.md` §6 — it is a real defect and it
+ * belongs to `COVERFLOW.stageGutterPx`, not to this rig). An x-offset check
+ * therefore cannot tell "the scroll landed in the wrong place" from "the card is
+ * never in the right place", and it is only the first that makes a contrast
+ * figure meaningless.
+ *
+ * `.coverflow-veil` answers the real question directly and is immune to the
+ * layout: its opacity is keyframed to `sideVeil` at the two ends of the card's
+ * own window and to **0 at the middle**, so it *is* the animation's own distance
+ * from the centred moment. At the six sampled moments it reads 0.0001–0.0015.
+ * Anything above 0.02 means the scroll did not land where the run says, or the
+ * card is a flank — and a flank is the EASY case, since the recede adds scrim
+ * and therefore RAISES cream type's contrast (the plan's correction C), so a
+ * figure read there would understate the worst.
+ */
+const misplacement = (run, row) => {
+  if (!run.card) return null;
+  const p = row.placement;
+  if (!p || !p.found) return `${run.card} is not on the page, or is not inside a coverflow stage`;
+  if (p.veil === null) return `${run.card} has no .coverflow-veil — nothing here can tell when it is centred`;
+  if (p.veil > 0.02) {
+    return `card's veil is at ${p.veil} — the scroll did not land at this card's centred moment, or the card is a flank (a flank wears added scrim, so its type reads BETTER than the worst case this run claims to measure)`;
+  }
+  if (Math.abs(p.offset) > p.nearest + 1) {
+    return `card is ${Math.abs(p.offset)}px from the stage's centre but another is ${p.nearest}px — a different card is the one in front`;
+  }
+  return null;
+};
+
+/**
+ * The card's own x-offset from the stage's centre, reported and never fatal.
+ *
+ * Kept because it is what found the 768–948px centring defect, and kept
+ * non-fatal because that defect is not this rig's to assert — see
+ * `misplacement` above. A number printed every run is how it stays visible
+ * until `check_coverflow.mjs` grows a width sweep that owns it.
+ */
+const OFF_CENTRE_NOTE = 8;
 
 async function main() {
   const pathname = new globalThis.URL(URL).pathname.replace(/\/$/, "") || "/";
@@ -486,6 +708,19 @@ async function main() {
    * looks like success.
    */
   let missing = 0;
+  /**
+   * A run that measured the right selector at the wrong moment.
+   *
+   * Counted separately from a contrast failure and equally fatal. A coverflow
+   * card is only the worst case when it is the CENTRED one — a flank wears an
+   * added veil, which raises cream type's contrast — so a run that sampled a
+   * flank, or landed between two cards, reports a number that is true of a
+   * frame nobody reads. That is the same shape of defect as an unfindable
+   * target: it looks like a pass.
+   */
+  let misplaced = 0;
+  /** Counted and printed, never fatal — see `OFF_CENTRE_NOTE`. */
+  let offCentre = 0;
 
   for (const width of WIDTHS) {
     const context = await browser.newContext({
@@ -496,23 +731,44 @@ async function main() {
     await page.waitForTimeout(1500);
 
     const rows = [];
-    for (const run of RUNS) rows.push(await measure(page, run));
+    for (const run of RUNS) {
+      const row = await measure(page, run);
+      row.misplaced = misplacement(run, row);
+      rows.push(row);
+    }
     report.widths[width] = rows;
 
     console.log(`--- ${width}px ---`);
     for (const r of rows) {
       if (r.pass === false) failures++;
       if (r.pass === null) missing++;
+      if (r.misplaced) misplaced++;
       console.log(
         `  ${r.name.padEnd(24)} floor ${String(r.min).padEnd(4)} worst ${String(r.worst).padEnd(6)} ${
           r.pass === null ? "NOT FOUND" : r.pass ? "ok" : "FAIL"
         }`,
       );
+      if (r.misplaced) console.log(`      MISPLACED @${width}px: ${r.misplaced}`);
+      if (r.placement?.found && Math.abs(r.placement.offset) > OFF_CENTRE_NOTE) {
+        offCentre++;
+        console.log(
+          `      note: this card sits ${r.placement.offset}px off the stage's centre at ${width}px — ` +
+            `a layout defect, not a mis-timed sample (its veil is ${r.placement.veil}). See scrims.md §6.`,
+        );
+      }
     }
     await context.close();
   }
 
   await browser.close();
+  report.offCentre = offCentre;
+  if (offCentre > 0) {
+    console.log(
+      `\n${offCentre} sample(s) found their card off the stage's centre by more than ${OFF_CENTRE_NOTE}px. ` +
+        `Not a failure here — the contrast figure is still the one a visitor reads — but it is a real ` +
+        `layout defect and it is written up in docs/reviews/2026-08-16-coverflow/scrims.md §6.`,
+    );
+  }
   await mkdir(path.dirname(OUT), { recursive: true });
   await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`, "utf8");
   console.log(`Wrote ${OUT}`);
@@ -527,6 +783,14 @@ async function main() {
       `FAILED: ${missing} target(s) could not be found on the page. Either the markup moved and the ` +
         `selector needs updating, or the run genuinely no longer exists and should be deleted from RUNS. ` +
         `A target that is silently skipped is an unmeasured piece of type over a photograph.`,
+    );
+    process.exitCode = 1;
+  }
+
+  if (misplaced > 0) {
+    console.error(
+      `FAILED: ${misplaced} run(s) measured their type at a scroll position where the card they name ` +
+        `was not the centred, unveiled one. The figure they report is about a frame nobody reads.`,
     );
     process.exitCode = 1;
   }

@@ -20,7 +20,6 @@ const MIN_MEDIA = {
   // pinned scene with one photograph in it is two screens of scroll spent on
   // nothing — but three is what the layout is built for.
   pinnedCollage: 3,
-  splitFeature: 2,
   // Six activities, one card each. Below that it is not a carousel; the pin
   // reserves scroll for cards that are not there — non-negotiable #9.
   coverflow: 6,

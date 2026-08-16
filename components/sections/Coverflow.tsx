@@ -101,13 +101,33 @@ export const BOXES = {
 /**
  * The wash between each card's photograph and the cream type laid on it.
  *
- * **Every figure here is a placeholder and is deliberately heavy.** The plan's
- * Task 8 solves all six against the rendered page — raising each until the worst
- * single pixel under that card's type clears its floor and no further — and adds
- * a run per card to `scripts/check_contrast_over_photos.mjs`, whose `RUNS` table
- * is hand-written and discovers nothing, so a card absent from it is a card
- * nobody has checked. `{ flat: 0.5 }` fails towards legible-but-muddy, which a
- * reviewer sees, rather than towards illegible, which they may not.
+ * **Solved, 16 Aug 2026, against the rendered page** — six photographs, six
+ * exposures, six figures, each raised only until the worst single pixel under
+ * that card's type clears 4.5:1 and no further. Every one is re-derivable:
+ * `scripts/check_contrast_over_photos.mjs` carries a run per card and the full
+ * sweep is `docs/reviews/2026-08-16-coverflow/scrims.md`. They replaced a
+ * deliberate `{ flat: 0.5 }` placeholder that measured **2.6–3.4:1** at 390px —
+ * legible-looking and below the floor on all six.
+ *
+ * **The shape is `centre` + `bottom` + `corner`, and the shape is the finding.**
+ * `Scrim.tsx` is explicit that a flat wash heavy enough for the brightest patch
+ * flattens the whole photograph to mud, so the layers are put where the type is.
+ * Where the type IS, though, depends on the width, and this card changes shape
+ * more than most: at 1440 the words are 27% of the card's height and sit low in
+ * it, so `bottom` + `corner` alone solve it and leave the frame alone. At 390 the
+ * same words — floored by their own `clamp()` while the card shrinks to 342x192 —
+ * are **58%** of the card, and their top edge is above the `bottom` band
+ * entirely. No amount of `bottom` reaches them. `centre` is the layer whose
+ * geometry matches that case, and it is why these figures are heavier than a
+ * desktop-only solve would need. **390 is what binds every one of them.**
+ *
+ * The cost is real and is written down rather than hidden: at 1440 these frames
+ * are duller than the `{ bottom, corner }` pair that clears the same floor there
+ * (`docs/reviews/2026-08-16-coverflow/scrims.md` §4). The lever that would buy it
+ * back is the card's own small-screen composition — smaller type, or fewer words,
+ * or a taller card below ~950px — not a lighter wash. **Do not lighten these
+ * without re-running the rig at 390**; the desktop widths pass with several
+ * points to spare and will not notice.
  *
  * **Keyed by photograph, not by activity, and not in `content/`.** What a scrim
  * answers to is the exposure of a frame; the activity that happens to name it is
@@ -118,23 +138,53 @@ export const BOXES = {
  *
  * `Partial<Record<…>>` rather than `Record<MediaId, ScrimStrength>`: `MediaId` is
  * all fifty-three curated photographs and this map is about six of them. The
- * fallback is the same heavy placeholder, so a card whose photograph is swapped
- * without a figure being solved for it still fails towards muddy.
+ * fallback is a deliberately heavy wash, so a card whose photograph is swapped
+ * without a figure being solved for it fails towards muddy — which a reviewer
+ * sees — rather than towards illegible, which they may not.
  */
 const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
   // `vann-safari`, not `tiger-crossing-track`, since 16 Aug 2026 — see
   // `content/home.ts`'s `ExperienceCopy.mediaId`. The 541px file was capping
   // every card on the stage.
-  "vann-safari": { flat: 0.5 },
-  "vann-bird-watching": { flat: 0.5 },
-  "vann-kohka-lake": { flat: 0.5 },
-  "forest-boardwalk-daylight": { flat: 0.5 },
-  "vann-potters-village": { flat: 0.5 },
-  "forest-trail-canopy": { flat: 0.5 },
+  //
+  // Dry forest at midday behind the vehicle; the brightest pixel under the type
+  // is bare track. 1.02:1 unwashed at 390. → 5.03 at 390, 6.02 at 1440.
+  "vann-safari": { centre: 0.65, bottom: 0.6, corner: 0.4 },
+  // A blown-out sky through the canopy — 1.02:1 unwashed, and the highlight sits
+  // directly under the body copy rather than beside it, which is why this one
+  // needs the strongest `centre` of the six. → 5.24 at 390, 8.82 at 1440.
+  "vann-bird-watching": { centre: 0.8, bottom: 0.6, corner: 0.6 },
+  // The only card that needs a flat layer at all. Its bright water reaches the
+  // TOP-LEFT of the type block at 390, which is the one place none of the three
+  // shaped layers covers: above the `bottom` band, outside the `corner` wedge,
+  // and at the `centre` ellipse's edge. 0.15 is the least that closes it —
+  // 4.22:1 without it, 4.91 with. → 4.91 at 390.
+  "vann-kohka-lake": { flat: 0.15, centre: 0.8, bottom: 0.6, corner: 0.6 },
+  // Pale boardwalk timber, the most even frame of the six — 1.32:1 unwashed, the
+  // best starting point in the set. → 5.45 at 390, 8.78 at 1440.
+  "forest-boardwalk-daylight": { centre: 0.65, bottom: 0.6, corner: 0.6 },
+  // **The hardest photograph on the stage**, and the one a reviewer reading 390px
+  // frames had already flagged by eye: white-glazed pots read [234,235,230] under
+  // the type — 1.01:1, effectively cream on cream. → 5.18 at 390, 7.94 at 1440.
+  // See §5 of the review: this is the frame whose crop, not whose wash, is the
+  // real lever.
+  "vann-potters-village": { centre: 0.8, bottom: 0.6, corner: 0.6 },
+  // Sunlit leaf litter — 1.01:1 unwashed, but the bright pixels are low in the
+  // frame, so `bottom` does more of the work here than anywhere else in the set
+  // and the `centre` can stay at 0.65. → 5.05 at 390, 7.84 at 1440.
+  "forest-trail-canopy": { centre: 0.65, bottom: 0.8, corner: 0.6 },
 };
 
-/** See `CARD_SCRIM`. Task 8 replaces every one of these. */
-const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.5 };
+/**
+ * The fallback for a photograph nobody has solved a figure for.
+ *
+ * Heavier than any solved figure on purpose: an unsolved card must fail towards
+ * legible-but-muddy, which a reviewer sees, not towards illegible, which they may
+ * not. Nothing reaches it today — all six cards are in `CARD_SCRIM` — and it
+ * exists for the swap that changes one `mediaId` in `content/home.ts` without
+ * coming back here.
+ */
+const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.35, centre: 0.7, bottom: 0.8, corner: 0.6 };
 
 /**
  * `04 · Days in the Field` as a coverflow — six activities, six cards, advancing

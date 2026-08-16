@@ -21,7 +21,6 @@ import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
 import { GALLERY_SIZES } from "@/components/sections/RoomCardStack";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
-import { BOXES as SPLIT_BOXES, SIZES as SPLIT_SIZES } from "@/components/sections/SplitFeature";
 import {
   BOXES as TESTIMONIAL_BOXES,
   SIZES as TESTIMONIAL_SIZES,
@@ -161,12 +160,10 @@ const LIVE_SLOTS: readonly Slot[] = [
     sizes: LODGE_SIZES[k],
     box: LODGE_BOXES[k] as CoverBox,
   })),
-  { name: "SplitFeature.wide (band 1)", sizes: SPLIT_SIZES.wide, box: SPLIT_BOXES.wideStacked },
-  { name: "SplitFeature.wide (band 2)", sizes: SPLIT_SIZES.wide, box: SPLIT_BOXES.wide },
-  { name: "SplitFeature.inlayWide", sizes: SPLIT_SIZES.inlayWide, box: SPLIT_BOXES.inlayWide },
-  { name: "SplitFeature.inlayTall", sizes: SPLIT_SIZES.inlayTall, box: SPLIT_BOXES.inlayTall },
-  { name: "SplitFeature.aside", sizes: SPLIT_SIZES.aside, box: SPLIT_BOXES.aside },
-  { name: "SplitFeature.sticky", sizes: SPLIT_SIZES.sticky, box: SPLIT_BOXES.sticky },
+  // `SplitFeature`'s six rows were here until 16 Aug 2026, when the coverflow
+  // replaced it on `field-days` — its only caller — and the component was
+  // deleted. Five distinct strings went with them (`wide` was two rows and one
+  // string), which is the whole of this table's own count moving 29 → 24.
   // An unframed plate is `h-auto`, so nothing is cropped and there is no box to
   // describe. A grid whose plates disagree about their shape imposes one on all
   // of them, and then there is — every frame against every plate width, since
@@ -376,7 +373,15 @@ describe("the sizes the page actually serves", () => {
     // and `track` is a flat 420px cap set by a 541px FILE rather than by a
     // column, which nothing else on the page does at all. Read off this suite by
     // running it and reading the failure (`expected 29 to be 26`).
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(29);
+    // 29 → 24 when `SplitFeature` was retired (16 Aug 2026, the coverflow plan's
+    // Task 8): `field-days` was its only caller and is a `coverflow` now, so the
+    // component was deleted and its six rows came out with it. Five distinct
+    // strings, not six — `wide` was two rows (band 1 and band 2, same string,
+    // different boxes) and one string — and none of the five was shared with any
+    // surviving slot. Read off this suite by running it and reading the failure
+    // (`expected 24 to be 29`), not computed by hand, per the same instruction
+    // as every step above.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -526,7 +531,6 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/Hero.tsx", declared: HERO_BOX },
     { file: "components/sections/ChapterIntro.tsx", declared: INTRO_BOXES },
     { file: "components/sections/LodgeCards.tsx", declared: LODGE_BOXES },
-    { file: "components/sections/SplitFeature.tsx", declared: SPLIT_BOXES },
     { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
     // The day's six experiences: `hero` at 2:1, `quiet` at 4:5 — new crops

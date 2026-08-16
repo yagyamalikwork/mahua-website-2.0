@@ -27,14 +27,15 @@ export type ChapterKind =
    * same way and the rhythm rule counts it the same way.
    */
   | "pinnedCollage"
-  | "splitFeature"
   /**
    * Six activity cards on one pinned stage, the neighbours behind and to either
    * side, advancing on the visitor's own scroll (16 Aug 2026). Every card is a
    * photograph with its words on it, so the chapter is image-led at every point
-   * in its travel — unlike `splitFeature`, which it replaced on `field-days`,
-   * it has no text-only state. Nothing moves unless the visitor moves: there is
-   * no autoplay, which the client was offered and declined (non-negotiable #5).
+   * in its travel — unlike `"splitFeature"`, the copy-one-side/imagery-the-other
+   * kind it replaced on `field-days` and which was retired with its component
+   * the same day, it has no text-only state. Nothing moves unless the visitor
+   * moves: there is no autoplay, which the client was offered and declined
+   * (non-negotiable #5).
    */
   | "coverflow"
   | "plateGrid"
@@ -74,9 +75,10 @@ export type ChapterLike = {
 /**
  * The kinds that count as carrying a screen on their photography.
  *
- * Deliberately conservative: `lodgeCards` and `splitFeature` both show
- * substantial imagery, but counting them as quiet makes the alternation test
- * stricter rather than looser, which is the direction to err in.
+ * Deliberately conservative: `lodgeCards` shows substantial imagery and is
+ * still counted as quiet, because counting it that way makes the alternation
+ * test stricter rather than looser, which is the direction to err in. (The
+ * retired `splitFeature` was the other one held to that line.)
  */
 export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
   "hero",

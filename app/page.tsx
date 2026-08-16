@@ -8,7 +8,6 @@ import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
 import { LodgeCards } from "@/components/sections/LodgeCards";
 import { PlateGrid } from "@/components/sections/PlateGrid";
-import { SplitFeature } from "@/components/sections/SplitFeature";
 import { Testimonials } from "@/components/sections/Testimonials";
 import type { ScrimStrength } from "@/components/ui/Scrim";
 import { ForestBackdrop } from "@/components/ui/ForestBackdrop";
@@ -62,9 +61,12 @@ const CREAM_KINDS: readonly ChapterKind[] = [
   // be counted here for the same reason `pinnedCollage` is counted among the
   // intros: this list is what alternates the two creams, so a chapter dropping
   // out of it would flip the surface of every cream chapter BELOW it as a side
-  // effect. `splitFeature` stays until the plan's Task 8 retires the component;
-  // nothing routes to it now, so the count is unchanged either way.
-  "splitFeature",
+  // effect. `"splitFeature"` sat beside it for one day and came out with the
+  // component on the same date — safely, and only because the two changes were
+  // made together: the kind was already unrouted, so removing it changed no
+  // chapter's position in this count. Removing a kind that IS routed would flip
+  // the cream of every chapter below it, silently, and this list is referenced
+  // by no plan.
   "coverflow",
   "testimonials",
 ];
@@ -186,38 +188,6 @@ function renderChapter(chapter: Chapter, at: Position) {
           backdrop={chapter.id === "forest" ? <ForestBackdrop surface={at.surface} /> : undefined}
         />
       );
-    case "splitFeature":
-      return (
-        <SplitFeature
-          key={chapter.id}
-          chapter={chapter}
-          surface={at.surface}
-          /*
-           * The tiger goes here — the chapter about going out to look for
-           * animals, and the one that owns the emptiest screen belonging to any
-           * chapter (52.4% against non-negotiable #8's 45% ceiling).
-           *
-           * It was an ink drawing that inked itself in until 6 Aug 2026, when the
-           * client supplied this film. `components/signature/InkTiger.tsx` and its
-           * artwork are still here, tested, and one line from returning — see
-           * `docs/DECISIONS.md` for the trade that was made and what it cost.
-           */
-          footer={
-            chapter.id === "field-days" ? (
-              /* Sized here rather than in the component, because how large the
-                 tiger should be is a question about this chapter's column and not
-                 about the film. 420px is sharp to DPR 2 against an 810px source. */
-              <SignatureFilm
-                src="/media/tiger-film.mp4"
-                poster="/media/tiger-film-poster.webp"
-                width={810}
-                height={1080}
-                className="block h-auto w-[240px] sm:w-[280px] lg:w-[300px]"
-              />
-            ) : undefined
-          }
-        />
-      );
     case "coverflow":
       return (
         <Coverflow
@@ -225,12 +195,22 @@ function renderChapter(chapter: Chapter, at: Position) {
           chapter={chapter}
           surface={at.surface}
           /*
-           * The same tiger, on the same terms as the `splitFeature` case above —
-           * this arm exists because `field-days` changed shape on 16 Aug 2026,
-           * not because the film did.
+           * The tiger goes here — the chapter about going out to look for
+           * animals, and the one that owned the emptiest screen belonging to any
+           * chapter.
+           *
+           * It was an ink drawing that inked itself in until 6 Aug 2026, when the
+           * client supplied this film. `components/signature/InkTiger.tsx` and its
+           * artwork are still here, tested, and one line from returning — see
+           * `docs/DECISIONS.md` for the trade that was made and what it cost.
+           *
+           * This arm carried the same film as a `case "splitFeature"` beside it
+           * for one day; that component was retired on 16 Aug 2026 once the
+           * coverflow's measurement said it shipped, and nothing has routed to it
+           * since `field-days` changed shape.
            *
            * **The prop is `figure`, not `footer`, and that word is the finding.**
-           * `SplitFeature` puts its slot at the foot of the chapter, where a
+           * `SplitFeature` put its slot at the foot of the chapter, where a
            * prose band leaves cream to hang a drawing in. A pinned stage leaves
            * none: at 1440x900 a centred card is 506px of a 793px stage, the film
            * is 400px tall, and there is no scroll position at which both fit one
