@@ -1,7 +1,25 @@
 {
-  "measuredAt": "2026-08-16T19:12:36.378Z",
+  "measuredAt": "2026-08-16T20:40:44.345Z",
   "url": "http://localhost:3110",
-  "assertion": "At every sampled scroll position inside the pin: at most one card is within 8px of the stage's horizontal centre, exactly one card's arrows are hit-testable, and that card is the one nearest the centre. Across the pin the card in charge advances 0 -> 7 hitting every index, and every card is bisected to its own centred moment and must land inside 8px. The deck is the six activities plus the two wrap-around ghosts, which must be aria-hidden, id-less and out of the tab order.",
+  "path": "/",
+  "sweep": {
+    "from": 360,
+    "to": 1920,
+    "step": 20,
+    "height": 900
+  },
+  "assertions": [
+    "1 the stage holds within 2px of the header across the whole pin",
+    "2 at most one card within 8px of centre; the card in charge advances 0->7; every card reaches centre",
+    "3 a neighbour recedes by veil and scale, never by opacity; the centred card is unveiled",
+    "4 exactly one card's arrows are hit-testable, and it is the one nearest centre",
+    "5 the arrows loop both ways",
+    "6 no photograph loses more than 25% of its own width",
+    "7 continuous width sweep 360-1920 in 20px steps, asserting 1-6 plus the card's centring and its width against its stage",
+    "8 reduced motion yields a readable, non-overlapping list of the six activities",
+    "9 with no JavaScript the six activities are complete in the document",
+    "precondition animation-range never falls back to `normal`"
+  ],
   "shapes": [
     {
       "width": 1440,
@@ -9,6 +27,10 @@
       "geometry": {
         "top": 7812,
         "height": 1800,
+        "trackTop": 7812,
+        "trackHeight": 1800,
+        "headerHeight": 107,
+        "innerHeight": 900,
         "cards": 8,
         "targets": 6,
         "ghostCards": 2,
@@ -17,6 +39,12 @@
       },
       "samples": 113,
       "pinnedSamples": 43,
+      "pinWindow": {
+        "lockAt": 7705,
+        "releaseAt": 8712
+      },
+      "heldSamples": 41,
+      "slippedSamples": 0,
       "inChargeOrder": [
         0,
         1,
@@ -85,12 +113,195 @@
           "byHold": true
         }
       ],
+      "flanks": [
+        {
+          "card": 0,
+          "ghost": true,
+          "scrollY": 6912,
+          "neighbours": [
+            {
+              "i": 1,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": false
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 1,
+          "ghost": false,
+          "scrollY": 7848,
+          "neighbours": [
+            {
+              "i": 0,
+              "scale": 0.8206,
+              "veil": 0.398686,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 2,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 2,
+          "ghost": false,
+          "scrollY": 7992,
+          "neighbours": [
+            {
+              "i": 1,
+              "scale": 0.8204,
+              "veil": 0.399077,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 3,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 3,
+          "ghost": false,
+          "scrollY": 8136,
+          "neighbours": [
+            {
+              "i": 2,
+              "scale": 0.8202,
+              "veil": 0.399468,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 4,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 4,
+          "ghost": false,
+          "scrollY": 8280,
+          "neighbours": [
+            {
+              "i": 3,
+              "scale": 0.8201,
+              "veil": 0.39987,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 5,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 5,
+          "ghost": false,
+          "scrollY": 8424,
+          "neighbours": [
+            {
+              "i": 4,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 6,
+              "scale": 0.8201,
+              "veil": 0.399728,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 6,
+          "ghost": false,
+          "scrollY": 8568,
+          "neighbours": [
+            {
+              "i": 5,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 7,
+              "scale": 0.8203,
+              "veil": 0.399337,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        },
+        {
+          "card": 7,
+          "ghost": true,
+          "scrollY": 8712,
+          "neighbours": [
+            {
+              "i": 6,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2239
+        }
+      ],
+      "loop": [
+        {
+          "from": 6,
+          "direction": "next",
+          "href": "#field-days-card-0",
+          "landedOn": 1
+        },
+        {
+          "from": 1,
+          "direction": "previous",
+          "href": "#field-days-card-5",
+          "landedOn": 6
+        }
+      ],
       "firstSample": {
         "scrollY": 7704,
         "innerHeight": 900,
+        "innerWidth": 1440,
         "headerHeight": 107,
         "stageTop": 107.625,
+        "stageWidth": 1344,
         "stageCentre": 720,
+        "cardMax": 900,
+        "sideVeil": 0.4,
+        "sideScale": 0.82,
         "pinned": true,
         "cards": [
           {
@@ -98,9 +309,22 @@
             "centre": 720,
             "offset": 0,
             "width": 900,
+            "layoutWidth": 900,
+            "height": 506.25,
+            "onScreen": true,
             "opacity": 1,
+            "scale": 1,
+            "veil": 0,
             "zIndex": "2",
             "rangeStart": "cover 505.286px",
+            "veilRangeStart": "cover 505.286px",
+            "arrowsRangeStart": "cover 505.286px",
+            "photo": {
+              "src": "forest-trail-canopy-960.avif",
+              "imageAspect": 1.5008,
+              "boxAspect": 1.7778,
+              "cropped": 0
+            },
             "arrows": [
               {
                 "href": "#field-days-card-4",
@@ -128,9 +352,22 @@
             "centre": 1281.0308837890625,
             "offset": 561.0308837890625,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": true,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 649.143px",
+            "veilRangeStart": "cover 649.143px",
+            "arrowsRangeStart": "cover 649.143px",
+            "photo": {
+              "src": "vann-safari-1163.avif",
+              "imageAspect": 2.2905,
+              "boxAspect": 1.7778,
+              "cropped": 0.2239
+            },
             "arrows": [
               {
                 "href": "#field-days-card-5",
@@ -158,9 +395,22 @@
             "centre": 1980,
             "offset": 1260,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 793px",
+            "veilRangeStart": "cover 793px",
+            "arrowsRangeStart": "cover 793px",
+            "photo": {
+              "src": "vann-bird-watching-1163.avif",
+              "imageAspect": 2.2905,
+              "boxAspect": 1.7778,
+              "cropped": 0.2239
+            },
             "arrows": [
               {
                 "href": "#field-days-card-0",
@@ -188,9 +438,22 @@
             "centre": 1980,
             "offset": 1260,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 936.857px",
+            "veilRangeStart": "cover 936.857px",
+            "arrowsRangeStart": "cover 936.857px",
+            "photo": {
+              "src": "vann-kohka-lake-1163.avif",
+              "imageAspect": 2.2905,
+              "boxAspect": 1.7778,
+              "cropped": 0.2239
+            },
             "arrows": [
               {
                 "href": "#field-days-card-1",
@@ -218,9 +481,17 @@
             "centre": 1980,
             "offset": 1260,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1080.71px",
+            "veilRangeStart": "cover 1080.71px",
+            "arrowsRangeStart": "cover 1080.71px",
+            "photo": null,
             "arrows": [
               {
                 "href": "#field-days-card-2",
@@ -248,9 +519,22 @@
             "centre": 1980,
             "offset": 1260,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1224.57px",
+            "veilRangeStart": "cover 1224.57px",
+            "arrowsRangeStart": "cover 1224.57px",
+            "photo": {
+              "src": "vann-potters-village-1163.avif",
+              "imageAspect": 2.2905,
+              "boxAspect": 1.7778,
+              "cropped": 0.2239
+            },
             "arrows": [
               {
                 "href": "#field-days-card-3",
@@ -278,9 +562,22 @@
             "centre": 1980,
             "offset": 1260,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1368.43px",
+            "veilRangeStart": "cover 1368.43px",
+            "arrowsRangeStart": "cover 1368.43px",
+            "photo": {
+              "src": "forest-trail-canopy-960.avif",
+              "imageAspect": 1.5008,
+              "boxAspect": 1.7778,
+              "cropped": 0
+            },
             "arrows": [
               {
                 "href": "#field-days-card-4",
@@ -308,9 +605,22 @@
             "centre": 1980,
             "offset": 1260,
             "width": 738,
+            "layoutWidth": 900,
+            "height": 415.125,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1512.29px",
+            "veilRangeStart": "cover 1512.29px",
+            "arrowsRangeStart": "cover 1512.29px",
+            "photo": {
+              "src": "vann-safari-1163.avif",
+              "imageAspect": 2.2905,
+              "boxAspect": 1.7778,
+              "cropped": 0.2239
+            },
             "arrows": [
               {
                 "href": "#field-days-card-5",
@@ -342,6 +652,10 @@
       "geometry": {
         "top": 9783,
         "height": 1688,
+        "trackTop": 9783,
+        "trackHeight": 1688,
+        "headerHeight": 75.390625,
+        "innerHeight": 844,
         "cards": 8,
         "targets": 6,
         "ghostCards": 2,
@@ -350,6 +664,12 @@
       },
       "samples": 106,
       "pinnedSamples": 39,
+      "pinWindow": {
+        "lockAt": 9708,
+        "releaseAt": 10627
+      },
+      "heldSamples": 37,
+      "slippedSamples": 0,
       "inChargeOrder": [
         0,
         1,
@@ -415,12 +735,195 @@
           "byHold": true
         }
       ],
+      "flanks": [
+        {
+          "card": 0,
+          "ghost": true,
+          "scrollY": 8939,
+          "neighbours": [
+            {
+              "i": 1,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": false
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 1,
+          "ghost": false,
+          "scrollY": 9839,
+          "neighbours": [
+            {
+              "i": 0,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 2,
+              "scale": 0.8201,
+              "veil": 0.399726,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 2,
+          "ghost": false,
+          "scrollY": 9971,
+          "neighbours": [
+            {
+              "i": 1,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 3,
+              "scale": 0.8211,
+              "veil": 0.397536,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 3,
+          "ghost": false,
+          "scrollY": 10101,
+          "neighbours": [
+            {
+              "i": 2,
+              "scale": 0.8207,
+              "veil": 0.398536,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 4,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 4,
+          "ghost": false,
+          "scrollY": 10235,
+          "neighbours": [
+            {
+              "i": 3,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 5,
+              "scale": 0.8231,
+              "veil": 0.393169,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 5,
+          "ghost": false,
+          "scrollY": 10364,
+          "neighbours": [
+            {
+              "i": 4,
+              "scale": 0.8201,
+              "veil": 0.399869,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 6,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 6,
+          "ghost": false,
+          "scrollY": 10499,
+          "neighbours": [
+            {
+              "i": 5,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            },
+            {
+              "i": 7,
+              "scale": 0.825,
+              "veil": 0.388824,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        },
+        {
+          "card": 7,
+          "ghost": true,
+          "scrollY": 10643,
+          "neighbours": [
+            {
+              "i": 6,
+              "scale": 0.82,
+              "veil": 0.4,
+              "opacity": 1,
+              "onScreen": true
+            }
+          ],
+          "worstCrop": 0.2242
+        }
+      ],
+      "loop": [
+        {
+          "from": 6,
+          "direction": "next",
+          "href": "#field-days-card-0",
+          "landedOn": 1
+        },
+        {
+          "from": 1,
+          "direction": "previous",
+          "href": "#field-days-card-5",
+          "landedOn": 6
+        }
+      ],
       "firstSample": {
         "scrollY": 9707,
         "innerHeight": 844,
+        "innerWidth": 390,
         "headerHeight": 75.390625,
         "stageTop": 75.59375,
+        "stageWidth": 342,
         "stageCentre": 195,
+        "cardMax": 900,
+        "sideVeil": 0.4,
+        "sideScale": 0.82,
         "pinned": true,
         "cards": [
           {
@@ -428,9 +931,22 @@
             "centre": 195,
             "offset": 0,
             "width": 342,
+            "layoutWidth": 342,
+            "height": 192.375,
+            "onScreen": true,
             "opacity": 1,
+            "scale": 1,
+            "veil": 0,
             "zIndex": "2",
             "rangeStart": "cover 506.429px",
+            "veilRangeStart": "cover 506.429px",
+            "arrowsRangeStart": "cover 506.429px",
+            "photo": {
+              "src": "forest-trail-canopy-400.avif",
+              "imageAspect": 1.5066,
+              "boxAspect": 1.7778,
+              "cropped": 0
+            },
             "arrows": [
               {
                 "href": "#field-days-card-4",
@@ -458,9 +974,22 @@
             "centre": 407.9189758300781,
             "offset": 212.91897583007812,
             "width": 280.44000244140625,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": true,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 637.714px",
+            "veilRangeStart": "cover 637.714px",
+            "arrowsRangeStart": "cover 637.714px",
+            "photo": {
+              "src": "vann-safari-640.avif",
+              "imageAspect": 2.2917,
+              "boxAspect": 1.7778,
+              "cropped": 0.2242
+            },
             "arrows": [
               {
                 "href": "#field-days-card-5",
@@ -488,9 +1017,22 @@
             "centre": 595.2000274658203,
             "offset": 400.2000274658203,
             "width": 280.4400329589844,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 769px",
+            "veilRangeStart": "cover 769px",
+            "arrowsRangeStart": "cover 769px",
+            "photo": {
+              "src": "vann-bird-watching-640.avif",
+              "imageAspect": 2.2917,
+              "boxAspect": 1.7778,
+              "cropped": 0.2242
+            },
             "arrows": [
               {
                 "href": "#field-days-card-0",
@@ -518,9 +1060,22 @@
             "centre": 595.2000274658203,
             "offset": 400.2000274658203,
             "width": 280.4400329589844,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 900.286px",
+            "veilRangeStart": "cover 900.286px",
+            "arrowsRangeStart": "cover 900.286px",
+            "photo": {
+              "src": "vann-kohka-lake-640.avif",
+              "imageAspect": 2.2917,
+              "boxAspect": 1.7778,
+              "cropped": 0.2242
+            },
             "arrows": [
               {
                 "href": "#field-days-card-1",
@@ -548,9 +1103,22 @@
             "centre": 595.2000274658203,
             "offset": 400.2000274658203,
             "width": 280.4400329589844,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1031.57px",
+            "veilRangeStart": "cover 1031.57px",
+            "arrowsRangeStart": "cover 1031.57px",
+            "photo": {
+              "src": "forest-boardwalk-daylight-400.avif",
+              "imageAspect": 1.5066,
+              "boxAspect": 1.7778,
+              "cropped": 0
+            },
             "arrows": [
               {
                 "href": "#field-days-card-2",
@@ -578,9 +1146,17 @@
             "centre": 595.2000274658203,
             "offset": 400.2000274658203,
             "width": 280.4400329589844,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1162.86px",
+            "veilRangeStart": "cover 1162.86px",
+            "arrowsRangeStart": "cover 1162.86px",
+            "photo": null,
             "arrows": [
               {
                 "href": "#field-days-card-3",
@@ -608,9 +1184,22 @@
             "centre": 595.2000274658203,
             "offset": 400.2000274658203,
             "width": 280.4400329589844,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1294.14px",
+            "veilRangeStart": "cover 1294.14px",
+            "arrowsRangeStart": "cover 1294.14px",
+            "photo": {
+              "src": "forest-trail-canopy-400.avif",
+              "imageAspect": 1.5066,
+              "boxAspect": 1.7778,
+              "cropped": 0
+            },
             "arrows": [
               {
                 "href": "#field-days-card-4",
@@ -638,9 +1227,22 @@
             "centre": 595.2000274658203,
             "offset": 400.2000274658203,
             "width": 280.4400329589844,
+            "layoutWidth": 342,
+            "height": 157.74752807617188,
+            "onScreen": false,
             "opacity": 1,
+            "scale": 0.82,
+            "veil": 0.4,
             "zIndex": "1",
             "rangeStart": "cover 1425.43px",
+            "veilRangeStart": "cover 1425.43px",
+            "arrowsRangeStart": "cover 1425.43px",
+            "photo": {
+              "src": "vann-safari-640.avif",
+              "imageAspect": 2.2917,
+              "boxAspect": 1.7778,
+              "cropped": 0.2242
+            },
             "arrows": [
               {
                 "href": "#field-days-card-5",
@@ -667,6 +1269,5143 @@
       }
     }
   ],
+  "widthSweep": [
+    {
+      "width": 360,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9882,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 312,
+          "cardWidth": 312,
+          "drawnWidth": 311.9,
+          "wantWidth": 312,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399473,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2242,
+          "margins": [
+            0.3,
+            -0.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10300,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 312,
+          "cardWidth": 312,
+          "drawnWidth": 312,
+          "wantWidth": 312,
+          "offset": 0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399877,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2242,
+          "margins": [
+            0.1,
+            -0.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 380,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10012,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 332,
+          "cardWidth": 332,
+          "drawnWidth": 331.9,
+          "wantWidth": 332,
+          "offset": -0.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399652
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2256,
+          "margins": [
+            -0.1,
+            0.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10430,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 332,
+          "cardWidth": 332,
+          "drawnWidth": 331.9,
+          "wantWidth": 332,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399248
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2256,
+          "margins": [
+            -0.3,
+            0.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 400,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10093,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 352,
+          "cardWidth": 352,
+          "drawnWidth": 351.9,
+          "wantWidth": 352,
+          "offset": 0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399114,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            0.6,
+            -0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10511,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 352,
+          "cardWidth": 352,
+          "drawnWidth": 351.9,
+          "wantWidth": 352,
+          "offset": 0.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399518,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            0.3,
+            -0.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 420,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10292,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 372,
+          "cardWidth": 372,
+          "drawnWidth": 371.8,
+          "wantWidth": 372,
+          "offset": 0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399114,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2243,
+          "margins": [
+            0.6,
+            -0.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10710,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 372,
+          "cardWidth": 372,
+          "drawnWidth": 371.9,
+          "wantWidth": 372,
+          "offset": 0.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399518,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2243,
+          "margins": [
+            0.3,
+            -0.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 440,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10460,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 392,
+          "cardWidth": 392,
+          "drawnWidth": 391.8,
+          "wantWidth": 392,
+          "offset": 0.7,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398934,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.224,
+          "margins": [
+            0.8,
+            -0.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10878,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 392,
+          "cardWidth": 392,
+          "drawnWidth": 391.9,
+          "wantWidth": 392,
+          "offset": 0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399338,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.224,
+          "margins": [
+            0.5,
+            -0.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 460,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10661,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 412,
+          "cardWidth": 412,
+          "drawnWidth": 412,
+          "wantWidth": 412,
+          "offset": -0.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399832
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2252,
+          "margins": [
+            -0.1,
+            0.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 11079,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 412,
+          "cardWidth": 412,
+          "drawnWidth": 411.9,
+          "wantWidth": 412,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399428
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2252,
+          "margins": [
+            -0.3,
+            0.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10830,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 432,
+          "cardWidth": 432,
+          "drawnWidth": 431.8,
+          "wantWidth": 432,
+          "offset": 0.9,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398755,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            1,
+            -0.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 11248,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 432,
+          "cardWidth": 432,
+          "drawnWidth": 431.8,
+          "wantWidth": 432,
+          "offset": 0.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399159,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            0.7,
+            -0.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 500,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 10953,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 452,
+          "cardWidth": 452,
+          "drawnWidth": 451.8,
+          "wantWidth": 452,
+          "offset": 0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399293,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2241,
+          "margins": [
+            0.6,
+            -0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 11371,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 452,
+          "cardWidth": 452,
+          "drawnWidth": 451.9,
+          "wantWidth": 452,
+          "offset": 0.2,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399697,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2241,
+          "margins": [
+            0.3,
+            -0.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 520,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 11074,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 472,
+          "cardWidth": 472,
+          "drawnWidth": 471.7,
+          "wantWidth": 472,
+          "offset": -0.9,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398755
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            -0.8,
+            1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 11491,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 472,
+          "cardWidth": 472,
+          "drawnWidth": 471.7,
+          "wantWidth": 472,
+          "offset": 0.9,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.3988,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            1,
+            -0.8
+          ]
+        }
+      ]
+    },
+    {
+      "width": 540,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 11251,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 492,
+          "cardWidth": 492,
+          "drawnWidth": 491.7,
+          "wantWidth": 492,
+          "offset": -0.9,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398755
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2249,
+          "margins": [
+            -0.8,
+            1.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 11668,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 492,
+          "cardWidth": 492,
+          "drawnWidth": 491.7,
+          "wantWidth": 492,
+          "offset": 0.9,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.3988,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2249,
+          "margins": [
+            1.1,
+            -0.8
+          ]
+        }
+      ]
+    },
+    {
+      "width": 560,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 11459,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 512,
+          "cardWidth": 512,
+          "drawnWidth": 511.9,
+          "wantWidth": 512,
+          "offset": 0.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399473,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2258,
+          "margins": [
+            0.5,
+            -0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 11877,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 512,
+          "cardWidth": 512,
+          "drawnWidth": 512,
+          "wantWidth": 512,
+          "offset": 0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399877,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2258,
+          "margins": [
+            0.1,
+            -0.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 580,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 11668,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 532,
+          "cardWidth": 532,
+          "drawnWidth": 531.9,
+          "wantWidth": 532,
+          "offset": -0.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399473
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2266,
+          "margins": [
+            -0.4,
+            0.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12086,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 532,
+          "cardWidth": 532,
+          "drawnWidth": 531.8,
+          "wantWidth": 532,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399069
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2266,
+          "margins": [
+            -0.7,
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "width": 600,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 11877,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 552,
+          "cardWidth": 552,
+          "drawnWidth": 551.6,
+          "wantWidth": 552,
+          "offset": -1.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398575
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2238,
+          "margins": [
+            -1,
+            1.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12294,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 552,
+          "cardWidth": 552,
+          "drawnWidth": 551.7,
+          "wantWidth": 552,
+          "offset": 0.9,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398979,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2238,
+          "margins": [
+            1,
+            -0.8
+          ]
+        }
+      ]
+    },
+    {
+      "width": 620,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12085,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 572,
+          "cardWidth": 572,
+          "drawnWidth": 571.9,
+          "wantWidth": 572,
+          "offset": 0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399473,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2246,
+          "margins": [
+            0.6,
+            -0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12503,
+          "pinned": true,
+          "stageTop": 75,
+          "headerHeight": 75.4,
+          "stageWidth": 572,
+          "cardWidth": 572,
+          "drawnWidth": 572,
+          "wantWidth": 572,
+          "offset": 0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399877,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2246,
+          "margins": [
+            0.1,
+            -0.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 11852,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 592,
+          "cardWidth": 592,
+          "drawnWidth": 592,
+          "wantWidth": 592,
+          "offset": 0,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.4
+          ],
+          "flankScale": [
+            0.82,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2254,
+          "margins": [
+            0,
+            0
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12276,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 592,
+          "cardWidth": 592,
+          "drawnWidth": 591.9,
+          "wantWidth": 592,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399613
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2254,
+          "margins": [
+            -0.3,
+            0.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 660,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12044,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 612,
+          "cardWidth": 612,
+          "drawnWidth": 611.9,
+          "wantWidth": 612,
+          "offset": -0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.39948
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            -0.4,
+            0.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12468,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 612,
+          "cardWidth": 612,
+          "drawnWidth": 611.7,
+          "wantWidth": 612,
+          "offset": -0.9,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399082
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            -0.8,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 680,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12212,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 632,
+          "cardWidth": 632,
+          "drawnWidth": 632,
+          "wantWidth": 632,
+          "offset": -0.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399834
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2247,
+          "margins": [
+            -0.1,
+            0.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12636,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 632,
+          "cardWidth": 632,
+          "drawnWidth": 631.8,
+          "wantWidth": 632,
+          "offset": -0.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399436
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2247,
+          "margins": [
+            -0.5,
+            0.6
+          ]
+        }
+      ]
+    },
+    {
+      "width": 700,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12405,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 652,
+          "cardWidth": 652,
+          "drawnWidth": 651.9,
+          "wantWidth": 652,
+          "offset": -0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399657
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2245,
+          "margins": [
+            -0.3,
+            0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 12829,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 652,
+          "cardWidth": 652,
+          "drawnWidth": 651.8,
+          "wantWidth": 652,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399259
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2245,
+          "margins": [
+            -0.6,
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "width": 720,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12597,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 672,
+          "cardWidth": 672,
+          "drawnWidth": 671.8,
+          "wantWidth": 672,
+          "offset": -0.7,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399303
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2252,
+          "margins": [
+            -0.6,
+            0.8
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13021,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 672,
+          "cardWidth": 672,
+          "drawnWidth": 671.7,
+          "wantWidth": 672,
+          "offset": -1.2,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398905
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2252,
+          "margins": [
+            -1,
+            1.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 740,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12765,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 692,
+          "cardWidth": 692,
+          "drawnWidth": 692,
+          "wantWidth": 692,
+          "offset": -0.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399834
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2238,
+          "margins": [
+            -0.1,
+            0.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13189,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 692,
+          "cardWidth": 692,
+          "drawnWidth": 691.8,
+          "wantWidth": 692,
+          "offset": -0.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399436
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2238,
+          "margins": [
+            -0.5,
+            0.7
+          ]
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12957,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 712,
+          "cardWidth": 712,
+          "drawnWidth": 711.7,
+          "wantWidth": 712,
+          "offset": -1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399126
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2245,
+          "margins": [
+            -0.8,
+            1.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13381,
+          "pinned": true,
+          "stageTop": 89,
+          "headerHeight": 89,
+          "stageWidth": 712,
+          "cardWidth": 712,
+          "drawnWidth": 711.6,
+          "wantWidth": 712,
+          "offset": -1.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398728
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2245,
+          "margins": [
+            -1.2,
+            1.6
+          ]
+        }
+      ]
+    },
+    {
+      "width": 780,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12888,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 684,
+          "cardWidth": 684,
+          "drawnWidth": 683.8,
+          "wantWidth": 684,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399251,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2242,
+          "margins": [
+            0.9,
+            -0.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13320,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 684,
+          "cardWidth": 684,
+          "drawnWidth": 683.9,
+          "wantWidth": 684,
+          "offset": -0.5,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399555
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2242,
+          "margins": [
+            -0.4,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 800,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13087,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 704,
+          "cardWidth": 704,
+          "drawnWidth": 703.9,
+          "wantWidth": 704,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399772,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2249,
+          "margins": [
+            0.3,
+            -0.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13519,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 704,
+          "cardWidth": 704,
+          "drawnWidth": 703.7,
+          "wantWidth": 704,
+          "offset": -1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399033
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2249,
+          "margins": [
+            -0.9,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 820,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13285,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 724,
+          "cardWidth": 724,
+          "drawnWidth": 723.9,
+          "wantWidth": 724,
+          "offset": 0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399598,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2237,
+          "margins": [
+            0.5,
+            -0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13717,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 724,
+          "cardWidth": 724,
+          "drawnWidth": 723.7,
+          "wantWidth": 724,
+          "offset": -0.9,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399207
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2237,
+          "margins": [
+            -0.8,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 840,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13484,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 744,
+          "cardWidth": 744,
+          "drawnWidth": 744,
+          "wantWidth": 744,
+          "offset": -0.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.39987
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2243,
+          "margins": [
+            -0.1,
+            0.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13916,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 744,
+          "cardWidth": 744,
+          "drawnWidth": 743.6,
+          "wantWidth": 744,
+          "offset": -1.5,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398686
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2243,
+          "margins": [
+            -1.3,
+            1.7
+          ]
+        }
+      ]
+    },
+    {
+      "width": 860,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13683,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 764,
+          "cardWidth": 764,
+          "drawnWidth": 763.6,
+          "wantWidth": 764,
+          "offset": 1.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398729,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2249,
+          "margins": [
+            1.7,
+            -1.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 14115,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 764,
+          "cardWidth": 764,
+          "drawnWidth": 764,
+          "wantWidth": 764,
+          "offset": 0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399913,
+            0.4
+          ],
+          "flankScale": [
+            0.82,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2249,
+          "margins": [
+            0.1,
+            -0.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 880,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13884,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 784,
+          "cardWidth": 784,
+          "drawnWidth": 783.7,
+          "wantWidth": 784,
+          "offset": 1.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399077,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            1.3,
+            -1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 14316,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 784,
+          "cardWidth": 784,
+          "drawnWidth": 783.9,
+          "wantWidth": 784,
+          "offset": -0.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399728
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            -0.3,
+            0.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 900,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 14085,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 804,
+          "cardWidth": 804,
+          "drawnWidth": 803.8,
+          "wantWidth": 804,
+          "offset": 0.7,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2236,
+          "margins": [
+            0.8,
+            -0.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 14517,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 804,
+          "cardWidth": 804,
+          "drawnWidth": 803.8,
+          "wantWidth": 804,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2236,
+          "margins": [
+            -0.6,
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "width": 920,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 14286,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 824,
+          "cardWidth": 824,
+          "drawnWidth": 823.9,
+          "wantWidth": 824,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399772,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2242,
+          "margins": [
+            0.3,
+            -0.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 14718,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 824,
+          "cardWidth": 824,
+          "drawnWidth": 823.6,
+          "wantWidth": 824,
+          "offset": -1.2,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399033
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2242,
+          "margins": [
+            -1,
+            1.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 940,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 14487,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 844,
+          "cardWidth": 844,
+          "drawnWidth": 843.8,
+          "wantWidth": 844,
+          "offset": 0.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399598,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2248,
+          "margins": [
+            0.6,
+            -0.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 14919,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 844,
+          "cardWidth": 844,
+          "drawnWidth": 843.7,
+          "wantWidth": 844,
+          "offset": -1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399207
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2248,
+          "margins": [
+            -0.9,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 14688,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 864,
+          "cardWidth": 864,
+          "drawnWidth": 863.9,
+          "wantWidth": 864,
+          "offset": -0.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399696
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            -0.3,
+            0.4
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 15119,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 864,
+          "cardWidth": 864,
+          "drawnWidth": 863.5,
+          "wantWidth": 864,
+          "offset": 1.7,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398697,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.223,
+          "margins": [
+            2,
+            -1.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 980,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 12974,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 884,
+          "cardWidth": 884,
+          "drawnWidth": 883.5,
+          "wantWidth": 884,
+          "offset": -1.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398653
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2236,
+          "margins": [
+            -1.6,
+            2.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13405,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 884,
+          "cardWidth": 884,
+          "drawnWidth": 883.9,
+          "wantWidth": 884,
+          "offset": 0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399739,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2236,
+          "margins": [
+            0.4,
+            -0.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1000,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13136,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 904,
+          "cardWidth": 900,
+          "drawnWidth": 899.7,
+          "wantWidth": 900,
+          "offset": -1.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399175
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            1,
+            3.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13567,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 904,
+          "cardWidth": 900,
+          "drawnWidth": 899.7,
+          "wantWidth": 900,
+          "offset": 1.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399218,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            3.2,
+            1.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1020,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 13298,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 924,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399696
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            11.7,
+            12.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 13729,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 924,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": 1.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398697,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            14.1,
+            10.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1040,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8436,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 944,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.6,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399598,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            22.7,
+            21.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8868,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 944,
+          "cardWidth": 900,
+          "drawnWidth": 899.7,
+          "wantWidth": 900,
+          "offset": -1.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399207
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            21.1,
+            23.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1060,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8506,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 964,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.6,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399598,
+            0.4
+          ],
+          "flankScale": [
+            0.8202,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            32.7,
+            31.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8938,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 964,
+          "cardWidth": 900,
+          "drawnWidth": 899.7,
+          "wantWidth": 900,
+          "offset": -1.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399207
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            31.1,
+            33.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1080,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8576,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 984,
+          "cardWidth": 900,
+          "drawnWidth": 899.7,
+          "wantWidth": 900,
+          "offset": 1.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399251,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            43.2,
+            41.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9008,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 984,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399555
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            41.5,
+            42.7
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8582,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1004,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.6,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399522
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            51.5,
+            52.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9013,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1004,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": 1.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.39887,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            53.8,
+            50.7
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1120,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8591,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1024,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": 0.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399946,
+            0.4
+          ],
+          "flankScale": [
+            0.82,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            62.1,
+            61.9
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9023,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1024,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": -1.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.39886
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            60.7,
+            63.8
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1140,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8664,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1044,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399001
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            70.8,
+            73.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9095,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1044,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399392,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            73,
+            71.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1160,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8736,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1064,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": 1.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399077,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            83.5,
+            80.9
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9168,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1064,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399728
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            81.7,
+            82.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1180,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8809,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1084,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399772,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            92.4,
+            91.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9241,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1084,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399033
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            90.9,
+            93.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1200,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8801,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1104,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": 1.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399077,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            103.5,
+            100.9
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9233,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1104,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399728
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            101.7,
+            102.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1220,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8874,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1124,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": -0.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.39987
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            111.9,
+            112.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9305,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1124,
+          "cardWidth": 900,
+          "drawnWidth": 899.4,
+          "wantWidth": 900,
+          "offset": 2.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398523,
+            0.4
+          ],
+          "flankScale": [
+            0.8207,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            114.4,
+            110.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1240,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8947,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1144,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399001
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            120.8,
+            123.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9378,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1144,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399392,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            123,
+            121.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1260,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9030,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1164,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": 1.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399077,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            133.5,
+            130.9
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9462,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1164,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399728
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            131.7,
+            132.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9116,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1184,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": 1.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399077,
+            0.4
+          ],
+          "flankScale": [
+            0.8204,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            143.5,
+            140.9
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9548,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1184,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399728
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            141.7,
+            142.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1300,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9202,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1204,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399772,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            152.4,
+            151.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9634,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1204,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399033
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            150.9,
+            153.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1320,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9288,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1224,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": -0.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.39987
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            161.9,
+            162.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9720,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1224,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": -1.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.398686
+          ],
+          "flankScale": [
+            0.82,
+            0.8206
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            160.4,
+            164.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1340,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9372,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1244,
+          "cardWidth": 900,
+          "drawnWidth": 899.7,
+          "wantWidth": 900,
+          "offset": 1.1,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399251,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            173.2,
+            171.1
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9804,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1244,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.6,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399555
+          ],
+          "flankScale": [
+            0.82,
+            0.8202
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            171.5,
+            172.7
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1360,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9453,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1264,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399772,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            182.4,
+            181.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9885,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1264,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399033
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            180.9,
+            183.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1380,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9534,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1284,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399696
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            191.7,
+            192.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 9965,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1284,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": 1.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398697,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            194.1,
+            190.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1400,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9615,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1304,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399001
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            200.8,
+            203.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10046,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1304,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399392,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            203,
+            201.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1420,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 9695,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1324,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": 1.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398903,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            213.8,
+            210.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 10127,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1324,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": -0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399902
+          ],
+          "flankScale": [
+            0.82,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            211.9,
+            212.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 7993,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1344,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399001
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            220.8,
+            223.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8424,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1344,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399392,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            223,
+            221.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1460,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8023,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1364,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": 1.5,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398903,
+            0.4
+          ],
+          "flankScale": [
+            0.8205,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            233.8,
+            230.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8455,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1364,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": -0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399902
+          ],
+          "flankScale": [
+            0.82,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            231.9,
+            232.1
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1480,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8054,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1384,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            242.9,
+            241.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8486,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1384,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            241.3,
+            243
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1500,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8085,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1404,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": -0.2,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.39987
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            251.9,
+            252.2
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8516,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1404,
+          "cardWidth": 900,
+          "drawnWidth": 899.4,
+          "wantWidth": 900,
+          "offset": 2.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398523,
+            0.4
+          ],
+          "flankScale": [
+            0.8207,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            254.4,
+            250.2
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1520,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8092,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1424,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": 0.3,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399772,
+            0.4
+          ],
+          "flankScale": [
+            0.8201,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            262.4,
+            261.7
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8524,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1424,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.3,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399033
+          ],
+          "flankScale": [
+            0.82,
+            0.8204
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            260.9,
+            263.5
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1540,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8123,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1444,
+          "cardWidth": 900,
+          "drawnWidth": 899.9,
+          "wantWidth": 900,
+          "offset": -0.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399696
+          ],
+          "flankScale": [
+            0.82,
+            0.8201
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            271.7,
+            272.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8554,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1444,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": 1.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398697,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            274.1,
+            270.4
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1560,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8154,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1464,
+          "cardWidth": 900,
+          "drawnWidth": 899.6,
+          "wantWidth": 900,
+          "offset": -1.4,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399001
+          ],
+          "flankScale": [
+            0.82,
+            0.8205
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            280.8,
+            283.6
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8585,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1464,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399392,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            283,
+            281.3
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1580,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8184,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1484,
+          "cardWidth": 900,
+          "drawnWidth": 899.5,
+          "wantWidth": 900,
+          "offset": 1.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.398729,
+            0.4
+          ],
+          "flankScale": [
+            0.8206,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            294,
+            290.5
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8616,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1484,
+          "cardWidth": 900,
+          "drawnWidth": 900,
+          "wantWidth": 900,
+          "offset": 0.1,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399913,
+            0.4
+          ],
+          "flankScale": [
+            0.82,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            292.1,
+            291.9
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1600,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1620,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1640,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1660,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1680,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1700,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1720,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1740,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1760,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1780,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1800,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1820,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1840,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1860,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1880,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1900,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "targets": [
+        {
+          "target": 1,
+          "scrollY": 8188,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": 0.8,
+          "nearest": 2,
+          "liveCount": 1,
+          "liveCard": 2,
+          "centredCount": 1,
+          "flankVeil": [
+            0.399424,
+            0.4
+          ],
+          "flankScale": [
+            0.8203,
+            0.82
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            302.9,
+            301.3
+          ]
+        },
+        {
+          "target": 4,
+          "scrollY": 8620,
+          "pinned": true,
+          "stageTop": 107,
+          "headerHeight": 107,
+          "stageWidth": 1504,
+          "cardWidth": 900,
+          "drawnWidth": 899.8,
+          "wantWidth": 900,
+          "offset": -0.8,
+          "nearest": 5,
+          "liveCount": 1,
+          "liveCard": 5,
+          "centredCount": 1,
+          "flankVeil": [
+            0.4,
+            0.399381
+          ],
+          "flankScale": [
+            0.82,
+            0.8203
+          ],
+          "minOpacity": 1,
+          "worstCrop": 0.2239,
+          "margins": [
+            301.3,
+            303
+          ]
+        }
+      ]
+    }
+  ],
   "reducedMotion": {
     "inMarkup": 8,
     "visible": 6,
@@ -679,9 +6418,30 @@
       "Walks and cycling"
     ],
     "stagePosition": "static",
+    "stageHeight": 3198,
+    "trackHeight": 3198,
+    "reservedScreens": 1800,
+    "positions": [
+      "static"
+    ],
+    "overlaps": 0,
     "animations": [
       "none"
     ]
+  },
+  "noJavaScript": {
+    "cards": 6,
+    "titles": [
+      "Jungle safari",
+      "Bird watching",
+      "Kohka Lake",
+      "The river walk",
+      "Pachdhar, the potters' village",
+      "Walks and cycling"
+    ],
+    "targets": 6,
+    "boxless": 0,
+    "arrowless": 0
   },
   "failures": [],
   "verdict": "pass"

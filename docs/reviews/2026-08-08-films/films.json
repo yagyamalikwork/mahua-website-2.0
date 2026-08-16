@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-16T19:13:20.956Z",
+  "measuredAt": "2026-08-16T20:16:15.680Z",
   "url": "http://localhost:3110/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.97,
+        "currentTime": 3.06,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.98,
-        "afterHover": 3.58
+        "beforeHover": 3.06,
+        "afterHover": 4.1
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -136,7 +136,7 @@
       },
       "leaveAndReturn": {
         "from": 10,
-        "to": 0.97
+        "to": 0.86
       }
     },
     {
@@ -176,7 +176,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.95,
+        "currentTime": 2.88,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -189,8 +189,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.95,
-        "afterHover": 3.53
+        "beforeHover": 2.88,
+        "afterHover": 3.46
       },
       "afterItEnds": {
         "stillVisible": false,

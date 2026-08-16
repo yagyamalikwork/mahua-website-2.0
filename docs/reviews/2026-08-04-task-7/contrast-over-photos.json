@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-16T19:01:12.493Z",
+  "measuredAt": "2026-08-16T20:31:49.655Z",
   "url": "http://localhost:3110/",
   "widths": {
     "390": [
@@ -594,18 +594,18 @@
         "name": "coverflow · card 01",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.08,
+        "worst": 6.27,
         "brightest": [
-          97,
-          84,
-          67
+          95,
+          82,
+          66
         ],
         "boxes": 7,
         "pass": true,
         "placement": {
           "found": true,
-          "offset": 25.21,
-          "nearest": 25.21,
+          "offset": 1.13,
+          "nearest": 1.13,
           "veil": 0.00108312
         },
         "misplaced": null
@@ -614,18 +614,18 @@
         "name": "coverflow · card 02",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.43,
+        "worst": 8.74,
         "brightest": [
+          60,
           65,
-          67,
-          43
+          46
         ],
         "boxes": 7,
         "pass": true,
         "placement": {
           "found": true,
-          "offset": 24.04,
-          "nearest": 24.04,
+          "offset": 0.04,
+          "nearest": 0.04,
           "veil": 0.0000386829
         },
         "misplaced": null
@@ -634,18 +634,18 @@
         "name": "coverflow · card 03",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.57,
+        "worst": 7.39,
         "brightest": [
           74,
-          73,
-          53
+          75,
+          55
         ],
         "boxes": 6,
         "pass": true,
         "placement": {
           "found": true,
-          "offset": 22.83,
-          "nearest": 22.83,
+          "offset": -1.09,
+          "nearest": 1.09,
           "veil": 0.00104444
         },
         "misplaced": null
@@ -654,18 +654,18 @@
         "name": "coverflow · card 04",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.56,
+        "worst": 9.08,
         "brightest": [
-          61,
-          66,
-          53
+          50,
+          64,
+          49
         ],
         "boxes": 6,
         "pass": true,
         "placement": {
           "found": true,
-          "offset": 24.43,
-          "nearest": 24.43,
+          "offset": 0.4,
+          "nearest": 0.4,
           "veil": 0.000386828
         },
         "misplaced": null
@@ -674,18 +674,18 @@
         "name": "coverflow · card 05",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.16,
+        "worst": 6.5,
         "brightest": [
-          88,
-          73,
-          57
+          89,
+          81,
+          63
         ],
         "boxes": 7,
         "pass": true,
         "placement": {
           "found": true,
-          "offset": 23.24,
-          "nearest": 23.24,
+          "offset": -0.71,
+          "nearest": 0.71,
           "veil": 0.000676934
         },
         "misplaced": null
@@ -694,18 +694,18 @@
         "name": "coverflow · card 06",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.68,
+        "worst": 7.17,
         "brightest": [
-          72,
-          72,
-          57
+          75,
+          77,
+          59
         ],
         "boxes": 6,
         "pass": true,
         "placement": {
           "found": true,
-          "offset": 24.82,
-          "nearest": 24.82,
+          "offset": 0.77,
+          "nearest": 0.77,
           "veil": 0.000734974
         },
         "misplaced": null
@@ -1571,5 +1571,5 @@
       }
     ]
   },
-  "offCentre": 6
+  "offCentre": 0
 }

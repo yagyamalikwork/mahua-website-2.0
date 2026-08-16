@@ -1742,28 +1742,33 @@ body {
     --cf-off: calc(50vw + 60%);
 
     /*
-     * The centred card's own drawn size, and the stage it is centred in.
+     * The stage a card is centred in.
      *
-     * **The width expression is `CoverflowCard`'s, deliberately repeated rather
-     * than shared**, because there is nowhere to share it from: the card writes
-     * it as an inline `width` (so a card is correct as a plain block with no
-     * stylesheet) and `CARD_SIZES` writes it a third time as a `sizes` string
-     * (which is evaluated before custom properties are usable). Three copies of
-     * one arithmetic, all derived from `COVERFLOW` — if one moves they all must,
-     * and `lib/sizes.test.ts` holds the aspect ratio to the markup's own class.
+     * **A card's own width is NOT declared here, and that is 17 Aug 2026's
+     * repair.** It used to be — `--cf-card-w: min(var(--coverflow-card-max),
+     * 100vw - 2 * var(--coverflow-gutter))`, with a `--cf-card-h` derived from
+     * it — as a third copy of an arithmetic `CoverflowCard.tsx` also writes
+     * inline and a fourth that `CARD_SIZES` writes as a `sizes` string. Neither
+     * of the two here was read by any rule; both were wrong from 768px to 996px,
+     * where that expression exceeds the container's own content width, and the
+     * card sat 22-25.6px right of centre across the whole band (see
+     * `CoverflowCard.tsx`'s `CARD_SIZES`, and
+     * `docs/reviews/2026-08-16-coverflow/rig-failures.md`). A declaration that
+     * nothing reads cannot be caught by anything looking at the page, so it is
+     * gone rather than corrected: the card's width is `min(cardMax, 100%, 100vw
+     * − 2 × gutter)` on the element itself, where `100%` is THIS stage and the
+     * bound is an invariant instead of a re-derivation.
      *
-     * **A fourth reader of these two, `--cf-card-foot`, existed for one day and
-     * is gone.** It measured the cream a centred card leaves beneath itself
-     * (143px at 1440x900) and the tiger's band was bought out of it. The arm
-     * that needed it is `docs/reviews/2026-08-16-coverflow/flanks-and-tiger.md`
-     * §9-§10: 143px of clearance against a 400px film is not a fit, and the film
-     * is in the header band now. If a later figure is ever put back at the foot
-     * of this wrapper, that number is `(--cf-stage-h − --cf-card-h) / 2` and it
-     * goes NEGATIVE on a landscape phone, where a 796px card overflows a 283px
-     * stage.
+     * **`--cf-card-foot` existed for one day and is gone for the same reason.**
+     * It measured the cream a centred card leaves beneath itself (143px at
+     * 1440x900) and the tiger's band was bought out of it. The arm that needed
+     * it is `docs/reviews/2026-08-16-coverflow/flanks-and-tiger.md` §9-§10:
+     * 143px of clearance against a 400px film is not a fit, and the film is in
+     * the header band now. If a later figure is ever put back at the foot of
+     * this wrapper, that number is `(--cf-stage-h − cardWidth × 9 / 16) / 2`
+     * with the card's width read off the stage, and it goes NEGATIVE on a
+     * landscape phone, where a 796px card overflows a 283px stage.
      */
-    --cf-card-w: min(var(--coverflow-card-max), 100vw - 2 * var(--coverflow-gutter));
-    --cf-card-h: calc(var(--cf-card-w) * 9 / 16);
     --cf-stage-h: calc(100svh - var(--header-height, 0px));
   }
 
@@ -1858,9 +1863,12 @@ body {
     --cf-to: calc(var(--cf-pin-start) + (var(--i) + 3) * var(--cf-step));
 
     animation: coverflow-pass linear both;
-    /* AFTER the shorthand, never before it. See the note above. Watched: with
-       these two lines swapped, `check_coverflow.mjs` fails at every one of 96
-       sampled positions and no card is ever centred at all. */
+    /* AFTER the shorthand, never before it. See the note above. Watched, 17 Aug
+       2026: with these two lines swapped nothing binds to the timeline, every
+       card sits at its 0% keyframe off-stage right, and `check_coverflow.mjs`
+       returns 112 failures — no card ever centred (assertion 2), no arrow ever
+       reachable at any of 75 sampled positions (assertion 4), and the deck's
+       last ghost the only thing left near the middle. */
     animation-timeline: --coverflow-track;
     animation-range: cover var(--cf-from) cover var(--cf-to);
   }

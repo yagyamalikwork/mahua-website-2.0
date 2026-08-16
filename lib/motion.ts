@@ -571,7 +571,10 @@ export const COVERFLOW = {
   /** Extra `--overlay` wash over a neighbour at full offset. Never an opacity — see above. */
   sideVeil: 0.4,
   /**
-   * How wide a card is drawn, at any viewport above `this + 2 × stageGutterPx`.
+   * The widest a card is ever drawn — reached once the container it sits in is
+   * this wide, i.e. above `this + 2 × stageGutterMdPx` (996px). Below that the
+   * card fills its container; see `stageGutterPx` and `CoverflowCard`'s
+   * `CARD_SIZES`.
    *
    * **This is the only lever this chapter's density has, and 900 is solved
    * against the photographs rather than chosen.** It read 560 until 16 Aug 2026,
@@ -610,8 +613,42 @@ export const COVERFLOW = {
    * files, `cardMaxPx: 1120` measures 36.7% / 42.3% and clears the ceiling.
    */
   cardMaxPx: 900,
-  /** Breathing room between the stage's cards and the viewport edge. */
+  /**
+   * The container's own horizontal padding — `ChapterSurface`'s `px-6`, and the
+   * least cream a card may leave between itself and the viewport's edge.
+   *
+   * **These three numbers describe `ChapterSurface`, not the coverflow, and
+   * they are here for exactly one reason.** A card's width is
+   * `min(cardMaxPx, 100%)` in CSS — bounded by the stage it is centred in,
+   * whatever that stage's own padding turns out to be — but `CARD_SIZES` cannot
+   * say `100%`: `sizes` is an HTML attribute, evaluated before CSS custom
+   * properties or layout exist, so the only way for it to name the same width
+   * the browser will draw is to spell the container's arithmetic out in `vw`.
+   * These are that arithmetic, in one place, interpolated into the one string.
+   *
+   * **They were `stageGutterPx: 24` alone until 17 Aug 2026, and that single
+   * number was the defect.** The card's width was `min(cardMaxPx, 100vw − 2 ×
+   * 24px)` while `ChapterSurface`'s container is `md:px-12` — 48px a side —
+   * from 768px up, so from 768px to 996px the card came out up to 48px WIDER
+   * than the stage holding it. `margin-inline: auto` against `left: 0; right:
+   * 0` is then over-constrained, CSS 2.1 §10.3.7 resolves it by pushing the box
+   * to the inline start, and every card sat 22-25px right of centre with 47px
+   * of cream on one side and 1px on the other, at every scroll position, across
+   * a 228px band that no rig on this project had ever looked at
+   * (`docs/reviews/2026-08-16-coverflow/rig-failures.md`).
+   *
+   * The repair is that CSS no longer reads any of these for the card's width —
+   * `min(cardMaxPx, 100%)` cannot exceed its stage whatever the padding does,
+   * which is an invariant rather than a threshold. If a future edit changes
+   * `ChapterSurface`'s padding, the layout stays correct and only these three
+   * go stale; the symptom would be a photograph served one tier soft, and
+   * `scripts/check_image_resolution.mjs` is what reports it.
+   */
   stageGutterPx: 24,
+  /** The same container's padding from `md` up — `ChapterSurface`'s `md:px-12`. */
+  stageGutterMdPx: 48,
+  /** …and the width it switches at, which is Tailwind's own `md`. */
+  stageGutterMdFromPx: 768,
 } as const;
 
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */

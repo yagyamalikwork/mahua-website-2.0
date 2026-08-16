@@ -8,29 +8,55 @@ import { COVERFLOW } from "@/lib/motion";
 /**
  * How wide this card is actually drawn, at every viewport.
  *
- * **Derived from `COVERFLOW`, never transcribed from it.** The card's width is
- * `min(cardMaxPx, 100vw − 2 × stageGutterPx)` — the same expression the `width`
- * in the markup below carries, written once in JavaScript and emitted into both
- * the `sizes` string and the inline style, so the number a browser lays the card
- * out at and the number `srcset` picks a file for cannot drift. `sizes` is an
- * HTML attribute evaluated before CSS custom properties are usable, so it
- * *cannot* read `var(--coverflow-card-max)`; template-literal interpolation at
- * build time is the only version of this promise that holds.
+ * **The card is bounded by the STAGE it is centred in, not by the viewport, and
+ * that correction is 17 Aug 2026's.** In CSS the width is
+ * `min(--coverflow-card-max, 100%, 100vw − 2 × --coverflow-gutter)`: never wider
+ * than its solved cap, never wider than the box holding it, and never closer to
+ * the screen's edge than the gutter. The middle term is the one that matters and
+ * it is an invariant — a card cannot exceed its stage whatever `ChapterSurface`
+ * does to its own padding.
  *
- * The breakpoint is where the two arms of the `min()` cross:
- * `100vw − 2 × 24px ≥ 900px ⟺ 100vw ≥ 948px`. Exact, not rounded — above 948px
- * the card is a flat 900px, below it `calc(100vw − 48px)`. `ui/Photo.tsx`'s own
- * comment is explicit that a `sizes` must round *up* where it is unsure;
- * nothing here is unsure, because both arms are the layout's own arithmetic.
+ * **It read `min(cardMaxPx, 100vw − 2 × stageGutterPx)` until then, and that was
+ * a real defect on real screens.** `stageGutterPx` is 24 and the container is
+ * `px-6 md:px-12`, so from 768px up the container takes 48px a side and the card
+ * came out up to 48px WIDER than the stage. `margin-inline: auto` against
+ * `left: 0; right: 0` with an over-constrained width resolves by CSS 2.1
+ * §10.3.7 — the auto margins go to zero and the box is pushed to the inline
+ * start — so every card sat 22-25.6px right of centre, with 47px of cream one
+ * side and 1px the other, at every scroll position from 768px to 996px. Nothing
+ * measured it, because `check_coverflow.mjs` sampled 1440 and 390 and this
+ * project's four fixed widths step straight over the band. That rig now sweeps
+ * 360-1920 continuously and asserts the card's rendered width IS
+ * `min(cardMax, stageWidth)` — see `docs/reviews/2026-08-16-coverflow/
+ * rig-failures.md`.
  *
- * Current value: `(min-width: 948px) 900px, calc(100vw - 48px)`. **Both numbers
- * were 560 and 608 until 16 Aug 2026**, when `COVERFLOW.cardMaxPx` was swept
- * from a value that had been picked by analogy and never measured — the
- * expression is unchanged and still derives from `COVERFLOW`, so the sweep moved
- * these numbers without anyone touching this line
+ * **`sizes` still has to spell the container's arithmetic out, and that is not
+ * avoidable.** It is an HTML attribute evaluated before layout or custom
+ * properties exist, so it cannot say `100%`. The three arms below are
+ * `min(cardMaxPx, containerContentWidth)` written in `vw`, interpolated from
+ * `COVERFLOW`'s own numbers so the two cannot drift by transcription:
+ *
+ * | viewport | container content | card |
+ * |---|---|---|
+ * | < 768px | `100vw − 48` | `100vw − 48` |
+ * | 768-996px | `100vw − 96` | `100vw − 96` |
+ * | ≥ 996px | `100vw − 96` | a flat 900px |
+ *
+ * 996 is exact, not rounded: `100vw − 96 ≥ 900 ⟺ 100vw ≥ 996`. The container's
+ * own `max-w-[1600px]` never enters it — above 1696px the content box holds at
+ * 1504px, which is still wider than `cardMaxPx`, and would only start to bind if
+ * a future sweep took the card past 1504. `ui/Photo.tsx`'s comment is explicit
+ * that a `sizes` must round *up* where it is unsure; nothing here is unsure,
+ * because every arm is the layout's own arithmetic.
+ *
+ * Current value: `(min-width: 996px) 900px, (min-width: 768px)
+ * calc(100vw - 96px), calc(100vw - 48px)`. **`cardMaxPx` was 560 until 16 Aug
+ * 2026**, when it was swept from a value picked by analogy and never measured —
+ * the expression is unchanged and still derives from `COVERFLOW`, so the sweep
+ * moved these numbers without anyone touching this line
  * (`docs/reviews/2026-08-16-coverflow/density-sweep.md` §5).
  */
-export const CARD_SIZES = `(min-width: ${COVERFLOW.cardMaxPx + 2 * COVERFLOW.stageGutterPx}px) ${COVERFLOW.cardMaxPx}px, calc(100vw - ${2 * COVERFLOW.stageGutterPx}px)`;
+export const CARD_SIZES = `(min-width: ${COVERFLOW.cardMaxPx + 2 * COVERFLOW.stageGutterMdPx}px) ${COVERFLOW.cardMaxPx}px, (min-width: ${COVERFLOW.stageGutterMdFromPx}px) calc(100vw - ${2 * COVERFLOW.stageGutterMdPx}px), calc(100vw - ${2 * COVERFLOW.stageGutterPx}px)`;
 
 /**
  * The card's shape, and the box the photograph is `object-cover` inside.
@@ -195,12 +221,20 @@ export function CoverflowCard({
       style={
         {
           "--i": String(slot),
-          // The same arithmetic `CARD_SIZES` describes, and the reason it is
-          // here rather than in `app/globals.css`: the two must move together,
-          // and one file is the only place that can be true. Inline so a card
-          // is correct as a plain block with no stylesheet of its own —
+          // The width `CARD_SIZES` above describes, and the reason it is here
+          // rather than in `app/globals.css`: the two must move together, and
+          // one file is the only place that can be true. Inline so a card is
+          // correct as a plain block with no stylesheet of its own —
           // `Coverflow.tsx` positions it, it does not size it.
-          width: `min(var(--coverflow-card-max), 100vw - 2 * var(--coverflow-gutter))`,
+          //
+          // **`100%` is the term that was missing, and it is the whole of 17
+          // Aug 2026's fix.** It resolves against the stage — the flex
+          // container in flow, the sticky containing block once the effect is
+          // on — so a card can never be wider than the box it is centred in,
+          // whatever padding `ChapterSurface` puts around it. The viewport term
+          // stays as a floor on cream at the screen's edge; the cap is the
+          // photographs' own resolution ceiling (`COVERFLOW.cardMaxPx`).
+          width: `min(var(--coverflow-card-max), 100%, 100vw - 2 * var(--coverflow-gutter))`,
           // The one dark colour on the page, under the photograph rather than
           // over it — so a card is a card before a byte of imagery arrives,
           // and the blur placeholder is never a white hole. `FullBleedQuote`

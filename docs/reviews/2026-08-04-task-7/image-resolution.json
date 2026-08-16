@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-16T15:43:34.367Z",
+  "measuredAt": "2026-08-16T20:19:06.839Z",
   "url": "http://localhost:3110/",
   "densityCap": 2,
   "results": [
     {
       "viewport": "390x844@1x",
-      "images": 45,
+      "images": 46,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -225,11 +225,18 @@
           "ratio": 1.45
         },
         {
-          "file": "/media/vann-potters-village-640.avif",
+          "file": "/media/vann-kohka-lake-640.avif",
           "cssWidth": 342,
           "drawnWidth": 440,
           "needed": 440,
           "ratio": 1.45
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
         },
         {
           "file": "/media/forest-trail-canopy-400.avif",
@@ -361,7 +368,7 @@
     },
     {
       "viewport": "390x844@3x",
-      "images": 45,
+      "images": 46,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -616,11 +623,18 @@
           "ratio": 1.09
         },
         {
-          "file": "/media/vann-potters-village-960.avif",
+          "file": "/media/vann-kohka-lake-960.avif",
           "cssWidth": 342,
           "drawnWidth": 440,
           "needed": 879,
           "ratio": 1.09
+        },
+        {
+          "file": "/media/forest-boardwalk-daylight-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
         },
         {
           "file": "/media/forest-trail-canopy-768.avif",
@@ -752,7 +766,7 @@
     },
     {
       "viewport": "768x1024@1x",
-      "images": 46,
+      "images": 45,
       "softestServed": {
         "file": "/media/potters-hands-700.avif",
         "fileWidth": 700,
@@ -967,52 +981,45 @@
         },
         {
           "file": "/media/forest-trail-canopy-768.avif",
-          "cssWidth": 720,
-          "drawnWidth": 720,
-          "needed": 720,
-          "ratio": 1.07
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
         },
         {
           "file": "/media/vann-safari-960.avif",
-          "cssWidth": 720,
-          "drawnWidth": 929,
-          "needed": 929,
-          "ratio": 1.03
+          "cssWidth": 672,
+          "drawnWidth": 867,
+          "needed": 867,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/vann-bird-watching-960.avif",
+          "cssWidth": 672,
+          "drawnWidth": 867,
+          "needed": 867,
+          "ratio": 1.11
         },
         {
           "file": "/media/vann-kohka-lake-960.avif",
-          "cssWidth": 720,
-          "drawnWidth": 929,
-          "needed": 929,
-          "ratio": 1.03
-        },
-        {
-          "file": "/media/forest-boardwalk-daylight-768.avif",
-          "cssWidth": 720,
-          "drawnWidth": 720,
-          "needed": 720,
-          "ratio": 1.07
-        },
-        {
-          "file": "/media/vann-potters-village-960.avif",
-          "cssWidth": 720,
-          "drawnWidth": 929,
-          "needed": 929,
-          "ratio": 1.03
+          "cssWidth": 672,
+          "drawnWidth": 867,
+          "needed": 867,
+          "ratio": 1.11
         },
         {
           "file": "/media/forest-trail-canopy-768.avif",
-          "cssWidth": 720,
-          "drawnWidth": 720,
-          "needed": 720,
-          "ratio": 1.07
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
         },
         {
           "file": "/media/vann-safari-960.avif",
-          "cssWidth": 720,
-          "drawnWidth": 929,
-          "needed": 929,
-          "ratio": 1.03
+          "cssWidth": 672,
+          "drawnWidth": 867,
+          "needed": 867,
+          "ratio": 1.11
         },
         {
           "file": "/media/room-open-to-bamboo-768.avif",
@@ -1357,11 +1364,11 @@
           "ratio": 1
         },
         {
-          "file": "/media/forest-boardwalk-daylight-960.avif",
+          "file": "/media/vann-potters-village-1163.avif",
           "cssWidth": 900,
-          "drawnWidth": 900,
-          "needed": 900,
-          "ratio": 1.07
+          "drawnWidth": 1159,
+          "needed": 1159,
+          "ratio": 1
         },
         {
           "file": "/media/forest-trail-canopy-960.avif",
@@ -1733,18 +1740,18 @@
           "ratio": 1
         },
         {
-          "file": "/media/vann-kohka-lake-1163.avif",
-          "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
-        },
-        {
           "file": "/media/forest-boardwalk-daylight-960.avif",
           "cssWidth": 900,
           "drawnWidth": 900,
           "needed": 900,
           "ratio": 1.07
+        },
+        {
+          "file": "/media/vann-potters-village-1163.avif",
+          "cssWidth": 900,
+          "drawnWidth": 1159,
+          "needed": 1159,
+          "ratio": 1
         },
         {
           "file": "/media/forest-trail-canopy-960.avif",
