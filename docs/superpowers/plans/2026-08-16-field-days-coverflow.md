@@ -62,8 +62,27 @@ in the chapter**, in the header band above the stage. They carry the chapter's t
 gate, and "then the day slows right down"), which are the client's own copy and must not be dropped to make
 room for a carousel. The chapter goes from six photographs to nine.
 
-**Flag this to the client in the review, with the alternative stated:** keep all six existing frames and
-accept that two cards show a photograph of something other than what they name. Do not pick that silently.
+**Settled by the client, 16 Aug 2026:** he chose the right photographs and accepted the repeat. Build the
+pairing above. The review still records the trade — three frames now appear on both the home page and
+`/mahua-vann` — as a decision taken, not as a question outstanding.
+
+### C. The card is a photograph with its words on it — client, 16 Aug 2026
+
+*"Can we make them like section between the 01-The Lodges and 02-Rooted Like The Mahua, where we have an
+image with text on it with 3D effect."*
+
+That section is `why-you-came` — `components/sections/FullBleedQuote.tsx`. **This supersedes spec §5's
+photo-above-text card**, which was never built. Spec §5a records it and why it is the better shape. Two
+consequences run through this plan:
+
+1. **Every card needs its own solved `ScrimStrength`.** Six photographs, six exposures, six figures — each
+   raised until the *worst single pixel* under the type clears its floor, and each with its own run in
+   `scripts/check_contrast_over_photos.mjs`. That rig's `RUNS` table is hand-written; it discovers nothing.
+   A card absent from it is a card nobody has checked.
+2. **A neighbour recedes by veil, not by opacity.** `COVERFLOW.sideDim` is gone. Dimming a card whose text
+   sits on its own photograph lowers that text's contrast against the frame beneath it — the depth cue would
+   be fighting the legibility floor. `COVERFLOW.sideVeil` adds scrim to a neighbour instead, which recedes
+   the photograph and *raises* cream type's contrast. Scale and shift are unchanged.
 
 ### B. The tiger cannot go inside the sticky stage
 
@@ -435,6 +454,16 @@ export type ExperienceCopy = {
    * did not. See the plan's correction A.
    */
   readonly mediaId: MediaId;
+  /**
+   * The wash between this photograph and the cream type laid on it.
+   *
+   * Per activity, not per chapter, because six photographs are six exposures —
+   * the same reason `FullBleedQuote`'s scrim is per chapter and not global. Each
+   * figure is SOLVED against the rendered page's worst pixel under the type
+   * (plan Task 8), never chosen by eye: `components/ui/Scrim.tsx`'s own comment
+   * records what choosing by eye produced.
+   */
+  readonly scrim: ScrimStrength;
 };
 ```
 
@@ -539,14 +568,24 @@ describe("COVERFLOW", () => {
     expect(COVERFLOW.screens).toBeGreaterThanOrEqual(1);
   });
 
-  it("keeps a neighbour readable rather than hiding it", () => {
+  it("recedes a neighbour without hiding it", () => {
     // The client asked for neighbours "out of focus … behind" — behind, not gone.
-    // A dim below this and the card reads as absent, which loses the depth the
-    // whole effect is for.
-    expect(COVERFLOW.sideDim).toBeGreaterThanOrEqual(0.35);
-    expect(COVERFLOW.sideDim).toBeLessThan(1);
+    // Past this veil the photograph is a dark rectangle, which loses the depth
+    // the whole effect is for.
+    expect(COVERFLOW.sideVeil).toBeGreaterThan(0);
+    expect(COVERFLOW.sideVeil).toBeLessThanOrEqual(0.55);
     expect(COVERFLOW.sideScale).toBeGreaterThan(0.7);
     expect(COVERFLOW.sideScale).toBeLessThan(1);
+  });
+
+  it("recedes by veil and never by opacity", () => {
+    // Correction C. A card's text sits ON its own photograph, so fading the card
+    // fades the type against the frame beneath it and the depth cue starts
+    // fighting the legibility floor. More scrim recedes the photograph AND
+    // raises cream type's contrast. This asserts the dial cannot grow the old
+    // lever back by accident.
+    expect(COVERFLOW).not.toHaveProperty("sideDim");
+    expect(COVERFLOW).not.toHaveProperty("sideOpacity");
   });
 
   it("shifts a neighbour far enough to be seen past the centre card", () => {
@@ -570,9 +609,17 @@ Expected: FAIL — `COVERFLOW` is not exported.
  *
  * Client request, 16 Aug 2026: *"the next and previous cards sit out of focus on
  * left and right respectively behind the center card."* So a neighbour is
- * smaller, shifted out past the centre card's edge, and dimmed — three quiet
+ * smaller, shifted out past the centre card's edge, and veiled — three quiet
  * changes rather than one loud one, which is the same restraint `ROOM_STACK`'s
  * recede is built with.
+ *
+ * **`sideVeil` is scrim, not opacity, and the distinction is load-bearing.** A
+ * card's type sits ON its own photograph (the client's second ruling the same
+ * day — `FullBleedQuote`'s shape). Fading the whole card would fade that type
+ * against the frame beneath it, so the depth cue would be working against the
+ * contrast floor CLAUDE.md sets for text over a photograph. Adding scrim
+ * recedes the photograph and RAISES cream type's contrast. Do not "simplify"
+ * this back to an opacity.
  *
  * **No rotation and no blur.** A `rotateY` is the thing most coverflows reach
  * for and it is the thing this page cannot have: it is the tilt the client
@@ -593,8 +640,8 @@ export const COVERFLOW = {
   sideScale: 0.82,
   /** How far a neighbour sits from centre, as a percentage of a card's width. */
   sideShiftPct: 62,
-  /** A neighbour's opacity at full offset. */
-  sideDim: 0.45,
+  /** Extra `--overlay` wash over a neighbour at full offset. Never an opacity — see above. */
+  sideVeil: 0.4,
   /** Past this a card stops reading as a card. Matches `ROOM_STACK.heightMax`'s reasoning. */
   cardMaxPx: 560,
   /** Breathing room between the stage's cards and the viewport edge. */
@@ -605,7 +652,7 @@ export const COVERFLOW = {
 - [ ] **Step 4: Publish it to CSS**
 
 In `app/layout.tsx`, alongside the existing `--enter-*` / `--float-*` / `--room-*` writes, add
-`--coverflow-screens`, `--coverflow-side-scale`, `--coverflow-side-shift`, `--coverflow-side-dim`,
+`--coverflow-screens`, `--coverflow-side-scale`, `--coverflow-side-shift`, `--coverflow-side-veil`,
 `--coverflow-card-max`, `--coverflow-gutter`. **Follow the file's existing pattern exactly** — read how
 `ROOM_STACK` is written there and match it, units included. The point of this indirection is that no number
 in `app/globals.css` can drift from the test that guards it.
@@ -649,6 +696,7 @@ const experience = {
   title: "Kohka Lake",
   body: "An hour at the water near Pench.",
   mediaId: "vann-kohka-lake",
+  scrim: { flat: 0.5 },
 } as const;
 
 describe("CoverflowCard", () => {
@@ -694,21 +742,29 @@ Expected: FAIL — module not found.
 
 - [ ] **Step 3: Write the card**
 
-Photograph above words (spec §5 — the client asked for "cards like the Room Types", and this is deliberately
-*not* their photo-beside-words shape: a coverflow card is seen partly overlapped, where a side-by-side split
-reads poorly). Structure:
+**A photograph with its words on it** — correction C, and spec §5a. The model is
+`components/sections/FullBleedQuote.tsx`: the photograph fills the card, a `Scrim` sits over it, the type
+sits over that in `var(--bg)` cream. Read that component before writing this one; the arrangement it settled
+on (the box is the section with the photograph absolute *inside* it, not a photograph with text absolutely on
+top) exists because the other way puts type through the bottom of the frame on a landscape phone.
 
 ```tsx
 <li className="coverflow-card" style={{ "--i": String(index) } as React.CSSProperties}>
   <a id={coverflowTargetId(chapterId, index)} className="coverflow-anchor" aria-hidden="true" tabIndex={-1} />
-  <figure>
-    <ImageReveal className="block aspect-[4/3] w-full">
-      <Photo id={experience.mediaId} sizes={CARD_SIZES} box={CARD_BOX} … />
-    </ImageReveal>
-  </figure>
+
+  <div className="absolute inset-0 -z-10">
+    <Photo id={experience.mediaId} sizes={CARD_SIZES} box={CARD_BOX} className="h-full w-full object-cover" … />
+  </div>
+  {/* The solved wash. Per card, because six photographs are six exposures. */}
+  <div className="absolute inset-0 -z-10"><Scrim {...experience.scrim} /></div>
+  {/* The veil that recedes a neighbour — its opacity is keyframed, and it is a
+      wash over the photograph, never an opacity on the card. Correction C. */}
+  <div aria-hidden="true" className="coverflow-veil absolute inset-0 -z-10" />
+
   <p className="…">{String(index + 1).padStart(2, "0")}</p>
   <h3 className="…">{experience.title}</h3>
   <p className="…">{experience.body}</p>
+
   <nav className="coverflow-arrows">
     <a href={`#${coverflowTargetId(chapterId, previous)}`}>…</a>
     <a href={`#${coverflowTargetId(chapterId, next)}`}>…</a>
@@ -717,6 +773,17 @@ reads poorly). Structure:
 ```
 
 Rules this must follow:
+
+- **All type is `var(--bg)` cream over the wash** — the same colour `FullBleedQuote` uses. `var(--text)` ink
+  on a photograph is the failure that rule exists to prevent, and `--accent-text` gold is legible on cream
+  and *only* on cream (non-negotiable #7).
+- **`experience.scrim` is a `ScrimStrength` in `content/home.ts`, one per activity, and Task 8 solves the six
+  figures against the rendered page.** Ship Task 5 with a deliberately heavy placeholder (`{ flat: 0.5 }`)
+  and a comment saying so — a *heavy* placeholder fails towards legible-but-muddy, which a reviewer sees,
+  rather than towards illegible, which they may not.
+- **The card is `overflow-hidden` with `isolate`** so the photograph, the scrim and the veil compose inside
+  it. Do **not** give `.coverflow` (the outer wrapper) a `z-index` — the tiger blends against the cream
+  through it (correction B).
 
 - **Every colour through a CSS variable** — `var(--text)`, `var(--dim)`, `var(--accent)`,
   `var(--accent-text)`. Never a hex.
@@ -897,8 +964,11 @@ build broken *elsewhere* has proved nothing. Record which break was used for eac
    `header-height`. Break to test: remove `position: sticky`.
 2. **Exactly one card is centred**, at every sample, and it changes monotonically 1 → 6 as the visitor
    scrolls forward. Break: delete the per-card `animation-range` so every card shares the full range.
-3. **Neighbours are visible and behind.** At each sample the two adjacent cards are on screen, their opacity
-   between `sideDim` and 1, their scale below 1. Break: set `sideDim` to 0.
+3. **Neighbours are visible and behind, and veiled rather than faded.** At each sample the two adjacent cards
+   are on screen and scaled below 1; their own computed `opacity` is **1** and their `.coverflow-veil` is
+   above 0. Break two ways: set `sideVeil` to 0 (they stop receding), and move the recede back onto the
+   card's `opacity` (assertion must fail — that is correction C's regression, and it is invisible to the eye
+   at a glance because both look like depth).
 4. **Exactly one card's arrows are hit-testable** (`elementFromPoint`). Break: remove the keyframed
    `pointer-events`.
 5. **The arrows loop.** Click card 6's next; assert card 1 becomes the centred card. Click card 1's previous;
@@ -960,6 +1030,28 @@ page today at 73.1% and a pin either side of it moves it.
 **Choose from the numbers.** The bar is `field-days` under 45% *worst* (it is 57.9% today) and
 `imagesPerScreen` not falling. If neither arm clears 45% worst, say so plainly and do not adjust the ceiling.
 
+- [ ] **Step 1b: Solve the six scrims, and add six runs to the contrast rig**
+
+Correction C. Six blocks of cream type on six photographs, each needing its own figure.
+
+Add six entries to `RUNS` in `scripts/check_contrast_over_photos.mjs` — that table is hand-written and
+discovers nothing, so a card missing from it is a card nobody has checked. Each run scrolls to that card's
+own anchor (`at: "#field-days-card-N"`, which exists because the arrows need it) so the card being sampled
+is the centred, unveiled one. Use the existing quote runs as the pattern, including their `min` and their
+`[data-word]` selector convention.
+
+Then **solve** each figure rather than picking it: raise the card's scrim until the worst single pixel under
+its type clears the floor, and no further. Start from the placeholder Task 5 shipped and record the before
+and after for all six. `Scrim`'s own comment is explicit that a flat wash heavy enough for the brightest
+patch turns the whole photograph to mud, so prefer the shaped layers (`bottom`, `corner`) to `flat` where
+the type sits in one part of the frame.
+
+Run: `node scripts/check_contrast_over_photos.mjs`
+Expected: PASS on all three routes, including the six new runs.
+
+**Watch it fail first**: set one card's scrim to `{}` and confirm that card's run reports a real ratio below
+its floor. A contrast rig that passes with no wash at all is measuring the wrong pixels.
+
 - [ ] **Step 2: The rest of the measurements**
 
 ```bash
@@ -1002,8 +1094,9 @@ Run: `npm test && npm run lint && npm run build`
 after, the JS delta, the rig's nine failures and nine passes, the screenshots read by eye, and **two open
 items for the client**:
 
-1. **The three property-page photographs now on the home page** (correction A), with the alternative stated:
-   keep the original six and accept that two cards name a place their photograph is not.
+1. **The three property-page photographs now on the home page** (correction A) — recorded as a decision he
+   took on 16 Aug, with the six solved scrim figures beside them so he can see what each photograph cost in
+   wash.
 2. **What "repetitive scroll" actually got.** The arrows loop in both directions, which is what the client
    asked for and what the anchor-link mechanism gives for free. The *scroll* still runs 1 → 6 once and then
    releases the pin — a page cannot scroll forever, and making the scroll itself loop needs JavaScript that
