@@ -1586,6 +1586,18 @@ body {
  * fades the words against the frame beneath them. That is `COVERFLOW.sideVeil`'s
  * whole reason for existing, and the veil below is where receding happens.
  *
+ * ## Eight cards, six activities — the loop is rendered, not implied
+ *
+ * The stage carries a copy of the last activity at `--i: -1` and of the first at
+ * `--i: count`. The formula above places them with no change at all: `--i: -1`
+ * centres at `pin-start + 0 × step`, the exact offset at which the stage locks,
+ * and `--i: count` at `pin-start + (count + 1) × step`, the offset at which it
+ * lets go. So the reading is `[6] → 1 → … → 6 → [1]`, the client's own request of
+ * 16 Aug 2026, and the flanks are no longer empty at the pin's two ends — which
+ * is where this chapter's worst screens were. `Coverflow.tsx` carries the whole
+ * of it; the ghosts are `aria-hidden`, carry no `id`, and their arrows are out of
+ * the tab order.
+ *
  * ## Three things a future editor would break
  *
  * - **`animation-timeline` MUST come after the `animation` shorthand.** The
@@ -1613,11 +1625,17 @@ body {
  */
 
 .coverflow {
-  /* Tall and NOT sticky: it carries the reserved scroll and declares the
-     timeline. `relative` so the six zero-size scroll targets and the footer can
-     be positioned inside it — and `z-index: auto`, see above. */
+  /* NOT sticky: it declares the timeline, and `relative` so the six zero-size
+     scroll targets can be positioned inside it — and `z-index: auto`, see above.
+     Its HEIGHT is the track's plus the film's band; the reserved scroll itself
+     belongs to `.coverflow-track`. */
   position: relative;
 }
+
+/* `.coverflow-track` is a plain static block in flow and needs no rule of its
+   own here — it is the pin's box and gets its height inside `@supports`, where
+   the comment above it explains what it is for. Deliberately NOT positioned: a
+   positioned box paints after its static siblings, and the film is a sibling. */
 
 /* In flow this is simply the list of cards. `position: sticky` and the absolute
    children arrive in the `@supports` block. */
@@ -1626,6 +1644,26 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+}
+
+/*
+ * **The wrap-around ghosts exist only where there is a carousel to wrap.**
+ *
+ * A ghost is a copy of a card that is also on the stage under its own number,
+ * and it earns that in the pinned construction: it is what is centred while the
+ * stage rides in and out, so the reading is `[6] → 1 → … → 6 → [1]`. In the flow
+ * fallback — no `animation-timeline`, or a visitor who asked for reduced motion —
+ * there is no wrap and no stage, only a vertical list of activities, and a list
+ * that opens with a repeat of its own last entry is simply wrong. Measured, not
+ * reasoned about after the fact: the fallback rendered eight cards stacked
+ * 06/01/02/03/04/05/06/01 before this rule existed.
+ *
+ * `display: flex` in the `@supports` block below is what turns them back on, and
+ * it mirrors the `flex` utility on the card's own `<li>`. Unlayered, so it beats
+ * Tailwind's layered utility whichever way the specificity falls.
+ */
+.coverflow-card[aria-hidden="true"] {
+  display: none;
 }
 
 /*
@@ -1654,14 +1692,17 @@ body {
 
 @supports (animation-timeline: view()) {
   .coverflow {
-    height: calc(var(--coverflow-screens) * 100svh);
     view-timeline-name: --coverflow-track;
     view-timeline-axis: block;
 
     /* Where the pin begins, in px from the start of `cover`, and how long it is.
        Both were read back off `getComputedStyle` in the probe as resolved px:
        card 0's window opens at exactly the offset where the stage locks, and the
-       last card's closes at exactly the offset where it lets go. */
+       last card's closes at exactly the offset where it lets go.
+
+       These are measured against the TRACK's height, which is why it is written
+       as `--coverflow-screens * 100svh` and not as `100%`: the wrapper is taller
+       than the track by the film's band, and the pin is the track. */
     --cf-pin-start: calc(100svh - var(--header-height, 0px));
     --cf-pin-len: calc(var(--coverflow-screens) * 100svh - 100svh + var(--header-height, 0px));
     --cf-step: calc(var(--cf-pin-len) / (var(--coverflow-count) + 1));
@@ -1669,13 +1710,71 @@ body {
        it. The `%` resolves against the CARD's own width, because a custom
        property is substituted where it is used, not where it is declared. */
     --cf-off: calc(50vw + 60%);
+
+    /*
+     * The centred card's own drawn size, and the cream it leaves beneath itself.
+     *
+     * **The width expression is `CoverflowCard`'s, deliberately repeated rather
+     * than shared**, because there is nowhere to share it from: the card writes
+     * it as an inline `width` (so a card is correct as a plain block with no
+     * stylesheet) and `CARD_SIZES` writes it a third time as a `sizes` string
+     * (which is evaluated before custom properties are usable). Three copies of
+     * one arithmetic, all derived from `COVERFLOW` — if one moves they all must,
+     * and `lib/sizes.test.ts` holds the aspect ratio to the markup's own class.
+     *
+     * `--cf-card-foot` is the gap between the bottom of a centred card and the
+     * bottom of the stage, and it is what the film's band is bought with below.
+     * It goes NEGATIVE on a viewport short enough that the card is taller than
+     * the stage (a landscape phone: 844x390 gives a 448px card in a 313px
+     * stage), which is why the footer's margin is a plain subtraction and not a
+     * `max()` — there the film has to be pushed DOWN, past a card that is
+     * overflowing its own stage, and the same expression does it.
+     */
+    --cf-card-w: min(var(--coverflow-card-max), 100vw - 2 * var(--coverflow-gutter));
+    --cf-card-h: calc(var(--cf-card-w) * 9 / 16);
+    --cf-stage-h: calc(100svh - var(--header-height, 0px));
+    --cf-card-foot: calc((var(--cf-stage-h) - var(--cf-card-h)) / 2);
+  }
+
+  /*
+   * The pin's own box — tall, not sticky, and the sticky stage's containing
+   * block.
+   *
+   * **It exists to put a floor under the stage, 16 Aug 2026.** `position: sticky`
+   * stops when the sticky box's bottom meets its containing block's bottom, so
+   * anything laid out below THIS element is somewhere no card can ever reach.
+   * The tiger sits there.
+   *
+   * Before this the film was `position: absolute; bottom: 0` inside the wrapper
+   * — which cost no height, and put the stage's own footprint straight over it:
+   * the card covered the tiger at every viewport below ~1430px, and at 1280 the
+   * tiger was headless (`docs/reviews/2026-08-16-coverflow/density-sweep.md` §9;
+   * it was already true below ~1090px at the card's previous width, and no rig
+   * ever looked because `check_films.mjs` only measured 1440). Ordering the film
+   * OVER the stage instead is not available: the film erases its own white
+   * ground with `mix-blend-mode: darken` against the chapter's cream, so it has
+   * to paint BEFORE the stage and may never be given a stacking context of its
+   * own (`DECISIONS.md` §14). Geometry is the only fix, and this is it.
+   *
+   * The card timings do not move by a pixel. `animation-range` offsets here are
+   * LENGTHS from the start of `cover`, and `cover` starts when the WRAPPER's top
+   * edge enters the scrollport — which this change does not touch. Growing the
+   * wrapper at its foot lengthens `cover` past every offset in use and shifts
+   * none of them. Watched, not assumed: `check_coverflow.mjs` bisects every
+   * card to its own centred moment.
+   */
+  .coverflow-track {
+    height: calc(var(--coverflow-screens) * 100svh);
   }
 
   .coverflow-stage {
     position: sticky;
     top: var(--header-height, 0px);
-    /* The header comes out of the stage's own height — fact 3 above. */
-    height: calc(100svh - var(--header-height, 0px));
+    /* The header comes out of the stage's own height — fact 3 above. Read from
+       `--cf-stage-h` rather than written out again: the footer's margin is
+       computed from the cream a centred card leaves inside THIS box, so the two
+       must agree, and one place is the only way that stays true. */
+    height: var(--cf-stage-h);
     /*
      * Above the tiger, and only that. `position: sticky` already makes this a
      * stacking context, so this changes nothing about the stage itself — it
@@ -1711,6 +1810,12 @@ body {
      * can swallow a pointer it was not built to receive.
      */
     pointer-events: none;
+  }
+
+  /* The ghosts are on, because there is now a carousel for them to wrap. See the
+     rule above; `flex` mirrors the card's own `flex` utility class. */
+  .coverflow-card[aria-hidden="true"] {
+    display: flex;
   }
 
   .coverflow-card {
@@ -1764,24 +1869,34 @@ body {
   }
 
   /*
-   * The first and last card's arrows stay live to the ends of the pin.
+   * The outermost card's arrows stay live to the ends of the pin.
    *
    * Every card's `pointer-events` window is the middle half of its own four-step
    * arc — d ∈ [−0.5, +0.5] steps either side of its centred moment — and those
-   * windows tile the pin between card 0's centred moment and card 5's, but not
-   * the half step before the first or after the last. Measured before this rule
-   * existed: the first four and the last ten sampled positions inside the pin at
-   * 1440x900 had no reachable arrow anywhere on the page, which is a visitor
-   * pressing "next" on the only card on the stage and nothing happening. Both
-   * ends get an open-ended window instead, and the six windows still never
-   * overlap.
+   * windows tile the pin between the first card's centred moment and the last
+   * one's, but not the half step before the first or after the last. Measured
+   * before this rule existed: the first four and the last ten sampled positions
+   * inside the pin at 1440x900 had no reachable arrow anywhere on the page,
+   * which is a visitor pressing "next" on the only card on the stage and nothing
+   * happening. Both ends get an open-ended window instead, and the windows still
+   * never overlap.
    *
-   * `:first-child` / `:last-child` rather than an attribute from the component
-   * — deliberately unlike `.room-card[data-room-card-last]` above, where the
-   * `<ol>` interleaves slots and cards and a positional selector would have been
-   * standing in for a coincidence. This `<ul>` holds nothing but cards. And it
-   * is guarded rather than assumed: `scripts/check_coverflow.mjs` fails if the
-   * card in charge is ever anything other than exactly one, advancing 0 → 5, at
+   * **`:first-child` and `:last-child` are the two wrap-around GHOSTS since 16
+   * Aug 2026** — the copy of the last activity at `--i: -1` and of the first at
+   * `--i: count`, which centre exactly where the pin locks and lets go
+   * (`Coverflow.tsx`). That is why they carry arrows at all: they are the cards
+   * at the centre of the stage through both of those stretches, and a card
+   * nobody can advance from is what this rule exists to prevent. Their arrows
+   * are real links to the same six targets, out of the tab order and inside an
+   * `aria-hidden` card.
+   *
+   * `:first-child` / `:last-child` rather than an attribute from the component —
+   * deliberately unlike `.room-card[data-room-card-last]` above, where the `<ol>`
+   * interleaves slots and cards and a positional selector would have been
+   * standing in for a coincidence. This `<ul>` holds nothing but cards, and the
+   * two at its ends are exactly the two that hold. And it is guarded rather than
+   * assumed: `scripts/check_coverflow.mjs` fails if the card in charge is ever
+   * anything other than exactly one, advancing through every card in order, at
    * every position inside the pin.
    */
   .coverflow-card:first-child .coverflow-arrows {
@@ -1793,7 +1908,7 @@ body {
   }
 
   /*
-   * The first and last card also HOLD at centre outside the carousel's own run,
+   * The two outermost cards also HOLD at centre outside the carousel's own run,
    * and this one is a density repair with a measurement behind it.
    *
    * A sticky stage is on screen for its own height of scroll before it locks and
@@ -1804,15 +1919,24 @@ body {
    * in the tail where the stage rides out carrying nothing at all. That is
    * paid-for empty scroll, which is the exact thing non-negotiable #9 forbids.
    *
-   * So card 0 is simply *there*, centred, as the chapter arrives, and starts
-   * travelling when the carousel does; and card 5 arrives at centre and stays
-   * there while the stage rides out. Neither one changes the carousel between
-   * them: both still reach centre at `pin-start + (i + 1) × step`, which is what
-   * the anchor targets are placed from.
+   * So the deck's first card is simply *there*, centred, as the chapter arrives,
+   * and starts travelling when the carousel does; and its last arrives at centre
+   * and stays there while the stage rides out. Neither one changes the carousel
+   * between them: every card still reaches centre at
+   * `pin-start + (i + 1) × step`, which is what the anchor targets are placed
+   * from.
+   *
+   * **Since the ghosts landed (16 Aug 2026) those two are the ghosts**, and the
+   * hold moving onto them is what makes the loop visible rather than merely
+   * available: the copy of the last activity is what is centred as the chapter
+   * arrives, and it gives way to the first activity as the pin engages. Activity
+   * 1 and activity 6 now travel on the ordinary schedule, so each of them has a
+   * neighbour beside it at its own centred moment, which the held cards never
+   * did.
    *
    * `check_coverflow.mjs`'s "at most one card within 8px of centre" still holds
-   * at every position, because the card next to a holding one is off-stage for
-   * the whole hold.
+   * at every position, because the card next to a holding one is a full step
+   * away from centre for the whole hold.
    */
   .coverflow-card:first-child {
     animation-name: coverflow-pass-first;
@@ -1839,25 +1963,43 @@ body {
   }
 
   /*
-   * The tiger, at the wrapper's foot: absolute, so it costs no height (in flow
-   * this same film took `field-days` from 41.5% to 44.4% mean empty), and a
-   * sibling of the stage rather than a child, so it has no sticky ancestor to
-   * blend against.
+   * The tiger, below the track — in flow, and pulled back up into the cream the
+   * centred card leaves beneath itself.
    *
-   * `right: 0` with no `left`, so the box is only as wide as the drawing. It was
-   * `inset-inline: 0` for one build, and a full-width invisible band at the foot
-   * of the wrapper is exactly the thing that swallows clicks it was never meant
-   * to see: `elementFromPoint` at the last card's own arrows returned
-   * `div.coverflow-footer` for the final ten sampled positions of the pin at
-   * 1440x900. The stage's `z-index` above is the other half of that repair, and
-   * the two are kept separate on purpose — one bounds the box, the other orders
-   * it.
+   * **Almost all of its height is still free, and the part that is not is the
+   * price of the fix.** The film is 400px tall at `lg`; a centred card leaves
+   * `--cf-card-foot` of empty stage below it (158px at 1440x900), and this rule
+   * spends every pixel of that on the film, keeping only a 2.5rem gap so the two
+   * do not touch. What the chapter actually pays is `filmHeight − cardFoot +
+   * 2.5rem` — 281px at 1440x900, against 400px for the naive in-flow version and
+   * 0px for the absolute one that put the card over the tiger's head.
+   *
+   * **That 281px is not free and it was measured, 16 Aug 2026.** The chapter
+   * goes 3.34 → 3.67 screens and 46.2% / 52.2% → 48.6% / 62.3% empty, because
+   * the band is a 1344 × 281 strip carrying one 300px-wide drawing — 78% cream —
+   * and it lands on the chapter's own tail. It gives back the whole of what the
+   * wrap-around ghosts had just won. The alternative is to take the band out of
+   * the PIN rather than add it to the chapter (shorten `--cf-pin-len` by the same
+   * amount, keeping the chapter exactly as tall as before), and it is not taken
+   * here because it is not free either: it speeds the carousel by 29%, from a
+   * 279px arc per card to 199px, on a page whose whole brief is unhurried. The
+   * numbers for both are in `docs/reviews/2026-08-16-coverflow/
+   * flanks-and-tiger.md`; the trade is the client's.
+   *
+   * A plain subtraction rather than a clamped one, on purpose: on a viewport
+   * short enough that the card is taller than the stage, `--cf-card-foot` is
+   * negative and this becomes a positive margin that pushes the film clear of a
+   * card overflowing its own stage. One expression, both directions.
+   *
+   * It is still a full-width flex row, and that is still safe for the reason the
+   * previous note gave: an invisible band at the foot of the wrapper swallows
+   * clicks it was never meant to see, so it must not lie over a card's arrows.
+   * It cannot — its top edge is 2.5rem BELOW the centred card's bottom edge at
+   * every viewport, by the arithmetic above, and the arrows sit inside the card
+   * above that edge. `check_coverflow.mjs` measures it rather than trusting it.
    */
   .coverflow-footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin-top: 0;
+    margin-top: calc(2.5rem - var(--cf-card-foot));
   }
 
   @keyframes coverflow-pass {
@@ -2032,8 +2174,14 @@ body {
    */
   @media (prefers-reduced-motion: reduce) {
     .coverflow {
-      height: auto;
       view-timeline-name: none;
+    }
+
+    /* No pin, so no reserved scroll and no floor to put under a stage that is
+       not sticky — the track collapses to its contents and the film goes back to
+       being an ordinary block below them. */
+    .coverflow-track {
+      height: auto;
     }
 
     .coverflow-stage {
@@ -2048,6 +2196,13 @@ body {
       top: auto;
       z-index: auto;
       transform: none;
+    }
+
+    /* Off again — see the base rule. Reduced motion collapses the pin entirely,
+       so what is left is the same plain list of six the `@supports` fallback
+       gives, and a list must not open with a repeat of its own last entry. */
+    .coverflow-card[aria-hidden="true"] {
+      display: none;
     }
 
     /*
@@ -2080,7 +2235,6 @@ body {
     }
 
     .coverflow-footer {
-      position: static;
       margin-top: 2.5rem;
     }
   }

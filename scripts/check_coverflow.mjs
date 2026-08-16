@@ -28,9 +28,15 @@
 //
 // and across the pin as a whole:
 //
-//   (d) the card in charge advances 0 → 5, monotonically, hitting every index;
+//   (d) the card in charge advances 0 → 7, monotonically, hitting every index;
 //   (e) every card genuinely REACHES the centre — found by bisecting its own
 //       signed offset for the zero crossing, and required to land inside 8px.
+//
+// Eight, not six, since 16 Aug 2026: the deck carries a wrap-around copy of the
+// last activity and of the first, so the client's loop is in the scroll and not
+// only in the arrows. They are `aria-hidden`, carry no `id`, and their arrows are
+// out of the tab order — all three read off the DOM below, because "eight cards"
+// must not silently become "eight activities" to a screen reader.
 //
 // **(a) is "at most one", not "exactly one", and the difference is a correction
 // to this task's own brief.** No continuously-moving carousel can have a card
@@ -48,9 +54,9 @@
 //
 //   * No coverflow at all (the state of the page before Task 6): no
 //     `ul.coverflow-stage` inside `#field-days` — the rig stops there and says so.
-//   * Per-card `animation-range` deleted, so all six share the full range: all
-//     six move together, so at a centred moment SIX cards are inside 8px — (a)
-//     fails — and either six or zero cards' arrows are live — (b) fails.
+//   * Per-card `animation-range` deleted, so every card shares the full range:
+//     they all move together, so at a centred moment EIGHT cards are inside 8px
+//     — (a) fails — and either eight or zero cards' arrows are live — (b) fails.
 //   * The keyframed `pointer-events` removed: all twelve arrows are live
 //     wherever they are on screen — (b) fails with a count of 3 (the centre card
 //     and both neighbours) rather than 1.
@@ -89,9 +95,28 @@ const BASE = flag("url", `http://localhost:${PORT}`);
 const PATH = flag("path", "/");
 const OUT = flag("out", "docs/reviews/2026-08-16-coverflow/coverflow.json");
 
-/** The chapter, and the six cards it must carry. */
+/** The chapter, and the deck it must carry. */
 const CHAPTER = "field-days";
-const EXPECTED_CARDS = 6;
+/**
+ * Six activities — and therefore six scroll targets, one per activity.
+ *
+ * The ghosts carry no `id`: a wrap-around copy of a card that is also on the
+ * stage under its own number would otherwise emit a duplicate id, and every
+ * arrow pointing at it would land on whichever the browser saw first.
+ */
+const EXPECTED_TARGETS = 6;
+/**
+ * Eight cards, since 16 Aug 2026: the six, plus a copy of the last at `--i: -1`
+ * and of the first at `--i: count`.
+ *
+ * They are the client's own "after 6 the 1 card comes back" made visible in the
+ * scroll rather than only in the arrows, and they are what puts a card at the
+ * flanks at the two moments the stage used to hold ONE card alone — this
+ * chapter's worst screens (`docs/reviews/2026-08-16-coverflow/density-sweep.md`
+ * §2). Everything below is asked of all eight: each one is bisected to its own
+ * centred moment, and each one takes its turn in charge.
+ */
+const EXPECTED_CARDS = EXPECTED_TARGETS + 2;
 
 const SHAPES = [
   [1440, 900],
@@ -230,8 +255,10 @@ const report = {
   assertion:
     "At every sampled scroll position inside the pin: at most one card is within 8px of the " +
     "stage's horizontal centre, exactly one card's arrows are hit-testable, and that card is the " +
-    "one nearest the centre. Across the pin the card in charge advances 0 -> 5 hitting every " +
-    "index, and every card is bisected to its own centred moment and must land inside 8px.",
+    `one nearest the centre. Across the pin the card in charge advances 0 -> ${EXPECTED_CARDS - 1} ` +
+    "hitting every index, and every card is bisected to its own centred moment and must land " +
+    "inside 8px. The deck is the six activities plus the two wrap-around ghosts, which must be " +
+    "aria-hidden, id-less and out of the tab order.",
   shapes: [],
 };
 
@@ -261,11 +288,24 @@ for (const [width, height] of SHAPES) {
     const stage = document.querySelector(`#${id} ul.coverflow-stage`);
     if (!wrap || !stage) return null;
     const r = wrap.getBoundingClientRect();
+    const seen = new Set();
+    const duplicateIds = [];
+    for (const el of document.querySelectorAll(`#${id} [id]`)) {
+      if (seen.has(el.id)) duplicateIds.push(el.id);
+      seen.add(el.id);
+    }
     return {
       top: Math.round(r.top + window.scrollY),
       height: Math.round(r.height),
       cards: stage.querySelectorAll("li.coverflow-card").length,
       targets: document.querySelectorAll(`#${id} .coverflow-target`).length,
+      // The ghosts must be out of the accessibility tree AND out of the tab
+      // order. Read off the DOM rather than off the component: eight cards must
+      // not be eight activities to a screen reader, and sixteen arrows must not
+      // be sixteen stops on the way through the page.
+      ghostCards: stage.querySelectorAll('li.coverflow-card[aria-hidden="true"]').length,
+      tabbableArrows: stage.querySelectorAll("nav.coverflow-arrows a:not([tabindex='-1'])").length,
+      duplicateIds,
     };
   }, CHAPTER);
 
@@ -277,8 +317,30 @@ for (const [width, height] of SHAPES) {
   if (geometry.cards !== EXPECTED_CARDS) {
     note(label, `${geometry.cards} cards in the stage, expected ${EXPECTED_CARDS}`);
   }
-  if (geometry.targets !== EXPECTED_CARDS) {
-    note(label, `${geometry.targets} scroll targets, expected ${EXPECTED_CARDS}`);
+  if (geometry.ghostCards !== EXPECTED_CARDS - EXPECTED_TARGETS) {
+    note(
+      label,
+      `${geometry.ghostCards} cards are \`aria-hidden\`, expected ${EXPECTED_CARDS - EXPECTED_TARGETS} — ` +
+        "the wrap-around copies must not be read out as activities of their own",
+    );
+  }
+  if (geometry.tabbableArrows !== EXPECTED_TARGETS * 2) {
+    note(
+      label,
+      `${geometry.tabbableArrows} arrows are in the tab order, expected ${EXPECTED_TARGETS * 2} — ` +
+        "a ghost's arrows are inside an `aria-hidden` card and must carry `tabindex=\"-1\"`, or they " +
+        "are keyboard stops a screen reader cannot announce",
+    );
+  }
+  if (geometry.targets !== EXPECTED_TARGETS) {
+    note(label, `${geometry.targets} scroll targets, expected ${EXPECTED_TARGETS}`);
+  }
+  if (geometry.duplicateIds.length > 0) {
+    note(
+      label,
+      `duplicate element ids inside #${CHAPTER}: ${geometry.duplicateIds.join(", ")} — a ghost card ` +
+        "is carrying its twin's id, so half the arrows point at the wrong element",
+    );
   }
   if (!supported) {
     note(
@@ -399,33 +461,60 @@ for (const [width, height] of SHAPES) {
   // when it was centred for a third of the pin — the bisection's own assumption
   // failing, not the page. So a coarse sample already inside the tolerance
   // settles it outright and the bisection is only for cards that pass through.
+  //
+  // **The search runs over EVERY sample, not only the pinned ones, and the
+  // "while pinned" half of the assertion is asked of the six activities only.**
+  // That is the ghosts' geometry, not a relaxation: `step` is `pin-len / 7`, so
+  // the eight centred moments sit at 0, 1, … 7 steps from the pin's start — the
+  // first ghost's is exactly where the stage locks and the last ghost's exactly
+  // where it lets go, and each of them then HOLDS at centre through the stage's
+  // own ride-in and ride-out. Measured at 390x844 before this was corrected: the
+  // last ghost's offset never went negative anywhere in the *pinned* window,
+  // because its crossing is that window's own closing edge. That the two ghosts
+  // are the cards at the centre when the pin begins and ends is still asserted,
+  // and more directly, by (c) and (d) — the card in charge is the one nearest
+  // the centre, and the order runs 0 → 7 across the pin.
+  const activityCards = Array.from({ length: EXPECTED_CARDS }, (_, i) => i).filter(
+    (i) => i !== 0 && i !== EXPECTED_CARDS - 1,
+  );
   const centreHits = [];
   for (let i = 0; i < EXPECTED_CARDS; i++) {
-    const already = pinned
-      .map((s) => ({ scrollY: Math.round(s.scrollY), offset: s.cards[i]?.offset ?? 999, pinned: true }))
+    const already = samples
+      .map((s) => ({
+        scrollY: Math.round(s.scrollY),
+        offset: s.cards[i]?.offset ?? 999,
+        pinned: s.pinned,
+      }))
       .filter((s) => Math.abs(s.offset) <= CENTRE_TOLERANCE)
       .sort((a, b) => Math.abs(a.offset) - Math.abs(b.offset))[0];
     if (already) {
       centreHits.push({ card: i, ...already, byHold: true });
+      if (!already.pinned && activityCards.includes(i)) {
+        note(
+          label,
+          `card ${i} is only ever centred at scrollY=${already.scrollY}, where the stage is NOT ` +
+            "pinned — the pin is too short for its own carousel",
+        );
+      }
       continue;
     }
 
     let lo = null;
     let hi = null;
-    for (let k = 1; k < pinned.length; k++) {
-      const a = pinned[k - 1].cards[i];
-      const b = pinned[k].cards[i];
+    for (let k = 1; k < samples.length; k++) {
+      const a = samples[k - 1].cards[i];
+      const b = samples[k].cards[i];
       if (!a || !b) continue;
       if (a.offset > 0 && b.offset <= 0) {
-        lo = pinned[k - 1].scrollY;
-        hi = pinned[k].scrollY;
+        lo = samples[k - 1].scrollY;
+        hi = samples[k].scrollY;
         break;
       }
     }
     if (lo === null) {
       note(
         label,
-        `card ${i}'s offset from the stage's centre never crossed zero anywhere inside the pin ` +
+        `card ${i}'s offset from the stage's centre never crossed zero anywhere in this chapter ` +
           "— it is never the centred card",
       );
       continue;
@@ -450,7 +539,7 @@ for (const [width, height] of SHAPES) {
           `centre — it never actually arrives`,
       );
     }
-    if (best && !best.pinned) {
+    if (best && !best.pinned && activityCards.includes(i)) {
       note(
         label,
         `card ${i} reaches the centre at scrollY=${best.scrollY}, where the stage is NOT pinned ` +
@@ -479,6 +568,71 @@ for (const [width, height] of SHAPES) {
       }px`,
   );
 
+  await context.close();
+}
+
+// ---------------------------------------------------------------------------
+// The fallback: reduced motion, where the pin collapses to a plain list.
+//
+// **This arm exists because the ghosts broke it, 16 Aug 2026.** They are copies
+// of cards that are also on the stage under their own numbers, which earns its
+// place in the pinned construction and is simply wrong in a list: the fallback
+// rendered 06 / 01 / 02 / 03 / 04 / 05 / 06 / 01, opening with a repeat of its
+// own last entry. `app/globals.css` now turns them off outside the carousel, in
+// the base rule and again under reduced motion, and this is what holds it there.
+//
+// What a broken build scores: with either `display: none` removed, `visible`
+// reads 8 instead of 6.
+{
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    reducedMotion: "reduce",
+  });
+  const page = await context.newPage();
+  await page.goto(`${BASE}${PATH}`, { waitUntil: "load" });
+  await page.waitForTimeout(2600);
+  const fallback = await page.evaluate((id) => {
+    const stage = document.querySelector(`#${id} ul.coverflow-stage`);
+    if (!stage) return null;
+    const cards = Array.from(stage.querySelectorAll("li.coverflow-card"));
+    const shown = cards.filter((el) => getComputedStyle(el).display !== "none");
+    return {
+      inMarkup: cards.length,
+      visible: shown.length,
+      titles: shown.map((el) => el.querySelector("h3")?.textContent ?? "?"),
+      stagePosition: getComputedStyle(stage).position,
+      animations: [...new Set(cards.map((el) => getComputedStyle(el).animationName))],
+    };
+  }, CHAPTER);
+
+  if (!fallback) {
+    note("reduced motion", `no \`ul.coverflow-stage\` inside #${CHAPTER}`);
+  } else {
+    report.reducedMotion = fallback;
+    if (fallback.visible !== EXPECTED_TARGETS) {
+      note(
+        "reduced motion",
+        `${fallback.visible} cards are rendered (${fallback.titles.join(" / ")}), expected ` +
+          `${EXPECTED_TARGETS} — with no carousel there is nothing for a wrap-around copy to wrap, ` +
+          "and a plain list that opens with a repeat of its own last entry reads as a mistake",
+      );
+    }
+    if (fallback.stagePosition === "sticky") {
+      note("reduced motion", "the stage is still sticky — the pin has not collapsed");
+    }
+    if (fallback.animations.some((a) => a !== "none")) {
+      note(
+        "reduced motion",
+        `cards still carry animation-name ${fallback.animations.join(", ")} — every selector that ` +
+          "names an animation must be repeated in the reduced-motion block, or the more specific " +
+          "ones keep theirs",
+      );
+    }
+    console.log(
+      `reduced motion      ${fallback.visible}/${fallback.inMarkup} cards rendered, stage ` +
+        `${fallback.stagePosition}, animations ${fallback.animations.join("/")}`,
+    );
+  }
   await context.close();
 }
 

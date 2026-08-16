@@ -18,12 +18,17 @@ import { COVERFLOW } from "@/lib/motion";
  * build time is the only version of this promise that holds.
  *
  * The breakpoint is where the two arms of the `min()` cross:
- * `100vw − 2 × 24px ≥ 560px ⟺ 100vw ≥ 608px`. Exact, not rounded — above 608px
- * the card is a flat 560px, below it `calc(100vw − 48px)`. `ui/Photo.tsx`'s own
+ * `100vw − 2 × 24px ≥ 900px ⟺ 100vw ≥ 948px`. Exact, not rounded — above 948px
+ * the card is a flat 900px, below it `calc(100vw − 48px)`. `ui/Photo.tsx`'s own
  * comment is explicit that a `sizes` must round *up* where it is unsure;
  * nothing here is unsure, because both arms are the layout's own arithmetic.
  *
- * Current value: `(min-width: 608px) 560px, calc(100vw - 48px)`.
+ * Current value: `(min-width: 948px) 900px, calc(100vw - 48px)`. **Both numbers
+ * were 560 and 608 until 16 Aug 2026**, when `COVERFLOW.cardMaxPx` was swept
+ * from a value that had been picked by analogy and never measured — the
+ * expression is unchanged and still derives from `COVERFLOW`, so the sweep moved
+ * these numbers without anyone touching this line
+ * (`docs/reviews/2026-08-16-coverflow/density-sweep.md` §5).
  */
 export const CARD_SIZES = `(min-width: ${COVERFLOW.cardMaxPx + 2 * COVERFLOW.stageGutterPx}px) ${COVERFLOW.cardMaxPx}px, calc(100vw - ${2 * COVERFLOW.stageGutterPx}px)`;
 
@@ -116,6 +121,8 @@ export function CoverflowCard({
   experience,
   scrim,
   index,
+  slot = index,
+  ghost = false,
   count,
   chapterId,
   previousTitle,
@@ -135,7 +142,32 @@ export function CoverflowCard({
    * towards illegible, which they may not.
    */
   scrim: ScrimStrength;
+  /** Which activity this is — its number, its words, and the two it points at. */
   index: number;
+  /**
+   * Which position on the stage it animates through, if that is not its own.
+   *
+   * The two wrap-around ghosts are the only cards where the two differ: the copy
+   * of the last activity animates at `slot: -1` and the copy of the first at
+   * `slot: count`, which the shared `animation-range` formula centres exactly at
+   * the pin's two ends. `Coverflow.tsx` carries the whole reasoning.
+   */
+  slot?: number;
+  /**
+   * A wrap-around copy of a card that is also on the stage under its own number.
+   *
+   * It is `aria-hidden` and everything inside it is out of the tab order: eight
+   * cards must not be eight activities to a screen reader, and sixteen arrows
+   * must not be sixteen stops on the way through the page. **It keeps its arrows
+   * all the same, as real links with `tabindex="-1"`**, and that is a decision
+   * rather than an oversight — this is the card at the centre of the stage
+   * through the whole of the pin's first and last stretch, so a version of it
+   * without arrows would be the one card a visitor cannot advance from, and
+   * `app/globals.css`'s `pointer-events` windows (which tile the pin, one card
+   * at a time) would have a hole at each end. Its arrows point at the same six
+   * targets its twin's do.
+   */
+  ghost?: boolean;
   count: number;
   chapterId: string;
   /**
@@ -159,9 +191,10 @@ export function CoverflowCard({
   return (
     <li
       className="coverflow-card relative isolate flex aspect-[16/9] flex-col justify-end overflow-hidden p-5 md:p-7"
+      aria-hidden={ghost ? "true" : undefined}
       style={
         {
-          "--i": String(index),
+          "--i": String(slot),
           // The same arithmetic `CARD_SIZES` describes, and the reason it is
           // here rather than in `app/globals.css`: the two must move together,
           // and one file is the only place that can be true. Inline so a card
@@ -239,11 +272,17 @@ export function CoverflowCard({
         // and below it are cream, which is the half of that rule that binds.
         style={{ borderColor: "var(--accent)" }}
       >
+        {/* `tabIndex={-1}` on a ghost's pair, never on a real card's: an
+            `aria-hidden` subtree with a tabbable link in it is a keyboard stop
+            a screen reader cannot announce. Out of the tab order they are
+            neither counted nor reachable, and they still work under the
+            pointer, which is the whole point of rendering them. */}
         <a
           href={`#${coverflowTargetId(chapterId, previous)}`}
           aria-label={
             previousTitle ? `${SITE.coverflow.previous} — ${previousTitle}` : SITE.coverflow.previous
           }
+          tabIndex={ghost ? -1 : undefined}
           className={arrow}
         >
           {SITE.coverflow.previous}
@@ -251,6 +290,7 @@ export function CoverflowCard({
         <a
           href={`#${coverflowTargetId(chapterId, next)}`}
           aria-label={nextTitle ? `${SITE.coverflow.next} — ${nextTitle}` : SITE.coverflow.next}
+          tabIndex={ghost ? -1 : undefined}
           className={arrow}
         >
           {SITE.coverflow.next}

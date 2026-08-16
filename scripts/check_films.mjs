@@ -23,7 +23,11 @@
 //   4. It stops at the end and **holds the last frame** — it does not loop, and
 //      it does not rewind.
 //   5. **The white ground is erased.** Sampled as pixels, against the cream the
-//      chapter actually sits on.
+//      chapter actually sits on — **at six widths, not one** (see below).
+//   5b. **Nothing on the page covers the film's box.** A separate question from
+//      the one above and a separate assertion, because a corner sample answers
+//      "is the ground cream *here*" and says nothing about a card lying over the
+//      middle of the drawing.
 //   6. A deliberate hover replays it.
 //   7. Hover is ignored **while it is still playing**.
 //   8. The pointer must **leave and return** — a parked cursor may not replay it
@@ -31,6 +35,40 @@
 //      another name, and it is the one no static reading can see.
 //   9. Reduced motion: the still, and nothing ever plays.
 //  10. No JavaScript: the still, and no broken box.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// **Everything above except 5 and 5b is measured at 1440x900 only, and that is
+// how this rig missed a real defect for a day.** 16 Aug 2026: the coverflow's
+// widened card covers the tiger below ~1430px of viewport — headless at 1280 —
+// and the conflict was already true below ~1090px at the card's previous width.
+// No instrument on this project ever looked, because this file's one viewport is
+// the one width at which the overlap does not happen
+// (`docs/reviews/2026-08-16-coverflow/density-sweep.md` §9).
+//
+// Worse, when the overlap finally *did* reach 1440 the message this rig printed
+// was a false diagnosis — "the white ground is showing as a rectangle" — because
+// a corner sample that is 131 levels off cream has exactly two explanations and
+// this rig only knew one of them. The sampled pixel was a photograph.
+//
+// So 5 and 5b sweep `GROUND_SHAPES` and are two assertions, not one:
+//
+//   * **5b, the geometry**, asked at a dozen scroll positions per width while the
+//     box is on screen: does any element that actually paints anything overlap
+//     the film's box? This is the one that catches a card over the tiger's head
+//     while all four corners still sit on cream.
+//   * **5, the pixels**, sampled with the box fully in view. Its message now
+//     names the covering element when there is one, says "white" when the corner
+//     is near white, and says neither when it is neither — three different
+//     repairs that read identically before.
+//
+// What a broken build scores, written down before the first run:
+//
+//   * The card covering the tiger (the build this was written against): 5b fails
+//     at 390, 1024, 1280 and 1366 with `li.coverflow-card` named as the
+//     occluder, and 5 fails wherever a *corner* lands on the card.
+//   * `mix-blend-mode: darken` removed: 5 fails at every width with the corner
+//     near white and 5b clean — the pair separates the two defects.
+//   * The film moved inside a stacking context: same signature as the line above.
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -57,6 +95,108 @@ const note = (film, message) => failures.push(`${film}: ${message}`);
 
 /** How far a channel may drift from the chapter's own cream before it reads as a rectangle. */
 const CREAM_TOLERANCE = 6;
+
+/** How near 255 a corner has to read before "the white ground is back" is the honest diagnosis. */
+const WHITE_TOLERANCE = 14;
+
+/**
+ * The shapes assertions 5 and 5b are asked at.
+ *
+ * **Continuous-ish rather than the project's four fixed widths**, because the
+ * defect this list exists for lives between them: the overlap begins at whatever
+ * viewport makes `container/2 − cardWidth/2` smaller than the film's own box, and
+ * that is a threshold nobody can put on a round number in advance. 1366x768 is in
+ * the list for a second reason — it is a `short:` viewport (`max-height: 800px`),
+ * which is where this project has already shipped two geometry defects
+ * (`DECISIONS.md` §2 #44-45).
+ */
+const GROUND_SHAPES = [
+  [390, 844],
+  [1024, 900],
+  [1280, 900],
+  [1366, 768],
+  [1440, 900],
+  [1920, 1080],
+];
+
+/** How many scroll positions the box is checked for overlap at, per width per film. */
+const SWEEP_SAMPLES = 12;
+/** An overlap smaller than this is sub-pixel rounding at a shared edge, not a card on a tiger. */
+const OVERLAP_TOLERANCE_PX = 4;
+
+/**
+ * Everything that paints, and overlaps the film's box, right now.
+ *
+ * **Geometry rather than `elementFromPoint`, deliberately.** Hit-testing cannot
+ * answer this question here: the coverflow's stage is `pointer-events: none` so
+ * that the tiger stays hoverable through it, and `elementFromPoint` /
+ * `elementsFromPoint` do not return such elements at all — the same blindness
+ * that made `measure_density.mjs` score the lantern as bare paper until 7 Aug
+ * 2026. A card would lie over the tiger and every hit test would say the tiger
+ * was reachable, which it is.
+ *
+ * "Paints" is the filter that keeps this from reporting the section, the
+ * container and the stage: an element counts only if it is an `<img>`/`<video>`/
+ * `<picture>`/`<canvas>`/`<svg>`, or carries a background image, or a background
+ * colour with real alpha. Ancestors and descendants of the frame are skipped
+ * outright — an ancestor always overlaps, and a descendant is the drawing.
+ */
+const OVERLAP = ({ chapter, tolerance }) => {
+  const frame = document.querySelector(`#${chapter} [data-signature-film-frame]`);
+  if (!frame) return null;
+  const r = frame.getBoundingClientRect();
+  const vis = {
+    left: Math.max(r.left, 0),
+    top: Math.max(r.top, 0),
+    right: Math.min(r.right, window.innerWidth),
+    bottom: Math.min(r.bottom, window.innerHeight),
+  };
+  const onScreen = vis.right - vis.left > 1 && vis.bottom - vis.top > 1;
+  if (!onScreen) return { onScreen: false, scrollY: Math.round(window.scrollY), occluders: [] };
+
+  const paints = (el) => {
+    const cs = getComputedStyle(el);
+    if (cs.visibility === "hidden" || cs.display === "none" || Number(cs.opacity) === 0) return false;
+    if (/^(IMG|VIDEO|PICTURE|CANVAS|SVG)$/.test(el.tagName)) return true;
+    if (cs.backgroundImage !== "none") return true;
+    const parts = cs.backgroundColor.match(/[\d.]+/g);
+    if (!parts) return false;
+    return (parts.length > 3 ? Number(parts[3]) : 1) > 0.01;
+  };
+
+  const name = (el) => {
+    const cls =
+      typeof el.className === "string" && el.className.trim()
+        ? `.${el.className.trim().split(/\s+/).slice(0, 2).join(".")}`
+        : "";
+    return `${el.tagName.toLowerCase()}${cls}`;
+  };
+
+  const occluders = [];
+  for (const el of document.querySelectorAll(`#${chapter} *`)) {
+    if (el === frame || frame.contains(el) || el.contains(frame)) continue;
+    if (!paints(el)) continue;
+    const b = el.getBoundingClientRect();
+    const w = Math.min(b.right, vis.right) - Math.max(b.left, vis.left);
+    const h = Math.min(b.bottom, vis.bottom) - Math.max(b.top, vis.top);
+    if (w <= tolerance || h <= tolerance) continue;
+    occluders.push({
+      el: name(el),
+      overlap: { w: Math.round(w), h: Math.round(h), area: Math.round(w * h) },
+    });
+  }
+  occluders.sort((a, b) => b.overlap.area - a.overlap.area);
+
+  return {
+    onScreen: true,
+    scrollY: Math.round(window.scrollY),
+    box: { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) },
+    visibleShare: Number(
+      (((vis.right - vis.left) * (vis.bottom - vis.top)) / (r.width * r.height)).toFixed(3),
+    ),
+    occluders: occluders.slice(0, 4),
+  };
+};
 
 const FRAME = (chapter) => {
   const frame = document.querySelector(`#${chapter} [data-signature-film-frame]`);
@@ -126,6 +266,84 @@ async function hover(page, chapter, on) {
   }, chapter);
   await page.mouse.move(box.x, box.y);
   await page.waitForTimeout(160);
+}
+
+/** The chapter's own background colour, which is what the film has to disappear into. */
+const chapterCream = (page, chapter) =>
+  page.evaluate((id) => {
+    const rgb = getComputedStyle(document.getElementById(id)).backgroundColor.match(/\d+/g).map(Number);
+    return { r: rgb[0], g: rgb[1], b: rgb[2] };
+  }, chapter);
+
+/**
+ * The four corners of the film's box, as pixels, against that cream.
+ *
+ * Pixels rather than the declared blend mode: the artwork is drawn on white and
+ * only `mix-blend-mode: darken` against a lighter-than-cream ground makes the
+ * rectangle disappear. If that stops working the page shows a white box and
+ * every other assertion in this file still passes.
+ */
+async function ground(page, chapter, box, shotPath) {
+  const cream = await chapterCream(page, chapter);
+  await page.screenshot({ path: shotPath, clip: { x: box.x, y: box.y, width: box.w, height: box.h } });
+  const { data, info } = await sharp(shotPath).raw().toBuffer({ resolveWithObject: true });
+  const px = (x, y) => {
+    const i = (y * info.width + x) * info.channels;
+    return { r: data[i], g: data[i + 1], b: data[i + 2] };
+  };
+  // The artwork occupies the middle of its frame, so every one of these is
+  // background in the source file.
+  const corners = [
+    px(2, 2),
+    px(info.width - 3, 2),
+    px(2, info.height - 3),
+    px(info.width - 3, info.height - 3),
+  ];
+  const drift = Math.max(
+    ...corners.flatMap((c) => [
+      Math.abs(c.r - cream.r),
+      Math.abs(c.g - cream.g),
+      Math.abs(c.b - cream.b),
+    ]),
+  );
+  return { chapterCream: cream, corners, worstChannelDriftPx: drift };
+}
+
+/**
+ * What a drifting corner actually means — three readings, three repairs.
+ *
+ * The rig said "the white ground is showing as a rectangle" for a year and it was
+ * the only sentence it knew. On 16 Aug 2026 it printed that sentence about a
+ * corner reading `{102,104,75}`, which is a photograph: the coverflow's card had
+ * grown wide enough to reach under the film's box. A reader who trusted the
+ * message would have gone looking at `mix-blend-mode`, which was fine.
+ */
+function groundVerdict(g, occluders) {
+  if (g.worstChannelDriftPx <= CREAM_TOLERANCE) return null;
+  const c = g.corners.find(
+    (x) =>
+      Math.max(
+        Math.abs(x.r - g.chapterCream.r),
+        Math.abs(x.g - g.chapterCream.g),
+        Math.abs(x.b - g.chapterCream.b),
+      ) > CREAM_TOLERANCE,
+  );
+  const near = `${JSON.stringify(c)} against the chapter's cream ${JSON.stringify(g.chapterCream)} — ` +
+    `${g.worstChannelDriftPx} levels out`;
+  const white = c && Math.min(c.r, c.g, c.b) >= 255 - WHITE_TOLERANCE;
+  if (white) {
+    return `a corner of the film's box is ${near}, and it is WHITE — the ground is showing as a ` +
+      "rectangle, so the blend against the chapter's cream has stopped working (a stacking context " +
+      "between the film and that cream is what breaks it — `DECISIONS.md` §14)";
+  }
+  if (occluders && occluders.length > 0) {
+    return `a corner of the film's box is ${near}, and it is NOT white — ${occluders[0].el} is ` +
+      `lying over the box (${occluders[0].overlap.w}x${occluders[0].overlap.h}px of it), so what this ` +
+      "sample read is that element, not the film's own ground. The blend is not the defect; the " +
+      "overlap is";
+  }
+  return `a corner of the film's box is ${near}, and it is neither white nor covered by anything ` +
+    "this rig can see — the chapter's own background may have changed under it";
 }
 
 const t = async (page, chapter) =>
@@ -263,42 +481,16 @@ for (const { chapter, name } of FILMS) {
   }
 
   // --- The white ground is erased. ------------------------------------------
-  // Pixels, not the declared blend mode. The artwork is drawn on white and only
-  // `mix-blend-mode: darken` against a lighter-than-cream ground makes the
-  // rectangle disappear; if that ever stops working the page shows a white box
-  // and every other assertion here still passes.
-  const cream = await page.evaluate((id) => {
-    const section = document.getElementById(id);
-    const rgb = getComputedStyle(section).backgroundColor.match(/\d+/g).map(Number);
-    return { r: rgb[0], g: rgb[1], b: rgb[2] };
-  }, chapter);
-  const box = ended.box;
-  const clip = { x: box.x, y: box.y, width: box.w, height: box.h };
-  const shot = path.join(SHOTS, `film-${name}.png`);
-  await page.screenshot({ path: shot, clip });
-  const { data, info } = await sharp(shot).raw().toBuffer({ resolveWithObject: true });
-  const px = (x, y) => {
-    const i = (y * info.width + x) * info.channels;
-    return { r: data[i], g: data[i + 1], b: data[i + 2] };
-  };
-  // Four corners: the artwork occupies the middle of its frame, so every one of
-  // these is background in the source file.
-  const corners = [px(2, 2), px(info.width - 3, 2), px(2, info.height - 3), px(info.width - 3, info.height - 3)];
-  const drift = Math.max(
-    ...corners.flatMap((c) => [
-      Math.abs(c.r - cream.r),
-      Math.abs(c.g - cream.g),
-      Math.abs(c.b - cream.b),
-    ]),
-  );
-  record.ground = { chapterCream: cream, corners, worstChannelDriftPx: drift };
-  if (drift > CREAM_TOLERANCE) {
-    note(
-      name,
-      `the corners of the film's box are ${JSON.stringify(corners[0])} against the chapter's cream ` +
-        `${JSON.stringify(cream)} — ${drift} levels out. The white ground is showing as a rectangle`,
-    );
-  }
+  // See `ground` and `groundVerdict`. The overlap probe runs first so a failing
+  // corner can be told from a covered one rather than guessed at.
+  const overlapHere = await page.evaluate(OVERLAP, {
+    chapter,
+    tolerance: OVERLAP_TOLERANCE_PX,
+  });
+  const g = await ground(page, chapter, ended.box, path.join(SHOTS, `film-${name}.png`));
+  record.ground = { ...g, overlap: overlapHere };
+  const verdict = groundVerdict(g, overlapHere?.occluders);
+  if (verdict) note(name, verdict);
 
   // --- A deliberate hover replays it. ---------------------------------------
   await hover(page, chapter, true);
@@ -356,6 +548,134 @@ for (const { chapter, name } of FILMS) {
   }
 
   report.films.push(record);
+  await context.close();
+}
+
+// ------------------- 5 and 5b: the ground, and the clearance, at six widths --
+
+/**
+ * Scroll and wait for the page to actually stop.
+ *
+ * Lenis interpolates toward its target, so a fixed wait after `scrollTo` reads a
+ * position the page has not reached. `check_card_stack.mjs` solved this first and
+ * `check_coverflow.mjs` carries the same routine; this is it, trimmed.
+ */
+async function settle(page, y) {
+  await page.evaluate((yy) => window.scrollTo(0, yy), y);
+  let prev = null;
+  for (let i = 0; i < 40; i++) {
+    await page.waitForTimeout(30);
+    const cur = await page.evaluate(() => window.scrollY);
+    if (prev !== null && Math.abs(cur - prev) < 0.5) return cur;
+    prev = cur;
+  }
+  return prev;
+}
+
+const widthShots = path.join(SHOTS, "widths");
+await mkdir(widthShots, { recursive: true });
+report.groundSweep = [];
+
+for (const [width, height] of GROUND_SHAPES) {
+  const context = await browser.newContext({ viewport: { width, height } });
+  const page = await context.newPage();
+  await page.goto(URL, { waitUntil: "load" });
+  await page.waitForTimeout(1200);
+  // Settle the lazily-loaded stills and fire the entrance observers, so the
+  // first real sample is not catching mid-load layout.
+  await page.evaluate(async () => {
+    const step = window.innerHeight * 0.8;
+    for (let y = 0; y < document.body.scrollHeight; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 60));
+    }
+  });
+
+  for (const { chapter, name } of FILMS) {
+    const label = `${name}@${width}x${height}`;
+    const geom = await page.evaluate((id) => {
+      const el = document.querySelector(`#${id} [data-signature-film-frame]`);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return {
+        top: Math.round(r.top + window.scrollY),
+        h: Math.round(r.height),
+        w: Math.round(r.width),
+      };
+    }, chapter);
+    if (!geom) {
+      failures.push(`${label}: no film frame inside #${chapter}`);
+      continue;
+    }
+
+    // From "box bottom resting on the viewport's bottom edge" to "box top on the
+    // viewport's top edge" — every position at which a visitor can see the box.
+    const from = geom.top + geom.h - height;
+    const to = geom.top;
+    const swept = [];
+    for (let k = 0; k < SWEEP_SAMPLES; k++) {
+      const y = Math.max(0, Math.round(from + ((to - from) * k) / (SWEEP_SAMPLES - 1)));
+      await settle(page, y);
+      const o = await page.evaluate(OVERLAP, { chapter, tolerance: OVERLAP_TOLERANCE_PX });
+      if (o) swept.push(o);
+    }
+
+    const covered = swept.filter((s) => s.onScreen && s.occluders.length > 0);
+    const worst = covered.sort(
+      (a, b) => b.occluders[0].overlap.area - a.occluders[0].overlap.area,
+    )[0];
+
+    // The pixels, from a position where the whole box is in view — clipping a
+    // screenshot to a partly off-screen box measures the viewport's edge.
+    const whole = swept.filter((s) => s.onScreen && s.visibleShare >= 0.999);
+    const at = whole[Math.floor(whole.length / 2)] ?? swept.find((s) => s.onScreen);
+    let g = null;
+    if (at) {
+      await settle(page, at.scrollY);
+      const box = await page.evaluate((id) => {
+        const r = document.querySelector(`#${id} [data-signature-film-frame]`).getBoundingClientRect();
+        return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
+      }, chapter);
+      const clipped =
+        box.x >= 0 && box.y >= 0 && box.x + box.w <= width && box.y + box.h <= height;
+      if (clipped) {
+        g = await ground(page, chapter, box, path.join(widthShots, `${name}-${width}x${height}.png`));
+      }
+    }
+
+    const here = await page.evaluate(OVERLAP, { chapter, tolerance: OVERLAP_TOLERANCE_PX });
+    const verdict = g ? groundVerdict(g, here?.occluders) : null;
+    if (verdict) failures.push(`${label}: ${verdict}`);
+    if (worst) {
+      failures.push(
+        `${label}: ${worst.occluders.map((o) => o.el).join(", ")} overlap${
+          worst.occluders.length === 1 ? "s" : ""
+        } the film's box at scrollY=${worst.scrollY} — worst ` +
+          `${worst.occluders[0].overlap.w}x${worst.occluders[0].overlap.h}px of a ${geom.w}x${geom.h}px ` +
+          "drawing, on " +
+          `${covered.length} of ${swept.length} sampled positions. The film has to sit clear of ` +
+          "everything else in its chapter: it cannot be raised above them, because a stacking " +
+          "context between it and the chapter's cream is exactly what puts its white ground back",
+      );
+    }
+
+    report.groundSweep.push({
+      film: name,
+      width,
+      height,
+      box: geom,
+      sampled: swept.length,
+      coveredAt: covered.length,
+      worstOverlap: worst ? { scrollY: worst.scrollY, occluders: worst.occluders } : null,
+      ground: g,
+    });
+    console.log(
+      `${label.padEnd(20)} covered ${covered.length}/${swept.length} positions` +
+        (worst ? ` (worst ${worst.occluders[0].el} ${worst.occluders[0].overlap.w}x${worst.occluders[0].overlap.h})` : "") +
+        (g ? ` | corners within ${g.worstChannelDriftPx} of cream` : " | box never wholly in view"),
+    );
+  }
+
   await context.close();
 }
 

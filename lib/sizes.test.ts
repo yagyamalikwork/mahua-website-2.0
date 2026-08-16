@@ -6,6 +6,10 @@ import {
   BOXES as INTRO_BOXES,
   SIZES as INTRO_SIZES,
 } from "@/components/sections/ChapterIntro";
+import {
+  BOXES as COVERFLOW_BOXES,
+  SIZES as COVERFLOW_SIZES,
+} from "@/components/sections/Coverflow";
 import { CARD_BOX, CARD_SIZES } from "@/components/sections/CoverflowCard";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
 import {
@@ -220,6 +224,18 @@ const LIVE_SLOTS: readonly Slot[] = [
   // 2.2925, so the box may not be narrower than 1.7194). See the component's own
   // comments.
   { name: "Coverflow.card", sizes: CARD_SIZES, box: CARD_BOX },
+  // The same chapter's header band — four photographs above the stage, carrying
+  // the two written beats a carousel of six activities cannot. They were missed
+  // when the coverflow shipped: the tripwire below asserted the test's own source
+  // `toContain("@/components/sections/Coverflow")`, which is a SUBSTRING of
+  // `@/components/sections/CoverflowCard`, so it read green for a file nothing
+  // here imported. Registered 16 Aug 2026, with the substring hole closed in the
+  // same change.
+  ...(["wide", "pair", "track"] as const).map((k) => ({
+    name: `Coverflow.${k}`,
+    sizes: COVERFLOW_SIZES[k],
+    box: COVERFLOW_BOXES[k] as CoverBox,
+  })),
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -340,13 +356,27 @@ describe("the sizes the page actually serves", () => {
     // becomes two — net +1, 24 → 25 — read off this suite by running it and
     // reading the failure (`expected 25 to be 24`), not computed by hand.
     // 25 → 26 since Task 5 of the coverflow plan (16 Aug 2026):
-    // `CoverflowCard`'s `CARD_SIZES` is a genuinely new width list — `(min-width:
-    // 608px) 560px, calc(100vw - 48px)` — and 608px/560px appear nowhere else on
-    // the page, both being derived from `COVERFLOW.cardMaxPx` and
-    // `COVERFLOW.stageGutterPx` rather than from a container's own columns. Read
-    // off this suite by running it and reading the failure (`expected 26 to be
-    // 25`), not computed by hand, per the same instruction as every step above.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(26);
+    // `CoverflowCard`'s `CARD_SIZES` is a genuinely new width list — derived from
+    // `COVERFLOW.cardMaxPx` and `COVERFLOW.stageGutterPx` rather than from a
+    // container's own columns, so neither of its two numbers appears anywhere
+    // else on the page. (The literal string that comment used to quote,
+    // `(min-width: 608px) 560px, calc(100vw - 48px)`, is history: the card was
+    // swept from 560px to 900px on 16 Aug and it now reads `(min-width: 948px)
+    // 900px, calc(100vw - 48px)`. The assertion is unaffected — still one
+    // genuinely new string — so only the quoted numbers changed.) Read off this
+    // suite by running it and reading the failure (`expected 26 to be 25`), not
+    // computed by hand, per the same instruction as every step above.
+    // 26 → 29 the same day, registering the coverflow's HEADER BAND —
+    // `Coverflow.tsx`'s own `SIZES.wide`/`.pair`/`.track`, which had never been
+    // in this table at all because the companion tripwire below matched
+    // `@/components/sections/Coverflow` as a substring of
+    // `@/components/sections/CoverflowCard` and reported itself satisfied. All
+    // three are genuinely new strings: `wide` and `pair` are that band's own
+    // 7/5 column split at a 56px gutter (nothing else on the page uses either),
+    // and `track` is a flat 420px cap set by a 541px FILE rather than by a
+    // column, which nothing else on the page does at all. Read off this suite by
+    // running it and reading the failure (`expected 29 to be 26`).
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(29);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -410,8 +440,17 @@ describe("the sizes the page actually serves", () => {
     expect(passers.length).toBeGreaterThan(0);
     for (const file of passers) {
       const specifier = `@/${path.relative(root, file).replace(/\\/g, "/").replace(/\.tsx$/, "")}`;
+      // **The closing quote is the whole assertion, and it was missing for a
+      // day.** A bare `toContain(specifier)` is a substring test, and every
+      // module path on this page is a prefix of some other one:
+      // `@/components/sections/Coverflow` is a substring of
+      // `@/components/sections/CoverflowCard`, which something else already
+      // imported — so this tripwire read green for a file it had never seen, and
+      // `Coverflow.tsx`'s own `SIZES`/`BOXES` went unregistered while the test
+      // written to make that impossible passed. Matching the specifier *and its
+      // closing quote* is what makes a prefix stop being a match.
       expect(self, `${specifier} passes a sizes prop but nothing here imports it`).toContain(
-        specifier,
+        `"${specifier}"`,
       );
     }
   });
@@ -512,6 +551,12 @@ describe("cover boxes match the markup they describe", () => {
     // photograph cropped past the ceiling and a `sizes` describing a box that
     // no longer exists.
     { file: "components/sections/CoverflowCard.tsx", declared: CARD_BOX },
+    // The coverflow's header band — 3:2 for `guide-sunrise` (its own native
+    // shape, so nothing is cropped), 16:9 for the two frames that share a row,
+    // and 1:1 for `tiger-crossing-track`. All three are in the markup as
+    // `aspect-*` classes and all three are solved against a photograph rather
+    // than chosen, which is exactly the pairing this test exists to hold.
+    { file: "components/sections/Coverflow.tsx", declared: COVERFLOW_BOXES },
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(

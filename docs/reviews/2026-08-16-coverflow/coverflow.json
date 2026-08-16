@@ -1,18 +1,21 @@
 {
-  "measuredAt": "2026-08-16T11:36:54.874Z",
+  "measuredAt": "2026-08-16T16:04:24.216Z",
   "url": "http://localhost:3110",
-  "assertion": "At every sampled scroll position inside the pin: at most one card is within 8px of the stage's horizontal centre, exactly one card's arrows are hit-testable, and that card is the one nearest the centre. Across the pin the card in charge advances 0 -> 5 hitting every index, and every card is bisected to its own centred moment and must land inside 8px.",
+  "assertion": "At every sampled scroll position inside the pin: at most one card is within 8px of the stage's horizontal centre, exactly one card's arrows are hit-testable, and that card is the one nearest the centre. Across the pin the card in charge advances 0 -> 7 hitting every index, and every card is bisected to its own centred moment and must land inside 8px. The deck is the six activities plus the two wrap-around ghosts, which must be aria-hidden, id-less and out of the tab order.",
   "shapes": [
     {
       "width": 1440,
       "height": 900,
       "geometry": {
-        "top": 7300,
-        "height": 1800,
-        "cards": 6,
-        "targets": 6
+        "top": 7602,
+        "height": 2097,
+        "cards": 8,
+        "targets": 6,
+        "ghostCards": 2,
+        "tabbableArrows": 12,
+        "duplicateIds": []
       },
-      "samples": 113,
+      "samples": 125,
       "pinnedSamples": 43,
       "inChargeOrder": [
         0,
@@ -20,57 +23,73 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7
       ],
       "centreHits": [
         {
           "card": 0,
-          "scrollY": 7192,
+          "scrollY": 6702,
           "offset": 0,
-          "pinned": true,
+          "pinned": false,
           "byHold": true
         },
         {
           "card": 1,
-          "scrollY": 7480,
-          "offset": 2.771759033203125,
+          "scrollY": 7638,
+          "offset": 2.818267822265625,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 2,
-          "scrollY": 7624,
-          "offset": 2.413482666015625,
+          "scrollY": 7782,
+          "offset": 2.272796630859375,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 3,
-          "scrollY": 7768,
-          "offset": 2.074066162109375,
+          "scrollY": 7926,
+          "offset": 1.696990966796875,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 4,
-          "scrollY": 7912,
-          "offset": 1.734710693359375,
+          "scrollY": 8070,
+          "offset": 1.151519775390625,
           "pinned": true,
           "byHold": true
         },
         {
           "card": 5,
-          "scrollY": 8080,
+          "scrollY": 8214,
+          "offset": 0.606048583984375,
+          "pinned": true,
+          "byHold": true
+        },
+        {
+          "card": 6,
+          "scrollY": 8358,
+          "offset": 0.030303955078125,
+          "pinned": true,
+          "byHold": true
+        },
+        {
+          "card": 7,
+          "scrollY": 8502,
           "offset": 0,
           "pinned": true,
           "byHold": true
         }
       ],
       "firstSample": {
-        "scrollY": 7192,
+        "scrollY": 7494,
         "innerHeight": 900,
         "headerHeight": 107,
-        "stageTop": 108.390625,
+        "stageTop": 107.84375,
         "stageCentre": 720,
         "pinned": true,
         "cards": [
@@ -78,24 +97,24 @@
             "i": 0,
             "centre": 720,
             "offset": 0,
-            "width": 560,
+            "width": 900,
             "opacity": 1,
             "zIndex": "2",
-            "rangeStart": "cover 649.143px",
+            "rangeStart": "cover 505.286px",
             "arrows": [
               {
-                "href": "#field-days-card-5",
-                "x": 500,
-                "y": 627,
+                "href": "#field-days-card-4",
+                "x": 330,
+                "y": 722,
                 "inside": true,
                 "reachable": true,
                 "hit": "a.rule-in.font-[family-name:var(--font-label)].text-[0.62rem]",
                 "pointerEvents": "auto"
               },
               {
-                "href": "#field-days-card-1",
-                "x": 955,
-                "y": 627,
+                "href": "#field-days-card-0",
+                "x": 1125,
+                "y": 722,
                 "inside": true,
                 "reachable": true,
                 "hit": "a.rule-in.font-[family-name:var(--font-label)].text-[0.62rem]",
@@ -106,26 +125,26 @@
           },
           {
             "i": 1,
-            "centre": 1776,
-            "offset": 1056,
-            "width": 459.199951171875,
+            "centre": 1282.2508544921875,
+            "offset": 562.2508544921875,
+            "width": 738,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 793px",
+            "rangeStart": "cover 649.143px",
             "arrows": [
               {
-                "href": "#field-days-card-0",
-                "x": 1596,
-                "y": 605,
-                "inside": false,
+                "href": "#field-days-card-5",
+                "x": 963,
+                "y": 683,
+                "inside": true,
                 "reachable": false,
-                "hit": "outside the viewport",
+                "hit": "div.coverflow-track",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-2",
-                "x": 1968,
-                "y": 605,
+                "href": "#field-days-card-1",
+                "x": 1614,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -136,26 +155,26 @@
           },
           {
             "i": 2,
-            "centre": 1776,
-            "offset": 1056,
-            "width": 459.199951171875,
+            "centre": 1980,
+            "offset": 1260,
+            "width": 738,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 936.857px",
+            "rangeStart": "cover 793px",
             "arrows": [
               {
-                "href": "#field-days-card-1",
-                "x": 1596,
-                "y": 605,
+                "href": "#field-days-card-0",
+                "x": 1661,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-3",
-                "x": 1968,
-                "y": 605,
+                "href": "#field-days-card-2",
+                "x": 2312,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -166,26 +185,26 @@
           },
           {
             "i": 3,
-            "centre": 1776,
-            "offset": 1056,
-            "width": 459.199951171875,
+            "centre": 1980,
+            "offset": 1260,
+            "width": 738,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 1080.71px",
+            "rangeStart": "cover 936.857px",
             "arrows": [
               {
-                "href": "#field-days-card-2",
-                "x": 1596,
-                "y": 605,
+                "href": "#field-days-card-1",
+                "x": 1661,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-4",
-                "x": 1968,
-                "y": 605,
+                "href": "#field-days-card-3",
+                "x": 2312,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -196,26 +215,26 @@
           },
           {
             "i": 4,
-            "centre": 1776,
-            "offset": 1056,
-            "width": 459.199951171875,
+            "centre": 1980,
+            "offset": 1260,
+            "width": 738,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 1224.57px",
+            "rangeStart": "cover 1080.71px",
             "arrows": [
               {
-                "href": "#field-days-card-3",
-                "x": 1596,
-                "y": 605,
+                "href": "#field-days-card-2",
+                "x": 1661,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-5",
-                "x": 1968,
-                "y": 605,
+                "href": "#field-days-card-4",
+                "x": 2312,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -226,17 +245,47 @@
           },
           {
             "i": 5,
-            "centre": 1776,
-            "offset": 1056,
-            "width": 459.199951171875,
+            "centre": 1980,
+            "offset": 1260,
+            "width": 738,
+            "opacity": 1,
+            "zIndex": "1",
+            "rangeStart": "cover 1224.57px",
+            "arrows": [
+              {
+                "href": "#field-days-card-3",
+                "x": 1661,
+                "y": 683,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              },
+              {
+                "href": "#field-days-card-5",
+                "x": 2312,
+                "y": 683,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              }
+            ],
+            "live": false
+          },
+          {
+            "i": 6,
+            "centre": 1980,
+            "offset": 1260,
+            "width": 738,
             "opacity": 1,
             "zIndex": "1",
             "rangeStart": "cover 1368.43px",
             "arrows": [
               {
                 "href": "#field-days-card-4",
-                "x": 1596,
-                "y": 605,
+                "x": 1661,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -244,8 +293,38 @@
               },
               {
                 "href": "#field-days-card-0",
-                "x": 1968,
-                "y": 605,
+                "x": 2312,
+                "y": 683,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              }
+            ],
+            "live": false
+          },
+          {
+            "i": 7,
+            "centre": 1980,
+            "offset": 1260,
+            "width": 738,
+            "opacity": 1,
+            "zIndex": "1",
+            "rangeStart": "cover 1512.29px",
+            "arrows": [
+              {
+                "href": "#field-days-card-5",
+                "x": 1661,
+                "y": 683,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              },
+              {
+                "href": "#field-days-card-1",
+                "x": 2312,
+                "y": 683,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -261,12 +340,15 @@
       "width": 390,
       "height": 844,
       "geometry": {
-        "top": 9021,
-        "height": 1688,
-        "cards": 6,
-        "targets": 6
+        "top": 9431,
+        "height": 1760,
+        "cards": 8,
+        "targets": 6,
+        "ghostCards": 2,
+        "tabbableArrows": 12,
+        "duplicateIds": []
       },
-      "samples": 106,
+      "samples": 109,
       "pinnedSamples": 39,
       "inChargeOrder": [
         0,
@@ -274,55 +356,70 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7
       ],
       "centreHits": [
         {
           "card": 0,
-          "scrollY": 8945,
+          "scrollY": 8587,
           "offset": 0,
-          "pinned": true,
+          "pinned": false,
           "byHold": true
         },
         {
           "card": 1,
-          "scrollY": 9209,
-          "offset": -0.694000244140625,
-          "pinned": true,
-          "byHold": true
+          "scrollY": 9487,
+          "offset": -0.164031982421875,
+          "pinned": true
         },
         {
           "card": 2,
-          "scrollY": 9340,
-          "offset": -0.23974609375,
-          "pinned": true
-        },
-        {
-          "card": 3,
-          "scrollY": 9473,
-          "offset": -3.0157318115234375,
+          "scrollY": 9619,
+          "offset": -1.299652099609375,
           "pinned": true,
           "byHold": true
         },
         {
-          "card": 4,
-          "scrollY": 9602,
-          "offset": 0.6813507080078125,
+          "card": 3,
+          "scrollY": 9749,
+          "offset": 0.7696990966796875,
           "pinned": true
         },
         {
-          "card": 5,
-          "scrollY": 9737,
-          "offset": 0,
+          "card": 4,
+          "scrollY": 9883,
+          "offset": -3.6213836669921875,
           "pinned": true,
+          "byHold": true
+        },
+        {
+          "card": 5,
+          "scrollY": 10012,
+          "offset": 0.0756988525390625,
+          "pinned": true
+        },
+        {
+          "card": 6,
+          "scrollY": 10147,
+          "offset": -5.9178619384765625,
+          "pinned": true,
+          "byHold": true
+        },
+        {
+          "card": 7,
+          "scrollY": 10291,
+          "offset": 0,
+          "pinned": false,
           "byHold": true
         }
       ],
       "firstSample": {
-        "scrollY": 8945,
+        "scrollY": 9355,
         "innerHeight": 844,
         "headerHeight": 75.390625,
-        "stageTop": 75.96875,
+        "stageTop": 75.59375,
         "stageCentre": 195,
         "pinned": true,
         "cards": [
@@ -333,10 +430,10 @@
             "width": 342,
             "opacity": 1,
             "zIndex": "2",
-            "rangeStart": "cover 637.714px",
+            "rangeStart": "cover 506.429px",
             "arrows": [
               {
-                "href": "#field-days-card-5",
+                "href": "#field-days-card-4",
                 "x": 76,
                 "y": 529,
                 "inside": true,
@@ -345,7 +442,7 @@
                 "pointerEvents": "auto"
               },
               {
-                "href": "#field-days-card-1",
+                "href": "#field-days-card-0",
                 "x": 329,
                 "y": 529,
                 "inside": true,
@@ -358,26 +455,26 @@
           },
           {
             "i": 1,
-            "centre": 595.2000274658203,
-            "offset": 400.2000274658203,
-            "width": 280.4400329589844,
+            "centre": 407.9189758300781,
+            "offset": 212.91897583007812,
+            "width": 280.44000244140625,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 769px",
+            "rangeStart": "cover 637.714px",
             "arrows": [
               {
-                "href": "#field-days-card-0",
-                "x": 498,
-                "y": 517,
-                "inside": false,
+                "href": "#field-days-card-5",
+                "x": 311,
+                "y": 516,
+                "inside": true,
                 "reachable": false,
-                "hit": "outside the viewport",
+                "hit": "nav.coverflow-arrows.relative.mt-4",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-2",
-                "x": 705,
-                "y": 517,
+                "href": "#field-days-card-1",
+                "x": 518,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -393,21 +490,21 @@
             "width": 280.4400329589844,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 900.286px",
+            "rangeStart": "cover 769px",
             "arrows": [
               {
-                "href": "#field-days-card-1",
+                "href": "#field-days-card-0",
                 "x": 498,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-3",
+                "href": "#field-days-card-2",
                 "x": 705,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -423,21 +520,21 @@
             "width": 280.4400329589844,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 1031.57px",
+            "rangeStart": "cover 900.286px",
             "arrows": [
               {
-                "href": "#field-days-card-2",
+                "href": "#field-days-card-1",
                 "x": 498,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-4",
+                "href": "#field-days-card-3",
                 "x": 705,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -453,21 +550,21 @@
             "width": 280.4400329589844,
             "opacity": 1,
             "zIndex": "1",
-            "rangeStart": "cover 1162.86px",
+            "rangeStart": "cover 1031.57px",
             "arrows": [
               {
-                "href": "#field-days-card-3",
+                "href": "#field-days-card-2",
                 "x": 498,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
                 "pointerEvents": "none"
               },
               {
-                "href": "#field-days-card-5",
+                "href": "#field-days-card-4",
                 "x": 705,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -483,12 +580,42 @@
             "width": 280.4400329589844,
             "opacity": 1,
             "zIndex": "1",
+            "rangeStart": "cover 1162.86px",
+            "arrows": [
+              {
+                "href": "#field-days-card-3",
+                "x": 498,
+                "y": 516,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              },
+              {
+                "href": "#field-days-card-5",
+                "x": 705,
+                "y": 516,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              }
+            ],
+            "live": false
+          },
+          {
+            "i": 6,
+            "centre": 595.2000274658203,
+            "offset": 400.2000274658203,
+            "width": 280.4400329589844,
+            "opacity": 1,
+            "zIndex": "1",
             "rangeStart": "cover 1294.14px",
             "arrows": [
               {
                 "href": "#field-days-card-4",
                 "x": 498,
-                "y": 517,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -497,7 +624,37 @@
               {
                 "href": "#field-days-card-0",
                 "x": 705,
-                "y": 517,
+                "y": 516,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              }
+            ],
+            "live": false
+          },
+          {
+            "i": 7,
+            "centre": 595.2000274658203,
+            "offset": 400.2000274658203,
+            "width": 280.4400329589844,
+            "opacity": 1,
+            "zIndex": "1",
+            "rangeStart": "cover 1425.43px",
+            "arrows": [
+              {
+                "href": "#field-days-card-5",
+                "x": 498,
+                "y": 516,
+                "inside": false,
+                "reachable": false,
+                "hit": "outside the viewport",
+                "pointerEvents": "none"
+              },
+              {
+                "href": "#field-days-card-1",
+                "x": 705,
+                "y": 516,
                 "inside": false,
                 "reachable": false,
                 "hit": "outside the viewport",
@@ -510,6 +667,22 @@
       }
     }
   ],
+  "reducedMotion": {
+    "inMarkup": 8,
+    "visible": 6,
+    "titles": [
+      "Jungle safari",
+      "Bird watching",
+      "Kohka Lake",
+      "The river walk",
+      "Pachdhar, the potters' village",
+      "Walks and cycling"
+    ],
+    "stagePosition": "static",
+    "animations": [
+      "none"
+    ]
+  },
   "failures": [],
   "verdict": "pass"
 }

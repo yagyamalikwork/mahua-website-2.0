@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-16T11:37:32.086Z",
+  "measuredAt": "2026-08-16T16:05:16.599Z",
   "url": "http://localhost:3110/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.95,
+        "currentTime": 3.04,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.96,
-        "afterHover": 3.76
+        "beforeHover": 3.04,
+        "afterHover": 7.03
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -111,11 +111,23 @@
             "b": 200
           }
         ],
-        "worstChannelDriftPx": 1
+        "worstChannelDriftPx": 1,
+        "overlap": {
+          "onScreen": true,
+          "scrollY": 4731,
+          "box": {
+            "x": 610,
+            "y": 315,
+            "w": 220,
+            "h": 256
+          },
+          "visibleShare": 1,
+          "occluders": []
+        }
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.88
+        "to": 0.81
       },
       "pointerParked": {
         "paused": true,
@@ -124,7 +136,7 @@
       },
       "leaveAndReturn": {
         "from": 10,
-        "to": 0.87
+        "to": 0.85
       }
     },
     {
@@ -147,7 +159,7 @@
         "ended": false,
         "box": {
           "x": 1092,
-          "y": 8700,
+          "y": 9299,
           "w": 300,
           "h": 400
         },
@@ -164,7 +176,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.63,
+        "currentTime": 2.74,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -177,8 +189,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.63,
-        "afterHover": 3.23
+        "beforeHover": 2.74,
+        "afterHover": 3.34
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -236,11 +248,23 @@
             "b": 200
           }
         ],
-        "worstChannelDriftPx": 1
+        "worstChannelDriftPx": 1,
+        "overlap": {
+          "onScreen": true,
+          "scrollY": 8983,
+          "box": {
+            "x": 1092,
+            "y": 315,
+            "w": 300,
+            "h": 400
+          },
+          "visibleShare": 1,
+          "occluders": []
+        }
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.87
+        "to": 0.86
       },
       "pointerParked": {
         "paused": true,
@@ -250,6 +274,524 @@
       "leaveAndReturn": {
         "from": 10,
         "to": 0.87
+      }
+    }
+  ],
+  "groundSweep": [
+    {
+      "film": "potter",
+      "width": 390,
+      "height": 844,
+      "box": {
+        "top": 5380,
+        "h": 174,
+        "w": 150
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 201
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 1
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 390,
+      "height": 844,
+      "box": {
+        "top": 10870,
+        "h": 320,
+        "w": 240
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 230,
+            "g": 220,
+            "b": 197
+          },
+          {
+            "r": 230,
+            "g": 220,
+            "b": 197
+          }
+        ],
+        "worstChannelDriftPx": 3
+      }
+    },
+    {
+      "film": "potter",
+      "width": 1024,
+      "height": 900,
+      "box": {
+        "top": 4179,
+        "h": 256,
+        "w": 220
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1024,
+      "height": 900,
+      "box": {
+        "top": 9847,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 232,
+            "g": 222,
+            "b": 199
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 1
+      }
+    },
+    {
+      "film": "potter",
+      "width": 1280,
+      "height": 900,
+      "box": {
+        "top": 4144,
+        "h": 256,
+        "w": 220
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1280,
+      "height": 900,
+      "box": {
+        "top": 10510,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "potter",
+      "width": 1366,
+      "height": 768,
+      "box": {
+        "top": 3993,
+        "h": 256,
+        "w": 220
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1366,
+      "height": 768,
+      "box": {
+        "top": 10335,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "potter",
+      "width": 1440,
+      "height": 900,
+      "box": {
+        "top": 5046,
+        "h": 256,
+        "w": 220
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1440,
+      "height": 900,
+      "box": {
+        "top": 9298,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "potter",
+      "width": 1920,
+      "height": 1080,
+      "box": {
+        "top": 5703,
+        "h": 256,
+        "w": 220
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 232,
+            "g": 222,
+            "b": 199
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 1
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1920,
+      "height": 1080,
+      "box": {
+        "top": 10332,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 233,
+          "g": 223,
+          "b": 200
+        },
+        "corners": [
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          },
+          {
+            "r": 233,
+            "g": 223,
+            "b": 200
+          }
+        ],
+        "worstChannelDriftPx": 0
       }
     }
   ],

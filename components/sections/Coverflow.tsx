@@ -237,6 +237,47 @@ export function Coverflow({
   const [dawn, track, hammocks, pool] = chapter.media;
   const count = copy.experiences.length;
 
+  /**
+   * The eight cards on the stage: the six activities, with the wrap-around
+   * neighbour rendered at each end.
+   *
+   * **The client asked for a loop** — *"the scroll needs to be repetitive and not
+   * a linear straight scroll, so that after 6 the 1 card comes back or
+   * vice-versa"* (16 Aug 2026) — and until this the loop existed only in the
+   * arrows: scrolling ran 1 → 6 and stopped. The reading is now
+   * `[6] → 1 → 2 → 3 → 4 → 5 → 6 → [1]`, so a visitor scrolling in watches the
+   * last activity give way to the first, and scrolling out watches the first
+   * return.
+   *
+   * **It is also the only lever left on this chapter's density.** The stage's
+   * worst screens are the two moments the sweep named — the first and last
+   * card's centre-hold, where every other card is parked at `--cf-off` and one
+   * card sits alone on a 793px stage (`docs/reviews/2026-08-16-coverflow/
+   * density-sweep.md` §2). `sideScale`, `sideShiftPct` and `sideVeil` cannot
+   * reach it, because there is no card to put at the flanks: no card −1, no card
+   * 6. There is now.
+   *
+   * **`slot` is the animation's index and `source` is the activity's**, and they
+   * are only equal for the six real cards. `--i: -1` centres at
+   * `pin-start + 0 × step` — the exact offset at which the stage locks — and
+   * `--i: 6` at `pin-start + 7 × step`, the offset at which it lets go, because
+   * `step` is `pin-len / (count + 1)` and the eight centred moments tile the pin
+   * exactly. Verified in the browser rather than trusted: `check_coverflow.mjs`
+   * bisects all eight to their own centred moments and requires every one inside
+   * 8px of the stage's centre, and requires the last card's arrows still to be
+   * live when the pin ends.
+   *
+   * The two ghosts carry no `id`. The scroll targets live in the wrapper (there
+   * are six, one per activity, and the arrows on a ghost point at the same six),
+   * so a ghost carrying a card's id would emit a duplicate id and the browser
+   * would honour whichever came first.
+   */
+  const stageCards = [
+    { experience: copy.experiences[count - 1], source: count - 1, slot: -1, ghost: true },
+    ...copy.experiences.map((experience, i) => ({ experience, source: i, slot: i, ghost: false })),
+    { experience: copy.experiences[0], source: 0, slot: count, ghost: true },
+  ];
+
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
       {/* Row 1 — the chapter's own opening, against the dawn gate, which is now
@@ -366,24 +407,39 @@ export function Coverflow({
           />
         ))}
 
-        <ul className="coverflow-stage">
-          {copy.experiences.map((experience, i) => {
-            const { previous, next } = coverflowNeighbours(i, count);
-            return (
-              <CoverflowCard
-                key={experience.title}
-                experience={experience}
-                scrim={CARD_SCRIM[experience.mediaId] ?? PLACEHOLDER_SCRIM}
-                index={i}
-                count={count}
-                chapterId={chapter.id}
-                previousTitle={copy.experiences[previous].title}
-                nextTitle={copy.experiences[next].title}
-              />
-            );
-          })}
-        </ul>
+        {/* The pin's own box. It carries the reserved scroll and it is the sticky
+            stage's containing block, which is the whole reason it exists: sticky
+            stops when the stage's bottom meets THIS element's bottom, so a band
+            below it is a band the stage can never reach. The tiger lives in that
+            band — see the note on `.coverflow-footer` below. */}
+        <div className="coverflow-track">
+          <ul className="coverflow-stage">
+            {stageCards.map(({ experience, source, slot, ghost }) => {
+              const { previous, next } = coverflowNeighbours(source, count);
+              return (
+                <CoverflowCard
+                  key={slot}
+                  experience={experience}
+                  scrim={CARD_SCRIM[experience.mediaId] ?? PLACEHOLDER_SCRIM}
+                  index={source}
+                  slot={slot}
+                  ghost={ghost}
+                  count={count}
+                  chapterId={chapter.id}
+                  previousTitle={copy.experiences[previous].title}
+                  nextTitle={copy.experiences[next].title}
+                />
+              );
+            })}
+          </ul>
+        </div>
 
+        {/* In flow, below the track, and pulled back up by `app/globals.css` into
+            the cream the centred card leaves beneath itself — so it still costs
+            almost none of its own height, and no card can reach it. It was
+            `position: absolute; bottom: 0` inside the wrapper until 16 Aug 2026,
+            which cost nothing at all and put the card over the tiger's head at
+            every viewport below ~1430px. See `.coverflow-footer`. */}
         {footer && <div className="coverflow-footer">{footer}</div>}
       </div>
     </ChapterSurface>
@@ -391,21 +447,21 @@ export function Coverflow({
 }
 
 /*
- * **Owed: `SIZES` and `BOXES` above are not registered in `lib/sizes.test.ts`.**
+ * **`SIZES` and `BOXES` are registered in `lib/sizes.test.ts` — closed 16 Aug
+ * 2026, along with the hole that hid them.**
  *
  * That file's table is what puts every `sizes` string on the page through
  * `capDensity`'s round trip and through all fifty-three photographs, and its
  * companion test — "imports from every component that passes a sizes prop" —
- * exists precisely so a new component cannot be forgotten. It does not fire here,
- * and the reason is an accident worth writing down: it asserts that the test
- * file's own source `toContain("@/components/sections/Coverflow")`, and that
- * string is a **substring** of `@/components/sections/CoverflowCard`, which Task
- * 5 already added. So the tripwire reads green for a file it has never seen.
+ * exists precisely so a new component cannot be forgotten. It did not fire here,
+ * and the reason is worth keeping: it asserted that the test file's own source
+ * `toContain("@/components/sections/Coverflow")`, and that string is a
+ * **substring** of `@/components/sections/CoverflowCard`, which was already
+ * imported. So the tripwire read green for a file it had never seen, and three
+ * `sizes` strings went unchecked.
  *
- * Task 6 may not edit `lib/sizes.test.ts`. Task 7 or 8 must add two rows
- * (`Coverflow.wide`, `Coverflow.pair`), bump the distinct-string count by
- * running the suite and reading the failure rather than computing it, and add
- * this file to the `CASES` list so its `aspect-[16/9]` classes are held to
- * `BOXES`. It is worth fixing the substring hole at the same time — an
- * `endsWith`-aware check, or matching `from "…"` exactly.
+ * It now matches the specifier *with its closing quote*, which is what makes a
+ * prefix stop being a match; all three strings turned out to be genuinely new
+ * (26 → 29), and this file is in the `CASES` list, so its `aspect-*` classes and
+ * `BOXES` are held to each other in both directions.
  */
