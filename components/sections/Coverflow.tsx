@@ -19,7 +19,7 @@ type CoverflowCopy = {
 };
 
 /**
- * The header band's three photographs, at their real drawn widths.
+ * The header band's four photographs, at their real drawn widths.
  *
  * The band is a 12-column grid inside `ChapterSurface`'s `max-w-[1600px]` /
  * `px-6` / `md:px-12` container with a `gap-x-14` (56px) gutter, so a
@@ -34,10 +34,19 @@ type CoverflowCopy = {
  * from 1696 — and it stacks to full width below `sm`, where two frames side by
  * side would be 163px each on a phone.
  *
+ * `track` is a **flat cap, not a column fraction**, and the cap is the file:
+ * `tiger-crossing-track` is 541px wide, the smallest photograph in the chapter,
+ * and 420px is the largest round size its own file serves at DPR 1 with room to
+ * spare. It sits in the `col-span-5` text column, which is 527px at 1440 and
+ * 594px at 1920 — both wider than the frame, so the cap binds at every viewport
+ * above 468px and the frame simply stops growing. That is deliberate: this is
+ * the one photograph on the page whose size is set by its resolution rather than
+ * by its column.
+ *
  * Rounded up at every step, per `ui/Photo.tsx`: over-stating costs a tier,
- * under-stating ships a soft photograph. Both are narrower than what
- * `SplitFeature` drew these same three frames at (63vw, i.e. 907px at 1440), so
- * this composition asks *less* of the same files than the one it replaces.
+ * under-stating ships a soft photograph. `wide` and `pair` are both narrower
+ * than what `SplitFeature` drew these frames at (63vw, i.e. 907px at 1440), so
+ * this composition asks *less* of the same files than the one it replaced.
  */
 export const SIZES = {
   /** `guide-sunrise` — the band's large frame, `col-span-7` from `lg`. */
@@ -46,27 +55,47 @@ export const SIZES = {
   /** `hammocks-shade` and `pool-daylight-forest` — half that column each. */
   pair:
     "(min-width: 1696px) 419px, (min-width: 1024px) 27vw, (min-width: 768px) calc((100vw - 112px) / 2), (min-width: 640px) calc((100vw - 64px) / 2), calc(100vw - 48px)",
+  /**
+   * `tiger-crossing-track` — the dawn drive's second frame, under the paragraph
+   * about the gates opening. Capped at 420px; `100vw − 48px ≥ 420` from 468px up.
+   */
+  track: "(min-width: 468px) 420px, calc(100vw - 48px)",
 } as const;
 
 /**
- * The same three slots' `object-cover` boxes.
+ * The same slots' `object-cover` boxes.
  *
- * All three are 16:9, which is a shared frame rather than three native shapes —
- * the device `03 · The Forest`'s plate grid uses, and for the same reason: the
- * pair sit side by side and a row whose two frames disagree about their height
- * reads as a mistake. `hammocks-shade` is natively 16:9 and loses nothing;
- * `pool-daylight-forest` is a 2.281:1 letterbox and loses **22.1%** of its width
- * (`2.281 / 1.778 = 1.283`), inside the 25% bound this project holds every
- * cropped photograph to; `guide-sunrise` is 1.502:1, *narrower* than the box, so
- * `cover` crops its height instead — unbounded by the same convention
- * `CoverflowCard`'s `CARD_BOX` records.
+ * `pair` is 16:9, a shared frame rather than two native shapes — the device
+ * `03 · The Forest`'s plate grid uses, and for the same reason: the two sit side
+ * by side and a row whose frames disagree about their height reads as a mistake.
+ * `hammocks-shade` is natively 16:9 and loses nothing; `pool-daylight-forest` is
+ * a 2.281:1 letterbox and loses **22.1%** of its width (`2.281 / 1.778 = 1.283`),
+ * inside the 25% bound this project holds every cropped photograph to.
+ *
+ * **`wide` is 3:2 rather than 16:9 since 16 Aug 2026, and both halves of that
+ * were measured.** `guide-sunrise` is natively 1.502:1, so a 3:2 box is its own
+ * shape and crops it by nothing at all — 16:9 was taking 15.5% of its height for
+ * no reason. And the taller box is 507px at 1440 against 428px, which is 79px of
+ * additional imagery across a 760px column: the header band is the only part of
+ * this chapter whose density is not bounded by the stage, and it is where the
+ * cheap points are. It may not go taller than this: at 1920 the column is 854px,
+ * a `cover` box narrower than 3:2 draws `guide-sunrise` wider than the box, and
+ * a 5:4 box would ask 1,026px of a 1,000px file.
+ *
+ * **`track` is 1:1, and that is the photograph's shape rather than the grid's.**
+ * `tiger-crossing-track` is 1.065:1 — very nearly square — with the tiger low
+ * and left and the vehicle centre-right. A 16:9 box (the card it came out of)
+ * takes 40% of its height, which cuts the tiger's legs and the vehicle's canopy;
+ * a 1:1 box takes 6.1% of its width and cuts nothing. Looked at, not derived —
+ * `public/media/tiger-crossing-track-541.jpg`.
  *
  * These are not registered in `lib/sizes.test.ts` yet — see the note at the foot
  * of this file.
  */
 export const BOXES = {
-  wide: 16 / 9,
+  wide: 3 / 2,
   pair: 16 / 9,
+  track: 1,
 } as const;
 
 /**
@@ -93,7 +122,10 @@ export const BOXES = {
  * without a figure being solved for it still fails towards muddy.
  */
 const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
-  "tiger-crossing-track": { flat: 0.5 },
+  // `vann-safari`, not `tiger-crossing-track`, since 16 Aug 2026 — see
+  // `content/home.ts`'s `ExperienceCopy.mediaId`. The 541px file was capping
+  // every card on the stage.
+  "vann-safari": { flat: 0.5 },
   "vann-bird-watching": { flat: 0.5 },
   "vann-kohka-lake": { flat: 0.5 },
   "forest-boardwalk-daylight": { flat: 0.5 },
@@ -197,19 +229,26 @@ export function Coverflow({
   footer?: React.ReactNode;
 }) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as CoverflowCopy;
-  // The first three photographs are the header band's; the last six are the
-  // cards', one per activity, and each card names its own by `mediaId` rather
-  // than by position — `content/chapters.test.ts` holds every one of those names
-  // to an id this chapter declares.
-  const [dawn, hammocks, pool] = chapter.media;
+  // The first four photographs are the header band's, in the order the band
+  // draws them; the last six are the cards', one per activity, and each card
+  // names its own by `mediaId` rather than by position —
+  // `content/chapters.test.ts` holds every one of those names to an id this
+  // chapter declares.
+  const [dawn, track, hammocks, pool] = chapter.media;
   const count = copy.experiences.length;
 
   return (
     <ChapterSurface id={chapter.id} surface={surface}>
-      {/* Row 1 — the chapter's own opening, against the dawn gate. `items-end`
-          rather than `items-center`: the text column is the shorter of the two
-          and hanging it from the photograph's own baseline puts the band's slack
-          in one place above it instead of splitting it top and bottom. */}
+      {/* Row 1 — the chapter's own opening, against the dawn gate, which is now
+          TWO photographs: the naturalist at first light on the right, and the
+          tiger crossing the track under the paragraph that says the gates open
+          before the light does.
+
+          `items-end` rather than `items-center`: the two columns are different
+          heights (the text column is the taller one since the track frame joined
+          it) and hanging both from one baseline puts the band's slack in a single
+          place — the top right, beside the chapter mark — rather than splitting
+          it above and below. */}
       <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-x-14">
         <div className="lg:col-span-5">
           <Enter>
@@ -226,10 +265,26 @@ export function Coverflow({
               </p>
             </div>
           </Enter>
+
+          {/* Capped at 420px rather than filling its column — the file is 541px
+              wide, and that cap is the whole reason this photograph is in the
+              band rather than on a card. See `SIZES.track` and `BOXES.track`. */}
+          <ImageReveal
+            className="mt-8 block aspect-square w-full max-w-[420px]"
+            delay={DURATION.columnStagger}
+          >
+            <Photo
+              id={track}
+              sizes={SIZES.track}
+              box={BOXES.track}
+              pictureClassName="block h-full w-full"
+              className="h-full w-full object-cover"
+            />
+          </ImageReveal>
         </div>
 
         <div className="lg:col-span-7">
-          <ImageReveal className="block aspect-[16/9] w-full">
+          <ImageReveal className="block aspect-[3/2] w-full">
             <Photo
               id={dawn}
               sizes={SIZES.wide}

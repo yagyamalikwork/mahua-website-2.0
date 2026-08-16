@@ -57,13 +57,26 @@ export type ExperienceCopy = {
   /**
    * The photograph this activity shows on its card.
    *
-   * Added 16 Aug 2026 with the coverflow. Three of the six are frames that
+   * Added 16 Aug 2026 with the coverflow. Four of the six are frames that
    * `/mahua-vann` also shows rather than the chapter's own originals, and the
-   * client saw that repeat and accepted it. Two of the three were corrections
-   * rather than preferences: "Kohka Lake" would have been captioning the
-   * lodge's own swimming pool, and Pachdhar had no village and no potter
-   * anywhere in the chapter. Three prose bands only sat a photograph *near* an
-   * activity; a card puts the two in one box, which makes the pairing a claim.
+   * client saw that repeat and accepted it. Two of them were corrections rather
+   * than preferences: "Kohka Lake" would have been captioning the lodge's own
+   * swimming pool, and Pachdhar had no village and no potter anywhere in the
+   * chapter. Three prose bands only sat a photograph *near* an activity; a card
+   * puts the two in one box, which makes the pairing a claim.
+   *
+   * **The fourth — `vann-safari` under "Jungle safari" — is a RESOLUTION
+   * decision, taken the same day** (the plan's Task 8 follow-up). A card's width
+   * is `COVERFLOW.cardMaxPx`, and the chapter measured 70.7% mean / 83.1% worst
+   * empty at 560px because a 560x315 card is 13.6% of a 1440x900 screen. Every
+   * lever on that number is the card's own width, and the card can only be as
+   * wide as its narrowest photograph: `tiger-crossing-track` is 541px, which was
+   * already short of 560 and blocked every larger value outright. `vann-safari`
+   * is 1163px and is literally a photograph of a safari vehicle on a game drive,
+   * so it is the better pairing as well as the bigger file.
+   * `tiger-crossing-track` did not leave the chapter — it is the dawn-drive
+   * frame and it moved into the header band, beside the paragraph about the
+   * gates opening, where a 420px square serves it fully.
    *
    * Typed `MediaId`, not `string`, so a mistyped id is a compile error rather
    * than a `media()` throw at render — the same reason `PlateCopy` above is.
@@ -215,7 +228,11 @@ export const HOME = {
           body:
             "Morning and evening drives in open vehicles, led by naturalists who have followed " +
             "these particular tigresses and their lineages for years.",
-          mediaId: "tiger-crossing-track",
+          // Not `tiger-crossing-track`, which is 541px wide and capped the whole
+          // carousel's card at a size that measured 83.1% empty on its worst
+          // screen. This frame is 1163px, and it is an open safari vehicle on a
+          // morning drive — the activity itself. See `ExperienceCopy.mediaId`.
+          mediaId: "vann-safari",
         },
         {
           title: "Bird watching",

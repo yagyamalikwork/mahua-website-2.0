@@ -545,14 +545,24 @@ export const ROOM_STACK = {
  * call noticeable. Depth here is scale and veil, the way the deck's is.
  *
  * `screens` is the pin's length INCLUDING its own screen, matching
- * `StickyScene`'s `screens` so the two mean the same thing on this page. **2 is
- * a starting value, not a settled one** — the plan's Task 8 chooses between 2
- * and 3 by measuring density, and nothing here has been measured yet. It is
- * chosen by measurement, not by feel: `rooted`'s own history is that three
- * screens was indefensible and two was break-even (non-negotiable #9).
+ * `StickyScene`'s `screens` so the two mean the same thing on this page. Both it
+ * and `cardMaxPx` were **swept and settled on 16 Aug 2026** — see each one's own
+ * note below, and `docs/reviews/2026-08-16-coverflow/density-sweep.md`.
  */
 export const COVERFLOW = {
-  /** Screens of scroll the chapter's stage occupies, including its own. Task 8 settles it. */
+  /**
+   * Screens of scroll the chapter's stage occupies, including its own.
+   *
+   * **Swept at 2, 2.5 and 3, and 2 wins on every figure.** The chapter's worst
+   * screen is *identical* at all three — 61.5% empty — because this dial changes
+   * how many screens the pin spends, not what is on any one of them; and the
+   * chapter's mean goes the wrong way (48.4 → 48.9 → 49.3%), because every extra
+   * screen is a pin screen, and pin screens are the emptiest ones, so they
+   * dilute the dense header band's share of the chapter. The page follows: mean
+   * 38.5 → 38.8 → 39.2%, images per screen 2.27 → 2.26 → 2.20, screens over the
+   * 45% budget 41 → 45 → 48. `rooted`'s own history is the same lesson in the
+   * same direction (non-negotiable #9).
+   */
   screens: 2,
   /** A neighbour's scale at full offset. */
   sideScale: 0.82,
@@ -560,8 +570,46 @@ export const COVERFLOW = {
   sideShiftPct: 62,
   /** Extra `--overlay` wash over a neighbour at full offset. Never an opacity — see above. */
   sideVeil: 0.4,
-  /** Past this a card stops reading as a card. Matches `ROOM_STACK.heightMax`'s reasoning. */
-  cardMaxPx: 560,
+  /**
+   * How wide a card is drawn, at any viewport above `this + 2 × stageGutterPx`.
+   *
+   * **This is the only lever this chapter's density has, and 900 is solved
+   * against the photographs rather than chosen.** It read 560 until 16 Aug 2026,
+   * on the strength of a comment saying it "matches `ROOM_STACK.heightMax`'s
+   * reasoning" — an analogy to a different component in a different composition,
+   * measured against nothing. That is this project's own named repeat defect
+   * (`DECISIONS.md` §18, §19: a number picked in a plan is read downstream as a
+   * bound and reported spent rather than swept). At 560 the chapter measured
+   * **70.7% mean / 83.1% worst** empty against the 45% ceiling, because a
+   * 560 × 315 card is 13.6% of a 1440 × 900 screen — and through the first and
+   * last card's centre-hold it is the *only* card on the stage, every other one
+   * being parked at `--cf-off`. That hold is the chapter's worst screen at every
+   * width tested, and no neighbour dial (`sideScale`, `sideShiftPct`,
+   * `sideVeil`) can reach it.
+   *
+   * Swept at 560/700/800/900/960/1120: **about −7 points of worst-screen empty
+   * per 100px of card, and it costs no scroll whatsoever** — the wrapper's
+   * height is `screens × 100svh` and has nothing to do with the card's size, so
+   * the chapter is 3.34 screens at every arm. 900 reads 48.4% / 61.5%.
+   *
+   * **The cap is resolution, not taste.** `object-fit: cover` in `CARD_BOX`'s
+   * 16:9 draws a photograph wider than its box whenever the photograph is wider
+   * than 16:9 — `cardWidth × (9/16) × imageAspect` — and four of the six card
+   * photographs are already-cropped 2.289:1 panoramas at 1163px, so they need
+   * **1.288 ×** this number in source pixels and run out at **903px**. Above
+   * that those four ship soft on an ordinary 100%-scaled laptop, which is the
+   * screen the client tests on, and `scripts/check_image_resolution.mjs` will
+   * NOT stop you: a photograph already served its widest file is
+   * `atLibraryCeiling`, a class that rig reports and does not enforce.
+   *
+   * **So this chapter does not meet non-negotiable #8 and cannot until the
+   * library grows.** 45% worst needs about 1,090px. The ask is the uncropped
+   * originals — ~1,450px minimum, ~2,900px to serve a 2× screen — for
+   * `vann-safari`, `vann-bird-watching`, `vann-kohka-lake` and
+   * `vann-potters-village`, plus ~1,150px for `forest-trail-canopy`. With those
+   * files, `cardMaxPx: 1120` measures 36.7% / 42.3% and clears the ceiling.
+   */
+  cardMaxPx: 900,
   /** Breathing room between the stage's cards and the viewport edge. */
   stageGutterPx: 24,
 } as const;

@@ -175,21 +175,35 @@ const CHAPTER_LIST = [
     // 2026; that was `splitFeature`'s composition, which the coverflow replaced.
     // Its 1163px file still bounds how large it can be drawn.
     //
-    // Nine, from six, when the coverflow landed (16 Aug 2026). The first three
-    // are the chapter's two written beats and stay in the header band above the
-    // stage: the dawn gate, then "the day slows right down" — the client's own
+    // Nine, from six, when the coverflow landed (16 Aug 2026), then TEN the same
+    // day when the density measurement came back. The first four are the header
+    // band's, above the stage, and carry the chapter's two written beats — the
+    // dawn gate (`guide-sunrise`, `tiger-crossing-track`), then "the day slows
+    // right down" (`hammocks-shade`, `pool-daylight-forest`) — the client's own
     // copy, which a carousel of activities does not carry and must not drop.
+    // `Coverflow.tsx` reads them positionally, in this order.
+    //
     // The last six are one per activity, in the order `content/home.ts` lists
-    // them; three of those are frames `/mahua-vann` also shows, a repeat the
+    // them; four of those are frames `/mahua-vann` also shows, a repeat the
     // client saw and accepted the same day. `chapters.test.ts` asserts that
     // every activity's photograph is declared here — membership, not order — so
     // a card can never reach for a frame this list does not carry, and so
     // `measure_density.mjs` counts every photograph a card can show.
+    //
+    // **`tiger-crossing-track` moved from the cards to the band on 16 Aug 2026,
+    // and it was a size decision rather than an editorial one.** It is 541px
+    // wide — narrower than the 560px card it was being drawn in — so it was the
+    // single photograph blocking any wider card, and the card's width is the
+    // only lever on a chapter that measured 70.7% mean / 83.1% worst empty.
+    // `vann-safari` (1163px, an open vehicle on a morning drive) took its place
+    // on the card. In the band it is a 420px square beside the paragraph about
+    // the gates opening, which its own file serves fully at DPR 1.
     media: [
       "guide-sunrise",
+      "tiger-crossing-track",
       "hammocks-shade",
       "pool-daylight-forest",
-      "tiger-crossing-track",
+      "vann-safari",
       "vann-bird-watching",
       "vann-kohka-lake",
       "forest-boardwalk-daylight",
