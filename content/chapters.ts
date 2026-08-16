@@ -28,6 +28,15 @@ export type ChapterKind =
    */
   | "pinnedCollage"
   | "splitFeature"
+  /**
+   * Six activity cards on one pinned stage, the neighbours behind and to either
+   * side, advancing on the visitor's own scroll (16 Aug 2026). Every card is a
+   * photograph with its words on it, so the chapter is image-led at every point
+   * in its travel — unlike `splitFeature`, which it replaced on `field-days`,
+   * it has no text-only state. Nothing moves unless the visitor moves: there is
+   * no autoplay, which the client was offered and declined (non-negotiable #5).
+   */
+  | "coverflow"
   | "plateGrid"
   | "lodgeCards"
   | "testimonials"
@@ -73,6 +82,13 @@ export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
   "hero",
   "fullBleedQuote",
   "plateGrid",
+  // Nine photographs, six of them the cards themselves, and a card is a
+  // photograph with its words laid on it. Added 16 Aug 2026 with the coverflow.
+  // The suite would not have caught its omission — `field-days` sits between
+  // `forest` and `rooms`, both `plateGrid`, so the alternation rule is already
+  // satisfied by its neighbours either way. It is here because it is true, not
+  // because a test demanded it.
+  "coverflow",
   "invitation",
 ];
 
@@ -148,23 +164,37 @@ const CHAPTER_LIST = [
     id: "field-days",
     number: "04",
     label: "Days in the Field",
-    kind: "splitFeature",
+    kind: "coverflow",
     // The hammocks carry the chapter's second paragraph — the half of the day
     // most lodges leave out. Nothing else in the library says "rest".
     //
     // `pool-daylight-forest` was one of the two photographs held in reserve after
-    // Task 4 and came off the bench on 5 Aug 2026. It sits under that same
-    // sentence, in a column that until then held one display line and 500px of
-    // paper — and it is the only other frame in the library of the slow half of
-    // the day. Its 1163px width is why it is a letterbox in a half-width column
-    // rather than anything larger.
+    // Task 4 and came off the bench on 5 Aug 2026, under that same sentence, and
+    // it is the only other frame in the library of the slow half of the day. It
+    // was described here as a letterbox in a half-width column until 16 Aug
+    // 2026; that was `splitFeature`'s composition, which the coverflow replaced.
+    // Its 1163px file still bounds how large it can be drawn.
+    //
+    // Nine, from six, when the coverflow landed (16 Aug 2026). The first three
+    // are the chapter's two written beats and stay in the header band above the
+    // stage: the dawn gate, then "the day slows right down" — the client's own
+    // copy, which a carousel of activities does not carry and must not drop.
+    // The last six are one per activity, in the order `content/home.ts` lists
+    // them; three of those are frames `/mahua-vann` also shows, a repeat the
+    // client saw and accepted the same day. `chapters.test.ts` asserts that
+    // every activity's photograph is declared here — membership, not order — so
+    // a card can never reach for a frame this list does not carry, and so
+    // `measure_density.mjs` counts every photograph a card can show.
     media: [
       "guide-sunrise",
-      "forest-boardwalk-daylight",
-      "tiger-crossing-track",
-      "forest-trail-canopy",
       "hammocks-shade",
       "pool-daylight-forest",
+      "tiger-crossing-track",
+      "vann-bird-watching",
+      "vann-kohka-lake",
+      "forest-boardwalk-daylight",
+      "vann-potters-village",
+      "forest-trail-canopy",
     ],
   },
   {

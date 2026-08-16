@@ -4,7 +4,18 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
-import { DURATION, ENTER, FLOAT, IMAGE_FROM, LIVING, PHOTO_ZOOM, RAISE, ROOM_STACK, WELCOME } from "@/lib/motion";
+import {
+  COVERFLOW,
+  DURATION,
+  ENTER,
+  FLOAT,
+  IMAGE_FROM,
+  LIVING,
+  PHOTO_ZOOM,
+  RAISE,
+  ROOM_STACK,
+  WELCOME,
+} from "@/lib/motion";
 import { INDEXING_ALLOWED } from "@/lib/indexing";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
@@ -106,6 +117,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--room-card-scale-min": String(ROOM_STACK.scaleMin),
           "--room-card-dim": String(ROOM_STACK.dim),
           "--property-bar-reserve": `${ROOM_STACK.barReserve}px`,
+          // The `04 · Days in the Field` coverflow, on the same terms as the
+          // card stack above it: the numbers live in `lib/motion.ts`, the rules
+          // live in `app/globals.css`, and neither can drift from the other.
+          // `--coverflow-side-veil` is scrim opacity over a neighbour's
+          // photograph, never the card's own opacity — see the note on
+          // `COVERFLOW` for why the difference is load-bearing.
+          "--coverflow-screens": String(COVERFLOW.screens),
+          "--coverflow-side-scale": String(COVERFLOW.sideScale),
+          "--coverflow-side-shift": `${COVERFLOW.sideShiftPct}%`,
+          "--coverflow-side-veil": String(COVERFLOW.sideVeil),
+          "--coverflow-card-max": `${COVERFLOW.cardMaxPx}px`,
+          "--coverflow-gutter": `${COVERFLOW.stageGutterPx}px`,
           // The base paper, under its own name.
           //
           // `--bg` cannot serve here: `ChapterSurface` shadows it with

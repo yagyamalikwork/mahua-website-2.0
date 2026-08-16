@@ -519,6 +519,53 @@ export const ROOM_STACK = {
   barReserve: 72,
 } as const;
 
+/**
+ * The `04 · Days in the Field` coverflow — `components/sections/Coverflow.tsx`.
+ *
+ * Client request, 16 Aug 2026: *"the next and previous cards sit out of focus on
+ * left and right respectively behind the center card."* So a neighbour is
+ * smaller, shifted out past the centre card's edge, and veiled — three quiet
+ * changes rather than one loud one, which is the same restraint `ROOM_STACK`'s
+ * recede is built with.
+ *
+ * **`sideVeil` is scrim, not opacity, and the distinction is load-bearing.** A
+ * card's type sits ON its own photograph (the client's second ruling the same
+ * day — `FullBleedQuote`'s shape). Fading the whole card would fade that type
+ * against the frame beneath it, so the depth cue would be working against the
+ * contrast floor CLAUDE.md sets for text over a photograph. Adding scrim
+ * recedes the photograph and RAISES cream type's contrast. Do not "simplify"
+ * this back to an opacity — an earlier draft of this dial carried `sideDim` and
+ * it was wrong; `motion.test.ts` asserts that lever cannot grow back, because
+ * the "simplification" is exactly what a future editor would reach for.
+ *
+ * **No rotation and no blur.** A `rotateY` is the thing most coverflows reach
+ * for and it is the thing this page cannot have: it is the tilt the client
+ * explicitly did not want on the photographs a day earlier (`FLOAT`, above), and
+ * a blur costs a compositor layer per card for an effect non-negotiable #4 would
+ * call noticeable. Depth here is scale and veil, the way the deck's is.
+ *
+ * `screens` is the pin's length INCLUDING its own screen, matching
+ * `StickyScene`'s `screens` so the two mean the same thing on this page. **2 is
+ * a starting value, not a settled one** — the plan's Task 8 chooses between 2
+ * and 3 by measuring density, and nothing here has been measured yet. It is
+ * chosen by measurement, not by feel: `rooted`'s own history is that three
+ * screens was indefensible and two was break-even (non-negotiable #9).
+ */
+export const COVERFLOW = {
+  /** Screens of scroll the chapter's stage occupies, including its own. Task 8 settles it. */
+  screens: 2,
+  /** A neighbour's scale at full offset. */
+  sideScale: 0.82,
+  /** How far a neighbour sits from centre, as a percentage of a card's width. */
+  sideShiftPct: 62,
+  /** Extra `--overlay` wash over a neighbour at full offset. Never an opacity — see above. */
+  sideVeil: 0.4,
+  /** Past this a card stops reading as a card. Matches `ROOM_STACK.heightMax`'s reasoning. */
+  cardMaxPx: 560,
+  /** Breathing room between the stage's cards and the viewport edge. */
+  stageGutterPx: 24,
+} as const;
+
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined" || !window.matchMedia) return false;

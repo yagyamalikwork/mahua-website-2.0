@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { DURATION, EASE, ENTER, IMAGE_FROM, LIVING, PARALLAX_MAX, ROOM_STACK, STICKY_SCREENS_MAX } from "./motion";
+import {
+  COVERFLOW,
+  DURATION,
+  EASE,
+  ENTER,
+  IMAGE_FROM,
+  LIVING,
+  PARALLAX_MAX,
+  ROOM_STACK,
+  STICKY_SCREENS_MAX,
+} from "./motion";
 
 describe("the motion laws (spec section 4.3)", () => {
   it("keeps reveals between 800ms and 1400ms", () => {
@@ -230,5 +240,41 @@ describe("ROOM_STACK", () => {
     const SLACK_390 = 706;
     const deck = ROOM_STACK.deckStep * 3;
     expect(deck + ROOM_STACK.gutter).toBeLessThan(SLACK_390 * 0.15);
+  });
+});
+
+describe("COVERFLOW", () => {
+  it("never reserves more scroll than the page's own pin ceiling", () => {
+    // Non-negotiable #9. `StickyScene` clamps to this; a second pinned chapter
+    // that quietly reserved four screens would be exactly the paid-for empty
+    // scroll that rule exists to stop.
+    expect(COVERFLOW.screens).toBeLessThanOrEqual(STICKY_SCREENS_MAX);
+    expect(COVERFLOW.screens).toBeGreaterThanOrEqual(1);
+  });
+
+  it("recedes a neighbour without hiding it", () => {
+    // The client asked for neighbours "out of focus … behind" — behind, not gone.
+    // Past this veil the photograph is a dark rectangle, which loses the depth
+    // the whole effect is for.
+    expect(COVERFLOW.sideVeil).toBeGreaterThan(0);
+    expect(COVERFLOW.sideVeil).toBeLessThanOrEqual(0.55);
+    expect(COVERFLOW.sideScale).toBeGreaterThan(0.7);
+    expect(COVERFLOW.sideScale).toBeLessThan(1);
+  });
+
+  it("recedes by veil and never by opacity", () => {
+    // Correction C. A card's text sits ON its own photograph, so fading the card
+    // fades the type against the frame beneath it and the depth cue starts
+    // fighting the legibility floor. More scrim recedes the photograph AND
+    // raises cream type's contrast. This asserts the dial cannot grow the old
+    // lever back by accident.
+    expect(COVERFLOW).not.toHaveProperty("sideDim");
+    expect(COVERFLOW).not.toHaveProperty("sideOpacity");
+  });
+
+  it("shifts a neighbour far enough to be seen past the centre card", () => {
+    // Less than half a card's width and the neighbour is entirely hidden behind
+    // the centre one, which is a stack, not a coverflow.
+    expect(COVERFLOW.sideShiftPct).toBeGreaterThan(50);
   });
 });

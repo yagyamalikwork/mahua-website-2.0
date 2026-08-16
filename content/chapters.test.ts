@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { media } from "@/lib/media";
 import { CHAPTERS, FULL_BLEED_KINDS, IMAGE_LED_KINDS, type ChapterKind } from "./chapters";
+import { chapterCopy, type ChapterCopyKey, type ExperienceCopy } from "./home";
 
 /**
  * The fewest photographs each layout needs before it stops being the layout.
@@ -20,6 +21,9 @@ const MIN_MEDIA = {
   // nothing — but three is what the layout is built for.
   pinnedCollage: 3,
   splitFeature: 2,
+  // Six activities, one card each. Below that it is not a carousel; the pin
+  // reserves scroll for cards that are not there — non-negotiable #9.
+  coverflow: 6,
   plateGrid: 3,
   lodgeCards: 2,
   testimonials: 1,
@@ -72,6 +76,28 @@ describe("CHAPTERS", () => {
         c.media.length,
         `"${c.id}" is a ${c.kind} with ${c.media.length} image(s); it needs ${MIN_MEDIA[c.kind]}`,
       ).toBeGreaterThanOrEqual(MIN_MEDIA[c.kind]);
+    }
+  });
+
+  it("gives every coverflow activity a photograph the chapter actually carries", () => {
+    // A card puts a photograph and an activity's name in one box, so the pairing
+    // becomes a claim. This asserts the weaker, mechanical half of that: every
+    // activity names a real id, and every id it names is in the chapter's own
+    // media list, so a card can never reach for a photograph the chapter does not
+    // declare (and that `measure_density.mjs` therefore does not count).
+    for (const chapter of CHAPTERS.filter((c) => c.kind === "coverflow")) {
+      const copy = chapterCopy(chapter.id as ChapterCopyKey) as { experiences: readonly ExperienceCopy[] };
+      expect(copy.experiences.length).toBeGreaterThan(0);
+      for (const experience of copy.experiences) {
+        // `media` is a FUNCTION that throws on an unknown id, not a record — the
+        // rest of this file already calls it that way (see the "references only
+        // real images" case below).
+        expect(() => media(experience.mediaId), `${experience.title} names "${experience.mediaId}"`).not.toThrow();
+        expect(
+          chapter.media,
+          `"${chapter.id}" must declare ${experience.mediaId} — ${experience.title} shows it`,
+        ).toContain(experience.mediaId);
+      }
     }
   });
 

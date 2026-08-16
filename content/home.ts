@@ -54,6 +54,21 @@ export type LodgeCopy = {
 export type ExperienceCopy = {
   readonly title: string;
   readonly body: string;
+  /**
+   * The photograph this activity shows on its card.
+   *
+   * Added 16 Aug 2026 with the coverflow. Three of the six are frames that
+   * `/mahua-vann` also shows rather than the chapter's own originals, and the
+   * client saw that repeat and accepted it. Two of the three were corrections
+   * rather than preferences: "Kohka Lake" would have been captioning the
+   * lodge's own swimming pool, and Pachdhar had no village and no potter
+   * anywhere in the chapter. Three prose bands only sat a photograph *near* an
+   * activity; a card puts the two in one box, which makes the pairing a claim.
+   *
+   * Typed `MediaId`, not `string`, so a mistyped id is a compile error rather
+   * than a `media()` throw at render — the same reason `PlateCopy` above is.
+   */
+  readonly mediaId: MediaId;
 };
 
 export type GuestQuote = {
@@ -190,37 +205,53 @@ export const HOME = {
           "saying out loud where everything is.",
         "Then the day slows right down. That is the half most lodges leave out.",
       ],
+      // Six activities, six cards, and the order here is the order they travel
+      // in. Each names its own photograph — see `ExperienceCopy.mediaId` above
+      // for why three of them come from `/mahua-vann` — and `chapters.test.ts`
+      // holds every id to one the chapter itself declares in `chapters.ts`.
       experiences: [
         {
           title: "Jungle safari",
           body:
             "Morning and evening drives in open vehicles, led by naturalists who have followed " +
             "these particular tigresses and their lineages for years.",
+          mediaId: "tiger-crossing-track",
         },
         {
           title: "Bird watching",
           body:
             "The estate is its own reason to carry binoculars — our naturalists have recorded " +
             "species here without ever leaving it.",
+          mediaId: "vann-bird-watching",
         },
         {
           title: "Kohka Lake",
           body: "An hour at the water near Pench, where the day comes down slowly and the birds come to it.",
+          // Not `pool-daylight-forest`, which is the lodge's swimming pool.
+          // Naming a specific lake over a photograph of a pool is a false claim
+          // about a real place, and a card is where it would have been made.
+          mediaId: "vann-kohka-lake",
         },
         {
           title: "The river walk",
           body:
             "At Tola, the Hattinala: flowing water, chirping, leaves turning over. Nothing scheduled.",
+          mediaId: "forest-boardwalk-daylight",
         },
         {
           title: "Pachdhar, the potters' village",
           body:
             "More than a hundred Kumhar families next to Pench have kept the wheel turning. " +
             "Watch, then take a turn at it yourself.",
+          // The chapter held no village and no potter at all. `potters-hands`
+          // exists but belongs to `02 · Rooted`, and the page never shows one
+          // photograph twice — `chapters.test.ts` enforces that.
+          mediaId: "vann-potters-village",
         },
         {
           title: "Walks and cycling",
           body: "Winding trails and earthy air, at the pace the forest is actually lived at.",
+          mediaId: "forest-trail-canopy",
         },
       ],
     },
