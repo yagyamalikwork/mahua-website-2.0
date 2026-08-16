@@ -45,10 +45,11 @@ on a Retina or 150%-scaled one. Closing that would need ~2,700px. It is the same
 and 3 carry, so if you are ever re-exporting these from the camera originals, going straight to ~2,700px
 would close all of it at once.
 
-**These four are also crops.** They are 2.29:1 — very wide, very short — because they were cut for the
-Mahua Vann page's own layout. **Uncropped originals would be worth more than wider crops**: a taller frame
-would let the card be a better shape, and right now the card has to be 16:9 to avoid cutting more than a
-quarter off these.
+**The shape changed too, and that was the more valuable half.** The old files were 2.29:1 — very wide, very
+short — because they had been cut for the Mahua Vann page's layout, and that ratio was the *only* reason the
+card had to be 16:9: anything taller cut more than a quarter off them. At 1.96:1 the card is free to be the
+shape it should be. **This is the general lesson for groups 2 and 3: a taller original is worth more than a
+wider crop**, because the crop dictates the layout rather than the other way round.
 
 ### `vann-potters-village` — the crop problem, and whether the new frame fixed it
 
