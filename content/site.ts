@@ -47,6 +47,22 @@ export const SITE = {
     next: "Next room",
     close: "Close",
   },
+  /** The `04 · Days in the Field` coverflow's two arrows, per card (16 Aug
+   * 2026). Labels only; the mechanism is a plain `<a href="#…">` at the
+   * neighbour's own scroll target, so the arrows and the scroll drive one
+   * position rather than competing for it, and the loop the client asked for
+   * ("after 6 the 1 card comes back or visa-versa") costs no script.
+   *
+   * **These two words are never the whole accessible name.** Six cards carry a
+   * pair each, so twelve links would otherwise be announced as "Previous" and
+   * "Next" twelve times with nothing to tell them apart;
+   * `CoverflowCard.tsx` appends the neighbouring activity's own title. The
+   * visible label stays exactly the word below, which is what keeps the
+   * accessible name a superset of the visible one (WCAG 2.5.3). */
+  coverflow: {
+    previous: "Previous",
+    next: "Next",
+  },
   footer: {
     placesLabel: "The places",
     officeLabel: "The office",

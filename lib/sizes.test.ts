@@ -6,6 +6,7 @@ import {
   BOXES as INTRO_BOXES,
   SIZES as INTRO_SIZES,
 } from "@/components/sections/ChapterIntro";
+import { CARD_BOX, CARD_SIZES } from "@/components/sections/CoverflowCard";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
 import {
   EXPERIENCE_BOXES,
@@ -211,6 +212,14 @@ const LIVE_SLOTS: readonly Slot[] = [
   // new crop and a genuinely new width list, since nothing else on the page is
   // sized this small.
   { name: "SiteMenu.card", sizes: MENU_CARD_SIZES, box: MENU_CARD_BOX },
+  // `04 · Days in the Field`'s coverflow card (16 Aug 2026) — one activity, its
+  // photograph filling the card with the words laid on it. Both halves are
+  // derived rather than transcribed: `CARD_SIZES` is built from `COVERFLOW`'s
+  // own `cardMaxPx`/`stageGutterPx`, and `CARD_BOX`'s 16:9 is solved against the
+  // 25% width-crop bound on the widest tier the six photographs emit (768x335 =
+  // 2.2925, so the box may not be narrower than 1.7194). See the component's own
+  // comments.
+  { name: "Coverflow.card", sizes: CARD_SIZES, box: CARD_BOX },
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -330,7 +339,14 @@ describe("the sizes the page actually serves", () => {
     // `ExperiencePair.quiet` is left holding the old one alone. One string
     // becomes two — net +1, 24 → 25 — read off this suite by running it and
     // reading the failure (`expected 25 to be 24`), not computed by hand.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(25);
+    // 25 → 26 since Task 5 of the coverflow plan (16 Aug 2026):
+    // `CoverflowCard`'s `CARD_SIZES` is a genuinely new width list — `(min-width:
+    // 608px) 560px, calc(100vw - 48px)` — and 608px/560px appear nowhere else on
+    // the page, both being derived from `COVERFLOW.cardMaxPx` and
+    // `COVERFLOW.stageGutterPx` rather than from a container's own columns. Read
+    // off this suite by running it and reading the failure (`expected 26 to be
+    // 25`), not computed by hand, per the same instruction as every step above.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(26);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -488,6 +504,14 @@ describe("cover boxes match the markup they describe", () => {
     // that renders it), which is why this entry names that file and not the
     // client menu.
     { file: "components/ui/SiteHeader.tsx", declared: MENU_CARD_BOX },
+    // The coverflow card — a bare 16:9, the same shape as the `aspect-[16/9]`
+    // class on its own `<li>`. This pairing is load-bearing rather than tidy:
+    // the ratio is what keeps the three 2.29:1 panoramas inside the 25%
+    // width-crop bound, so a future editor who retunes the card's shape in the
+    // markup and leaves `CARD_BOX` alone gets a red test here instead of a
+    // photograph cropped past the ceiling and a `sizes` describing a box that
+    // no longer exists.
+    { file: "components/sections/CoverflowCard.tsx", declared: CARD_BOX },
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(
