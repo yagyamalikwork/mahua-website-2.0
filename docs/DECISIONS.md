@@ -1837,3 +1837,185 @@ measured at a fixed 1440×900). Initial-load transfer is unchanged and under 1.5
 three routes. **467 tests**, `tsc`, `lint` and `build` all green. `components/ui/Plate.tsx` and
 `components/ui/Photo.tsx` — the other session's files — remain untouched. Full working:
 `docs/reviews/2026-08-14-plate-reflow/README.md`.
+
+## 20. The coverflow — a sticky stage does not freeze its timeline, and five other things measured, 16-17 Aug 2026
+
+`04 · Days in the Field` became a pinned coverflow: six activity cards advancing on the visitor's own
+scroll, the neighbours behind and to either side, at **zero added JavaScript** (168.2 KB brotli, delta 0).
+Client request, 16 Aug: *"looks flat even though it has beautiful images."* The design is
+`docs/superpowers/specs/2026-08-16-field-days-coverflow-design.md`; the plan and its running corrections are
+`docs/superpowers/plans/2026-08-16-field-days-coverflow.md`; the evidence is `docs/reviews/2026-08-16-coverflow/`.
+
+**Read §20.1 before touching `app/globals.css`'s `.coverflow*` block, and §20.4 before quoting any density
+figure from this chapter.**
+
+### 20.1 `position: sticky` does not freeze a view timeline. The range phase does.
+
+This is the most valuable thing the work produced, and **it corrects what `app/globals.css` says above
+`.room-stack`** — or rather, it explains it. That comment records a measured symptom ("its own exit-phase
+progress does not advance… only catches up in one jump once the whole deck unsticks") and attributes it to
+the element being sticky. The attribution was wrong; the symptom was right.
+
+Task 1's probe built the sticky-self-animating construction *as a control arm, expecting it to fail*. It
+passed, and was numerically identical to the non-sticky arms — Chrome computes a sticky subject's
+view-timeline range with the sticky offset applied. Three further arms then isolated the real cause, same
+construction, only the range phase differing:
+
+| range | progress across the pin | longest flat run | after release |
+|---|---|---|---|
+| `cover 0% → 100%` | 0.884 → 0.319, continuous | 0px | keeps moving |
+| `exit 0% → 100%` | 1.000 → 1.000 | **4,480px** | completes over 2 samples |
+| `contain 0% → 100%` | 1.000 → 1.000 | **4,440px** | **completes in one 200px step** |
+
+`cover`'s offsets are computed off the sticky-adjusted box; `exit` and `contain` are computed off boundaries
+a stuck box never crosses. **Nothing here licenses simplifying `.room-slot` away** — `RoomCard` needs a
+phase that tracks a card being *covered*, which is what a non-sticky sibling supplies. What it does mean is
+that the coverflow's range must stay on `cover`, and that "tightening" it to `contain` — which reads as the
+more precise choice for a subject taller than the viewport — freezes the whole carousel for its entire pin
+and dumps it in one frame at the end.
+
+### 20.2 Three geometry facts nobody would derive on paper
+
+- **A view timeline is inset by the scroll container's `scroll-padding-top`.** That property is set in
+  `globals.css` for *anchor links* and has nothing to do with animation, and it shortens `cover` by its own
+  height. One step is 889px at 1440×900, not 900.
+- **The sticky stage must clear the header out of its own height** (`calc(100svh - var(--header-height))`).
+  At a flat `100svh` the last card centres **11px after the pin has released**.
+- **The naive anchor-target placement is wrong with a *slope*, not an offset** — `−66 + 11·i`, because two
+  things are wrong at once. A fix tuned on card 3 looks perfect and is 33px out at both ends. Solving from
+  the track's own arithmetic lands every card at 0.00px; the negative control in the same run put four of
+  six cards a full ±360px out, i.e. **arrows silently landing on the wrong card**.
+
+### 20.3 The pin length was coupled to the card count, and did not have to be
+
+Dividing *percentages of `cover`* into `n + 1` steps forces `screens ≥ card count` — six screens of pin for
+six cards, against `STICKY_SCREENS_MAX` of 3 and a chapter that was 2.93 screens. That would have breached
+non-negotiable #9 outright and the feature would have died there.
+
+The fix is to express `animation-range` offsets as **lengths anchored to the pinned window** rather than
+percentages of `cover`, since `cover` includes a viewport of entry travel and a tail that no card should
+spend a step on. The two resolved values are self-proving: card 0 reads `cover 823px`, exactly where the
+stage locks, and the last reads `cover 2700px`, exactly where it lets go. `screens` is now a free dial for
+**pace alone** — measured at 2, 2.5, 3, 3.6, 4 and 6.
+
+### 20.4 The density story, in the order it happened — quote only the last row
+
+Every intermediate figure below is **stale and must not be quoted as current.**
+
+| state | `field-days` mean | worst | page worst |
+|---|---|---|---|
+| the three bands this replaced | 43.9% | 57.9% | 64.6% |
+| first build, `cardMaxPx: 560` | 70.7% | 83.1% | — |
+| + header band recomposed | 65.2% | 82.9% | — |
+| + `cardMaxPx` swept to 900 | 48.4% | 61.5% | 64.6% |
+| + flank ghosts | 46.2% | **52.2%** | 64.6% |
+| + tiger in its own band (rejected) | 48.6% | 62.3% | **77.1%** |
+| **shipped** — tiger into the header band | **48.1%** | **55.0%** | **67.0%** |
+
+**The worst screen beats what it replaced (55.0% against 57.9%) and the mean does not (48.1% against
+43.9%).** `passesWorst` is the field non-negotiable #8 binds on; `passesMean` is informative only. It is
+still over the 45% ceiling and **cannot reach it on today's photographs** — see §20.6.
+
+Four things decided those rows:
+
+- **`cardMaxPx: 560` was never swept.** It came from the plan by analogy to `ROOM_STACK.heightMax`. This is
+  the *same defect shape* as the beside-room-cards breach two days earlier (§18) — a number written in a
+  plan read downstream as a bound and reported spent. Sweeping it costs **no scroll at all**: the chapter is
+  3.34 screens and the document 16,686px at every arm from 560 to 1120.
+- **`screens` cannot touch the worst screen and makes the chapter's mean *worse*** — every screen it adds is
+  a pin screen. Measured at 2 / 2.5 / 3: mean 48.4 / 48.9 / 49.3%, worst 61.5% at all three.
+- **The flank ghosts are worth 9.3 points and are free.** The worst screen was the first and last card's
+  centre-hold, where one card sat alone because there is no card −1 or card 6. There is: the client asked
+  for a loop, and rendering the wrap-around neighbours as `aria-hidden` ghosts at `--i: -1` and `6` fills
+  exactly those screens *and* makes the loop visible in the scroll rather than only in the arrows. The
+  existing `animation-range` formula placed them with no change. `distinctImages` is 42 in every arm, so
+  none of the gain came from double-counting an image, and a card and its own ghost are never on stage
+  together — which is what makes it read as wrapping round rather than as a photograph shown twice.
+- **One line of markup was worth ten points.** The tiger film below `guide-sunrise` reads 51.6% / 65.3%;
+  above it, 48.1% / 55.0%. Either end leaves the same strip of cream at the foot of the text column; the
+  only variable is whether its neighbour across the gutter is a 300px drawing or a 761px photograph.
+
+**An accounting trap worth carrying forward: a band sitting on a chapter boundary scores as a JOIN and is
+excluded from that chapter's own mean, surfacing only in the page's worst.** The rejected tiger arm's 48.6%
+was flattered by exactly this. The shipped arm makes the chapter pay for its own figure and still wins.
+
+**The tiger now opens the chapter rather than closing it**, and non-negotiable #5 is untouched by that: it
+is a rule about behaviour — arrive, perform once, doze, replay on hover — not about position. Candidate 1,
+taking the band out of the pin instead, was built and rejected on measurement: it moves the same 297px of
+78%-cream band 297px earlier, the join screen measures identical, and it costs 29% of the carousel's pace.
+
+### 20.5 The card is a photograph with its words on it, and all six were illegible
+
+Client's second ruling, 16 Aug: *"an image with text on it"*, like `why-you-came`. Denser than a
+photo-above-text card (all imagery, not half) and it survives being overlapped — a stacked card at the edge
+of a coverflow loses either its photograph or its words, while a photograph with type on it degrades into a
+photograph.
+
+**Unwashed, the type on these six cards measures 1.01–1.32:1 against a 4.5 floor.** The placeholder
+`{ flat: 0.5 }` the cards shipped with for a day reached only 2.55–4.21 — **below the floor at every
+width.** Solved per photograph: 4.91–8.82.
+
+Two findings inside that:
+
+- **The card's small-screen composition, not the photographs, forced the figures.** Bottom-anchored layers
+  solve every card at 1440 almost free and cannot solve *any* card at 390: the words are 27% of the card's
+  height at 1440 and **58%** at 390, so their top edge clears the `bottom` band entirely and only a `centre`
+  layer reaches. The lever to lighten these is the card's composition at 390, not a lighter scrim.
+- **The rig had to change to measure the right pixels.** A block-level heading's rect is the card's full
+  width, and cropping its empty gutter read 1.00:1 where the glyphs measured 1.33. Per-line `Range` crops
+  replaced element rects, and that moved solved figures by whole steps.
+
+**A neighbour recedes by VEIL, never by opacity** — fading a card whose type sits on its own photograph
+fades the words against the frame beneath them, so the depth cue would fight the legibility floor. More
+scrim recedes the photograph and *raises* cream type's contrast. `COVERFLOW.sideDim` was retired before it
+shipped and `lib/motion.test.ts` asserts the lever cannot grow back.
+
+### 20.6 What is owed, and what it unlocks
+
+**45% is unreachable on today's files.** A 2.289:1 panorama in a 16:9 box is drawn at **1.288 × the card
+width**, and four of the six card photographs are 1163px — so at a 900px card the browser is already using
+every pixel they have, measured at exactly 1.00. The ceiling is 903px. Reaching 45% needs a ~1,090px card,
+which needs ~1,450px files (~2,900px to also serve DPR 2). `docs/OWED-ORIGINALS.md` is the consolidated ask
+and supersedes the partial ones in §5 and §19.
+
+`vann-potters-village` is a **different** ask: it measures 1.00:1 unwashed, the theoretical floor, because
+white-glazed pots sit exactly where the body copy lands. That frame wants a different crop, not a wider file.
+
+`CARD_BOX` is 16/9 for the same reason and was solved, not chosen: a `cover` box keeps `boxAspect /
+imageAspect` of a photograph's width, so the 25% crop bound requires at least 1.7194. 16/9 clears it by 3.4%
+at 22.45% cropped; 3:2 would crop 34.6% and 4:5 would crop 65.1%. **No portrait or square card is available
+while those four frames are 2.29:1 crops** — which is why the ask above prefers uncropped originals over
+merely wider ones.
+
+### 20.7 Two defects the fixed sample widths hid, again
+
+- **The card painted over the tiger film below ~1430px of viewport** — headless at 1280, and pre-existing
+  below ~1090px at the old card size. No rig saw it because `check_films.mjs` only ever measured 1440. It
+  now samples six widths, and its message distinguishes *white ground present* from *covered by X*.
+- **The cards sat ~24px off-centre between 768px and 948px** — the card is `min(900, 100vw − 48)` while
+  `ChapterSurface` is `md:px-12`, so the card is wider than its stage and `margin: auto` collapses.
+  Found only when a rig finally swept continuously.
+
+That is the fourth and fifth time a defect on this project has lived between 390 / 768 / 1440 / 1920. The
+plate squeeze, the room card's 51% crop and the map's 4.3px labels were the first three.
+
+### 20.8 What the plan got wrong, and who caught it
+
+Recorded because the pattern is the point: **eight of the nine corrections below were defects in the plan or
+the probe, not in the implementations**, and every one was found by the person executing rather than by the
+person who wrote it.
+
+| # | The plan/probe said | The truth |
+|---|---|---|
+| 1 | `lib/coverflow.ts` produces `COVERFLOW_STEP_DENOMINATOR` | Defined nowhere and consumed by nothing; implementer declined to invent it |
+| 2 | `COVERFLOW` carries `sideDim` | Stale against the plan's own correction C; `sideVeil` shipped |
+| 3 | `tsc` passes at the end of Task 3 | It cannot — `app/page.tsx`'s exhaustive switch is *meant* to break until the case arm lands |
+| 4 | `MediaId` is a branded type | A plain string-literal union; a genuine brand would have broken the test's cast |
+| 5 | The scroll target sits inside the card | Measured wrong by a slope, and would emit duplicate ids |
+| 6 | `@supports (…) and (not (prefers-reduced-motion: reduce))` | `not` over an invalid declaration is **true**; reduced motion would have done nothing, silently |
+| 7 | A two-step window gives the client's effect | At the moment a card is centred its neighbours are at 0% and 100% of their own windows, i.e. off-stage; widened to four steps |
+| 8 | "Exactly one card within 8px of centre at every sample" | Unachievable by any continuously-moving carousel; replaced with the invariant that does tile |
+| 9 | `field-days` has six photographs matching six activities one-to-one | A count match, not a semantic one — two cards would have named a place their photograph is not |
+
+`app/page.tsx`'s `CREAM_KINDS` appears in no task at all; omitting the new kind there would have flipped the
+cream surface of every chapter below `field-days`.
