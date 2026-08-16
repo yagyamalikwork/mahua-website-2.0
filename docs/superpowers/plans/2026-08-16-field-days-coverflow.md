@@ -262,7 +262,12 @@ git commit -m "docs: what a coverflow timeline actually does over a sticky stage
   - `coverflowNeighbours(index: number, count: number): { previous: number; next: number }`
   - `coverflowWindow(index: number, count: number): { start: number; end: number }` — percentages of the
     timeline, as numbers
-  - `COVERFLOW_STEP_DENOMINATOR = (count: number) => number`
+
+  > A `COVERFLOW_STEP_DENOMINATOR` export was listed here and defined nowhere — not in this task's test, not
+  > in its module, and consumed by no later task. **Struck 16 Aug 2026 by Task 2's implementer, correctly**,
+  > who declined to invent an export with no test and no caller. The quantity (`count + 1`) lives inside
+  > `coverflowWindow`. If Task 6 or 7 needs it as its own CSS custom property, extract it *then*, with its
+  > own test, so the two cannot drift.
 
 - [ ] **Step 1: Write the failing test**
 
