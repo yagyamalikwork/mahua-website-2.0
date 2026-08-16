@@ -20,32 +20,37 @@ useful as a new file.
 
 ---
 
-## Group 1 — the four carousel photographs (this one has a decision attached)
+## ~~Group 1 — the carousel photographs~~ — **DELIVERED, 17 August 2026**
 
-`04 · Days in the Field` is now a carousel of six photograph cards. **These four are the reason it does not
-yet pass your 45% rule**, and they are the only lever left.
+**You sent all six at 1344 × 685 and this group is closed.** Recorded here rather than deleted, because the
+shape of the ask is worth keeping for next time: what was needed was never "bigger files" in the abstract —
+it was a specific width driven by a specific card size, and the card size was driven by your 45% rule.
 
-| Photograph | Have | Need (minimum) | Need (ideal) |
+| Card | Photograph | Was | Now |
 |---|---|---|---|
-| `vann-safari` — the open vehicle, morning drive | 1163 × 508 | **1,450px wide** | **2,900px wide** |
-| `vann-bird-watching` | 1163 × 508 | 1,450px | 2,900px |
-| `vann-kohka-lake` | 1163 × 508 | 1,450px | 2,900px |
-| `vann-potters-village` | 1163 × 508 | 1,450px | 2,900px |
-| `forest-trail-canopy` — the trail under canopy | 960 × 640 | 1,150px | 2,200px |
+| 01 Jungle safari | `tiger-crossing-track` | 541 × 508 | **1344 × 685** |
+| 02 Bird watching | `vann-bird-watching` | 1163 × 508 | **1344 × 685** |
+| 03 Kohka Lake | `vann-kohka-lake` | 1163 × 508 | **1344 × 685** |
+| 04 The river walk | `forest-boardwalk-daylight` | 1440 × 960 | **1344 × 685** |
+| 05 Pachdhar, the potters' village | `vann-potters-village` | 1163 × 508 | **1344 × 685** |
+| 06 Walks and cycling | `forest-trail-canopy` | 960 × 640 | **1344 × 685** |
 
-**Why this decides the 45% question.** The cards are currently 900px wide, and at that size the browser is
-already using *every pixel these files have* — measured at exactly 1.00, no margin. To get the section under
-45% empty the cards need to be about 1,090px wide, and that needs the "minimum" column above.
+Three of these replaced the photograph as well as its size, and two of those were upgrades rather than
+swaps: the safari card gained a frame with the vehicle and guests in it, and Kohka Lake became an actual
+lake instead of the lodge's swimming pool.
 
-The "ideal" column is double, which is what a Retina or 150%-scaled screen actually asks for. Without it the
-photographs are sharp on your laptop and slightly soft on a Mac.
+**One thing in this group is still open, and it is a lower priority than groups 2 and 3.** 1344px serves a
+1344px card at exactly 1.00 on an ordinary 100%-scaled screen — which is what you test on — and at **0.5**
+on a Retina or 150%-scaled one. Closing that would need ~2,700px. It is the same DPR-2 shortfall groups 2
+and 3 carry, so if you are ever re-exporting these from the camera originals, going straight to ~2,700px
+would close all of it at once.
 
 **These four are also crops.** They are 2.29:1 — very wide, very short — because they were cut for the
 Mahua Vann page's own layout. **Uncropped originals would be worth more than wider crops**: a taller frame
 would let the card be a better shape, and right now the card has to be 16:9 to avoid cutting more than a
 quarter off these.
 
-### `vann-potters-village` is a different ask, and worth reading on its own
+### `vann-potters-village` — the crop problem, and whether the new frame fixed it
 
 This one is not about resolution. Every card carries its words *on* the photograph, over a dark wash, and
 that wash is solved per photograph — raised until the worst single pixel under the type is legible, and no
@@ -57,8 +62,12 @@ but only because it is carrying one of the heaviest washes on the page, and that
 with the photograph's own light.
 
 **What would fix it is a different frame or a different crop, not a wider file** — the same scene with the
-pots somewhere other than the lower third, or a wider view with room at the bottom. If you have an
-alternative from the same shoot, that would be worth more here than 2,900px of the current one.
+pots somewhere other than the lower third, or a wider view with room at the bottom.
+
+**Your 17 Aug file is a closer crop of the same scene**, so the bright reflections have moved rather than
+gone. Whether that helped is a measurement, not a judgement, and it is being taken as part of re-solving all
+six washes against the new photographs. If it still reads near the floor, the honest fix is a different
+frame from that shoot rather than more darkening.
 
 ---
 
@@ -98,6 +107,9 @@ be a duplicate of one we already have — both of which have happened before.
 
 ## Priority, if you can only do some
 
-1. **Group 1's four Vann frames** — they are the open decision, not just a sharpness improvement.
-2. Group 3, the rooms — the largest photographs on two property pages.
-3. Group 2, the cats — the shortfall is real but only shows on a high-resolution screen.
+**Group 1 is closed.** What remains:
+
+1. **Group 3, the rooms** — the largest photographs on two property pages, and the biggest visible shortfall.
+2. **Group 2, the cats** — real, but only shows on a high-resolution screen.
+3. The DPR-2 half of group 1, which only matters on a Retina or scaled screen and which you would get for
+   free if either of the above is exported from camera originals at ~2,700px.
