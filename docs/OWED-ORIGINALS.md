@@ -45,6 +45,21 @@ Mahua Vann page's own layout. **Uncropped originals would be worth more than wid
 would let the card be a better shape, and right now the card has to be 16:9 to avoid cutting more than a
 quarter off these.
 
+### `vann-potters-village` is a different ask, and worth reading on its own
+
+This one is not about resolution. Every card carries its words *on* the photograph, over a dark wash, and
+that wash is solved per photograph — raised until the worst single pixel under the type is legible, and no
+further, because a heavy wash flattens a photograph to mud.
+
+**Unwashed, the words on this card measure 1.00:1** — the theoretical floor, meaning cream type on
+effectively white pixels. The white-glazed pots sit exactly where the body copy lands. It is legible now,
+but only because it is carrying one of the heaviest washes on the page, and that wash is buying legibility
+with the photograph's own light.
+
+**What would fix it is a different frame or a different crop, not a wider file** — the same scene with the
+pots somewhere other than the lower third, or a wider view with room at the bottom. If you have an
+alternative from the same shoot, that would be worth more here than 2,900px of the current one.
+
 ---
 
 ## Group 2 — the three forest cats
