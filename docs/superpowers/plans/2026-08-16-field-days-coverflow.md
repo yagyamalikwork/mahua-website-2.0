@@ -858,8 +858,23 @@ git commit -m "feat: one card, a photograph over an activity's own words"
 - Produces: `Coverflow({ chapter, copy, surface, footer })` — the same `footer` slot shape `SplitFeature`
   has, so the tiger's wiring in `app/page.tsx` changes by one component name and nothing else.
 
-> **Write the CSS from `docs/reviews/2026-08-16-coverflow/task-1-timeline-probe.md`, not from the hypothesis
-> in Task 1.** If the two disagree, the probe is right.
+> **Lift the CSS from `docs/reviews/2026-08-16-coverflow/task-1-timeline-probe.md` §11.7 — not from the
+> hypothesis in Task 1, and not from that file's own §9, which §11.7 supersedes.** Read §11 before §9 or you
+> will build the version that forces a six-screen pin. Where the probe and this plan disagree, the probe is
+> right. Four things in it are load-bearing and each is measured:
+>
+> 1. **The range stays on `cover`.** `exit` and `contain` read as the more precise choice for a subject
+>    taller than the viewport, and both freeze the carousel solid for its entire pin (~4,450px of flat) then
+>    complete in one frame. That is the rooms card stack's own recorded defect, and §6 is where it actually
+>    lives — **not** in `position: sticky`, which the probe's control arm proved does not freeze.
+> 2. **The offsets are lengths anchored to the pinned window, not percentages of `cover`.** Percentages
+>    force `screens ≥ card count` — six screens for six cards, against `STICKY_SCREENS_MAX` of 3 — because
+>    `cover` includes a viewport of entry travel and a tail that no card should spend a step on.
+> 3. **The stage clears the header out of its own height.** At a flat `100svh` the last card centres 11px
+>    *after* the pin releases.
+> 4. **No `timeline-scope`.** The cards are descendants of the declaring element, so the name already
+>    reaches them; measured identical with and without over 1,100 samples. The plan's earlier hypothesis
+>    carried it, and `Coverflow.tsx` must not.
 
 - [ ] **Step 1: The fallback comes first, and it is the default**
 
@@ -1038,9 +1053,24 @@ git commit -m "test: the coverflow's rig, watched failing nine ways first"
   `ChapterKind`), `content/chapters.test.ts` (remove its `MIN_MEDIA` entry)
 - Create: `docs/reviews/2026-08-16-coverflow/README.md`
 
-- [ ] **Step 1: Measure both pin lengths on one build**
+- [ ] **Step 1: Measure the pin length on one build**
 
-Build twice, changing only `COVERFLOW.screens` between 2 and 3, and for each run:
+**`COVERFLOW.screens` is a continuous dial, not a choice of two** — Task 1 §11 measured it at 2, 2.5, 3, 3.6,
+4 and 6 and the card count no longer constrains it. Run **2, 2.5 and 3**; 3 is `STICKY_SCREENS_MAX` and the
+ceiling. The measured pace, at 1440×900, is the other half of the decision:
+
+| `screens` | wrapper | pinned scroll | centre-to-centre | a card's whole arc |
+|---|---|---|---|---|
+| 2 | 1,800px | 977px | 139.6px | 279px |
+| 2.5 | 2,250px | — | 203.8px | 408px |
+| 3 | 2,700px | 1,877px | 268.1px | 536px |
+
+The rooms card stack advances at roughly **700px per card**, so 3 screens is about 77% of that pace and 2 is
+about 40%. `field-days` is **2,637px today**: two screens leaves 837px for the header band and still lands
+shorter than today; three screens is 63px over *before* the band is added. Density decides it, pace informs
+it, and both go in the review.
+
+For each arm:
 
 ```bash
 npm run build && npx next start -p 3100

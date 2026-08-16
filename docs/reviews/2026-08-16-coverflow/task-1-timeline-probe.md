@@ -341,3 +341,264 @@ and `--coverflow-screens` on the wrapper, and both inherit to the targets and th
   derived from two measured formulas, not watched.
 - **Why the `exit`/`contain` freeze happens.** §6 measures it precisely and reproduces the card stack's
   symptom. It does not establish whether this is Chrome's intended reading of the specification.
+
+---
+
+# §11 — decoupling the pin's length from the card count
+
+**Measured 16 Aug 2026, same session, same Chromium 151.0.7922.34.** A second throwaway page
+(`coverflow-lengths.html` / `.mjs`, plus three small verification scripts), 911 samples at **20px** — half
+§1–§10's step, because the windows under test are as short as 140px.
+
+## 11.1 Why this was asked, and what it costs if it fails
+
+§4's scheme divides **percentages of `cover`** into `n + 1` steps, and `cover` includes a whole viewport of
+entry travel before the pin engages plus a tail after it releases. Those wasted steps are what force
+`--coverflow-screens ≥ n` — **six screens of pin for six cards, ~5,400px**, where `field-days` is 2,637px
+today and `STICKY_SCREENS_MAX` (`lib/motion.ts:488`) is **3**. Non-negotiable #9 killed a three-screen pin
+on `rooted` for less than this. Under §9's CSS the coverflow is not shippable.
+
+**It decouples completely.** The fix is to express the offsets as **lengths measured from the start of
+`cover`, anchored to the pinned window** rather than as percentages of the whole timeline:
+
+- the pinned window begins `100svh − scroll-padding-top` into `cover`
+- it is `(screens − 1) · 100svh + scroll-padding-top` long
+
+Every claim below was measured; the arithmetic was supplied on paper and is reported here only because the
+measurement agreed with it to **0.01px**.
+
+## 11.2 (1) Chrome accepts length offsets, and resolves the `calc()`
+
+`animation-range` took `cover <length>` with `calc()` over custom properties, nested one level deep, mixing
+`svh` with `px`. The read-back is fully resolved — px, not a deferred `calc()`:
+
+| Arm | `--cf-step` as authored | Card 0 `animation-range-start` / `-end` | Card 5 `-start` / `-end` |
+|---|---|---|---|
+| screens 2 | `calc(calc(2 * 100svh - 100svh + 77px) / (6 + 1))` | `cover 823px` / `cover 1102.14px` | `cover 1520.86px` / `cover 1800px` |
+| screens 3 | `calc(calc(3 * 100svh - 100svh + 77px) / (6 + 1))` | `cover 823px` / `cover 1359.29px` | `cover 2163.71px` / `cover 2700px` |
+| screens 4 | `calc(calc(4 * 100svh - 100svh + 77px) / (6 + 1))` | `cover 823px` / `cover 1616.43px` | `cover 2806.57px` / `cover 3600px` |
+| screens 6 | `calc(calc(6 * 100svh - 100svh + 77px) / (6 + 1))` | `cover 823px` / `cover 2130.71px` | `cover 4092.29px` / `cover 5400px` |
+| **broken control** | references an undeclared `--nope` | **`normal` / `normal`** | — |
+
+**Those two resolved numbers are the whole argument, and they can be read without trusting anything else.**
+Card 0's window *opens* at `cover 823px` — and 823 is `100svh − scroll-padding-top`, the exact offset at
+which the stage locks. Card 5's window *closes* at `cover 1800px` / `2700px` / `3600px` / `5400px` — which
+is the wrapper's own height in each arm, the exact offset at which the stage lets go. **The carousel starts
+when the pin starts and finishes when the pin finishes, at every length**, and the browser's own computed
+values say so.
+
+The negative control behaved as §7 did: an undeclared custom property silently produced `normal`.
+
+## 11.3 (2) Every card centres inside the pin, at every length tested
+
+Pin window taken as `[T − P, T + H − V]` — §4 and §5's measured formulas, `P` = `scroll-padding-top` = 77px.
+
+| screens | Pin window | Pin length | Card 0 centres | Card 5 centres | All six inside? | Worst measured − predicted |
+|---|---|---|---|---|---|---|
+| **2** | [923, 1900] | 977px | 1,063 (+140 from start) | 1,760 (−140 from end) | **yes** | **0.01px** |
+| **3** | [3723, 5600] | 1,877px | 3,991 (+268) | 5,332 (−268) | **yes** | **0.01px** |
+| **4** | [7423, 10200] | 2,777px | 7,820 (+397) | 9,803 (−397) | **yes** | **0.01px** |
+| **6** | [12023, 16600] | 4,577px | 12,677 (+654) | 15,946 (−654) | **yes** | **0.01px** |
+
+Every card in every arm: `insidePin = true`. The margins are not approximate — the first and last card sit
+**exactly one step** inside each end, at every length, which is the structural consequence of §11.2's two
+resolved offsets rather than a tuned result.
+
+After clicking each card's own arrow, the stage was pinned on arrival **6 of 6 times in all four arms**.
+
+## 11.4 (3) The pace — the number for the client
+
+At 1440×900. `step` is centre-to-centre; `arc` is a card's whole journey, entering to leaving, and is
+`2 × step` because adjacent windows overlap by one step.
+
+| `--coverflow-screens` | Wrapper height | Pin length | **Step (centre to centre)** | **Arc (enters → leaves)** |
+|---|---|---|---|---|
+| 2 | 1,800px | 977px | **139.6px** | 279px |
+| 2.5 | 2,250px | 1,427px | **203.8px** | 408px |
+| **3 — the cap** | **2,700px** | **1,877px** | **268.1px** | **536px** |
+| 3.6 | 3,240px | 2,417px | 345.3px | 691px |
+| 4 | 3,600px | 2,777px | 396.7px | 793px |
+| 6 | 5,400px | 4,577px | 653.9px | 1,308px |
+
+All six rows measured, not extrapolated; the step column was read off a probe element sized to `--cf-step`
+and the wrapper heights off `getBoundingClientRect()`.
+
+**Against the rooms card stack's ~700px per card.** The comparable figure is the **arc**, not the step — in
+the card stack ~700px is a card's whole arrival, and here a card's whole journey is `2 × step`. So at the
+three-screen cap a card takes **536px**, about **77%** of the card stack's pace. The step between two cards
+being *centred* is 268px.
+
+**The card stack's pace is not reachable under the cap.** A 700px step would need `screens = 6.36`; a 700px
+arc needs `screens = 3.65`, also over. Three screens buys 536px of arc and that is the ceiling.
+
+**`--coverflow-screens` is a continuous dial, measured, not assumed.** It appears only inside `calc()`, and
+fractional values behave exactly on the formula — 2.5 gave a 2,250px wrapper and a 203.8px step, 3.6 gave
+3,240px and 345.3px, and re-setting it to 3 returned 2,700px / 268.1px. So the client's choice is not
+"two screens or three".
+
+**One number Task 5 will need against the density ruling.** `field-days` is 2,637px today. The wrapper
+alone is 1,800px at two screens and 2,700px at three — so **two screens leaves 837px for the header band
+and still comes in shorter than today**, while three screens is already 63px over before a single
+photograph of header band is added. That is the trade in one line, and it is the client's.
+
+## 11.5 (4) The anchor targets still land — and the formula gets simpler
+
+The target expression collapses. Substituting `--cf-pin-start = 100svh − P` into the proposed
+`calc(P − 100svh + pin-start + (i + 1)·step)` leaves `0 + (i + 1)·step`:
+
+```css
+.coverflow-target { top: calc((var(--i) + 1) * var(--cf-step)); }
+```
+
+**Both forms were clicked, in the same run.** They produced identical results to the pixel on arm `l3`
+(`[0.19, 0.38, 0.57, −0.59, −0.4, −0.2]`), so the simplification is confirmed rather than argued.
+
+| Arm | Worst absolute `translateX` after clicking each card's arrow | Pinned on arrival |
+|---|---|---|
+| screens 2 | 1.11px | 6/6 |
+| screens 3 | 0.59px | 6/6 |
+| screens 4 | 0.40px | 6/6 |
+| screens 6 | 0.24px | 6/6 |
+| **negative control** — §9's percentage placement, on the length scheme | **360.00px** | — |
+
+The residue is sub-pixel scroll rounding, and it scales inversely with step size exactly as that explains;
+1.11px of a 720px arc is 0.15%. **The negative control is the one that matters**: leaving §9's placement in
+place while switching the range to lengths put four of the six cards at a full ±360px — completely off
+centre, arrows landing on the wrong card entirely — and nothing about the page would have said so.
+
+**Held across viewport shapes** (arm `l3`, screens 3, clicking all six each time):
+
+| Viewport | Step | Worst absolute `translateX` | Pinned on every arrival |
+|---|---|---|---|
+| 1440×900 | 268.1px | 0.59px | yes |
+| 1440×760 | 228.1px | 0.69px | yes |
+| 1280×1024 | 303.6px | 0.51px | yes |
+| 1920×1080 | 319.6px | 0.48px | yes |
+| 1366×768 | 230.4px | 0.67px | yes |
+| 390×844 | 252.1px | 0.62px | yes |
+
+The step tracks viewport height, as `((screens − 1)·V + P)/(n + 1)` requires — a 1366×768 laptop runs the
+carousel at 230px per card against 1440×900's 268px. That is inherent to a wrapper measured in `svh` and is
+equally true of §9's scheme; it is worth knowing before someone reports the effect as "faster on my laptop".
+
+**The no-JavaScript arm holds too.** `--header-height` is written only by `StickyHeader`, so with script
+off every `var(--header-height, 0px)` in the scheme falls back to 0 at once — the stage's `top`, its
+height, `scroll-padding-top`, and both ends of the range. Measured by driving the property directly:
+
+| `--header-height` | Step | Worst absolute `translateX` | Pinned on every arrival |
+|---|---|---|---|
+| `77px` (script running) | 268.1px | 0.59px | yes |
+| `0px` (**no script**) | 257.1px | 0.61px | yes |
+| `120px` (a taller header) | 274.3px | 0.57px | yes |
+
+## 11.6 The extreme cards are not clipped — structurally, not by luck
+
+Asked as a "if it is cheap" question; it is the strongest property of this scheme.
+
+At three screens the six cards share 1,877px, and card 0 centres 268px after the pin engages while card 5
+centres 268px before it releases — **exactly one step of margin at each end, at every length in §11.3**.
+Neither is clipped, and the reason is §11.2's read-back rather than a measurement that happened to come out
+well: card 0's window *opens* at the offset where the stage locks and card 5's *closes* at the offset where
+it lets go. The pin is spent entirely on the carousel and the carousel fits the pin exactly.
+
+What a visitor sees outside the pin, sampled at 1440×900 on the three-screen arm:
+
+| Scroll position | All six cards' `translateX` |
+|---|---|
+| cover start (`T − V`) | +360 ×6 — parked off-right |
+| 300px into cover | +360 ×6 |
+| pin engage − 20px | +360 ×6 |
+| **pin engage** (`T − P`) | +360 ×6 — the first card has not begun |
+| **pin release** (`T + H − V`) | −360 ×6 — the last card has just finished |
+| pin release + 20px | −360 ×6 |
+| pin release + 400px | −360 ×6 |
+
+Nothing is half-animated on the way in or on the way out. The deck is a closed set of cards off-right
+before the pin and off-left after it.
+
+## 11.7 The CSS Task 6 should lift — this replaces §9
+
+§9's `cover` phase and stage height are unchanged and still load-bearing; only the offsets change from
+percentages of `cover` to lengths anchored to the pin.
+
+```css
+/*
+ * The coverflow. Four facts hold this together and every one is measured —
+ * `docs/reviews/2026-08-16-coverflow/task-1-timeline-probe.md`:
+ *
+ *  1. The range must stay on `cover`. `exit` and `contain` are computed off
+ *     boundaries a stuck box never crosses and freeze SOLID for the whole pin
+ *     (measured: 4,480px and 4,440px of flat), then complete in one frame. §6.
+ *  2. The stage clears the header out of its OWN height. At a flat `100svh`
+ *     the last card centres 11px AFTER the pin has released. §5.
+ *  3. The offsets are LENGTHS from the start of `cover`, anchored to the pinned
+ *     window — NOT percentages of `cover`. Percentages force
+ *     `screens >= card count` (six screens for six cards, against
+ *     STICKY_SCREENS_MAX of 3) because `cover` includes a viewport of entry
+ *     travel and a tail that no card should be spending a step on. §11.
+ *  4. `scroll-padding-top` is part of the geometry. It is set in `globals.css`
+ *     for ANCHOR LINKS and has nothing to do with animation, and it moves both
+ *     the pin's start and the timeline's end. §4.
+ *
+ * `--coverflow-screens` is now a free dial — pace only, no longer coupled to
+ * the card count. Measured at 2, 2.5, 3, 3.6, 4 and 6.
+ */
+.coverflow {
+  /* Tall, NOT sticky. It carries the scroll and declares the timeline. */
+  position: relative;                       /* the arrows' targets sit inside it */
+  height: calc(var(--coverflow-screens) * 100svh);
+  view-timeline-name: --coverflow-track;
+  view-timeline-axis: block;
+  /* No `timeline-scope`: the cards are descendants, so the name already
+     reaches them. Measured identical with and without, over 1,100 samples. */
+
+  /* Where the pin begins, in px from the start of `cover`, and how long it is. */
+  --cf-pin-start: calc(100svh - var(--header-height, 0px));
+  --cf-pin-len: calc(
+    var(--coverflow-screens) * 100svh - 100svh + var(--header-height, 0px)
+  );
+  --cf-step: calc(var(--cf-pin-len) / (var(--coverflow-count) + 1));
+}
+
+.coverflow-stage {
+  position: sticky;
+  top: var(--header-height, 0px);
+  height: calc(100svh - var(--header-height, 0px));
+}
+
+.coverflow-card {
+  animation: coverflow-pass linear both;
+  animation-timeline: --coverflow-track;
+  animation-range:
+    cover calc(var(--cf-pin-start) + var(--i) * var(--cf-step))
+    cover calc(var(--cf-pin-start) + (var(--i) + 2) * var(--cf-step));
+  /* Centred at `pin-start + (i + 1) * step`. Card 0's window opens exactly
+     where the stage locks; the last card's closes exactly where it lets go. */
+}
+
+/* An arrow's target. Zero-size, absolutely positioned in the wrapper. */
+.coverflow-target {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 0;
+  top: calc((var(--i) + 1) * var(--cf-step));
+}
+```
+
+`--coverflow-screens` and `--coverflow-count` go on the wrapper and inherit to the cards and the targets;
+`--i` is per element. **`--coverflow-screens` must be > 1** — at exactly 1 the pinned window collapses to
+`scroll-padding-top` (77px, an 11px step) and with no script to 0. Two is the practical floor.
+
+## 11.8 What §11 does not settle
+
+- **Whether 268px per card reads well.** That is a number, not a verdict, and nothing here judges it. The
+  arc comparison against the card stack (536px vs ~700px) is the closest this probe gets, and it is a
+  comparison of scroll distances, not of how either one feels.
+- **Everything in §10 still stands** — Lenis, real content, reduced motion, the no-`@supports` fallback,
+  arrows inside the sticky stage, and non-Chromium browsers are all still untested.
+- **The header band's height.** §11.4's "two screens comes in shorter than today" assumes only the wrapper;
+  Task 5 owns what sits above it, and the density rig is what settles the chapter.
+- **Fractional `screens` in `lib/motion.ts`.** It works in CSS. Whether `COVERFLOW.screens` should be
+  allowed to be fractional — and what `expect(COVERFLOW.screens).toBeLessThanOrEqual(STICKY_SCREENS_MAX)`
+  should then assert — is a decision for Task 2, not a measurement.
