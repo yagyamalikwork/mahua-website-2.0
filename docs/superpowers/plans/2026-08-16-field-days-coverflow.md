@@ -78,7 +78,9 @@ consequences run through this plan:
 1. **Every card needs its own solved `ScrimStrength`.** Six photographs, six exposures, six figures — each
    raised until the *worst single pixel* under the type clears its floor, and each with its own run in
    `scripts/check_contrast_over_photos.mjs`. That rig's `RUNS` table is hand-written; it discovers nothing.
-   A card absent from it is a card nobody has checked.
+   A card absent from it is a card nobody has checked. The figures live in `components/sections/Coverflow.tsx`
+   keyed by `MediaId` — **not in `content/`**, which holds copy, and not in `lib/coverflow.ts`, which imports
+   nothing from `components/`.
 2. **A neighbour recedes by veil, not by opacity.** `COVERFLOW.sideDim` is gone. Dimming a card whose text
    sits on its own photograph lowers that text's contrast against the frame beneath it — the depth cue would
    be fighting the legibility floor. `COVERFLOW.sideVeil` adds scrim to a neighbour instead, which recedes
@@ -397,9 +399,11 @@ git commit -m "feat: the coverflow's arithmetic, where a test can reach it"
 
 **Interfaces:**
 - Consumes: `coverflowTargetId` is not needed here.
-- Produces: `ExperienceCopy` gains `readonly mediaId: MediaId` (the branded union from `lib/media.ts`, the
-  same type `Chapter.media` already uses — **not** `string`, so a typo is a compile error rather than a
-  runtime throw). `ChapterKind` gains `"coverflow"`.
+- Produces: `ExperienceCopy` gains `readonly mediaId: MediaId` — the string-literal union from `lib/media.ts`
+  (`(typeof MANIFEST)[number]["id"]`; **not** a branded type, as an earlier draft of this line said, which
+  matters because a genuine brand would stop the test's structural cast type-checking). Use it rather than
+  `string` so a typo is a compile error instead of a `media()` throw at render. `ChapterKind` gains
+  `"coverflow"`.
 
 > **Read correction A at the top of this plan before starting.** Three of these six photographs are new to
 > the home page and are already used on `/mahua-vann`. That is a real trade and it goes in the review for the
@@ -459,18 +463,15 @@ export type ExperienceCopy = {
    * did not. See the plan's correction A.
    */
   readonly mediaId: MediaId;
-  /**
-   * The wash between this photograph and the cream type laid on it.
-   *
-   * Per activity, not per chapter, because six photographs are six exposures —
-   * the same reason `FullBleedQuote`'s scrim is per chapter and not global. Each
-   * figure is SOLVED against the rendered page's worst pixel under the type
-   * (plan Task 8), never chosen by eye: `components/ui/Scrim.tsx`'s own comment
-   * records what choosing by eye produced.
-   */
-  readonly scrim: ScrimStrength;
 };
 ```
+
+**The scrim does not go here.** A wash opacity is a rendering figure, not copy, and `content/` holds copy —
+the architecture rule. `FullBleedQuote`'s own scrims live outside content for the same reason (they are
+passed from `app/page.tsx`). The six figures live in `components/sections/Coverflow.tsx` as a
+`Record<MediaId, ScrimStrength>` keyed by photograph, since what a scrim answers to is the *exposure of a
+frame*, not the activity that happens to name it — Task 5 passes each card its own. `ScrimStrength` is
+imported from `components/ui/Scrim`, which a component may do and `lib/coverflow.ts` deliberately may not.
 
 `MediaId` comes from `@/lib/media` — `content/chapters.ts` already imports it for `Chapter.media`, so this is
 an established direction, not a new dependency.
@@ -526,9 +527,24 @@ In `content/chapters.test.ts`, add the floor:
 - [ ] **Step 4: Run the whole suite**
 
 Run: `npm test`
-Expected: PASS, and the new test now genuinely exercises a chapter. `tsc` (via `npm run build` in Task 8, or
-`npx tsc --noEmit` now) must also pass — `MIN_MEDIA` is `satisfies Record<ChapterKind, number>`, so omitting
-the floor is a compile error and that is deliberate.
+Expected: PASS, and the new test now genuinely exercises a chapter.
+
+> **`tsc --noEmit` CANNOT pass from here until Task 6, and that is by construction — not a defect to chase.**
+> Recorded 16 Aug 2026 by Task 3's implementer, after this step originally claimed it should pass.
+> `app/page.tsx` closes its `switch (kind)` with `const unhandled: never = kind;`, so the moment `"coverflow"`
+> joins `ChapterKind` that file stops type-checking with:
+>
+> ```
+> app/page.tsx(219,13): error TS2322: Type '"coverflow"' is not assignable to type 'never'.
+> ```
+>
+> That exhaustiveness check is doing exactly its job: a new chapter kind with no component is meant to be a
+> compile error rather than a blank patch of page. **Tasks 5 and 7 will both see this error and neither
+> should try to fix it** — Task 6 adds the case arm and closes it. Verify your own files instead by
+> type-checking them and their import graph under a tsconfig that excludes `app/page.tsx`.
+>
+> `MIN_MEDIA` is `satisfies Record<ChapterKind, number>`, so omitting the floor is a *separate* compile error,
+> and that one is yours.
 
 **Expect the rhythm test to still pass and check why.** `field-days`' neighbours are `forest` (a `plateGrid`)
 and `rooms` (a `plateGrid`) — both image-led — so the alternation rule is satisfied by its neighbours and
@@ -555,8 +571,10 @@ git commit -m "feat: each activity carries the photograph it names"
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `COVERFLOW` — `{ screens, sideScale, sideShiftPct, sideDim, cardMaxPx, stageGutterPx }`, and the
-  matching `--coverflow-*` custom properties on `<html>`.
+- Produces: `COVERFLOW` — `{ screens, sideScale, sideShiftPct, sideVeil, cardMaxPx, stageGutterPx }`, and the
+  matching `--coverflow-*` custom properties on `<html>`. (**`sideVeil`, never `sideDim`** — this line said
+  `sideDim` until 16 Aug 2026, stale against correction C and against this task's own Step 3 code. Corrected
+  by Task 4's implementer, who built the right one and reported the contradiction rather than picking one.)
 
 - [ ] **Step 1: Write the failing test**
 
@@ -684,8 +702,8 @@ git commit -m "feat: the coverflow's numbers, on the dial where they belong"
 
 **Interfaces:**
 - Consumes: `ExperienceCopy` (Task 3), `coverflowTargetId` and `coverflowNeighbours` (Task 2).
-- Produces: `CoverflowCard({ experience, index, count, chapterId })`, plus `export const CARD_SIZES: string`
-  and `export const CARD_BOX: number` for `lib/sizes.test.ts`.
+- Produces: `CoverflowCard({ experience, scrim, index, count, chapterId, previousTitle, nextTitle })`, plus
+  `export const CARD_SIZES: string` and `export const CARD_BOX: number` for `lib/sizes.test.ts`.
 
 **Build it in flow first, deliberately.** A card that is correct as a plain block is a card whose failures in
 Task 6 are certainly the animation's. `RoomCard` was debugged the other way round and it cost a fix round.
@@ -701,27 +719,30 @@ const experience = {
   title: "Kohka Lake",
   body: "An hour at the water near Pench.",
   mediaId: "vann-kohka-lake",
-  scrim: { flat: 0.5 },
 } as const;
+
+// The card takes its wash as a prop; the six real figures live in
+// `Coverflow.tsx`, keyed by photograph. See correction C.
+const scrim = { flat: 0.5 } as const;
 
 describe("CoverflowCard", () => {
   it("carries its own index into CSS, because every card shares one stylesheet", () => {
     const { container } = render(
-      <CoverflowCard experience={experience} index={2} count={6} chapterId="field-days" />,
+      <CoverflowCard experience={experience} scrim={scrim} index={2} count={6} chapterId="field-days" />,
     );
     const card = container.querySelector("li");
     expect(card?.style.getPropertyValue("--i")).toBe("2");
   });
 
   it("shows the activity's own words", () => {
-    render(<CoverflowCard experience={experience} index={2} count={6} chapterId="field-days" />);
+    render(<CoverflowCard experience={experience} scrim={scrim} index={2} count={6} chapterId="field-days" />);
     expect(screen.getByRole("heading", { name: "Kohka Lake" })).toBeInTheDocument();
     expect(screen.getByText(/An hour at the water/)).toBeInTheDocument();
   });
 
   it("points its arrows at its neighbours, and wraps at the ends", () => {
     const { container } = render(
-      <CoverflowCard experience={experience} index={0} count={6} chapterId="field-days" />,
+      <CoverflowCard experience={experience} scrim={scrim} index={0} count={6} chapterId="field-days" />,
     );
     const links = [...container.querySelectorAll("a")].map((a) => a.getAttribute("href"));
     // Card 0's "previous" is card 5 — the loop the client asked for, and the
@@ -731,7 +752,7 @@ describe("CoverflowCard", () => {
   });
 
   it("names its arrows for a screen reader, since a chevron has no text", () => {
-    render(<CoverflowCard experience={experience} index={0} count={6} chapterId="field-days" />);
+    render(<CoverflowCard experience={experience} scrim={scrim} index={0} count={6} chapterId="field-days" />);
     // Six cards each carry a pair, so a bare "Previous" would be announced twelve
     // times with nothing to tell them apart.
     expect(screen.getByRole("link", { name: /previous/i })).toBeInTheDocument();
@@ -761,7 +782,7 @@ top) exists because the other way puts type through the bottom of the frame on a
     <Photo id={experience.mediaId} sizes={CARD_SIZES} box={CARD_BOX} className="h-full w-full object-cover" … />
   </div>
   {/* The solved wash. Per card, because six photographs are six exposures. */}
-  <div className="absolute inset-0 -z-10"><Scrim {...experience.scrim} /></div>
+  <div className="absolute inset-0 -z-10"><Scrim {...scrim} /></div>
   {/* The veil that recedes a neighbour — its opacity is keyframed, and it is a
       wash over the photograph, never an opacity on the card. Correction C. */}
   <div aria-hidden="true" className="coverflow-veil absolute inset-0 -z-10" />
@@ -782,10 +803,9 @@ Rules this must follow:
 - **All type is `var(--bg)` cream over the wash** — the same colour `FullBleedQuote` uses. `var(--text)` ink
   on a photograph is the failure that rule exists to prevent, and `--accent-text` gold is legible on cream
   and *only* on cream (non-negotiable #7).
-- **`experience.scrim` is a `ScrimStrength` in `content/home.ts`, one per activity, and Task 8 solves the six
-  figures against the rendered page.** Ship Task 5 with a deliberately heavy placeholder (`{ flat: 0.5 }`)
-  and a comment saying so — a *heavy* placeholder fails towards legible-but-muddy, which a reviewer sees,
-  rather than towards illegible, which they may not.
+- **`scrim` is a prop, and Task 8 solves the six real figures against the rendered page.** Ship Task 5 with a
+  deliberately heavy placeholder (`{ flat: 0.5 }`) and a comment saying so — a *heavy* placeholder fails
+  towards legible-but-muddy, which a reviewer sees, rather than towards illegible, which they may not.
 - **The card is `overflow-hidden` with `isolate`** so the photograph, the scrim and the veil compose inside
   it. Do **not** give `.coverflow` (the outer wrapper) a `z-index` — the tiger blends against the cream
   through it (correction B).
