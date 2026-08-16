@@ -1508,6 +1508,585 @@ body {
 }
 
 /*
+ * `04 · Days in the Field` as a coverflow — `components/sections/Coverflow.tsx`.
+ *
+ * Six activity cards pass through a stage that holds still while the visitor
+ * scrolls. **Every part of it is CSS**, which is the whole of the plan's budget
+ * claim: no `"use client"` anywhere in the section, and the arrows are plain
+ * `<a href="#…">` links at the scroll offsets where each card is centred, so the
+ * arrows and the scrolling drive one position rather than competing for one.
+ *
+ * ## The flow layout below comes FIRST, and it is the default
+ *
+ * Everything animated is inside `@supports (animation-timeline: view())`. That
+ * ordering is load-bearing rather than tidy: inside the effect the cards are
+ * `position: absolute`, so a browser without scroll-driven animations (Safari,
+ * Firefox without the flag) would otherwise render six cards in one pile with
+ * five invisible under the sixth. Written as an opt-in *over* a working list, an
+ * absent feature yields a plain, readable, scrollable list of six — this
+ * project's own rule that anything covering content must fail into not
+ * existing. Verified by commenting the `@supports` block's contents out and
+ * loading the page, not by reading this paragraph.
+ *
+ * The plan's own sketch for that gate was
+ * `@supports (animation-timeline: view()) and (not (prefers-reduced-motion:
+ * reduce))`, and it does not work: `@supports` tests declarations, so
+ * `(prefers-reduced-motion: reduce)` is simply an invalid declaration, `not`
+ * makes it TRUE, and the whole condition reduces to the feature query alone —
+ * silently, with reduced motion doing nothing. Reduced motion is therefore a
+ * nested `@media` at the foot of the block.
+ *
+ * ## Four measured facts, all from `docs/reviews/2026-08-16-coverflow/task-1-timeline-probe.md`
+ *
+ *  1. **The range stays on `cover`.** `exit` and `contain` read as the more
+ *     precise choice for a subject taller than the viewport, and both freeze the
+ *     carousel SOLID for its entire pin — measured at 4,480px and 4,440px of
+ *     flat — then complete in one frame. That is the rooms card stack's own
+ *     recorded defect, and §6 of the probe is where it actually lives: **not** in
+ *     `position: sticky`, whose control arm did not freeze. Nothing here licenses
+ *     simplifying `.room-slot` away either; `RoomCard` needs a phase that tracks
+ *     a card being *covered*, which only a non-sticky box supplies.
+ *  2. **The offsets are LENGTHS anchored to the pinned window, not percentages
+ *     of `cover`** (§11). Percentages force `screens ≥ card count` — six screens
+ *     for six cards, against `STICKY_SCREENS_MAX` of 3 — because `cover` includes
+ *     a whole viewport of entry travel and a tail that no card should spend a
+ *     step on. With lengths, `--coverflow-screens` is a free pace dial; the probe
+ *     measured it at 2, 2.5, 3, 3.6, 4 and 6 and every card centred inside the
+ *     pin at all six.
+ *  3. **The stage clears the header out of its OWN height** (§5). At a flat
+ *     `100svh` the last card reaches centre 11px AFTER the pin has released.
+ *  4. **No `timeline-scope`.** The cards are descendants of the declaring
+ *     element, so the name already reaches them; measured identical with and
+ *     without over 1,100 samples. A line that does nothing invites a later reader
+ *     to conclude it does something.
+ *
+ * And one that is not the probe's: **`scroll-padding-top` is part of the
+ * geometry.** It is set on `html` above for ANCHOR LINKS and has nothing to do
+ * with animation, and it moves both the pin's start and the timeline's end. One
+ * step is 139.6px at 1440x900 and two screens, not 150.
+ *
+ * ## The window is FOUR steps wide, and that is this file's own correction
+ *
+ * The probe's CSS gives each card a two-step window with the centre at its 50%
+ * mark. Read off the arithmetic, that means at the exact moment card *i* is
+ * centred, card *i±1* sits at 0%/100% of its own window — i.e. off-stage. The
+ * client asked for the opposite: *"the next and previous cards sit out of focus
+ * on left and right respectively behind the center card."* Four steps puts the
+ * neighbours at the 25% and 75% keyframes while the centre card is at 50%, which
+ * is exactly the five stops the effect needs, with the centre still at
+ * `pin-start + (i + 1) × step` — so the anchor targets, which the probe measured
+ * landing at 0.00px, are untouched. The cost is one step of spill at each end of
+ * the pin: the first card slides in as the stage locks and the last slides out as
+ * it lets go, which reads as the carousel arriving and leaving.
+ *
+ * **A card at the extremes is off-screen, not faded.** `--cf-off` is
+ * `50vw + 60%` of the card's own width, past the viewport edge, where
+ * `ChapterSurface`'s `overflow-x-clip` removes it. Nothing keyframes a card's
+ * `opacity`, ever: a card's type sits ON its own photograph, so fading the card
+ * fades the words against the frame beneath them. That is `COVERFLOW.sideVeil`'s
+ * whole reason for existing, and the veil below is where receding happens.
+ *
+ * ## Three things a future editor would break
+ *
+ * - **`animation-timeline` MUST come after the `animation` shorthand.** The
+ *   shorthand resets `animation-timeline` to `auto`, so reordering these two
+ *   lines silently detaches every card from the timeline and the carousel plays
+ *   itself once on page load.
+ * - **`.coverflow` must never be given a `z-index`.** It is `position: relative`
+ *   with `z-index: auto`, which is not a stacking context — and it has to stay
+ *   that way, because the tiger film in `.coverflow-footer` erases its own white
+ *   ground with `mix-blend-mode: darken` against the chapter's cream, and a
+ *   stacking context between the two is what breaks it (`DECISIONS.md` §14,
+ *   asserted as PIXELS by `scripts/check_films.mjs`). The same reasoning is why
+ *   the footer is a sibling of the stage rather than a child: `position: sticky`
+ *   *does* create a stacking context.
+ * - **The `z-index` and `pointer-events` stops at 37.4/37.6% and 62.4/62.6% are
+ *   tight pairs on purpose.** Both properties interpolate discretely, flipping at
+ *   the midpoint between two keyframes, so a lone stop at 37.5% would flip at
+ *   18.75% instead. The pairs put both flips at d = ±0.5 steps from centre, which
+ *   is exactly "this is the card nearest the middle" — and those intervals tile
+ *   the pin, so at every scroll position exactly one card paints on top and
+ *   exactly one card's arrows are hit-testable. Without the `pointer-events`
+ *   half there are twelve overlapping links resolved by paint order, which is
+ *   invisible to the eye and to a screenshot; `scripts/check_coverflow.mjs`
+ *   asserts it with `elementFromPoint`.
+ */
+
+.coverflow {
+  /* Tall and NOT sticky: it carries the reserved scroll and declares the
+     timeline. `relative` so the six zero-size scroll targets and the footer can
+     be positioned inside it — and `z-index: auto`, see above. */
+  position: relative;
+}
+
+/* In flow this is simply the list of cards. `position: sticky` and the absolute
+   children arrive in the `@supports` block. */
+.coverflow-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/*
+ * An arrow's target: a zero-size box, positioned in the WRAPPER rather than in
+ * the card. An anchor inside the sticky stage has no document offset that
+ * corresponds to the moment its card is centred — the naive placement lands with
+ * a slope of `−66 + 11·i` px, so a nudge tuned on card 3 is 33px out at both
+ * ends (probe §8).
+ *
+ * The `top` here is the FLOW fallback: card *i*'s share of a plain vertical
+ * list. The measured, timeline-derived offset is in the `@supports` block.
+ */
+.coverflow-target {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 0;
+  top: calc(var(--i) * 100% / var(--coverflow-count, 1));
+}
+
+.coverflow-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+}
+
+@supports (animation-timeline: view()) {
+  .coverflow {
+    height: calc(var(--coverflow-screens) * 100svh);
+    view-timeline-name: --coverflow-track;
+    view-timeline-axis: block;
+
+    /* Where the pin begins, in px from the start of `cover`, and how long it is.
+       Both were read back off `getComputedStyle` in the probe as resolved px:
+       card 0's window opens at exactly the offset where the stage locks, and the
+       last card's closes at exactly the offset where it lets go. */
+    --cf-pin-start: calc(100svh - var(--header-height, 0px));
+    --cf-pin-len: calc(var(--coverflow-screens) * 100svh - 100svh + var(--header-height, 0px));
+    --cf-step: calc(var(--cf-pin-len) / (var(--coverflow-count) + 1));
+    /* Past the viewport edge, where `ChapterSurface`'s `overflow-x-clip` removes
+       it. The `%` resolves against the CARD's own width, because a custom
+       property is substituted where it is used, not where it is declared. */
+    --cf-off: calc(50vw + 60%);
+  }
+
+  .coverflow-stage {
+    position: sticky;
+    top: var(--header-height, 0px);
+    /* The header comes out of the stage's own height — fact 3 above. */
+    height: calc(100svh - var(--header-height, 0px));
+    /*
+     * Above the tiger, and only that. `position: sticky` already makes this a
+     * stacking context, so this changes nothing about the stage itself — it
+     * changes which of two siblings paints second. Measured: without it the
+     * footer's box answered `elementFromPoint` at the last card's own arrows for
+     * the final ten sampled positions of the pin at 1440x900, and the film sits
+     * over a card's arrows at 390 whatever width its own box is.
+     *
+     * **Safe for the film's blend, and worth knowing why.** `mix-blend-mode`
+     * composites against everything painted *below* it inside its own stacking
+     * context, which for the tiger is the root — `.coverflow` is
+     * `position: relative; z-index: auto` and must stay that way. Ordering the
+     * stage AFTER the film takes the stage out of the film's backdrop
+     * altogether, so the film blends against the chapter's bare cream, which is
+     * what `scripts/check_films.mjs` samples in pixels.
+     */
+    z-index: 1;
+    /*
+     * **The stage is transparent to the pointer, and the arrows opt back in.**
+     * `pointer-events` inherits, and a descendant that says `auto` is hit-tested
+     * even under an ancestor that says `none` — which is the whole arrangement
+     * here: the only interactive things on this stage are the twelve arrows, and
+     * which of them answer is exactly what `@keyframes coverflow-arrows`
+     * controls.
+     *
+     * It is here because of the line above it. Ordering the stage over the
+     * footer also put an 823px-tall `<ul>` over the tiger, and
+     * `check_films.mjs` caught it at once: hovering the film hit the stage
+     * instead and the replay the client asked for on 6 Aug stopped working
+     * (10s → 10s, twice). A card carries no interactive content of its own, so
+     * standing the whole stage down costs only text selection on a card that is
+     * sliding past — and buys back the guarantee that nothing in this chapter
+     * can swallow a pointer it was not built to receive.
+     */
+    pointer-events: none;
+  }
+
+  .coverflow-card {
+    /* `left: 0; right: 0` with a definite inline `width` and auto side margins
+       is the centring; `top: 50%` plus the `-50%` carried in every keyframe's
+       `translate` is the vertical half. The keyframes therefore only ever say
+       where a card sits RELATIVE to the middle of the stage. */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-inline: auto;
+    z-index: 1;
+    transform: translate(0, -50%);
+
+    /* Four steps wide, centred at `pin-start + (i + 1) × step` — see the note
+       above. Named so the veil and the arrows inside this card animate over the
+       identical window without three copies of the arithmetic. */
+    --cf-from: calc(var(--cf-pin-start) + (var(--i) - 1) * var(--cf-step));
+    --cf-to: calc(var(--cf-pin-start) + (var(--i) + 3) * var(--cf-step));
+
+    animation: coverflow-pass linear both;
+    /* AFTER the shorthand, never before it. See the note above. Watched: with
+       these two lines swapped, `check_coverflow.mjs` fails at every one of 96
+       sampled positions and no card is ever centred at all. */
+    animation-timeline: --coverflow-track;
+    animation-range: cover var(--cf-from) cover var(--cf-to);
+  }
+
+  /*
+   * The recede. Scrim over the neighbour's photograph, never opacity on the card
+   * — `COVERFLOW.sideVeil` in `lib/motion.ts` carries the full reasoning. More
+   * wash recedes the photograph AND raises cream type's contrast against it,
+   * where fading the card would have put the depth cue in a fight with the
+   * legibility floor.
+   *
+   * The element is server-rendered with an inline `opacity: 0`, which is what
+   * keeps a card unveiled in flow, with no stylesheet, and under reduced motion.
+   * A CSS animation outranks an inline style, so this wins wherever it applies.
+   */
+  .coverflow-veil {
+    animation: coverflow-veil linear both;
+    animation-timeline: --coverflow-track;
+    animation-range: cover var(--cf-from) cover var(--cf-to);
+  }
+
+  .coverflow-arrows {
+    animation: coverflow-arrows linear both;
+    animation-timeline: --coverflow-track;
+    animation-range: cover var(--cf-from) cover var(--cf-to);
+  }
+
+  /*
+   * The first and last card's arrows stay live to the ends of the pin.
+   *
+   * Every card's `pointer-events` window is the middle half of its own four-step
+   * arc — d ∈ [−0.5, +0.5] steps either side of its centred moment — and those
+   * windows tile the pin between card 0's centred moment and card 5's, but not
+   * the half step before the first or after the last. Measured before this rule
+   * existed: the first four and the last ten sampled positions inside the pin at
+   * 1440x900 had no reachable arrow anywhere on the page, which is a visitor
+   * pressing "next" on the only card on the stage and nothing happening. Both
+   * ends get an open-ended window instead, and the six windows still never
+   * overlap.
+   *
+   * `:first-child` / `:last-child` rather than an attribute from the component
+   * — deliberately unlike `.room-card[data-room-card-last]` above, where the
+   * `<ol>` interleaves slots and cards and a positional selector would have been
+   * standing in for a coincidence. This `<ul>` holds nothing but cards. And it
+   * is guarded rather than assumed: `scripts/check_coverflow.mjs` fails if the
+   * card in charge is ever anything other than exactly one, advancing 0 → 5, at
+   * every position inside the pin.
+   */
+  .coverflow-card:first-child .coverflow-arrows {
+    animation-name: coverflow-arrows-first;
+  }
+
+  .coverflow-card:last-child .coverflow-arrows {
+    animation-name: coverflow-arrows-last;
+  }
+
+  /*
+   * The first and last card also HOLD at centre outside the carousel's own run,
+   * and this one is a density repair with a measurement behind it.
+   *
+   * A sticky stage is on screen for its own height of scroll before it locks and
+   * again after it lets go — 823px at each end at 1440x900 — and under the plain
+   * schedule the deck is parked off-stage through both. Measured on the build
+   * that had it: `field-days` read **74.3% mean / 87.1% worst** empty, and four
+   * of the page's five emptiest screens were inside this chapter, three of them
+   * in the tail where the stage rides out carrying nothing at all. That is
+   * paid-for empty scroll, which is the exact thing non-negotiable #9 forbids.
+   *
+   * So card 0 is simply *there*, centred, as the chapter arrives, and starts
+   * travelling when the carousel does; and card 5 arrives at centre and stays
+   * there while the stage rides out. Neither one changes the carousel between
+   * them: both still reach centre at `pin-start + (i + 1) × step`, which is what
+   * the anchor targets are placed from.
+   *
+   * `check_coverflow.mjs`'s "at most one card within 8px of centre" still holds
+   * at every position, because the card next to a holding one is off-stage for
+   * the whole hold.
+   */
+  .coverflow-card:first-child {
+    animation-name: coverflow-pass-first;
+  }
+
+  .coverflow-card:last-child {
+    animation-name: coverflow-pass-last;
+  }
+
+  .coverflow-card:first-child .coverflow-veil {
+    animation-name: coverflow-veil-first;
+  }
+
+  .coverflow-card:last-child .coverflow-veil {
+    animation-name: coverflow-veil-last;
+  }
+
+  /* The measured placement. `top: (i + 1) × step` is the probe's own simplified
+     form (§11.5) — the `scroll-padding-top` and `100svh` terms in the long form
+     cancel exactly — and it landed every card at 0.00px off centre at 1440x900,
+     1440x760, 1280x1024, 1920x1080 and 390x844. */
+  .coverflow-target {
+    top: calc((var(--i) + 1) * var(--cf-step));
+  }
+
+  /*
+   * The tiger, at the wrapper's foot: absolute, so it costs no height (in flow
+   * this same film took `field-days` from 41.5% to 44.4% mean empty), and a
+   * sibling of the stage rather than a child, so it has no sticky ancestor to
+   * blend against.
+   *
+   * `right: 0` with no `left`, so the box is only as wide as the drawing. It was
+   * `inset-inline: 0` for one build, and a full-width invisible band at the foot
+   * of the wrapper is exactly the thing that swallows clicks it was never meant
+   * to see: `elementFromPoint` at the last card's own arrows returned
+   * `div.coverflow-footer` for the final ten sampled positions of the pin at
+   * 1440x900. The stage's `z-index` above is the other half of that repair, and
+   * the two are kept separate on purpose — one bounds the box, the other orders
+   * it.
+   */
+  .coverflow-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-top: 0;
+  }
+
+  @keyframes coverflow-pass {
+    0% {
+      transform: translate(var(--cf-off), -50%) scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+    25% {
+      transform: translate(var(--coverflow-side-shift), -50%) scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+    37.4% {
+      z-index: 1;
+    }
+    37.6% {
+      z-index: 2;
+    }
+    50% {
+      transform: translate(0, -50%) scale(1);
+      z-index: 2;
+    }
+    62.4% {
+      z-index: 2;
+    }
+    62.6% {
+      z-index: 1;
+    }
+    75% {
+      transform: translate(calc(-1 * var(--coverflow-side-shift)), -50%)
+        scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+    100% {
+      transform: translate(calc(-1 * var(--cf-off)), -50%) scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+  }
+
+  /* See the hold note above. Same five stops, with one end flattened onto
+     centre. */
+  @keyframes coverflow-pass-first {
+    0%,
+    50% {
+      transform: translate(0, -50%) scale(1);
+      z-index: 2;
+    }
+    62.4% {
+      z-index: 2;
+    }
+    62.6% {
+      z-index: 1;
+    }
+    75% {
+      transform: translate(calc(-1 * var(--coverflow-side-shift)), -50%)
+        scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+    100% {
+      transform: translate(calc(-1 * var(--cf-off)), -50%) scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+  }
+
+  @keyframes coverflow-pass-last {
+    0% {
+      transform: translate(var(--cf-off), -50%) scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+    25% {
+      transform: translate(var(--coverflow-side-shift), -50%) scale(var(--coverflow-side-scale));
+      z-index: 1;
+    }
+    37.4% {
+      z-index: 1;
+    }
+    37.6% {
+      z-index: 2;
+    }
+    50%,
+    100% {
+      transform: translate(0, -50%) scale(1);
+      z-index: 2;
+    }
+  }
+
+  @keyframes coverflow-veil {
+    0%,
+    25% {
+      opacity: var(--coverflow-side-veil);
+    }
+    50% {
+      opacity: 0;
+    }
+    75%,
+    100% {
+      opacity: var(--coverflow-side-veil);
+    }
+  }
+
+  /* The two holding cards are at CENTRE through their hold, so they must be
+     unveiled through it. Without these a held card sits dead centre wearing a
+     neighbour's wash, which is the depth cue pointing at the wrong card. */
+  @keyframes coverflow-veil-first {
+    0%,
+    50% {
+      opacity: 0;
+    }
+    75%,
+    100% {
+      opacity: var(--coverflow-side-veil);
+    }
+  }
+
+  @keyframes coverflow-veil-last {
+    0%,
+    25% {
+      opacity: var(--coverflow-side-veil);
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes coverflow-arrows {
+    0%,
+    37.4% {
+      pointer-events: none;
+    }
+    37.6%,
+    62.4% {
+      pointer-events: auto;
+    }
+    62.6%,
+    100% {
+      pointer-events: none;
+    }
+  }
+
+  /* See the `:first-child` / `:last-child` note above. Same flip points, one end
+     opened out to the edge of the card's own window. */
+  @keyframes coverflow-arrows-first {
+    0%,
+    62.4% {
+      pointer-events: auto;
+    }
+    62.6%,
+    100% {
+      pointer-events: none;
+    }
+  }
+
+  @keyframes coverflow-arrows-last {
+    0%,
+    37.4% {
+      pointer-events: none;
+    }
+    37.6%,
+    100% {
+      pointer-events: auto;
+    }
+  }
+
+  /*
+   * Reduced motion collapses the PIN as well as the movement — deliberately
+   * unlike `.room-card` above, which keeps its stack and drops only the recede.
+   * The two are not alike: a card stack's scroll is the visitor's own movement,
+   * 1:1, so there is something left when the recede goes. This pin reserves
+   * scroll that only means anything because cards travel through it, which is
+   * `.sticky-scene`'s case — with nothing moving it is two screens of nothing.
+   * What is left is the same plain list the `@supports` fallback gives.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .coverflow {
+      height: auto;
+      view-timeline-name: none;
+    }
+
+    .coverflow-stage {
+      position: static;
+      height: auto;
+      /* Nothing is stacked or moving here, so nothing needs standing down. */
+      pointer-events: auto;
+    }
+
+    .coverflow-card {
+      position: static;
+      top: auto;
+      z-index: auto;
+      transform: none;
+    }
+
+    /*
+     * **Every selector that names an animation above is repeated here.**
+     * `animation: none` on the bare `.coverflow-card` is (0,1,0) and loses to
+     * `.coverflow-card:first-child`'s (0,2,0), so the first and last card kept
+     * their `animation-name` under reduced motion — measured, not theorised:
+     * `getComputedStyle(card).animationName` read `coverflow-pass-first` with the
+     * setting on. It happened to be harmless, because the shorthand had already
+     * reset the duration to 0s and the timeline to `auto`, so nothing ran. That
+     * is a defect resting on an accident, and it is the exact shape
+     * `docs/DECISIONS.md` §2 catalogues — the hover-zoom's own reduced-motion
+     * rule shipped the full zoom to visitors who had asked for none by losing
+     * this same contest. Repeat the selectors and win on document order.
+     */
+    .coverflow-card,
+    .coverflow-card:first-child,
+    .coverflow-card:last-child,
+    .coverflow-veil,
+    .coverflow-arrows,
+    .coverflow-card:first-child .coverflow-veil,
+    .coverflow-card:last-child .coverflow-veil,
+    .coverflow-card:first-child .coverflow-arrows,
+    .coverflow-card:last-child .coverflow-arrows {
+      animation: none;
+    }
+
+    .coverflow-target {
+      top: calc(var(--i) * 100% / var(--coverflow-count, 1));
+    }
+
+    .coverflow-footer {
+      position: static;
+      margin-top: 2.5rem;
+    }
+  }
+}
+
+/*
  * The homepage's slow hover zoom — client request, 12 Aug 2026.
  *
  * The frame never moves. `ImageReveal` is already `position: relative` and

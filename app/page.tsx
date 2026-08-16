@@ -2,6 +2,7 @@ import { PinnedCollage } from "@/components/motion/PinnedCollage";
 import { HangingLantern } from "@/components/signature/lantern/HangingLantern";
 import { SignatureFilm } from "@/components/signature/SignatureFilm";
 import { ChapterIntro } from "@/components/sections/ChapterIntro";
+import { Coverflow } from "@/components/sections/Coverflow";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
@@ -57,7 +58,14 @@ const CREAM_KINDS: readonly ChapterKind[] = [
   "chapterIntro",
   "pinnedCollage",
   "plateGrid",
+  // `coverflow` replaced `splitFeature` on `field-days` (16 Aug 2026) and has to
+  // be counted here for the same reason `pinnedCollage` is counted among the
+  // intros: this list is what alternates the two creams, so a chapter dropping
+  // out of it would flip the surface of every cream chapter BELOW it as a side
+  // effect. `splitFeature` stays until the plan's Task 8 retires the component;
+  // nothing routes to it now, so the count is unchanged either way.
   "splitFeature",
+  "coverflow",
   "testimonials",
 ];
 
@@ -193,6 +201,42 @@ function renderChapter(chapter: Chapter, at: Position) {
            * client supplied this film. `components/signature/InkTiger.tsx` and its
            * artwork are still here, tested, and one line from returning — see
            * `docs/DECISIONS.md` for the trade that was made and what it cost.
+           */
+          footer={
+            chapter.id === "field-days" ? (
+              /* Sized here rather than in the component, because how large the
+                 tiger should be is a question about this chapter's column and not
+                 about the film. 420px is sharp to DPR 2 against an 810px source. */
+              <SignatureFilm
+                src="/media/tiger-film.mp4"
+                poster="/media/tiger-film-poster.webp"
+                width={810}
+                height={1080}
+                className="block h-auto w-[240px] sm:w-[280px] lg:w-[300px]"
+              />
+            ) : undefined
+          }
+        />
+      );
+    case "coverflow":
+      return (
+        <Coverflow
+          key={chapter.id}
+          chapter={chapter}
+          surface={at.surface}
+          /*
+           * The same tiger, on the same terms as the `splitFeature` case above —
+           * this arm exists because `field-days` changed shape on 16 Aug 2026,
+           * not because the film did.
+           *
+           * **Where it hangs is load-bearing and the component owns it.** The
+           * film erases its own white ground with `mix-blend-mode: darken`
+           * against the chapter's cream, and `position: sticky` creates a
+           * stacking context — so inside `Coverflow`'s sticky stage the white
+           * box comes back (`DECISIONS.md` §14, asserted as pixels by
+           * `scripts/check_films.mjs`). `Coverflow` hangs this slot off its own
+           * non-sticky wrapper for exactly that reason. Nothing about that is
+           * visible from here, which is why it is written down in both places.
            */
           footer={
             chapter.id === "field-days" ? (
