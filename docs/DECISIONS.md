@@ -1910,11 +1910,17 @@ Every intermediate figure below is **stale and must not be quoted as current.**
 | + `cardMaxPx` swept to 900 | 48.4% | 61.5% | 64.6% |
 | + flank ghosts | 46.2% | **52.2%** | 64.6% |
 | + tiger in its own band (rejected) | 48.6% | 62.3% | **77.1%** |
-| **shipped** — tiger into the header band | **48.1%** | **55.0%** | **67.0%** |
+| tiger into the header band | 48.1% | 55.0% | 67.0% |
+| + the client's six re-exports, collage removed (17 Aug) | 52.0% | 66.2% | 82.9% |
+| + header band recomposed | 47.1% | 55.0% | 77.8% |
+| **shipped** — `cardMaxPx` swept to 1217 | **26.4%** | **41.0%** | **71.4%** |
 
-**The worst screen beats what it replaced (55.0% against 57.9%) and the mean does not (48.1% against
-43.9%).** `passesWorst` is the field non-negotiable #8 binds on; `passesMean` is informative only. It is
-still over the 45% ceiling and **cannot reach it on today's photographs** — see §20.6.
+**It passes. 41.0% against the 45% ceiling, `passesWorst` TRUE, four points clear, zero screens over
+budget** — against 43.9% / 57.9% for the three bands it replaced. Page mean 35.6%.
+
+**It could not reach 45% at any card size on 16 August and does on 17 August, because the photographs
+changed, not the code.** The client supplied all six at 1344 × 685 (§20.6). That is the single most useful
+thing to carry out of this chapter: the lever was never in the CSS.
 
 Four things decided those rows:
 
@@ -1924,6 +1930,14 @@ Four things decided those rows:
   3.34 screens and the document 16,686px at every arm from 560 to 1120.
 - **`screens` cannot touch the worst screen and makes the chapter's mean *worse*** — every screen it adds is
   a pin screen. Measured at 2 / 2.5 / 3: mean 48.4 / 48.9 / 49.3%, worst 61.5% at all three.
+- **The card sweep, re-run on the new files, is where the ceiling was finally cleared**: 900 / 1000 / 1100 /
+  1217 → worst **55.0 / 51.2 / 46.5 / 41.0%**. Roughly seven points per 100px of card, and it still costs no
+  scroll at all.
+- **Removing the collage made the chapter WORSE before it made it better** (52.0% / 66.2%, and the page's
+  worst screen 82.9%, the emptiest on the site). Deleting four photographs left the header band's *height*
+  and took its imagery. Recomposing that band — 7/5 instead of 5/7, wider prose, 56px of cream out — was
+  worth **−11.2 points** off the chapter's worst before the card sweep ran. **A removal is not free: it
+  leaves a hole the shape of what it removed.**
 - **The flank ghosts are worth 9.3 points and are free.** The worst screen was the first and last card's
   centre-hold, where one card sat alone because there is no card −1 or card 6. There is: the client asked
   for a loop, and rendering the wrap-around neighbours as `aria-hidden` ghosts at `--i: -1` and `6` fills
@@ -1970,22 +1984,41 @@ fades the words against the frame beneath them, so the depth cue would fight the
 scrim recedes the photograph and *raises* cream type's contrast. `COVERFLOW.sideDim` was retired before it
 shipped and `lib/motion.test.ts` asserts the lever cannot grow back.
 
-### 20.6 What is owed, and what it unlocks
+### 20.6 The photographs were the lever, and the client supplied them — 17 Aug 2026
 
-**45% is unreachable on today's files.** A 2.289:1 panorama in a 16:9 box is drawn at **1.288 × the card
-width**, and four of the six card photographs are 1163px — so at a 900px card the browser is already using
-every pixel they have, measured at exactly 1.00. The ceiling is 903px. Reaching 45% needs a ~1,090px card,
-which needs ~1,450px files (~2,900px to also serve DPR 2). `docs/OWED-ORIGINALS.md` is the consolidated ask
-and supersedes the partial ones in §5 and §19.
+**Everything this section said until 17 August was true of files that no longer exist**, and it is worth
+reading as history rather than deleting, because the shape of the constraint is the lesson.
 
-`vann-potters-village` is a **different** ask: it measures 1.00:1 unwashed, the theoretical floor, because
-white-glazed pots sit exactly where the body copy lands. That frame wants a different crop, not a wider file.
+**What was true on 16 August.** Four of the six card photographs were **1163px, 2.289:1 crops** made for
+`/mahua-vann`. `object-fit: cover` in a 16:9 box draws a photograph wider than its box by
+`imageAspect / CARD_BOX`, so those four were drawn at **1.288 × the card's width** and ran out at a **903px**
+card. 45% needed ~1,090px. `CARD_BOX` was 16:9 for the same reason — anything taller cropped them past the
+25% bound — so **no portrait or square card was available**, and the chapter could not meet non-negotiable
+#8 at any setting.
 
-`CARD_BOX` is 16/9 for the same reason and was solved, not chosen: a `cover` box keeps `boxAspect /
-imageAspect` of a photograph's width, so the 25% crop bound requires at least 1.7194. 16/9 clears it by 3.4%
-at 22.45% cropped; 3:2 would crop 34.6% and 4:5 would crop 65.1%. **No portrait or square card is available
-while those four frames are 2.29:1 crops** — which is why the ask above prefers uncropped originals over
-merely wider ones.
+**What the client sent.** All six re-exported at **1344 × 685 (1.962:1)** — wider *and* taller, from the
+original scenes rather than the property page's crops. Three of the six are different photographs as well as
+bigger ones, and two of those are upgrades: the safari card gained a frame with the vehicle and guests in
+it, and Kohka Lake became an actual lake rather than the lodge's swimming pool (§20.9).
+
+**What that unlocked, in one line each:**
+
+- The draw factor fell from 1.288 to **1.1036**, so the ceiling rose from 903px to **1217px** — past the
+  ~1,090px 45% needed. Shipped at 1217, measured 41.0% worst.
+- The minimum box fell from 1.7194 to **1.4715**. 16:9 now crops **9.4%**, not 22.45%, and a 3:2 or squarer
+  card is available. `CARD_BOX` stays 16:9 on measurement, not inertia: at *every* box's own ceiling the
+  card is 685px tall — the file's height — so a wider box buys width only, and at 390px the free space
+  inside the card is 23px at 16:9 against 5px at 1.962, in an `overflow: hidden` box.
+- **`check_image_resolution.mjs` does not guard this**, which is why `CoverflowCard.test.tsx` now does. A
+  photograph already served its widest tier is classed `atLibraryCeiling` — a class that rig *reports* and
+  does not enforce — so raising `cardMaxPx` past 1217 fails silently: green rig, green build, six visibly
+  soft cards on the one screen the client tests on.
+
+**Still owed.** `vann-potters-village` measures **1.03:1 unwashed** even after the re-crop — the glaze
+highlights moved but still land where the body copy does, and it carries one of the heaviest washes on the
+page for it. That frame wants a **different photograph from the same shoot**, not a bigger file.
+`docs/OWED-ORIGINALS.md` carries it, along with the DPR-2 half of this group (1344px serves a 1344px card at
+1.00 on an ordinary screen and 0.50 on a Retina one).
 
 ### 20.7 Two defects the fixed sample widths hid, again
 
