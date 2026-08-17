@@ -1,7 +1,11 @@
 # `04 · Days in the Field` as a coverflow carousel — design
 
 **Date:** 16 August 2026
-**Status:** **APPROVED by the client, NOT YET BUILT.** Agreed in conversation; no code written.
+**Status:** **BUILT AND SHIPPED, 16-18 August 2026 — and this document is HISTORY, not the current design.**
+Three of its decisions were reversed by the client after he saw them built (§4's loop, §5's card shape, and
+the photograph pairing in §1's table). **Read `docs/DECISIONS.md` §20 for what the page actually does**, and
+`docs/reviews/2026-08-16-coverflow/` for the evidence. Every reversal is marked in place below; nothing here
+should be rebuilt from this file without checking §20 first.
 **Scope:** the `field-days` chapter on the home page only. Nothing else.
 
 ---
@@ -28,8 +32,13 @@ chapter, above the stage, carrying its two written beats. The chapter goes from 
 
 | | |
 |---|---|
-| photographs (`content/chapters.ts`) | `guide-sunrise`, `forest-boardwalk-daylight`, `tiger-crossing-track`, `forest-trail-canopy`, `hammocks-shade`, `pool-daylight-forest` |
+| photographs, **as at 16 Aug and since replaced** | `guide-sunrise`, `forest-boardwalk-daylight`, `tiger-crossing-track`, `forest-trail-canopy`, `hammocks-shade`, `pool-daylight-forest` |
 | activities (`content/home.ts` → `experiences`) | Jungle safari · Bird watching · Kohka Lake · The river walk · Pachdhar, the potters' village · Walks and cycling |
+
+**The photographs above are not the ones on the page.** On 17 Aug the client supplied all six re-exported at
+1344 × 685 from wider originals, and three are different frames as well as bigger ones. The collage of four
+that this spec keeps "above the stage" was removed entirely on his ruling the same day. `content/home.ts` is
+the live pairing; `docs/OWED-ORIGINALS.md` records what was delivered.
 
 Today it renders through `components/sections/SplitFeature.tsx` as three bands.
 
@@ -63,7 +72,8 @@ moves.
   just keep it 01 to 06 … if the person wants to see the 01 card again and currently sits on card 06, they
   will have to scroll back."* The ghosts are gone and the arrows no longer wrap. **Do not rebuild it from
   this spec.** `DECISIONS.md` §20.4 and `docs/reviews/2026-08-16-coverflow/linear.md`.
-  No script, and arrows and scrolling drive one mechanism rather than competing for control of a position.
+- **What survived from that bullet:** no script, and the arrows and the scroll still drive one mechanism
+  rather than competing for control of a position. Only the wraparound went.
 
 ## 5. Decisions already taken
 
