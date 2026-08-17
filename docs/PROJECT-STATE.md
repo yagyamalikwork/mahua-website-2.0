@@ -3,59 +3,70 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
-## `04 · Days in the Field` is a coverflow — COMPLETE, and it does not meet non-negotiable #8 — 16-17 Aug 2026
+## `04 · Days in the Field` is a coverflow, and it passes non-negotiable #8 — 16-17 Aug 2026
 
 Client: *"looks flat even though it has beautiful images."* Six activity cards on a pinned stage, advancing
 on the visitor's own scroll, each a photograph with its own words laid on it, the neighbours behind and
-veiled. **Zero added JavaScript** — 168.2 KB brotli, delta 0. `SplitFeature` retired. 482 tests.
+veiled, the loop visible in the scroll. **Zero added JavaScript** — 168.2 KB brotli, delta 0. `SplitFeature`
+retired. **477 tests.**
 
 Evidence: [`reviews/2026-08-16-coverflow/README.md`](reviews/2026-08-16-coverflow/README.md).
 Reasoning: [`DECISIONS.md` §20](DECISIONS.md). **Read §20.4 before quoting any density figure for this
-chapter — that table has seven rows and only the last is current.**
+chapter — that table has nine rows and only the last is current.**
 
-### The number, plainly
+### The number
 
-**48.1% mean / 55.0% worst**, against **43.9% / 57.9%** for the three bands it replaced, and a 45% ceiling.
-The worst screen improved and the mean did not; `passesWorst` is the field #8 binds on. So on the rule that
-binds it is better than what was there, on the rule that does not it is worse, and it is over the ceiling
-either way.
+**26.4% mean / 41.0% worst**, against 43.9% / 57.9% for the three bands it replaced and a 45% ceiling.
+`passesWorst` **true**, four points clear, zero screens over budget. Page mean 35.6%.
 
-**It cannot reach 45% on today's photographs, and that is arithmetic rather than effort.** The card's own
-width is the only lever — `screens` cannot touch the worst screen at all, and no neighbour dial reaches it.
-A 2.289:1 panorama in a 16:9 box is drawn at 1.288× the card's width, and four of the six card frames are
-1163px files, so at the shipped 900px card the browser is already using every pixel they have. The ceiling
-is 903px; 45% needs ~1,090px. **`cardMaxPx: 1120` was one of the swept arms and measures 36.7% / 42.3%** —
-it needs only the files.
+**It could not reach 45% at any card size on 16 August and does on 17 August, because the photographs
+changed rather than the code.** That is the single most useful thing to carry out of this work. Four of the
+six card frames had been 1163px 2.289:1 crops made for `/mahua-vann`, drawn at 1.288× the card's width and
+running out at a 903px card when 45% needed ~1,090px. The client supplied all six at **1344 × 685**, the
+draw factor fell to 1.1036, the ceiling rose to **1217px**, and the same sweep that had bottomed out at
+55.0% read **41.0%**.
 
-### What the client owes, and what is his to rule on
+### What the client ruled, and what he sent
 
-- **[`OWED-ORIGINALS.md`](OWED-ORIGINALS.md)** — one consolidated list of eleven photographs, superseding the
-  partial asks in `DECISIONS.md` §5 and §19. Group 1 is the one with a decision attached. **Uncropped
-  originals are worth more than wider crops**: those four frames are 2.29:1 crops made for `/mahua-vann`,
-  and that ratio is the only reason the card must be 16:9.
-- **`vann-potters-village` wants a different crop, not a wider file** — 1.00:1 unwashed, the theoretical
-  floor, because white-glazed pots sit exactly where the body copy lands.
-- **The tiger film now opens the chapter rather than closing it.** Non-negotiable #5 is about behaviour —
-  arrive, perform once, doze, replay on hover — and all of that is intact, but the position changed and he
-  has not ruled on it. The alternative measured 77.1% page-worst.
-- **The four photographs he approved on 16 Aug are in**, and there are now four Vann frames shared with
-  `/mahua-vann` rather than three: `vann-safari` replaced `tiger-crossing-track` on the safari card, because
-  at 541px that was the single smallest file in the set and it blocked any widening at all. The tiger frame
-  stayed in the chapter and moved to the header band.
+- **17 Aug, four changes**: remove the four-photograph collage and the *"day slows right down"* line; the
+  carousel must open on 01 rather than 06; cards as large as the property pages' room cards; and the scroll
+  must not fly past cards. All four are built.
+- **He then supplied all six card photographs at 1344 × 685.** Three are different frames as well as bigger
+  ones, and two of those are upgrades: the safari card gained a vehicle with guests in it, and Kohka Lake
+  became an actual lake rather than the lodge's swimming pool.
+- **Guest consent granted, 17 Aug**, for the safari frame and the three birders — recorded on their
+  `CURATION` entries in `scripts/build_images.mjs`, not only here. The reason it had to be asked generalises:
+  the safari frame had shipped for weeks at 541px where nobody is identifiable, and **enlarging a photograph
+  is enough on its own to reopen consent**.
+- **Scroll feel: "settles on a card"**, his choice over one-card-per-gesture, which he rejected as taking the
+  page out of the visitor's hands.
 
-### Three things a future session should not have to rediscover
+### Still open
 
-- **`position: sticky` does not freeze a view timeline.** A control arm built to fail passed. The freeze
-  belongs to the *range phase* — `exit` and `contain` sat flat for ~4,450px where `cover` swept
-  continuously. This **corrects the reason recorded in §17** for the rooms card stack, whose construction is
-  right for a different reason than its own comment claims. Nothing here licenses simplifying `.room-slot`.
-- **The loop is visible in the scroll**, via `aria-hidden` ghosts of the last and first activity at the
-  pin's two ends. Worth 9.3 points of worst-screen density and free — the existing formula placed them with
-  no change — and `distinctImages` is unchanged, so none of the gain was double-counting.
-- **Nine defects in the plan, eight found by the implementers** (§20.8), including a browser rule of mine
-  that silently disabled reduced-motion support and an assertion no moving carousel could pass. Two
-  implementers declined to build something they had measured to be wrong rather than following the
-  instruction.
+- **`vann-potters-village` wants a different photograph, not a wider file.** The 17 Aug re-crop moved the
+  glaze highlights without removing them — 1.03:1 unwashed — so it still carries one of the heaviest washes
+  on the page. [`OWED-ORIGINALS.md`](OWED-ORIGINALS.md), where group 1 is otherwise closed.
+- **The tiger film now opens the chapter rather than closing it.** Non-negotiable #5 is about behaviour and
+  all of it is intact, but the position changed and he has not ruled. The alternative measured 77.1%
+  page-worst.
+- **`lodges` at 48.6% worst is the one chapter still over the ceiling.** `rooms` and `guests` crossed under
+  it on 17 Aug and **neither was touched** — `field-days` lost 56px and shifted the page against the sample
+  grid. Do not record them as fixed.
+
+### Four things a future session should not rediscover
+
+- **`position: sticky` does not freeze a view timeline.** A control arm built to fail passed; the freeze
+  belongs to the *range phase* (`exit`/`contain` sat flat ~4,450px where `cover` swept). This **corrects the
+  reason recorded in §17** for the rooms card stack, whose construction is right for a different reason than
+  its own comment claims. Nothing licenses simplifying `.room-slot`.
+- **A zero-sized scroll-snap target snaps nothing** — silently, under `proximity`, and it collapses every
+  scroll to offset 0 under `mandatory`. `.coverflow-target` had been 0×0 since the day it was written.
+- **A removal is not free.** Deleting the collage on the client's ruling made the chapter *worse* (52.0% /
+  66.2%, page worst 82.9%) because the band kept its height and lost its imagery. Recomposing it was worth
+  −11.2 points.
+- **Snapping quantised the rig's own measurements** — `proximity` applies to programmatic scrolls, so 43
+  requested sample positions became 6 actual rests, and three assertions were only ever asked where the
+  carousel looks best. The rig now suppresses snapping for those and restores it for the one that tests it.
 
 ## The close chooses a lodge, and the plates float — 15 Aug 2026
 
