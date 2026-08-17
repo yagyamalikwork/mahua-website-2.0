@@ -34,11 +34,30 @@ export function coverflowNeighbours(index: number, count: number) {
  * The slice of the shared timeline over which card `index` travels from
  * off-right to off-left, as percentages.
  *
- * `count + 1` steps, not `count`: a card is centred at the MIDDLE of its own
- * window, so the first card needs half a window before it and the last one half
- * a window after. Windows deliberately overlap by one step — a card must be
- * leaving while its successor arrives, or there is a moment mid-scroll with
- * nothing centred and a stage of bare cream.
+ * **RETIRED 17 Aug 2026 — the arithmetic below is NOT what the page does.**
+ * Imported by nothing but its own test; no component, script or stylesheet
+ * reads it. Kept because deleting it is a decision worth taking on its own
+ * rather than folding into a change that already touched five files.
+ *
+ * Two supersessions, in order. Task 1 §11 replaced percentages of `cover` with
+ * lengths anchored to the pinned window, because dividing `cover` into steps
+ * forces `screens ≥ card count` — six screens of pin for six cards. Then the
+ * step denominator went from `count + 1` to `count − 1`: under `count + 1` all
+ * EIGHT cards including the two flank ghosts tiled the pin, so the leading
+ * ghost — a copy of the last activity — took a centred moment of its own, and
+ * the client saw the carousel open on activity 06. The six activities tile the
+ * pin now, card 01 centred exactly where the stage locks and card 06 exactly
+ * where it releases, with the ghosts held at the flanks by their own keyframes.
+ *
+ * **Do not reason from this function.** `app/globals.css`'s `--cf-step` is the
+ * live arithmetic and `docs/reviews/2026-08-16-coverflow/task-1-timeline-probe.md`
+ * §11.7 is its derivation. This note exists so the only prose in `lib/`
+ * describing this geometry does not quietly describe the defect.
+ *
+ * The original, for the record: `count + 1` steps put a card at the MIDDLE of
+ * its own window, so the first needed half a window before it and the last half
+ * a window after, and adjacent windows overlapped by one step so a card was
+ * always leaving as its successor arrived.
  */
 export function coverflowWindow(index: number, count: number) {
   const step = 100 / (count + 1);
