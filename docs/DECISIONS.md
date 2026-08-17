@@ -1947,10 +1947,27 @@ Every intermediate figure below is **stale and must not be quoted as current.**
 | tiger into the header band | 48.1% | 55.0% | 67.0% |
 | + the client's six re-exports, collage removed (17 Aug) | 52.0% | 66.2% | 82.9% |
 | + header band recomposed | 47.1% | 55.0% | 77.8% |
-| **shipped** — `cardMaxPx` swept to 1217 | **26.4%** | **41.0%** | **71.4%** |
+| `cardMaxPx` swept to 1217 | 26.4%† | 41.0% | 71.4% |
+| + linear (ghosts out), snap out, `screens: 3`, snug (18 Aug) | 28.6% | 40.4% | 66.9% |
+| **shipped** — card at the files' own 1344 × 685, words centred, stage tightened | **27.0%** | **31.1%** | **64.5%** |
 
-**It passes. 41.0% against the 45% ceiling, `passesWorst` TRUE, four points clear, zero screens over
-budget** — against 43.9% / 57.9% for the three bands it replaced. Page mean 35.6%.
+† **flattered by the instrument.** `scroll-snap: proximity` applies to *programmatic* scrolls, so it was
+quantising `measure_density.mjs`'s own 150px samples onto the six centred moments. Removing the snap moved
+the mean 1.8 points with nothing else changed. The same mechanism had already been caught quantising
+`check_coverflow.mjs`'s own width sweep — 43 requested positions collapsing to 6 rests, so three assertions
+were only ever asked where the carousel looks best. **A rig that scrolls a page it is also measuring can be
+steered by the page's own CSS.**
+
+**It passes, with room. 31.1% against the 45% ceiling, `passesWorst` TRUE, 13.9 points clear** — against
+43.9% / 57.9% for the three bands it replaced. Page worst 64.5%; screens over budget page-wide 28 → 25.
+
+**Three client changes on 18 August account for the last nine points**, measured apart: the card widened to
+the photographs' own 1344 × 685 (−4.4 worst), the held frame tightened (−4.9), and the words centred on the
+card (**exactly 0** — `measure_density.mjs` hit-tests what is painted, and every cell inside a card already
+meets a photograph, so type on it cannot add occupancy). He also **reversed his own 16 Aug loop request**:
+the carousel is linear 01→06, the flank ghosts are gone, and the arrows no longer wrap. And `scroll-snap`
+shipped for one day and was rejected as *"very snappy"*, so the pace is `COVERFLOW.screens: 3` — 381.4px of
+scroll per card against 201.4px at 2.
 
 **It could not reach 45% at any card size on 16 August and does on 17 August, because the photographs
 changed, not the code.** The client supplied all six at 1344 × 685 (§20.6). That is the single most useful
