@@ -909,6 +909,40 @@ screenshot. With the push zeroed it reports 0 degrees and 0 crossings.
 
 ---
 
+## 5a. The density rig's sampling step — an open question about every #8 figure on this project
+
+**Found 18 Aug 2026 while making the coverflow linear. Recorded, not acted on, because it is a question
+about the instrument rather than about any one chapter.**
+
+`scripts/measure_density.mjs` walks a chapter in **150px** steps. Two things surfaced on the same day:
+
+1. **Re-sampling at a 50px step finds 3–7 points more empty on five chapters** — including `rooted`
+   (44.5 → 47.3) and `guests` (43.8 → 48.6), neither of which that day's work touched. **Every
+   non-negotiable #8 figure ever recorded on this project is a 150px-step figure**, so every one of them is
+   an optimistic estimate of the chapter's true worst screen, by an unknown amount that is at least
+   sometimes enough to change a pass into a fail.
+2. **A chapter's figure moves when a chapter *above* it changes height by a non-multiple of 150.**
+   `05 · The Rooms` went 39.6% → 46.5% worst with nothing in it altered, because `field-days` lost 72px and
+   every downstream chapter is now sampled at a different phase. Proven rather than asserted: changing
+   `COVERFLOW.screens` moved the document by 450px and 900px — both multiples of 150 — and moved **not one
+   figure** below that chapter.
+
+**The padding was deliberately not tuned to a multiple of 150 to make (2) go away.** Doing that would be
+fitting the page to the instrument, which is the shape of defect this file exists to catalogue.
+
+**What this does not mean.** It is not a reason to relitigate a chapter that passes, and it is not a reason
+to lower the ceiling — CLAUDE.md's #8 already says never to do that. What it means is that a figure sitting
+within a point or two of 45% is inside the instrument's own error, and **"it passes" and "it fails" are both
+weaker claims than they look at that margin.** `field-days` at 40.4% and `lodges` at 48.6% are outside it;
+`rooms` at 46.5% is not.
+
+**Before acting on it, decide what the rig is for.** A smaller step is not obviously more correct: it costs
+run time on every route, and a 900px window slid 50px at a time reports many nearly-identical screens, which
+flatters nothing but does weight the *worst* statistic toward whatever the page's tallest run of cream
+happens to be. The honest options are to keep 150 and record that every figure is an estimate, or to move to
+a smaller step and **re-baseline every chapter on the same day**, so no two figures in `density.json` are
+ever measured at different steps. Full working: `docs/reviews/2026-08-16-coverflow/linear.md` §5.2.
+
 ## 6. Deferred minors carried out of Plan 4
 
 None block anything. Listed so they are not rediscovered as new.
