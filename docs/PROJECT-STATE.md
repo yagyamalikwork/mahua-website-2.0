@@ -16,8 +16,12 @@ chapter — that table has nine rows and only the last is current.**
 
 ### The number
 
-**26.4% mean / 41.0% worst**, against 43.9% / 57.9% for the three bands it replaced and a 45% ceiling.
-`passesWorst` **true**, four points clear, zero screens over budget. Page mean 35.6%.
+**28.6% mean / 40.4% worst**, against 43.9% / 57.9% for the three bands it replaced and a 45% ceiling.
+`passesWorst` **true**, 4.6 points clear. Page worst 66.9%.
+
+**The carousel is linear, 01 to 06** — the client reversed his own 16 Aug loop request on 18 Aug once he had
+seen it — **and the scroll is smooth rather than snapping**, at 381.4px per card. `scroll-snap` shipped for a
+day and he rejected it as *"very snappy"*.
 
 **It could not reach 45% at any card size on 16 August and does on 17 August, because the photographs
 changed rather than the code.** That is the single most useful thing to carry out of this work. Four of the
@@ -53,7 +57,12 @@ draw factor fell to 1.1036, the ceiling rose to **1217px**, and the same sweep t
   it on 17 Aug and **neither was touched** — `field-days` lost 56px and shifted the page against the sample
   grid. Do not record them as fixed.
 
-### Four things a future session should not rediscover
+### Five things a future session should not rediscover
+
+- **The density rig's own 150px sampling step is an open question** — `DECISIONS.md` §5a. A 50px step finds
+  3-7 points more empty on five chapters that nobody touched, and a chapter's figure moves when a chapter
+  *above* it changes height by a non-multiple of 150. `05 · The Rooms` went 39.6% → 46.5% that way, with
+  nothing in it changed. **A figure within a point or two of 45% is inside the instrument's own error.**
 
 - **`position: sticky` does not freeze a view timeline.** A control arm built to fail passed; the freeze
   belongs to the *range phase* (`exit`/`contain` sat flat ~4,450px where `cover` swept). This **corrects the
