@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-16T20:19:06.839Z",
+  "measuredAt": "2026-08-17T00:00:01.990Z",
   "url": "http://localhost:3110/",
   "densityCap": 2,
   "results": [
     {
       "viewport": "390x844@1x",
-      "images": 46,
+      "images": 41,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -20,7 +20,7 @@
       },
       "deviceDensity": {
         "worst": 0.89,
-        "median": 1.17,
+        "median": 1.16,
         "best": 4.21
       },
       "understatedSizes": [],
@@ -176,81 +176,46 @@
           "ratio": 1.17
         },
         {
+          "file": "/media/forest-trail-canopy-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 377,
+          "needed": 377,
+          "ratio": 1.06
+        },
+        {
           "file": "/media/tiger-crossing-track-400.avif",
           "cssWidth": 342,
-          "drawnWidth": 364,
-          "needed": 364,
-          "ratio": 1.1
+          "drawnWidth": 377,
+          "needed": 377,
+          "ratio": 1.06
         },
         {
-          "file": "/media/guide-sunrise-400.avif",
+          "file": "/media/vann-bird-watching-400.avif",
           "cssWidth": 342,
-          "drawnWidth": 344,
-          "needed": 344,
-          "ratio": 1.16
+          "drawnWidth": 377,
+          "needed": 377,
+          "ratio": 1.06
         },
         {
-          "file": "/media/hammocks-shade-400.avif",
+          "file": "/media/vann-kohka-lake-400.avif",
           "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 342,
-          "ratio": 1.17
-        },
-        {
-          "file": "/media/pool-daylight-forest-640.avif",
-          "cssWidth": 342,
-          "drawnWidth": 438,
-          "needed": 438,
-          "ratio": 1.46
+          "drawnWidth": 377,
+          "needed": 377,
+          "ratio": 1.06
         },
         {
           "file": "/media/forest-trail-canopy-400.avif",
           "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 342,
-          "ratio": 1.17
+          "drawnWidth": 377,
+          "needed": 377,
+          "ratio": 1.06
         },
         {
-          "file": "/media/vann-safari-640.avif",
+          "file": "/media/tiger-crossing-track-400.avif",
           "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 440,
-          "ratio": 1.45
-        },
-        {
-          "file": "/media/vann-bird-watching-640.avif",
-          "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 440,
-          "ratio": 1.45
-        },
-        {
-          "file": "/media/vann-kohka-lake-640.avif",
-          "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 440,
-          "ratio": 1.45
-        },
-        {
-          "file": "/media/forest-boardwalk-daylight-400.avif",
-          "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 342,
-          "ratio": 1.17
-        },
-        {
-          "file": "/media/forest-trail-canopy-400.avif",
-          "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 342,
-          "ratio": 1.17
-        },
-        {
-          "file": "/media/vann-safari-640.avif",
-          "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 440,
-          "ratio": 1.45
+          "drawnWidth": 377,
+          "needed": 377,
+          "ratio": 1.06
         },
         {
           "file": "/media/room-open-to-bamboo-400.avif",
@@ -368,7 +333,7 @@
     },
     {
       "viewport": "390x844@3x",
-      "images": 46,
+      "images": 41,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -407,11 +372,6 @@
           "file": "/media/potters-hands-700.avif",
           "needed": 1053,
           "ratio": 0.66
-        },
-        {
-          "file": "/media/tiger-crossing-track-541.avif",
-          "needed": 726,
-          "ratio": 0.75
         },
         {
           "file": "/media/lodge-facade-night-1440.avif",
@@ -574,81 +534,46 @@
           "ratio": 1.12
         },
         {
-          "file": "/media/tiger-crossing-track-541.avif",
+          "file": "/media/forest-trail-canopy-768.avif",
           "cssWidth": 342,
-          "drawnWidth": 363,
-          "needed": 726,
-          "ratio": 0.75
+          "drawnWidth": 377,
+          "needed": 753,
+          "ratio": 1.02
         },
         {
-          "file": "/media/guide-sunrise-768.avif",
+          "file": "/media/tiger-crossing-track-768.avif",
           "cssWidth": 342,
-          "drawnWidth": 344,
-          "needed": 689,
-          "ratio": 1.11
+          "drawnWidth": 377,
+          "needed": 753,
+          "ratio": 1.02
         },
         {
-          "file": "/media/hammocks-shade-768.avif",
+          "file": "/media/vann-bird-watching-768.avif",
           "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 684,
-          "ratio": 1.12
+          "drawnWidth": 377,
+          "needed": 753,
+          "ratio": 1.02
         },
         {
-          "file": "/media/pool-daylight-forest-960.avif",
+          "file": "/media/vann-kohka-lake-768.avif",
           "cssWidth": 342,
-          "drawnWidth": 438,
-          "needed": 876,
-          "ratio": 1.1
+          "drawnWidth": 377,
+          "needed": 753,
+          "ratio": 1.02
         },
         {
           "file": "/media/forest-trail-canopy-768.avif",
           "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 684,
-          "ratio": 1.12
+          "drawnWidth": 377,
+          "needed": 753,
+          "ratio": 1.02
         },
         {
-          "file": "/media/vann-safari-960.avif",
+          "file": "/media/tiger-crossing-track-768.avif",
           "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 879,
-          "ratio": 1.09
-        },
-        {
-          "file": "/media/vann-bird-watching-960.avif",
-          "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 879,
-          "ratio": 1.09
-        },
-        {
-          "file": "/media/vann-kohka-lake-960.avif",
-          "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 879,
-          "ratio": 1.09
-        },
-        {
-          "file": "/media/forest-boardwalk-daylight-768.avif",
-          "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 684,
-          "ratio": 1.12
-        },
-        {
-          "file": "/media/forest-trail-canopy-768.avif",
-          "cssWidth": 342,
-          "drawnWidth": 342,
-          "needed": 684,
-          "ratio": 1.12
-        },
-        {
-          "file": "/media/vann-safari-960.avif",
-          "cssWidth": 342,
-          "drawnWidth": 440,
-          "needed": 879,
-          "ratio": 1.09
+          "drawnWidth": 377,
+          "needed": 753,
+          "ratio": 1.02
         },
         {
           "file": "/media/room-open-to-bamboo-768.avif",
@@ -766,7 +691,7 @@
     },
     {
       "viewport": "768x1024@1x",
-      "images": 45,
+      "images": 41,
       "softestServed": {
         "file": "/media/potters-hands-700.avif",
         "fileWidth": 700,
@@ -952,74 +877,46 @@
           "ratio": 1.14
         },
         {
-          "file": "/media/tiger-crossing-track-541.avif",
-          "cssWidth": 420,
-          "drawnWidth": 447,
-          "needed": 447,
-          "ratio": 1.21
-        },
-        {
-          "file": "/media/guide-sunrise-768.avif",
+          "file": "/media/forest-trail-canopy-768.avif",
           "cssWidth": 672,
-          "drawnWidth": 673,
-          "needed": 673,
-          "ratio": 1.14
+          "drawnWidth": 743,
+          "needed": 743,
+          "ratio": 1.03
         },
         {
-          "file": "/media/hammocks-shade-400.avif",
-          "cssWidth": 328,
-          "drawnWidth": 330,
-          "needed": 330,
-          "ratio": 1.21
+          "file": "/media/tiger-crossing-track-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 743,
+          "needed": 743,
+          "ratio": 1.03
         },
         {
-          "file": "/media/pool-daylight-forest-640.avif",
-          "cssWidth": 328,
-          "drawnWidth": 422,
-          "needed": 422,
-          "ratio": 1.52
+          "file": "/media/forest-boardwalk-daylight-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 743,
+          "needed": 743,
+          "ratio": 1.03
+        },
+        {
+          "file": "/media/vann-potters-village-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 743,
+          "needed": 743,
+          "ratio": 1.03
         },
         {
           "file": "/media/forest-trail-canopy-768.avif",
           "cssWidth": 672,
-          "drawnWidth": 672,
-          "needed": 672,
-          "ratio": 1.14
+          "drawnWidth": 743,
+          "needed": 743,
+          "ratio": 1.03
         },
         {
-          "file": "/media/vann-safari-960.avif",
+          "file": "/media/tiger-crossing-track-768.avif",
           "cssWidth": 672,
-          "drawnWidth": 867,
-          "needed": 867,
-          "ratio": 1.11
-        },
-        {
-          "file": "/media/vann-bird-watching-960.avif",
-          "cssWidth": 672,
-          "drawnWidth": 867,
-          "needed": 867,
-          "ratio": 1.11
-        },
-        {
-          "file": "/media/vann-kohka-lake-960.avif",
-          "cssWidth": 672,
-          "drawnWidth": 867,
-          "needed": 867,
-          "ratio": 1.11
-        },
-        {
-          "file": "/media/forest-trail-canopy-768.avif",
-          "cssWidth": 672,
-          "drawnWidth": 672,
-          "needed": 672,
-          "ratio": 1.14
-        },
-        {
-          "file": "/media/vann-safari-960.avif",
-          "cssWidth": 672,
-          "drawnWidth": 867,
-          "needed": 867,
-          "ratio": 1.11
+          "drawnWidth": 743,
+          "needed": 743,
+          "ratio": 1.03
         },
         {
           "file": "/media/room-open-to-bamboo-768.avif",
@@ -1137,7 +1034,7 @@
     },
     {
       "viewport": "1440x900@1x",
-      "images": 46,
+      "images": 42,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -1308,81 +1205,53 @@
           "ratio": 1.52
         },
         {
-          "file": "/media/tiger-crossing-track-541.avif",
-          "cssWidth": 420,
-          "drawnWidth": 447,
-          "needed": 447,
+          "file": "/media/forest-trail-canopy-1200.avif",
+          "cssWidth": 900,
+          "drawnWidth": 993,
+          "needed": 993,
           "ratio": 1.21
         },
         {
-          "file": "/media/guide-sunrise-960.avif",
-          "cssWidth": 761,
-          "drawnWidth": 762,
-          "needed": 762,
-          "ratio": 1.26
-        },
-        {
-          "file": "/media/hammocks-shade-400.avif",
-          "cssWidth": 372,
-          "drawnWidth": 372,
-          "needed": 372,
-          "ratio": 1.08
-        },
-        {
-          "file": "/media/pool-daylight-forest-640.avif",
-          "cssWidth": 372,
-          "drawnWidth": 475,
-          "needed": 475,
-          "ratio": 1.35
-        },
-        {
-          "file": "/media/forest-trail-canopy-960.avif",
+          "file": "/media/tiger-crossing-track-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 900,
-          "needed": 900,
-          "ratio": 1.07
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-safari-1163.avif",
+          "file": "/media/vann-bird-watching-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-bird-watching-1163.avif",
+          "file": "/media/vann-kohka-lake-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-kohka-lake-1163.avif",
+          "file": "/media/vann-potters-village-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-potters-village-1163.avif",
+          "file": "/media/forest-trail-canopy-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/forest-trail-canopy-960.avif",
+          "file": "/media/tiger-crossing-track-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 900,
-          "needed": 900,
-          "ratio": 1.07
-        },
-        {
-          "file": "/media/vann-safari-1163.avif",
-          "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
           "file": "/media/room-open-to-bamboo-768.avif",
@@ -1500,7 +1369,7 @@
     },
     {
       "viewport": "1920x1080@1x",
-      "images": 46,
+      "images": 42,
       "softestServed": {
         "file": "/media/tiger-golden-grass-1440.avif",
         "fileWidth": 1440,
@@ -1515,7 +1384,7 @@
       },
       "deviceDensity": {
         "worst": 0.7,
-        "median": 1.05,
+        "median": 1.12,
         "best": 1.9
       },
       "understatedSizes": [],
@@ -1691,81 +1560,53 @@
           "ratio": 1.35
         },
         {
-          "file": "/media/tiger-crossing-track-541.avif",
-          "cssWidth": 420,
-          "drawnWidth": 447,
-          "needed": 447,
+          "file": "/media/forest-trail-canopy-1200.avif",
+          "cssWidth": 900,
+          "drawnWidth": 993,
+          "needed": 993,
           "ratio": 1.21
         },
         {
-          "file": "/media/guide-sunrise-960.avif",
-          "cssWidth": 854,
-          "drawnWidth": 856,
-          "needed": 856,
-          "ratio": 1.12
-        },
-        {
-          "file": "/media/hammocks-shade-640.avif",
-          "cssWidth": 419,
-          "drawnWidth": 421,
-          "needed": 421,
-          "ratio": 1.52
-        },
-        {
-          "file": "/media/pool-daylight-forest-640.avif",
-          "cssWidth": 419,
-          "drawnWidth": 537,
-          "needed": 537,
-          "ratio": 1.19
-        },
-        {
-          "file": "/media/forest-trail-canopy-960.avif",
+          "file": "/media/tiger-crossing-track-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 900,
-          "needed": 900,
-          "ratio": 1.07
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-safari-1163.avif",
+          "file": "/media/vann-bird-watching-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-bird-watching-1163.avif",
+          "file": "/media/forest-boardwalk-daylight-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/forest-boardwalk-daylight-960.avif",
+          "file": "/media/vann-potters-village-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 900,
-          "needed": 900,
-          "ratio": 1.07
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/vann-potters-village-1163.avif",
+          "file": "/media/forest-trail-canopy-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
-          "file": "/media/forest-trail-canopy-960.avif",
+          "file": "/media/tiger-crossing-track-1200.avif",
           "cssWidth": 900,
-          "drawnWidth": 900,
-          "needed": 900,
-          "ratio": 1.07
-        },
-        {
-          "file": "/media/vann-safari-1163.avif",
-          "cssWidth": 900,
-          "drawnWidth": 1159,
-          "needed": 1159,
-          "ratio": 1
+          "drawnWidth": 993,
+          "needed": 993,
+          "ratio": 1.21
         },
         {
           "file": "/media/room-open-to-bamboo-768.avif",

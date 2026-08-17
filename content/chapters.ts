@@ -84,8 +84,11 @@ export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
   "hero",
   "fullBleedQuote",
   "plateGrid",
-  // Nine photographs, six of them the cards themselves, and a card is a
-  // photograph with its words laid on it. Added 16 Aug 2026 with the coverflow.
+  // Six photographs, all six of them the cards themselves, and a card is a
+  // photograph with its words laid on it. (It was nine, then ten, while the
+  // chapter still carried a header band of photographs above the stage; the
+  // client deleted that band on 17 Aug 2026 and the chapter is now the carousel
+  // and nothing else.) Added 16 Aug 2026 with the coverflow.
   // The suite would not have caught its omission — `field-days` sits between
   // `forest` and `rooms`, both `plateGrid`, so the alternation rule is already
   // satisfied by its neighbours either way. It is here because it is true, not
@@ -167,45 +170,40 @@ const CHAPTER_LIST = [
     number: "04",
     label: "Days in the Field",
     kind: "coverflow",
-    // The hammocks carry the chapter's second paragraph — the half of the day
-    // most lodges leave out. Nothing else in the library says "rest".
-    //
-    // `pool-daylight-forest` was one of the two photographs held in reserve after
-    // Task 4 and came off the bench on 5 Aug 2026, under that same sentence, and
-    // it is the only other frame in the library of the slow half of the day. It
-    // was described here as a letterbox in a half-width column until 16 Aug
-    // 2026; that was `splitFeature`'s composition, which the coverflow replaced.
-    // Its 1163px file still bounds how large it can be drawn.
-    //
-    // Nine, from six, when the coverflow landed (16 Aug 2026), then TEN the same
-    // day when the density measurement came back. The first four are the header
-    // band's, above the stage, and carry the chapter's two written beats — the
-    // dawn gate (`guide-sunrise`, `tiger-crossing-track`), then "the day slows
-    // right down" (`hammocks-shade`, `pool-daylight-forest`) — the client's own
-    // copy, which a carousel of activities does not carry and must not drop.
-    // `Coverflow.tsx` reads them positionally, in this order.
-    //
-    // The last six are one per activity, in the order `content/home.ts` lists
-    // them; four of those are frames `/mahua-vann` also shows, a repeat the
-    // client saw and accepted the same day. `chapters.test.ts` asserts that
-    // every activity's photograph is declared here — membership, not order — so
-    // a card can never reach for a frame this list does not carry, and so
-    // `measure_density.mjs` counts every photograph a card can show.
-    //
-    // **`tiger-crossing-track` moved from the cards to the band on 16 Aug 2026,
-    // and it was a size decision rather than an editorial one.** It is 541px
-    // wide — narrower than the 560px card it was being drawn in — so it was the
-    // single photograph blocking any wider card, and the card's width is the
-    // only lever on a chapter that measured 70.7% mean / 83.1% worst empty.
-    // `vann-safari` (1163px, an open vehicle on a morning drive) took its place
-    // on the card. In the band it is a 420px square beside the paragraph about
-    // the gates opening, which its own file serves fully at DPR 1.
+    /*
+     * **Exactly the six cards since 17 Aug 2026 — one photograph per activity,
+     * in the order `content/home.ts` lists them, and nothing else.**
+     *
+     * The list went 6 → 9 → 10 → 6 in three days. The four that came and went
+     * were the header band's — `guide-sunrise` and `tiger-crossing-track` under
+     * the dawn-gate paragraph, `hammocks-shade` and `pool-daylight-forest` under
+     * "then the day slows right down" — and the client deleted that band and
+     * that sentence outright: *"Remove all 4 images (collage of images) between
+     * the section's introductory text and the activity card carousel, also
+     * remove the text 'Then the day slows right down…'"*. `Coverflow.tsx` no
+     * longer reads any of this list positionally; every card names its own frame
+     * by `mediaId`, and `chapters.test.ts` holds each of those names to
+     * membership of this list — so a card can never reach for a photograph the
+     * chapter does not declare, and `measure_density.mjs` counts every
+     * photograph a card can show.
+     *
+     * `guide-sunrise`, `hammocks-shade` and `pool-daylight-forest` leave the
+     * chapter with the band. They remain curated and are drawn elsewhere or held;
+     * the client also re-exported all three at 1344x685 for the band, and those
+     * three files are deliberately unused — see `scripts/build_images.mjs`.
+     *
+     * **`tiger-crossing-track` is a card again, and both moves were resolution
+     * decisions rather than editorial ones.** At 541x508 it was narrower than
+     * the card it was drawn in — the single frame capping `COVERFLOW.cardMaxPx`
+     * for the whole carousel — so on 16 Aug it went to the band and `vann-safari`
+     * took the card. The client's 17 Aug re-export makes it 1344x685, the same
+     * shape and the same width as the other five, and `vann-safari` is unused
+     * again. Four of the six are frames `/mahua-vann` also draws (a repeat the
+     * client saw and accepted); the other two, `tiger-crossing-track` and
+     * `forest-boardwalk-daylight`, are this page's own.
+     */
     media: [
-      "guide-sunrise",
       "tiger-crossing-track",
-      "hammocks-shade",
-      "pool-daylight-forest",
-      "vann-safari",
       "vann-bird-watching",
       "vann-kohka-lake",
       "forest-boardwalk-daylight",

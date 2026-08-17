@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-16T20:16:15.680Z",
+  "measuredAt": "2026-08-16T23:56:19.170Z",
   "url": "http://localhost:3110/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 3.06,
+        "currentTime": 3.01,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 3.06,
-        "afterHover": 4.1
+        "beforeHover": 3.01,
+        "afterHover": 3.6
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -127,7 +127,7 @@
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.84
+        "to": 0.88
       },
       "pointerParked": {
         "paused": true,
@@ -136,7 +136,7 @@
       },
       "leaveAndReturn": {
         "from": 10,
-        "to": 0.86
+        "to": 0.88
       }
     },
     {
@@ -176,7 +176,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.88,
+        "currentTime": 2.82,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -189,8 +189,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.88,
-        "afterHover": 3.46
+        "beforeHover": 2.83,
+        "afterHover": 3.45
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -264,7 +264,7 @@
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.86
+        "to": 0.87
       },
       "pointerParked": {
         "paused": true,
@@ -273,7 +273,7 @@
       },
       "leaveAndReturn": {
         "from": 10,
-        "to": 0.87
+        "to": 0.86
       }
     }
   ],
@@ -326,7 +326,7 @@
       "width": 390,
       "height": 844,
       "box": {
-        "top": 8574,
+        "top": 8200,
         "h": 320,
         "w": 240
       },

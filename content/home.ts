@@ -57,26 +57,27 @@ export type ExperienceCopy = {
   /**
    * The photograph this activity shows on its card.
    *
-   * Added 16 Aug 2026 with the coverflow. Four of the six are frames that
-   * `/mahua-vann` also shows rather than the chapter's own originals, and the
-   * client saw that repeat and accepted it. Two of them were corrections rather
-   * than preferences: "Kohka Lake" would have been captioning the lodge's own
-   * swimming pool, and Pachdhar had no village and no potter anywhere in the
-   * chapter. Three prose bands only sat a photograph *near* an activity; a card
-   * puts the two in one box, which makes the pairing a claim.
+   * Added 16 Aug 2026 with the coverflow. **Four of the six are frames
+   * `/mahua-vann` also draws** — `vann-bird-watching`, `vann-kohka-lake`,
+   * `vann-potters-village` and `forest-trail-canopy`, all in that page's 4:5
+   * `quiet` box — and the client saw that repeat and accepted it. Two of those
+   * were corrections rather than preferences: "Kohka Lake" would have been
+   * captioning the lodge's own swimming pool, and Pachdhar had no village and no
+   * potter anywhere in the chapter. Three prose bands only sat a photograph
+   * *near* an activity; a card puts the two in one box, which makes the pairing
+   * a claim.
    *
-   * **The fourth — `vann-safari` under "Jungle safari" — is a RESOLUTION
-   * decision, taken the same day** (the plan's Task 8 follow-up). A card's width
-   * is `COVERFLOW.cardMaxPx`, and the chapter measured 70.7% mean / 83.1% worst
-   * empty at 560px because a 560x315 card is 13.6% of a 1440x900 screen. Every
-   * lever on that number is the card's own width, and the card can only be as
-   * wide as its narrowest photograph: `tiger-crossing-track` is 541px, which was
-   * already short of 560 and blocked every larger value outright. `vann-safari`
-   * is 1163px and is literally a photograph of a safari vehicle on a game drive,
-   * so it is the better pairing as well as the bigger file.
-   * `tiger-crossing-track` did not leave the chapter — it is the dawn-drive
-   * frame and it moved into the header band, beside the paragraph about the
-   * gates opening, where a 420px square serves it fully.
+   * **"Jungle safari" is `tiger-crossing-track` again as of 17 Aug 2026, and
+   * that closes a resolution detour worth recording.** For one day it was
+   * `vann-safari` — an open vehicle with no tiger in it — purely because
+   * `tiger-crossing-track`'s file was 541px wide, narrower than the card it was
+   * being drawn in, and so was the single photograph capping
+   * `COVERFLOW.cardMaxPx` for the whole carousel. The client then re-exported
+   * all six frames at 1344x685 (`scripts/build_images.mjs`), the cap moved to
+   * every other frame at once, and the better photograph — a tiger crossing the
+   * track in front of a vehicle of guests, which is what a jungle safari here
+   * actually is — came back. `vann-safari` is curated and unused again, exactly
+   * as it was before 16 Aug.
    *
    * Typed `MediaId`, not `string`, so a mistyped id is a compile error rather
    * than a `media()` throw at render — the same reason `PlateCopy` above is.
@@ -212,15 +213,24 @@ export const HOME = {
     // ── 04 · Days in the Field ──────────────────────────────────────────────
     "field-days": {
       heading: { text: "The day the forest keeps", dim: "forest" },
+      /*
+       * **One paragraph since 17 Aug 2026, by the client's own ruling**: *"…also
+       * remove the text 'Then the day slows right down. That is the half most
+       * lodges leave out.'"* It went with the four-photograph collage it was
+       * written to introduce — the same ruling deleted both — so the chapter now
+       * opens on the dawn gate and hands straight over to the carousel.
+       *
+       * `Coverflow.tsx` reads `body[0]` and nothing else. Adding a second entry
+       * here will not render; the band that drew it no longer exists.
+       */
       body: [
         "The gates open before the light does. We are five kilometres from Turia and among the " +
           "first vehicles through, which matters most in the hour when the forest is still " +
           "saying out loud where everything is.",
-        "Then the day slows right down. That is the half most lodges leave out.",
       ],
       // Six activities, six cards, and the order here is the order they travel
       // in. Each names its own photograph — see `ExperienceCopy.mediaId` above
-      // for why three of them come from `/mahua-vann` — and `chapters.test.ts`
+      // for the four that `/mahua-vann` also draws — and `chapters.test.ts`
       // holds every id to one the chapter itself declares in `chapters.ts`.
       experiences: [
         {
@@ -228,11 +238,13 @@ export const HOME = {
           body:
             "Morning and evening drives in open vehicles, led by naturalists who have followed " +
             "these particular tigresses and their lineages for years.",
-          // Not `tiger-crossing-track`, which is 541px wide and capped the whole
-          // carousel's card at a size that measured 83.1% empty on its worst
-          // screen. This frame is 1163px, and it is an open safari vehicle on a
-          // morning drive — the activity itself. See `ExperienceCopy.mediaId`.
-          mediaId: "vann-safari",
+          // The tiger crossing the track in front of a vehicle of watching
+          // guests. It was `vann-safari` — the same drive with no tiger in it —
+          // for one day, while this file was 541px wide and capping the card;
+          // the client's 1344x685 re-export lifted that. Guest consent for this
+          // frame at card size is granted and recorded in
+          // `scripts/build_images.mjs`. See `ExperienceCopy.mediaId`.
+          mediaId: "tiger-crossing-track",
         },
         {
           title: "Bird watching",

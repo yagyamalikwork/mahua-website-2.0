@@ -22,6 +22,14 @@ const MIN_MEDIA = {
   pinnedCollage: 3,
   // Six activities, one card each. Below that it is not a carousel; the pin
   // reserves scroll for cards that are not there — non-negotiable #9.
+  //
+  // **`field-days` now sits EXACTLY on this floor, with no margin at all.** It
+  // carried ten photographs until 17 Aug 2026 — six cards plus a four-frame
+  // header band — and the client deleted the band, so the chapter is the six
+  // cards and nothing else. Dropping one photograph from `content/chapters.ts`
+  // now fails here rather than merely thinning a band, which is the right
+  // direction, but it does mean this assertion is load-bearing for the first
+  // time rather than a comfortable floor.
   coverflow: 6,
   plateGrid: 3,
   lodgeCards: 2,

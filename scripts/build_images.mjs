@@ -41,6 +41,38 @@ const MANIFEST_PATH = path.join(ROOT, "lib", "media-manifest.ts");
  *
  * Alt text is written by hand, in British English, describing what is
  * actually in the frame — not filler.
+ *
+ * ## The 1344x685 re-exports, 17 Aug 2026
+ *
+ * Six entries — `tiger-crossing-track`, `vann-bird-watching`,
+ * `vann-kohka-lake`, `forest-boardwalk-daylight`, `vann-potters-village`,
+ * `forest-trail-canopy` — point at `Activity-Carousel-Images/` rather than at
+ * `reference/`. They are the six `04 · Days in the Field` coverflow cards, and
+ * the client re-exported each from the wider original after `docs/DECISIONS.md`
+ * §20.6 measured that chapter as unable to reach the 45% density ceiling on the
+ * files it had: four of the six were 1163px 2.289:1 crops served at exactly 1.00
+ * against a 900px card, so the card could not grow.
+ *
+ * **They are re-exports, not upscales, and that was checked rather than
+ * assumed** — every one shows more scene than the file it replaces, and each was
+ * opened beside its old derivative at full size before being wired in. Two
+ * consequences fall out of the shape change and are recorded on the entries
+ * themselves: `forest-boardwalk-daylight` loses `fullBleedSafe` (1344 < the
+ * 1400px floor), and `forest-trail-canopy` loses its `maxWidth` cap (the new
+ * window is a third fewer pixels and now fits the 200 KB budget).
+ *
+ * **Four of the six are also drawn on `/mahua-vann`** — `vann-bird-watching`,
+ * `vann-kohka-lake`, `vann-potters-village`, `forest-trail-canopy`, all in
+ * `ExperiencePair`'s 4:5 `quiet` box. Repointing a source repoints that page
+ * too, and a 4:5 box `cover`-crops a 1.962:1 frame to its centred 41%. Both
+ * routes were screenshotted and read by eye before this shipped.
+ *
+ * Three further files arrived in the same folder — `guide-sunrise-1000-2.png`,
+ * `hammocks-shade-1440-2.png`, `pool-daylight-forest-768-2.png` — and are
+ * deliberately NOT used. They are re-exports of the four-photograph header
+ * collage the client deleted the same day, so those three entries keep their
+ * existing `reference/` sources: repointing them would be re-cutting artwork
+ * for an element that no longer exists.
  */
 const CURATION = [
   // ---- lanternHour: dusk and after — flame, filament and firelight ----
@@ -173,23 +205,47 @@ const CURATION = [
   // as "tiger-golden-grass" at two-thirds the width, and "tiger-pair-profile"
   // (forest-17) is the 700px twin of the entry above.
   {
+    /*
+     * Re-exported by the client at 1344x685 on 17 Aug 2026 — see the
+     * "1344x685 re-exports" note at the head of `CURATION`. Looked at against
+     * the old 1440x960 derivative: the same photograph, wider and shallower —
+     * the vine-hung trunk on the right and the lantern posts on the bridge are
+     * all still in frame, and the alt below still describes what is there.
+     *
+     * **`fullBleedSafe` drops to false with the re-export**, and it is not a
+     * judgement: 1344 is under the 1400px floor in non-negotiable #11. Nothing
+     * lays this photograph out edge-to-edge — it is a coverflow card, and
+     * `FULL_BLEED_KINDS` is hero/fullBleedQuote/invitation — so the flag was
+     * describing an eligibility nothing used.
+     */
     id: "forest-boardwalk-daylight",
-    src: "reference/wp-media/RAG1474-scaled.jpg",
+    src: "Activity-Carousel-Images/forest-boardwalk-daylight-1440-2.png",
     alt: "A timber boardwalk threading through forest, tangled vines framing the foreground.",
     category: "forest",
     orientation: "landscape",
-    fullBleedSafe: true,
+    fullBleedSafe: false,
   },
   {
+    /*
+     * Re-exported at 1344x685, 17 Aug 2026. **The `maxWidth: 960` cap that
+     * used to sit here is gone, and the reason it can go is the crop.**
+     *
+     * The cap was written against the old 1440x960 window: dense foliage over
+     * 1.38 Mpx, whose WebP landed at 203 KB even at the quality floor, so the
+     * entry was capped rather than shipped over budget. The re-export is a
+     * 1344x685 letterbox — 0.92 Mpx, a third fewer pixels — and its widest tier
+     * fits the 200 KB budget with the encoder still well above its floor.
+     *
+     * The cap could not survive anyway: a 900px coverflow card draws a 1.962:1
+     * photograph in a 16:9 box at 993px, so a 960px ceiling would have served
+     * this one card soft while the other five were sharp. Re-run
+     * `check_image_resolution.mjs` if this frame is ever re-cropped.
+     */
     id: "forest-trail-canopy",
-    src: "reference/wp-media/DSC00170-scaled.jpg",
+    src: "Activity-Carousel-Images/forest-trail-canopy-960-2.png",
     alt: "A sunlit trail tunnelling beneath an arch of forest canopy.",
     category: "forest",
     orientation: "landscape",
-    // Dense foliage compresses badly: at 1440 its WebP lands at 203 KB even at
-    // the quality floor. Capped at 960 and dropped from full-bleed rather than
-    // shipped over budget or visibly soft.
-    maxWidth: 960,
     fullBleedSafe: false,
   },
   {
@@ -208,9 +264,21 @@ const CURATION = [
      * *whether* a face is in shot but about *how large it will be drawn*. A
      * frame cleared at one size is not cleared at every size, and enlarging a
      * photograph is enough on its own to reopen it.
+     *
+     * The 1344x685 re-export below is that larger frame arriving. Consent is
+     * the same consent, granted for exactly this: **do not remove or weaken
+     * this note, and do not re-narrow the file to "solve" it.** Looked at at
+     * full size, 17 Aug 2026: the guests are at ~a third of the frame's width,
+     * four of them under the canopy behind the windscreen and two standing with
+     * cameras; faces are small, shaded and mostly turned toward the tiger.
+     *
+     * It was 1.065:1 (541x508) and is now 1.962:1 (1344x685), which is why it
+     * is back on a card rather than in the header band — the band, its 420px
+     * cap and its 1:1 box were all built around the narrow file and went with
+     * the collage on 17 Aug.
      */
     id: "tiger-crossing-track",
-    src: "reference/wp-media/Mahua-Website-Images_Homepage_Pench.jpg",
+    src: "Activity-Carousel-Images/tiger-crossing-track-541-2.png",
     alt: "A tiger crossing the track ahead of a safari jeep and its watching guests.",
     category: "forest",
     orientation: "landscape",
@@ -425,8 +493,13 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    // Re-exported at 1344x685, 17 Aug 2026 (see the head of `CURATION`).
+    // Viewed at full size: the same still water and forested far shore, with
+    // more sky above and more of the reed bank in the bottom-right corner than
+    // the 2.289:1 window carried. **Also drawn on `/mahua-vann`**, where a 4:5
+    // `quiet` box shows the centred third — open water either way.
     id: "vann-kohka-lake",
-    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Kohka-Lake.jpg",
+    src: "Activity-Carousel-Images/Pench-Kohka-Lake.png",
     alt: "Kohka Lake near Mahua Vann, still water at the forest's edge.",
     category: "forest",
     orientation: "landscape",
@@ -435,9 +508,16 @@ const CURATION = [
   {
     // Viewed 9 Aug 2026: finished pots — terracotta and blackened clay —
     // laid out in the sun. No potter and no wheel in the frame, whatever
-    // the filename suggests.
+    // the filename suggests. Still true of the 1344x685 re-export (17 Aug
+    // 2026), which is the same arrangement with more of the terracotta cups
+    // above and below the old letterbox window.
+    //
+    // **This is the frame `docs/OWED-ORIGINALS.md` asks for a different CROP
+    // of, not a wider file**, and the re-export does not answer that: the
+    // white-glazed highlights on the two black bowls are still where a card's
+    // body copy lands. Its scrim is solved against those highlights.
     id: "vann-potters-village",
-    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Potters-Village.jpg",
+    src: "Activity-Carousel-Images/Pench-potters-village.png",
     alt: "Terracotta and blackened clay pots drying in the sun at Pachdhar, the potters' village near Pench.",
     category: "details",
     orientation: "landscape",
@@ -452,8 +532,26 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    /*
+     * Re-exported at 1344x685, 17 Aug 2026 (see the head of `CURATION`).
+     *
+     * **Three identifiable people, and this is the entry to look at first if
+     * that rule is ever revisited.** Looked at at full size: three men in olive
+     * fleeces, field trousers and caps, each with binoculars raised — the dress
+     * and the kit read as naturalists rather than as guests. Every pair of eyes
+     * is behind an eyecup, but the left figure's nose, mouth and jaw are clear
+     * in three-quarter view, the centre figure's profile and grey-streaked hair
+     * are clear, and the right figure's full beard and profile are clear. The
+     * old 1163x508 window drew all three at roughly half this height.
+     *
+     * Raised with the client on 17 Aug 2026 alongside the `tiger-crossing-track`
+     * consent above; it is his call, not this file's, and the note is here so
+     * that the next person to enlarge this frame asks again rather than
+     * inherits an answer. See the two withdrawn images recorded elsewhere in
+     * this list for what a "no" looks like: the entry is deleted, not shelved.
+     */
     id: "vann-bird-watching",
-    src: "reference/wp-media/property-pages/Mahua-Website-Images_Pench_Bird-Watching.jpg",
+    src: "Activity-Carousel-Images/Pench-Bird-Watching.png",
     alt: "Birdwatching in Mahua Vann's private eco park.",
     category: "forest",
     orientation: "landscape",

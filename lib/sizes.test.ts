@@ -6,10 +6,11 @@ import {
   BOXES as INTRO_BOXES,
   SIZES as INTRO_SIZES,
 } from "@/components/sections/ChapterIntro";
-import {
-  BOXES as COVERFLOW_BOXES,
-  SIZES as COVERFLOW_SIZES,
-} from "@/components/sections/Coverflow";
+// `@/components/sections/Coverflow` is deliberately NOT imported: since 17 Aug
+// 2026 that file draws no `<Photo>` at all — the client deleted its header band
+// — so it exports no `SIZES`/`BOXES` and passes no `sizes` prop. The tripwire at
+// the foot of this file is what would notice if that ever changed back, and it
+// can only notice because its match now includes the closing quote (see below).
 import { CARD_BOX, CARD_SIZES } from "@/components/sections/CoverflowCard";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
 import {
@@ -221,18 +222,14 @@ const LIVE_SLOTS: readonly Slot[] = [
   // 2.2925, so the box may not be narrower than 1.7194). See the component's own
   // comments.
   { name: "Coverflow.card", sizes: CARD_SIZES, box: CARD_BOX },
-  // The same chapter's header band — four photographs above the stage, carrying
-  // the two written beats a carousel of six activities cannot. They were missed
-  // when the coverflow shipped: the tripwire below asserted the test's own source
-  // `toContain("@/components/sections/Coverflow")`, which is a SUBSTRING of
-  // `@/components/sections/CoverflowCard`, so it read green for a file nothing
-  // here imported. Registered 16 Aug 2026, with the substring hole closed in the
-  // same change.
-  ...(["wide", "pair", "track"] as const).map((k) => ({
-    name: `Coverflow.${k}`,
-    sizes: COVERFLOW_SIZES[k],
-    box: COVERFLOW_BOXES[k] as CoverBox,
-  })),
+  // The same chapter's header band had three more rows here — `Coverflow.wide`,
+  // `.pair` and `.track`, the four photographs above the stage — registered on
+  // 16 Aug 2026 and removed on 17 Aug when the client deleted the band. They are
+  // worth a line because of HOW they were missed for a day: the tripwire below
+  // asserted the test's own source `toContain("@/components/sections/Coverflow")`,
+  // which is a SUBSTRING of `@/components/sections/CoverflowCard`, so it read
+  // green for a file nothing here imported. That hole is closed, which is also
+  // what makes removing these three safe rather than a silent regression.
 ];
 
 describe("the sizes the page actually serves", () => {
@@ -381,7 +378,15 @@ describe("the sizes the page actually serves", () => {
     // surviving slot. Read off this suite by running it and reading the failure
     // (`expected 24 to be 29`), not computed by hand, per the same instruction
     // as every step above.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(24);
+    // 24 → 21 on 17 Aug 2026, the client's ruling that deleted `field-days`'
+    // header band outright (*"Remove all 4 images (collage of images)…"*).
+    // `Coverflow.tsx` draws no photograph now, so `Coverflow.wide`, `.pair` and
+    // `.track` come out — three rows and three genuinely distinct strings, none
+    // of them shared with a surviving slot (`track`'s flat 420px cap in
+    // particular was the only file-driven width on the page). `Coverflow.card`
+    // stays: the cards are the chapter. Read off this suite by running it and
+    // reading the failure (`expected 21 to be 24`), not computed by hand.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -555,12 +560,12 @@ describe("cover boxes match the markup they describe", () => {
     // photograph cropped past the ceiling and a `sizes` describing a box that
     // no longer exists.
     { file: "components/sections/CoverflowCard.tsx", declared: CARD_BOX },
-    // The coverflow's header band — 3:2 for `guide-sunrise` (its own native
-    // shape, so nothing is cropped), 16:9 for the two frames that share a row,
-    // and 1:1 for `tiger-crossing-track`. All three are in the markup as
-    // `aspect-*` classes and all three are solved against a photograph rather
-    // than chosen, which is exactly the pairing this test exists to hold.
-    { file: "components/sections/Coverflow.tsx", declared: COVERFLOW_BOXES },
+    // `components/sections/Coverflow.tsx` had a case here from 16 to 17 Aug 2026
+    // — 3:2 for `guide-sunrise`, 16:9 for the pair, 1:1 for
+    // `tiger-crossing-track`. The client deleted that band, so the file now has
+    // no `aspect-*` class and no `<Photo>`, and a case with an empty set on both
+    // sides asserts nothing. The chapter's one remaining box is
+    // `CoverflowCard`'s, above.
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(
