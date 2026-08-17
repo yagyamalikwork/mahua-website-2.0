@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-14T06:29:36.721Z",
-  "url": "http://localhost:3100",
+  "measuredAt": "2026-08-17T02:00:19.094Z",
+  "url": "http://localhost:3110",
   "noRecede": false,
   "method": "Scrolled `/mahua-vann` and `/mahua-tola`'s rooms chapters in 120px steps in a real browser, settling the smooth-scrolled position (polled, never a fixed wait) before every sample. Every figure is getBoundingClientRect() / getComputedStyle() on the running page.",
   "combos": [

@@ -546,8 +546,10 @@ export const ROOM_STACK = {
  *
  * `screens` is the pin's length INCLUDING its own screen, matching
  * `StickyScene`'s `screens` so the two mean the same thing on this page. Both it
- * and `cardMaxPx` were **swept and settled on 16 Aug 2026** — see each one's own
- * note below, and `docs/reviews/2026-08-16-coverflow/density-sweep.md`.
+ * and `cardMaxPx` were **swept** rather than picked — `screens` on 16 Aug 2026
+ * (`docs/reviews/2026-08-16-coverflow/density-sweep.md`) and `cardMaxPx` twice,
+ * the second time on 17 Aug against the client's re-exported photographs
+ * (`docs/reviews/2026-08-16-coverflow/geometry.md` §2). See each one's own note.
  */
 export const COVERFLOW = {
   /**
@@ -572,47 +574,78 @@ export const COVERFLOW = {
   sideVeil: 0.4,
   /**
    * The widest a card is ever drawn — reached once the container it sits in is
-   * this wide, i.e. above `this + 2 × stageGutterMdPx` (996px). Below that the
+   * this wide, i.e. above `this + 2 × stageGutterMdPx` (1313px). Below that the
    * card fills its container; see `stageGutterPx` and `CoverflowCard`'s
    * `CARD_SIZES`.
    *
-   * **This is the only lever this chapter's density has, and 900 is solved
-   * against the photographs rather than chosen.** It read 560 until 16 Aug 2026,
-   * on the strength of a comment saying it "matches `ROOM_STACK.heightMax`'s
-   * reasoning" — an analogy to a different component in a different composition,
-   * measured against nothing. That is this project's own named repeat defect
-   * (`DECISIONS.md` §18, §19: a number picked in a plan is read downstream as a
-   * bound and reported spent rather than swept). At 560 the chapter measured
-   * **70.7% mean / 83.1% worst** empty against the 45% ceiling, because a
-   * 560 × 315 card is 13.6% of a 1440 × 900 screen — and through the first and
-   * last card's centre-hold it is the *only* card on the stage, every other one
-   * being parked at `--cf-off`. That hold is the chapter's worst screen at every
-   * width tested, and no neighbour dial (`sideScale`, `sideShiftPct`,
-   * `sideVeil`) can reach it.
+   * **This is the only lever this chapter's density has, and it is SOLVED against
+   * the photographs rather than chosen.** 1217 is the exact largest card every
+   * one of the six frames can still fill at full resolution, and
+   * `CoverflowCard.test.tsx` asserts both that figure and the rule that produced
+   * it. Read that test before changing this number.
    *
-   * Swept at 560/700/800/900/960/1120: **about −7 points of worst-screen empty
-   * per 100px of card, and it costs no scroll whatsoever** — the wrapper's
-   * height is `screens × 100svh` and has nothing to do with the card's size, so
-   * the chapter is 3.34 screens at every arm. 900 reads 48.4% / 61.5%.
+   * ## The client's request, and the files that made it possible
    *
-   * **The cap is resolution, not taste.** `object-fit: cover` in `CARD_BOX`'s
-   * 16:9 draws a photograph wider than its box whenever the photograph is wider
-   * than 16:9 — `cardWidth × (9/16) × imageAspect` — and four of the six card
-   * photographs are already-cropped 2.289:1 panoramas at 1163px, so they need
-   * **1.288 ×** this number in source pixels and run out at **903px**. Above
-   * that those four ship soft on an ordinary 100%-scaled laptop, which is the
-   * screen the client tests on, and `scripts/check_image_resolution.mjs` will
-   * NOT stop you: a photograph already served its widest file is
-   * `atLibraryCeiling`, a class that rig reports and does not enforce.
+   * 17 Aug 2026: *"as big as the Room Type cards from the property pages"* —
+   * 1344 × 685 at 1440 — *"if the previous and next cards are flowing out of the
+   * canvas of our website it is completely fine, it adds to the depth."* The same
+   * day he re-exported all six card photographs at **1344 × 685 (1.9620:1)**,
+   * where three had been 1163 × 508 (2.2925:1) crops made for `/mahua-vann`. Every
+   * ceiling figure this comment used to carry belonged to those files.
    *
-   * **So this chapter does not meet non-negotiable #8 and cannot until the
-   * library grows.** 45% worst needs about 1,090px. The ask is the uncropped
-   * originals — ~1,450px minimum, ~2,900px to serve a 2× screen — for
-   * `vann-safari`, `vann-bird-watching`, `vann-kohka-lake` and
-   * `vann-potters-village`, plus ~1,150px for `forest-trail-canopy`. With those
-   * files, `cardMaxPx: 1120` measures 36.7% / 42.3% and clears the ceiling.
+   * ## The cap is resolution, not taste
+   *
+   * `object-fit: cover` in `CARD_BOX`'s 16:9 draws a photograph wider than its box
+   * whenever the photograph is wider than 16:9 — `cardWidth × imageAspect /
+   * CARD_BOX` — so at 1.9620 the six are drawn **1.1036 ×** this number and run
+   * out at `1344 / 1.1036 = 1217.8`. Above that they ship soft on an ordinary
+   * 100%-scaled laptop, which is the screen the client tests on, and
+   * `scripts/check_image_resolution.mjs` will **NOT** stop you: a photograph
+   * already served its widest file is `atLibraryCeiling`, a class that rig reports
+   * and does not enforce. That is why the guard is a unit test.
+   *
+   * ## The sweep, 17 Aug 2026 — and the chapter finally clears the ceiling
+   *
+   * Four real builds, four real density runs, `check_image_resolution.mjs` at
+   * every arm (0 under-served throughout), on the build that carries the
+   * recomposed header band:
+   *
+   * | `cardMaxPx` | card at 1440 | `field-days` mean | worst | page mean | page worst |
+   * |---|---|---|---|---|---|
+   * | 900 (what shipped 16 Aug) | 900 × 506 | 47.1% | 55.0% | 38.4% | 77.8% |
+   * | 1000 | 1000 × 563 | 40.7% | 51.2% | 37.6% | 75.2% |
+   * | 1100 | 1100 × 619 | 33.8% | 46.5% | 36.6% | 71.8% |
+   * | **1217** | **1217 × 685** | **26.3%** | **41.0%** | **35.5%** | **71.4%** |
+   *
+   * About **−4.4 points of worst-screen empty per 100px of card, and it costs no
+   * scroll whatsoever** — the wrapper's height is `screens × 100svh` and has
+   * nothing to do with the card's size, so the chapter is ~2.7 screens at every
+   * arm. **At 1217 `field-days` passes non-negotiable #8 for the first time**:
+   * `passesWorst` true, 0 screens over budget, against three chapters over the
+   * ceiling before this work.
+   *
+   * (The 1217 row was swept at 1218 — one pixel above the integer ceiling, where
+   * the browser is asked for 1344.2px of a 1344px file. Shipped at 1217 so the
+   * test can state the ceiling exactly; the final figures are the gate run's.)
+   *
+   * **It was 560 for a day in Aug 2026**, on the strength of a comment saying it
+   * "matches `ROOM_STACK.heightMax`'s reasoning" — an analogy to a different
+   * component in a different composition, measured against nothing. That is this
+   * project's own named repeat defect (`DECISIONS.md` §18, §19, §20.4: a number
+   * picked in a plan is read downstream as a bound and reported spent rather than
+   * swept), and at 560 the chapter measured 70.7% / 83.1%.
+   *
+   * ## What is still on the table, and it is the client's call
+   *
+   * `CARD_BOX` could be the photographs' own **1.9620**, which crops nothing and
+   * is exactly the Room Type card's shape, and would take this number to 1344.
+   * Measured and declined: at 390 the card's own words leave **5px** of clearance
+   * inside a 1.9620 box against **23px** inside 16:9, in an `overflow: hidden`
+   * box that would clip a heading silently. Extrapolating this table's own slope,
+   * it is worth roughly 4-5 further points of worst-screen empty on a figure that
+   * already passes. `docs/reviews/2026-08-16-coverflow/geometry.md` §2.3.
    */
-  cardMaxPx: 900,
+  cardMaxPx: 1217,
   /**
    * The container's own horizontal padding — `ChapterSurface`'s `px-6`, and the
    * least cream a card may leave between itself and the viewport's edge.

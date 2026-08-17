@@ -411,3 +411,194 @@ figure for every card is still 390's, and 390 did not move. **No scrim needs re-
 
 `check_contrast_over_photos.mjs`'s own non-fatal placement note — the one `scrims.md` §6 added to print the
 off-centre displacement at every run rather than fix it — now reports **0**.
+
+---
+---
+
+# 17 August 2026 — the client's four changes, and two more assertions
+
+The rig went from nine assertions plus a precondition to **eleven**, and two of its own arms turned out to be
+measuring less than they claimed. Same discipline as above: each break is the defect the assertion exists to
+catch, the build was rebuilt and the server restarted between every one, and the width sweep ran at
+`--sweep-step 400` except where it is the assertion under test.
+
+Full working: [`geometry.md`](geometry.md).
+
+---
+
+## 15. Assertion 10 — a wrap-around ghost is never the centred card
+
+**The defect the client reported**, restored in full: `--cf-step` back to `pin-len / (count + 1)`, the card
+window back to four steps starting at `(i − 1)`, the anchor target back to `(i + 1) × step`, and the two
+ghosts pointed back at `coverflow-pass-first` / `-last` — i.e. the build as it stood on 16 August.
+
+```
+/@1440x900         cards=8 pinned=44/113 held=44/44 order=1,2,3,4,5,6 worst-centre=2.38px
+
+FAIL
+  - /@1440x900: assertion 10: the wrap-around ghost at DOM index 0 came to 0.0px of the stage's
+    centre at scrollY=6099 (34 of 113 samples inside 8px) — a ghost is a FLANK. Centred, it is the
+    chapter opening on a copy of its own last activity, which is what the client reported on
+    17 Aug 2026: "it started with 06-Walk and Cycling"
+  - /@1440x900: assertion 10: the wrap-around ghost at DOM index 7 came to 0.0px … at scrollY=7923
+    (38 of 113 samples inside 8px) …
+  - /@390x844: assertion 10: … at scrollY=7714 (33 of 106) …
+  - /@390x844: assertion 10: … at scrollY=9418 (35 of 106) …
+  - /@1440x900: assertion 2: at scrollY=6891 2 cards (0, 1) were within 8px of the stage's centre
+  - /@1440x900: assertion 3: at card 1's centred moment (scrollY=6891) neighbour 0 is drawn at
+    scale 1 — a neighbour must be measurably behind (≤0.99) and still a card (≥0.5)
+```
+
+**34 of 113 samples with the leading ghost dead centre** is not a moment in passing; it is the hold, and it
+is what a visitor arriving at the chapter met first. Both shapes, both ghosts.
+
+## 16. The break that did *not* fire assertion 10, and what it proved
+
+Run first, and worth keeping. Only `--cf-step`'s denominator was reverted (`count − 1` back to `count + 1`),
+leaving the ghosts on their own flank keyframes:
+
+```
+FAIL
+  - /@1440x900: assertion 3: at card 6's centred moment (scrollY=7899) neighbour 5 of the centred
+    card 6 is off screen entirely (left -1229, right -231, viewport 1440) — the client asked for
+    the neighbours to sit BEHIND the centre card, not to be gone
+```
+
+Assertion 10 stayed silent, correctly: with the ghosts still pinned to their flanks, no ghost reaches the
+middle whatever the step is. What fired instead was assertion **3** — six activities squeezed into five of
+seven steps leaves the last one with nothing beside it.
+
+**The lesson is the one this file exists for.** The reported defect is *two* things — the step arithmetic and
+the ghosts' schedule — and a break that undoes one of them proves nothing about the assertion aimed at the
+pair. Had this run been accepted as "assertion 10 watched failing", the record would have been false and the
+assertion untested. §15 is the honest version.
+
+## 17. Assertion 11 — `scroll-snap-align` removed
+
+The declaration deleted from `.coverflow-target`, everything else untouched:
+
+```
+/@1440x900   … settle=2/6 worst-settle=327.0px
+/@390x844    … settle=2/6 worst-settle=85.5px
+
+FAIL
+  - /@1440x900: assertion 11: `.coverflow-target` declares `scroll-snap-align: none` — the six
+    offsets a card is centred at are not snap positions
+  - /@1440x900: assertion 11: a 200px flick left the page at scrollY=6919, inside the pin, with the
+    nearest card (1) 100.7px off centre — the visitor is stranded between two cards …
+  - /@1440x900: assertion 11: a 320px flick … card (3) 329.4px off centre …
+  - /@1440x900: assertion 11: a 140px flick … card (3) 146.4px off centre …
+  - /@1440x900: assertion 11: a 500px flick … card (5) 327.0px off centre …
+  - /@390x844: … four more, 30.8 / 58.7 / 85.5 / 30.3px off centre
+```
+
+Four of six flicks stranded at 1440, the worst 327px — a quarter of a card's width between two of them. This
+is the client's report reproduced: *"if scrolled fast it moves up or down the cards very easily."*
+
+## 18. Assertion 11 again — the snap box taken back to zero
+
+`scroll-snap-align: start` left in place, `.coverflow-target` returned to `width: 0; height: 0`. **This is
+the one that looks correct in the stylesheet**, and it is why the box is asserted separately from the
+alignment:
+
+```
+FAIL
+  - /@1440x900: assertion 11: `.coverflow-target` is 0×0px — a ZERO-AREA snap area is not a snap
+    area. Measured in Chromium 151 on a bare page: six zero-sized targets under `proximity` snapped
+    nothing at all, and the same six at 1×1px snapped every scroll. This is the one that looks
+    correct in the stylesheet
+  - … and the same four stranded flicks per shape as §17, to the pixel
+```
+
+Identical behaviour to §17 from a stylesheet that still says `scroll-snap-align: start` on six elements at
+the right offsets. The targets had been zero-sized since the day they were written, for no reason other than
+that nothing had ever needed otherwise.
+
+## 19. The negative control — the anchor target left on the old slope
+
+`--cf-step`'s new denominator kept, and only `.coverflow-target { top }` reverted to `(i + 1) × step`. This
+is Task 1 §11.5's negative control in its new form: every target one whole step out.
+
+```
+FAIL
+  - /@1440x900: assertion 5: clicking card 6's "next" (#field-days-card-0) left card 2 nearest the
+    stage's centre, not card 1 — the loop the client asked for … is not wired
+  - /@390x844: assertion 5: … the same
+  - assertion 7 · sweep: the scroll target landed on the wrong card at 360-1560px (8 of 8 samples).
+    Worst at 360px: `#field-days-card-1` left card 3 nearest the centre, not card 2
+  - assertion 7 · sweep: the centred card was not centred in its stage at 360-1560px (8 of 8).
+    Worst 754.4px at 1560px …
+  - assertion 7 · sweep: a neighbour was not veiled at 360-1560px … flank veils 0.4, 0.000128205
+  - assertion 7 · sweep: a neighbour was not behind the centre card at 360-1560px … 0.82, 0.9999
+```
+
+**Every width, every target.** Note that the second message's own diagnosis is wrong for this break — it
+blames the over-constrained margins, because that is the only cause it knows for a card off centre — while
+the target band directly above it names the real one. Read them together; the "wrong card" band is the
+diagnosis.
+
+---
+
+## 20. Two defects in this rig, found by the work that changed it
+
+Neither would have failed anything. Both made a green run mean less than it says.
+
+### 20.1 Snapping quantised the rig's own sweep — 43 sampled positions, 6 distinct rests
+
+`.coverflow-target` became a snap area for assertion 11, and `scroll-snap-type: proximity` applies to
+programmatic scrolls as well as to wheels. So `scrollToAndSettle` — this file's whole sampling method, a
+position every 24px — was being pulled onto the nearest card's centred moment. Measured on the shipped build
+at 1440×900 over the pin's own 1,007px:
+
+| | positions asked for | distinct positions rested at |
+|---|---|---|
+| snapping on (as shipped) | 43 | **6** — 6892, 7093, 7295, 7496, 7698, 7899 |
+| snapping suppressed | 43 | **42** |
+
+Assertions 2, 3 and 4 would have been asked only at the six moments the carousel looks best — never between
+two cards, which is where every defect this rig has ever caught lived. The run stayed green throughout, and
+`pinned=64/113` against `43/113` is the only trace it left.
+
+`setSnap` now suppresses snapping for assertions 1-7 and restores it for assertion 11, and `readSnap` reads
+the declaration off the page **before** any of that, so the suppression can never be what makes assertion 11
+pass. §18's break is the proof of that half working.
+
+### 20.2 The bisection preferred a sample deeper into a hold than the pin's own edge
+
+The last activity now centres at the exact offset the pin releases, and then holds there while the stage
+rides out. The bisection kept the sample with the smallest `|offset|`, and measured at 1440×900 those are:
+
+| scrollY | stage top | card 6's offset | pinned |
+|---|---|---|---|
+| 7890 | 107 | 34.16px | yes |
+| **7899 — the release** | **107** | **0.44px** | **yes** |
+| 7905 | 101.1 | **0.00px** | no |
+| 7911 | 95.1 | 0.00px | no |
+
+So it reported 7911, and the rig said *"card 6 reaches the centre at scrollY=7911, where the stage is NOT
+pinned — the pin is too short for its own carousel"* about a page whose last card is centred, pinned, at the
+offset the pin ends. A false failure, and the sort that gets "fixed" in the page. Both the bisection and the
+no-crossing shortcut now prefer a pinned sample and fall back to distance.
+
+An earlier version of the same shortcut had the opposite bug for the FIRST activity, which is held at centre
+from before the pin engages: sorted on distance alone the tie was broken by sampling order, and it answered
+with the earliest sample, before the lock.
+
+---
+
+## 21. The gates, on the restored build
+
+| | |
+|---|---|
+| `npm test` | **477** passed, 43 files |
+| `npm run lint` | 0 errors (5 pre-existing `lib/booking` warnings) |
+| `npx tsc --noEmit` | clean |
+| `npm run build` | clean |
+| `npm run verify:budget` | **168.2 KB brotli — delta 0** |
+| `check_coverflow.mjs` | **pass** — order `1,2,3,4,5,6` at both shapes, worst centre 1.81px @1440 / 0.57px @390, 79 sweep widths at step 20 with worst off-centre 1.90px, settle 6/6 at both shapes |
+| `check_films.mjs` | pass at six widths, 0/12 covered positions, corners within 0-3 levels of cream |
+| `check_contrast_over_photos.mjs` | pass on all three routes; six card runs, worst 4.79 at 390 |
+| `check_image_resolution.mjs` | **0 under-served** at all five arms |
+| `check_card_stack.mjs` | pass — the site-wide snap declaration leaves the other pinned chapter alone |
+| `check_plates.mjs` | pass — 0.00% worst distortion, three routes |
+| `measure_density.mjs` | `field-days` **26.4% / 41.0%** — `passesWorst` **true**, 0 screens over budget |

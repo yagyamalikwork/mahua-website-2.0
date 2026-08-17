@@ -23,7 +23,9 @@ import { COVERFLOW } from "@/lib/motion";
  * `left: 0; right: 0` with an over-constrained width resolves by CSS 2.1
  * §10.3.7 — the auto margins go to zero and the box is pushed to the inline
  * start — so every card sat 22-25.6px right of centre, with 47px of cream one
- * side and 1px the other, at every scroll position from 768px to 996px. Nothing
+ * side and 1px the other, at every scroll position from 768px to 996px (the band
+ * the card's cap put it in at the time — the cap is 1217px now, so the same
+ * defect would have run from 768px all the way to 1313px). Nothing
  * measured it, because `check_coverflow.mjs` sampled 1440 and 390 and this
  * project's four fixed widths step straight over the band. That rig now sweeps
  * 360-1920 continuously and asserts the card's rendered width IS
@@ -39,56 +41,74 @@ import { COVERFLOW } from "@/lib/motion";
  * | viewport | container content | card |
  * |---|---|---|
  * | < 768px | `100vw − 48` | `100vw − 48` |
- * | 768-996px | `100vw − 96` | `100vw − 96` |
- * | ≥ 996px | `100vw − 96` | a flat 900px |
+ * | 768-1313px | `100vw − 96` | `100vw − 96` |
+ * | ≥ 1313px | `100vw − 96` | a flat 1217px |
  *
- * 996 is exact, not rounded: `100vw − 96 ≥ 900 ⟺ 100vw ≥ 996`. The container's
- * own `max-w-[1600px]` never enters it — above 1696px the content box holds at
- * 1504px, which is still wider than `cardMaxPx`, and would only start to bind if
- * a future sweep took the card past 1504. `ui/Photo.tsx`'s comment is explicit
- * that a `sizes` must round *up* where it is unsure; nothing here is unsure,
- * because every arm is the layout's own arithmetic.
+ * 1313 is exact, not rounded: `100vw − 96 ≥ 1217 ⟺ 100vw ≥ 1313`. The
+ * container's own `max-w-[1600px]` never enters it — above 1696px the content box
+ * holds at 1504px, which is still wider than `cardMaxPx`, and would only start to
+ * bind if a future sweep took the card past 1504. `ui/Photo.tsx`'s comment is
+ * explicit that a `sizes` must round *up* where it is unsure; nothing here is
+ * unsure, because every arm is the layout's own arithmetic.
  *
- * Current value: `(min-width: 996px) 900px, (min-width: 768px)
- * calc(100vw - 96px), calc(100vw - 48px)`. **`cardMaxPx` was 560 until 16 Aug
- * 2026**, when it was swept from a value picked by analogy and never measured —
- * the expression is unchanged and still derives from `COVERFLOW`, so the sweep
- * moved these numbers without anyone touching this line
- * (`docs/reviews/2026-08-16-coverflow/density-sweep.md` §5).
+ * Current value: `(min-width: 1313px) 1217px, (min-width: 768px)
+ * calc(100vw - 96px), calc(100vw - 48px)`. **`cardMaxPx` has been swept twice —
+ * 560 → 900 on 16 Aug 2026, and 900 → 1217 on 17 Aug against the client's
+ * re-exported photographs** — and this line has not been touched either time.
+ * That is the whole point of interpolating it from `COVERFLOW`: the breakpoint
+ * and the width both moved by 400px and nothing here could drift, because there
+ * is no second copy of the number to drift from.
  */
 export const CARD_SIZES = `(min-width: ${COVERFLOW.cardMaxPx + 2 * COVERFLOW.stageGutterMdPx}px) ${COVERFLOW.cardMaxPx}px, (min-width: ${COVERFLOW.stageGutterMdFromPx}px) calc(100vw - ${2 * COVERFLOW.stageGutterMdPx}px), calc(100vw - ${2 * COVERFLOW.stageGutterPx}px)`;
 
 /**
  * The card's shape, and the box the photograph is `object-cover` inside.
  *
- * **16:9 is solved against the photographs, not chosen for the look.** Three of
- * the six frames the coverflow shows (`vann-kohka-lake`, `vann-potters-village`,
- * `vann-bird-watching` — the plan's correction A) are 2.29:1 panoramas already
- * cropped for `/mahua-vann`; their widest emitted tier is 768×335 = **2.2925**.
- * A `cover` box keeps `boxAspect / imageAspect` of a photograph's width, and
- * this project's own bound — `check_card_stack.mjs` assertion 6, which the
- * coverflow's rig inherits — is that no photograph loses more than 25% of its
- * width. So the box may not be narrower than `0.75 × 2.2925 = 1.7194`.
+ * **The 16 Aug derivation of this number is dead and the number survived it —
+ * for a different reason, and with a great deal more room.** It used to read:
+ * three of the six frames are 2.29:1 panoramas cropped for `/mahua-vann`, their
+ * widest tier is 2.2925, this project's bound is that no photograph loses more
+ * than 25% of its width (`check_card_stack.mjs` assertion 6, which the
+ * coverflow's rig inherits), so the box may not be narrower than
+ * `0.75 × 2.2925 = 1.7194` — and 16:9 was the only standard ratio above it, at
+ * 22.45% cropped with 2.55 points to spare. It also concluded that **no portrait
+ * or square card was available**.
  *
- * 16:9 = 1.7778 clears that by 3.4%, keeping **77.5%** of the widest frame
- * (22.45% cropped, 2.55 points inside the ceiling). It is the standard ratio
- * closest above the bound; anything appreciably taller — 3:2 would crop 34.6%,
- * 4:5 would crop 65% — fails the bound outright.
+ * **The client re-exported all six frames at 1344 × 685 on 17 Aug 2026**, so the
+ * widest tier is **1.9620** and the minimum box is `0.75 × 1.9620 = 1.4715`. 16:9
+ * now crops **9.4%**, not 22.45%; 3:2 is available and crops 23.5%; and a box as
+ * tall as 1.4715 would clear the bound. The old sentence about portrait cards no
+ * longer holds.
  *
- * **This is a real constraint on the card's design, and it belongs to the
- * photographs rather than to the layout:** a portrait or square coverflow card
- * is not available while three of the six frames are 2.29:1. A card is
- * therefore short and wide, and its words have ~315px of height at 1440 and
- * ~192px at 390 — which is why the type below is `clamp()`ed rather than
- * stepped at breakpoints.
+ * **16:9 is kept, and the reason is now the card's own words rather than the
+ * crop.** Measured on the rendered card — the content block's height against the
+ * card's content box, which is what decides whether the heading is clipped by
+ * this element's own `overflow: hidden`:
  *
- * The tallest frame in the set, `tiger-crossing-track` at 1.065:1, is *narrower*
- * than this box, so `cover` crops its height instead — unbounded by design, the
- * same convention `ROOM_CARD_MIN_BOX` records.
+ * | box | crop | draw factor | resolution ceiling | free space at **390** | at 768 |
+ * |---|---|---|---|---|---|
+ * | **16/9 = 1.7778** | 9.4% | ×1.1036 | 1217px card | **23px** | 191px |
+ * | 1344/685 = 1.9620 | 0% | ×1.0000 | 1344px card | **5px** | 156px |
+ * | 3/2 = 1.5 | 23.5% | ×1.3080 | 1027px card | 59px | 261px |
+ *
+ * At 390 the words are **58%** of the card's height (they are 27% at 1440 — see
+ * `Coverflow.tsx`'s `CARD_SCRIM`), so 390 is where a shorter box bites, and the
+ * photographs' own ratio leaves five pixels there: one copy edit, one font
+ * fallback, one longer activity title from a clipped heading, silently. And at
+ * every box's own resolution ceiling the card is **685px tall** — the ceiling is
+ * by definition the width at which the box's height equals the file's — so all
+ * three leave the same 476px inside the card at 1440 and a wider box buys width
+ * and nothing else.
+ *
+ * The tallest frame in the set is *narrower* than this box, so `cover` crops its
+ * height instead — unbounded by design, the same convention `ROOM_CARD_MIN_BOX`
+ * records.
  *
  * `lib/sizes.test.ts` holds this to the `aspect-[16/9]` class below in both
  * directions; changing one without the other is a red test, not a soft
- * photograph found in a screenshot three tasks later.
+ * photograph found in a screenshot three tasks later. `CoverflowCard.test.tsx`
+ * holds it against `COVERFLOW.cardMaxPx` and the library's own file widths,
+ * which is the half `lib/sizes.test.ts` cannot see.
  */
 export const CARD_BOX = 16 / 9;
 
@@ -175,8 +195,10 @@ export function CoverflowCard({
    *
    * The two wrap-around ghosts are the only cards where the two differ: the copy
    * of the last activity animates at `slot: -1` and the copy of the first at
-   * `slot: count`, which the shared `animation-range` formula centres exactly at
-   * the pin's two ends. `Coverflow.tsx` carries the whole reasoning.
+   * `slot: count`. The shared `animation-range` formula puts their centred
+   * moments one step OUTSIDE each end of the pin — which is what makes them
+   * flanks rather than cards — and `role` below is what keeps them there while
+   * the stage rides in and out. `Coverflow.tsx` carries the whole reasoning.
    */
   slot?: number;
   /**
@@ -186,12 +208,14 @@ export function CoverflowCard({
    * cards must not be eight activities to a screen reader, and sixteen arrows
    * must not be sixteen stops on the way through the page. **It keeps its arrows
    * all the same, as real links with `tabindex="-1"`**, and that is a decision
-   * rather than an oversight — this is the card at the centre of the stage
-   * through the whole of the pin's first and last stretch, so a version of it
-   * without arrows would be the one card a visitor cannot advance from, and
-   * `app/globals.css`'s `pointer-events` windows (which tile the pin, one card
-   * at a time) would have a hole at each end. Its arrows point at the same six
-   * targets its twin's do.
+   * rather than an oversight — but the reason changed on 17 Aug 2026 and the old
+   * one is worth not re-deriving. It used to be the card at the centre of the
+   * stage through the pin's first and last stretch, so a version without arrows
+   * would have been the one card a visitor could not advance from; the two real
+   * end cards hold those stretches now (`role`), and `app/globals.css` makes a
+   * ghost's arrows permanently un-hit-testable. They are still drawn because a
+   * ghost that looked different from its own twin would read as a seventh
+   * activity rather than as the loop coming round.
    */
   ghost?: boolean;
   count: number;
@@ -211,6 +235,40 @@ export function CoverflowCard({
 }) {
   const { previous, next } = coverflowNeighbours(index, count);
 
+  /**
+   * Which of the four special parts on the stage this card plays, if any.
+   *
+   * Four of the eight cards do not simply pass through, and `app/globals.css`
+   * needs to address each of them: the two ghosts are held at a flank across the
+   * stage's ride in and out, and the two real end cards are held at CENTRE across
+   * the same two stretches, so activity 1 is what a visitor meets when the
+   * chapter arrives and activity 6 is what is still there as it leaves.
+   *
+   * **A role, not a position, and that is 17 Aug 2026's correction.** The CSS said
+   * `:first-child` / `:last-child`, which meant "the two ghosts" only because the
+   * ghosts happened to be both the outermost cards and the cards that held. The
+   * step arithmetic split those two facts apart the moment the six activities
+   * started tiling the pin on their own, and `:nth-child(2)` for "the first real
+   * card" would have been a positional selector standing in for the coincidence
+   * that there is exactly one ghost in front of it —
+   * `.room-card[data-room-card-last]`'s own recorded lesson.
+   *
+   * It is derived here rather than passed in because it is a pure function of two
+   * props this card already has, and because `Coverflow.tsx` decides the slots:
+   * these four values are what the slots MEAN, and there is one place that is
+   * true.
+   */
+  const role =
+    slot === -1
+      ? "ghost-lead"
+      : slot === count
+        ? "ghost-trail"
+        : slot === 0
+          ? "hold-first"
+          : slot === count - 1
+            ? "hold-last"
+            : undefined;
+
   const arrow =
     "rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] text-[color:var(--bg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)]";
 
@@ -218,6 +276,7 @@ export function CoverflowCard({
     <li
       className="coverflow-card relative isolate flex aspect-[16/9] flex-col justify-end overflow-hidden p-5 md:p-7"
       aria-hidden={ghost ? "true" : undefined}
+      data-cf={role}
       style={
         {
           "--i": String(slot),

@@ -231,26 +231,32 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.35, centre: 0.7, bottom: 0.8,
  * band. Two constraints put the film here and both were measured rather than
  * argued:
  *
- * 1. **It cannot be inside the pinned viewport at any desktop shape.** A centred
- *    card is 506px tall in a 793px stage at 1440x900, leaving 143px of cream
- *    beneath it; the film is 400px tall. 506 + 400 + a gap does not fit in 793,
- *    so there is no scroll position at which a card and this film are both on a
- *    900px screen without touching. Its two earlier homes were the two ways of
- *    losing that argument: absolutely positioned at the wrapper's foot, where it
- *    cost no height and the card painted over the tiger's head below ~1430px;
- *    and in flow below the track, clear of every card and costing the chapter a
- *    297px band that is **78% cream** and lands on the join with `05 · Rooms` —
- *    which made 77.1% the emptiest screen on the whole site.
+ * 1. **It cannot be inside the pinned viewport at any desktop shape, and the card
+ *    growing on 17 Aug 2026 made that more true, not less.** A centred card is
+ *    **685px** tall in a 793px stage at 1440x900 — it was 506px until the card
+ *    was swept from 900 to 1217 — leaving **54px** of cream beneath it against
+ *    143px before. The film is 400px tall, so 685 + 400 + a gap does not fit in
+ *    793 by an even wider margin than it did, and there is no scroll position at
+ *    which a card and this film are both on a 900px screen without touching. Its
+ *    two earlier homes were the two ways of losing that argument: absolutely
+ *    positioned at the wrapper's foot, where it cost no height and the card
+ *    painted over the tiger's head below ~1430px; and in flow below the track,
+ *    clear of every card and costing the chapter a 297px band that is **78%
+ *    cream** and lands on the join with `05 · Rooms` — which made 77.1% the
+ *    emptiest screen on the whole site.
  * 2. **The band it needs already exists here, and nowhere else in the chapter.**
  *    Measured at 1024 / 1280 / 1440 / 1920, the header band's text column is the
  *    *taller* of the two by 353 / 311 / 222 / 160px, so its photograph column
  *    carries that much unused height. The film does not fit it outright — it is
  *    400px — but the row grows by only the difference (79 / 121 / 210 / 272px)
  *    where a tail band cost 297, and it grows at the chapter's dense head rather
- *    than at its empty join. Measured on this build: `field-days` 48.6% / 62.3%
- *    → **48.1% / 55.0%** empty, page worst **77.1% → 67.0%**, page mean 39.2% →
- *    38.9%, images per screen 2.23 → 2.29, and the pin is untouched, so the
- *    wrap-around ghosts keep every point they won.
+ *    than at its empty join. Measured on the build that had it: `field-days`
+ *    48.6% / 62.3% → 48.1% / 55.0% empty, page worst 77.1% → 67.0%. **Those four
+ *    figures are 16 Aug's and are superseded twice over** — by the client's
+ *    deletion of this band's photographs and by the card sweep that followed. The
+ *    current pair is `field-days` **26.3% mean / 41.0% worst**, the first time
+ *    this chapter has cleared non-negotiable #8 (`docs/reviews/
+ *    2026-08-16-coverflow/geometry.md` §2.2).
  *
  * **Above `guide-sunrise` rather than below it was worth 10 points** — 51.6% /
  * 65.3% against 48.1% / 55.0%, same markup one line apart, because the strip of
@@ -332,15 +338,24 @@ export function Coverflow({
    * reach it, because there is no card to put at the flanks: no card −1, no card
    * 6. There is now.
    *
+   * **A ghost is a flank and never a card, and that is 17 Aug 2026's correction
+   * — the client's own report.** *"When I scrolled down to the carousel it
+   * started with 06-Walk and Cycling whereas it should start with 01-Jungle
+   * Safari … should start with 01 and end with 06."* `step` was
+   * `pin-len / (count + 1)`, so all EIGHT centred moments tiled the pin and the
+   * leading ghost — the copy of activity 6 — was the card centred as the stage
+   * locked, and held there. `step` is `pin-len / (count − 1)` now: the six
+   * activities tile the pin, activity 1 centred where it locks and activity 6
+   * where it lets go, and the two ghosts fall one step outside each end. They are
+   * then held at their flanks by their own keyframes so that "outside the pin"
+   * never means "in the middle of a stage that is still on screen".
+   *
    * **`slot` is the animation's index and `source` is the activity's**, and they
-   * are only equal for the six real cards. `--i: -1` centres at
-   * `pin-start + 0 × step` — the exact offset at which the stage locks — and
-   * `--i: 6` at `pin-start + 7 × step`, the offset at which it lets go, because
-   * `step` is `pin-len / (count + 1)` and the eight centred moments tile the pin
-   * exactly. Verified in the browser rather than trusted: `check_coverflow.mjs`
-   * bisects all eight to their own centred moments and requires every one inside
-   * 8px of the stage's centre, and requires the last card's arrows still to be
-   * live when the pin ends.
+   * are only equal for the six real cards. Verified in the browser rather than
+   * trusted: `check_coverflow.mjs` bisects the six activities to their own
+   * centred moments and requires every one inside 8px of the stage's centre, and
+   * separately requires that NEITHER ghost is ever within 8px of it — which is
+   * the client's complaint written as an assertion.
    *
    * The two ghosts carry no `id`. The scroll targets live in the wrapper (there
    * are six, one per activity, and the arrows on a ghost point at the same six),
@@ -369,22 +384,58 @@ export function Coverflow({
           `guide-sunrise`. The photograph that used to sit under it is gone;
           nothing about the film's own position, size or blend changed.
 
-          `lg:items-start` is inherited from that arrangement and still right:
-          the film column is the taller of the two, and bottom-aligning would
-          push the chapter mark and the heading down the page by the difference.
-          The columns are still 5/7 — the film is drawn at 300px in a 7-column
-          slot, so this row carries visible cream to its right, which
-          `measure_density.mjs` sees and the geometry pass may want to spend. */}
-      <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-x-14">
-        <div className="lg:col-span-5">
+          ## Recomposed the same day, and the arithmetic of WHY is worth keeping
+
+          Removing the photographs left the band's height and took its imagery,
+          and the numbers said so: `field-days` read **52.0% mean / 66.2% worst**
+          empty and the page's own worst screen moved here — **82.9%**, on the
+          `forest / field-days` join, the emptiest screen on the site.
+
+          **A band this wide cannot be filled with type, and that is measured
+          rather than felt.** At 1440 the row is 1,344px across and 432px tall —
+          581,000px² — and everything in it is one paragraph, one heading, a
+          chapter mark and a 300px drawing. The rig counts a line box's own
+          rect, so the text is worth roughly 75,000px² and the film's element box
+          120,000: about a third of the band, whatever the columns do. Doubling
+          the prose would not close it and the client has just deleted a
+          paragraph from here.
+
+          So this row is composed for the two things that ARE available — the
+          text column reaching further across the band, and the band being no
+          taller than the film that sets its height:
+
+          - **7/5 rather than 5/7, and `gap-x-10` rather than `-14`.** The film is
+            drawn at 300px, so a 7-column slot for it left 461px of bare cream
+            inside its own column; a 5-column slot leaves 227. The width goes to
+            the text, where a wider measure at a larger size is real ink.
+          - **The prose is the chapter's only prose now, and is sized like it.**
+            `1.15rem`/`md:text-xl` at `54ch` against `1.08rem`/`md:text-lg` at
+            `52ch` — the same words, a bigger measure, more occupied area per
+            line, and no new copy invented to fill a hole (`docs/DECISIONS.md`
+            §2's own standing warning).
+          - **`lg:items-start` is unchanged and still right.** The film column is
+            the taller of the two, so bottom- or centre-aligning would push the
+            chapter mark and the heading down the page by the difference. The
+            slack stays at the foot of the text column, where the paragraph above
+            is what it is spacing.
+
+          The band's own height is the film's 400px and nothing here can change
+          that — the film's size is declared in `app/page.tsx`, where a comment
+          records that 420px is the ceiling its 810px source stays sharp to at
+          DPR 2. **A wider drawing is the one lever this band has left**, and it
+          is one line there rather than anything here. What this row does spend
+          is the 32px `margin-bottom` that used to sit under the film and half the
+          gap below the band; see `.coverflow-figure` in `app/globals.css`. */}
+      <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-x-10">
+        <div className="lg:col-span-7">
           <Enter>
             <div>
               {chapter.number && chapter.label && (
                 <ChapterMark number={chapter.number} label={chapter.label} />
               )}
-              <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[14ch]" />
+              <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[16ch]" />
               <p
-                className="mt-7 max-w-[52ch] font-[family-name:var(--font-body)] text-[1.08rem] leading-[1.72] md:text-lg"
+                className="mt-7 max-w-[54ch] font-[family-name:var(--font-body)] text-[1.15rem] leading-[1.68] md:text-xl"
                 style={{ color: "var(--text)" }}
               >
                 {copy.body[0]}
@@ -393,7 +444,7 @@ export function Coverflow({
           </Enter>
         </div>
 
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-5">
           {/* The tiger. Deliberately NOT wrapped in `ImageReveal`: that is a
               masked entrance, and a mask is a stacking context, which is what
               erases this film's white ground. `.coverflow-figure` must not
@@ -414,7 +465,12 @@ export function Coverflow({
        * stylesheet compute each element's own window without a per-index rule.
        */}
       <div
-        className="coverflow mt-12 lg:mt-16"
+        // `mt-8 lg:mt-10`, halved on 17 Aug 2026 with the band above it. A
+        // centred card already leaves cream of its own inside the stage — the
+        // stage is `100svh − header` and the card is centred in it — so this
+        // margin was being paid on top of a gap the pin creates for free, in the
+        // chapter whose worst screen was the page's worst.
+        className="coverflow mt-8 lg:mt-10"
         style={{ "--coverflow-count": String(count) } as React.CSSProperties}
       >
         {/* The six scroll targets. Zero-size, in the wrapper rather than in the

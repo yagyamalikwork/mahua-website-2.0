@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { chapterCopy } from "@/content/home";
+import { media } from "@/lib/media";
 import { COVERFLOW } from "@/lib/motion";
-import { CARD_SIZES, CoverflowCard } from "./CoverflowCard";
+import { CARD_BOX, CARD_SIZES, CoverflowCard } from "./CoverflowCard";
 
 const experience = {
   title: "Kohka Lake",
@@ -113,5 +115,64 @@ describe("CARD_SIZES", () => {
     // `md:px-12` fires at, or the string describes a container that does not exist.
     expect(COVERFLOW.stageGutterMdFromPx).toBe(768);
     expect(COVERFLOW.stageGutterMdPx).toBeGreaterThan(COVERFLOW.stageGutterPx);
+  });
+});
+
+/**
+ * **`cardMaxPx` has a hard ceiling and until now nothing enforced it.**
+ *
+ * The card's density lever is its width, and the photographs are what bound it:
+ * `object-fit: cover` in a box of `CARD_BOX` draws a photograph wider than its
+ * box whenever the photograph is wider than the box, by exactly
+ * `imageAspect / CARD_BOX`, and `ui/Photo.tsx`'s `coverSizes` asks the browser
+ * for that many pixels. Past the widest file the library holds, the browser
+ * simply serves what it has and the photograph ships soft.
+ *
+ * **`scripts/check_image_resolution.mjs` will not stop you**, and that is the
+ * reason this lives in the suite rather than in a rig: a photograph already
+ * served its widest tier is classed `atLibraryCeiling`, which that rig *reports*
+ * and does not enforce. So the failure mode is a green rig, a green build, and
+ * six visibly soft cards on the one screen the client tests on.
+ *
+ * The six ids are read out of `content/home.ts` rather than listed here — the
+ * chapter's own copy is what decides which photographs are on the stage, and a
+ * seventh activity added there must be caught by this, not skipped by it.
+ */
+describe("COVERFLOW.cardMaxPx against the photographs it draws", () => {
+  const experiences = (
+    chapterCopy("field-days") as { experiences: readonly { mediaId: string }[] }
+  ).experiences;
+
+  /** What the browser is asked to paint for a card this wide. */
+  const drawnWidth = (cardWidth: number, imageAspect: number) =>
+    cardWidth * Math.max(1, imageAspect / CARD_BOX);
+
+  it("never asks a card photograph for more pixels than its widest file has", () => {
+    expect(experiences.length).toBeGreaterThan(0);
+    for (const { mediaId } of experiences) {
+      const m = media(mediaId as Parameters<typeof media>[0]);
+      const needed = drawnWidth(COVERFLOW.cardMaxPx, m.width / m.height);
+      expect(
+        m.width,
+        `${mediaId}: a ${COVERFLOW.cardMaxPx}px card draws it ${needed.toFixed(0)}px wide and the ` +
+          `widest file is ${m.width}px — raise the card only as far as the library allows, or ask ` +
+          "the client for a wider original (`docs/OWED-ORIGINALS.md`)",
+      ).toBeGreaterThanOrEqual(Math.floor(needed));
+    }
+  });
+
+  it("states the ceiling, so raising the card is a decision and not a discovery", () => {
+    // The largest card every one of the six can still fill. Recorded as an
+    // assertion rather than a comment because the last three times a number like
+    // this was written in prose it was read downstream as spent and never swept
+    // (`docs/DECISIONS.md` §18, §19, §20.4).
+    const ceiling = Math.min(
+      ...experiences.map(({ mediaId }) => {
+        const m = media(mediaId as Parameters<typeof media>[0]);
+        return m.width / Math.max(1, m.width / m.height / CARD_BOX);
+      }),
+    );
+    expect(Math.floor(ceiling)).toBe(1217);
+    expect(COVERFLOW.cardMaxPx).toBeLessThanOrEqual(Math.floor(ceiling));
   });
 });

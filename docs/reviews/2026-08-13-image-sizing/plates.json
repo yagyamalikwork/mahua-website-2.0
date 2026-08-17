@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-14T04:19:03.002Z",
-  "url": "http://localhost:3100",
+  "measuredAt": "2026-08-17T02:14:18.620Z",
+  "url": "http://localhost:3110",
   "method": "Swept every route's [data-plate-grid] boards continuously — 900-1920px wide in 16px steps at heights 900 and 768, plus the 13 named shapes from the plate-squeeze evidence table — in a real browser, reducedMotion, against a production build. Column count and pocket:/roomy: mode are both computed live from the sampled numbers, never read off CSS. The 1440x900 reference (each plate's own width and column count) is captured at the start of each route's run, not hard-coded.",
   "shapesSwept": 143,
   "routes": [
@@ -13,36 +13,36 @@
       ],
       "samples": 143,
       "pocketSamples": 27,
-      "roomyFloorSamples": 297,
-      "worstDistortionPct": 0.285,
+      "roomyFloorSamples": 348,
+      "worstDistortionPct": 0.25,
       "worstDistortion": {
         "board": "rooms",
-        "plate": 1,
-        "width": 844,
-        "height": 390,
-        "pctOff": 0.285230518478663
+        "plate": 0,
+        "width": 1440,
+        "height": 900,
+        "pctOff": 0.2497121401752178
       },
       "boards": {
         "forest": {
           "referenceColumns": 3,
           "referenceWidths": [
             421.328125,
-            421.328125,
-            421.34375
+            421.34375,
+            421.328125
           ],
-          "worstDistortionPct": 0.207,
+          "worstDistortionPct": 0.217,
           "worstDistortionSample": {
-            "width": 964,
+            "width": 1492,
             "height": 900
           },
-          "worstFloorRatio": 0.8734,
+          "worstFloorRatio": 1,
           "worstFloorSample": {
-            "width": 1280,
-            "height": 720,
-            "renderedWidth": 368,
-            "refWidth": 421.34375
+            "width": 1440,
+            "height": 900,
+            "renderedWidth": 421.328125,
+            "refWidth": 421.328125
           },
-          "floorUsedAtWorst": 0.85,
+          "floorUsedAtWorst": 1,
           "worstPocketOverPx": 0,
           "worstPocketSample": null
         },
@@ -54,19 +54,19 @@
             652,
             652
           ],
-          "worstDistortionPct": 0.285,
+          "worstDistortionPct": 0.25,
           "worstDistortionSample": {
-            "width": 844,
-            "height": 390
+            "width": 1440,
+            "height": 900
           },
-          "worstFloorRatio": 0.681,
+          "worstFloorRatio": 1,
           "worstFloorSample": {
-            "width": 1024,
-            "height": 768,
-            "renderedWidth": 444,
+            "width": 1440,
+            "height": 900,
+            "renderedWidth": 652,
             "refWidth": 652
           },
-          "floorUsedAtWorst": 0.65,
+          "floorUsedAtWorst": 1,
           "worstPocketOverPx": 0,
           "worstPocketSample": null
         },
@@ -78,19 +78,19 @@
             318,
             318
           ],
-          "worstDistortionPct": 0.082,
+          "worstDistortionPct": 0.169,
           "worstDistortionSample": {
-            "width": 932,
-            "height": 430
+            "width": 1588,
+            "height": 768
           },
-          "worstFloorRatio": 0.8742,
+          "worstFloorRatio": 1,
           "worstFloorSample": {
-            "width": 1280,
-            "height": 720,
-            "renderedWidth": 278,
+            "width": 1440,
+            "height": 900,
+            "renderedWidth": 318,
             "refWidth": 318
           },
-          "floorUsedAtWorst": 0.85,
+          "floorUsedAtWorst": 1,
           "worstPocketOverPx": 0,
           "worstPocketSample": null
         }
