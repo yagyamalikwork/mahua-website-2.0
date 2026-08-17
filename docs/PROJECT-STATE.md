@@ -8,7 +8,7 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 Client: *"looks flat even though it has beautiful images."* Six activity cards on a pinned stage, advancing
 on the visitor's own scroll, each a photograph with its own words laid on it, the neighbours behind and
 veiled, the loop visible in the scroll. **Zero added JavaScript** — 168.2 KB brotli, delta 0. `SplitFeature`
-retired. **477 tests.**
+retired. **481 tests.**
 
 Evidence: [`reviews/2026-08-16-coverflow/README.md`](reviews/2026-08-16-coverflow/README.md).
 Reasoning: [`DECISIONS.md` §20](DECISIONS.md). **Read §20.4 before quoting any density figure for this

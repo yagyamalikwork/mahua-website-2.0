@@ -2055,7 +2055,9 @@ it, and Kohka Lake became an actual lake rather than the lodge's swimming pool (
 **What that unlocked, in one line each:**
 
 - The draw factor fell from 1.288 to **1.1036**, so the ceiling rose from 903px to **1217px** — past the
-  ~1,090px 45% needed. Shipped at 1217, measured 41.0% worst.
+  ~1,090px 45% needed. Shipped at 1217 on 17 Aug (41.0% worst), then at the files' **own 1344** on 18 Aug
+  once `CARD_BOX` became their exact ratio — crop 0.0%, draw factor 1.000, **31.1% worst**. `cardMaxPx` is
+  now spent exactly: the next pixel is a soft photograph.
 - The minimum box fell from 1.7194 to **1.4715**. 16:9 now crops **9.4%**, not 22.45%, and a 3:2 or squarer
   card is available. `CARD_BOX` stays 16:9 on measurement, not inertia: at *every* box's own ceiling the
   card is 685px tall — the file's height — so a wider box buys width only, and at 390px the free space
