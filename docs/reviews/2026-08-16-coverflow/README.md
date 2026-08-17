@@ -20,7 +20,7 @@ either side, looping. **Zero added JavaScript.** The narrative and every expensi
 
 | | |
 |---|---|
-| `npm test` | **482** passed |
+| `npm test` | **477** passed |
 | `npm run build` / `npx tsc --noEmit` / `npm run lint` | clean (5 pre-existing booking-provider warnings) |
 | `npm run verify:budget` | **168.2 KB brotli — JS delta 0** |
 | `node scripts/check_coverflow.mjs` | pass — nine assertions, 158-sample continuous sweep |
@@ -31,23 +31,35 @@ either side, looping. **Zero added JavaScript.** The narrative and every expensi
 
 ## 2. Density
 
-| | mean | worst | page mean | page worst | images/screen |
+| | mean | worst | `passesWorst` | page mean | page worst |
 |---|---|---|---|---|---|
-| the three bands this replaced | 43.9% | 57.9% | — | 64.6% | — |
-| **shipped** | **48.1%** | **55.0%** | 38.9% | 67.0% | **2.29** |
+| the three bands this replaced | 43.9% | 57.9% | no | — | 64.6% |
+| **shipped, 17 Aug** | **26.4%** | **41.0%** | **yes** | **35.6%** | 71.4% |
 
-**The worst screen beats what it replaced; the mean does not.** `passesWorst` is the field non-negotiable #8
-binds on — `passesMean` is informative only — so on the rule that binds this is an improvement, and on the
-rule that does not it is a regression. Both are stated because both are true.
+**It passes — four points clear of the ceiling, zero screens over budget.**
 
-**Still over the 45% ceiling, and it cannot reach it on today's photographs.** §4.
+**And it could not, at any card size, twenty-four hours earlier.** What changed was the photographs, not the
+code: the client supplied all six at 1344 × 685, which moved the resolution ceiling from a 903px card to a
+1217px one. The card sweep on the new files reads 900 / 1000 / 1100 / 1217 → **55.0 / 51.2 / 46.5 / 41.0%**
+worst. `DECISIONS.md` §20.6 has the arithmetic.
+
+**Two figures that are NOT this work's** and must not be reported as fixed: `rooms` (44.8 → 39.6) and
+`guests` (45.9 → 40.7) crossed under the ceiling because `field-days` lost 56px and shifted the page against
+the 150px sample grid. Neither chapter was touched. `lodges` at 48.6% is the one still over.
 
 The full seven-row history of how it got here, and the four things that moved it, are `DECISIONS.md` §20.4.
 **Every intermediate figure in that table is stale**; quote only the shipped row.
 
 ## 3. What the visitor gets
 
-- Six cards, one per activity, each a photograph carrying its own words over a solved wash.
+- Six cards, one per activity, each a photograph carrying its own words over a solved wash, at
+  **1217 × 685** — the size of the property pages' room cards, which is what the client asked for.
+- **It opens on card 01 and closes on card 06.** Until 17 Aug the leading ghost had its own centred moment
+  and the carousel appeared to start on activity 06; the ghosts are now held at the flanks and never reach
+  the middle.
+- **The scroll settles on a card.** A fast flick still travels several, but the page comes to rest with one
+  centred rather than stranded between two — measured at 0px from a card on seven of eight flicks, against
+  19-549px unsnapped. `proximity`, not `mandatory`, so nobody is ever trapped.
 - **The loop is visible in the scroll**, not only in the arrows: `aria-hidden` ghosts of the last and first
   activity sit at the pin's two ends, so scrolling in shows the last card give way to the first and
   scrolling out shows the first return. A card and its own ghost are never on stage together.
@@ -58,15 +70,12 @@ The full seven-row history of how it got here, and the four things that moved it
 
 ## 4. Open — and one of them is the client's
 
-1. **Higher-resolution originals.** [`docs/OWED-ORIGINALS.md`](../../OWED-ORIGINALS.md) is the consolidated
-   ask across all three outstanding groups. For this chapter: four Vann frames at ~1,450px minimum
-   (~2,900px to serve a 2× screen) and `forest-trail-canopy` at ~1,150px. **With them, `cardMaxPx: 1120`
-   measures 36.7% / 42.3% and clears the ceiling outright** — that is measured, not projected, since 1120
-   was one of the swept arms.
-   **Uncropped originals are worth more than wider crops**: four of the six are 2.29:1 crops made for
-   `/mahua-vann`, and that ratio is the only reason the card must be 16:9 (§20.6).
-2. **`vann-potters-village` wants a different crop, not a wider file.** It measures 1.00:1 unwashed — the
-   theoretical floor — because white-glazed pots sit exactly where the body copy lands.
+1. ~~Higher-resolution originals~~ — **DELIVERED 17 Aug** and this is why the chapter passes. See
+   [`docs/OWED-ORIGINALS.md`](../../OWED-ORIGINALS.md), where group 1 is now closed. The DPR-2 half remains:
+   1344px serves a 1344px card at 1.00 on an ordinary screen and 0.50 on a Retina one.
+2. **`vann-potters-village` still wants a different photograph, not a wider file.** The 17 Aug re-crop moved
+   the glaze highlights without removing them — **1.03:1 unwashed**, against 1.00 before — so it still
+   carries one of the heaviest washes on the page, buying legibility with the photograph's own light.
 3. **The tiger now opens the chapter rather than closing it.** Non-negotiable #5 is a rule about behaviour
    (arrive, perform once, doze, replay on hover), all of which is intact, but the position changed and the
    client has not ruled on it. The alternative measured 77.1% page-worst.
