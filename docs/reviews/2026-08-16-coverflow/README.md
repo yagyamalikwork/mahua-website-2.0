@@ -40,8 +40,10 @@ either side, looping. **Zero added JavaScript.** The narrative and every expensi
 
 **And it could not, at any card size, twenty-four hours earlier.** What changed was the photographs, not the
 code: the client supplied all six at 1344 × 685, which moved the resolution ceiling from a 903px card to a
-1217px one. The card sweep on the new files reads 900 / 1000 / 1100 / 1217 → **55.0 / 51.2 / 46.5 / 41.0%**
-worst. `DECISIONS.md` §20.6 has the arithmetic.
+1344px one — the files' own width. The card sweep on the new files reads 900 / 1000 / 1100 / 1217 →
+**55.0 / 51.2 / 46.5 / 41.0%** worst, and the card then went to the full 1344 on 18 Aug (`CARD_BOX` became
+the photographs' own ratio, so the crop is 0.0%) for the shipped **31.1%**. `DECISIONS.md` §20.6 has the
+arithmetic. **`cardMaxPx` is now spent exactly** — the next pixel is a soft photograph.
 
 **Two figures that are NOT this work's** and must not be reported as fixed: `rooms` (44.8 → 39.6) and
 `guests` (45.9 → 40.7) crossed under the ceiling because `field-days` lost 56px and shifted the page against

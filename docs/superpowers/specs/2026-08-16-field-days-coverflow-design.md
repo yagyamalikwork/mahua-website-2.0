@@ -57,7 +57,12 @@ moves.
 - **The arrows are anchor links.** Invisible targets sit at the scroll offsets where each card is centred,
   so `‹` and `›` are ordinary `<a href="#…">` links to those points: the browser scrolls, and the same
   animation plays.
-- **Looping is free because of that choice.** The arrow on card 6 points at card 1's target and vice versa.
+- ~~**Looping is free because of that choice.** The arrow on card 6 points at card 1's target and vice versa.~~
+  **REVERSED BY THE CLIENT, 18 Aug 2026, after seeing it built.** The loop shipped — visible in the scroll as
+  `aria-hidden` ghost cards at the pin's two ends — and he dropped it on sight: *"let's make it linear and
+  just keep it 01 to 06 … if the person wants to see the 01 card again and currently sits on card 06, they
+  will have to scroll back."* The ghosts are gone and the arrows no longer wrap. **Do not rebuild it from
+  this spec.** `DECISIONS.md` §20.4 and `docs/reviews/2026-08-16-coverflow/linear.md`.
   No script, and arrows and scrolling drive one mechanism rather than competing for control of a position.
 
 ## 5. Decisions already taken
