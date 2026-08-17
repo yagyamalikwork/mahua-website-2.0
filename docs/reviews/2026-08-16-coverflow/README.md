@@ -20,7 +20,7 @@ either side, looping. **Zero added JavaScript.** The narrative and every expensi
 
 | | |
 |---|---|
-| `npm test` | **477** passed |
+| `npm test` | **481** passed |
 | `npm run build` / `npx tsc --noEmit` / `npm run lint` | clean (5 pre-existing booking-provider warnings) |
 | `npm run verify:budget` | **168.2 KB brotli — JS delta 0** |
 | `node scripts/check_coverflow.mjs` | pass — nine assertions, 158-sample continuous sweep |
@@ -34,7 +34,7 @@ either side, looping. **Zero added JavaScript.** The narrative and every expensi
 | | mean | worst | `passesWorst` | page mean | page worst |
 |---|---|---|---|---|---|
 | the three bands this replaced | 43.9% | 57.9% | no | — | 64.6% |
-| **shipped, 17 Aug** | **26.4%** | **41.0%** | **yes** | **35.6%** | 71.4% |
+| **shipped, 18 Aug** | **27.0%** | **31.1%** | **yes** | **34.6%** | 64.5% |
 
 **It passes — four points clear of the ceiling, zero screens over budget.**
 

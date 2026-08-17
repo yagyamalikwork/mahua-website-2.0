@@ -16,7 +16,9 @@ chapter — that table has nine rows and only the last is current.**
 
 ### The number
 
-**28.6% mean / 40.4% worst**, against 43.9% / 57.9% for the three bands it replaced and a 45% ceiling.
+**27.0% mean / 31.1% worst**, against 43.9% / 57.9% for the three bands it replaced and a 45% ceiling.
+Cards are **1344 × 685**, the photographs' own dimensions, cropped 0.0%; the words are **centred** on them.
+**`cardMaxPx` is spent exactly** — the next pixel is a soft photograph.
 `passesWorst` **true**, 4.6 points clear. Page worst 66.9%.
 
 **The carousel is linear, 01 to 06** — the client reversed his own 16 Aug loop request on 18 Aug once he had
