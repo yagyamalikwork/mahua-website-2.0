@@ -29,8 +29,10 @@ day and he rejected it as *"very snappy"*.
 changed rather than the code.** That is the single most useful thing to carry out of this work. Four of the
 six card frames had been 1163px 2.289:1 crops made for `/mahua-vann`, drawn at 1.288× the card's width and
 running out at a 903px card when 45% needed ~1,090px. The client supplied all six at **1344 × 685**, the
-draw factor fell to 1.1036, the ceiling rose to **1217px**, and the same sweep that had bottomed out at
-55.0% read **41.0%**.
+draw factor fell to 1.1036, the ceiling rose past the ~1,090px 45% needed, and the same sweep that had
+bottomed out at 55.0% read 41.0%. On 18 Aug the card went to the files' **own** 1344 × 685 — `CARD_BOX` is
+now their exact ratio, so the crop is 0.0% and the draw factor 1.000 — and the chapter reads **31.1%**.
+`cardMaxPx` is spent exactly: the next pixel is a soft photograph.
 
 ### What the client ruled, and what he sent
 

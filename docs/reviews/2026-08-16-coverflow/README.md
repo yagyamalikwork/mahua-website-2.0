@@ -53,7 +53,7 @@ The full seven-row history of how it got here, and the four things that moved it
 ## 3. What the visitor gets
 
 - Six cards, one per activity, each a photograph carrying its own words over a solved wash, at
-  **1217 × 685** — the size of the property pages' room cards, which is what the client asked for.
+  **1344 × 685** — the photographs' own dimensions, so they are cropped 0.0% and drawn at exactly 1.00.
 - **It opens on card 01 and closes on card 06.** Until 17 Aug the leading ghost had its own centred moment
   and the carousel appeared to start on activity 06; the ghosts are now held at the flanks and never reach
   the middle.
