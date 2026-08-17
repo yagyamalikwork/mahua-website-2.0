@@ -129,6 +129,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--coverflow-side-veil": String(COVERFLOW.sideVeil),
           "--coverflow-card-max": `${COVERFLOW.cardMaxPx}px`,
           "--coverflow-gutter": `${COVERFLOW.stageGutterPx}px`,
+          // The cream above and below a centred card inside the pinned stage,
+          // and the card's own shape as the two integers it is exported at —
+          // both new on 18 Aug 2026. The stylesheet needs the ratio because the
+          // card is bounded by the stage's HEIGHT as well as its width, and
+          // turning an available height into an available width is exactly this
+          // division. Unitless, so `calc()` can use them as numbers.
+          "--coverflow-gutter-y": `${COVERFLOW.stageGutterYPx}px`,
+          "--coverflow-card-box-w": String(COVERFLOW.cardBoxW),
+          "--coverflow-card-box-h": String(COVERFLOW.cardBoxH),
           // The base paper, under its own name.
           //
           // `--bg` cannot serve here: `ChapterSurface` shadows it with

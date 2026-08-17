@@ -185,13 +185,37 @@ describe("COVERFLOW.cardMaxPx against the photographs it draws", () => {
     // assertion rather than a comment because the last three times a number like
     // this was written in prose it was read downstream as spent and never swept
     // (`docs/DECISIONS.md` §18, §19, §20.4).
+    //
+    // **1217 → 1344 on 18 Aug 2026, and the card is AT the ceiling now.** The
+    // client chose *wider only, stay sharp* — the box became the photographs'
+    // own 1344/685, so the draw factor fell from 1.1036 to exactly 1.000 and the
+    // ceiling became the file's own width. There is no headroom left in this
+    // number at all: `cardMaxPx` equals `ceiling` equals every file's width, and
+    // the next pixel of card is a soft photograph. The lever is a wider original
+    // (`docs/OWED-ORIGINALS.md`), not this line.
     const ceiling = Math.min(
       ...experiences.map(({ mediaId }) => {
         const m = media(mediaId as Parameters<typeof media>[0]);
         return m.width / Math.max(1, m.width / m.height / CARD_BOX);
       }),
     );
-    expect(Math.floor(ceiling)).toBe(1217);
+    expect(Math.floor(ceiling)).toBe(1344);
     expect(COVERFLOW.cardMaxPx).toBeLessThanOrEqual(Math.floor(ceiling));
+  });
+
+  it("crops none of the six, because the box is the shape they were exported at", () => {
+    // The other half of *"stay sharp"*, and the half `check_coverflow.mjs`
+    // assertion 6 measures on the rendered page. Here it is arithmetic on the
+    // library: a box equal to the photograph's own ratio crops neither axis, so
+    // the 25% width-crop bound this project holds every photograph to is not
+    // merely satisfied — it is unreachable while these six files and this box
+    // agree. A re-export at a different shape breaks this before it can ship a
+    // silently cropped frame.
+    for (const { mediaId } of experiences) {
+      const m = media(mediaId as Parameters<typeof media>[0]);
+      const imageAspect = m.width / m.height;
+      const cropped = Math.max(0, 1 - Math.min(1, CARD_BOX / imageAspect));
+      expect(cropped, `${mediaId} is ${imageAspect.toFixed(4)}:1 in a ${CARD_BOX.toFixed(4)} box`).toBeCloseTo(0, 4);
+    }
   });
 });

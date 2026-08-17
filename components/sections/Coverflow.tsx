@@ -36,45 +36,58 @@ type CoverflowCopy = {
 /**
  * The wash between each card's photograph and the cream type laid on it.
  *
- * **Solved twice against the rendered page — 16 Aug 2026, then RE-solved from
- * scratch on 17 Aug when the client re-exported all six photographs.** Six
+ * **Solved three times against the rendered page — 16 Aug 2026, re-solved on
+ * 17 Aug when the client re-exported all six photographs, and re-solved AGAIN
+ * from scratch on 18 Aug when he asked for the words to be centred.** Six
  * frames, six exposures, six figures, each raised only until the worst single
  * pixel under that card's type clears 4.5:1 and no further. Every one is
- * re-derivable: `scripts/check_contrast_over_photos.mjs` carries a run per card,
- * and the 16 Aug sweep is `docs/reviews/2026-08-16-coverflow/scrims.md`.
+ * re-derivable: `scripts/check_contrast_over_photos.mjs` carries a run per card;
+ * the sweeps are `docs/reviews/2026-08-16-coverflow/scrims.md` (16 Aug) and
+ * `wider.md` §3 (18 Aug).
  *
- * **A re-crop is a re-solve, and this is the evidence for saying so.** The six
- * new files are the same photographs at 1344x685 rather than 1163x508 or
- * 1440x960 — different windows on the same scenes, nothing else. Carried over
- * unchanged, the 16 Aug figures put `vann-bird-watching` at **3.16:1** and
- * `forest-boardwalk-daylight` at **4.28:1** at 390px, both below the floor,
- * while `tiger-crossing-track` and `vann-potters-village` came out
- * over-washed. The photograph moved and the wash did not.
+ * **Moving type is a re-solve, exactly as re-cropping a photograph was.** Both
+ * are the same statement — a scrim answers to the pixels *under the glyphs*, and
+ * either the glyphs or the pixels moving invalidates it. Carried over unchanged
+ * onto the centred composition, the 17 Aug figures put `vann-potters-village` at
+ * **3.47:1** and `forest-trail-canopy` at **3.61:1** at 390px, both below the
+ * floor, while `vann-bird-watching` came out at 8.00 — over-washed by a mile.
  *
- * **Unwashed, at 390px, the six now measure 1.36 / 1.00 / 1.31 / 1.04 / 1.03 /
- * 1.00** in the order below — two of them at 1.00:1, the theoretical floor,
- * which is cream type on pixels of the same luminance. (The 16 Aug set read
- * 1.01–1.32.) The figures below are what each becomes.
+ * **Unwashed, the six measure 1.22 / 1.00 / 1.34 / 1.06 / 1.02 / 1.02 at 390 and
+ * 1.05 / 1.03 / 1.30 / 1.00 / 1.00 / 1.00 at 1440**, in the order below — four
+ * of them at the theoretical floor of 1.00:1, which is cream type on pixels of
+ * exactly its own luminance. The figures below are what each becomes.
  *
- * **The shape is `centre` + `bottom` + `corner`, and the shape is the finding.**
- * `Scrim.tsx` is explicit that a flat wash heavy enough for the brightest patch
- * flattens the whole photograph to mud, so the layers are put where the type is.
- * Where the type IS, though, depends on the width, and this card changes shape
- * more than most: at 1440 the words are 27% of the card's height and sit low in
- * it, so `bottom` + `corner` alone solve it and leave the frame alone. At 390 the
- * same words — floored by their own `clamp()` while the card shrinks to 342x192 —
- * are **58%** of the card, and their top edge is above the `bottom` band
- * entirely. No amount of `bottom` reaches them. `centre` is the layer whose
- * geometry matches that case, and it is why these figures are heavier than a
- * desktop-only solve would need. **390 is what binds every one of them.**
+ * ## Centring the words made the scrims LIGHTER, and that is the finding
  *
- * The cost is real and is written down rather than hidden: at 1440 these frames
- * are duller than the `{ bottom, corner }` pair that clears the same floor there
- * (`docs/reviews/2026-08-16-coverflow/scrims.md` §4). The lever that would buy it
- * back is the card's own small-screen composition — smaller type, or fewer words,
- * or a taller card below ~950px — not a lighter wash. **Do not lighten these
- * without re-running the rig at 390**; the desktop widths pass with several
- * points to spare and will not notice.
+ * The shape is now **`centre` + `bottom`, and nothing else** — where it was
+ * `centre` + `bottom` + `corner` plus a `flat` on two cards. Every one of the six
+ * carries less overlay than it did, and two of them lost a flat wash entirely.
+ * Three reasons, all geometric:
+ *
+ * - **`centre` is a radial that is fully opaque out to 34% of its own extent and
+ *   fades to nothing at 100%.** Bottom-anchored type sat at the *edge* of that
+ *   ellipse and was mostly being carried by `bottom` and `corner`; centred type
+ *   sits in its opaque middle. The same layer at a lower opacity now does more.
+ * - **`corner` is a wedge into the bottom-LEFT only.** It existed to reach a
+ *   headline standing on the floor of the frame, and it never reached "NEXT" in
+ *   the opposite corner. With the words gone from the floor, the only type left
+ *   down there is the two arrows, and `bottom` spans the full width — so the
+ *   wedge answers a question nobody is asking any more.
+ * - **The 390px case stopped being pathological.** `scrims.md` §5 recorded that
+ *   bottom-anchored words are 58% of the card's height at 390 and their top edge
+ *   clears the `bottom` band entirely, so *no* value of `bottom` reached them —
+ *   which is what forced the heavy figures. Centred words are centred at every
+ *   width, so one layer's geometry now matches the type at all four.
+ *
+ * **390 no longer binds all six.** It binds cards 02, 05 and 06; **1440 binds
+ * card 04** (4.85) and **768 binds card 01** (4.91). Re-run the rig at **all four
+ * widths** after touching any of these — a desktop-only or phone-only check would
+ * now pass a build that fails somewhere else, which was not true of the 17 Aug
+ * set.
+ *
+ * **Do not lighten these further.** The tightest three sit at 4.71-4.78, which is
+ * 5-6% over the floor, and `check_contrast_over_photos.mjs` is the only instrument
+ * on this project that can see it.
  *
  * **Keyed by photograph, not by activity, and not in `content/`.** What a scrim
  * answers to is the exposure of a frame; the activity that happens to name it is
@@ -94,47 +107,50 @@ const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
   // `content/home.ts`'s `ExperienceCopy.mediaId`. The 541px file that sent this
   // frame to the header band for a day is 1344px now.
   //
-  // **The lightest wash of the six**, and the only one that could be lightened
-  // rather than raised on the re-solve: dry roadside dust and pale grass under
-  // the type, but no blown highlight in it. 1.36:1 unwashed at 390 — the best
-  // starting point in the set. → 5.08 at 390, 6.51 at 1440.
-  "tiger-crossing-track": { centre: 0.55, bottom: 0.6, corner: 0.5 },
-  // **The hardest photograph on the stage since the re-export, and the only one
-  // that needed a heavy FLAT layer.** 1.00:1 unwashed — the theoretical floor,
-  // cream type on pixels of its own luminance. The taller crop carries much more
-  // of the blown-out sky burning through the canopy, and it is spread across the
-  // type block rather than sitting in one patch, so no shaped layer reaches all
-  // of it: `flat` 0.2 measured 4.01 and 0.3 measured 4.53, which is inside this
-  // rig's own noise of the floor. 0.35 is the first value with real margin.
-  // → 4.86 at 390, 9.48 at 1440. It carried `{ centre: 0.8, bottom: 0.6, corner:
-  // 0.6 }` and no flat on the old 1163x508 crop, where it read 5.24.
-  "vann-bird-watching": { flat: 0.35, centre: 0.8, bottom: 0.6, corner: 0.6 },
-  // Still the only other card that needs a flat layer, and for the reason the
-  // 16 Aug solve found: its bright water reaches the TOP-LEFT of the type block
-  // at 390, the one place none of the three shaped layers covers — above the
-  // `bottom` band, outside the `corner` wedge, at the `centre` ellipse's edge.
-  // 1.31:1 unwashed. The flat came DOWN, 0.15 → 0.12, because the re-export puts
-  // more sky and more reed bank in frame and less of the lit water under the
-  // words. → 4.98 at 390, 7.04 at 1440.
-  "vann-kohka-lake": { flat: 0.12, centre: 0.8, bottom: 0.6, corner: 0.6 },
-  // Pale boardwalk timber lit through the canopy. 1.04:1 unwashed, against 1.32
-  // on the old 1440x960 window — the shallower crop keeps the bright planks and
-  // loses the dark upper canopy that used to sit behind the type. Raised, not
-  // lightened: `{ centre: 0.65, bottom: 0.6, corner: 0.6 }` measured 4.28 here.
-  // → 4.82 at 390, 8.64 at 1440.
-  "forest-boardwalk-daylight": { centre: 0.75, bottom: 0.7, corner: 0.6 },
+  // **Still the lightest wash of the six**, and still for the same reason: dry
+  // roadside dust and pale grass under the type, no blown highlight in it. 1.22:1
+  // unwashed at 390, the best starting point in the set. It carried
+  // `{ centre: 0.55, bottom: 0.6, corner: 0.5 }` for the bottom-anchored words.
+  // **768 is what binds it**, not 390 — the one card in the set where that is
+  // true. → 5.49 at 390, 4.91 at 768, 5.09 at 1440 and 1920.
+  "tiger-crossing-track": { centre: 0.63, bottom: 0.58 },
+  // **The hardest photograph in the set on 17 Aug, and no longer.** It needed
+  // `{ flat: 0.35, centre: 0.8, bottom: 0.6, corner: 0.6 }` — the only heavy flat
+  // on the stage — because the blown-out sky burning through the canopy is spread
+  // across the whole frame rather than sitting in one patch, and no shaped layer
+  // reached the words where they sat. Centred, one radial does it and the flat is
+  // gone: the frame keeps its sky. 1.00:1 unwashed, the theoretical floor.
+  // → 4.78 at 390, 4.89 at 768, 5.55 at 1440.
+  "vann-bird-watching": { centre: 0.7, bottom: 0.6 },
+  // Its bright water used to reach the TOP-LEFT of the type block at 390, the one
+  // place none of the three shaped layers covered, which is why this frame
+  // carried a `flat` too. That corner is not where any type is now. 1.34:1
+  // unwashed — the best of the six — but the highest `centre` of the six all the
+  // same, because what is under the CENTRED words here is lit open water.
+  // **Its arrows are what bind it at 1440** (5.33 against the words' 7.03): the
+  // reed bank at the frame's foot is the brightest thing left in it.
+  // → 4.99 at 390, 6.14 at 768, 5.33 at 1440.
+  "vann-kohka-lake": { centre: 0.75, bottom: 0.62 },
+  // Pale boardwalk timber lit through the canopy — the shallower 17 Aug crop
+  // keeps the bright planks and lost the dark upper canopy that used to sit
+  // behind the type. 1.06:1 unwashed at 390 and **1.00 at 1440**, and 1440 is
+  // what binds it: at 4.85 it is the only card in the set solved on a desktop
+  // width. It carried `{ centre: 0.75, bottom: 0.7, corner: 0.6 }`.
+  // → 5.77 at 390, 5.28 at 768, 4.85 at 1440 and 1920.
+  "forest-boardwalk-daylight": { centre: 0.68, bottom: 0.6 },
   // White-glazed pots, the frame `docs/OWED-ORIGINALS.md` asks for a different
-  // CROP of rather than a wider file: 1.03:1 unwashed (1.01 before), because the
-  // specular highlights on the black bowls sit exactly where the body copy
-  // lands, and the re-export does not move them. A wash cannot fix that; only a
-  // crop can. → 5.00 at 390, 5.65 at 1440 — the narrowest DESKTOP margin of the
-  // six, which is the same finding stated a second way.
-  "vann-potters-village": { centre: 0.7, bottom: 0.6, corner: 0.55 },
-  // Sunlit leaf litter — 1.00:1 unwashed, the theoretical floor again, but the
-  // bright pixels are low in the frame, so `bottom` does more of the work here
-  // than anywhere else in the set and the `centre` can stay lowest-but-one.
-  // → 4.86 at 390, 6.43 at 1440.
-  "forest-trail-canopy": { centre: 0.6, bottom: 0.75, corner: 0.55 },
+  // CROP of rather than a wider file: 1.02:1 unwashed at 390 and 1.00 at 1440,
+  // because the specular highlights on the black bowls sit exactly where the body
+  // copy lands — and centring the copy did not move them off, which is the same
+  // finding a third time. A wash cannot fix that; only a crop can.
+  // → 4.71 at 390 — the tightest figure on the page — 4.75 at 768, 5.33 at 1440.
+  "vann-potters-village": { centre: 0.69, bottom: 0.6 },
+  // Sunlit leaf litter — 1.02:1 unwashed at 390, 1.00 at 1440. Its bright pixels
+  // are low in the frame, which is why this was the one card whose `bottom`
+  // (0.75) used to be heavier than its `centre` (0.6). Centred type has moved off
+  // the bright half and the two have swapped back round.
+  // → 4.73 at 390, 5.59 at 768, 5.52 at 1440.
+  "forest-trail-canopy": { centre: 0.7, bottom: 0.6 },
 };
 
 /**
@@ -145,14 +161,15 @@ const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
  * cards are in `CARD_SCRIM` — and it exists for the swap that changes one
  * `mediaId` in `content/home.ts` without coming back here.
  *
- * **It used to be heavier than every solved figure and no longer is, in one
- * layer.** The 17 Aug re-solve took `vann-bird-watching`'s `centre` to 0.8
- * against this 0.7, because a blown-out sky needed it. This is still heavier
- * overall on every card and still the right direction to fail in; it is simply
- * no longer true that it dominates each solved figure layer by layer, and saying
- * so is cheaper than a reader discovering it.
+ * **It dominates every solved figure again, layer by layer, since the 18 Aug
+ * re-solve** — the heaviest `centre` on the stage is now 0.75 against this 0.7…
+ * which is still short. Raised to 0.8 with the rest, so the promise this comment
+ * makes is one the numbers keep: no card can be swapped in and land lighter than
+ * the fallback by accident. It was briefly untrue on 17 Aug (`vann-bird-watching`
+ * needed a `centre` of 0.8), and saying so is cheaper than a reader discovering
+ * it.
  */
-const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.35, centre: 0.7, bottom: 0.8, corner: 0.6 };
+const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.35, centre: 0.8, bottom: 0.8, corner: 0.6 };
 
 /**
  * `04 · Days in the Field` as a coverflow — six activities, six cards, advancing

@@ -277,4 +277,37 @@ describe("COVERFLOW", () => {
     // the centre one, which is a stack, not a coverflow.
     expect(COVERFLOW.sideShiftPct).toBeGreaterThan(50);
   });
+
+  it("keeps the stage's gutter a gutter at the viewport the client tests on", () => {
+    // **The coupling the 18 Aug 2026 stage rests on, and it is not obvious.**
+    // `--cf-stage-h` is `min(100svh − header, cardMaxH + 2 × gutter-y)`, so the
+    // gutter is only the number it says it is while the SECOND term is the
+    // smaller one. Raise `stageGutterYPx` past the cream it replaced and the
+    // `min()` flips at 1440x900: the stage goes back to filling the space under
+    // the header, the gutter silently becomes a remainder again, and the client's
+    // *"remove some of the buffer space"* quietly un-does itself while every
+    // browser assertion still passes — because a stage at `100svh − header` is a
+    // perfectly valid stage.
+    //
+    // 107px is the header at 1440x900, measured. The rig proves the gutter holds
+    // at every height from 600 to 1200 (`check_coverflow.mjs` assertion 13); this
+    // is the arithmetic reason to expect it to.
+    const HEADER_AT_1440 = 107;
+    const cardMaxHeight = COVERFLOW.cardMaxPx * (COVERFLOW.cardBoxH / COVERFLOW.cardBoxW);
+    expect(cardMaxHeight + 2 * COVERFLOW.stageGutterYPx).toBeLessThanOrEqual(900 - HEADER_AT_1440);
+    // And a gutter of zero is not a gutter — the card would touch the stage's own
+    // edges and, at the pin's two ends, the chapter's.
+    expect(COVERFLOW.stageGutterYPx).toBeGreaterThan(0);
+  });
+
+  it("draws its photographs at exactly their own width, which is what `stay sharp` means", () => {
+    // The client's ruling of 18 Aug 2026, as arithmetic. `CARD_BOX` is
+    // `cardBoxW / cardBoxH` and `cardMaxPx` is the largest card the files can
+    // fill; with the box equal to the photographs' own ratio the draw factor is
+    // 1.000 and those two numbers are the same number. `CoverflowCard.test.tsx`
+    // checks the other end of it — that the ceiling really is the library's — and
+    // this checks that the two constants have not drifted apart, which is the
+    // cheap half and the one that would otherwise be found in a screenshot.
+    expect(COVERFLOW.cardMaxPx).toBe(COVERFLOW.cardBoxW);
+  });
 });

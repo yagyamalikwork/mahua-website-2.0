@@ -217,10 +217,11 @@ const LIVE_SLOTS: readonly Slot[] = [
   // `04 · Days in the Field`'s coverflow card (16 Aug 2026) — one activity, its
   // photograph filling the card with the words laid on it. Both halves are
   // derived rather than transcribed: `CARD_SIZES` is built from `COVERFLOW`'s
-  // own `cardMaxPx`/`stageGutterPx`, and `CARD_BOX`'s 16:9 is solved against the
-  // 25% width-crop bound on the widest tier the six photographs emit (768x335 =
-  // 2.2925, so the box may not be narrower than 1.7194). See the component's own
-  // comments.
+  // own `cardMaxPx`/`stageGutterPx`, and `CARD_BOX` from `COVERFLOW.cardBoxW` /
+  // `cardBoxH`. **Since 18 Aug 2026 that box is the photographs' own 1344/685**
+  // — the client's *"wider only, stay sharp"* — so it crops neither axis, where
+  // the 16:9 it carried until then was solved against the 25% width-crop bound
+  // on files that no longer exist. See the component's own comments.
   { name: "Coverflow.card", sizes: CARD_SIZES, box: CARD_BOX },
   // The same chapter's header band had three more rows here — `Coverflow.wide`,
   // `.pair` and `.track`, the four photographs above the stage — registered on
@@ -552,13 +553,14 @@ describe("cover boxes match the markup they describe", () => {
     // that renders it), which is why this entry names that file and not the
     // client menu.
     { file: "components/ui/SiteHeader.tsx", declared: MENU_CARD_BOX },
-    // The coverflow card — a bare 16:9, the same shape as the `aspect-[16/9]`
-    // class on its own `<li>`. This pairing is load-bearing rather than tidy:
-    // the ratio is what keeps the three 2.29:1 panoramas inside the 25%
-    // width-crop bound, so a future editor who retunes the card's shape in the
-    // markup and leaves `CARD_BOX` alone gets a red test here instead of a
-    // photograph cropped past the ceiling and a `sizes` describing a box that
-    // no longer exists.
+    // The coverflow card — `COVERFLOW.cardBoxW / cardBoxH`, the same shape as
+    // the `aspect-[1344/685]` class on its own `<li>`. This pairing is
+    // load-bearing rather than tidy: since 18 Aug 2026 the ratio is what makes
+    // the card's own resolution ceiling equal the file's width (draw factor
+    // 1.000), so a future editor who retunes the card's shape in the markup and
+    // leaves `CARD_BOX` alone gets a red test here instead of a photograph
+    // drawn wider than any file the library holds and a `sizes` describing a
+    // box that no longer exists.
     { file: "components/sections/CoverflowCard.tsx", declared: CARD_BOX },
     // `components/sections/Coverflow.tsx` had a case here from 16 to 17 Aug 2026
     // — 3:2 for `guide-sunrise`, 16:9 for the pair, 1:1 for

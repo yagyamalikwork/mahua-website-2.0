@@ -41,76 +41,116 @@ import { COVERFLOW } from "@/lib/motion";
  * | viewport | container content | card |
  * |---|---|---|
  * | < 768px | `100vw − 48` | `100vw − 48` |
- * | 768-1313px | `100vw − 96` | `100vw − 96` |
- * | ≥ 1313px | `100vw − 96` | a flat 1217px |
+ * | 768-1440px | `100vw − 96` | `100vw − 96` |
+ * | ≥ 1440px | `100vw − 96` | a flat 1344px |
  *
- * 1313 is exact, not rounded: `100vw − 96 ≥ 1217 ⟺ 100vw ≥ 1313`. The
+ * 1440 is exact, not rounded: `100vw − 96 ≥ 1344 ⟺ 100vw ≥ 1440`. The
  * container's own `max-w-[1600px]` never enters it — above 1696px the content box
  * holds at 1504px, which is still wider than `cardMaxPx`, and would only start to
  * bind if a future sweep took the card past 1504. `ui/Photo.tsx`'s comment is
  * explicit that a `sizes` must round *up* where it is unsure; nothing here is
  * unsure, because every arm is the layout's own arithmetic.
  *
- * Current value: `(min-width: 1313px) 1217px, (min-width: 768px)
- * calc(100vw - 96px), calc(100vw - 48px)`. **`cardMaxPx` has been swept twice —
- * 560 → 900 on 16 Aug 2026, and 900 → 1217 on 17 Aug against the client's
- * re-exported photographs** — and this line has not been touched either time.
+ * Current value: `(min-width: 1440px) 1344px, (min-width: 768px)
+ * calc(100vw - 96px), calc(100vw - 48px)`. **`cardMaxPx` has been swept three
+ * times — 560 → 900 on 16 Aug 2026, 900 → 1217 on 17 Aug against the client's
+ * re-exported photographs, and 1217 → 1344 on 18 Aug when he chose the
+ * photographs' own ratio for the box** — and this line has not been touched once.
  * That is the whole point of interpolating it from `COVERFLOW`: the breakpoint
- * and the width both moved by 400px and nothing here could drift, because there
- * is no second copy of the number to drift from.
+ * and the width have both moved by hundreds of pixels and nothing here could
+ * drift, because there is no second copy of either number to drift from.
+ *
+ * **The card exactly fills its stage at 1440 now, and that is arithmetic rather
+ * than a coincidence**: the breakpoint is `cardMaxPx + 2 × stageGutterMdPx`, and
+ * `ChapterSurface`'s container at 1440 is `1440 − 96 = 1344`. So 1440 is both the
+ * width at which the cap starts to bind and the width at which the container
+ * stops being the binding term — they meet, they do not cross, and there is no
+ * band in between for a card to be wider than the box holding it.
+ *
+ * **A fourth bound joined these three on 18 Aug 2026 and it is NOT in this
+ * string: the stage's own height.** A card that would be taller than the pinned
+ * stage is narrowed until it fits (`app/globals.css`, `--cf-stage-h`), which
+ * `sizes` cannot express — it has no access to the viewport's height. It is safe
+ * to leave out because it can only ever make the card *smaller*: `sizes` then
+ * over-states, which costs a tier of bytes on a short viewport and never ships a
+ * soft photograph, and `ui/Photo.tsx` records that as the correct direction to be
+ * wrong in. `check_image_resolution.mjs` is what would report the cost.
  */
 export const CARD_SIZES = `(min-width: ${COVERFLOW.cardMaxPx + 2 * COVERFLOW.stageGutterMdPx}px) ${COVERFLOW.cardMaxPx}px, (min-width: ${COVERFLOW.stageGutterMdFromPx}px) calc(100vw - ${2 * COVERFLOW.stageGutterMdPx}px), calc(100vw - ${2 * COVERFLOW.stageGutterPx}px)`;
 
 /**
  * The card's shape, and the box the photograph is `object-cover` inside.
  *
- * **The 16 Aug derivation of this number is dead and the number survived it —
- * for a different reason, and with a great deal more room.** It used to read:
- * three of the six frames are 2.29:1 panoramas cropped for `/mahua-vann`, their
- * widest tier is 2.2925, this project's bound is that no photograph loses more
- * than 25% of its width (`check_card_stack.mjs` assertion 6, which the
- * coverflow's rig inherits), so the box may not be narrower than
- * `0.75 × 2.2925 = 1.7194` — and 16:9 was the only standard ratio above it, at
- * 22.45% cropped with 2.55 points to spare. It also concluded that **no portrait
+ * **It is the photographs' own ratio since 18 Aug 2026 — 1344/685 = 1.9620 — so
+ * it crops them not at all.** The client was given four card sizes with a
+ * measured sharpness for each and chose *wider only, stay sharp*:
+ *
+ * | | card at 1440 | area | sharpness |
+ * |---|---|---|---|
+ * | 16/9, `cardMaxPx` 1217 | 1217 × 685 | — | 1.00 |
+ * | **chosen** | **1344 × 685 (1.9620)** | **+10%** | **1.00** |
+ * | rejected | 1344 × 754 (1.7825) | +22% | 0.91 |
+ * | rejected | 1344 × 823 (1.6331) | +33% | 0.83 |
+ *
+ * The two rejected rows are what a *taller* card costs: `cover` in a box
+ * narrower than the photograph draws it `imageAspect / CARD_BOX` times the
+ * card's own width, so a 754px-tall card asks for 1,478px of a 1,344px file and
+ * the browser simply serves what it has. **A ratio is a sharpness decision on
+ * this card, not only a composition one**, and that is why the four options were
+ * put to him as a table rather than as a picture.
+ *
+ * ## What the two earlier derivations said, kept because the shape is the lesson
+ *
+ * **16 Aug.** Three of the six frames were 2.29:1 panoramas cropped for
+ * `/mahua-vann`; this project's bound is that no photograph loses more than 25%
+ * of its width (`check_card_stack.mjs` assertion 6, which the coverflow's rig
+ * inherits), so the box could not be narrower than `0.75 × 2.2925 = 1.7194`, and
+ * 16:9 was the only standard ratio above it. It also concluded that **no portrait
  * or square card was available**.
  *
- * **The client re-exported all six frames at 1344 × 685 on 17 Aug 2026**, so the
- * widest tier is **1.9620** and the minimum box is `0.75 × 1.9620 = 1.4715`. 16:9
- * now crops **9.4%**, not 22.45%; 3:2 is available and crops 23.5%; and a box as
- * tall as 1.4715 would clear the bound. The old sentence about portrait cards no
- * longer holds.
- *
- * **16:9 is kept, and the reason is now the card's own words rather than the
- * crop.** Measured on the rendered card — the content block's height against the
- * card's content box, which is what decides whether the heading is clipped by
- * this element's own `overflow: hidden`:
+ * **17 Aug.** The client re-exported all six at 1344 × 685, so the minimum box
+ * became `0.75 × 1.9620 = 1.4715` and three ratios were available. 16:9 was kept
+ * anyway, on the card's own words rather than on the crop — measured on the
+ * rendered card, the content block's height against the card's content box:
  *
  * | box | crop | draw factor | resolution ceiling | free space at **390** | at 768 |
  * |---|---|---|---|---|---|
- * | **16/9 = 1.7778** | 9.4% | ×1.1036 | 1217px card | **23px** | 191px |
- * | 1344/685 = 1.9620 | 0% | ×1.0000 | 1344px card | **5px** | 156px |
+ * | 16/9 = 1.7778 | 9.4% | ×1.1036 | 1217px card | **23px** | 191px |
+ * | **1344/685 = 1.9620** | **0%** | **×1.0000** | **1344px card** | **5px** | 156px |
  * | 3/2 = 1.5 | 23.5% | ×1.3080 | 1027px card | 59px | 261px |
  *
- * At 390 the words are **58%** of the card's height (they are 27% at 1440 — see
- * `Coverflow.tsx`'s `CARD_SCRIM`), so 390 is where a shorter box bites, and the
- * photographs' own ratio leaves five pixels there: one copy edit, one font
- * fallback, one longer activity title from a clipped heading, silently. And at
- * every box's own resolution ceiling the card is **685px tall** — the ceiling is
- * by definition the width at which the box's height equals the file's — so all
- * three leave the same 476px inside the card at 1440 and a wider box buys width
- * and nothing else.
+ * **That 5px is the one real cost of the client's choice, and it is now guarded
+ * rather than argued about.** At 390 the words are 58% of the card's height (27%
+ * at 1440 — see `Coverflow.tsx`'s `CARD_SCRIM`), so 390 is where a shorter box
+ * bites, and five pixels is one copy edit or one font fallback from a heading
+ * clipped by this element's own `overflow: hidden`, silently.
+ * `scripts/check_coverflow.mjs`'s **assertion 12** measures the words' own box
+ * against the card's across the whole 360-1920px sweep, which is the only
+ * instrument that can see it. It is also why the type is centred *in the space
+ * above the arrows* rather than absolutely over the whole card: a centred block
+ * and a bottom-anchored rule cannot collide if the rule is what bounds the space
+ * the block is centred in.
+ *
+ * And at every box's own resolution ceiling the card is **685px tall** — the
+ * ceiling is by definition the width at which the box's height equals the file's
+ * — so a wider box buys width and nothing else. All three rows above leave the
+ * same 476px of card inside a 1440px screen.
  *
  * The tallest frame in the set is *narrower* than this box, so `cover` crops its
  * height instead — unbounded by design, the same convention `ROOM_CARD_MIN_BOX`
- * records.
+ * records. With all six at exactly 1344 × 685 nothing is cropped in either axis
+ * today, which is the first time that has been true of any box on this page.
  *
- * `lib/sizes.test.ts` holds this to the `aspect-[16/9]` class below in both
+ * **Derived from `COVERFLOW`, not written here.** The same two integers are what
+ * `app/globals.css` uses to turn the stage's available HEIGHT into an available
+ * width, and a second copy of a ratio is a ratio that can drift.
+ * `lib/sizes.test.ts` holds this to the `aspect-[1344/685]` class below in both
  * directions; changing one without the other is a red test, not a soft
  * photograph found in a screenshot three tasks later. `CoverflowCard.test.tsx`
  * holds it against `COVERFLOW.cardMaxPx` and the library's own file widths,
  * which is the half `lib/sizes.test.ts` cannot see.
  */
-export const CARD_BOX = 16 / 9;
+export const CARD_BOX = COVERFLOW.cardBoxW / COVERFLOW.cardBoxH;
 
 /**
  * One activity, as a photograph with its own words laid on it.
@@ -238,12 +278,51 @@ export function CoverflowCard({
    */
   const role = index === 0 ? "hold-first" : index === count - 1 ? "hold-last" : undefined;
 
-  const arrow =
-    "rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] text-[color:var(--bg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)]";
+  /**
+   * The label size shared by the number and the two arrows.
+   *
+   * **`vw` below its own cap, and that is the whole of the small-screen fix.**
+   * Below `md` the card is `100vw − 48` wide and therefore
+   * `(100vw − 48) / 1.9620` TALL, so its height is very nearly proportional to
+   * the viewport — while type set in `rem` is not proportional to anything. That
+   * mismatch is what put "NEXT" on the cream *below* the card at 390 the day this
+   * box became 1344/685 (18 Aug 2026, read off a screenshot; every rig on this
+   * project passed the same build). Sizing all four of the card's type roles in
+   * `vw` under their `rem` caps makes the words a roughly constant FRACTION of
+   * the card at every width below ~550px, so a fit at 390 is a fit at 360 as
+   * well. `check_coverflow.mjs` assertion 12 is what says so.
+   */
+  const label = "text-[clamp(0.5rem,2.3vw,0.62rem)]";
+
+  const arrow = `rule-in font-[family-name:var(--font-label)] ${label} uppercase tracking-[0.2em] text-[color:var(--bg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)]`;
 
   return (
     <li
-      className="coverflow-card relative isolate flex aspect-[16/9] flex-col justify-end overflow-hidden p-5 md:p-7"
+      // **No `justify-end` since 18 Aug 2026 — the words are centred.** The
+      // client: *"Move the text to the center with 3D effect for all cards like
+      // the Tiger image with text that comes after 01-The Lodges or the image
+      // that comes before 06-The Lantern Hour."* Those two are `why-you-came`
+      // and `after-dark`, both `FullBleedQuote`, and what they have in common is
+      // the COMPOSITION — type centred on a photograph — not the type scale: a
+      // `FullBleedQuote` is one display line of 1.9-3.9rem and cannot hold a
+      // number, a title and a sentence. So this card takes the arrangement and
+      // keeps its own three parts. **The "3D effect" is what the carousel
+      // already does** — scale, shift and veil on the neighbours (`COVERFLOW`) —
+      // and nothing here changes it.
+      //
+      // The words block below is `flex-1`, so it takes every pixel the arrows do
+      // not and centres its content in that. **Centring it over the whole card
+      // instead was considered and rejected on arithmetic**: at 390 the card is
+      // 342 x 174 and the arrows are ~40 of the 134px of content box, so an
+      // absolutely-centred block and a bottom-anchored rule would sit a couple of
+      // pixels apart at best and overlap at worst, inside an `overflow: hidden`
+      // box. Bounding the centred space by the arrows makes a collision
+      // impossible rather than unlikely.
+      //
+      // **The padding is `vw` below `md` for the same reason the type is** — see
+      // `label`. `3.6vw` reaches 27.6px just under 768, where `md:p-7` takes over
+      // at 28, so the two meet rather than step.
+      className="coverflow-card relative isolate flex aspect-[1344/685] flex-col overflow-hidden p-[3.6vw] md:p-7"
       data-cf={role}
       style={
         {
@@ -261,7 +340,22 @@ export function CoverflowCard({
           // whatever padding `ChapterSurface` puts around it. The viewport term
           // stays as a floor on cream at the screen's edge; the cap is the
           // photographs' own resolution ceiling (`COVERFLOW.cardMaxPx`).
-          width: `min(var(--coverflow-card-max), 100%, 100vw - 2 * var(--coverflow-gutter))`,
+          //
+          // **The fourth term is 18 Aug 2026's, and it is the stage's HEIGHT.**
+          // `(100svh − header − 2 × gutter-y) × CARD_BOX` is the widest card
+          // whose own height still leaves the gutter the pinned stage is now
+          // built around (`app/globals.css`, `--cf-stage-h`). Without it,
+          // shortening the stage would clip the card on a laptop 100px shorter
+          // than the one it was tuned on — this project's own repeat defect, a
+          // value correct at one sample and wrong at another. With it, a short
+          // viewport gets a SMALLER photograph rather than a cropped one, which
+          // is the direction a page should fail in.
+          //
+          // It is written in `svh`/`px` rather than read from `--cf-stage-h`
+          // deliberately: that property is declared inside `@supports
+          // (animation-timeline: view())` and this element must size itself
+          // correctly with no stylesheet of its own at all.
+          width: `min(var(--coverflow-card-max), 100%, 100vw - 2 * var(--coverflow-gutter), (100svh - var(--header-height, 0px) - 2 * var(--coverflow-gutter-y)) * var(--coverflow-card-box-w) / var(--coverflow-card-box-h))`,
           // The one dark colour on the page, under the photograph rather than
           // over it — so a card is a card before a byte of imagery arrives,
           // and the blur placeholder is never a white hole. `FullBleedQuote`
@@ -304,20 +398,46 @@ export function CoverflowCard({
           being re-composed, which is the lesson that file's own
           `brand-wordmark` comment records — a run whose selector went stale
           reported "not visible" and was neither a pass nor a failure. */}
-      <div data-contrast="coverflow-card" className="relative">
-        <p className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] text-[color:var(--bg)]">
+      <div
+        data-contrast="coverflow-card"
+        className="relative flex flex-1 flex-col items-center justify-center text-center"
+      >
+        {/* `text-indent` equal to the tracking, which is not a nicety on a
+            centred label: letter-spacing is applied AFTER the last glyph too, so
+            a centred two-character number sits half a space left of true centre
+            without it. The chapter marks elsewhere on this page are left-aligned
+            and never had to care. */}
+        <p
+          className={`font-[family-name:var(--font-label)] ${label} uppercase tracking-[0.32em] text-[color:var(--bg)] [text-indent:0.32em]`}
+        >
           {String(index + 1).padStart(2, "0")}
         </p>
-        <h3 className="mt-2 font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.6vw,1.75rem)] font-light leading-tight tracking-[-0.01em] text-[color:var(--bg)]">
+        {/* The display face, as `FullBleedQuote` sets its own line. The clamp's
+            CEILING rose from 1.75rem to 2.25rem on 18 Aug 2026: at 1440 the card
+            is 685px tall with ~490px of unused height inside it, so a centred
+            title at 28px read as a caption that had wandered into the middle
+            rather than as the card's subject.
+
+            **Its floor came DOWN in the same edit, 1.15rem to 0.85rem, and the
+            `vw` term went up.** Not a taste change — see `label`. The floor is
+            what a 342 x 174 card at 390px actually has room for once the arrows
+            are subtracted, and the steeper `vw` is what keeps the title the same
+            fraction of the card at 360 as at 500. It reaches 2.25rem at ~818px,
+            where the card is 722 x 368 and has room for it. */}
+        <h3 className="mt-[1.8vw] font-[family-name:var(--font-display)] text-[clamp(0.85rem,4.4vw,2.25rem)] font-light leading-tight tracking-[-0.01em] text-[color:var(--bg)] md:mt-2">
           {experience.title}
         </h3>
         {/* `clamp()`, not a breakpoint step: the card's height is its width
-            divided by 16/9 and therefore continuous, so the type that has to
-            fit inside it must be continuous too. A stepped size is what leaves
+            divided by `CARD_BOX` and therefore continuous, so the type that has
+            to fit inside it must be continuous too. A stepped size is what leaves
             a card legible at 1440 and clipped at 1100 — the shape of defect
             this project has now shipped twice between its fixed sample widths
-            (`DECISIONS.md` §2 #44-45, #52-53). */}
-        <p className="mt-2 max-w-[42ch] font-[family-name:var(--font-body)] text-[clamp(0.76rem,1.32vw,0.98rem)] leading-[1.55] text-[color:var(--bg)]">
+            (`DECISIONS.md` §2 #44-45, #52-53).
+
+            `mx-auto` as well as `max-w`: a centred block whose own measure is
+            left-aligned inside it is centred type that is not on the card's
+            centre line, which is the thing this whole change is about. */}
+        <p className="mx-auto mt-[2.4vw] max-w-[46ch] font-[family-name:var(--font-body)] text-[clamp(0.6rem,2.85vw,0.98rem)] leading-[1.55] text-[color:var(--bg)] md:mt-3">
           {experience.body}
         </p>
       </div>
@@ -340,11 +460,21 @@ export function CoverflowCard({
         above stays whole either way — it is the card's own hairline, not the
         arrows' — and the `<nav>` itself goes only if a card has no arrows at
         all, which no six-activity chapter produces.
+
+        **The arrows did NOT move when the words did, 18 Aug 2026**, and that is
+        a decision. The client asked for the *text* to be centred; these are
+        navigation, and a rule with a label under each end reads as the foot of a
+        card wherever the words are. Left in flow after a `flex-1` words block,
+        so the card still has exactly one bottom-anchored element and the centred
+        block is bounded by it — see the note on the `<li>`. It also keeps the
+        thing `linear.md` §4.3 read by eye and liked: on the last card the
+        hairline runs the full width with "PREVIOUS" alone beneath it, which
+        reads as deliberate rather than as broken.
       */}
       {(previous !== null || next !== null) && (
         <nav
           aria-label={experience.title}
-          className="coverflow-arrows relative mt-4 flex items-center justify-between gap-6 border-t pt-3"
+          className="coverflow-arrows relative mt-[3vw] flex items-center justify-between gap-6 border-t pt-[2vw] md:mt-4 md:pt-3"
           // `--accent` gold, not cream: the hairline carries no text, and a rule
           // is the one thing non-negotiable #7 says gold IS for. The words above
           // and below it are cream, which is the half of that rule that binds.

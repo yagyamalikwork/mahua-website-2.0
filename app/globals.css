@@ -1769,9 +1769,22 @@ body {
        as `--coverflow-screens * 100svh` and not as `100%`: the pin is the track,
        and `100%` would silently follow the wrapper if anything were ever laid
        out beside it again — which is exactly what the tiger's second placement
-       did between 16 Aug's two fixes. */
-    --cf-pin-start: calc(100svh - var(--header-height, 0px));
-    --cf-pin-len: calc(var(--coverflow-screens) * 100svh - 100svh + var(--header-height, 0px));
+       did between 16 Aug's two fixes.
+
+       **Both were re-derived on 18 Aug 2026, when the stage stopped being
+       exactly `100svh − header`.** The general forms, with `S` the sticky `top`
+       and `stageH` the stage's height, are
+
+         lock    at scrollY = trackTop − S              ->  d = 100svh − S
+         release at scrollY = trackTop + H − S − stageH ->  d = 100svh + H − S − stageH
+         pin len =  H − stageH
+
+       (`d = scrollY − trackTop + 100svh` is the probe's, unchanged.) Put
+       `S = header` and `stageH = 100svh − header` back in and these collapse to
+       the two expressions that were written here from 16 to 18 Aug, which is the
+       check that the generalisation is one. */
+    --cf-pin-start: calc(100svh - var(--cf-sticky-top));
+    --cf-pin-len: calc(var(--coverflow-screens) * 100svh - var(--cf-stage-h));
     /* `count − 1`, so the SIX activities' centred moments tile the pin: card 0 at
        `pin-start + 0 × step` (the offset the stage locks) and card 5 at
        `pin-start + 5 × step` (the offset it lets go). It was `count + 1` until
@@ -1813,36 +1826,79 @@ body {
      * with the card's width read off the stage, and it goes NEGATIVE on a
      * landscape phone, where a 796px card overflows a 283px stage.
      *
-     * ## This height is not the dial it looks like — 18 Aug 2026
+     * ## This height IS a dial now, and both objections to making it one were
+     * answered rather than argued away — 18 Aug 2026
      *
-     * The client asked for the carousel to *"fit snugly"*, and the obvious place
-     * to find the space is here: a centred card leaves **54px** of cream above
-     * and below itself inside this box at 1440x900 (793px stage, 685px card), and
-     * that cream is paid at both ends of the chapter — it is part of the gap
-     * above the first card and part of the gap below the last. It was measured,
-     * considered and left alone, for two reasons that are both arithmetic:
+     * The client, twice: *"make sure it fits snugly"* (18 Aug), and then *"if the
+     * images cannot go taller, remove some of the buffer space from top and
+     * bottom of the carousel to make it look tighter and fuller horizontally."*
+     * The space he means is the cream a centred card leaves inside this box —
+     * **54px** above and below at 1440x900 (793px stage, 685px card) — and it is
+     * paid at both ends of the chapter: it is part of the gap under the tiger and
+     * part of the gap above `05 · The Rooms`.
      *
-     *  1. **The 54px is not a constant, it is what is left over.** The card is
-     *     `cardWidth × 9/16` tall and 685px is its ceiling; the stage is
-     *     `100svh − header`. At 1440x800 the same sum leaves **8px**, and at
-     *     1440x760 the card is taller than the stage already. Any fixed
-     *     shortening therefore overflows the card on a laptop 100px shorter than
-     *     the one it was tuned on, inside an `overflow: hidden` box — this
-     *     project's own repeat defect (`DECISIONS.md` §2 #44-45, #52-53), which is
-     *     a value tuned at one sample width breaking at another.
-     *  2. **It enters the pin window directly.** The pin releases at
-     *     `T + trackHeight − stageHeight`, so `--cf-pin-len` above would have to
-     *     become `screens × 100svh − --cf-stage-h` in the same edit, and the
-     *     sticky `top` would have to move down by half of whatever came off — or
-     *     the card stops being centred in the viewport and starts sitting under
-     *     the header. §20.2 records what a flat `100svh` does here: the last card
-     *     centres **11px after the pin has released**.
+     * This note said it could not be spent, for two reasons. Both were real:
      *
-     * The gap was taken out of `ChapterSurface`'s own padding (`tight` on this
-     * chapter) and out of the wrapper's top margin instead — both in
-     * `Coverflow.tsx`, both unable to break the pin.
+     *  1. **The 54px was not a constant, it was what was left over.** The card is
+     *     `cardWidth / CARD_BOX` tall, capped at 685; the stage was
+     *     `100svh − header`. At 1440x800 the same sum left **8px**, and at
+     *     1440x760 the card was taller than the stage already. Any fixed
+     *     shortening overflows the card on a laptop 100px shorter than the one it
+     *     was tuned on, inside an `overflow: hidden` box.
+     *  2. **It enters the pin window directly**, so `--cf-pin-len` and the sticky
+     *     `top` have to move in the same edit or the card stops being centred in
+     *     the viewport. §20.2 records what a flat `100svh` does here: the last
+     *     card centres **11px after the pin has released**.
+     *
+     * **(1) is answered by bounding the card by this height, which is what makes
+     * the gap a gap rather than a remainder.** `CoverflowCard`'s own width
+     * expression now carries a fourth term — `(100svh − header − 2 × gutter-y) ×
+     * CARD_BOX` — so on a viewport too short for a 685px card the card is
+     * NARROWED until it fits and this gap survives at its full size. That is the
+     * opposite failure direction from the one this note warned about: a short
+     * viewport shrinks the photograph instead of clipping it.
+     *
+     * **(2) is answered by doing exactly what it says.** `--cf-sticky-top` below
+     * takes half of whatever came off, so the card's centre stays at
+     * `header + (100svh − header) / 2` — dead centre of the viewport under the
+     * header, unchanged at every height — and `--cf-pin-start` / `--cf-pin-len`
+     * are written in the general form above. `.coverflow-target` needs the same
+     * half, with the opposite sign, and that is the one place this change could
+     * have gone silently wrong; see its own note.
+     *
+     * What it is worth: 54px of cream becomes 24 at each end of the chapter, on
+     * top of the 24px `ChapterSurface`'s `tight` already took and the 16px off
+     * the wrapper's own margin. During the pin **nothing moves at all** — the
+     * card is in the same place on the screen and the cream either side of the
+     * stage is the same cream as the track's.
+     *
+     * `min()` and not a bare subtraction: on a viewport shorter than a card plus
+     * its two gutters the stage is the whole of `100svh − header` and the card is
+     * what shrinks.
      */
-    --cf-stage-h: calc(100svh - var(--header-height, 0px));
+    --cf-stage-h: min(
+      calc(100svh - var(--header-height, 0px)),
+      calc(
+        var(--coverflow-card-max) * var(--coverflow-card-box-h) /
+          var(--coverflow-card-box-w) + 2 * var(--coverflow-gutter-y)
+      )
+    );
+
+    /*
+     * Where the stage sticks — the header, plus half of whatever this stage is
+     * SHORTER than the space under it.
+     *
+     * That second term is what keeps the card in the middle of the screen while
+     * the stage above and below it shrinks: the card's centre is
+     * `sticky-top + stage-h / 2`, which expands to `header + (100svh − header)/2`
+     * for any stage height at all. Take the term away and the carousel rides high
+     * under the header with all its cream in one place at the bottom — which is
+     * what "shorten the stage" does if it is done on its own.
+     */
+    --cf-sticky-top: calc(
+      var(--header-height, 0px) +
+        (100svh - var(--header-height, 0px) - var(--cf-stage-h)) / 2
+    );
   }
 
   /*
@@ -1869,7 +1925,11 @@ body {
 
   .coverflow-stage {
     position: sticky;
-    top: var(--header-height, 0px);
+    /* Not `var(--header-height)` since 18 Aug 2026 — see `--cf-sticky-top`. The
+       header still comes out of it; what is added is half the stage's own
+       shortfall, without which shortening the stage moves the card up the
+       screen. */
+    top: var(--cf-sticky-top);
     /* The header comes out of the stage's own height — fact 3 above. Read from
        `--cf-stage-h` rather than written out again, so anything else that has to
        reason about the cream a centred card leaves inside THIS box reads the same
@@ -2047,11 +2107,36 @@ body {
   /*
    * The measured placement, and the settle.
    *
-   * `top: i × step` is the probe's own simplified form (§11.5) with the step's
-   * new denominator — the `scroll-padding-top` and `100svh` terms in the long
-   * form `calc(P − 100svh + pin-start + i·step)` cancel exactly, whatever the
-   * step is. The 16 Aug form was `(i + 1) × step` because the first centred
+   * `top: i × step` was the probe's own simplified form (§11.5) with the step's
+   * new denominator: the `scroll-padding-top` and `100svh` terms in the long
+   * form `calc(P − 100svh + pin-start + i·step)` cancelled exactly, whatever the
+   * step was. The 16 Aug form was `(i + 1) × step` because the first centred
    * moment was one step into the pin; it is at the pin's own start now.
+   *
+   * ## They no longer cancel, and this is the trap in shortening the stage
+   *
+   * The derivation, with `S` the sticky `top` and `P` the scroll container's
+   * `scroll-padding-top`:
+   *
+   *     scrollY_c = T + d_c − 100svh          (card i is centred here)
+   *     Y_target  = scrollY_c + P             (a fragment click subtracts P)
+   *     top       = Y_target − T = d_c − 100svh + P
+   *               = (100svh − S) + i·step − 100svh + P
+   *               = i·step + (P − S)
+   *
+   * `P` is the header's own height (`scroll-padding-top` on `html`, set for
+   * anchor links and nothing to do with animation). So while `S` was also the
+   * header the last term was zero and could not be seen. **Since 18 Aug 2026 `S`
+   * is `header + slack/2`**, so `P − S` is `−slack/2` — 30px at 1440x900 — and
+   * leaving it out puts every one of the six targets 30px late, at every width,
+   * with nothing on screen saying so. That is the same SHAPE as §20.2's slope
+   * (`−66 + 11·i`): an error that a nudge tuned on one card hides, and that a
+   * negative control makes obvious. `check_coverflow.mjs` drives the page by
+   * clicking these targets at 79 widths and 31 heights and reads the card's
+   * distance from centre; watched failing with this term deleted.
+   *
+   * It is an OFFSET and not a slope this time — the same for every card — which
+   * is why it moves the arrows' landings without changing the order they land in.
    *
    * **Nothing snaps here, 18 Aug 2026, and the removal is the client's own.**
    * *"The scroll now feels very snappy, replace it with the smoother scroll
@@ -2072,7 +2157,9 @@ body {
    * which is silent.
    */
   .coverflow-target {
-    top: calc(var(--i) * var(--cf-step));
+    top: calc(
+      var(--i) * var(--cf-step) + var(--header-height, 0px) - var(--cf-sticky-top)
+    );
   }
 
   @keyframes coverflow-pass {

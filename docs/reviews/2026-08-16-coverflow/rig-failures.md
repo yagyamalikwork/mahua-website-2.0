@@ -714,3 +714,123 @@ happened to exist.
 
 Now `i + 1`, with `check_coverflow.mjs`'s assertion 10 named as what holds the ordering. Re-run: all six
 cards pass at all four widths, worst **4.63** (card 04 at 390) against the 4.5 floor.
+
+---
+
+## 23. The third pass — a wider card, centred words, a tighter frame (18 Aug 2026)
+
+Four deliberate breaks, one per changed or new assertion, each aimed at the thing the assertion is written
+to catch. Full working: [`wider.md`](wider.md).
+
+### 23.1 Assertion 1's pin window — the old header-based form, against the shipped build
+
+**Not a break of the page: a break of the RIG, run to prove the change to it was necessary rather than
+cosmetic.** Assertion 1 used to ask whether the stage's top edge sat within 2px of the *header's height*, and
+the pin window was `trackTop − headerHeight` to `trackTop + trackHeight − innerHeight`. Both were the special
+case of a stage that sticks at the header and is exactly `100svh − header` tall. Neither is true since the
+stage grew a gutter: it sticks at **137px** against a 107px header at 1440×900.
+
+Reverted those two lines only, on the shipped build:
+
+```
+/@1440x900: the stage was pinned at only 1 of 151 sampled positions — there is no pin to measure a
+            carousel inside
+/@390x844:  the stage was pinned at only 1 of 141 sampled positions — there is no pin to measure a
+            carousel inside
+assertion 7 · sweep: the stage did not hold at 360-1920px (158 of 158 samples). Worst: at 360px the
+            stage's top edge was 121px from the viewport top against a header of 75.4px
+assertion 13 · height sweep: a card reached centre outside the pin at 860-1200px (108 of 186 samples)
+```
+
+**Every motion assertion collapses**, because a rig that cannot find the pin measures nothing inside it. The
+form that shipped reads the stage's own declared `top` off `getComputedStyle` instead, so it re-derives
+nothing and cannot go stale the next time that number moves.
+
+### 23.2 Assertion 12 — the small-screen type reverted
+
+**The break.** `CoverflowCard`'s type back to the `rem` sizes it carried before `CARD_BOX` became 1344/685 —
+`label` at `0.62rem`, `p-5 md:p-7`, the title's clamp floor at `1.15rem`, the body's at `0.76rem`, and the
+fixed `mt-2 / mt-3 / mt-4 / pt-3` gaps. **This is not a hypothetical: it is the state that shipped for one
+build on 18 Aug and put "NEXT" on the chapter's cream at 390.**
+
+```
+/@390x844: assertion 12: at card 0's centred moment card 0's own type falls 3.06px outside the card
+           (1 of 6 cards) …
+assertion 7 · sweep: the card's own type fell outside the card at 360-380px (4 of 158 samples).
+           Worst 18.34px at 360px, on a 312x159 card
+assertion 7 · sweep: the arrows were live on no card or on more than one at 360-380px (4 of 158
+           samples). Worst at 360px: 0 cards with live arrows — assertion 4
+```
+
+Six failures at 390 (one per centred moment) and a band at 360-380. **The corroboration is assertion 4**: at
+360 the arrows are outside the card, so `elementFromPoint` at their own centres returns something else and
+*no* card has a live pair — which is the same defect arriving at an assertion that has existed since the
+first day and had never fired on it. The type check is what names the cause.
+
+### 23.3 Assertion 13 (a) — the card's fourth width bound removed
+
+**The break.** `(100svh − header − 2 × gutter-y) × CARD_BOX` deleted from `CoverflowCard`'s own `width`,
+leaving the three bounds it had before 18 Aug.
+
+```
+assertion 13 · height sweep: the card was taller than the stage holding it at 600-780px (60 of 186
+           samples). Worst at 600px of viewport: a 1344x685 card in a 493px stage
+height sweep  31 heights × 6 targets, worst off-centre 1.60px, stage gutter -96.0-24.0px
+```
+
+**60 of 186 samples, and the console line is the whole argument for this change**: the stage gutter runs from
++24px down to **−96px**. A negative gutter is a card hanging out of both ends of an `overflow: hidden` box.
+It fires from 780px of viewport downwards — i.e. on a 1440×768 laptop, which is a machine this project has
+already shipped one defect to (`DECISIONS.md` §2 #44-45).
+
+### 23.4 Assertion 13 (b) — the anchor targets' sticky-top correction removed
+
+**The break.** `.coverflow-target { top: calc(var(--i) * var(--cf-step)) }` — the expression that was correct
+for as long as the stage stuck at the header.
+
+```
+assertion 7 · sweep: the centred card was not centred in its stage at 360-1920px (158 of 158 samples).
+           Worst 64.3px at 1460px …
+assertion 13 · height sweep: the scroll target left its card off centre at 860-1200px (90 of 186
+           samples). Worst 262.0px at 1200px of viewport, on card 4
+assertion 13 · height sweep: a card reached centre outside the pin at 860-1200px (18 of 186 samples)
+```
+
+**It fires only at 860px of viewport and above, and that is the finding.** Below 860 the `min()` in
+`--cf-stage-h` binds, `sticky-top` equals the header again, and the correction is genuinely zero — so a rig
+sampling three fixed heights could pick three that all pass. This is §20.2's slope-versus-offset trap
+arriving a second time in its offset form: the same error on every card, which a nudge tuned on one of them
+hides completely.
+
+**One rig message was wrong and was fixed by this break rather than by review.** The width sweep's
+"not centred in its stage" band explained itself as the over-constrained-margins defect
+(`DECISIONS.md` §20.7) — but here the card fitted its stage perfectly and the *scroll* landed wrong, so the
+message confidently blamed the wrong thing at all 158 samples. It now measures which of the two it is and
+says so. A rig diagnosing a cause it has not measured is this project's own catalogued defect shape, in an
+instrument.
+
+### 23.5 The contrast rig, verified against type that moved rather than trusted
+
+`check_contrast_over_photos.mjs` was not changed by this pass, which is exactly why it needed checking: its
+coverflow selector had been silently wrong the day before (§22.5), and the words it measures have now moved
+from the floor of the card to its middle.
+
+**The break.** `tiger-crossing-track`'s scrim set to `{}` — no wash at all — and rebuilt, the same control
+`scrims.md` §3 used.
+
+```
+--- 390px ---   coverflow · card 01   floor 4.5  worst 1.22   FAIL
+--- 768px ---   coverflow · card 01   floor 4.5  worst 1.07   FAIL
+--- 1440px ---  coverflow · card 01   floor 4.5  worst 1.05   FAIL
+--- 1920px ---  coverflow · card 01   floor 4.5  worst 1.05   FAIL
+FAILED: 4 text run(s) below their contrast floor over a photograph.
+```
+
+The other five passed unchanged in the same run, so the run reads the card it names. **And the number is the
+evidence that the crop followed the type**: 1.22 is what the *centred* words measure unwashed on this frame;
+the *bottom-anchored* words measured 1.36 on the same photograph the day before. A crop still sitting where
+the old type was could not have produced it.
+
+Two further checks in the same runs, neither of which needed a break because both are already fatal in the
+rig: no run reported `MISPLACED` (every card sampled at its own centred moment, veil under 0.02), and no run
+printed the off-centre note (every card within 8px of its stage's centre at every width).

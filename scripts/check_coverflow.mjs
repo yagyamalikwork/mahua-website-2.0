@@ -19,7 +19,7 @@
 // switched off.
 //
 // ─────────────────────────────────────────────────────────────────────────────
-// THE ELEVEN ASSERTIONS
+// THE THIRTEEN ASSERTIONS
 //
 // Nine until 17 Aug 2026, when 10 and 11 arrived with the client's third and
 // fourth reports of that day. **Four of them changed on 18 Aug 2026 and none was
@@ -44,8 +44,19 @@
 //
 //   1. **The stage holds.** Between the scroll offset where the stage locks and
 //      the one where it lets go — both computed from the track's own measured
-//      box, not from the CSS — the stage's top edge stays within 2px of the
-//      header's height. Break: remove `position: sticky`.
+//      box, not from the CSS — the stage's top edge stays within 2px of where it
+//      says it sticks. Break: remove `position: sticky`.
+//
+//      **"Where it says it sticks" is read off the element since 18 Aug 2026**,
+//      not assumed to be the header's height. The stage is no longer
+//      `100svh − header` tall — it is the card plus `COVERFLOW.stageGutterYPx`
+//      either side, capped at the space under the header — and its sticky `top`
+//      carries half of the difference so that the card stays in the middle of the
+//      screen (`app/globals.css`, `--cf-sticky-top`). At 1440x900 that is 137px
+//      against a 107px header. The pin's own window moves with it:
+//      `lock = trackTop − stickyTop`, `release = trackTop + trackHeight −
+//      stickyTop − stageHeight`. Both are read from measured boxes here, so this
+//      file re-derives nothing.
 //
 //   2. **One card is in charge, and it advances.** At every sampled position
 //      inside the pin, AT MOST ONE card is within 8px of the stage's horizontal
@@ -137,8 +148,15 @@
 //      viewport — the bound `check_card_stack.mjs` assertion 6 enforces, for the
 //      same reason. Compares the loaded `<img>`'s natural aspect against its
 //      rendered box; a box narrower than the photograph crops height instead,
-//      which is unbounded by design. Break: widen `CARD_BOX` past the 1.7194
-//      the six photographs allow.
+//      which is unbounded by design. Break: widen `CARD_BOX` past the 1.4715 the
+//      six photographs allow.
+//
+//      **It reads 0.0% since 18 Aug 2026 and that is not slack.** `CARD_BOX` is
+//      the photographs' own 1344/685 — the client's *"wider only, stay sharp"* —
+//      so nothing is cropped in either axis, and the bound this asserts cannot
+//      be approached without changing the card's shape. What replaced it as the
+//      thing to watch is assertion 12: the shape that crops nothing is also the
+//      shape with the least room for the card's own words.
 //
 //   7. **A continuous width sweep, 360 → 1920 in 20px steps** — not four
 //      presets — asserting 1-6 at every step, plus the two things a width can
@@ -177,6 +195,49 @@
 //      here; what this asserts is that the CONTENT never depended on script.
 //      Break: make `Coverflow.tsx` a client component that renders its stage
 //      only after mount.
+//
+//  12. **The card's own words fit inside the card**, at every width in the sweep
+//      and every height in assertion 13. Every LINE BOX of the number, the
+//      title, the body and the two arrows must sit inside the card's border box.
+//      Not the block's rect — a `Range` over the text nodes, the same correction
+//      `check_contrast_over_photos.mjs` needed, because a block-level element's
+//      rect says nothing about where its glyphs are.
+//
+//      **This exists because the defect it catches shipped, on 18 Aug 2026, and
+//      every rig on this project passed the build that had it.** The client chose
+//      the photographs' own 1344/685 for `CARD_BOX` (*"wider only, stay sharp"*),
+//      which is 9.4% SHORTER than the 16/9 it replaced. At 390 that took the
+//      card from 342x192 to 342x174 while the type did not move at all, and the
+//      arrows were pushed out of the bottom of an `overflow: hidden` box: "NEXT"
+//      rendered on the chapter's cream, cream on cream, 1.1:1. It was found by
+//      opening a 390px screenshot and reading it — CLAUDE.md's standing
+//      instruction, and the same way the map's 4.3px labels were found.
+//
+//      Break: put `text-[0.62rem]` back on `CoverflowCard`'s `label`, or
+//      `p-5` back in place of `p-[3.6vw]`, and the sweep reports a band at the
+//      narrow end rather than one width.
+//
+//  13. **A continuous viewport-HEIGHT sweep, 600 → 1200 at 1440 wide** — the
+//      other axis, and new on 18 Aug 2026 with the stage that made it necessary.
+//      At every height: the card fits inside the stage in both axes, assertion 12
+//      holds, and each of the six anchor targets leaves ITS OWN card within 8px
+//      of centre with the stage pinned.
+//
+//      **The stage's height became a dial that day and it enters the pin window
+//      directly**, so the two things a shorter stage can break are exactly these:
+//      a card taller than the box clipping it, and a centred moment that has
+//      slid out of the pin. Heights rather than widths because the card's fourth
+//      width bound — `(100svh − header − 2 × gutter-y) × CARD_BOX` — is the only
+//      term in it that a width sweep at a fixed 900px can never reach; it starts
+//      to bind below ~880px of viewport and there is no laptop this project
+//      samples between 600 and 900.
+//
+//      Break two ways, and they fail differently, which is the point of having
+//      both halves: take the fourth term out of `CoverflowCard`'s `width` and the
+//      card clips below ~880px; take `+ header − sticky-top` out of
+//      `.coverflow-target`'s `top` and every target lands half the stage's
+//      shortfall late, at every height and width — 30px at 1440x900 — which is
+//      §20.2's offset-versus-slope trap arriving a second time.
 //
 // And one precondition that is fatal like an assertion:
 //
@@ -321,8 +382,29 @@ const SCALE_BEHIND_MAX = 0.99;
 const SCALE_BEHIND_MIN = 0.5;
 /** The bound every cropped photograph on this project is held to. */
 const MAX_CROP = 0.25;
-/** A card's rendered width must equal `min(cardMax, stageWidth)` this closely. */
+/** A card's rendered width must equal `min(cardMax, stageWidth, heightBound)` this closely. */
 const WIDTH_TOLERANCE = 1;
+/**
+ * How far a line box may sit outside the card's own border box — assertion 12.
+ *
+ * Half a pixel, not zero: a `Range` rect and an element rect are both
+ * sub-pixel, and a glyph run's own box legitimately touches the padding edge.
+ * Anything a reader could see as clipped is whole pixels, and the defect this
+ * caught was 24 of them.
+ */
+const TYPE_INSIDE_TOLERANCE = 0.5;
+/** Assertion 13's own axis. 20px for the same reason the width sweep uses 20. */
+const HEIGHT_SWEEP_FROM = 600;
+const HEIGHT_SWEEP_TO = 1200;
+const HEIGHT_SWEEP_STEP = Number(flag("height-step", "20"));
+/**
+ * The width assertion 13 sweeps heights AT.
+ *
+ * 1440, because the card is at `cardMaxPx` there and its height bound is
+ * therefore the first thing to bind — at 390 the card is 342px wide and 174px
+ * tall and no viewport in this range is short enough to reach it.
+ */
+const HEIGHT_SWEEP_WIDTH = 1440;
 /**
  * The wheel gestures assertion 11 uses, in CSS px of `deltaY`.
  *
@@ -434,6 +516,12 @@ async function sample(page, chapter) {
       const stageRect = stage.getBoundingClientRect();
       const stageCentre = stageRect.left + stageRect.width / 2;
       const headerHeight = header ? header.getBoundingClientRect().height : 0;
+      // Where the stage says it sticks, read off the element rather than assumed
+      // to be the header's height — see assertion 1. `getComputedStyle().top`
+      // resolves the `calc()` to px, and on a non-sticky stage it is `auto`,
+      // which is the honest answer and which assertion 1 then reports.
+      const stickyTopRaw = getComputedStyle(stage).top;
+      const stickyTop = Number.parseFloat(stickyTopRaw);
 
       const root = getComputedStyle(document.documentElement);
       const dial = (n) => Number.parseFloat(root.getPropertyValue(n));
@@ -500,8 +588,38 @@ async function sample(page, chapter) {
               })()
             : null;
 
+        // Assertion 12, per card: does the card's own type sit inside the card?
+        // A `Range` per text node, not the block's rect — a block-level element
+        // is the card's full content width whatever its glyphs do.
+        let typeOutside = 0;
+        for (const block of el.querySelectorAll(
+          '[data-contrast="coverflow-card"], nav.coverflow-arrows a',
+        )) {
+          const walk = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+          for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+            if (!n.textContent.trim()) continue;
+            const range = document.createRange();
+            range.selectNodeContents(n);
+            for (const b of range.getClientRects()) {
+              if (b.width < 1 || b.height < 1) continue;
+              typeOutside = Math.max(
+                typeOutside,
+                b.bottom - r.bottom,
+                r.top - b.top,
+                b.right - r.right,
+                r.left - b.left,
+              );
+            }
+          }
+        }
+
         return {
           i,
+          // How far the worst line box of this card's own type falls outside the
+          // card's border box. Scaled cards report a scaled figure, which is
+          // correct: both rects carry the same transform, so the comparison is
+          // in the card's own units either way.
+          typeOutside: Number(typeOutside.toFixed(2)),
           // Which card the page thinks this is. A wrap-around ghost declared
           // itself with `--i: -1` or `--i: count`, so this is where assertion 10
           // reads the deck's own account of itself — one number per card, from
@@ -519,6 +637,10 @@ async function sample(page, chapter) {
           // margin resolution that put every card 24px off centre is a layout
           // fact and has nothing to do with where the animation has it.
           layoutWidth: el.offsetWidth,
+          // Its untransformed height, for the same reason — "does the card fit
+          // the stage" is a layout question, and a flank card's rect is 0.82 of
+          // itself.
+          layoutHeight: el.offsetHeight,
           height: r.height,
           onScreen: r.right > 0 && r.left < window.innerWidth,
           opacity: Number(cs.opacity),
@@ -559,11 +681,21 @@ async function sample(page, chapter) {
         headerHeight,
         stageTop: stageRect.top,
         stageWidth: stage.offsetWidth,
+        stageHeight: stage.offsetHeight,
+        stickyTop: Number.isFinite(stickyTop) ? stickyTop : null,
+        stickyTopRaw,
         stageCentre,
         cardMax: Number.parseFloat(root.getPropertyValue("--coverflow-card-max")),
+        gutterY: Number.parseFloat(root.getPropertyValue("--coverflow-gutter-y")),
+        cardBox:
+          Number.parseFloat(root.getPropertyValue("--coverflow-card-box-w")) /
+          Number.parseFloat(root.getPropertyValue("--coverflow-card-box-h")),
         sideVeil: dial("--coverflow-side-veil"),
         sideScale: dial("--coverflow-side-scale"),
-        pinned: Math.abs(stageRect.top - headerHeight) <= pinTolerance,
+        // Pinned against where the stage SAYS it sticks, not against the header
+        // — the two stopped being the same number on 18 Aug 2026.
+        pinned:
+          Number.isFinite(stickyTop) && Math.abs(stageRect.top - stickyTop) <= pinTolerance,
         cards,
       };
     },
@@ -720,6 +852,27 @@ function checkCrops(label, where, s) {
   }
 }
 
+/**
+ * Assertion 12, at one sample: does every card's own type sit inside its card?
+ *
+ * Returns the worst overflow so a caller can report a band rather than a wall.
+ */
+function checkTypeFits(label, where, s) {
+  const spilling = s.cards.filter((c) => c.typeOutside > TYPE_INSIDE_TOLERANCE);
+  if (spilling.length > 0) {
+    const worst = spilling.reduce((a, b) => (a.typeOutside >= b.typeOutside ? a : b));
+    note(
+      label,
+      `assertion 12: at ${where} card ${worst.i}'s own type falls ${worst.typeOutside}px outside ` +
+        `the card (${spilling.length} of ${s.cards.length} cards). The card is ` +
+        `\`overflow: hidden\`, so what a visitor sees is a heading cut in half or an arrow ` +
+        "rendered on the chapter's cream — cream on cream, which measures 1.1:1 and which no " +
+        "other instrument on this page looks for",
+    );
+  }
+  return Math.max(0, ...s.cards.map((c) => c.typeOutside));
+}
+
 /** Assertions 2 and 4, at one sample. Returns the card in charge, or null. */
 function checkInCharge(label, where, s) {
   const centred = s.cards.filter((c) => Math.abs(c.offset) <= CENTRE_TOLERANCE);
@@ -803,6 +956,8 @@ const report = {
     "9 with no JavaScript the six activities are complete in the document",
     "10 the deck is exactly the six activities — six cards, none aria-hidden, `--i` 0-5 with no repeats and no wrap-around copy",
     "11 nothing snaps — `scroll-snap-type` is none, no target declares `scroll-snap-align`, and real wheel flicks do not all come to rest on a card",
+    "12 every line box of a card's own type sits inside the card's own box",
+    `13 continuous height sweep ${HEIGHT_SWEEP_FROM}-${HEIGHT_SWEEP_TO} at ${HEIGHT_SWEEP_WIDTH}px: the card fits its stage, its type fits the card, and all six targets centre their own card inside the pin`,
     "precondition animation-range never falls back to `normal`",
   ],
   shapes: [],
@@ -979,16 +1134,23 @@ for (const [width, height] of SHAPES) {
   // header it should be sitting on; it is the more useful failure and it comes
   // first.
   //
-  // The window is the track's own measured box, not the CSS's arithmetic: the
-  // stage locks when the track's top reaches the header, and lets go when the
-  // stage's bottom meets the track's bottom — `trackTop + trackHeight -
-  // innerHeight`, because the stage is exactly `100svh - header` tall. 8px is
-  // held back at each end so a sample landing on the changeover itself is not
-  // read as a failure of the middle.
-  const lockAt = geometry.trackTop - geometry.headerHeight;
-  const releaseAt = geometry.trackTop + geometry.trackHeight - geometry.innerHeight;
+  // The window is the track's own measured box and the stage's own measured
+  // sticky offset, not the CSS's arithmetic: the stage locks when the track's
+  // top reaches `sticky-top`, and lets go when the stage's bottom meets the
+  // track's bottom. **Both were rewritten on 18 Aug 2026** — they used to read
+  // `trackTop − headerHeight` and `trackTop + trackHeight − innerHeight`, which
+  // were the special case of a stage sitting at the header and being exactly
+  // `100svh − header` tall. Neither is true now, and the general forms below
+  // collapse to those two when they are. 8px is held back at each end so a sample
+  // landing on the changeover itself is not read as a failure of the middle.
+  const stickyTop = samples.find((s) => s.stickyTop !== null)?.stickyTop ?? geometry.headerHeight;
+  const stageHeight = samples[0]?.stageHeight ?? geometry.innerHeight - geometry.headerHeight;
+  const lockAt = geometry.trackTop - stickyTop;
+  const releaseAt = geometry.trackTop + geometry.trackHeight - stickyTop - stageHeight;
   const shouldHold = samples.filter((s) => s.scrollY > lockAt + 8 && s.scrollY < releaseAt - 8);
-  const slipped = shouldHold.filter((s) => Math.abs(s.stageTop - s.headerHeight) > PIN_TOLERANCE);
+  const slipped = shouldHold.filter(
+    (s) => s.stickyTop === null || Math.abs(s.stageTop - s.stickyTop) > PIN_TOLERANCE,
+  );
   if (shouldHold.length < 4) {
     note(
       label,
@@ -997,15 +1159,15 @@ for (const [width, height] of SHAPES) {
     );
   }
   if (slipped.length > 0) {
-    const worst = slipped.reduce((a, b) =>
-      Math.abs(a.stageTop - a.headerHeight) >= Math.abs(b.stageTop - b.headerHeight) ? a : b,
-    );
+    const dist = (s) => (s.stickyTop === null ? Infinity : Math.abs(s.stageTop - s.stickyTop));
+    const worst = slipped.reduce((a, b) => (dist(a) >= dist(b) ? a : b));
     note(
       label,
       `assertion 1: the stage moved at ${slipped.length} of ${shouldHold.length} samples inside ` +
         `the pin (${Math.round(lockAt)}-${Math.round(releaseAt)}px). Worst at scrollY=` +
         `${Math.round(worst.scrollY)}: its top edge was ${worst.stageTop.toFixed(1)}px from the ` +
-        `viewport top against a header of ${worst.headerHeight.toFixed(1)}px — it is not sticking`,
+        `viewport top against a declared \`top: ${worst.stickyTopRaw}\` (header ` +
+        `${worst.headerHeight.toFixed(1)}px) — it is not sticking`,
     );
   }
 
@@ -1127,22 +1289,64 @@ for (const [width, height] of SHAPES) {
     if (lo === null) {
       // No crossing anywhere: either the card is centred from the first sample
       // (the first activity, held) or it never arrives at all.
-      const already = samples
-        .map((s) => ({
+      const centredGrid = samples
+        .map((s, k) => ({
+          k,
           scrollY: Math.round(s.scrollY),
           offset: s.cards[i]?.offset ?? 999,
           pinned: s.pinned,
         }))
-        .filter((s) => Math.abs(s.offset) <= CENTRE_TOLERANCE)
-        // **Pinned first, then nearest.** A held card's offset is 0.0 at dozens
-        // of samples and a plain sort by distance is a tie broken by sampling
-        // order: the earliest, which is before the pin engages. That put "card 1
-        // is only ever centred where the stage is NOT pinned" on a page where
-        // card 1 is centred for a third of the pin.
-        .sort(
-          (a, b) => Number(b.pinned) - Number(a.pinned) || Math.abs(a.offset) - Math.abs(b.offset),
-        )[0];
-      if (already) {
+        .filter((s) => Math.abs(s.offset) <= CENTRE_TOLERANCE);
+      if (centredGrid.length > 0) {
+        /*
+         * **Bisect the END of the hold, do not pick a grid sample — 18 Aug 2026.**
+         *
+         * The first activity is held at centre from its window's opening until
+         * its centred moment, and that moment IS the offset where the stage
+         * locks. So the honest answer to "where is card 0 centred, and is the
+         * stage pinned there" is the LAST scroll position at which it is still
+         * centred, which is a hair inside the lock — and the 24px grid almost
+         * never lands there.
+         *
+         * The old form sorted the grid's own centred samples, preferring pinned.
+         * That worked only while the lock happened to fall within `PIN_TOLERANCE`
+         * of a grid line: with the sticky offset at the header's 107px it did
+         * (1px), and when the stage grew a gutter and the offset became 137px it
+         * did not — so the rig reported "the pin is too short for its own
+         * carousel" about a page whose card 0 centres exactly on the lock. **That
+         * is the same defect this loop already carries a note about for the LAST
+         * card**, at the other end of the pin, and it is fixed the same way:
+         * bisect the boundary instead of sampling near it.
+         *
+         * The predicate is "still at the offset it HOLDS at", not "still within
+         * the 8px the assertion allows". The second one is monotone too, but it
+         * lands the search 8px late by construction and then reports that 8px as
+         * this rig's worst centring figure — a number about the bisection rather
+         * than about the page. `holdOffset` is read deep inside the hold, where it
+         * is constant, and 1px either side of it is the boundary.
+         */
+        const lastCentred = centredGrid[centredGrid.length - 1];
+        const holdOffset = centredGrid[0].offset;
+        let loY = lastCentred.scrollY;
+        let hiY = samples[lastCentred.k + 1]?.scrollY ?? loY;
+        let edge = null;
+        for (let it = 0; it < 12 && hiY - loY > 0.5; it++) {
+          const mid = (loY + hiY) / 2;
+          await scrollToAndSettle(page, mid);
+          const s = await sample(page, CHAPTER);
+          const o = s.cards[i].offset;
+          if (Math.abs(o - holdOffset) <= 1) {
+            loY = s.scrollY;
+            edge = { scrollY: Math.round(s.scrollY), offset: o, pinned: s.pinned };
+          } else {
+            hiY = s.scrollY;
+          }
+        }
+        const already = edge ?? {
+          scrollY: lastCentred.scrollY,
+          offset: lastCentred.offset,
+          pinned: lastCentred.pinned,
+        };
         centreHits.push({ card: i, ...already, byHold: true });
         if (!already.pinned) {
           note(
@@ -1218,6 +1422,7 @@ for (const [width, height] of SHAPES) {
     // on passing by finding the wrong cards.
     checkFlanks(label, `card ${hit.card}'s centred moment (scrollY=${hit.scrollY})`, s, hit.card);
     checkCrops(label, `card ${hit.card}'s centred moment`, s);
+    checkTypeFits(label, `card ${hit.card}'s centred moment`, s);
     flankSamples.push({
       card: hit.card,
       scrollY: hit.scrollY,
@@ -1439,7 +1644,16 @@ for (const [width, height] of SHAPES) {
       const nearest = s.cards.reduce((a, b) => (Math.abs(a.offset) <= Math.abs(b.offset) ? a : b));
       const live = s.cards.filter((c) => c.live);
       const centred = s.cards.filter((c) => Math.abs(c.offset) <= CENTRE_TOLERANCE);
-      const wantWidth = Math.min(s.cardMax, s.stageWidth);
+      // The card's four bounds, from the page's own published numbers: its cap,
+      // the stage it is centred in, the viewport's gutter, and — since 18 Aug
+      // 2026 — the stage's own HEIGHT. The last one is what stops a short
+      // viewport clipping the card, and it is the term this expression gained in
+      // the same edit that gave the stage a gutter. See `--cf-stage-h`.
+      const wantWidth = Math.min(
+        s.cardMax,
+        s.stageWidth,
+        (s.innerHeight - s.headerHeight - 2 * s.gutterY) * s.cardBox,
+      );
       const flanks = [expected - 1, expected + 1]
         .filter((j) => j >= 0 && j < s.cards.length)
         .map((j) => s.cards[j]);
@@ -1463,6 +1677,9 @@ for (const [width, height] of SHAPES) {
         flankScale: flanks.map((f) => f.scale),
         minOpacity: Math.min(...s.cards.map((c) => c.opacity)),
         worstCrop: Math.max(...s.cards.map((c) => c.photo?.cropped ?? 0)),
+        typeOutside: Math.max(...s.cards.map((c) => c.typeOutside)),
+        cardH: me ? Number(me.height.toFixed(1)) : null,
+        stageH: s.stageHeight,
         // Why a card that is wider than its stage cannot be centred, in the
         // page's own numbers: `margin-inline: auto` with `left: 0; right: 0`
         // and an over-constrained width resolves to `0 / negative`.
@@ -1541,12 +1758,25 @@ for (const [width, height] of SHAPES) {
     (t) => Math.abs(t.offset ?? 999) > CENTRE_TOLERANCE,
     (bad) => {
       const worst = bad.reduce((a, b) => (Math.abs(a.offset) >= Math.abs(b.offset) ? a : b));
+      // **Two causes, and the message names both since 18 Aug 2026.** It used to
+      // name only the first, which is a rig diagnosing a defect it has not
+      // measured — the exact shape this project's own `DECISIONS.md` §2
+      // catalogues. Watched: with `.coverflow-target`'s sticky-top correction
+      // deleted, this band fired at all 158 samples while the card fitted its
+      // stage perfectly, and the old text confidently blamed the margins.
+      const overWide = worst.cardWidth > worst.stageWidth + WIDTH_TOLERANCE;
       return (
         `Worst ${Math.abs(worst.offset).toFixed(1)}px at ${worst.width}px, where a ` +
         `${worst.cardWidth}px card sits in a ${worst.stageWidth}px stage with margins ` +
-        `${worst.margins?.join(" / ")}. A card wider than its stage cannot be centred: with ` +
-        "`left: 0; right: 0` and a definite width, `margin-inline: auto` is over-constrained and " +
-        "CSS 2.1 §10.3.7 resolves it by pushing the box to the inline start"
+        `${worst.margins?.join(" / ")}. ` +
+        (overWide
+          ? "The card is WIDER than its stage, and a card wider than its stage cannot be centred: " +
+            "with `left: 0; right: 0` and a definite width, `margin-inline: auto` is " +
+            "over-constrained and CSS 2.1 §10.3.7 resolves it by pushing the box to the inline start"
+          : "The card FITS its stage, so this is not the margin defect — the scroll landed at the " +
+            "wrong offset. `.coverflow-target`'s `top` is `i × step + header − sticky-top`, and " +
+            "the last pair is half the stage's own shortfall; dropping it puts every target the " +
+            "same distance late at every width")
       );
     },
   );
@@ -1612,6 +1842,18 @@ for (const [width, height] of SHAPES) {
       return `Worst ${(worst.worstCrop * 100).toFixed(1)}% at ${worst.width}px — assertion 6`;
     },
   );
+  band(
+    "the card's own type fell outside the card",
+    (t) => t.typeOutside > TYPE_INSIDE_TOLERANCE,
+    (bad) => {
+      const worst = bad.reduce((a, b) => (a.typeOutside >= b.typeOutside ? a : b));
+      return (
+        `Worst ${worst.typeOutside}px at ${worst.width}px, on a ${worst.cardWidth}x${worst.cardH} ` +
+        "card — assertion 12. The card is `overflow: hidden`; the last time this happened the " +
+        "arrows rendered on the chapter's cream at 390px and no rig saw it"
+      );
+    },
+  );
 
   report.widthSweep = rows;
   const offsets = rows.flatMap((r) => r.targets.map((t) => Math.abs(t.offset ?? 0)));
@@ -1619,6 +1861,165 @@ for (const [width, height] of SHAPES) {
     `width sweep         ${rows.length} widths × ${SWEEP_TARGETS.length} targets, ` +
       `${SWEEP_FROM}-${SWEEP_TO}px step ${SWEEP_STEP}, worst off-centre ` +
       `${Math.max(...offsets).toFixed(2)}px`,
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Assertion 13 — the continuous HEIGHT sweep.
+//
+// The stage stopped being `100svh − header` on 18 Aug 2026: it is the card plus
+// `COVERFLOW.stageGutterYPx` either side, capped at the space under the header,
+// and the card is bounded by that height as well as by its width. Two things can
+// break as a viewport gets shorter, and neither is visible to a sweep at a fixed
+// 900px:
+//
+//   * the card outgrows the `overflow: hidden` box it is centred in, which is
+//     what the OLD construction did below ~760px of viewport;
+//   * a centred moment slides out of the pin, because the pin's own length is
+//     `screens × 100svh − stageHeight` and its start is `100svh − stickyTop`.
+//
+// So: every height from 600 to 1200, all six anchor targets clicked, and the card
+// they name must be centred, pinned, unclipped and inside its stage. Six targets
+// rather than two (the width sweep's number) because it is the CENTRING that a
+// height can break, and each card's centred moment is a different offset into a
+// pin whose length has changed.
+{
+  const context = await browser.newContext({
+    viewport: { width: HEIGHT_SWEEP_WIDTH, height: HEIGHT_SWEEP_TO },
+  });
+  const page = await context.newPage();
+  await page.goto(`${BASE}${PATH}`, { waitUntil: "load" });
+  await page.waitForTimeout(2600);
+  await page.evaluate(async () => {
+    const step = window.innerHeight * 0.8;
+    for (let y = 0; y < document.body.scrollHeight; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 70));
+    }
+  });
+
+  const heightRows = [];
+  for (let h = HEIGHT_SWEEP_FROM; h <= HEIGHT_SWEEP_TO; h += HEIGHT_SWEEP_STEP) {
+    await page.setViewportSize({ width: HEIGHT_SWEEP_WIDTH, height: h });
+    await page.waitForTimeout(60);
+    const row = { height: h, targets: [] };
+    for (const t of ACTIVITY_INDICES) {
+      const y = await anchorOffset(page, coverflowTargetIdOf(t));
+      if (y === null) {
+        row.targets.push({ target: t, error: "no such scroll target" });
+        continue;
+      }
+      await scrollToAndSettle(page, y);
+      const s = await sample(page, CHAPTER);
+      if (!s) {
+        row.targets.push({ target: t, error: "no stage" });
+        continue;
+      }
+      const me = s.cards[t];
+      row.targets.push({
+        target: t,
+        pinned: s.pinned,
+        stageH: s.stageHeight,
+        stickyTop: s.stickyTop,
+        cardW: me ? Number(me.layoutWidth.toFixed(1)) : null,
+        // The card's own untransformed height, which is what "does it fit the
+        // stage" is about — `getBoundingClientRect()` would carry the keyframed
+        // `scale()` and report 0.82 of a flank card as if it had shrunk.
+        cardH: me ? me.layoutHeight : null,
+        offset: me ? Number(me.offset.toFixed(1)) : null,
+        nearest: s.cards.reduce((a, b) => (Math.abs(a.offset) <= Math.abs(b.offset) ? a : b)).i,
+        typeOutside: Math.max(...s.cards.map((c) => c.typeOutside)),
+        gutter: me ? Number(((s.stageHeight - me.layoutHeight) / 2).toFixed(1)) : null,
+      });
+    }
+    heightRows.push(row);
+  }
+  await context.close();
+  report.heightSweep = heightRows;
+
+  const hband = (name, predicate, describe) => {
+    const bad = [];
+    for (const row of heightRows) {
+      for (const t of row.targets) {
+        if (!t.error && predicate(t, row)) bad.push({ ...t, height: row.height });
+      }
+    }
+    if (bad.length === 0) return;
+    const hs = [...new Set(bad.map((b) => b.height))].sort((a, b) => a - b);
+    const ranges = [];
+    for (const h of hs) {
+      const last = ranges[ranges.length - 1];
+      if (last && h - last[1] <= HEIGHT_SWEEP_STEP) last[1] = h;
+      else ranges.push([h, h]);
+    }
+    note(
+      "assertion 13 · height sweep",
+      `${name} at ${ranges.map(([a, b]) => (a === b ? `${a}px` : `${a}-${b}px`)).join(", ")} ` +
+        `(${bad.length} of ${heightRows.length * ACTIVITY_INDICES.length} samples). ${describe(bad)}`,
+    );
+  };
+
+  const unmeasuredH = heightRows.flatMap((r) =>
+    r.targets.filter((t) => t.error).map((t) => ({ ...t, height: r.height })),
+  );
+  if (unmeasuredH.length > 0) {
+    note(
+      "assertion 13 · height sweep",
+      `${unmeasuredH.length} samples could not be measured (` +
+        `${[...new Set(unmeasuredH.map((u) => u.error))].join("; ")})`,
+    );
+  }
+
+  hband(
+    "the card was taller than the stage holding it",
+    (t) => t.cardH !== null && t.cardH > t.stageH + 0.5,
+    (bad) => {
+      const worst = bad.reduce((a, b) => (a.cardH - a.stageH >= b.cardH - b.stageH ? a : b));
+      return (
+        `Worst at ${worst.height}px of viewport: a ${worst.cardW}x${worst.cardH} card in a ` +
+        `${worst.stageH}px stage. The card must be bounded by the stage's HEIGHT as well as its ` +
+        "width — `(100svh − header − 2 × gutter-y) × CARD_BOX` in `CoverflowCard`'s own width — " +
+        "or a short laptop clips it inside an `overflow: hidden` box"
+      );
+    },
+  );
+  hband(
+    "the card's own type fell outside the card",
+    (t) => t.typeOutside > TYPE_INSIDE_TOLERANCE,
+    (bad) => {
+      const worst = bad.reduce((a, b) => (a.typeOutside >= b.typeOutside ? a : b));
+      return `Worst ${worst.typeOutside}px at ${worst.height}px on a ${worst.cardW}x${worst.cardH} card — assertion 12, on the height axis`;
+    },
+  );
+  hband(
+    "the scroll target left its card off centre",
+    (t) => Math.abs(t.offset ?? 999) > CENTRE_TOLERANCE,
+    (bad) => {
+      const worst = bad.reduce((a, b) => (Math.abs(a.offset) >= Math.abs(b.offset) ? a : b));
+      return (
+        `Worst ${Math.abs(worst.offset).toFixed(1)}px at ${worst.height}px of viewport, on card ` +
+        `${worst.target} (card ${worst.nearest} was nearest). The anchor targets are placed at ` +
+        "`i × step + header − sticky-top`, and that last pair is the half of the stage's own " +
+        "shortfall — leave it out and every target lands half a shortfall late, at every height"
+      );
+    },
+  );
+  hband(
+    "a card reached centre outside the pin",
+    (t) => Math.abs(t.offset ?? 999) <= CENTRE_TOLERANCE && !t.pinned,
+    (bad) =>
+      `Worst at ${bad[0].height}px of viewport: card ${bad[0].target} is centred where the stage ` +
+      `is not pinned (declared top ${bad[0].stickyTop}, stage ${bad[0].stageH}px) — the pin is ` +
+      "too short for its own carousel at that height",
+  );
+
+  const gutters = heightRows.flatMap((r) => r.targets.map((t) => t.gutter).filter((g) => g !== null));
+  const offs = heightRows.flatMap((r) => r.targets.map((t) => Math.abs(t.offset ?? 0)));
+  console.log(
+    `height sweep        ${heightRows.length} heights × ${ACTIVITY_INDICES.length} targets, ` +
+      `${HEIGHT_SWEEP_FROM}-${HEIGHT_SWEEP_TO}px @${HEIGHT_SWEEP_WIDTH} step ${HEIGHT_SWEEP_STEP}, ` +
+      `worst off-centre ${Math.max(...offs).toFixed(2)}px, stage gutter ` +
+      `${Math.min(...gutters).toFixed(1)}-${Math.max(...gutters).toFixed(1)}px`,
   );
 }
 

@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-17T07:39:45.950Z",
+  "measuredAt": "2026-08-17T12:51:17.158Z",
   "url": "http://localhost:3110/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 3.03,
+        "currentTime": 3.02,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 3.04,
-        "afterHover": 3.63
+        "beforeHover": 3.02,
+        "afterHover": 3.62
       },
       "afterItEnds": {
         "stillVisible": false,
