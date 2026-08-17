@@ -30,21 +30,40 @@ describe("CoverflowCard", () => {
     expect(screen.getByText(/An hour at the water/)).toBeInTheDocument();
   });
 
-  it("points its arrows at its neighbours, and wraps at the ends", () => {
+  it("points its arrows at the cards either side of it", () => {
     const { container } = render(
-      <CoverflowCard experience={experience} scrim={scrim} index={0} count={6} chapterId="field-days" />,
+      <CoverflowCard experience={experience} scrim={scrim} index={2} count={6} chapterId="field-days" />,
     );
     const links = [...container.querySelectorAll("a")].map((a) => a.getAttribute("href"));
-    // Card 0's "previous" is card 5 — the loop the client asked for, and the
-    // whole reason the arrows are anchors rather than script.
-    expect(links).toContain("#field-days-card-5");
-    expect(links).toContain("#field-days-card-1");
+    expect(links).toEqual(["#field-days-card-1", "#field-days-card-3"]);
+  });
+
+  it("gives the first card no way back and the last card no way on", () => {
+    // The client's ruling of 18 Aug 2026: "make it linear and just keep it 01 to
+    // 06 … no card placed before it … no card placed after it". An arrow that
+    // wrapped would be the loop he has just removed, arriving by another door —
+    // his own route back is the scroll. This asserts the ends are ENDS, in the
+    // rendered markup, where the previous version asserted the wrap.
+    const first = render(
+      <CoverflowCard experience={experience} scrim={scrim} index={0} count={6} chapterId="field-days" />,
+    );
+    expect([...first.container.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual([
+      "#field-days-card-1",
+    ]);
+    first.unmount();
+
+    const last = render(
+      <CoverflowCard experience={experience} scrim={scrim} index={5} count={6} chapterId="field-days" />,
+    );
+    expect([...last.container.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual([
+      "#field-days-card-4",
+    ]);
   });
 
   it("names its arrows for a screen reader, since a chevron has no text", () => {
-    render(<CoverflowCard experience={experience} scrim={scrim} index={0} count={6} chapterId="field-days" />);
-    // Six cards each carry a pair, so a bare "Previous" would be announced twelve
-    // times with nothing to tell them apart.
+    render(<CoverflowCard experience={experience} scrim={scrim} index={2} count={6} chapterId="field-days" />);
+    // Ten arrows across the six cards, so a bare "Previous" would be announced
+    // five times with nothing to tell them apart.
     expect(screen.getByRole("link", { name: /previous/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /next/i })).toBeInTheDocument();
   });

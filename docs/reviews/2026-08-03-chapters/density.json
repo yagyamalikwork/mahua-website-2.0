@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-08-17T02:14:16.704Z",
+  "measuredAt": "2026-08-17T08:15:40.390Z",
   "url": "http://localhost:3110/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
   "imagery": {
     "distinctImages": 39,
-    "imgElements": 41,
-    "documentHeightPx": 16083,
-    "screensOfScroll": 17.9,
-    "imagesPerScreen": 2.18,
+    "imgElements": 39,
+    "documentHeightPx": 16911,
+    "screensOfScroll": 18.8,
+    "imagesPerScreen": 2.08,
     "ids": [
       {
         "id": "tiger-golden-grass",
@@ -37,12 +37,12 @@
       },
       {
         "id": "forest-trail-canopy",
-        "instances": 2,
+        "instances": 1,
         "area": 833113
       },
       {
         "id": "tiger-crossing-track",
-        "instances": 2,
+        "instances": 1,
         "area": 560185
       },
       {
@@ -208,15 +208,15 @@
     ]
   },
   "page": {
-    "screens": 103,
-    "meanEmptyPercent": 35.6,
+    "screens": 108,
+    "meanEmptyPercent": 35.3,
     "medianEmptyPercent": 38.8,
     "bestEmptyPercent": 0.4,
-    "worstEmptyPercent": 71.4,
+    "worstEmptyPercent": 66.9,
     "worstAt": 6150,
-    "overBudget": 29,
-    "meanImagePercent": 57.2,
-    "meanTypePercent": 7.3
+    "overBudget": 28,
+    "meanImagePercent": 57.7,
+    "meanTypePercent": 7
   },
   "chapters": [
     {
@@ -296,14 +296,14 @@
     },
     {
       "id": "field-days",
-      "heightPx": 2400,
-      "screensTall": 2.67,
+      "heightPx": 3228,
+      "screensTall": 3.59,
       "wholeScreensAvailable": true,
-      "screens": 11,
-      "meanEmptyPercent": 26.4,
-      "medianEmptyPercent": 25.1,
-      "bestEmptyPercent": 24.1,
-      "worstEmptyPercent": 41,
+      "screens": 15,
+      "meanEmptyPercent": 28.6,
+      "medianEmptyPercent": 28.3,
+      "bestEmptyPercent": 25.6,
+      "worstEmptyPercent": 40.4,
       "worstAt": 6600,
       "overBudget": 0,
       "passesMean": true,
@@ -314,15 +314,15 @@
       "heightPx": 1436,
       "screensTall": 1.6,
       "wholeScreensAvailable": true,
-      "screens": 3,
-      "meanEmptyPercent": 33.8,
-      "medianEmptyPercent": 31.9,
-      "bestEmptyPercent": 29.9,
-      "worstEmptyPercent": 39.6,
-      "worstAt": 9000,
-      "overBudget": 0,
+      "screens": 4,
+      "meanEmptyPercent": 37.1,
+      "medianEmptyPercent": 38.9,
+      "bestEmptyPercent": 27.2,
+      "worstEmptyPercent": 46.5,
+      "worstAt": 9750,
+      "overBudget": 1,
       "passesMean": true,
-      "passesWorst": true
+      "passesWorst": false
     },
     {
       "id": "after-dark",
@@ -330,11 +330,11 @@
       "screensTall": 1,
       "wholeScreensAvailable": false,
       "screens": 1,
-      "meanEmptyPercent": 3.8,
-      "medianEmptyPercent": 3.8,
-      "bestEmptyPercent": 3.8,
-      "worstEmptyPercent": 3.8,
-      "worstAt": 10350,
+      "meanEmptyPercent": 4.7,
+      "medianEmptyPercent": 4.7,
+      "bestEmptyPercent": 4.7,
+      "worstEmptyPercent": 4.7,
+      "worstAt": 11100,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -345,11 +345,11 @@
       "screensTall": 1.3,
       "wholeScreensAvailable": true,
       "screens": 2,
-      "meanEmptyPercent": 33.9,
-      "medianEmptyPercent": 36,
-      "bestEmptyPercent": 31.8,
-      "worstEmptyPercent": 36,
-      "worstAt": 11400,
+      "meanEmptyPercent": 37,
+      "medianEmptyPercent": 41.8,
+      "bestEmptyPercent": 32.3,
+      "worstEmptyPercent": 41.8,
+      "worstAt": 12300,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -360,11 +360,11 @@
       "screensTall": 1.17,
       "wholeScreensAvailable": true,
       "screens": 1,
-      "meanEmptyPercent": 40.6,
-      "medianEmptyPercent": 40.6,
-      "bestEmptyPercent": 40.6,
-      "worstEmptyPercent": 40.6,
-      "worstAt": 12450,
+      "meanEmptyPercent": 41.4,
+      "medianEmptyPercent": 41.4,
+      "bestEmptyPercent": 41.4,
+      "worstEmptyPercent": 41.4,
+      "worstAt": 13350,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -375,11 +375,11 @@
       "screensTall": 1.54,
       "wholeScreensAvailable": true,
       "screens": 3,
-      "meanEmptyPercent": 39.5,
-      "medianEmptyPercent": 39.6,
-      "bestEmptyPercent": 38.1,
-      "worstEmptyPercent": 40.7,
-      "worstAt": 13500,
+      "meanEmptyPercent": 40.7,
+      "medianEmptyPercent": 39.5,
+      "bestEmptyPercent": 38.9,
+      "worstEmptyPercent": 43.8,
+      "worstAt": 14700,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -390,11 +390,11 @@
       "screensTall": 1,
       "wholeScreensAvailable": false,
       "screens": 1,
-      "meanEmptyPercent": 5.4,
-      "medianEmptyPercent": 5.4,
-      "bestEmptyPercent": 5.4,
-      "worstEmptyPercent": 5.4,
-      "worstAt": 14850,
+      "meanEmptyPercent": 6.8,
+      "medianEmptyPercent": 6.8,
+      "bestEmptyPercent": 6.8,
+      "worstEmptyPercent": 6.8,
+      "worstAt": 15600,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -403,27 +403,27 @@
   "emptiestScreens": [
     {
       "at": 6150,
-      "empty": 71.4,
+      "empty": 66.9,
       "spans": "forest / field-days"
+    },
+    {
+      "at": 12750,
+      "empty": 64.5,
+      "spans": "lantern-hour / details"
     },
     {
       "at": 6300,
-      "empty": 67.5,
+      "empty": 63.7,
       "spans": "forest / field-days"
     },
     {
-      "at": 11850,
-      "empty": 64.3,
+      "at": 12900,
+      "empty": 61.8,
       "spans": "lantern-hour / details"
     },
     {
-      "at": 12000,
-      "empty": 63.8,
-      "spans": "lantern-hour / details"
-    },
-    {
-      "at": 12150,
-      "empty": 57.7,
+      "at": 12600,
+      "empty": 59.4,
       "spans": "lantern-hour / details"
     }
   ],
@@ -696,454 +696,489 @@
     },
     {
       "at": 5700,
-      "occupied": 65.2,
-      "empty": 34.8,
-      "imagePercent": 62.5,
-      "typePercent": 2.7
+      "occupied": 66.5,
+      "empty": 33.5,
+      "imagePercent": 63.1,
+      "typePercent": 3.4
     },
     {
       "at": 5850,
-      "occupied": 54.2,
-      "empty": 45.8,
-      "imagePercent": 49.3,
-      "typePercent": 4.9
+      "occupied": 55.6,
+      "empty": 44.4,
+      "imagePercent": 49.9,
+      "typePercent": 5.7
     },
     {
       "at": 6000,
-      "occupied": 43.6,
-      "empty": 56.4,
-      "imagePercent": 36.1,
+      "occupied": 44.2,
+      "empty": 55.8,
+      "imagePercent": 36.7,
       "typePercent": 7.5
     },
     {
       "at": 6150,
-      "occupied": 28.6,
-      "empty": 71.4,
-      "imagePercent": 21.1,
+      "occupied": 33.1,
+      "empty": 66.9,
+      "imagePercent": 25.6,
       "typePercent": 7.5
     },
     {
       "at": 6300,
-      "occupied": 32.5,
-      "empty": 67.5,
-      "imagePercent": 25.5,
+      "occupied": 36.3,
+      "empty": 63.7,
+      "imagePercent": 29.3,
       "typePercent": 7
     },
     {
       "at": 6450,
-      "occupied": 45.7,
-      "empty": 54.3,
-      "imagePercent": 39.6,
+      "occupied": 48.1,
+      "empty": 51.9,
+      "imagePercent": 42,
       "typePercent": 6.1
     },
     {
       "at": 6600,
-      "occupied": 59,
-      "empty": 41,
-      "imagePercent": 53.4,
-      "typePercent": 5.6
+      "occupied": 59.6,
+      "empty": 40.4,
+      "imagePercent": 54.6,
+      "typePercent": 5
     },
     {
-      "at": 6892,
-      "occupied": 75.9,
-      "empty": 24.1,
-      "imagePercent": 75,
+      "at": 6750,
+      "occupied": 72,
+      "empty": 28,
+      "imagePercent": 69.4,
+      "typePercent": 2.6
+    },
+    {
+      "at": 6900,
+      "occupied": 73.8,
+      "empty": 26.2,
+      "imagePercent": 72.9,
       "typePercent": 0.9
     },
     {
-      "at": 6892,
-      "occupied": 75.9,
-      "empty": 24.1,
-      "imagePercent": 75,
+      "at": 7050,
+      "occupied": 70.3,
+      "empty": 29.7,
+      "imagePercent": 69.4,
       "typePercent": 0.9
     },
     {
-      "at": 7093,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
+      "at": 7200,
+      "occupied": 74.4,
+      "empty": 25.6,
+      "imagePercent": 73.4,
+      "typePercent": 1
+    },
+    {
+      "at": 7350,
+      "occupied": 71.6,
+      "empty": 28.4,
+      "imagePercent": 70.7,
       "typePercent": 0.9
     },
     {
-      "at": 7295,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
+      "at": 7500,
+      "occupied": 71.7,
+      "empty": 28.3,
+      "imagePercent": 70.8,
       "typePercent": 0.9
     },
     {
-      "at": 7295,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
+      "at": 7650,
+      "occupied": 73.8,
+      "empty": 26.2,
+      "imagePercent": 72.9,
       "typePercent": 0.9
     },
     {
-      "at": 7496,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
+      "at": 7800,
+      "occupied": 70.3,
+      "empty": 29.7,
+      "imagePercent": 69.4,
       "typePercent": 0.9
     },
     {
-      "at": 7698,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
+      "at": 7950,
+      "occupied": 73.8,
+      "empty": 26.2,
+      "imagePercent": 72.9,
       "typePercent": 0.9
     },
     {
-      "at": 7899,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
-      "typePercent": 0.9
-    },
-    {
-      "at": 7899,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
-      "typePercent": 0.9
-    },
-    {
-      "at": 7899,
-      "occupied": 74.9,
-      "empty": 25.1,
-      "imagePercent": 74,
+      "at": 8100,
+      "occupied": 71.7,
+      "empty": 28.3,
+      "imagePercent": 70.8,
       "typePercent": 0.9
     },
     {
       "at": 8250,
-      "occupied": 56,
-      "empty": 44,
-      "imagePercent": 49,
-      "typePercent": 7
+      "occupied": 71.6,
+      "empty": 28.4,
+      "imagePercent": 70.7,
+      "typePercent": 0.9
     },
     {
       "at": 8400,
-      "occupied": 51.6,
-      "empty": 48.4,
-      "imagePercent": 44.6,
-      "typePercent": 7
+      "occupied": 73.8,
+      "empty": 26.2,
+      "imagePercent": 72.9,
+      "typePercent": 0.9
     },
     {
       "at": 8550,
-      "occupied": 51.4,
-      "empty": 48.6,
-      "imagePercent": 44.4,
-      "typePercent": 7
+      "occupied": 70.4,
+      "empty": 29.6,
+      "imagePercent": 69.5,
+      "typePercent": 0.9
     },
     {
       "at": 8700,
-      "occupied": 49.2,
-      "empty": 50.8,
-      "imagePercent": 41.6,
-      "typePercent": 7.6
+      "occupied": 72.7,
+      "empty": 27.3,
+      "imagePercent": 71.8,
+      "typePercent": 0.9
     },
     {
       "at": 8850,
-      "occupied": 48.6,
-      "empty": 51.4,
-      "imagePercent": 40.7,
-      "typePercent": 7.9
+      "occupied": 70.1,
+      "empty": 29.9,
+      "imagePercent": 69.2,
+      "typePercent": 0.9
     },
     {
       "at": 9000,
-      "occupied": 60.4,
-      "empty": 39.6,
-      "imagePercent": 53.5,
-      "typePercent": 6.9
+      "occupied": 60.8,
+      "empty": 39.2,
+      "imagePercent": 55.5,
+      "typePercent": 5.3
     },
     {
       "at": 9150,
-      "occupied": 70.1,
-      "empty": 29.9,
-      "imagePercent": 68.2,
-      "typePercent": 1.9
-    },
-    {
-      "at": 9300,
-      "occupied": 68.1,
-      "empty": 31.9,
-      "imagePercent": 65.2,
-      "typePercent": 2.9
-    },
-    {
-      "at": 9450,
-      "occupied": 57.2,
-      "empty": 42.8,
-      "imagePercent": 54,
-      "typePercent": 3.2
-    },
-    {
-      "at": 9600,
-      "occupied": 62.6,
-      "empty": 37.4,
-      "imagePercent": 60,
-      "typePercent": 2.6
-    },
-    {
-      "at": 9750,
-      "occupied": 75.3,
-      "empty": 24.7,
-      "imagePercent": 73.2,
-      "typePercent": 2.1
-    },
-    {
-      "at": 9900,
-      "occupied": 78.9,
-      "empty": 21.1,
-      "imagePercent": 72,
+      "occupied": 50.9,
+      "empty": 49.1,
+      "imagePercent": 44,
       "typePercent": 6.9
     },
     {
-      "at": 10050,
-      "occupied": 80.5,
-      "empty": 19.5,
-      "imagePercent": 72.1,
-      "typePercent": 8.4
+      "at": 9300,
+      "occupied": 52.1,
+      "empty": 47.9,
+      "imagePercent": 45.2,
+      "typePercent": 6.9
     },
     {
-      "at": 10200,
-      "occupied": 88.6,
-      "empty": 11.4,
-      "imagePercent": 81.2,
+      "at": 9450,
+      "occupied": 53.2,
+      "empty": 46.8,
+      "imagePercent": 46.3,
+      "typePercent": 6.9
+    },
+    {
+      "at": 9600,
+      "occupied": 47.8,
+      "empty": 52.2,
+      "imagePercent": 40.4,
       "typePercent": 7.4
     },
     {
+      "at": 9750,
+      "occupied": 53.5,
+      "empty": 46.5,
+      "imagePercent": 45.6,
+      "typePercent": 7.9
+    },
+    {
+      "at": 9900,
+      "occupied": 64.3,
+      "empty": 35.7,
+      "imagePercent": 60.7,
+      "typePercent": 3.6
+    },
+    {
+      "at": 10050,
+      "occupied": 72.8,
+      "empty": 27.2,
+      "imagePercent": 70.9,
+      "typePercent": 1.9
+    },
+    {
+      "at": 10200,
+      "occupied": 61.1,
+      "empty": 38.9,
+      "imagePercent": 57.9,
+      "typePercent": 3.2
+    },
+    {
       "at": 10350,
-      "occupied": 96.2,
-      "empty": 3.8,
-      "imagePercent": 89,
-      "typePercent": 7.2
+      "occupied": 58.4,
+      "empty": 41.6,
+      "imagePercent": 55.2,
+      "typePercent": 3.2
     },
     {
       "at": 10500,
-      "occupied": 90.7,
-      "empty": 9.3,
-      "imagePercent": 83.5,
-      "typePercent": 7.2
+      "occupied": 68.4,
+      "empty": 31.6,
+      "imagePercent": 65.8,
+      "typePercent": 2.6
     },
     {
       "at": 10650,
-      "occupied": 86.1,
-      "empty": 13.9,
-      "imagePercent": 78.9,
-      "typePercent": 7.2
+      "occupied": 78,
+      "empty": 22,
+      "imagePercent": 74.6,
+      "typePercent": 3.4
     },
     {
       "at": 10800,
-      "occupied": 81,
-      "empty": 19,
-      "imagePercent": 76,
-      "typePercent": 5
+      "occupied": 79.6,
+      "empty": 20.4,
+      "imagePercent": 71.2,
+      "typePercent": 8.4
     },
     {
       "at": 10950,
-      "occupied": 76.8,
-      "empty": 23.2,
-      "imagePercent": 71.1,
-      "typePercent": 5.7
+      "occupied": 82.8,
+      "empty": 17.2,
+      "imagePercent": 74.4,
+      "typePercent": 8.4
     },
     {
       "at": 11100,
-      "occupied": 72,
-      "empty": 28,
-      "imagePercent": 64.2,
-      "typePercent": 7.8
+      "occupied": 95.3,
+      "empty": 4.7,
+      "imagePercent": 88.1,
+      "typePercent": 7.2
     },
     {
       "at": 11250,
-      "occupied": 68.2,
-      "empty": 31.8,
-      "imagePercent": 58.6,
-      "typePercent": 9.6
+      "occupied": 92.9,
+      "empty": 7.1,
+      "imagePercent": 85.7,
+      "typePercent": 7.2
     },
     {
       "at": 11400,
-      "occupied": 64,
-      "empty": 36,
-      "imagePercent": 54.4,
-      "typePercent": 9.6
+      "occupied": 88.6,
+      "empty": 11.4,
+      "imagePercent": 81.4,
+      "typePercent": 7.2
     },
     {
       "at": 11550,
-      "occupied": 51.5,
-      "empty": 48.5,
-      "imagePercent": 43.1,
-      "typePercent": 8.4
+      "occupied": 84.7,
+      "empty": 15.3,
+      "imagePercent": 77.4,
+      "typePercent": 7.3
     },
     {
       "at": 11700,
-      "occupied": 43.5,
-      "empty": 56.5,
-      "imagePercent": 33.5,
-      "typePercent": 10
+      "occupied": 78.7,
+      "empty": 21.3,
+      "imagePercent": 74.4,
+      "typePercent": 4.3
     },
     {
       "at": 11850,
-      "occupied": 35.7,
-      "empty": 64.3,
-      "imagePercent": 24.7,
-      "typePercent": 11
+      "occupied": 74.4,
+      "empty": 25.6,
+      "imagePercent": 68.1,
+      "typePercent": 6.3
     },
     {
       "at": 12000,
-      "occupied": 36.2,
-      "empty": 63.8,
-      "imagePercent": 27.8,
-      "typePercent": 8.4
+      "occupied": 70.6,
+      "empty": 29.4,
+      "imagePercent": 61.5,
+      "typePercent": 9.1
     },
     {
       "at": 12150,
-      "occupied": 42.3,
-      "empty": 57.7,
-      "imagePercent": 35.1,
-      "typePercent": 7.2
+      "occupied": 67.7,
+      "empty": 32.3,
+      "imagePercent": 58.1,
+      "typePercent": 9.6
     },
     {
       "at": 12300,
-      "occupied": 51.9,
-      "empty": 48.1,
-      "imagePercent": 44.7,
-      "typePercent": 7.2
+      "occupied": 58.2,
+      "empty": 41.8,
+      "imagePercent": 48.9,
+      "typePercent": 9.3
     },
     {
       "at": 12450,
-      "occupied": 59.4,
-      "empty": 40.6,
-      "imagePercent": 50.2,
-      "typePercent": 9.2
+      "occupied": 46.6,
+      "empty": 53.4,
+      "imagePercent": 38.5,
+      "typePercent": 8.1
     },
     {
       "at": 12600,
-      "occupied": 55.6,
-      "empty": 44.4,
-      "imagePercent": 50.2,
-      "typePercent": 5.4
+      "occupied": 40.6,
+      "empty": 59.4,
+      "imagePercent": 28.7,
+      "typePercent": 11.9
     },
     {
       "at": 12750,
-      "occupied": 53.7,
-      "empty": 46.3,
-      "imagePercent": 47.7,
-      "typePercent": 6
+      "occupied": 35.5,
+      "empty": 64.5,
+      "imagePercent": 25.5,
+      "typePercent": 10
     },
     {
       "at": 12900,
+      "occupied": 38.2,
+      "empty": 61.8,
+      "imagePercent": 30.6,
+      "typePercent": 7.6
+    },
+    {
+      "at": 13050,
+      "occupied": 46.9,
+      "empty": 53.1,
+      "imagePercent": 39.7,
+      "typePercent": 7.2
+    },
+    {
+      "at": 13200,
+      "occupied": 57.2,
+      "empty": 42.8,
+      "imagePercent": 49.3,
+      "typePercent": 7.9
+    },
+    {
+      "at": 13350,
+      "occupied": 58.6,
+      "empty": 41.4,
+      "imagePercent": 50.2,
+      "typePercent": 8.4
+    },
+    {
+      "at": 13500,
+      "occupied": 54.6,
+      "empty": 45.4,
+      "imagePercent": 50.1,
+      "typePercent": 4.5
+    },
+    {
+      "at": 13650,
+      "occupied": 49.2,
+      "empty": 50.8,
+      "imagePercent": 42.1,
+      "typePercent": 7.1
+    },
+    {
+      "at": 13800,
+      "occupied": 45.2,
+      "empty": 54.8,
+      "imagePercent": 38.1,
+      "typePercent": 7.1
+    },
+    {
+      "at": 13950,
       "occupied": 45,
       "empty": 55,
       "imagePercent": 37.9,
       "typePercent": 7.1
     },
     {
-      "at": 13050,
-      "occupied": 44.8,
-      "empty": 55.2,
-      "imagePercent": 37.7,
-      "typePercent": 7.1
-    },
-    {
-      "at": 13200,
-      "occupied": 45.3,
-      "empty": 54.7,
-      "imagePercent": 38.3,
-      "typePercent": 7
-    },
-    {
-      "at": 13350,
-      "occupied": 52.6,
-      "empty": 47.4,
-      "imagePercent": 47.6,
-      "typePercent": 5
-    },
-    {
-      "at": 13500,
-      "occupied": 59.3,
-      "empty": 40.7,
-      "imagePercent": 55,
-      "typePercent": 4.3
-    },
-    {
-      "at": 13650,
-      "occupied": 60.4,
-      "empty": 39.6,
-      "imagePercent": 58.6,
-      "typePercent": 1.8
-    },
-    {
-      "at": 13800,
-      "occupied": 61.9,
-      "empty": 38.1,
-      "imagePercent": 55.6,
-      "typePercent": 6.3
-    },
-    {
-      "at": 13950,
-      "occupied": 52.3,
-      "empty": 47.7,
-      "imagePercent": 45.6,
-      "typePercent": 6.7
-    },
-    {
       "at": 14100,
-      "occupied": 54.1,
-      "empty": 45.9,
-      "imagePercent": 47.4,
-      "typePercent": 6.7
+      "occupied": 47.2,
+      "empty": 52.8,
+      "imagePercent": 41.2,
+      "typePercent": 6
     },
     {
       "at": 14250,
-      "occupied": 56.8,
-      "empty": 43.2,
-      "imagePercent": 46.3,
-      "typePercent": 10.5
+      "occupied": 57,
+      "empty": 43,
+      "imagePercent": 52,
+      "typePercent": 5
     },
     {
       "at": 14400,
-      "occupied": 65,
-      "empty": 35,
-      "imagePercent": 52.4,
-      "typePercent": 12.6
+      "occupied": 61.1,
+      "empty": 38.9,
+      "imagePercent": 58,
+      "typePercent": 3.1
     },
     {
       "at": 14550,
-      "occupied": 76.5,
-      "empty": 23.5,
-      "imagePercent": 62.3,
-      "typePercent": 14.2
+      "occupied": 60.5,
+      "empty": 39.5,
+      "imagePercent": 58.5,
+      "typePercent": 2
     },
     {
       "at": 14700,
-      "occupied": 86.4,
-      "empty": 13.6,
-      "imagePercent": 76.7,
-      "typePercent": 9.7
+      "occupied": 56.2,
+      "empty": 43.8,
+      "imagePercent": 49.5,
+      "typePercent": 6.7
     },
     {
       "at": 14850,
-      "occupied": 94.6,
-      "empty": 5.4,
-      "imagePercent": 85.3,
-      "typePercent": 9.3
+      "occupied": 53,
+      "empty": 47,
+      "imagePercent": 46.3,
+      "typePercent": 6.7
     },
     {
       "at": 15000,
-      "occupied": 80.2,
-      "empty": 19.8,
-      "imagePercent": 69.4,
-      "typePercent": 10.8
+      "occupied": 54.9,
+      "empty": 45.1,
+      "imagePercent": 46.6,
+      "typePercent": 8.3
     },
     {
       "at": 15150,
-      "occupied": 64.3,
-      "empty": 35.7,
-      "imagePercent": 55.8,
-      "typePercent": 8.5
+      "occupied": 59.3,
+      "empty": 40.7,
+      "imagePercent": 48.4,
+      "typePercent": 10.9
     },
     {
-      "at": 15183,
+      "at": 15300,
+      "occupied": 70.2,
+      "empty": 29.8,
+      "imagePercent": 56.5,
+      "typePercent": 13.7
+    },
+    {
+      "at": 15450,
+      "occupied": 81.8,
+      "empty": 18.2,
+      "imagePercent": 68.3,
+      "typePercent": 13.5
+    },
+    {
+      "at": 15600,
+      "occupied": 93.2,
+      "empty": 6.8,
+      "imagePercent": 83.9,
+      "typePercent": 9.3
+    },
+    {
+      "at": 15750,
+      "occupied": 87.2,
+      "empty": 12.8,
+      "imagePercent": 77.3,
+      "typePercent": 9.9
+    },
+    {
+      "at": 15900,
+      "occupied": 72.5,
+      "empty": 27.5,
+      "imagePercent": 63,
+      "typePercent": 9.5
+    },
+    {
+      "at": 16011,
       "occupied": 61.2,
       "empty": 38.8,
       "imagePercent": 53.5,

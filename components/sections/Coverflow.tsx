@@ -158,6 +158,27 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.35, centre: 0.7, bottom: 0.8,
  * `04 · Days in the Field` as a coverflow — six activities, six cards, advancing
  * on the visitor's own scroll while the stage holds still.
  *
+ * **It runs 01 to 06 and stops at both ends, since 18 Aug 2026.** The client, who
+ * had asked for a loop on 16 Aug and seen it built: *"As I scroll down to the
+ * carousel, I see a card before the 01-The safari card and when I scroll to the
+ * end I see a 01-The safari card after the 06 card … let's make it linear and
+ * just keep it 01 to 06, so that when I come to the carousel I see card 01 in
+ * focus with no card placed before it … and when I scroll down to card 06 I see
+ * [05] beside it but no card placed after it."* Two `aria-hidden` wrap-around
+ * ghosts at `--i: -1` and `--i: count` are what he was seeing, and they are gone
+ * — the markup, their two `data-cf` roles, their four keyframes and the rig
+ * assertion that policed them. **The arrows went linear with them**, which is
+ * this project's ruling rather than his words: his own route back is the scroll
+ * (*"they will have to scroll back to card 01"*), so an arrow that wrapped would
+ * reintroduce the loop by another door. `lib/coverflow.ts` carries that, and
+ * `docs/reviews/2026-08-16-coverflow/linear.md` carries what it cost.
+ *
+ * **What did NOT go with them is the pair of end-holds** (`[data-cf]` in
+ * `CoverflowCard`), and that is why they were moved onto the two real end cards
+ * on 17 Aug rather than left on the ghosts: the stage must not ride in or out
+ * empty, which is a fact about a sticky box being on screen for its own height
+ * and has nothing to do with wrapping.
+ *
  * Client request, 16 Aug 2026: the chapter *"looks flat even though it has
  * beautiful images"*, and the density data agreed — 43.9% mean / **57.9% worst**
  * against non-negotiable #8's 45% ceiling, one of three chapters over it. He was
@@ -205,11 +226,11 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.35, centre: 0.7, bottom: 0.8,
  *   zero-size boxes in the wrapper instead, positioned by `app/globals.css` from
  *   the timeline's own arithmetic. Both ends compose the id through
  *   `coverflowTargetId`, so a link and its target cannot disagree.
- * - **Each card's neighbours' titles.** Six cards carry a pair of arrows each, so
- *   twelve links would otherwise be announced as "Previous" and "Next" twelve
- *   times with nothing to tell them apart. The section knows the running order; a
- *   card does not, and must not reach into `content/` for words belonging to a
- *   *different* card.
+ * - **Each card's neighbours' titles.** Ten arrows across the six cards — the
+ *   first has no "previous" and the last no "next" — would otherwise be announced
+ *   as "Previous" and "Next" five times each with nothing to tell them apart. The
+ *   section knows the running order; a card does not, and must not reach into
+ *   `content/` for words belonging to a *different* card.
  * - **The six scrims.** See `CARD_SCRIM`.
  *
  * ## The tiger, and why it opens the chapter instead of closing it
@@ -318,58 +339,25 @@ export function Coverflow({
   // of those names to MEMBERSHIP of this chapter's list rather than to a slot.
   const count = copy.experiences.length;
 
-  /**
-   * The eight cards on the stage: the six activities, with the wrap-around
-   * neighbour rendered at each end.
-   *
-   * **The client asked for a loop** — *"the scroll needs to be repetitive and not
-   * a linear straight scroll, so that after 6 the 1 card comes back or
-   * vice-versa"* (16 Aug 2026) — and until this the loop existed only in the
-   * arrows: scrolling ran 1 → 6 and stopped. The reading is now
-   * `[6] → 1 → 2 → 3 → 4 → 5 → 6 → [1]`, so a visitor scrolling in watches the
-   * last activity give way to the first, and scrolling out watches the first
-   * return.
-   *
-   * **It is also the only lever left on this chapter's density.** The stage's
-   * worst screens are the two moments the sweep named — the first and last
-   * card's centre-hold, where every other card is parked at `--cf-off` and one
-   * card sits alone on a 793px stage (`docs/reviews/2026-08-16-coverflow/
-   * density-sweep.md` §2). `sideScale`, `sideShiftPct` and `sideVeil` cannot
-   * reach it, because there is no card to put at the flanks: no card −1, no card
-   * 6. There is now.
-   *
-   * **A ghost is a flank and never a card, and that is 17 Aug 2026's correction
-   * — the client's own report.** *"When I scrolled down to the carousel it
-   * started with 06-Walk and Cycling whereas it should start with 01-Jungle
-   * Safari … should start with 01 and end with 06."* `step` was
-   * `pin-len / (count + 1)`, so all EIGHT centred moments tiled the pin and the
-   * leading ghost — the copy of activity 6 — was the card centred as the stage
-   * locked, and held there. `step` is `pin-len / (count − 1)` now: the six
-   * activities tile the pin, activity 1 centred where it locks and activity 6
-   * where it lets go, and the two ghosts fall one step outside each end. They are
-   * then held at their flanks by their own keyframes so that "outside the pin"
-   * never means "in the middle of a stage that is still on screen".
-   *
-   * **`slot` is the animation's index and `source` is the activity's**, and they
-   * are only equal for the six real cards. Verified in the browser rather than
-   * trusted: `check_coverflow.mjs` bisects the six activities to their own
-   * centred moments and requires every one inside 8px of the stage's centre, and
-   * separately requires that NEITHER ghost is ever within 8px of it — which is
-   * the client's complaint written as an assertion.
-   *
-   * The two ghosts carry no `id`. The scroll targets live in the wrapper (there
-   * are six, one per activity, and the arrows on a ghost point at the same six),
-   * so a ghost carrying a card's id would emit a duplicate id and the browser
-   * would honour whichever came first.
-   */
-  const stageCards = [
-    { experience: copy.experiences[count - 1], source: count - 1, slot: -1, ghost: true },
-    ...copy.experiences.map((experience, i) => ({ experience, source: i, slot: i, ghost: false })),
-    { experience: copy.experiences[0], source: 0, slot: count, ghost: true },
-  ];
-
   return (
-    <ChapterSurface id={chapter.id} surface={surface}>
+    // `tight` — the client's third change of 18 Aug 2026: *"I see a lot of margin
+    // and gap between the carousel cards and the section heading and text (and
+    // the animated tiger) for 04 · Days in the Field, and the next section 05 ·
+    // The Rooms, which makes the carousel feel disconnected. Make sure it fits
+    // snugly and has no large unnecessary, disconnecting space before or after."*
+    //
+    // `py-10 md:py-12 lg:py-14` against the default `py-14 md:py-16 lg:py-20`, so
+    // 24px comes off this chapter's own top and bottom at 1440. It is the same
+    // dial `OpeningColumn`, `PropertyMap` and `PressBand` turn on the property
+    // pages, opt-in per chapter, and it changes nothing else on this page.
+    //
+    // **It is half of each join and never the whole of it.** The 214px between
+    // the last card and `05 · The Rooms`'s chapter mark at 1440 is 54px of cream
+    // inside the stage, then this chapter's 80px, then the rooms chapter's own
+    // 80px — and only the middle number is reachable from this file. The 54px is
+    // structural and deliberately untouched: see the note on `.coverflow` in
+    // `app/globals.css` for why the stage's height is not the dial it looks like.
+    <ChapterSurface id={chapter.id} surface={surface} tight>
       {/* The header band — one row since 17 Aug 2026, and it is the client's own
           ruling rather than a composition choice: *"Remove all 4 images (collage
           of images) between the section's introductory text and the activity
@@ -465,12 +453,19 @@ export function Coverflow({
        * stylesheet compute each element's own window without a per-index rule.
        */}
       <div
-        // `mt-8 lg:mt-10`, halved on 17 Aug 2026 with the band above it. A
-        // centred card already leaves cream of its own inside the stage — the
-        // stage is `100svh − header` and the card is centred in it — so this
-        // margin was being paid on top of a gap the pin creates for free, in the
-        // chapter whose worst screen was the page's worst.
-        className="coverflow mt-8 lg:mt-10"
+        // `mt-8 lg:mt-10` on 17 Aug 2026, halved again to `mt-3 lg:mt-4` on 18
+        // Aug — the client's *"make sure it fits snugly"*.
+        //
+        // **This margin is never the whole gap and the arithmetic is why.** A
+        // centred card leaves 54px of cream above itself INSIDE the stage at
+        // 1440x900 (the stage is `100svh − header` = 793px and the card is 685px
+        // tall), so what a visitor actually sees between the tiger's tail and the
+        // card's top is this margin PLUS that 54. At `lg:mt-10` it was 94px; at
+        // `lg:mt-4` it is 70px. Taking it to zero would buy 16 more and leave the
+        // card touching the band the moment the tiger is ever drawn any taller,
+        // which is one line in `app/page.tsx` and a recommendation already
+        // standing (`docs/reviews/2026-08-16-coverflow/geometry.md` §6).
+        className="coverflow mt-3 lg:mt-4"
         style={{ "--coverflow-count": String(count) } as React.CSSProperties}
       >
         {/* The six scroll targets. Zero-size, in the wrapper rather than in the
@@ -497,20 +492,24 @@ export function Coverflow({
             wrapper. */}
         <div className="coverflow-track">
           <ul className="coverflow-stage">
-            {stageCards.map(({ experience, source, slot, ghost }) => {
-              const { previous, next } = coverflowNeighbours(source, count);
+            {copy.experiences.map((experience, i) => {
+              // `null` at the two ends, and the component renders one arrow
+              // there rather than two — see `lib/coverflow.ts`. Indexing
+              // `experiences` with either of these without checking is a
+              // compile error, which is the whole reason it is not a `-1`.
+              const { previous, next } = coverflowNeighbours(i, count);
               return (
                 <CoverflowCard
-                  key={slot}
+                  key={experience.title}
                   experience={experience}
                   scrim={CARD_SCRIM[experience.mediaId] ?? PLACEHOLDER_SCRIM}
-                  index={source}
-                  slot={slot}
-                  ghost={ghost}
+                  index={i}
                   count={count}
                   chapterId={chapter.id}
-                  previousTitle={copy.experiences[previous].title}
-                  nextTitle={copy.experiences[next].title}
+                  previousTitle={
+                    previous === null ? undefined : copy.experiences[previous].title
+                  }
+                  nextTitle={next === null ? undefined : copy.experiences[next].title}
                 />
               );
             })}

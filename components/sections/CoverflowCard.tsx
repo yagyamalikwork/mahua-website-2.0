@@ -167,8 +167,6 @@ export function CoverflowCard({
   experience,
   scrim,
   index,
-  slot = index,
-  ghost = false,
   count,
   chapterId,
   previousTitle,
@@ -188,47 +186,22 @@ export function CoverflowCard({
    * towards illegible, which they may not.
    */
   scrim: ScrimStrength;
-  /** Which activity this is — its number, its words, and the two it points at. */
+  /** Which activity this is — its number, its words, and the card(s) it points at. */
   index: number;
-  /**
-   * Which position on the stage it animates through, if that is not its own.
-   *
-   * The two wrap-around ghosts are the only cards where the two differ: the copy
-   * of the last activity animates at `slot: -1` and the copy of the first at
-   * `slot: count`. The shared `animation-range` formula puts their centred
-   * moments one step OUTSIDE each end of the pin — which is what makes them
-   * flanks rather than cards — and `role` below is what keeps them there while
-   * the stage rides in and out. `Coverflow.tsx` carries the whole reasoning.
-   */
-  slot?: number;
-  /**
-   * A wrap-around copy of a card that is also on the stage under its own number.
-   *
-   * It is `aria-hidden` and everything inside it is out of the tab order: eight
-   * cards must not be eight activities to a screen reader, and sixteen arrows
-   * must not be sixteen stops on the way through the page. **It keeps its arrows
-   * all the same, as real links with `tabindex="-1"`**, and that is a decision
-   * rather than an oversight — but the reason changed on 17 Aug 2026 and the old
-   * one is worth not re-deriving. It used to be the card at the centre of the
-   * stage through the pin's first and last stretch, so a version without arrows
-   * would have been the one card a visitor could not advance from; the two real
-   * end cards hold those stretches now (`role`), and `app/globals.css` makes a
-   * ghost's arrows permanently un-hit-testable. They are still drawn because a
-   * ghost that looked different from its own twin would read as a seventh
-   * activity rather than as the loop coming round.
-   */
-  ghost?: boolean;
   count: number;
   chapterId: string;
   /**
-   * The titles of the cards the two arrows point at.
+   * The titles of the cards the arrows point at.
    *
-   * **Optional, and `Coverflow.tsx` must nonetheless always pass them.** Six
-   * cards carry a pair each, so twelve links would otherwise be announced as
-   * "Previous" and "Next" twelve times over with nothing to tell them apart.
-   * They are props rather than a lookup because this component must not reach
-   * into `content/` for words that belong to a *different* card — the section
-   * knows the running order; a card does not.
+   * **Optional, and `Coverflow.tsx` must nonetheless always pass the ones that
+   * exist.** Ten links would otherwise be announced as "Previous" and "Next"
+   * five times each with nothing to tell them apart. They are props rather than
+   * a lookup because this component must not reach into `content/` for words
+   * that belong to a *different* card — the section knows the running order; a
+   * card does not.
+   *
+   * The first card has no `previousTitle` and the last no `nextTitle`, because
+   * neither has the arrow that would carry it (`coverflowNeighbours`).
    */
   previousTitle?: string;
   nextTitle?: string;
@@ -236,38 +209,34 @@ export function CoverflowCard({
   const { previous, next } = coverflowNeighbours(index, count);
 
   /**
-   * Which of the four special parts on the stage this card plays, if any.
+   * Which of the two special parts on the stage this card plays, if any.
    *
-   * Four of the eight cards do not simply pass through, and `app/globals.css`
-   * needs to address each of them: the two ghosts are held at a flank across the
-   * stage's ride in and out, and the two real end cards are held at CENTRE across
-   * the same two stretches, so activity 1 is what a visitor meets when the
-   * chapter arrives and activity 6 is what is still there as it leaves.
+   * A sticky stage is on screen for its own height of scroll before it locks and
+   * again after it lets go, and the two end cards are held at CENTRE across those
+   * two stretches — so activity 1 is what a visitor meets when the chapter
+   * arrives and activity 6 is still there as it leaves, rather than the stage
+   * riding in and out empty. `app/globals.css` addresses both by this attribute.
+   *
+   * **It was four roles until 18 Aug 2026**: two wrap-around ghosts were held at
+   * the flanks at those same two moments, and the client has now seen the loop
+   * and ruled it out (*"let's make it linear and just keep it 01 to 06"*). The
+   * ghosts and their two roles are gone; **these two are not, and the separation
+   * is exactly why they survived it.** The holds were moved off the ghosts and
+   * onto the two real end cards on 17 Aug, so that they did not depend on the
+   * ghosts — see `docs/reviews/2026-08-16-coverflow/linear.md`.
    *
    * **A role, not a position, and that is 17 Aug 2026's correction.** The CSS said
    * `:first-child` / `:last-child`, which meant "the two ghosts" only because the
-   * ghosts happened to be both the outermost cards and the cards that held. The
-   * step arithmetic split those two facts apart the moment the six activities
-   * started tiling the pin on their own, and `:nth-child(2)` for "the first real
-   * card" would have been a positional selector standing in for the coincidence
-   * that there is exactly one ghost in front of it —
-   * `.room-card[data-room-card-last]`'s own recorded lesson.
+   * ghosts happened to be both the outermost cards and the cards that held; the
+   * step arithmetic split those two facts apart. Those selectors would happen to
+   * be correct again now that the deck is six cards and nothing else, which is
+   * precisely the coincidence `.room-card[data-room-card-last]`'s own recorded
+   * lesson says not to build on.
    *
    * It is derived here rather than passed in because it is a pure function of two
-   * props this card already has, and because `Coverflow.tsx` decides the slots:
-   * these four values are what the slots MEAN, and there is one place that is
-   * true.
+   * props this card already has.
    */
-  const role =
-    slot === -1
-      ? "ghost-lead"
-      : slot === count
-        ? "ghost-trail"
-        : slot === 0
-          ? "hold-first"
-          : slot === count - 1
-            ? "hold-last"
-            : undefined;
+  const role = index === 0 ? "hold-first" : index === count - 1 ? "hold-last" : undefined;
 
   const arrow =
     "rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] text-[color:var(--bg)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--bg)]";
@@ -275,11 +244,10 @@ export function CoverflowCard({
   return (
     <li
       className="coverflow-card relative isolate flex aspect-[16/9] flex-col justify-end overflow-hidden p-5 md:p-7"
-      aria-hidden={ghost ? "true" : undefined}
       data-cf={role}
       style={
         {
-          "--i": String(slot),
+          "--i": String(index),
           // The width `CARD_SIZES` above describes, and the reason it is here
           // rather than in `app/globals.css`: the two must move together, and
           // one file is the only place that can be true. Inline so a card is
@@ -354,41 +322,63 @@ export function CoverflowCard({
         </p>
       </div>
 
-      {/* Named, because six unnamed `<nav>` landmarks on one page are six
-          identical entries in a screen reader's landmark list. The activity's
-          own title is the name — no new copy, and distinct by construction. */}
-      <nav
-        aria-label={experience.title}
-        className="coverflow-arrows relative mt-4 flex items-center justify-between gap-6 border-t pt-3"
-        // `--accent` gold, not cream: the hairline carries no text, and a rule
-        // is the one thing non-negotiable #7 says gold IS for. The words above
-        // and below it are cream, which is the half of that rule that binds.
-        style={{ borderColor: "var(--accent)" }}
-      >
-        {/* `tabIndex={-1}` on a ghost's pair, never on a real card's: an
-            `aria-hidden` subtree with a tabbable link in it is a keyboard stop
-            a screen reader cannot announce. Out of the tab order they are
-            neither counted nor reachable, and they still work under the
-            pointer, which is the whole point of rendering them. */}
-        <a
-          href={`#${coverflowTargetId(chapterId, previous)}`}
-          aria-label={
-            previousTitle ? `${SITE.coverflow.previous} — ${previousTitle}` : SITE.coverflow.previous
-          }
-          tabIndex={ghost ? -1 : undefined}
-          className={arrow}
+      {/*
+        Named, because five unnamed `<nav>` landmarks on one page are five
+        identical entries in a screen reader's landmark list. The activity's own
+        title is the name — no new copy, and distinct by construction.
+
+        **An end of the carousel is an end, 18 Aug 2026.** The first card renders
+        no "previous" and the last renders no "next", because there is no such
+        card to point at (`coverflowNeighbours`). An arrow that wrapped round
+        would be the loop the client has just asked to be rid of, arriving by a
+        different route — his own sentence for how to get back is *"they will
+        have to scroll back to card 01"*.
+
+        Rendering a *disabled* arrow instead was considered and rejected: it is a
+        control that announces itself and then refuses, on a card where the only
+        other affordance is the scroll the visitor is already using. The rule
+        above stays whole either way — it is the card's own hairline, not the
+        arrows' — and the `<nav>` itself goes only if a card has no arrows at
+        all, which no six-activity chapter produces.
+      */}
+      {(previous !== null || next !== null) && (
+        <nav
+          aria-label={experience.title}
+          className="coverflow-arrows relative mt-4 flex items-center justify-between gap-6 border-t pt-3"
+          // `--accent` gold, not cream: the hairline carries no text, and a rule
+          // is the one thing non-negotiable #7 says gold IS for. The words above
+          // and below it are cream, which is the half of that rule that binds.
+          style={{ borderColor: "var(--accent)" }}
         >
-          {SITE.coverflow.previous}
-        </a>
-        <a
-          href={`#${coverflowTargetId(chapterId, next)}`}
-          aria-label={nextTitle ? `${SITE.coverflow.next} — ${nextTitle}` : SITE.coverflow.next}
-          tabIndex={ghost ? -1 : undefined}
-          className={arrow}
-        >
-          {SITE.coverflow.next}
-        </a>
-      </nav>
+          {previous !== null && (
+            <a
+              href={`#${coverflowTargetId(chapterId, previous)}`}
+              aria-label={
+                previousTitle
+                  ? `${SITE.coverflow.previous} — ${previousTitle}`
+                  : SITE.coverflow.previous
+              }
+              className={arrow}
+            >
+              {SITE.coverflow.previous}
+            </a>
+          )}
+          {next !== null && (
+            // `ml-auto` as well as `justify-between`: with both arrows present
+            // the two are identical, and on the FIRST card — where "next" is the
+            // only child — `justify-between` would put it at the inline start,
+            // under the words, where a "next" reads as a "previous" that has
+            // lost its label.
+            <a
+              href={`#${coverflowTargetId(chapterId, next)}`}
+              aria-label={nextTitle ? `${SITE.coverflow.next} — ${nextTitle}` : SITE.coverflow.next}
+              className={`${arrow} ml-auto`}
+            >
+              {SITE.coverflow.next}
+            </a>
+          )}
+        </nav>
+      )}
     </li>
   );
 }

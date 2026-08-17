@@ -602,3 +602,115 @@ with the earliest sample, before the lock.
 | `check_card_stack.mjs` | pass — the site-wide snap declaration leaves the other pinned chapter alone |
 | `check_plates.mjs` | pass — 0.00% worst distortion, three routes |
 | `measure_density.mjs` | `field-days` **26.4% / 41.0%** — `passesWorst` **true**, 0 screens over budget |
+
+---
+
+## 22. The 18 August rewrite — four assertions turned around, each watched failing
+
+The client reversed two of his own rulings on 18 Aug 2026: the wrap-around loop he asked for on 16 Aug is
+out (*"let's make it linear and just keep it 01 to 06"*), and the scroll snapping he asked for on 17 Aug is
+out (*"the scroll now feels very snappy"*). **A reversed ruling still needs a guard, pointing the other
+way**, so assertions 2, 5, 10 and 11 were rewritten rather than deleted, and each was watched failing
+against the break it now exists to catch. `docs/reviews/2026-08-16-coverflow/linear.md` carries the work
+itself.
+
+Every run below is a real production build on `:3110`, the whole rig, both shapes.
+
+### 22.1 Assertion 10 — a flank ghost put back
+
+**The break.** `Coverflow.tsx`'s card map fed `[experiences[count − 1], ...experiences]` and offset the
+index, which is the lead ghost exactly as it shipped from 16 to 18 Aug: a copy of the last activity at
+`--i: -1`, one step outside the pin.
+
+**51 failures.** The two that name it:
+
+```
+assertion 10: 7 cards in the stage, expected 6. Eight is the two wrap-around ghosts back on the
+              stage, which the client ruled out on 18 Aug 2026
+assertion 10: the deck's own `--i` values are -1, 0, 1, 2, 3, 4, 5, expected 0,1,2,3,4,5. A `-1`
+              or a 6 is a wrap-around ghost — a copy of a card that is already on this stage under
+              its own number
+```
+
+and, on the way through, assertion 2 (the card in charge went `1 → 6`, not `0 → 5`), assertion 8 (seven
+cards in the reduced-motion list, opening with a repeat of its own last entry), assertion 9 (seven cards
+with no script) and the whole width sweep. **Both halves of 10 fire independently** — the count, and the
+deck's own account of itself — which is deliberate: a ghost rendered without `aria-hidden`, or one that
+kept a real card's number, would still be caught by the other.
+
+### 22.2 Assertion 5 — the arrows made to wrap again
+
+**The break.** `coverflowNeighbours` back to `(index + count − 1) % count` / `(index + 1) % count`, which is
+the 16 Aug implementation verbatim. Nothing else changed, and **nothing about the page looks wrong**: six
+cards, six centred moments, every geometry assertion green.
+
+**15 failures, 12 of them assertion 5**, four distinct shapes at both viewports:
+
+```
+assertion 5: card 0 carries 2 arrows (previous, next), expected 1
+assertion 5: the FIRST card carries a `previous` arrow — there is no card 0−1
+assertion 5: card 0's "previous" points at #field-days-card-5 — an arrow may only ever point at
+             the card immediately either side of it
+assertion 5: the LAST card carries a `next` arrow — there is no card 6
+```
+
+plus the tab-order count (12, expected 10) and the no-JavaScript arm (2 cards carrying the wrong number of
+fragment links). **This is the break that matters most**, because the wrap is invisible to every other
+instrument on the project: it is two extra links on two cards, and a screenshot of a centred card is
+identical either way.
+
+### 22.3 Assertion 11 — the snapping restored
+
+**The break.** `html { scroll-snap-type: y proximity }` and `scroll-snap-align: start` on
+`.coverflow-target`, with the 1×1px box the snap needs restored alongside them — i.e. the build exactly as
+it shipped on 17 Aug.
+
+**30 failures.** Assertion 11 fires on both halves at both shapes:
+
+```
+assertion 11: the scroll container declares `scroll-snap-type: y` — the client asked for the
+              snapping to go
+assertion 11: `.coverflow-target` declares `scroll-snap-align: start` — the six offsets a card is
+              centred at are snap positions again
+assertion 11: all 6 wheel flicks that came to rest inside the pin landed within 8px of a card's
+              centred moment (200px→0, 320px→0, 140px→1, 500px→1, 180px→-0.2, 260px→-0.2) — the
+              page is being pulled onto a stop
+```
+
+The flick figures are the whole argument for keeping that arm: **six for six at 0.0-1.0px**, against
+19-549px unsnapped on the same six gestures, and 0/6 and 1/6 within 8px on the shipped build. It is the same
+instrument as 17 Aug's, inverted, and it still discriminates.
+
+**The other 24 failures are the finding.** With snapping restored and **no suppression left in this file**,
+assertions 2 and 3 collapse — *"card 2 came no closer than 755.5px to the stage's centre"*, *"the centred
+card 2 is drawn at scale 0.82"* — because the rig's own 24px sweep is being quantised onto the six centred
+moments (§20.1). That is §20.1's defect reproducing itself the moment the property comes back, and it means
+the rig now fails **three different ways** if snapping returns rather than silently measuring less.
+
+### 22.4 The suppression machinery was measured out, not assumed out
+
+`setSnap` existed only because the page snapped. Removing a rig helper on the grounds that it "should" be a
+no-op is this project's own repeat defect, so the whole run was repeated with the helper retained — injected
+`html { scroll-snap-type: none !important }` for assertions 1-7, lifted for 11 — and with it deleted:
+
+| | samples | pinned | held | in-charge order | all six centred moments | pin window | sweep worst |
+|---|---|---|---|---|---|---|---|
+| 1440×900, helper retained | 151 | 80 | 79/79 | 0,1,2,3,4,5 | 6843, 7226, 7607, 7988, 8370, 8753 | 6844-8751 | 1.00px |
+| 1440×900, helper deleted | 151 | 80 | 79/79 | 0,1,2,3,4,5 | 6843, 7226, 7607, 7988, 8370, 8753 | 6844-8751 | 1.00px |
+| 390×844, helper retained | 141 | 74 | 73/73 | 0,1,2,3,4,5 | 8446, 8800, 9153, 9505, 9858, 10211 | 8447-10210 | — |
+| 390×844, helper deleted | 141 | 74 | 73/73 | 0,1,2,3,4,5 | 8446, 8800, 9153, 9505, 9858, 10211 | 8447-10210 | — |
+
+Identical to the pixel, on every field assertions 1-7 read.
+
+### 22.5 One rig this work broke, and it crashed rather than lying
+
+`check_contrast_over_photos.mjs` names a card positionally —
+`ul.coverflow-stage > li.coverflow-card:nth-child(i + 2)` — because the deck opened with a ghost and a card
+carries no id of its own. With six cards that offset is wrong by one, and the failure was **not** six
+mis-attributed figures: `nth-child(7)` matches nothing, `sharp` was handed an empty crop and threw
+`extract_area: bad extract area` from inside a loop with no run name attached. The five runs before it had
+already measured the wrong card each, silently, which is the half that would have shipped if the sixth had
+happened to exist.
+
+Now `i + 1`, with `check_coverflow.mjs`'s assertion 10 named as what holds the ordering. Re-run: all six
+cards pass at all four widths, worst **4.63** (card 04 at 390) against the 4.5 floor.

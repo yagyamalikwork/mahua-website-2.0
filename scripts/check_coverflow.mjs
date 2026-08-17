@@ -21,9 +21,21 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // THE ELEVEN ASSERTIONS
 //
-// Nine until 17 Aug 2026; 10 and 11 are the client's third and fourth reports of
-// that day, and they are listed out of numerical order below — beside assertion
-// 2, which is what used to assert the defect 10 now forbids.
+// Nine until 17 Aug 2026, when 10 and 11 arrived with the client's third and
+// fourth reports of that day. **Four of them changed on 18 Aug 2026 and none was
+// deleted**, because the client reversed two of his own rulings and a reversed
+// ruling still needs a guard — pointing the other way:
+//
+//   * **2** counted eight cards and asked the card in charge to advance `1 → 6`
+//     through a deck that opened with a ghost. Six cards, `0 → 5`.
+//   * **5** asserted that the arrows LOOP. It now asserts that they do not: an
+//     end card that grows an arrow back is the failure.
+//   * **10** asserted that a ghost is never the centred card. It now asserts that
+//     there is no ghost — same defect, one step earlier.
+//   * **11** asserted that the page snaps and that a flick settles on a card. It
+//     now asserts that nothing snaps, and the flicks are kept as the instrument
+//     that would notice if it came back (with snapping on, every flick that ended
+//     inside the pin landed at 0.0px; without it, 19-549px away).
 //
 // Watched failing, one deliberate break each, in
 // `docs/reviews/2026-08-16-coverflow/rig-failures.md`. Break it in the way the
@@ -38,43 +50,48 @@
 //   2. **One card is in charge, and it advances.** At every sampled position
 //      inside the pin, AT MOST ONE card is within 8px of the stage's horizontal
 //      centre; across the pin the card in charge advances through the six
-//      ACTIVITIES monotonically, hitting every one; and each of the six is
+//      activities monotonically, hitting every one; and each of the six is
 //      bisected to its own centred moment and must land inside 8px of centre.
 //      Break: delete the per-card `animation-range` so every card shares the
 //      full range.
 //
-//      **The two ghosts are excluded, and assertion 10 is why.** Until 17 Aug
-//      2026 the pin carried eight centred moments and this assertion demanded
-//      all eight — which is exactly the defect the client reported that day.
+//  10. **The deck is the six activities and nothing else.** *"I see a card
+//      before the 01-The safari card and when I scroll to the end I see a 01-The
+//      safari card after the 06 card … let's make it linear and just keep it 01
+//      to 06"* (18 Aug 2026). The `<ul>` carries exactly `count` cards, none of
+//      them `aria-hidden`, their `--i` values are exactly `0 … count−1` with no
+//      repeats, and no element inside the chapter is a wrap-around copy. Break:
+//      put either flank ghost back in `Coverflow.tsx`.
 //
-//  10. **A ghost is never the centred card.** *"When I scrolled down to the
-//      carousel it started with 06-Walk and Cycling whereas it should start with
-//      01-Jungle Safari"* (17 Aug 2026). The wrap-around copies exist to fill the
-//      FLANKS at the pin's two ends; a ghost at the middle of the stage is the
-//      chapter opening on its own last activity. Neither ghost may come within
-//      8px of the stage's centre at any sampled position anywhere in the chapter
-//      — pinned or not, since the stage is on screen for its own height before it
-//      locks and after it lets go. Break: put `--cf-step`'s denominator back to
-//      `count + 1`, or give a ghost the shared `coverflow-pass` schedule.
+//      **This is the same defect as the assertion it replaced, caught one step
+//      earlier.** The 17 Aug form measured that neither ghost ever came within
+//      8px of the stage's centre — the right question while ghosts existed, and
+//      an assertion that would now pass a build carrying them.
 //
-//  11. **A flick settles on a card.** *"Too smooth and if scrolled fast it moves
-//      up or down the cards very easily, making it difficult for the viewer to go
-//      through them one-by-one"* (17 Aug 2026). Two halves. The declaration —
-//      the container snaps on `y`, the target aligns `start`, and the target has
-//      a NON-ZERO box, read off the page before this file suppresses anything.
-//      And the behaviour — real wheel gestures, not `scrollTo`: after each one,
-//      if the stage is still pinned once the page has stopped moving, some card
-//      must be within 8px of centre. He refused one-card-per-gesture, so a flick
-//      may still travel several cards and may still leave the chapter — what it
-//      may not do is strand the page between two of them. Break: remove
-//      `scroll-snap-align` from `.coverflow-target`, or take its 1×1px box back
-//      to zero (a zero-area snap area is not a snap area — measured).
+//  11. **Nothing snaps.** *"The scroll now feels very snappy, replace it with the
+//      smoother scroll effect we used previously"* (18 Aug 2026). The scroll
+//      container's computed `scroll-snap-type` is `none` and no
+//      `.coverflow-target` declares a `scroll-snap-align` — read off the page, on
+//      `html`, where the declaration was site-wide. Break: put
+//      `scroll-snap-type: y proximity` back.
 //
-//      **Assertions 1-7 run with that snapping suppressed**, and `setSnap`'s own
-//      note says why: `proximity` snapping applies to programmatic scrolls, so
-//      this file's 24px sweep collapsed onto the six centred moments — 43
-//      requested positions, 6 distinct rests — and every motion assertion was
-//      quietly being asked only where the carousel looks best.
+//      **The wheel flicks are kept, and inverted.** Six real gestures, and if
+//      EVERY one that comes to rest inside the pin lands within 8px of a card's
+//      centred moment, something is pulling the page onto a stop. That
+//      discriminates because it was measured both ways on this page: with
+//      snapping on, every flick that ended inside the chapter rested at 0.0px;
+//      with it off, they rested 19-549px from the nearest card and not one landed
+//      inside 8px. Written as "not all of them" rather than "none of them" so a
+//      flick that happens to stop on a card is not a failure.
+//
+//      **Assertions 1-7 used to run with the page's own snapping suppressed** —
+//      `proximity` applies to programmatic scrolls, so this file's 24px sweep
+//      collapsed onto the six centred moments (43 requested positions, 6 distinct
+//      rests) and every motion assertion was quietly being asked only where the
+//      carousel looks best. That machinery went with the snapping on 18 Aug, and
+//      it was measured before it went: the same run with the suppression retained
+//      and removed produced identical sample counts, identical card-in-charge
+//      orders and identical centred moments on both shapes.
 //
 //      **"At most one", not "exactly one", and the difference is a correction to
 //      this rig's own brief.** No continuously-moving carousel can have a card
@@ -101,12 +118,20 @@
 //      Break: remove the keyframed `pointer-events`, and twelve overlapping
 //      links resolve by paint order — invisible to the eye and to a screenshot.
 //
-//   5. **The arrows loop.** Click the last activity's "next" and the first
-//      activity must become the centred card; click the first activity's
-//      "previous" and the last must. This is the client's own request of 16 Aug
-//      2026 — *"after 6 the 1 card comes back or vice-versa"* — and it is the
-//      whole reason the arrows are anchors. Break: replace `coverflowNeighbours`
-//      with a clamp.
+//   5. **The arrows are linear, and an end is an end.** Three halves, and the
+//      first is the one the client bought: the FIRST card carries exactly one
+//      arrow and it is the "next"; the LAST carries exactly one and it is the
+//      "previous"; every card between carries two. Then, no arrow anywhere in the
+//      chapter points at a card outside `0 … count−1`. And then the arrows are
+//      CLICKED, because an href can be right while the target it names sits at
+//      the wrong scroll offset: card 0's "next" must leave card 1 centred and
+//      card 5's "previous" must leave card 4.
+//
+//      **This asserted the opposite until 18 Aug 2026** — that clicking card 6's
+//      "next" wrapped to card 1 — which was the client's own request of 16 Aug
+//      (*"after 6 the 1 card comes back or vice-versa"*) and which he reversed
+//      after seeing it. Break: make `coverflowNeighbours` wrap again, and the
+//      first half fires on a count and the second on an href.
 //
 //   6. **No photograph is cropped past 25% of its own width** at any sampled
 //      viewport — the bound `check_card_stack.mjs` assertion 6 enforces, for the
@@ -136,9 +161,15 @@
 //   8. **Reduced motion yields a readable list.** With the setting emulated: the
 //      track reserves no screens (its height is its content's), the stage is not
 //      sticky, no card is `position: absolute` or carries an `animation-name`,
-//      exactly the six activities are rendered — not the two wrap-around ghosts,
-//      which have nothing to wrap in a list — and the six do not overlap. Break:
-//      remove `.coverflow-track { height: auto }` from the reduced-motion block.
+//      exactly the six activities are rendered, and the six do not overlap.
+//      Break: remove `.coverflow-track { height: auto }` from the reduced-motion
+//      block.
+//
+//      Until 18 Aug 2026 this also caught a defect that no longer has a source:
+//      the fallback rendered EIGHT cards, 06/01/02/03/04/05/06/01, because the
+//      two wrap-around ghosts earned their place in the pinned construction and
+//      were simply wrong in a plain list. The ghosts are gone; the assertion is
+//      unchanged and now reads six of six rather than six of eight.
 //
 //   9. **No JavaScript.** With scripting disabled, all six activities are in the
 //      document with their words, their arrows and their scroll targets, and
@@ -164,11 +195,11 @@
 //     because a production build of this page *before* the section existed
 //     cannot be made: `app/page.tsx`'s switch is exhaustive.
 //   * Per-card `animation-range` deleted: every card shares the full range and
-//     they all move together, so at a centred moment EIGHT cards are inside 8px
-//     (2 fails) and either eight or zero cards' arrows are live (4 fails).
-//   * The keyframed `pointer-events` removed: all sixteen arrows are live
-//     wherever they are on screen — 4 fails with a count of 3 (the centre card
-//     and both neighbours) rather than 1.
+//     they all move together, so at a centred moment SIX cards are inside 8px
+//     (2 fails) and either six or zero cards' arrows are live (4 fails).
+//   * The keyframed `pointer-events` removed: all ten arrows are live wherever
+//     they are on screen — 4 fails with a count of 3 (the centre card and both
+//     neighbours) rather than 1.
 //   * `animation-timeline` written BEFORE the `animation` shorthand, which
 //     resets it: nothing binds, every card sits at its 0% keyframe off-screen
 //     right, no card is ever centred and no arrow is ever reachable.
@@ -201,42 +232,29 @@ const CHAPTER = "field-days";
 /**
  * Six activities — and therefore six scroll targets, one per activity.
  *
- * The ghosts carry no `id`: a wrap-around copy of a card that is also on the
- * stage under its own number would otherwise emit a duplicate id, and every
- * arrow pointing at it would land on whichever the browser saw first.
+ * Six cards' worth of arrows point at these six ids, and `duplicateIds` below is
+ * what holds them to one element each: two elements answering to one fragment is
+ * a link that lands on whichever the browser saw first.
  */
 const EXPECTED_TARGETS = 6;
 /**
- * Eight cards, since 16 Aug 2026: the six, plus a copy of the last at `--i: -1`
- * and of the first at `--i: count`.
+ * Six cards, since 18 Aug 2026 — the deck IS the six activities.
  *
- * They are the client's own "after 6 the 1 card comes back" made visible in the
- * scroll rather than only in the arrows, and they are what puts a card at the
- * flanks at the two moments the stage used to hold ONE card alone — this
- * chapter's worst screens (`docs/reviews/2026-08-16-coverflow/density-sweep.md`
- * §2).
+ * It was eight from 16 to 18 Aug: a copy of the last activity at `--i: -1` and of
+ * the first at `--i: count`, which made the client's requested loop visible in
+ * the scroll and filled the flanks at the pin's two ends. He then saw it and
+ * ruled it out (*"let's make it linear and just keep it 01 to 06"*), and
+ * assertion 10 is what stops either of them coming back.
  *
- * **What is asked OF them changed on 17 Aug 2026.** They used to take their turn
- * in charge like any other card, because all eight centred moments tiled the pin;
- * that is what made the carousel open on activity 6, which the client reported.
- * They are flanks now: assertion 2 is asked of the six activities and assertion
- * 10 says neither ghost may ever reach the middle.
+ * **The two numbers are deliberately still separate.** A target is an anchor
+ * offset and a card is a box on a stage; they were equal before 16 Aug, unequal
+ * for two days, and are equal again. Collapsing them into one constant would make
+ * the next deck change silently unmeasured.
  */
-const EXPECTED_CARDS = EXPECTED_TARGETS + 2;
+const EXPECTED_CARDS = EXPECTED_TARGETS;
 
-/**
- * The DOM indices of the two ghosts — the outermost cards in the `<ul>`.
- *
- * Read positionally here on purpose, and it is not the coincidence the CSS was
- * corrected for: this rig must be able to say "the thing at the end of the deck
- * is not a card", which means identifying it by where it sits rather than by the
- * attribute the page uses to give itself the behaviour under test. Asking the
- * page for `[data-cf="ghost-lead"]` and then checking that element behaves like a
- * ghost is the circular check `docs/DECISIONS.md` §2 catalogues.
- */
-const GHOST_INDICES = [0, EXPECTED_CARDS - 1];
-/** …and everything between them is an activity, in order. */
-const ACTIVITY_INDICES = Array.from({ length: EXPECTED_TARGETS }, (_, i) => i + 1);
+/** Every card in the deck is an activity, in order — assertion 10 is what says so. */
+const ACTIVITY_INDICES = Array.from({ length: EXPECTED_TARGETS }, (_, i) => i);
 
 const SHAPES = [
   [1440, 900],
@@ -268,7 +286,8 @@ const SWEEP_HEIGHT = 900;
  * stage's, and where the card sits in it) are scroll-independent, so a second
  * position is a cross-check rather than more coverage, and 79 widths × 6
  * scroll-and-settle rounds buys nothing the deep arms above do not already
- * hold. Interior indices, so both flanks exist at both of them.
+ * hold. Interior indices, so both flanks exist at both of them — which is a real
+ * constraint now that the ends genuinely have only one neighbour each.
  */
 const SWEEP_TARGETS = [1, 4];
 
@@ -348,58 +367,38 @@ async function settle(page) {
 }
 
 /**
- * Turn the page's own scroll snapping off for the arms that measure MOTION, and
- * back on for the one that measures RESTING.
+ * What the page declares about snapping — assertion 11's first half.
  *
- * **Without this the rig proves far less than it did, and the run stays green.**
- * `.coverflow-target` became a snap area on 17 Aug 2026 (assertion 11), and
- * `proximity` snapping applies to programmatic scrolls too — so this file's own
- * coarse sweep, which asks for a sample every 24px, gets pulled onto the nearest
- * card's centred moment. Measured on the shipped build at 1440x900, over the
- * pin's own 1,007px: **43 requested positions came to rest at 6 distinct
- * offsets** with snapping on, and at 42 with it off. Assertions 2, 3 and 4 would
- * therefore only ever have been asked at the six moments the carousel looks best,
- * which is the shape `docs/DECISIONS.md` §2 catalogues — a check that quietly
- * stops looking where the defects are.
+ * **A `setSnap(page, on)` helper sat here until 18 Aug 2026**, injecting
+ * `html { scroll-snap-type: none !important }` for assertions 1-7 and lifting it
+ * for 11. It was not tidiness: `proximity` snapping applies to programmatic
+ * scrolls too, so this file's own 24px sweep was being pulled onto the nearest
+ * card's centred moment — measured at 1440x900 over the pin's 1,007px, **43
+ * requested positions came to rest at 6 distinct offsets** — and assertions 2, 3
+ * and 4 were quietly only ever asked at the six moments the carousel looks best.
  *
- * Suppressing it is legitimate because the two are independent: the timeline
- * decides where every card IS at a given scroll offset, and snapping only decides
- * which offsets a browser will let a scroll stop at. Assertion 11 is the only
- * question about the second, and it runs with the page exactly as shipped.
- *
- * **And the suppression itself is guarded** — `readSnap` below is called before
- * anything is switched off, and a build that has lost the declaration fails there
- * rather than sailing through arms this function has neutralised.
+ * The client had the snapping removed, so the suppression has nothing to
+ * suppress, and it went the same day. **Its removal was measured rather than
+ * assumed**, because a rig helper that turns out to have been doing something
+ * else as well is exactly this project's repeat defect: the whole run was
+ * repeated with the helper retained and with it deleted, and the sample counts,
+ * the pinned counts, the card-in-charge orders and all six centred moments were
+ * identical on both shapes.
  */
-const SNAP_STYLE_ID = "rig-snap-off";
-async function setSnap(page, on) {
-  await page.evaluate(
-    ({ id, enabled }) => {
-      const existing = document.getElementById(id);
-      if (enabled) {
-        existing?.remove();
-        return;
-      }
-      if (existing) return;
-      const style = document.createElement("style");
-      style.id = id;
-      style.textContent = "html { scroll-snap-type: none !important; }";
-      document.head.append(style);
-    },
-    { id: SNAP_STYLE_ID, enabled: on },
-  );
-}
-
-/** What the page itself declares — read BEFORE `setSnap` touches anything. */
 async function readSnap(page, chapter) {
   return page.evaluate((id) => {
-    const target = document.querySelector(`#${id} .coverflow-target`);
-    const cs = target ? getComputedStyle(target) : null;
-    const r = target ? target.getBoundingClientRect() : null;
+    const targets = [...document.querySelectorAll(`#${id} .coverflow-target`)];
     return {
       containerType: getComputedStyle(document.documentElement).scrollSnapType,
-      targetAlign: cs ? cs.scrollSnapAlign : null,
-      targetBox: r ? [Math.round(r.width), Math.round(r.height)] : null,
+      // Every target, not the first: a rule that reintroduced snapping on one of
+      // them would be a rule this rig should still catch.
+      targetAligns: [...new Set(targets.map((el) => getComputedStyle(el).scrollSnapAlign))],
+      targetBox: targets[0]
+        ? [
+            Math.round(targets[0].getBoundingClientRect().width),
+            Math.round(targets[0].getBoundingClientRect().height),
+          ]
+        : null,
     };
   }, chapter);
 }
@@ -503,6 +502,12 @@ async function sample(page, chapter) {
 
         return {
           i,
+          // Which card the page thinks this is. A wrap-around ghost declared
+          // itself with `--i: -1` or `--i: count`, so this is where assertion 10
+          // reads the deck's own account of itself — one number per card, from
+          // the property the whole animation is placed by.
+          cfIndex: Number.parseFloat(cs.getPropertyValue("--i")),
+          ariaHidden: el.getAttribute("aria-hidden") === "true",
           centre: r.left + r.width / 2,
           offset: r.left + r.width / 2 - stageCentre,
           width: r.width,
@@ -591,12 +596,26 @@ async function readGeometry(page, chapter) {
       innerHeight: window.innerHeight,
       cards: stage.querySelectorAll("li.coverflow-card").length,
       targets: document.querySelectorAll(`#${id} .coverflow-target`).length,
-      // The ghosts must be out of the accessibility tree AND out of the tab
-      // order. Read off the DOM rather than off the component: eight cards must
-      // not be eight activities to a screen reader, and sixteen arrows must not
-      // be sixteen stops on the way through the page.
-      ghostCards: stage.querySelectorAll('li.coverflow-card[aria-hidden="true"]').length,
+      // **Zero since 18 Aug 2026, and read here rather than assumed.** An
+      // `aria-hidden` card in this deck was a wrap-around ghost, and eight cards
+      // must never be eight activities to a screen reader. It is now also the
+      // cheapest possible statement of assertion 10: a ghost that came back
+      // carrying `aria-hidden` fails here before any geometry is measured.
+      hiddenCards: stage.querySelectorAll('li.coverflow-card[aria-hidden="true"]').length,
       tabbableArrows: stage.querySelectorAll("nav.coverflow-arrows a:not([tabindex='-1'])").length,
+      /**
+       * Every arrow in the deck, per card, in document order — assertion 5.
+       *
+       * `label` is what a screen reader announces and `href` is where it goes;
+       * both matter, because an end card that grew a "previous" back would be
+       * wrong even if its href happened to point somewhere real.
+       */
+      arrowsPerCard: [...stage.querySelectorAll("li.coverflow-card")].map((card) =>
+        [...card.querySelectorAll("nav.coverflow-arrows a")].map((a) => ({
+          href: a.getAttribute("href"),
+          label: (a.getAttribute("aria-label") ?? a.textContent ?? "").trim(),
+        })),
+      ),
       duplicateIds,
     };
   }, chapter);
@@ -609,15 +628,14 @@ async function readGeometry(page, chapter) {
  * at full size and unveiled; and, when `flanks` is asked for, its neighbours
  * must be on screen, smaller, unfaded and veiled.
  *
- * **Asked of all six activities since 17 Aug 2026, where it used to be skipped
- * for the two ghosts' own centred moments.** Those moments no longer exist: the
- * six activities tile the pin and the ghosts sit one step outside each end, held
- * at a flank. So every one of the six has a real card on either side of it —
- * activity 1's left-hand neighbour is the leading ghost, activity 6's right-hand
- * one is the trailing ghost — and the client's request, *"the next and previous
- * cards sit out of focus on left and right respectively behind the center
- * card"*, is now true at every centred moment in the chapter rather than at six
- * of eight.
+ * **It asks about the neighbours that exist, and the two ends have one each.**
+ * From 16 to 18 Aug 2026 a wrap-around ghost sat outside each end, so all six
+ * centred moments had a card on both sides; with the carousel linear there is
+ * nothing to the left of activity 1 and nothing to the right of activity 6, which
+ * is what the client asked for (*"no card placed before it … no card placed after
+ * it"*). The client's earlier request — *"the next and previous cards sit out of
+ * focus on left and right respectively behind the center card"* — is unchanged
+ * for every neighbour that is there.
  */
 function checkFlanks(label, where, s, i, { flanks = true } = {}) {
   const me = s.cards[i];
@@ -778,14 +796,13 @@ const report = {
     "2 at most one card within 8px of centre; the card in charge advances through the six activities; each of the six reaches centre",
     "3 a neighbour recedes by veil and scale, never by opacity; the centred card is unveiled",
     "4 exactly one card's arrows are hit-testable, and it is the one nearest centre",
-    "5 the arrows loop both ways",
+    "5 the arrows are linear — one arrow on each end card, two on the rest, none pointing outside 0-5, and the two end arrows land where they say",
     "6 no photograph loses more than 25% of its own width",
     `7 continuous width sweep ${SWEEP_FROM}-${SWEEP_TO} in ${SWEEP_STEP}px steps, asserting 1-6 plus the card's centring and its width against its stage`,
     "8 reduced motion yields a readable, non-overlapping list of the six activities",
     "9 with no JavaScript the six activities are complete in the document",
-    "10 neither wrap-around ghost is ever the centred card, anywhere in the chapter",
-    "11 the page declares the settle (container, alignment, a non-zero snap box) AND a real wheel flick settles with a card centred, or leaves the chapter",
-    "note assertions 1-7 run with the page's own scroll snapping suppressed, or a 24px sweep collapses onto the six centred moments — see `setSnap`",
+    "10 the deck is exactly the six activities — six cards, none aria-hidden, `--i` 0-5 with no repeats and no wrap-around copy",
+    "11 nothing snaps — `scroll-snap-type` is none, no target declares `scroll-snap-align`, and real wheel flicks do not all come to rest on a card",
     "precondition animation-range never falls back to `normal`",
   ],
   shapes: [],
@@ -814,61 +831,60 @@ for (const [width, height] of SHAPES) {
   const supported = await page.evaluate(() => CSS.supports("animation-timeline: view()"));
   const geometry = await readGeometry(page, CHAPTER);
 
-  // ---- assertion 11 (a): the page declares the settle at all. --------------
-  // Read before `setSnap` neutralises it, so the suppression below can never be
-  // what makes this pass. Three separate things have to be true and each one has
-  // failed a build somewhere: the container declares snapping, the target opts
-  // in, and the target has a box to snap to.
+  // ---- assertion 11 (a): nothing snaps. ------------------------------------
+  // The client had the settle removed on 18 Aug 2026 and this is what stops it
+  // coming back by accident. Read on `html`, because that is where it was
+  // declared and it was site-wide: a `scroll-snap-type` there quantises every
+  // programmatic scroll on every route, this rig's own sweep included.
   const snap = await readSnap(page, CHAPTER);
-  if (!/\by\b|\bboth\b/.test(snap.containerType)) {
+  if (snap.containerType !== "none") {
     note(
       label,
       `assertion 11: the scroll container declares \`scroll-snap-type: ${snap.containerType}\` — ` +
-        "nothing settles the carousel, and a flick strands the visitor between two cards",
+        "the client asked for the snapping to go (18 Aug 2026: *\"the scroll now feels very " +
+        'snappy, replace it with the smoother scroll effect we used previously"*). This ' +
+        "declaration is site-wide and it also quantises this rig's own 24px sweep onto the six " +
+        "centred moments",
     );
   }
-  if (snap.targetAlign !== "start") {
+  const aligned = snap.targetAligns.filter((a) => a && a !== "none");
+  if (aligned.length > 0) {
     note(
       label,
-      `assertion 11: \`.coverflow-target\` declares \`scroll-snap-align: ${snap.targetAlign}\` — ` +
-        "the six offsets a card is centred at are not snap positions",
+      `assertion 11: \`.coverflow-target\` declares \`scroll-snap-align: ${aligned.join(", ")}\` — ` +
+        "the six offsets a card is centred at are snap positions again",
     );
   }
-  if (!snap.targetBox || snap.targetBox[0] < 1 || snap.targetBox[1] < 1) {
-    note(
-      label,
-      `assertion 11: \`.coverflow-target\` is ${snap.targetBox?.join("×") ?? "?"}px — a ZERO-AREA ` +
-        "snap area is not a snap area. Measured in Chromium 151 on a bare page: six zero-sized " +
-        "targets under `proximity` snapped nothing at all, and the same six at 1×1px snapped every " +
-        "scroll. This is the one that looks correct in the stylesheet",
-    );
-  }
-
-  // Everything from here to assertion 11 measures the carousel's MOTION, which
-  // snapping would quantise onto the six centred moments — see `setSnap`.
-  await setSnap(page, false);
 
   if (!geometry) {
     note(label, `no \`.coverflow\` wrapper with a \`ul.coverflow-stage\` inside #${CHAPTER}`);
     await context.close();
     continue;
   }
+  // ---- assertion 10 (a): the deck is the six activities. -------------------
   if (geometry.cards !== EXPECTED_CARDS) {
-    note(label, `${geometry.cards} cards in the stage, expected ${EXPECTED_CARDS}`);
-  }
-  if (geometry.ghostCards !== EXPECTED_CARDS - EXPECTED_TARGETS) {
     note(
       label,
-      `${geometry.ghostCards} cards are \`aria-hidden\`, expected ${EXPECTED_CARDS - EXPECTED_TARGETS} — ` +
-        "the wrap-around copies must not be read out as activities of their own",
+      `assertion 10: ${geometry.cards} cards in the stage, expected ${EXPECTED_CARDS}. Eight is ` +
+        "the two wrap-around ghosts back on the stage, which the client ruled out on 18 Aug 2026",
     );
   }
-  if (geometry.tabbableArrows !== EXPECTED_TARGETS * 2) {
+  if (geometry.hiddenCards !== 0) {
     note(
       label,
-      `${geometry.tabbableArrows} arrows are in the tab order, expected ${EXPECTED_TARGETS * 2} — ` +
-        "a ghost's arrows are inside an `aria-hidden` card and must carry `tabindex=\"-1\"`, or they " +
-        "are keyboard stops a screen reader cannot announce",
+      `assertion 10: ${geometry.hiddenCards} cards are \`aria-hidden\` — every card in this deck ` +
+        "is one of the six activities and is read out as one. An `aria-hidden` card here is a " +
+        "wrap-around copy of a card that is already on the stage under its own number",
+    );
+  }
+  // Ten arrows, not twelve: the first card has no "previous" and the last no
+  // "next" — assertion 5's first half, counted here where every arrow in the
+  // deck is already in hand.
+  if (geometry.tabbableArrows !== EXPECTED_TARGETS * 2 - 2) {
+    note(
+      label,
+      `${geometry.tabbableArrows} arrows are in the tab order, expected ${EXPECTED_TARGETS * 2 - 2} — ` +
+        "six cards carry two arrows each except the two ends, which carry one",
     );
   }
   if (geometry.targets !== EXPECTED_TARGETS) {
@@ -877,9 +893,58 @@ for (const [width, height] of SHAPES) {
   if (geometry.duplicateIds.length > 0) {
     note(
       label,
-      `duplicate element ids inside #${CHAPTER}: ${geometry.duplicateIds.join(", ")} — a ghost card ` +
-        "is carrying its twin's id, so half the arrows point at the wrong element",
+      `duplicate element ids inside #${CHAPTER}: ${geometry.duplicateIds.join(", ")} — two elements ` +
+        "answer to one fragment and the browser honours whichever it saw first, so half the arrows " +
+        "point at the wrong element",
     );
+  }
+
+  // ---- assertion 5 (a): the arrows are linear, read off the markup. --------
+  // The ends are ENDS. This is the half that fails if `coverflowNeighbours`
+  // starts wrapping again, and it fails on a COUNT — before any clicking, at
+  // every viewport, whatever the geometry is doing.
+  {
+    const want = (i) => (i === 0 || i === EXPECTED_TARGETS - 1 ? 1 : 2);
+    const dir = (a) => (/previous/i.test(a.label) ? "previous" : /next/i.test(a.label) ? "next" : "?");
+    for (const [i, arrows] of geometry.arrowsPerCard.entries()) {
+      const dirs = arrows.map(dir);
+      if (arrows.length !== want(i)) {
+        note(
+          label,
+          `assertion 5: card ${i} carries ${arrows.length} arrows (${dirs.join(", ") || "none"}), ` +
+            `expected ${want(i)}. The client's ruling of 18 Aug 2026 is that the carousel is ` +
+            'linear — *"no card placed before it … no card placed after it"* — so the first card ' +
+            "has no previous and the last has no next, and the way back is the scroll",
+        );
+      }
+      if (i === 0 && dirs.includes("previous")) {
+        note(label, "assertion 5: the FIRST card carries a `previous` arrow — there is no card 0−1");
+      }
+      if (i === EXPECTED_TARGETS - 1 && dirs.includes("next")) {
+        note(
+          label,
+          `assertion 5: the LAST card carries a \`next\` arrow — there is no card ${EXPECTED_TARGETS}`,
+        );
+      }
+      // An href that names a card outside the run is the wrap arriving as an id
+      // rather than as a count — `#field-days-card-5` on card 0, say.
+      for (const a of arrows) {
+        const at = Number(String(a.href).replace(`#${CHAPTER}-card-`, ""));
+        const wrapped =
+          !Number.isInteger(at) ||
+          at < 0 ||
+          at >= EXPECTED_TARGETS ||
+          Math.abs(at - i) !== 1;
+        if (wrapped) {
+          note(
+            label,
+            `assertion 5: card ${i}'s "${dir(a)}" points at ${a.href} — an arrow may only ever ` +
+              "point at the card immediately either side of it, and every card it can point at " +
+              `exists (0…${EXPECTED_TARGETS - 1})`,
+          );
+        }
+      }
+    }
   }
   if (!supported) {
     note(
@@ -978,9 +1043,8 @@ for (const [width, height] of SHAPES) {
   }
 
   // ---- assertion 2 (d): the card in charge advances through the six. -------
-  // The ghosts are NOT in this list and their absence is the assertion: the pin
-  // belongs to the six activities, first to last, which is the client's own
-  // "should start with 01 and end with 06".
+  // The pin belongs to the six activities, first to last, which is the client's
+  // own "should start with 01 and end with 06".
   const order = [];
   for (const entry of inCharge) {
     if (order.length === 0 || order[order.length - 1] !== entry.card) order.push(entry.card);
@@ -991,31 +1055,28 @@ for (const [width, height] of SHAPES) {
       label,
       `assertion 2: the card in charge went ${order.join(" -> ")} across the pin, not ` +
         `${expectedOrder.join(" -> ")} — either an activity never takes its turn, or the order ` +
-        "reverses, or one card holds the whole pin. A 0 or a " +
-        `${EXPECTED_CARDS - 1} in that list is a GHOST in charge, which is the 17 Aug 2026 ` +
-        "defect: the carousel opening on its own last activity",
+        "reverses, or one card holds the whole pin",
     );
   }
 
-  // ---- assertion 10: a ghost is never the centred card. --------------------
-  // Over EVERY sample, not only the pinned ones. A ghost's centred moment falls
-  // one step outside the pin under the current arithmetic, and outside the pin is
-  // still on screen — the stage rides in and out for its own height — so a rig
-  // that only looked inside the pin would have passed the exact build the client
-  // rejected.
-  for (const g of GHOST_INDICES) {
-    const centred = samples
-      .map((s) => ({ scrollY: Math.round(s.scrollY), offset: s.cards[g]?.offset ?? 999 }))
-      .filter((s) => Math.abs(s.offset) <= CENTRE_TOLERANCE);
-    if (centred.length > 0) {
-      const worst = centred.reduce((a, b) => (Math.abs(a.offset) <= Math.abs(b.offset) ? a : b));
+  // ---- assertion 10 (b): every card on the stage is one of the six. --------
+  // The counts above say how many cards there are; this says WHICH. A ghost is
+  // placed by `--i`, one step outside each end of the pin, so its own `--i` is
+  // the thing that gives it away — `-1` or `count`, never a card's number. Read
+  // from a live sample rather than from the markup, because `--i` is what the
+  // animation is placed by and a card whose declared index is not its position
+  // is a card the timeline puts somewhere nobody asked for.
+  {
+    const indices = pinned[0].cards.map((c) => c.cfIndex);
+    const wanted = ACTIVITY_INDICES.join(",");
+    if (indices.join(",") !== wanted) {
       note(
         label,
-        `assertion 10: the wrap-around ghost at DOM index ${g} came to ${worst.offset.toFixed(1)}px ` +
-          `of the stage's centre at scrollY=${worst.scrollY} (${centred.length} of ` +
-          `${samples.length} samples inside ${CENTRE_TOLERANCE}px) — a ghost is a FLANK. Centred, ` +
-          "it is the chapter opening on a copy of its own last activity, which is what the client " +
-          'reported on 17 Aug 2026: "it started with 06-Walk and Cycling"',
+        `assertion 10: the deck's own \`--i\` values are ${indices.join(", ")}, expected ${wanted}. ` +
+          "A `-1` or a " +
+          `${EXPECTED_TARGETS} is a wrap-around ghost — a copy of a card that is already on this ` +
+          'stage under its own number, which the client ruled out on 18 Aug 2026: *"let\'s make it ' +
+          'linear and just keep it 01 to 06"*',
       );
     }
   }
@@ -1042,10 +1103,11 @@ for (const [width, height] of SHAPES) {
   // moment; the shortcut is now only for a card that is centred from the very
   // first sample, which is the first activity and nothing else.
   //
-  // **Only the six activities are asked to reach the centre.** The ghosts are
-  // held at their flanks for the whole of their lives and never cross it — that
-  // is assertion 10's business, and asking for a crossing here would demand the
-  // very thing assertion 10 forbids.
+  // **All six cards are asked to reach the centre, and since 18 Aug 2026 that is
+  // every card on the stage.** It was six of eight while the deck carried the two
+  // wrap-around ghosts, which were held at their flanks for the whole of their
+  // lives and never crossed the middle — asking a ghost for a crossing would have
+  // demanded the very thing the old assertion 10 forbade.
   const activityCards = ACTIVITY_INDICES;
   const centreHits = [];
   for (const i of activityCards) {
@@ -1146,13 +1208,14 @@ for (const [width, height] of SHAPES) {
     await scrollToAndSettle(page, hit.scrollY);
     const s = await sample(page, CHAPTER);
     if (!s) continue;
-    // **`flanks` is asked of all six now, where it used to be asked of six of
-    // eight.** Both flanks exist at every one of the six centred moments, and
-    // that is the ghosts' whole job: activity 1's left-hand neighbour is the
-    // leading ghost and activity 6's right-hand one is the trailing ghost. Before
-    // 17 Aug 2026 the two ghosts had centred moments of their own, where the rest
-    // of the deck was deliberately parked off-stage, and this check had to be
-    // skipped for them.
+    // **`checkFlanks` asks about the neighbours that EXIST**, and since 18 Aug
+    // 2026 the two end cards have one each rather than two: there is nothing to
+    // the left of activity 1 and nothing to the right of activity 6, which is the
+    // linear reading the client asked for. It filters on the array's own bounds,
+    // so this needed no change when the ghosts that used to fill those two
+    // positions were deleted — and that is worth noticing rather than being
+    // pleased about, because a check written as "both neighbours" would have gone
+    // on passing by finding the wrong cards.
     checkFlanks(label, `card ${hit.card}'s centred moment (scrollY=${hit.scrollY})`, s, hit.card);
     checkCrops(label, `card ${hit.card}'s centred moment`, s);
     flankSamples.push({
@@ -1171,17 +1234,15 @@ for (const [width, height] of SHAPES) {
     });
   }
 
-  // ---- assertion 5: the arrows loop, in both directions. -------------------
-  // Clicked, not read: the hrefs could be right while the targets sit at the
-  // wrong offsets, and the client's request was about what happens when he
-  // presses the thing, not about what the markup says.
+  // ---- assertion 5 (b): the arrows that DO exist land where they say. ------
+  // Clicked, not read: the hrefs above could be right while the targets sit at
+  // the wrong offsets. The two clicked are the ones at the ends, because those
+  // are the two cards whose arrow set changed on 18 Aug 2026 — the first card's
+  // only arrow and the last card's only arrow.
   const loop = [];
   for (const [fromCard, direction, toCard] of [
-    // DOM index 6 is the LAST activity (the deck is ghost, 1…6, ghost), and its
-    // "next" must wrap to the first. DOM index 1 is the first activity and its
-    // "previous" must wrap to the last.
-    [EXPECTED_TARGETS, "next", 1],
-    [1, "previous", EXPECTED_TARGETS],
+    [0, "next", 1],
+    [EXPECTED_TARGETS - 1, "previous", EXPECTED_TARGETS - 2],
   ]) {
     const hit = centreHits.find((c) => c.card === fromCard);
     if (!hit) {
@@ -1194,8 +1255,14 @@ for (const [width, height] of SHAPES) {
         const cards = document.querySelectorAll(`#${id} ul.coverflow-stage li.coverflow-card`);
         const card = cards[index];
         if (!card) return null;
-        const links = card.querySelectorAll("nav.coverflow-arrows a");
-        const a = dir === "next" ? links[1] : links[0];
+        // **By its own label, never by its position in the pair.** The end cards
+        // carry ONE arrow each now, so `links[1]` would be `undefined` on the
+        // first card and `links[0]` would be the wrong direction on the last —
+        // and the rig would report "no arrow to click" about a page that is
+        // correct.
+        const a = [...card.querySelectorAll("nav.coverflow-arrows a")].find((el) =>
+          new RegExp(dir, "i").test(el.getAttribute("aria-label") ?? el.textContent ?? ""),
+        );
         if (!a) return null;
         const href = a.getAttribute("href");
         a.click();
@@ -1216,37 +1283,35 @@ for (const [width, height] of SHAPES) {
       note(
         label,
         `assertion 5: clicking card ${fromCard}'s "${direction}" (${clicked}) left card ` +
-          `${nearest.i} nearest the stage's centre, not card ${toCard} — the loop the client asked ` +
-          'for on 16 Aug 2026 ("after 6 the 1 card comes back or vice-versa") is not wired: either ' +
-          "`coverflowNeighbours` is clamping instead of wrapping, or the target it names sits at " +
-          "the wrong scroll offset",
+          `${nearest.i} nearest the stage's centre, not card ${toCard} — the arrow and its target ` +
+          "disagree about which card it names, or the target sits at the wrong scroll offset",
       );
     }
   }
 
-  // ---- assertion 11: a flick settles on a card. ---------------------------
+  // ---- assertion 11 (b): the flicks, kept and inverted. -------------------
   // **Real wheel gestures, and that is the whole point of this arm.** Every other
   // sample in this file is `window.scrollTo`, which Lenis does not intercept and
   // which therefore cannot say anything about what a visitor's own wheel does.
-  // The client's report is about the wheel: *"too smooth and if scrolled fast it
-  // moves up or down the cards very easily, making it difficult for the viewer to
-  // go through them one-by-one."*
   //
-  // What is asserted is deliberately weak, because the client refused the strong
-  // version (*"it takes the page out of your hands"*): a flick may travel several
-  // cards and may leave the chapter entirely. What it may not do is come to rest
-  // inside the pin with no card centred.
+  // From 17 to 18 Aug 2026 this asserted that every flick coming to rest inside
+  // the pin left a card centred — the client's *"difficult to go through them
+  // one-by-one"*. He then asked for the snapping to go, so the assertion is
+  // inverted: if EVERY in-pin rest lands within 8px of a card, something is
+  // pulling the page onto a stop.
+  //
+  // **It discriminates, and that was measured on this page rather than assumed.**
+  // With `scroll-snap-type: y proximity` declared, every flick that ended inside
+  // the chapter rested at exactly 0.0px from a card; with it removed, the same
+  // six gestures rested 19-549px away and not one landed inside 8px. "Not all of
+  // them", never "none of them", so a flick that happens to stop on a card is not
+  // a failure — six for six is the signature of a browser doing it on purpose.
   const settleRuns = [];
   {
-    // Back to the page exactly as it ships. Everything above ran with snapping
-    // suppressed so that a 24px sweep stayed a 24px sweep; this arm is the only
-    // one whose question is where a scroll is allowed to stop.
-    await setSnap(page, true);
     const start = await anchorOffset(page, coverflowTargetIdOf(0));
     if (start === null) {
       note(label, "assertion 11: no scroll target to flick from");
     } else {
-      // A deliberately un-snapped starting offset, before the pin engages.
       await scrollToAndSettle(page, Math.max(0, start - 150));
       for (const dy of FLICKS) {
         await page.mouse.wheel(0, dy);
@@ -1254,25 +1319,25 @@ for (const [width, height] of SHAPES) {
         const s = await sample(page, CHAPTER);
         if (!s) continue;
         const nearest = s.cards.reduce((a, b) => (Math.abs(a.offset) <= Math.abs(b.offset) ? a : b));
-        const settled = Math.abs(nearest.offset) <= CENTRE_TOLERANCE;
         settleRuns.push({
           flick: dy,
           scrollY: Math.round(s.scrollY),
           pinned: s.pinned,
           nearest: nearest.i,
           offset: Number(nearest.offset.toFixed(1)),
-          settled,
+          onACard: Math.abs(nearest.offset) <= CENTRE_TOLERANCE,
         });
-        if (s.pinned && !settled) {
-          note(
-            label,
-            `assertion 11: a ${dy}px flick left the page at scrollY=${Math.round(s.scrollY)}, ` +
-              `inside the pin, with the nearest card (${nearest.i}) ` +
-              `${Math.abs(nearest.offset).toFixed(1)}px off centre — the visitor is stranded ` +
-              "between two cards. `.coverflow-target` needs `scroll-snap-align: start` AND a " +
-              "non-zero box: a zero-area snap area is not a snap area, measured",
-          );
-        }
+      }
+      const inPin = settleRuns.filter((r) => r.pinned);
+      if (inPin.length >= 2 && inPin.every((r) => r.onACard)) {
+        note(
+          label,
+          `assertion 11: all ${inPin.length} wheel flicks that came to rest inside the pin landed ` +
+            `within ${CENTRE_TOLERANCE}px of a card's centred moment ` +
+            `(${inPin.map((r) => `${r.flick}px→${r.offset}`).join(", ")}) — the page is being ` +
+            "pulled onto a stop. Unsnapped, six gestures of these sizes rest 19-549px from the " +
+            "nearest card; snapped, they rest at 0.0px every time",
+        );
       }
     }
   }
@@ -1302,8 +1367,8 @@ for (const [width, height] of SHAPES) {
           ? Math.max(...centreHits.map((c) => Math.abs(c.offset ?? 999))).toFixed(2)
           : "-"
       }px loop=${loop.map((l) => `${l.from}${l.direction === "next" ? ">" : "<"}${l.landedOn}`).join(" ")} ` +
-      `settle=${settleRuns.filter((r) => r.settled).length}/${settleRuns.length} ` +
-      `worst-settle=${
+      `flicks-on-a-card=${settleRuns.filter((r) => r.onACard).length}/${settleRuns.length} ` +
+      `worst-flick-rest=${
         settleRuns.length ? Math.max(...settleRuns.map((r) => Math.abs(r.offset))).toFixed(1) : "-"
       }px`,
   );
@@ -1339,11 +1404,12 @@ for (const [width, height] of SHAPES) {
     }
   });
 
-  // Snapping off here too. This arm scrolls to the targets themselves, which ARE
-  // the snap positions, so it would be a no-op — and that is exactly why it must
-  // be explicit: a sweep that reads "the centred card is centred" while the
-  // browser is what put it there measures the snap, not the timeline.
-  await setSnap(page, false);
+  // **Nothing is suppressed here any more, and that matters most in this arm.**
+  // While the page snapped, this sweep scrolled to the targets themselves — which
+  // WERE the snap positions — so a sweep reading "the centred card is centred"
+  // would have been measuring the browser's own correction rather than the
+  // timeline. The suppression is gone with the snapping (18 Aug 2026); the
+  // landings below are the timeline's.
 
   /** One row per width, so a failure can be reported as a RANGE rather than 79 lines. */
   const rows = [];
@@ -1364,8 +1430,11 @@ for (const [width, height] of SHAPES) {
         row.targets.push({ target: t, error: "no stage" });
         continue;
       }
-      // The deck opens with a ghost, so activity `t` is the `t + 1`-th card.
-      const expected = t + 1;
+      // The deck IS the six activities since 18 Aug 2026 — activity `t` is the
+      // `t`-th card. It was `t + 1` while the deck opened with a wrap-around
+      // ghost, and getting this wrong shows up as every sampled width reporting
+      // the neighbour as the centred card, which is a band the width of the sweep.
+      const expected = t;
       const me = s.cards[expected];
       const nearest = s.cards.reduce((a, b) => (Math.abs(a.offset) <= Math.abs(b.offset) ? a : b));
       const live = s.cards.filter((c) => c.live);
@@ -1498,10 +1567,10 @@ for (const [width, height] of SHAPES) {
   );
   band(
     "the scroll target landed on the wrong card",
-    (t) => t.nearest !== t.target + 1,
+    (t) => t.nearest !== t.target,
     (bad) =>
       `Worst at ${bad[0].width}px: \`#${CHAPTER}-card-${bad[0].target}\` left card ${bad[0].nearest} ` +
-      `nearest the centre, not card ${bad[0].target + 1} — assertion 2 off the fixed samples`,
+      `nearest the centre, not card ${bad[0].target} — assertion 2 off the fixed samples`,
   );
   band(
     "more than one card was within 8px of centre",
@@ -1556,16 +1625,18 @@ for (const [width, height] of SHAPES) {
 // ---------------------------------------------------------------------------
 // Assertion 8 — reduced motion, where the pin collapses to a plain list.
 //
-// **This arm exists because the ghosts broke it, 16 Aug 2026.** They are copies
-// of cards that are also on the stage under their own numbers, which earns its
-// place in the pinned construction and is simply wrong in a list: the fallback
-// rendered 06 / 01 / 02 / 03 / 04 / 05 / 06 / 01, opening with a repeat of its
-// own last entry. `app/globals.css` now turns them off outside the carousel, in
-// the base rule and again under reduced motion, and this is what holds it there.
+// **This arm exists because the ghosts broke it, 16 Aug 2026**, and it is kept
+// unchanged now that they are gone. They were copies of cards already on the
+// stage under their own numbers — right in the pinned construction, simply wrong
+// in a list — and the fallback rendered 06 / 01 / 02 / 03 / 04 / 05 / 06 / 01,
+// opening with a repeat of its own last entry. Two `display: none` rules held
+// that line until 18 Aug 2026; the deck is six cards now and the same assertion
+// reads six of six rather than six of eight.
 //
-// What a broken build scores: with either `display: none` removed, `visible`
-// reads 8 instead of 6; with `.coverflow-track { height: auto }` removed, the
-// track still reserves two screens of scroll for a list that does not move.
+// What a broken build scores: with `.coverflow-track { height: auto }` removed,
+// the track still reserves the pin's screens of scroll for a list that does not
+// move; with the reduced-motion `animation: none` selectors narrowed, the two
+// `[data-cf]` end cards keep their hold keyframes.
 {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 900 },
@@ -1694,14 +1765,15 @@ for (const [width, height] of SHAPES) {
         "content depends on script",
     );
   } else {
-    const cards = await page.$$(
-      `#${CHAPTER} ul.coverflow-stage li.coverflow-card:not([aria-hidden="true"])`,
-    );
+    // Every card in the deck, with no `:not([aria-hidden])` filter: there are no
+    // wrap-around copies to exclude since 18 Aug 2026, and a filter would hide
+    // one that came back rather than counting it.
+    const cards = await page.$$(`#${CHAPTER} ul.coverflow-stage li.coverflow-card`);
     const titles = [];
     const bodies = [];
     let boxless = 0;
     let arrowless = 0;
-    for (const card of cards) {
+    for (const [i, card] of cards.entries()) {
       const h3 = await card.$("h3");
       titles.push(h3 ? ((await h3.textContent()) ?? "").trim() : "");
       const ps = await card.$$("p");
@@ -1709,7 +1781,11 @@ for (const [width, height] of SHAPES) {
       const box = await card.boundingBox();
       if (!box || box.width < 40 || box.height < 40) boxless++;
       const arrows = await card.$$("nav.coverflow-arrows a[href^='#']");
-      if (arrows.length !== 2) arrowless++;
+      // One on each end card and two on the rest, since 18 Aug 2026 — the same
+      // shape assertion 5 asserts with script running, asserted again here
+      // because these anchors ARE the navigation and this arm is the one that
+      // proves they are not script.
+      if (arrows.length !== (i === 0 || i === cards.length - 1 ? 1 : 2)) arrowless++;
     }
     const targets = await page.$$(`#${CHAPTER} .coverflow-target`);
     report.noJavaScript = {
@@ -1748,8 +1824,9 @@ for (const [width, height] of SHAPES) {
     if (arrowless > 0) {
       note(
         "assertion 9 · no JavaScript",
-        `${arrowless} cards do not carry two fragment-link arrows — the navigation is script, not ` +
-          "anchors, which is the whole of this section's zero-JavaScript claim",
+        `${arrowless} cards do not carry the fragment-link arrows they should (two, or one at ` +
+          "either end) — the navigation is script, not anchors, which is the whole of this " +
+          "section's zero-JavaScript claim",
       );
     }
     if (targets.length !== EXPECTED_TARGETS) {

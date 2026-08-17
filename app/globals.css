@@ -1586,40 +1586,32 @@ body {
  * fades the words against the frame beneath them. That is `COVERFLOW.sideVeil`'s
  * whole reason for existing, and the veil below is where receding happens.
  *
- * ## Eight cards, SIX centred moments — the ghosts are flanks, never a card
+ * ## SIX cards, six centred moments — the carousel is linear, 01 to 06
  *
- * **17 Aug 2026, and it is the client's own report that corrects it**: *"When I
- * scrolled down to the carousel it started with 06-Walk and Cycling whereas it
- * should start with 01-Jungle Safari … should start with 01 and end with 06."*
+ * The step is `pin-len / (count − 1)` and the centre of card *i* is
+ * `pin-start + i × step`, so the six activities tile the pin exactly: activity 1
+ * is centred at the offset the stage locks and activity 6 at the offset it lets
+ * go. `scripts/check_coverflow.mjs`'s card-in-charge order is `0 → 1 → … → 5`,
+ * the six activities and nothing else.
  *
- * The step was `pin-len / (count + 1)` and the eight cards' centred moments tiled
- * the pin at 0…7 steps — so the leading ghost, a copy of the LAST activity, was
- * the card centred as the stage locked, and it held there. The loop was reading
- * backwards to anybody arriving at the chapter for the first time.
+ * **Two `aria-hidden` wrap-around ghosts sat at `--i: -1` and `--i: count` from
+ * 16 to 18 Aug 2026, and the client has ruled them out** — *"I see a card before
+ * the 01-The safari card and when I scroll to the end I see a 01-The safari card
+ * after the 06 card … let's make it linear and just keep it 01 to 06"*. Four
+ * keyframes (`coverflow-pass-ghost-lead` / `-trail`, `coverflow-veil-ghost`,
+ * `coverflow-arrows-ghost`), two `[data-cf]` roles, two `display` rules and one
+ * rig assertion went with them. **The step's `count − 1` denominator did not**:
+ * it was 17 Aug's fix for the carousel opening on activity 6, and it is what puts
+ * the six activities' own centred moments at the pin's two ends. It is also the
+ * reason nothing needs re-tuning here — the ghosts were placed by the SHARED
+ * formula, one step outside each end, so deleting them leaves every real card's
+ * window exactly where it was. Measured: the anchor targets land at **1.00px**
+ * worst across the continuous 360-1920px sweep, against 1.90px with the ghosts.
  *
- * The step is `pin-len / (count − 1)` instead, and the centre of card *i* is
- * `pin-start + i × step`. The SIX activities now tile the pin: activity 1 is
- * centred at the exact offset the stage locks and activity 6 at the exact offset
- * it lets go. The two ghosts keep the same shared formula and fall one step
- * OUTSIDE each end — `--i: -1` at `pin-start − step`, `--i: count` at
- * `pin-start + count × step` — which is precisely where they are wanted: at the
- * moment activity 1 is centred the leading ghost sits one step to its left, and
- * at the moment activity 6 is centred the trailing ghost sits one step to its
- * right. The loop is still visible in the scroll; it is no longer *led* by it.
- *
- * **A ghost must never be the centred card, and that is asserted rather than
- * assumed.** Their own centred moments fall outside the pin, but "outside the
- * pin" is still on screen while the stage rides in and out, so the two ghosts get
- * their own keyframes below (`coverflow-pass-ghost-lead` / `-trail`) which hold
- * them AT THE FLANK across that stretch and never bring them to the middle.
- * `scripts/check_coverflow.mjs` fails if either ghost comes within 8px of the
- * stage's centre at any sampled position, and the same rig's card-in-charge order
- * is `1 → 2 → … → 6`, the six activities and nothing else.
- *
- * The hold that keeps the stage from riding in and out empty moved with it, from
- * the ghosts onto the two real end cards — see `[data-cf]` below. `Coverflow.tsx`
- * carries the whole of it; the ghosts are `aria-hidden`, carry no `id`, and their
- * arrows are out of the tab order and never hit-testable.
+ * The one thing the ghosts must not take with them is the pair of end-holds —
+ * see `[data-cf]` below. They were moved off the ghosts and onto the two REAL end
+ * cards on 17 Aug, which is what let the ghosts be deleted a day later without
+ * the stage riding in and out empty.
  *
  * ## Three things a future editor would break
  *
@@ -1672,24 +1664,20 @@ body {
 }
 
 /*
- * **The wrap-around ghosts exist only where there is a carousel to wrap.**
+ * A pair of `.coverflow-card[aria-hidden="true"]` rules lived here and in the
+ * `@supports` block until 18 Aug 2026 — `display: none` in flow, `flex` inside
+ * the carousel — because the two wrap-around ghosts earned their place in the
+ * pinned construction and were simply wrong in the fallback list, which rendered
+ * 06/01/02/03/04/05/06/01 before the first of them existed.
  *
- * A ghost is a copy of a card that is also on the stage under its own number,
- * and it earns that in the pinned construction: it is what is centred while the
- * stage rides in and out, so the reading is `[6] → 1 → … → 6 → [1]`. In the flow
- * fallback — no `animation-timeline`, or a visitor who asked for reduced motion —
- * there is no wrap and no stage, only a vertical list of activities, and a list
- * that opens with a repeat of its own last entry is simply wrong. Measured, not
- * reasoned about after the fact: the fallback rendered eight cards stacked
- * 06/01/02/03/04/05/06/01 before this rule existed.
- *
- * `display: flex` in the `@supports` block below is what turns them back on, and
- * it mirrors the `flex` utility on the card's own `<li>`. Unlayered, so it beats
- * Tailwind's layered utility whichever way the specificity falls.
+ * Both are gone with the ghosts themselves (the client's ruling of 18 Aug: *"make
+ * it linear and just keep it 01 to 06"*). The finding they came from is worth
+ * keeping even so, because it is a shape rather than a detail: **the flow
+ * fallback and the pinned effect are two different compositions, and a thing that
+ * is right in one can be visibly wrong in the other.** Anything added to this
+ * deck later has to be looked at with `animation-timeline` unsupported and with
+ * reduced motion on, which is what `check_coverflow.mjs`'s assertion 8 does.
  */
-.coverflow-card[aria-hidden="true"] {
-  display: none;
-}
 
 /*
  * An arrow's target: a zero-size box, positioned in the WRAPPER rather than in
@@ -1701,22 +1689,32 @@ body {
  * The `top` here is the FLOW fallback: card *i*'s share of a plain vertical
  * list. The measured, timeline-derived offset is in the `@supports` block.
  *
- * **It is 1×1px and not zero-sized, and that single pixel is what makes the
- * scroll settle on a card** (17 Aug 2026 — the client's fourth report, *"too
- * smooth and if scrolled fast it moves up or down the cards very easily"*). A
- * snap area of zero width and height is not a snap area: measured in Chromium
- * 151 on a bare page with nothing else on it, six zero-sized `scroll-snap-align:
- * start` boxes under `proximity` snapped **nothing** (340→340, 700→700), and the
- * same six at 1×1px snapped every one (340→300, 700→600). Under `mandatory` the
- * zero-sized set was worse than useless — every scroll collapsed to offset 0.
- * The pixel is transparent, carries no background, is `aria-hidden` and is
- * skipped by `measure_density.mjs`'s hit test for want of anything to paint.
+ * **Zero-sized, and the day it spent at 1×1px is worth writing down rather than
+ * quietly reverting.** It was widened on 17 Aug 2026 for ONE reason — a snap
+ * area of zero width and height is not a snap area, measured in Chromium 151 on
+ * a bare page: six zero-sized `scroll-snap-align: start` boxes under `proximity`
+ * snapped **nothing** (340→340, 700→700) and the same six at 1×1px snapped every
+ * one (340→300, 700→600), while under `mandatory` the zero-sized set was worse
+ * than useless and collapsed every scroll to offset 0. The client asked for the
+ * snapping to go on 18 Aug (*"replace it with the smoother scroll effect we used
+ * previously"*), so the pixel's only justification went with it.
+ *
+ * **A fragment target needs a position, not an area**, which is the other half of
+ * that finding and the reason it is safe to go back: an anchor click scrolls to
+ * the element's own box position whatever its size. Asserted rather than
+ * reasoned — `check_coverflow.mjs`'s sweep drives the page by clicking these
+ * targets at 79 widths and reads the card's distance from centre: **1.00px worst
+ * at 0×0**, against 1.90px on the 1×1 build.
+ *
+ * If snapping is ever wanted again, the pixel has to come back WITH it. That is
+ * the one thing a future reader could get wrong here, because a zero-area snap
+ * area fails silently and looks perfectly correct in the stylesheet.
  */
 .coverflow-target {
   position: absolute;
   left: 0;
-  width: 1px;
-  height: 1px;
+  width: 0;
+  height: 0;
   top: calc(var(--i) * 100% / var(--coverflow-count, 1));
 }
 
@@ -1814,6 +1812,35 @@ body {
      * this wrapper, that number is `(--cf-stage-h − cardWidth × 9 / 16) / 2`
      * with the card's width read off the stage, and it goes NEGATIVE on a
      * landscape phone, where a 796px card overflows a 283px stage.
+     *
+     * ## This height is not the dial it looks like — 18 Aug 2026
+     *
+     * The client asked for the carousel to *"fit snugly"*, and the obvious place
+     * to find the space is here: a centred card leaves **54px** of cream above
+     * and below itself inside this box at 1440x900 (793px stage, 685px card), and
+     * that cream is paid at both ends of the chapter — it is part of the gap
+     * above the first card and part of the gap below the last. It was measured,
+     * considered and left alone, for two reasons that are both arithmetic:
+     *
+     *  1. **The 54px is not a constant, it is what is left over.** The card is
+     *     `cardWidth × 9/16` tall and 685px is its ceiling; the stage is
+     *     `100svh − header`. At 1440x800 the same sum leaves **8px**, and at
+     *     1440x760 the card is taller than the stage already. Any fixed
+     *     shortening therefore overflows the card on a laptop 100px shorter than
+     *     the one it was tuned on, inside an `overflow: hidden` box — this
+     *     project's own repeat defect (`DECISIONS.md` §2 #44-45, #52-53), which is
+     *     a value tuned at one sample width breaking at another.
+     *  2. **It enters the pin window directly.** The pin releases at
+     *     `T + trackHeight − stageHeight`, so `--cf-pin-len` above would have to
+     *     become `screens × 100svh − --cf-stage-h` in the same edit, and the
+     *     sticky `top` would have to move down by half of whatever came off — or
+     *     the card stops being centred in the viewport and starts sitting under
+     *     the header. §20.2 records what a flat `100svh` does here: the last card
+     *     centres **11px after the pin has released**.
+     *
+     * The gap was taken out of `ChapterSurface`'s own padding (`tight` on this
+     * chapter) and out of the wrapper's top margin instead — both in
+     * `Coverflow.tsx`, both unable to break the pin.
      */
     --cf-stage-h: calc(100svh - var(--header-height, 0px));
   }
@@ -1883,12 +1910,6 @@ body {
     pointer-events: none;
   }
 
-  /* The ghosts are on, because there is now a carousel for them to wrap. See the
-     rule above; `flex` mirrors the card's own `flex` utility class. */
-  .coverflow-card[aria-hidden="true"] {
-    display: flex;
-  }
-
   .coverflow-card {
     /* `left: 0; right: 0` with a definite inline `width` and auto side margins
        is the centring; `top: 50%` plus the `-50%` carried in every keyframe's
@@ -1912,9 +1933,10 @@ body {
     /* AFTER the shorthand, never before it. See the note above. Watched, 17 Aug
        2026: with these two lines swapped nothing binds to the timeline, every
        card sits at its 0% keyframe off-stage right, and `check_coverflow.mjs`
-       returns 112 failures — no card ever centred (assertion 2), no arrow ever
-       reachable at any of 75 sampled positions (assertion 4), and the deck's
-       last ghost the only thing left near the middle. */
+       returns a hundred-plus failures — no card ever centred (assertion 2) and no
+       arrow ever reachable at any sampled position (assertion 4). (The exact
+       count was 112 on the eight-card deck; it is not re-quoted here, because a
+       failure count is a property of the run and this deck is six cards now.) */
     animation-timeline: --coverflow-track;
     animation-range: cover var(--cf-from) cover var(--cf-to);
   }
@@ -1943,17 +1965,18 @@ body {
   }
 
   /*
-   * The four cards that do not simply pass through, addressed by the role
+   * The two cards that do not simply pass through, addressed by the role
    * `CoverflowCard.tsx` writes onto them rather than by their position.
    *
    * **`[data-cf]` replaced `:first-child` / `:last-child` on 17 Aug 2026**, and
    * the swap is not cosmetic. Those two selectors used to mean "the two ghosts",
    * which was true only because the ghosts happened to be the outermost `<li>`s
-   * AND happened to be the cards that held at centre. The step change below split
-   * those two facts apart: the ghosts are still the outermost cards, and the
-   * cards that hold at centre are now the two REAL end cards, one place inwards.
+   * AND happened to be the cards that held at centre. The step change split those
+   * two facts apart. **With the ghosts deleted on 18 Aug the two would happen to
+   * agree again — and that is the reason to keep the attribute, not to go back.**
    * A positional selector standing in for a coincidence is exactly what
-   * `.room-card[data-room-card-last]` above records as the thing to avoid.
+   * `.room-card[data-room-card-last]` above records as the thing to avoid, and
+   * the coincidence has now been broken and restored once inside three days.
    *
    * ## `hold-first` / `hold-last` — why anything holds at all
    *
@@ -1984,24 +2007,18 @@ body {
    * is a visitor pressing "next" on the only card on the stage and nothing
    * happening.
    *
-   * ## `ghost-lead` / `ghost-trail` — a flank, and never the middle
+   * **The holds are what let the ghosts be deleted (18 Aug 2026), and the order
+   * of those two changes is the whole of it.** Until 17 Aug the cards centred
+   * across the ride-in and ride-out were the two ghosts, so removing the wrap
+   * would have taken the end-holds with it and put the chapter back at 74.3% /
+   * 87.1% empty. They were moved onto the real end cards a day earlier, for an
+   * unrelated reason, and the removal cost nothing at either end.
    *
-   * A ghost's own centred moment now falls one step outside the pin, but outside
-   * the pin is still on screen: the stage rides in for its own height first, and
-   * a ghost passing through the middle there is exactly the defect the client
-   * reported (*"it started with 06-Walk and Cycling"*). So the two ghosts do not
-   * use the shared schedule at all. Each one is pinned to its flank across the
-   * whole of the stage's ride in or out and only ever leaves outwards:
-   * `ghost-lead` sits at the LEFT flank until activity 1's centred moment and
-   * then slides off left; `ghost-trail` arrives at the RIGHT flank at activity
-   * 6's centred moment and stays there. Neither is ever within a step of centre,
-   * and `scripts/check_coverflow.mjs` asserts exactly that.
-   *
-   * A ghost's arrows are never hit-testable (`coverflow-arrows-ghost`). They used
-   * to be, and had to be, because a ghost was the card at the centre of the stage
-   * through the pin's first and last stretch; the holds above are that card now.
-   * They are still rendered, because a ghost that looked different from its own
-   * twin would read as a seventh activity rather than as the loop coming round.
+   * At activity 1's centred moment there is now nothing to its left and at
+   * activity 6's nothing to its right — no flank, and `check_coverflow.mjs`'s
+   * assertion 3 asks about the neighbours that exist rather than about a fixed
+   * pair. That is the linear reading the client asked for: *"when I come to the
+   * carousel I see card 01 in focus with no card placed before it"*.
    */
   .coverflow-card[data-cf="hold-first"] {
     animation-name: coverflow-pass-first;
@@ -2027,27 +2044,6 @@ body {
     animation-name: coverflow-arrows-last;
   }
 
-  .coverflow-card[data-cf="ghost-lead"] {
-    animation-name: coverflow-pass-ghost-lead;
-  }
-
-  .coverflow-card[data-cf="ghost-trail"] {
-    animation-name: coverflow-pass-ghost-trail;
-  }
-
-  /* A ghost is at a flank for the whole of its life, so it wears the flank's
-     wash for the whole of it — the shared `coverflow-veil` unveils at its 50%,
-     which for these two is a moment they never reach. */
-  .coverflow-card[data-cf="ghost-lead"] .coverflow-veil,
-  .coverflow-card[data-cf="ghost-trail"] .coverflow-veil {
-    animation-name: coverflow-veil-ghost;
-  }
-
-  .coverflow-card[data-cf="ghost-lead"] .coverflow-arrows,
-  .coverflow-card[data-cf="ghost-trail"] .coverflow-arrows {
-    animation-name: coverflow-arrows-ghost;
-  }
-
   /*
    * The measured placement, and the settle.
    *
@@ -2057,41 +2053,26 @@ body {
    * step is. The 16 Aug form was `(i + 1) × step` because the first centred
    * moment was one step into the pin; it is at the pin's own start now.
    *
-   * **`scroll-snap-align` is the client's fourth report of 17 Aug 2026** — *"too
-   * smooth and if scrolled fast it moves up or down the cards very easily, making
-   * it difficult for the viewer to go through them one-by-one"*. He was offered
-   * one-card-per-gesture and refused it (*"it takes the page out of your hands"*,
-   * non-negotiable #5), so nothing here stops a flick travelling several cards;
-   * it only makes the page come to rest ON one rather than stranded between two.
+   * **Nothing snaps here, 18 Aug 2026, and the removal is the client's own.**
+   * *"The scroll now feels very snappy, replace it with the smoother scroll
+   * effect we used previously with the smaller card size in the carousel … but
+   * just make it a bit slower this time."* So `scroll-snap-align: start` on this
+   * rule and `scroll-snap-type: y proximity` on `html` (which was site-wide, the
+   * only snap declaration on the site) are both gone, and the pace question is
+   * answered by `COVERFLOW.screens` instead — a longer pin, which is a smoother
+   * scroll and a slower one, rather than a scroll that is pulled onto a stop.
    *
-   * Measured against Lenis rather than assumed, because Lenis intercepts the
-   * wheel and scrolls the document itself frame by frame, and its own docs say
-   * CSS snapping is unsupported. At 1440x900, eight wheel flicks from just before
-   * the pin: **without snap the page rested 19-549px from a card; with it, 0px on
-   * every flick that ended inside the chapter.** The control arm — the same
-   * declaration with `scroll-snap-align` removed and the targets still 1×1px —
-   * reproduced the unsnapped figures to the pixel, so the measurement is
-   * sensitive to the one property under test.
-   *
-   * `proximity`, never `mandatory`: mandatory would snap a visitor who is trying
-   * to scroll PAST this chapter, and this is the only pinned chapter on the home
-   * page. With `proximity` a flick that leaves the pin simply leaves — measured
-   * at 639px past the last card, unsnapped, which is the correct answer.
+   * It shipped for one day and everything measured about it held: at 1440x900,
+   * eight wheel flicks against Lenis rested 0px from a card with it and 19-549px
+   * without, and `proximity` (never `mandatory`) let a visitor scroll past the
+   * chapter unhindered. The client did not reject a broken thing; he rejected a
+   * working one, on feel. **Do not reinstate it without him** — and if it ever
+   * does come back, `.coverflow-target` needs its 1×1px box back in the same
+   * edit (see the base rule) or it will be a snap container with no snap areas,
+   * which is silent.
    */
   .coverflow-target {
     top: calc(var(--i) * var(--cf-step));
-    scroll-snap-align: start;
-  }
-
-  /*
-   * The snap container has to be the scroller itself, so this is on `html` and
-   * therefore site-wide. It costs nothing anywhere else: a `proximity` container
-   * with no snap area in reach does not snap, and `.coverflow-target` is the only
-   * `scroll-snap-align` on this site. Verified on `/mahua-vann`, whose rooms
-   * chapter is the other pinned construction, before and after.
-   */
-  html {
-    scroll-snap-type: y proximity;
   }
 
   @keyframes coverflow-pass {
@@ -2177,45 +2158,11 @@ body {
     }
   }
 
-  /*
-   * The two ghosts, which live at a flank and never come to the middle.
-   *
-   * The shared four-step window still places them — `ghost-lead` at `--i: -1` and
-   * `ghost-trail` at `--i: count` — so the keyframe percentages below land on the
-   * real cards' own centred moments and need no arithmetic of their own:
-   * `ghost-lead`'s 75% IS activity 1's centred moment and its 100% is activity
-   * 2's; `ghost-trail`'s 0% is activity 5's and its 25% is activity 6's.
-   *
-   * So the lead ghost is simply *at the left flank* for the whole of the stage's
-   * ride in and for the pin's first step, then slides out the way; and the trail
-   * ghost slides in for the pin's last step and stays at the right flank while
-   * the stage rides out. Their 50% keyframes — the moment the shared schedule
-   * would put a card dead centre — do not exist.
-   */
-  @keyframes coverflow-pass-ghost-lead {
-    0%,
-    75% {
-      transform: translate(calc(-1 * var(--coverflow-side-shift)), -50%)
-        scale(var(--coverflow-side-scale));
-      z-index: 1;
-    }
-    100% {
-      transform: translate(calc(-1 * var(--cf-off)), -50%) scale(var(--coverflow-side-scale));
-      z-index: 1;
-    }
-  }
-
-  @keyframes coverflow-pass-ghost-trail {
-    0% {
-      transform: translate(var(--cf-off), -50%) scale(var(--coverflow-side-scale));
-      z-index: 1;
-    }
-    25%,
-    100% {
-      transform: translate(var(--coverflow-side-shift), -50%) scale(var(--coverflow-side-scale));
-      z-index: 1;
-    }
-  }
+  /* `coverflow-pass-ghost-lead` and `-trail` sat here until 18 Aug 2026. They
+     held the two wrap-around ghosts at their flanks so that neither could reach
+     the middle of a stage that is still on screen before the pin engages — the
+     defect the client reported on 17 Aug. The ghosts are gone (see the note at
+     the top of this block) and so are both. */
 
   @keyframes coverflow-veil {
     0%,
@@ -2253,16 +2200,6 @@ body {
     50%,
     100% {
       opacity: 0;
-    }
-  }
-
-  /* A ghost is a flank for its whole life, so it never unveils. Written as a
-     keyframe rather than as `opacity` on the element because the element carries
-     a server-rendered inline `opacity: 0` that only an animation outranks. */
-  @keyframes coverflow-veil-ghost {
-    0%,
-    100% {
-      opacity: var(--coverflow-side-veil);
     }
   }
 
@@ -2305,16 +2242,9 @@ body {
     }
   }
 
-  /* A ghost is never the card in charge, so its arrows never answer a hit test.
-     They are still rendered — a ghost that looked different from its own twin
-     would read as a seventh activity — and they are inside an `aria-hidden` card
-     with `tabindex="-1"`, so they are neither announced nor a keyboard stop. */
-  @keyframes coverflow-arrows-ghost {
-    0%,
-    100% {
-      pointer-events: none;
-    }
-  }
+  /* `coverflow-veil-ghost` and `coverflow-arrows-ghost` sat here until 18 Aug
+     2026 — a permanent flank wash, and arrows that never answered a hit test on a
+     card no screen reader could see. Gone with the ghosts. */
 
   /*
    * Reduced motion collapses the PIN as well as the movement — deliberately
@@ -2351,13 +2281,6 @@ body {
       transform: none;
     }
 
-    /* Off again — see the base rule. Reduced motion collapses the pin entirely,
-       so what is left is the same plain list of six the `@supports` fallback
-       gives, and a list must not open with a repeat of its own last entry. */
-    .coverflow-card[aria-hidden="true"] {
-      display: none;
-    }
-
     /*
      * **Every selector that names an animation above is repeated here.**
      * `animation: none` on the bare `.coverflow-card` is (0,1,0) and loses to
@@ -2381,18 +2304,13 @@ body {
       animation: none;
     }
 
-    /* Back to the flow fallback's own placement — and no snapping, because there
-       is no carousel to settle on. A visitor who has asked for less motion being
-       pulled onto a snap point they did not choose is the opposite of what the
-       setting asks for, and the six targets are at list positions here rather
-       than at any card's centred moment. */
+    /* Back to the flow fallback's own placement: with no pin, the six targets are
+       at list positions rather than at any card's centred moment. A
+       `scroll-snap-align: none` and an `html { scroll-snap-type: none }` sat here
+       too, undoing the site-wide snapping for a visitor who had asked for less
+       motion; both went with the snapping itself on 18 Aug 2026. */
     .coverflow-target {
       top: calc(var(--i) * 100% / var(--coverflow-count, 1));
-      scroll-snap-align: none;
-    }
-
-    html {
-      scroll-snap-type: none;
     }
   }
 }

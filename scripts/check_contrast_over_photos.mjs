@@ -234,13 +234,23 @@ const MENU_RUNS = (heroId) => [
  * out. None of that is large text at any width this rig samples.
  */
 const COVERFLOW_RUNS = Array.from({ length: 6 }, (_, i) => {
-  // The deck opens with the wrap-around ghost of the last activity, so activity
-  // `i` is the `i + 2`-th card. Positional, and deliberately so: the ghosts
-  // carry no id (a duplicate would send half the arrows to the wrong element),
-  // so there is nothing else to name them by. `check_coverflow.mjs` is what
-  // holds that ordering — it fails if the deck is ever not eight cards with the
-  // two ghosts at its ends.
-  const card = `#field-days ul.coverflow-stage > li.coverflow-card:nth-child(${i + 2})`;
+  // Activity `i` is the `i + 1`-th card. **It was `i + 2` from 16 to 18 Aug
+  // 2026**, because the deck opened with a wrap-around ghost of the last
+  // activity; the client ruled the ghosts out and the deck is the six activities
+  // now (`docs/reviews/2026-08-16-coverflow/linear.md`).
+  //
+  // Worth knowing rather than quietly fixing: with the stale offset this file did
+  // not report six wrong figures, it CRASHED — `nth-child(7)` matches nothing, so
+  // `sharp` was handed an empty crop and threw `extract_area: bad extract area`
+  // from inside a `for` loop with no run name attached to it. The five runs
+  // before it had already measured the wrong card each, silently.
+  //
+  // Positional, and still deliberately so: a card carries no id of its own (the
+  // six ids belong to the scroll targets in the wrapper), so there is nothing
+  // else to name it by. `check_coverflow.mjs`'s assertion 10 is what holds the
+  // ordering — it fails if the deck is ever not exactly the six activities in
+  // order.
+  const card = `#field-days ul.coverflow-stage > li.coverflow-card:nth-child(${i + 1})`;
   return {
     name: `coverflow · card ${String(i + 1).padStart(2, "0")}`,
     min: 4.5,

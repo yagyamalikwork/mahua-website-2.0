@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-17T01:44:19.817Z",
+  "measuredAt": "2026-08-17T07:39:45.950Z",
   "url": "http://localhost:3110/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.98,
+        "currentTime": 3.03,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.98,
-        "afterHover": 3.56
+        "beforeHover": 3.04,
+        "afterHover": 3.63
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -159,7 +159,7 @@
         "ended": false,
         "box": {
           "x": 1092,
-          "y": 6559,
+          "y": 6535,
           "w": 300,
           "h": 400
         },
@@ -176,7 +176,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.78,
+        "currentTime": 2.94,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -189,8 +189,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.79,
-        "afterHover": 3.38
+        "beforeHover": 2.94,
+        "afterHover": 3.53
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -251,7 +251,7 @@
         "worstChannelDriftPx": 1,
         "overlap": {
           "onScreen": true,
-          "scrollY": 6244,
+          "scrollY": 6220,
           "box": {
             "x": 1092,
             "y": 315,
@@ -326,7 +326,7 @@
       "width": 390,
       "height": 844,
       "box": {
-        "top": 8206,
+        "top": 8190,
         "h": 320,
         "w": 240
       },
@@ -412,7 +412,7 @@
       "width": 1024,
       "height": 900,
       "box": {
-        "top": 7207,
+        "top": 7183,
         "h": 400,
         "w": 300
       },
@@ -498,7 +498,7 @@
       "width": 1280,
       "height": 900,
       "box": {
-        "top": 7770,
+        "top": 7746,
         "h": 400,
         "w": 300
       },
@@ -584,7 +584,7 @@
       "width": 1366,
       "height": 768,
       "box": {
-        "top": 7806,
+        "top": 7782,
         "h": 400,
         "w": 300
       },
@@ -670,7 +670,7 @@
       "width": 1440,
       "height": 900,
       "box": {
-        "top": 6559,
+        "top": 6535,
         "h": 400,
         "w": 300
       },
@@ -756,7 +756,7 @@
       "width": 1920,
       "height": 1080,
       "box": {
-        "top": 7296,
+        "top": 7272,
         "h": 400,
         "w": 300
       },

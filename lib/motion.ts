@@ -555,17 +555,39 @@ export const COVERFLOW = {
   /**
    * Screens of scroll the chapter's stage occupies, including its own.
    *
-   * **Swept at 2, 2.5 and 3, and 2 wins on every figure.** The chapter's worst
-   * screen is *identical* at all three — 61.5% empty — because this dial changes
-   * how many screens the pin spends, not what is on any one of them; and the
-   * chapter's mean goes the wrong way (48.4 → 48.9 → 49.3%), because every extra
-   * screen is a pin screen, and pin screens are the emptiest ones, so they
-   * dilute the dense header band's share of the chapter. The page follows: mean
-   * 38.5 → 38.8 → 39.2%, images per screen 2.27 → 2.26 → 2.20, screens over the
-   * 45% budget 41 → 45 → 48. `rooted`'s own history is the same lesson in the
-   * same direction (non-negotiable #9).
+   * **3 since 18 Aug 2026 — the client asked for the carousel to be slower**, and
+   * this is the whole of that answer: *"the scroll now feels very snappy, replace
+   * it with the smoother scroll effect we used previously with the smaller card
+   * size in the carousel … but just make it a bit slower this time."* The
+   * snapping he is describing is gone from `app/globals.css`, and pace is now a
+   * longer pin. It is `STICKY_SCREENS_MAX`, so this dial is spent.
+   *
+   * **Re-swept at 2 / 2.5 / 3 on the linear deck, and the direction REVERSED.**
+   * Four production builds, four density runs, `field-days` empty space:
+   *
+   * | screens | pin | centre-to-centre | mean | worst | page mean | images/screen |
+   * |---|---|---|---|---|---|---|
+   * | 2 | 1,007px | 201.4px | 30.6% | 44.4% | 36.2% | 2.18 |
+   * | 2.5 | 1,457px | 291.4px | 29.5% | 44.4% | 35.9% | 2.12 |
+   * | **3** | **1,907px** | **381.4px** | **29.1%** | **44.4%** | **35.6%** | **2.07** |
+   *
+   * The 16 Aug sweep read the opposite — mean 48.4 → 48.9 → 49.3% — and both are
+   * right about their own build. **The card was 900px then and is 1217px now**, so
+   * a pin screen used to be emptier than the chapter's average and is now denser
+   * than it. That is a property of the composition rather than of this dial, which
+   * is why the sweep was re-run rather than quoted.
+   *
+   * **The worst screen does not move at any length**, which is the one thing that
+   * did hold from the earlier sweep: this changes how many screens the pin spends,
+   * never what is on the emptiest of them.
+   *
+   * **What it costs is `imagesPerScreen`, 2.18 → 2.07.** That is the figure
+   * non-negotiable #9 says to look at rather than at the chapter, and `rooted`'s
+   * own history is this same trade in the same units, decided the other way — the
+   * difference being that a longer pin there bought nothing anyone had asked for.
+   * If 3 reads as too slow, 2.5 is one number and costs nothing else measured.
    */
-  screens: 2,
+  screens: 3,
   /** A neighbour's scale at full offset. */
   sideScale: 0.82,
   /** How far a neighbour sits from centre, as a percentage of a card's width. */
