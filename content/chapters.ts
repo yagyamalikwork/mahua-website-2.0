@@ -16,7 +16,6 @@ import type { MediaId } from "@/lib/media";
 
 export type ChapterKind =
   | "hero"
-  | "fullBleedQuote"
   /**
    * `chapterIntro`'s composition, held still while its photographs drift past —
    * the reference site's signature effect. Below the viewport
@@ -49,9 +48,44 @@ export type ChapterKind =
    * (non-negotiable #5).
    */
   | "coverflow"
-  | "lodgeCards"
+  /**
+   * Two photographs side by side, edge to edge, each carrying a small region
+   * label, the lodge's name, a sentence and a button — `01 · The Lodges`,
+   * 19 Aug 2026, on the ecotriip.co India/Africa split the client supplied as a
+   * screenshot (spec §2). `components/sections/LodgePanels.tsx`.
+   *
+   * **It replaces `"lodgeCards"` on the one chapter that used it**, which is why
+   * that kind is gone from this union below. The component survives and still
+   * compiles; nothing routes to it.
+   *
+   * Unlike the cards, this is type laid ON photographs at every width, so it is
+   * image-led in the sense non-negotiable #10 means — see `IMAGE_LED_KINDS`.
+   */
+  | "lodgePanels"
+  /**
+   * One band of forest at the photograph's own aspect, cream above and below,
+   * the heading left on it and a paragraph right — `02 · The Jungles`, 19 Aug
+   * 2026 (spec §3). `components/sections/JunglesBand.tsx`.
+   *
+   * **It replaces `"fullBleedQuote"` on this chapter only.** That kind is still
+   * in the union and still routed, because both property pages use it
+   * (`vann-table`, `tola-table`, `tola-guest-word`); the home page has none
+   * left. The client's words for why: the full-screen version *"covers the whole
+   * screen currently and feels too overwhelming"*.
+   */
+  | "junglesBand"
   | "invitation";
 /*
+ * **`"lodgeCards"` and `"fullBleedQuote"` were retired from this union on 19 Aug
+ * 2026**, by the two kinds above, and the two components are in different
+ * positions afterwards. `components/sections/LodgeCards.tsx` is now routed by
+ * nothing at all — `lodges` was its only caller on any page — and is a candidate
+ * for retirement alongside `PlateGrid.tsx`, `Testimonials.tsx` and
+ * `ui/ForestBackdrop.tsx`. `components/sections/FullBleedQuote.tsx` is very much
+ * alive: both property pages route their own `"fullBleed"` kind to it
+ * (`vann-table`, `tola-table`, `tola-guest-word`), so what has gone is this
+ * page's use of it, not the component. Deleting it would break two routes.
+ *
  * **`"plateGrid"` and `"testimonials"` were retired from this union on 19 Aug
  * 2026** with the chapters that used them — `03 · The Forest`, `05 · The Rooms`
  * and `07 · Details` were the three plate boards, and `guests` was the
@@ -101,7 +135,27 @@ export type ChapterLike = {
  */
 export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
   "hero",
-  "fullBleedQuote",
+  /*
+   * **`"lodgePanels"` is here where `"lodgeCards"` deliberately was not, and the
+   * distinction is real rather than convenient.** The cards were photographs on
+   * cream with the words beneath them, so a screen of that chapter could be
+   * mostly type; this kind is two photographs edge to edge with the words laid
+   * ON them, which has no text-only state at any scroll position — the same
+   * property that put `"coverflow"` on this list.
+   *
+   * **No adjacency depends on it**, which is the test that it is here because it
+   * is true rather than to make something pass: `lodges` sits between `arrival`
+   * (hero) and `why-you-came` (this band), both image-led, so the rhythm rule is
+   * satisfied on either side whichever way this is classified. Removing it would
+   * turn no test red today.
+   */
+  "lodgePanels",
+  /*
+   * `"fullBleedQuote"` was here until 19 Aug 2026 and left with the kind. This
+   * is what took its place on `02 · The Jungles`: a shorter band, but still one
+   * photograph across the full width of the screen with its type on it.
+   */
+  "junglesBand",
   // `"plateGrid"` came out on 19 Aug 2026 with the kind itself.
   //
   // **`"pinnedCollage"` is deliberately NOT here, and that is the whole of the
@@ -130,8 +184,22 @@ export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
  * may only use images ≥ 1400px wide (CLAUDE.md non-negotiable #10). Fourteen of
  * the thirty-five curated images qualify; the four used here are all of them
  * that suit a full screen.
+ *
+ * **`"lodgePanels"` and `"junglesBand"` replaced `"fullBleedQuote"` here on
+ * 19 Aug 2026.** The band is edge-to-edge in the obvious way. A panel is only
+ * half the screen wide from 768px up, so it is arguably not full-bleed at all —
+ * it is listed because listing it makes this test STRICTER (both `vann-hero` and
+ * `tola-hero` are 1440px and `fullBleedSafe`, so nothing changes today) and
+ * because the band of two panels does reach both edges. Erring towards the
+ * stricter reading is the direction this file already errs in — see the note on
+ * `lodgeCards` in `IMAGE_LED_KINDS`' history.
  */
-export const FULL_BLEED_KINDS: readonly ChapterKind[] = ["hero", "fullBleedQuote", "invitation"];
+export const FULL_BLEED_KINDS: readonly ChapterKind[] = [
+  "hero",
+  "lodgePanels",
+  "junglesBand",
+  "invitation",
+];
 
 /**
  * Kept `as const` so `ChapterId` below is a literal union — Task 6 keys `HOME`
@@ -150,20 +218,34 @@ const CHAPTER_LIST = [
     media: ["reception-path-dusk"],
   },
   {
-    // Two lodges, two photographs each: [Vann exterior, Vann room, Tola pool,
-    // Tola suite]. Orientation is Vann first, Tola second — Task 7 reads the
-    // pairs positionally.
-    //
-    // **This is the OLD shape, kept deliberately for one task.** Spec §2 rebuilds
-    // this chapter as ecotriip's two full-height panels on `vann-hero` and
-    // `tola-hero`, which drops it to two photographs; the restructure ships the
-    // spine only, so `lodgeCards` and its four frames stand until the panels are
-    // built.
+    /*
+     * **Two panels since 19 Aug 2026** (spec §2), on the ecotriip.co India /
+     * Africa split the client supplied as a screenshot: one photograph per
+     * lodge, side by side, edge to edge, each carrying its region, its name, a
+     * sentence and a button.
+     *
+     * **Two photographs where there were four**, and both are the property
+     * pages' own opening frames — the client's choice, and he accepted what it
+     * costs: the same photograph greets a visitor again one click later.
+     * `bungalow-exterior-palms`, `mahua-vann-room`, `mahua-tola-pool` and
+     * `mahua-tola-suite` are curated and now unused by any route.
+     *
+     * Order is Vann first, Tola second, and `LodgePanels` reads it positionally
+     * against the order `content/home.ts` lists the two lodges in. It also looks
+     * each one up in `content/site.ts` by route for the name and the region
+     * label, and throws if it cannot find it — so the pairing cannot silently
+     * come apart.
+     *
+     * This chapter measured 43.7% mean / **48.6% worst** as `lodgeCards` on this
+     * spine, one of only two over non-negotiable #8's ceiling, and the rebuild
+     * was aimed at exactly that. The after figure is in
+     * `docs/reviews/2026-08-19-home-v2/shapes.md`.
+     */
     id: "lodges",
     number: "01",
     label: "The Lodges",
-    kind: "lodgeCards",
-    media: ["bungalow-exterior-palms", "mahua-vann-room", "mahua-tola-pool", "mahua-tola-suite"],
+    kind: "lodgePanels",
+    media: ["vann-hero", "tola-hero"],
   },
   {
     /*
@@ -177,16 +259,23 @@ const CHAPTER_LIST = [
      * change, which is what makes the composite honest rather than a repeat —
      * see the entry's note in `scripts/build_images.mjs`.
      *
-     * **Still `fullBleedQuote`, and that is temporary.** Spec §3 crops the band
-     * down from 100svh so it breathes with cream above and below, left-aligns
-     * the heading at a smaller size, and sets `03 · The Forest`'s surviving
-     * paragraph to its right. None of that is built yet — only the numbering,
-     * the label, the photograph and the copy have moved.
+     * **A band since 19 Aug 2026, not a screen** (spec §3). It was `100svh` of
+     * full-bleed photograph with a centred quote on it; it is now a band at the
+     * photograph's OWN aspect — 1440 x 611, 2.357:1 — with cream above and below
+     * it, the heading left and `03 · The Forest`'s surviving paragraph right.
+     *
+     * The crop was a resolution fix as much as a compositional one. At 100svh
+     * `FullBleed` oversized the picture for parallax and `cover` drew this
+     * photograph **2,706px wide from a 1,440px file** at 1440x900 — ratio 0.53,
+     * the softest image on the site — with the panther at its left edge and the
+     * tiger at its right both outside the viewport. At its own aspect nothing is
+     * cropped and the ratio is 1.00 with no new file. See `JUNGLE_BAND` in
+     * `lib/motion.ts`.
      */
     id: "why-you-came",
     number: "02",
     label: "The Jungles",
-    kind: "fullBleedQuote",
+    kind: "junglesBand",
     media: ["jungle-cats-stitch"],
   },
   {

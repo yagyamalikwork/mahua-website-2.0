@@ -12,7 +12,13 @@ import {
 // the foot of this file is what would notice if that ever changed back, and it
 // can only notice because its match now includes the closing quote (see below).
 import { CARD_BOX, CARD_SIZES } from "@/components/sections/CoverflowCard";
+// `LodgeCards` is routed by nothing since 19 Aug 2026 — `01 · The Lodges` is
+// `LodgePanels` now — but it is still on disk and still passes a `sizes` prop,
+// so the tripwire at the foot of this file still demands this import and its
+// slots below. Delete both only when the component itself goes.
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
+import { PANEL_BOX, PANEL_SIZES } from "@/components/sections/LodgePanels";
+import { BAND_BOX, BAND_SIZES } from "@/components/sections/JunglesBand";
 import {
   EXPERIENCE_BOXES,
   EXPERIENCE_SIZES,
@@ -223,6 +229,20 @@ const LIVE_SLOTS: readonly Slot[] = [
   // the 16:9 it carried until then was solved against the 25% width-crop bound
   // on files that no longer exist. See the component's own comments.
   { name: "Coverflow.card", sizes: CARD_SIZES, box: CARD_BOX },
+  // `01 · The Lodges`' two panels (19 Aug 2026, spec §2) — one photograph per
+  // lodge, edge to edge, half the screen each from `lg`. Both halves are derived
+  // rather than transcribed: `PANEL_SIZES` interpolates
+  // `LODGE_PANELS.twoUpFromPx` and `PANEL_BOX` is `boxW / boxH`, so the
+  // breakpoint in the string and the ratio in the class cannot drift from the
+  // dial they come from.
+  { name: "LodgePanels.panel", sizes: PANEL_SIZES, box: PANEL_BOX },
+  // `02 · The Jungles`' band (19 Aug 2026, spec §3). Its `sizes` repeats
+  // `HERO_SIZES`/`FULL_BLEED_SIZES`' `100vw` verbatim — it is edge to edge, so
+  // there is no other honest answer — and adds no distinct string; the row is
+  // here for its BOX, which is new and is the whole point of the chapter: the
+  // photograph's own 1440/611, so `cover` crops it in neither axis and the drawn
+  // width is the element's width.
+  { name: "JunglesBand.band", sizes: BAND_SIZES, box: BAND_BOX },
   // The same chapter's header band had three more rows here — `Coverflow.wide`,
   // `.pair` and `.track`, the four photographs above the stage — registered on
   // 16 Aug 2026 and removed on 17 Aug when the client deleted the band. They are
@@ -387,7 +407,18 @@ describe("the sizes the page actually serves", () => {
     // particular was the only file-driven width on the page). `Coverflow.card`
     // stays: the cards are the chapter. Read off this suite by running it and
     // reading the failure (`expected 21 to be 24`), not computed by hand.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
+    // 21 → 22 on 19 Aug 2026, the home-page restructure's two new sections.
+    // `LodgePanels.panel`'s `(min-width: 1024px) 50vw, 100vw` is a genuinely new
+    // width list — nothing else on the page serves half the SCREEN (the room
+    // card's 75vw and the menu tile's 208px cap are both inside containers) —
+    // while `JunglesBand.band`'s `100vw` repeats `HERO_SIZES` and
+    // `FULL_BLEED_SIZES` character for character, because a band that reaches
+    // both edges has no other honest answer. One new row each, one new distinct
+    // string between them. Read off this suite by running it and reading the
+    // failure, not computed by hand, per the same instruction as every step
+    // above. `LodgeCards`' two slots stay: the component is unrouted but still
+    // on disk and still passes `sizes`, which the tripwire below still checks.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(22);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -562,6 +593,18 @@ describe("cover boxes match the markup they describe", () => {
     // drawn wider than any file the library holds and a `sizes` describing a
     // box that no longer exists.
     { file: "components/sections/CoverflowCard.tsx", declared: CARD_BOX },
+    // The lodge panel — `LODGE_PANELS.boxW / boxH`, the same shape as the
+    // `aspect-[4/3]` class on the frame inside its `<article>`. The pairing is
+    // load-bearing: 4:3 crops a 1440x960 hero by 11.1%, and the crop table on
+    // `LODGE_PANELS` is what says which ratios are available at all before the
+    // 25% width-crop bound bites. Retune the class alone and this goes red,
+    // rather than a photograph quietly losing a quarter of its width.
+    { file: "components/sections/LodgePanels.tsx", declared: PANEL_BOX },
+    // The Jungles band — the photograph's OWN 1440/611, as `aspect-[1440/611]`.
+    // Equality here is the chapter's whole argument: box aspect == image aspect
+    // is what makes the drawn width the element's width and the served ratio
+    // 1.00 rather than the 0.53 the 100svh version measured.
+    { file: "components/sections/JunglesBand.tsx", declared: BAND_BOX },
     // `components/sections/Coverflow.tsx` had a case here from 16 to 17 Aug 2026
     // — 3:2 for `guide-sunrise`, 16:9 for the pair, 1:1 for
     // `tiger-crossing-track`. The client deleted that band, so the file now has

@@ -12,7 +12,17 @@ import { chapterCopy, type ChapterCopyKey, type ExperienceCopy } from "./home";
  */
 const MIN_MEDIA = {
   hero: 1,
-  fullBleedQuote: 1,
+  // One photograph across the width of the screen, which is the whole chapter.
+  // `fullBleedQuote: 1` came out on 19 Aug 2026 with the kind; this is what
+  // replaced it on `02 · The Jungles`.
+  junglesBand: 1,
+  // **Two, and this floor is exact rather than cautious.** The chapter is the
+  // two lodges side by side; with one photograph it is not the split the client
+  // asked for, it is a banner. `lodgeCards: 2` was the same number for the same
+  // reason and left with its kind on 19 Aug 2026 — but the cards drew FOUR
+  // frames against that floor of two, where the panels draw exactly two, so this
+  // assertion is load-bearing here in a way it never was there.
+  lodgePanels: 2,
   // The reference's signature move is two or three photographs floating at the
   // margins around centred text — with fewer it is just a text screen — pinned,
   // so if anything the floor is higher here: a pinned scene with one photograph
@@ -35,8 +45,10 @@ const MIN_MEDIA = {
   coverflow: 6,
   // `plateGrid: 3` and `testimonials: 1` came out on 19 Aug 2026 with their
   // kinds — the three plate boards and the guests band all left the page in the
-  // v2 restructure.
-  lodgeCards: 2,
+  // v2 restructure. `lodgeCards: 2` and `fullBleedQuote: 1` came out later the
+  // same day, when `01 · The Lodges` became two panels and `02 · The Jungles`
+  // became a band; both floors are restated above under the kinds that replaced
+  // them.
   invitation: 1,
 } satisfies Record<ChapterKind, number>;
 
@@ -203,15 +215,19 @@ describe("CHAPTERS", () => {
     // assertion here, and shows one photograph per chapter.
     //
     // **Twenty until 19 Aug 2026, and lowered because the page is half the
-    // length, not because a chapter was thinned.** The v2 spine carries 19
+    // length, not because a chapter was thinned.** The v2 spine carried 19
     // distinct photographs across seven chapters (1 + 4 + 1 + 3 + 3 + 6 + 1),
-    // where the twelve-chapter page carried 32. Seventeen is that spine's own
-    // mechanical floor — `MIN_MEDIA` plus the no-repeats rule force exactly 17
-    // on it — which makes this assertion redundant for the *current* shape and
-    // load-bearing again the moment a chapter is swapped onto a cheaper kind.
-    // It is deliberately not set at 19: spec §2 rebuilds `01 · The Lodges` as
-    // two panels on two photographs, which takes the page to 17 by a change the
-    // client has already approved.
+    // where the twelve-chapter page carried 32; seventeen was set as that
+    // spine's own mechanical floor — `MIN_MEDIA` plus the no-repeats rule — in
+    // anticipation of spec §2.
+    //
+    // **The page now sits exactly on it, later the same day.** `01 · The Lodges`
+    // is two panels on two photographs rather than two cards on four, so the
+    // spine is 1 + 2 + 1 + 3 + 3 + 6 + 1 = **17**. This assertion is therefore
+    // as tight as it can be without becoming a restatement of `MIN_MEDIA`, and
+    // it is load-bearing again the moment a chapter is swapped onto a cheaper
+    // kind. Do not lower it to make room for another such swap: the swap is the
+    // thing to look at.
     expect(new Set(ALL_MEDIA).size).toBeGreaterThanOrEqual(17);
   });
 

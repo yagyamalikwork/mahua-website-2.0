@@ -1,15 +1,29 @@
 import { describe, expect, it } from "vitest";
+import { media } from "./media";
 import {
   COVERFLOW,
   DURATION,
   EASE,
   ENTER,
   IMAGE_FROM,
+  JUNGLE_BAND,
   LIVING,
+  LODGE_PANELS,
   PARALLAX_MAX,
   ROOM_STACK,
   STICKY_SCREENS_MAX,
 } from "./motion";
+
+/**
+ * This project's width-crop bound: `object-fit: cover` in a box taller than the
+ * photograph may throw away at most a quarter of its width.
+ *
+ * It is `scripts/check_card_stack.mjs`'s assertion 6, which the coverflow's own
+ * rig inherits and which `CoverflowCard`'s `CARD_BOX` was solved against. Height
+ * crop is unbounded by the same convention — a box WIDER than the photograph
+ * crops its top and bottom, and no rule on this project limits that.
+ */
+const MAX_WIDTH_CROP = 0.25;
 
 describe("the motion laws (spec section 4.3)", () => {
   it("keeps reveals between 800ms and 1400ms", () => {
@@ -309,5 +323,49 @@ describe("COVERFLOW", () => {
     // this checks that the two constants have not drifted apart, which is the
     // cheap half and the one that would otherwise be found in a screenshot.
     expect(COVERFLOW.cardMaxPx).toBe(COVERFLOW.cardBoxW);
+  });
+});
+
+describe("LODGE_PANELS", () => {
+  it("keeps both lodge photographs inside the 25% width-crop bound", () => {
+    // The panel is taller than either photograph, so `cover` crops their WIDTH,
+    // and the crop is a pure function of the two aspects. Asserted against the
+    // real manifest entries rather than against the 1.5 they happen to share
+    // today: the client swaps these frames, and a portrait re-export would blow
+    // through the bound silently.
+    const box = LODGE_PANELS.boxW / LODGE_PANELS.boxH;
+    for (const id of ["vann-hero", "tola-hero"] as const) {
+      const photo = media(id);
+      const crop = 1 - box / (photo.width / photo.height);
+      expect(crop, `${id} loses ${(crop * 100).toFixed(1)}% of its width in a ${box.toFixed(3)} box`)
+        .toBeLessThanOrEqual(MAX_WIDTH_CROP);
+    }
+  });
+
+  it("is a landscape box, because spec §2's 'full-height' panel is not buildable", () => {
+    // The reference screenshot measures ~1.3:1 and the spec's prose says "each
+    // full-height", which on a 1440x900 laptop is roughly 0.75:1 — that would
+    // throw away half of each 1.5:1 hero, twice the bound above. This is the
+    // assertion that stops a later reader "restoring" the spec's own words.
+    expect(LODGE_PANELS.boxW / LODGE_PANELS.boxH).toBeGreaterThan(1);
+  });
+
+  it("stops stacking at a Tailwind breakpoint, since a class has to name one", () => {
+    // `PANEL_SIZES` interpolates this number while the markup writes `lg:` as a
+    // literal, so the two can only agree if this IS a breakpoint. 1024 is `lg`.
+    expect([640, 768, 1024, 1280, 1536]).toContain(LODGE_PANELS.twoUpFromPx);
+  });
+});
+
+describe("JUNGLE_BAND", () => {
+  it("is the photograph's own box, which is the whole of the chapter's argument", () => {
+    // Box aspect == image aspect is what makes `cover` crop neither axis, the
+    // drawn width the element's width, and the served ratio 1.00 at 1440 — where
+    // the 100svh full-bleed version it replaces drew 2,706px from a 1,440px file
+    // (0.53) and put both edge cats off-screen. If the file is ever re-exported
+    // at another size, these two integers move with it or the argument is gone.
+    const photo = media("jungle-cats-stitch");
+    expect(JUNGLE_BAND.boxW).toBe(photo.width);
+    expect(JUNGLE_BAND.boxH).toBe(photo.height);
   });
 });

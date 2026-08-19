@@ -772,6 +772,103 @@ export const COVERFLOW = {
   stageGutterYPx: 24,
 } as const;
 
+/**
+ * `01 · The Lodges` as two panels — `components/sections/LodgePanels.tsx`,
+ * 19 Aug 2026, the stakeholders' restructure (spec §2).
+ *
+ * Model: the ecotriip.co India/Africa split the client supplied as a screenshot
+ * — two photographs side by side, each carrying a small region label, the
+ * lodge's name, a sentence and a button.
+ *
+ * **`boxW/boxH` is a CROP decision before it is a composition one, and 4:3 is
+ * the shallowest end of what the reference shows.** Both photographs are
+ * 1440 x 960 (1.5:1), and `object-fit: cover` in a box TALLER than the
+ * photograph crops its width by `1 − boxAspect / 1.5`:
+ *
+ * | box | crop | verdict |
+ * |---|---|---|
+ * | 3/2 = 1.5 | 0% | not a panel — it is the photograph, uncropped |
+ * | **4/3 = 1.333** | **11.1%** | **chosen** — the reference's own ~1.3:1 |
+ * | 5/4 = 1.25 | 16.7% | inside the bound, taller than the reference |
+ * | 9/8 = 1.125 | 25.0% | exactly ON this project's width-crop bound |
+ * | 3/4 = 0.75 | 50.0% | what spec §2's *"each full-height"* would cost |
+ *
+ * The 25% figure is `check_card_stack.mjs` assertion 6's bound, which the
+ * coverflow's own box was solved against (`CoverflowCard.tsx`'s `CARD_BOX`);
+ * it binds the WIDTH crop only, height being unbounded by the same convention.
+ * **Spec §2's "each full-height" is therefore not buildable on these two files**
+ * — a full-height panel at 1440x900 is roughly 0.75:1 and would throw away half
+ * of each photograph — and the task brief's own measurement of the reference
+ * screenshot (~1.3:1, not portrait) is what is built. See
+ * `docs/reviews/2026-08-19-home-v2/shapes.md`.
+ *
+ * `twoUpFromPx` is Tailwind's `lg`, and it is here to be interpolated into the
+ * `sizes` string rather than into a class: a Tailwind variant has to appear
+ * literally in the source for the utility to be emitted at all, so the class
+ * stays `lg:grid-cols-2` and `lib/sizes.test.ts` is what holds the two together.
+ *
+ * **It is `lg` and not the `md` spec §2 asks for, and that was measured rather
+ * than preferred.** At 768 two panels are 376px wide and 282px tall, and a
+ * label, a lodge's name, a sentence at a readable size and a pill do not fit in
+ * 282px: the block measured 296px and was clipped at the top by the panel's own
+ * `overflow: hidden` — the type ran off the photograph, which is this project's
+ * repeat defect between fixed sample widths, found here by a solver reporting
+ * "type top at 8% of panel height" where 1440 read 41%. Stacking to `lg` gives
+ * 768-1023 two 4:3 panels at the full width of the screen, which is both legible
+ * and denser than the side-by-side pair it replaces. The cost is that the split
+ * the client saw in the screenshot only appears on a laptop, which is the lens
+ * he named on 12 Aug 2026.
+ */
+export const LODGE_PANELS = {
+  /** The panel's shape, as the `aspect-[4/3]` class in the markup. */
+  boxW: 4,
+  boxH: 3,
+  /** The viewport at which the two panels stop stacking — Tailwind's `lg`. */
+  twoUpFromPx: 1024,
+} as const;
+
+/**
+ * `02 · The Jungles` — `components/sections/JunglesBand.tsx`, 19 Aug 2026
+ * (spec §3).
+ *
+ * The client, on the 100svh full-bleed quote this replaces: *"it covers the
+ * whole screen currently and feels too overwhelming… cropped from the length,
+ * keeping the width, giving the section more room to breathe with the newly
+ * created headroom and legroom, making it look sleeker."*
+ *
+ * **These two integers are `jungle-cats-stitch`'s own emitted dimensions, and
+ * that is the entire point of them.** The band's box is the photograph's box, so
+ * `object-fit: cover` crops it in neither axis and the width the browser draws
+ * is the width of the element — which is what takes this photograph from the
+ * softest on the site to exactly served, with no new file:
+ *
+ * | | drawn at 1440x900 | file | ratio |
+ * |---|---|---|---|
+ * | 100svh full-bleed (before) | 2,706px | 1,440 | **0.53** |
+ * | its own aspect (after) | 1,440px | 1,440 | **1.00** |
+ *
+ * The before figure is what a `viewportHeightVh` box costs: `FullBleed`
+ * oversizes to 127.6vh for parallax, so at 1440x900 the picture is 1,148px tall
+ * and `cover` scales a 2.357:1 photograph until it covers that — 2,706px wide,
+ * of which the visitor sees 1,440. **Both cats at the frame's edges are outside
+ * the viewport in that arrangement**, which is a composition defect as much as a
+ * resolution one: the black panther is in the left ~15% and the tiger in the
+ * right ~25% of the photograph.
+ *
+ * At 1920 the band is drawn 1,920px from the same 1,440px file (ratio 0.75) and
+ * `check_image_resolution.mjs` reports it as `atLibraryCeiling` rather than as a
+ * failure — the library has nothing wider. Holding the band at 1,440px with
+ * cream either side would fix that number and breach non-negotiable #8 in the
+ * same move, which is the trade the plate boards already settled (`DECISIONS.md`
+ * §19: at one column the plate fills the container).
+ */
+export const JUNGLE_BAND = {
+  /** `jungle-cats-stitch`'s emitted width, as the `aspect-[1440/611]` class. */
+  boxW: 1440,
+  /** Its emitted height. 1440/611 = 2.357:1. */
+  boxH: 611,
+} as const;
+
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined" || !window.matchMedia) return false;

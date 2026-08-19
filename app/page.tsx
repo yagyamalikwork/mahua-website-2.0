@@ -1,11 +1,10 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
 import { SignatureFilm } from "@/components/signature/SignatureFilm";
 import { Coverflow } from "@/components/sections/Coverflow";
-import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
-import { LodgeCards } from "@/components/sections/LodgeCards";
-import type { ScrimStrength } from "@/components/ui/Scrim";
+import { JunglesBand } from "@/components/sections/JunglesBand";
+import { LodgePanels } from "@/components/sections/LodgePanels";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
 
@@ -28,30 +27,24 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  *   which is exactly what makes `04 · Mahua Philosophy` the mirror of
  *   `03 · Rooted Like The Mahua` that the client asked for on 19 Aug 2026,
  *   with neither section knowing the other exists.
- * - **How heavy each full-bleed quote's scrim is.** It is a property of the
- *   photograph, not of the layout. The figure below was measured off a rendered
- *   browser frame with the type hidden, not chosen by eye — see
- *   `docs/reviews/2026-08-04-task-7/`.
- */
-
-/**
- * Per-photograph, and only ever raised by measuring the rendered result.
+ * **`QUOTE_SCRIM` used to be the second of those two, and it is gone as of
+ * 19 Aug 2026.** It was here because ONE component, `FullBleedQuote`, served two
+ * chapters over two unlike photographs, so the wash could not live in the
+ * component. The v2 spine has no `fullBleedQuote` chapter at all: every
+ * photograph carrying type on this page now belongs to a section that draws one
+ * chapter, and each of those keeps its own solved figure beside the markup it
+ * washes — `Hero.DEFAULT_SCRIM`, `Coverflow`'s `CARD_SCRIM` (keyed by `MediaId`,
+ * since 16 Aug), `LodgePanels`' `PANEL_SCRIM` and `JunglesBand`'s `BAND_SCRIM`.
+ * The rule the constant existed to state is unchanged and now stated in four
+ * places instead of one: a scrim is a property of the photograph, raised until
+ * the worst pixel under the type clears its floor, measured off a rendered
+ * browser frame by `scripts/check_contrast_over_photos.mjs` and never by eye.
  *
- * **The one figure here is now measured against a photograph that is no longer
- * on the page, and it must be re-solved before the Jungles band ships.** 0.34 /
- * 0.45 was solved on 4 Aug 2026 against `tiger-golden-grass` — noon, dry golden
- * grass, no shadow anywhere in the frame, the heaviest wash on the page and
- * still the tightest ratio. `why-you-came` draws `jungle-cats-stitch` since
- * 19 Aug: a shaded sal forest, far darker overall but with a lit golden band at
- * the right where the tiger stands. A re-crop is a re-solve — the coverflow
- * learnt that on 18 Aug — and so is a re-photograph. Run
- * `scripts/check_contrast_over_photos.mjs`.
- *
- * `"after-dark"` came out on 19 Aug with the chapter it described.
+ * The figure that was here — `{ flat: 0.34, centre: 0.45 }` for `why-you-came` —
+ * was solved on 4 Aug 2026 against `tiger-golden-grass`, a photograph that left
+ * the page on 19 Aug. It is not carried over: a re-photograph is a re-solve, the
+ * lesson the coverflow paid for on 18 Aug.
  */
-const QUOTE_SCRIM: Record<string, ScrimStrength> = {
-  "why-you-came": { flat: 0.34, centre: 0.45 },
-};
 
 /**
  * The chapters that render on cream rather than on a photograph.
@@ -63,11 +56,25 @@ const QUOTE_SCRIM: Record<string, ScrimStrength> = {
  *
  * **`"chapterIntro"`, `"plateGrid"` and `"testimonials"` came out on 19 Aug 2026,
  * and that is a real change to the page rather than a tidy-up.** All three were
- * routed until that day, so the creams below them shift. The new order is
- * `lodges` (base), `rooted` (deep), `philosophy` (base), `field-days` (deep) —
- * still alternating, which is the only property this list owes anybody.
+ * routed until that day, so the creams below them shift.
+ *
+ * **`"lodgeCards"` → `"lodgePanels"` and `"junglesBand"` joined later the same
+ * day.** Both new sections are cream chapters with a photograph reaching the
+ * screen's edge inside them — they are not `ChapterSurface` (each needs a child
+ * that escapes the 1,600px container) but they carry its padding, its `--bg`
+ * redefinition and therefore its place in this alternation. `junglesBand` is a
+ * genuine addition: `02 · The Jungles` was a full-screen photograph and counted
+ * as no cream chapter at all, so **every cream chapter below it flips**. The new
+ * order is `lodges` (base), `why-you-came` (deep), `rooted` (base), `philosophy`
+ * (deep), `field-days` (base) — still alternating, which is the only property
+ * this list owes anybody.
  */
-const CREAM_KINDS: readonly ChapterKind[] = ["lodgeCards", "pinnedCollage", "coverflow"];
+const CREAM_KINDS: readonly ChapterKind[] = [
+  "lodgePanels",
+  "junglesBand",
+  "pinnedCollage",
+  "coverflow",
+];
 
 /**
  * The kinds that share `ChapterIntro`'s composition, pinned or not.
@@ -92,16 +99,18 @@ function renderChapter(chapter: Chapter, at: Position) {
   switch (kind) {
     case "hero":
       return <Hero key={chapter.id} chapter={chapter} />;
-    case "lodgeCards":
-      return <LodgeCards key={chapter.id} chapter={chapter} surface={at.surface} />;
-    case "fullBleedQuote":
-      return (
-        <FullBleedQuote
-          key={chapter.id}
-          chapter={chapter}
-          scrim={QUOTE_SCRIM[chapter.id] ?? { flat: 0.4, centre: 0.4 }}
-        />
-      );
+    /*
+     * **`case "lodgeCards"` was here until 19 Aug 2026** — the same shape as the
+     * three arms retired earlier that day, with one difference worth recording:
+     * `components/sections/LodgeCards.tsx` is not routed by anything on any page
+     * now, where `FullBleedQuote` (the arm below it, also retired) is still what
+     * both property pages draw their `"fullBleed"` chapters with. One is a
+     * candidate for deletion; the other must not be deleted.
+     */
+    case "lodgePanels":
+      return <LodgePanels key={chapter.id} chapter={chapter} surface={at.surface} />;
+    case "junglesBand":
+      return <JunglesBand key={chapter.id} chapter={chapter} surface={at.surface} />;
     /*
      * **`case "chapterIntro"` was here until 19 Aug 2026, and it is what hung
      * the lantern.** `06 · The Lantern Hour` was the page's only `chapterIntro`,

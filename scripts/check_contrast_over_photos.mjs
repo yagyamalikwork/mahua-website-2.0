@@ -34,7 +34,14 @@ const flag = (n, d) => {
 };
 const URL = flag("url", `http://localhost:${flag("port", "3100")}/`);
 const OUT = flag("out", "docs/reviews/2026-08-04-task-7/contrast-over-photos.json");
-const WIDTHS = flag("widths", "390,768,1440,1920").split(",").map(Number);
+// **1024 joined the four on 19 Aug 2026, and it is not a round-number
+// addition.** `01 · The Lodges`' two panels sit side by side from exactly that
+// width, so 1024 is where a panel is smallest and its block of type tallest as a
+// fraction of it — the binding case for that chapter's scrim, and 300px away
+// from the nearest width this rig used to sample. Five defects on this project
+// have now lived between its fixed samples (`DECISIONS.md` §2 #44-45, #52-53,
+// §20.7); a scrim solved at a width nothing measures would have been the sixth.
+const WIDTHS = flag("widths", "390,768,1024,1440,1920").split(",").map(Number);
 
 /** The type colour over every photograph on the page — cream, not white. */
 const CREAM = [0xf1, 0xe9, 0xd7];
@@ -42,7 +49,19 @@ const CREAM = [0xf1, 0xe9, 0xd7];
 const INK = [0x31, 0x40, 0x2c];
 /** `PALETTE.brand` — the client's own wordmark brown, on the cream bar only. */
 const BRAND = [0x7f, 0x5c, 0x24];
-/** `PALETTE.dim` — the page's lighter body colour, and the one the forest tint's floor is set by. */
+/**
+ * `PALETTE.dim` — the page's lighter body colour, and the one the forest tint's
+ * floor is set by.
+ *
+ * **Unused since 19 Aug 2026, and deliberately kept**, on the same terms as
+ * `GOLD_TEXT` below. Its one run was `forest · intro`, the paragraph over the
+ * hornbill tint, and `03 · The Forest` left the page in the v2 restructure —
+ * the tint is unmounted rather than deleted (`app/page.tsx`'s note on the
+ * retired `plateGrid` arm), so the day it is hung behind another cream chapter
+ * this is the foreground colour its run needs. A constant with that history
+ * attached is cheaper to keep than to rediscover.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- see above: retained on purpose
 const DIM = [0x5a, 0x52, 0x40];
 /** `PALETTE.overlay` — the pill's label, on gold, in both header states. */
 const OVERLAY = [0x23, 0x2b, 0x21];
@@ -263,6 +282,69 @@ const COVERFLOW_RUNS = Array.from({ length: 6 }, (_, i) => {
   };
 });
 
+/**
+ * `01 · The Lodges`' two panels — added 19 Aug 2026 with
+ * `components/sections/LodgePanels.tsx` (spec §2).
+ *
+ * Each panel is a photograph with a region label, the lodge's name, a sentence
+ * and a button laid on it, so it is the exact case CLAUDE.md's contrast rule
+ * names. Two runs per panel:
+ *
+ * - the words, cream on the photograph, measured with `lines: true`. Every
+ *   element in that block is block-level and as wide as the block's `46ch`
+ *   measure, so a four-character label ("PENCH") would otherwise drag half a
+ *   panel of untyped photograph into its own crop and report the brightest pixel
+ *   in it as the worst case for glyphs nowhere near it — the finding the
+ *   coverflow's runs record, which moved solved figures by whole steps.
+ * - the button, which is a different measurement entirely: a `PillButton` is a
+ *   solid gold fill, so the photograph behind it is irrelevant and what is being
+ *   checked is `--overlay` on `--accent`. `hide: "color"` keeps the fill and
+ *   removes the glyphs; the `<span>` inside the `<a>` is the rectangle to crop,
+ *   because the `<a>` is `rounded-full` and its own rectangle includes four
+ *   corners that are not gold at all. Both points are `ui/PillButton.tsx`'s.
+ *
+ * **`at` is each panel's own `<article>`, not `#lodges`.** Anchoring both at the
+ * chapter puts the second panel's type below the fold at 390 — the panels stack
+ * there — where `measure()` filters it out and the run reports NOT FOUND, which
+ * this rig treats as fatal. Scrolling to the panel itself is correct at every
+ * width and needs no per-width special case.
+ *
+ * **The words run carries `from: 1024`, and the pill run deliberately does
+ * not.** Below `lg` the words are under the photograph on cream, so there is no
+ * photograph to measure them against; the pill is a solid gold fill at every
+ * width, so what it measures — `--overlay` on `--accent` — does not depend on
+ * what is behind it. 1024 is `LODGE_PANELS.twoUpFromPx`, and this file cannot
+ * import it: a `.mjs` rig cannot read a TypeScript dial, so the number is
+ * repeated here and named so a reader knows where its twin lives.
+ *
+ * `min` is 4.5 rather than the 3 the display-type runs use: one run covers all
+ * three blocks and the sentence is ~13px at 390, which is not large text at any
+ * width this rig samples.
+ */
+const LODGE_PANEL_RUNS = [1, 2].flatMap((n) => {
+  const panel = `#lodges article:nth-of-type(${n})`;
+  return [
+    {
+      name: `lodges · panel 0${n}`,
+      min: 4.5,
+      at: panel,
+      from: 1024,
+      lines: true,
+      container: panel,
+      sel: `${panel} [data-contrast="lodge-panel"]`,
+    },
+    {
+      name: `lodges · pill 0${n}`,
+      min: 4.5,
+      at: panel,
+      container: panel,
+      sel: `${panel} [data-contrast="lodge-panel-pill"] a span`,
+      text: OVERLAY,
+      hide: "color",
+    },
+  ];
+});
+
 const HOME_RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='site-menu']" },
   {
@@ -287,41 +369,50 @@ const HOME_RUNS = [
   },
   { name: "hero · headline", min: 3, at: "#arrival", container: "#arrival", sel: "#arrival h1 [data-word]" },
   /*
-   * `03 · The Forest` carries a tinted drawing between its cream and its
-   * content as of 10 Aug 2026, so its type is now text over imagery and belongs
-   * in this rig like any other.
+   * **`forest · headline` and `forest · intro` were deleted on 19 Aug 2026, and
+   * they were deleted rather than retargeted.** They measured `03 · The Forest`'s
+   * ink and `--dim` type over the client's hornbill tint, and that chapter left
+   * the page in the v2 restructure — there is no other chapter on any route with
+   * a tint behind its type, so there is nothing for these two to point at. The
+   * drawing itself is unmounted, not deleted (`app/page.tsx`); if it is ever hung
+   * behind another cream chapter, restore both runs with `INK` and `DIM`
+   * respectively and the new chapter's own id, and read `build_forest_overlay.mjs`
+   * first: that script solves the tint against a 4.55:1 floor as arithmetic on
+   * the file, and these runs exist because the file's arithmetic cannot see a
+   * mask, a scale, or a second thing painted on top.
    *
-   * `scripts/build_forest_overlay.mjs` already refuses to emit a tint that would
-   * put `PALETTE.dim` under 4.5:1 on its own darkest pixel — but that is
-   * arithmetic on the file, and this is the rendered page. The two have
-   * disagreed before on this project; the build maths cannot see a mask, a
-   * scale, or a second thing painted on top.
+   * **`quote · after-dark` went the same day, and `quote · why-you-came` with
+   * it.** `after-dark` is one of the four chapters the restructure removes
+   * outright. `why-you-came` survives as `02 · The Jungles` and is no longer a
+   * target at all: it is a cropped band with cream above and below, and its
+   * heading and paragraph are laid on that cream rather than on the photograph
+   * — a decision made by building both arrangements and looking at them
+   * (`components/sections/JunglesBand.tsx`, `docs/reviews/2026-08-19-home-v2/
+   * shapes.md` §3). Ink and `--dim` on cream is `lib/palette.test.ts`'s job, not
+   * this rig's. **If type is ever laid back onto that band, a run belongs here
+   * again** — this table is hand-written and discovers nothing.
    */
-  {
-    name: "forest · headline",
-    min: 3,
-    at: "#forest",
-    container: "#forest",
-    sel: "#forest h2 [data-word]",
-    // Ink, not cream. The default here is cream because almost every run in this
-    // rig sits on a photograph; this chapter's type sits on paper, and measuring
-    // cream against a cream-tinted backdrop reads 1:1 — which is what it did.
-    text: INK,
-  },
-  {
-    name: "forest · intro",
-    min: 4.5,
-    at: "#forest",
-    container: "#forest",
-    sel: '#forest [data-contrast="plate-intro"]',
-    text: DIM,
-  },
   { name: "hero · sub", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival > div > p" },
   { name: "hero · scroll cue", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival div.flex > span:nth-child(2)" },
+  /*
+   * **The three scrolled-header runs anchor at `#invitation` since 19 Aug 2026,
+   * where they anchored at `#why-you-came` from 5 Aug.** The anchor is not
+   * arbitrary and the note above explains why: it has to be a chapter where the
+   * header sits over a PHOTOGRAPH, so that a cream bar which failed to arrive
+   * would be measured as dark type on an image and fail loudly. Parked over a
+   * cream chapter these three would pass whether the bar was there or not, which
+   * is a check that cannot fail.
+   *
+   * `why-you-came` was a 100svh full-bleed photograph and is now a cream chapter
+   * with a band inside it — its first 107px, which is what the fixed header
+   * covers, is cream. `#invitation` is the home page's one remaining full-bleed
+   * photograph below the hero, so it is the only anchor that still holds the
+   * property these runs were written for.
+   */
   {
     name: "header scrolled · menu",
     min: 4.5,
-    at: "#why-you-came",
+    at: "#invitation",
     container: "header",
     sel: "[aria-controls='site-menu']",
     text: INK,
@@ -329,7 +420,7 @@ const HOME_RUNS = [
   {
     name: "header scrolled · wordmark",
     min: 4.5,
-    at: "#why-you-came",
+    at: "#invitation",
     container: "header",
     sel: '[data-contrast="brand-wordmark"]',
     text: BRAND,
@@ -337,14 +428,13 @@ const HOME_RUNS = [
   {
     name: "header scrolled · pill",
     min: 4.5,
-    at: "#why-you-came",
+    at: "#invitation",
     container: "header",
     sel: "[data-contrast='header-pill'] a span",
     text: OVERLAY,
     hide: "color",
   },
-  { name: "quote · why-you-came", min: 3, at: "#why-you-came", container: "#why-you-came", sel: "#why-you-came [data-word]" },
-  { name: "quote · after-dark", min: 3, at: "#after-dark", container: "#after-dark", sel: "#after-dark [data-word]" },
+  ...LODGE_PANEL_RUNS,
   ...COVERFLOW_RUNS,
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },
@@ -734,7 +824,13 @@ async function main() {
 
   for (const width of WIDTHS) {
     const context = await browser.newContext({
-      viewport: { width, height: width === 390 ? 844 : width === 768 ? 1024 : 900 },
+      // 1024x768 is a real laptop shape, not 1024x900 — and it matters here,
+      // because a shorter viewport is what decides how much of a section is in
+      // frame when a run scrolls to it.
+      viewport: {
+        width,
+        height: width === 390 ? 844 : width === 768 ? 1024 : width === 1024 ? 768 : 900,
+      },
     });
     const page = await context.newPage();
     await page.goto(URL, { waitUntil: "load" });
@@ -742,6 +838,26 @@ async function main() {
 
     const rows = [];
     for (const run of RUNS) {
+      /**
+       * A run whose type is not over a photograph at THIS width.
+       *
+       * The one case on the site, and the reason the field exists rather than a
+       * per-width table: `01 · The Lodges`' panels lay their words on the
+       * photograph from `lg` up and under it, on cream, below that
+       * (`LodgePanels.tsx` — a solved wash for a block filling 83% of a 390px
+       * panel measured a flat of 0.56-0.60 and would have mudded both frames).
+       * Ink on cream is `lib/palette.test.ts`'s job; measured here it would read
+       * cream against cream and report a confident 1:1 failure about type that
+       * is perfectly legible.
+       *
+       * **It is printed, never silent.** A skipped run looks exactly like a
+       * passing one in a log that does not mention it, which is the shape of
+       * defect this file's `missing` counter exists for.
+       */
+      if (run.from && width < run.from) {
+        rows.push({ name: run.name, min: run.min, worst: null, boxes: 0, pass: null, skipped: run.from });
+        continue;
+      }
       const row = await measure(page, run);
       row.misplaced = misplacement(run, row);
       rows.push(row);
@@ -750,6 +866,12 @@ async function main() {
 
     console.log(`--- ${width}px ---`);
     for (const r of rows) {
+      if (r.skipped) {
+        console.log(
+          `  ${r.name.padEnd(24)} skipped — its type is not over a photograph below ${r.skipped}px`,
+        );
+        continue;
+      }
       if (r.pass === false) failures++;
       if (r.pass === null) missing++;
       if (r.misplaced) misplaced++;
