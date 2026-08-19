@@ -388,6 +388,17 @@ const CURATION = [
      * file has cost two photographs already; a frame is not cleared because the
      * client sent it, only because he was shown what is in it and said yes.
      *
+     * **CONSENT GRANTED by the client, 19 Aug 2026**, having been shown exactly
+     * what the frame contains: the man in left profile and the woman at the
+     * eyepiece are both recognisable, the third figure has his back to camera.
+     * Cleared on the same terms as `tiger-crossing-track` two days earlier.
+     *
+     * That is now three consent rulings in three days, and the shape of all
+     * three is worth keeping: **the question was never whether a face was in
+     * shot, but how large it would be drawn.** This frame and the safari one had
+     * both been sitting in the library, unremarkable, until a card made them
+     * large. A frame cleared at one size is not cleared at every size.
+     *
      * 900x1350 (0.667:1) is genuinely portrait, which is what the reference's
      * tall cards want — the one source of the six that needs no re-crop.
      */

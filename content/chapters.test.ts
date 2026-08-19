@@ -67,13 +67,59 @@ describe("CHAPTERS", () => {
     expect(CHAPTERS.length).toBeLessThanOrEqual(9);
   });
 
+  /**
+   * ONE dated exception, granted by the client on 19 Aug 2026, and it must not
+   * grow a second member.
+   *
+   * `03 · Rooted Like The Mahua` and `04 · Mahua Philosophy` are both
+   * `pinnedCollage`, which this file classes as QUIET — see the kind's own
+   * comment above: below its pin viewport, and under reduced motion, it renders
+   * as an ordinary `chapterIntro`, so three photographs at the margins of
+   * centred text is exactly the composition #10 was written to call quiet.
+   *
+   * **The measurements agreed with the rule, not with the layout.** `philosophy`
+   * carries ONE moved paragraph — `check_pinned_collage.mjs` reports **55 words
+   * against `rooted`'s 139** — in a composition built for three, holding the
+   * same 900px pin. It measured 44.1% mean / 44.6% worst, clearing the 45%
+   * ceiling by 0.4pp, which is inside that instrument's own ±3-7pp error
+   * (`DECISIONS.md` §5a). The page's two emptiest screens became the joins
+   * either side of it.
+   *
+   * Put to the client with four ways out. His ruling: *"We will later add more
+   * text to the philosophy, for now keep this."* So this is a **deferral, not a
+   * relaxation** — the rule still guards every other adjacency on all three
+   * pages, and this pair is named rather than the rule being widened.
+   *
+   * **Delete this exception the moment that copy lands.** If it still fails
+   * afterwards, the extra words were not enough and the composition is wrong for
+   * the content — which is the finding, not a reason to widen the list again.
+   */
+  const RHYTHM_EXCEPTIONS: ReadonlySet<string> = new Set(["rooted→philosophy"]);
+
   it("never runs two quiet screens back to back", () => {
     // The rhythm rule. Two consecutive text-led sections is exactly the
     // sparseness the client rejected.
     for (let i = 0; i < CHAPTERS.length - 1; i++) {
+      const pair = `${CHAPTERS[i].id}→${CHAPTERS[i + 1].id}`;
+      if (RHYTHM_EXCEPTIONS.has(pair)) continue;
       const a = IMAGE_LED_KINDS.includes(CHAPTERS[i].kind);
       const b = IMAGE_LED_KINDS.includes(CHAPTERS[i + 1].kind);
       expect(a || b, `"${CHAPTERS[i].id}" and "${CHAPTERS[i + 1].id}" are both quiet`).toBe(true);
+    }
+  });
+
+  it("keeps every rhythm exception real, so none can outlive its reason", () => {
+    // An exception naming a pair that no longer exists is an exception nobody
+    // will ever delete — it just sits there looking principled. This fails the
+    // day `philosophy` moves, is renamed, or stops being adjacent to `rooted`.
+    for (const pair of RHYTHM_EXCEPTIONS) {
+      const [before, after] = pair.split("→");
+      const i = CHAPTERS.findIndex((c) => c.id === before);
+      expect(i, `rhythm exception "${pair}" names a chapter that is gone`).toBeGreaterThan(-1);
+      expect(CHAPTERS[i + 1]?.id, `rhythm exception "${pair}" is no longer adjacent`).toBe(after);
+      const stillNeeded =
+        !IMAGE_LED_KINDS.includes(CHAPTERS[i].kind) && !IMAGE_LED_KINDS.includes(CHAPTERS[i + 1].kind);
+      expect(stillNeeded, `rhythm exception "${pair}" is no longer needed — delete it`).toBe(true);
     }
   });
 
