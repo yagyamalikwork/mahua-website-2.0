@@ -125,11 +125,17 @@ export const SIZES = {
  * |---|---|---|
  * | `solo` | `lantern-bridge-dusk` 1300px, 1.501 | `veranda-through-leaves` 1100px, 0.667 |
  * | `pairTop` | `forest-shrine-incense` 700px, 0.667 | `petal-bowl-map` 700px, 0.667 |
- * | `pairLower` | `potters-hands` 700px, 1.502 | `lily-pond-fountain` 1080px, 1.000 |
+ * | `pairLower` | `vann-potters-village` 1344px, 1.962 | `lily-pond-fountain` 1080px, 1.000 |
  *
  * so `pairTop` is a **portrait** in both chapters and was being drawn in a 3:2
  * landscape box, which threw away 55% of its height. It is 7:8 now. `pairLower`
  * is 5:3 rather than 3:2, and `solo` is unchanged at 4:5.
+ *
+ * **`rooted`'s `pairLower` frame changed on 19 Aug 2026** — `potters-hands`
+ * (700px, 1.502) went to `05 · Experiences`' strip and `vann-potters-village`
+ * (1344px, 1.962) took its place; `content/chapters.ts` carries why. Both
+ * numbers move in this slot's favour: 1344px into a ~421px column against 700,
+ * and a 15.0% width crop in the 5:3 box, inside the 25% bound.
  *
  * The second constraint is arithmetic. At 1440x900 a third of the container is
  * 421px, so the tall photograph is 421 + 13vw = 608.5px wide and 4:5 makes it

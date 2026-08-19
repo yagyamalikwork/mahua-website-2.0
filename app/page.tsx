@@ -1,6 +1,6 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
 import { SignatureFilm } from "@/components/signature/SignatureFilm";
-import { Coverflow } from "@/components/sections/Coverflow";
+import { ExperienceStrip } from "@/components/sections/ExperienceStrip";
 import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
 import { JunglesBand } from "@/components/sections/JunglesBand";
@@ -33,8 +33,8 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  * component. The v2 spine has no `fullBleedQuote` chapter at all: every
  * photograph carrying type on this page now belongs to a section that draws one
  * chapter, and each of those keeps its own solved figure beside the markup it
- * washes — `Hero.DEFAULT_SCRIM`, `Coverflow`'s `CARD_SCRIM` (keyed by `MediaId`,
- * since 16 Aug), `LodgePanels`' `PANEL_SCRIM` and `JunglesBand`'s `BAND_SCRIM`.
+ * washes — `Hero.DEFAULT_SCRIM`, `ExperienceStrip`'s `CARD_SCRIM` (keyed by
+ * `MediaId`), `LodgePanels`' `PANEL_SCRIM` and `JunglesBand`'s `BAND_SCRIM`.
  * The rule the constant existed to state is unchanged and now stated in four
  * places instead of one: a scrim is a property of the photograph, raised until
  * the worst pixel under the type clears its floor, measured off a rendered
@@ -51,7 +51,8 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  *
  * This list is what alternates the two creams, so a chapter dropping out of it
  * flips the surface of every cream chapter BELOW it as a side effect — which is
- * why `coverflow` had to be added the day it replaced `splitFeature`, and why
+ * why `experienceStrip` had to be added the day it replaced `splitFeature`
+ * (then as `coverflow`), and why
  * `"splitFeature"` could only be removed safely because it was already unrouted.
  *
  * **`"chapterIntro"`, `"plateGrid"` and `"testimonials"` came out on 19 Aug 2026,
@@ -85,7 +86,12 @@ const CREAM_KINDS: readonly ChapterKind[] = [
   "lodgePanels",
   "junglesBand",
   "pinnedCollage",
-  "coverflow",
+  // `"coverflow"` until 19 Aug 2026, renamed with its kind when the pinned
+  // carousel became a horizontal strip. The surface it takes is unchanged, which
+  // is what stops the rename flipping every cream chapter below it — and there
+  // are none below it, so the whole risk this list carries is one that did not
+  // arise this time.
+  "experienceStrip",
 ];
 
 /**
@@ -245,9 +251,9 @@ function renderChapter(chapter: Chapter, at: Position) {
      * at build time rather than blended at runtime, so it cannot simply be laid
      * under a photograph — it needs a cream chapter to stand on.
      */
-    case "coverflow":
+    case "experienceStrip":
       return (
-        <Coverflow
+        <ExperienceStrip
           key={chapter.id}
           chapter={chapter}
           surface={at.surface}
@@ -264,18 +270,19 @@ function renderChapter(chapter: Chapter, at: Position) {
            * This arm carried the same film as a `case "splitFeature"` beside it
            * for one day; that component was retired on 16 Aug 2026 once the
            * coverflow's measurement said it shipped, and nothing has routed to it
-           * since `field-days` changed shape.
+           * since `field-days` changed shape. The coverflow itself was retired on
+           * 19 Aug, and this arm outlived it too.
            *
-           * **The prop is `figure`, not `footer`, and that word is the finding.**
-           * `SplitFeature` put its slot at the foot of the chapter, where a
-           * prose band leaves cream to hang a drawing in. A pinned stage leaves
-           * none: at 1440x900 a centred card is 506px of a 793px stage, the film
-           * is 400px tall, and there is no scroll position at which both fit one
-           * screen. `Coverflow` therefore puts this into the slack its own header
-           * band already has — measured, and measured against the two
-           * alternatives, in `docs/reviews/2026-08-16-coverflow/
-           * flanks-and-tiger.md`. Nothing about that is visible from here, which
-           * is why it is written down in both places.
+           * **The prop is `figure`, not `footer`, and the word is now history
+           * rather than a live constraint.** `SplitFeature` put its slot at the
+           * foot of the chapter, where a prose band leaves cream to hang a
+           * drawing in; a pinned stage left none, which is why the film moved
+           * into the header band's own slack (measured against both alternatives
+           * in `docs/reviews/2026-08-16-coverflow/flanks-and-tiger.md`). **There
+           * is no pinned stage any more**, so that argument is spent — the film
+           * stays exactly where it is because the client asked for it to
+           * (*"keep the tiger where it is now"*, 17 Aug), and if it is ever asked
+           * to move again the question is genuinely open.
            *
            * **Two things about the film are still load-bearing wherever it goes.**
            * It erases its own white ground with `mix-blend-mode: darken` against

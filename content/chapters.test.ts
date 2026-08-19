@@ -32,17 +32,16 @@ const MIN_MEDIA = {
   // `chapterIntro`'s own floor (also 3) came out on 19 Aug 2026 with the kind,
   // when `06 · The Lantern Hour` left the page.
   pinnedCollage: 3,
-  // Six activities, one card each. Below that it is not a carousel; the pin
-  // reserves scroll for cards that are not there — non-negotiable #9.
+  // Six activities, one card each. Below that it is not a strip — it is a row of
+  // cards with cream where the rest should be, which at 1440 shows four of them
+  // at once and would leave the sixth position visibly empty.
   //
-  // **`field-days` now sits EXACTLY on this floor, with no margin at all.** It
-  // carried ten photographs until 17 Aug 2026 — six cards plus a four-frame
-  // header band — and the client deleted the band, so the chapter is the six
-  // cards and nothing else. Dropping one photograph from `content/chapters.ts`
-  // now fails here rather than merely thinning a band, which is the right
-  // direction, but it does mean this assertion is load-bearing for the first
-  // time rather than a comfortable floor.
-  coverflow: 6,
+  // **`field-days` sits EXACTLY on this floor, with no margin at all**, and has
+  // since 17 Aug 2026 when the client deleted the chapter's four-photograph
+  // header band. Dropping one photograph from `content/chapters.ts` fails here
+  // rather than merely thinning a band. `coverflow: 6` was this same number
+  // under the kind's old name; the strip needs exactly as many.
+  experienceStrip: 6,
   // `plateGrid: 3` and `testimonials: 1` came out on 19 Aug 2026 with their
   // kinds — the three plate boards and the guests band all left the page in the
   // v2 restructure. `lodgeCards: 2` and `fullBleedQuote: 1` came out later the
@@ -154,13 +153,13 @@ describe("CHAPTERS", () => {
     }
   });
 
-  it("gives every coverflow activity a photograph the chapter actually carries", () => {
+  it("gives every strip activity a photograph the chapter actually carries", () => {
     // A card puts a photograph and an activity's name in one box, so the pairing
     // becomes a claim. This asserts the weaker, mechanical half of that: every
     // activity names a real id, and every id it names is in the chapter's own
     // media list, so a card can never reach for a photograph the chapter does not
     // declare (and that `measure_density.mjs` therefore does not count).
-    for (const chapter of CHAPTERS.filter((c) => c.kind === "coverflow")) {
+    for (const chapter of CHAPTERS.filter((c) => c.kind === "experienceStrip")) {
       const copy = chapterCopy(chapter.id as ChapterCopyKey) as { experiences: readonly ExperienceCopy[] };
       expect(copy.experiences.length).toBeGreaterThan(0);
       for (const experience of copy.experiences) {

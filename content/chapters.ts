@@ -38,16 +38,25 @@ export type ChapterKind =
    */
   | "pinnedCollage"
   /**
-   * Six activity cards on one pinned stage, the neighbours behind and to either
-   * side, advancing on the visitor's own scroll (16 Aug 2026). Every card is a
-   * photograph with its words on it, so the chapter is image-led at every point
-   * in its travel — unlike `"splitFeature"`, the copy-one-side/imagery-the-other
-   * kind it replaced on `field-days` and which was retired with its component
-   * the same day, it has no text-only state. Nothing moves unless the visitor
-   * moves: there is no autoplay, which the client was offered and declined
-   * (non-negotiable #5).
+   * Six activity cards in a row that scrolls sideways — `05 · Experiences`,
+   * 19 Aug 2026, on the "Curated Group Departures" strip the client pointed at
+   * (spec §6). Every card is a tall portrait photograph with its label, its name
+   * and one sentence laid on it, so the chapter is image-led at every point in
+   * its travel and has no text-only state.
+   *
+   * **It replaces `"coverflow"` on the one chapter that used it**, and that kind
+   * is gone from this union with its two components, `lib/coverflow.ts`,
+   * `COVERFLOW` in `lib/motion.ts` and `scripts/check_coverflow.mjs`. The client
+   * chose the strip over the pinned stage built 16-18 Aug knowing what it
+   * discards — the pin, the scroll pacing, the flank behaviour — so none of it
+   * is preserved under a flag. `docs/DECISIONS.md` §20 is the record.
+   *
+   * Nothing moves unless the visitor moves, which was true of the coverflow for
+   * a reason (the client was offered autoplay and declined it, non-negotiable
+   * #5) and is true of this by construction: a native scroller has no other
+   * mode.
    */
-  | "coverflow"
+  | "experienceStrip"
   /**
    * Two photographs side by side, edge to edge, each carrying a small region
    * label, the lodge's name, a sentence and a button — `01 · The Lodges`,
@@ -169,15 +178,17 @@ export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
   // enforces, so it has not been added; see the failing case in
   // `chapters.test.ts` and the report on this task.
   // Six photographs, all six of them the cards themselves, and a card is a
-  // photograph with its words laid on it. (It was nine, then ten, while the
-  // chapter still carried a header band of photographs above the stage; the
-  // client deleted that band on 17 Aug 2026 and the chapter is now the carousel
-  // and nothing else.) Added 16 Aug 2026 with the coverflow.
-  // The suite would not have caught its omission — `field-days` sits between
-  // `forest` and `rooms`, both `plateGrid`, so the alternation rule is already
-  // satisfied by its neighbours either way. It is here because it is true, not
-  // because a test demanded it.
-  "coverflow",
+  // photograph with its words laid on it. Added 16 Aug 2026 as `"coverflow"`;
+  // the kind changed on 19 Aug and the classification did not, because what
+  // makes this image-led is the card rather than the mechanism that moves it.
+  //
+  // **It is now load-bearing where it never used to be.** Under the twelve-
+  // chapter spine `field-days` sat between two `plateGrid` chapters and the
+  // alternation rule was satisfied by its neighbours whichever way this was
+  // classified. On the v2 spine it sits between `philosophy` (a `pinnedCollage`,
+  // which this file classes as QUIET) and `invitation`, so removing this entry
+  // turns `chapters.test.ts` red — correctly.
+  "experienceStrip",
   "invitation",
 ];
 
@@ -297,12 +308,29 @@ const CHAPTER_LIST = [
     // **`03` since 19 Aug 2026, and no longer the only pinned scene** —
     // `philosophy` below is its mirror. Spec §4 also removes the potter film
     // from its footer and realigns the text left with the photographs on the
-    // right; neither is built yet.
+    // right.
+    //
+    // **`potters-hands` became `vann-potters-village` later the same day, and it
+    // is a forced move rather than a preference.** `05 · Experiences`' "Village
+    // Craft" card wants exactly `potters-hands` — it is the client's own choice
+    // and its sentence is "Pottery at the wheel" — and the test below forbids
+    // one photograph appearing twice on this page. Something had to give, and
+    // this slot is the one that could: the paragraph it stands beside is about
+    // *Pachdhar, a village adjoining Pench, where more than a hundred Kumhar
+    // families have kept the potter's wheel turning*, which a photograph of that
+    // village's pots serves at least as well as a pair of anonymous hands. It is
+    // also the better file for this slot on the two grounds the order below is
+    // chosen on: 1344px rather than 700px into a ~421px column, and 1.962:1 in a
+    // 5:3 `pairLower` box, which crops 15.0% of its width — inside the 25%
+    // bound, where `potters-hands` at 1.502 was cropping 9.9% of its HEIGHT.
+    //
+    // The repeat with `/mahua-vann`, which also draws this frame, is the one the
+    // client saw and accepted on 16 Aug for four of the coverflow's cards.
     id: "rooted",
     number: "03",
     label: "Rooted Like The Mahua",
     kind: "pinnedCollage",
-    media: ["lantern-bridge-dusk", "forest-shrine-incense", "potters-hands"],
+    media: ["lantern-bridge-dusk", "forest-shrine-incense", "vann-potters-village"],
   },
   {
     /*
@@ -339,52 +367,62 @@ const CHAPTER_LIST = [
      * `04 · Days in the Field`. Spec §6 keeps the heading, the body copy and the
      * tiger film exactly as they are — *"We keep the text and the tiger where
      * they are and not touch them"* — and replaces the pinned coverflow with a
-     * plain horizontal strip of tall portrait cards. **The strip is a later
-     * task; this is still the coverflow, on its own six frames.**
+     * plain horizontal strip of tall portrait cards, which is what this now is.
      */
     id: "field-days",
     number: "05",
     label: "Experiences",
-    kind: "coverflow",
+    kind: "experienceStrip",
     /*
-     * **Exactly the six cards since 17 Aug 2026 — one photograph per activity,
-     * in the order `content/home.ts` lists them, and nothing else.**
+     * **Six new photographs on 19 Aug 2026 — all six, not one carried over.**
      *
-     * The list went 6 → 9 → 10 → 6 in three days. The four that came and went
-     * were the header band's — `guide-sunrise` and `tiger-crossing-track` under
-     * the dawn-gate paragraph, `hammocks-shade` and `pool-daylight-forest` under
-     * "then the day slows right down" — and the client deleted that band and
-     * that sentence outright: *"Remove all 4 images (collage of images) between
-     * the section's introductory text and the activity card carousel, also
-     * remove the text 'Then the day slows right down…'"*. `Coverflow.tsx` no
-     * longer reads any of this list positionally; every card names its own frame
-     * by `mediaId`, and `chapters.test.ts` holds each of those names to
-     * membership of this list — so a card can never reach for a photograph the
-     * chapter does not declare, and `measure_density.mjs` counts every
-     * photograph a card can show.
+     * The client named six activities of his own for the strip and five of the
+     * six frames with them; the sixth is a substitution this task made and he
+     * has not yet ruled on. In his order, which is the order they scroll in:
      *
-     * `guide-sunrise`, `hammocks-shade` and `pool-daylight-forest` leave the
-     * chapter with the band. They remain curated and are drawn elsewhere or held;
-     * the client also re-exported all three at 1344x685 for the band, and those
-     * three files are deliberately unused — see `scripts/build_images.mjs`.
+     * | card | frame | how it got here |
+     * |---|---|---|
+     * | Private Bush Dinners | `bonfire-dinner` | his; portrait-cropped in the pipeline |
+     * | Wellness | `sound-healing` | his; portrait-cropped |
+     * | Screenings and Star Talks | `star-talks` | his; supplied 19 Aug, natively portrait |
+     * | Nature Walks and Birding | `guide-sunrise` | his; portrait-cropped |
+     * | Village Craft | `potters-hands` | his; portrait-cropped, and TAKEN OFF `rooted` above |
+     * | Jungle Safari | `tiger-golden-grass` | **ours** — see below |
      *
-     * **`tiger-crossing-track` is a card again, and both moves were resolution
-     * decisions rather than editorial ones.** At 541x508 it was narrower than
-     * the card it was drawn in — the single frame capping `COVERFLOW.cardMaxPx`
-     * for the whole carousel — so on 16 Aug it went to the band and `vann-safari`
-     * took the card. The client's 17 Aug re-export makes it 1344x685, the same
-     * shape and the same width as the other five, and `vann-safari` is unused
-     * again. Four of the six are frames `/mahua-vann` also draws (a repeat the
-     * client saw and accepted); the other two, `tiger-crossing-track` and
-     * `forest-boardwalk-daylight`, are this page's own.
+     * **Five of the six are cropped to the card's 0.74 portrait inside
+     * `scripts/build_images.mjs`, not by the card's box.** A 1.5:1 frame in a
+     * portrait card loses 50.7% of its width and this project bounds that at
+     * 25%; there is no portrait ratio at which these files are legal by
+     * `object-cover`, so the crop is made by hand with the file open instead.
+     * That script's "THE PORTRAIT CROPS" note carries the arithmetic and each
+     * window's reasoning.
+     *
+     * **`tiger-crossing-track` is what his list names against Jungle Safari and
+     * it is not here.** It is 1.962:1 — a portrait window keeps 37.7% of its
+     * width, which loses either the tiger or the vehicle of guests behind it —
+     * and its guest-consent clearance rests on those guests being small and
+     * turned away, which a crop drawing them 2.65x larger would invalidate.
+     * `tiger-golden-grass` has no people in it, needs no consent question, and
+     * was freed the same day when `02 · The Jungles` took `jungle-cats-stitch`.
+     *
+     * The six the coverflow drew are all released: `vann-bird-watching`,
+     * `vann-kohka-lake`, `forest-boardwalk-daylight` and `forest-trail-canopy`
+     * are curated and now unused on this page (all four are still drawn on
+     * `/mahua-vann`), `vann-potters-village` moved up to `rooted`, and
+     * `tiger-crossing-track` is curated, cleared and unused.
+     *
+     * Nothing here is read positionally. Every card names its own frame by
+     * `mediaId` and `chapters.test.ts` holds each of those names to MEMBERSHIP
+     * of this list, so a card can never reach for a photograph the chapter does
+     * not declare and `measure_density.mjs` therefore does not count.
      */
     media: [
-      "tiger-crossing-track",
-      "vann-bird-watching",
-      "vann-kohka-lake",
-      "forest-boardwalk-daylight",
-      "vann-potters-village",
-      "forest-trail-canopy",
+      "bonfire-dinner",
+      "sound-healing",
+      "star-talks",
+      "guide-sunrise",
+      "potters-hands",
+      "tiger-golden-grass",
     ],
   },
   {

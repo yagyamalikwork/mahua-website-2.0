@@ -52,32 +52,51 @@ export type LodgeCopy = {
 };
 
 export type ExperienceCopy = {
+  /**
+   * The small word above the title — "Fireside", "Stillness", "On foot".
+   *
+   * **New on 19 Aug 2026 with the card strip**, and it is the reference's own
+   * part: ecotriip's "Curated Group Departures" card carries a status pill above
+   * its title. Ours has no status to report — nothing here is bookable, dated or
+   * limited — so the pill became a plain label naming the *register* of the
+   * activity rather than its availability, which is the one thing that slot can
+   * honestly hold on this site.
+   *
+   * Required, not optional. Five of the six came from
+   * `Brand&Design-Guidelines/mahua-home-v2-dusk.html` and the sixth was written
+   * to match them; a card without one is a card composed differently from its
+   * five neighbours, which is a decision to take on purpose rather than by
+   * omitting a field.
+   */
+  readonly label: string;
   readonly title: string;
   readonly body: string;
   /**
    * The photograph this activity shows on its card.
    *
-   * Added 16 Aug 2026 with the coverflow. **Four of the six are frames
-   * `/mahua-vann` also draws** — `vann-bird-watching`, `vann-kohka-lake`,
-   * `vann-potters-village` and `forest-trail-canopy`, all in that page's 4:5
-   * `quiet` box — and the client saw that repeat and accepted it. Two of those
-   * were corrections rather than preferences: "Kohka Lake" would have been
-   * captioning the lodge's own swimming pool, and Pachdhar had no village and no
-   * potter anywhere in the chapter. Three prose bands only sat a photograph
-   * *near* an activity; a card puts the two in one box, which makes the pairing
-   * a claim.
+   * Added 16 Aug 2026 with the coverflow; **all six changed on 19 Aug 2026**
+   * when the client replaced that pinned carousel with a horizontal strip of
+   * tall portrait cards and named six different activities for it (spec §6).
    *
-   * **"Jungle safari" is `tiger-crossing-track` again as of 17 Aug 2026, and
-   * that closes a resolution detour worth recording.** For one day it was
-   * `vann-safari` — an open vehicle with no tiger in it — purely because
-   * `tiger-crossing-track`'s file was 541px wide, narrower than the card it was
-   * being drawn in, and so was the single photograph capping
-   * `COVERFLOW.cardMaxPx` for the whole carousel. The client then re-exported
-   * all six frames at 1344x685 (`scripts/build_images.mjs`), the cap moved to
-   * every other frame at once, and the better photograph — a tiger crossing the
-   * track in front of a vehicle of guests, which is what a jungle safari here
-   * actually is — came back. `vann-safari` is curated and unused again, exactly
-   * as it was before 16 Aug.
+   * **Five of the six are cropped to 0.74 portrait inside the image pipeline**,
+   * not by the card's box — a landscape frame in a portrait card loses 50-62% of
+   * its width, which is over this project's 25% bound however it is dressed up.
+   * `scripts/build_images.mjs`'s "THE PORTRAIT CROPS" note carries the
+   * arithmetic and every window's reasoning; the short version is that the crop
+   * is now a decision somebody made with the file open, and the render-time crop
+   * is ~0%.
+   *
+   * **Two of the client's six named photographs are not the ones here, and both
+   * substitutions are findings rather than preferences.** "Jungle Safari" was to
+   * be `tiger-crossing-track`: it is 1.962:1, a portrait window keeps 37.7% of
+   * its width — losing either the tiger or the vehicle — and it would draw
+   * guests 2.65x larger relative to the card than the frame their consent was
+   * cleared in. `tiger-golden-grass` has no people in it and was freed the same
+   * day by `02 · The Jungles`. "Village Craft" IS `potters-hands` as he asked,
+   * but that frame was `03 · Rooted`'s until today and this page never shows one
+   * photograph twice (`content/chapters.test.ts`), so `rooted` took
+   * `vann-potters-village` — the Pachdhar potters' village its own third
+   * paragraph is actually about — and released this one.
    *
    * Typed `MediaId`, not `string`, so a mistyped id is a compile error rather
    * than a `media()` throw at render — the same reason `PlateCopy` above is.
@@ -113,6 +132,43 @@ export const HOME = {
     // places rather than one page's chapters, so its four strings moved to
     // `content/site.ts`'s `SITE.nav` — one source the menu and the footer
     // both read, so they can never name a place differently.
+  },
+
+  /**
+   * The words the card strip needs that are not a card's own — `05 · Experiences`.
+   *
+   * Here rather than in `content/site.ts` because they belong to one section of
+   * one page. `SITE.nav` exists for strings the menu and the footer must not be
+   * able to disagree about; nothing else on this site scrolls sideways.
+   */
+  strip: {
+    /**
+     * The accessible name of the scroll container, and of the pager beside it.
+     *
+     * A scrollable region is announced by its label or not at all, and "list"
+     * on its own tells a screen-reader user nothing about why they have landed
+     * in one that moves horizontally. It names the thing and says which way.
+     */
+    region: "Experiences — scroll sideways",
+    /**
+     * The visible affordance under the strip.
+     *
+     * **The client's own document's, verbatim** —
+     * `Brand&Design-Guidelines/mahua-home-v2-dusk.html` sets
+     * `.hint { Scroll → }` beneath its filmstrip. `aria-hidden` in the markup:
+     * it duplicates what `region` already says, and the arrow is a glyph rather
+     * than a word.
+     */
+    hint: "Scroll →",
+    /**
+     * The accessible name of a pager link, followed by the activity's own title.
+     *
+     * The visible text of each is a two-digit number, and six numbers are six
+     * links a screen reader cannot tell apart. "Show — Village Craft" is
+     * distinct by construction and invents no copy: the second half is the
+     * card's own title.
+     */
+    jump: "Show",
   },
 
   chapters: {
@@ -229,10 +285,11 @@ export const HOME = {
 
     // ── 05 · Experiences ────────────────────────────────────────────────────
     // Renamed and renumbered on 19 Aug 2026 (it was `04 · Days in the Field`).
-    // **Not one word below changed**, by the client's own ruling: *"We keep the
-    // text and the tiger where they are and not touch them."* The six activities
-    // and their photographs are re-carded in a later task; the six here are the
-    // ones the coverflow still shows.
+    // **The heading and the body are untouched**, by the client's own ruling:
+    // *"We keep the text and the tiger where they are and not touch them."* The
+    // six activities below them are entirely new — his own list, his own order —
+    // and were re-carded later the same day when the pinned coverflow became a
+    // horizontal strip.
     "field-days": {
       heading: { text: "The day the forest keeps", dim: "forest" },
       /*
@@ -240,69 +297,103 @@ export const HOME = {
        * remove the text 'Then the day slows right down. That is the half most
        * lodges leave out.'"* It went with the four-photograph collage it was
        * written to introduce — the same ruling deleted both — so the chapter now
-       * opens on the dawn gate and hands straight over to the carousel.
+       * opens on the dawn gate and hands straight over to the cards.
        *
-       * `Coverflow.tsx` reads `body[0]` and nothing else. Adding a second entry
-       * here will not render; the band that drew it no longer exists.
+       * `ExperienceStrip.tsx` reads `body[0]` and nothing else — as
+       * `Coverflow.tsx` did before it, and for the same reason. Adding a second
+       * entry here will not render; the band that drew it no longer exists.
        */
       body: [
         "The gates open before the light does. We are five kilometres from Turia and among the " +
           "first vehicles through, which matters most in the hour when the forest is still " +
           "saying out loud where everything is.",
       ],
-      // Six activities, six cards, and the order here is the order they travel
-      // in. Each names its own photograph — see `ExperienceCopy.mediaId` above
-      // for the four that `/mahua-vann` also draws — and `chapters.test.ts`
-      // holds every id to one the chapter itself declares in `chapters.ts`.
+      /*
+       * **Six activities, re-carded on 19 Aug 2026, in the client's own order.**
+       *
+       * Every word below except the sixth card's sentence comes from
+       * `Brand&Design-Guidelines/mahua-home-v2-dusk.html`, which is his own
+       * document; "Private Bush Dinners" is his rename of its "Lantern dinners",
+       * and he added Jungle Safari to that document's five and set this running
+       * order himself. Nothing here is written by us — the sixth card carries
+       * the *old* safari card's sentence verbatim, which is the one line that
+       * survives the previous six.
+       *
+       * **The labels are the reference's status pill, and this site has no
+       * status to put in one** — see `ExperienceCopy.label`. Five are his
+       * document's; `At the gate` is ours, written to the same register and to
+       * this chapter's own opening paragraph ("The gates open before the light
+       * does"), which is the nearest thing to a source there was.
+       *
+       * **Nothing on a card is a link, and that is a decision.** The reference's
+       * card ends in one because a departure has a page to go to; not one of
+       * these six activities has a page, a date or a price anywhere on this
+       * site, and the two lodges that run them are already the chapter after
+       * next. Six links to the same two pages would be six controls that all do
+       * the same not-very-much, and a link that goes nowhere is worse than no
+       * link — so the card is the photograph, its label, its title and one
+       * sentence, and the strip is scrolled rather than clicked through.
+       *
+       * Each names its own photograph; `chapters.test.ts` holds every id to one
+       * the chapter itself declares in `chapters.ts`, so a card can never reach
+       * for a frame the chapter has not counted.
+       */
       experiences: [
         {
-          title: "Jungle safari",
+          label: "Fireside",
+          title: "Private Bush Dinners",
+          body: "Tables under the trees, a fire going, the forest listening in.",
+          mediaId: "bonfire-dinner",
+        },
+        {
+          label: "Stillness",
+          title: "Wellness",
+          body: "Lawn yoga, pranayama and candlelit sound baths.",
+          mediaId: "sound-healing",
+        },
+        {
+          label: "After dark",
+          title: "Screenings and Star Talks",
+          body: "Telescopes on the lawn and wildlife documentaries under the trees.",
+          // The only one of the six a portrait card fits without a crop — 900 x
+          // 1350, supplied by the client for this card. Guest consent granted
+          // 19 Aug 2026 after he was shown exactly which two faces are legible
+          // in it; `scripts/build_images.mjs` carries that ruling in full.
+          mediaId: "star-talks",
+        },
+        {
+          label: "On foot",
+          title: "Nature Walks and Birding",
+          body: "Guided trails around the lodge — pugmarks, birdcalls, small dramas.",
+          mediaId: "guide-sunrise",
+        },
+        {
+          label: "Local hands",
+          title: "Village Craft",
+          body: "Pottery at the wheel, learnt from the villages next door.",
+          // The client's own choice, and it had to be taken off `03 · Rooted
+          // Like The Mahua` to be used here — see `ExperienceCopy.mediaId`. It
+          // is also re-sourced from a 900px export of the same photograph,
+          // because a 0.74 window of the old 700px file was 345px wide.
+          mediaId: "potters-hands",
+        },
+        {
+          label: "At the gate",
+          title: "Jungle Safari",
+          // The one sentence carried over from the coverflow's own six, word for
+          // word: the client ruled that this chapter's text is not to be
+          // touched, and the strip's brief asks for "the current safari card's
+          // own words".
           body:
             "Morning and evening drives in open vehicles, led by naturalists who have followed " +
             "these particular tigresses and their lineages for years.",
-          // The tiger crossing the track in front of a vehicle of watching
-          // guests. It was `vann-safari` — the same drive with no tiger in it —
-          // for one day, while this file was 541px wide and capping the card;
-          // the client's 1344x685 re-export lifted that. Guest consent for this
-          // frame at card size is granted and recorded in
-          // `scripts/build_images.mjs`. See `ExperienceCopy.mediaId`.
-          mediaId: "tiger-crossing-track",
-        },
-        {
-          title: "Bird watching",
-          body:
-            "The estate is its own reason to carry binoculars — our naturalists have recorded " +
-            "species here without ever leaving it.",
-          mediaId: "vann-bird-watching",
-        },
-        {
-          title: "Kohka Lake",
-          body: "An hour at the water near Pench, where the day comes down slowly and the birds come to it.",
-          // Not `pool-daylight-forest`, which is the lodge's swimming pool.
-          // Naming a specific lake over a photograph of a pool is a false claim
-          // about a real place, and a card is where it would have been made.
-          mediaId: "vann-kohka-lake",
-        },
-        {
-          title: "The river walk",
-          body:
-            "At Tola, the Hattinala: flowing water, chirping, leaves turning over. Nothing scheduled.",
-          mediaId: "forest-boardwalk-daylight",
-        },
-        {
-          title: "Pachdhar, the potters' village",
-          body:
-            "More than a hundred Kumhar families next to Pench have kept the wheel turning. " +
-            "Watch, then take a turn at it yourself.",
-          // The chapter held no village and no potter at all. `potters-hands`
-          // exists but belongs to `02 · Rooted`, and the page never shows one
-          // photograph twice — `chapters.test.ts` enforces that.
-          mediaId: "vann-potters-village",
-        },
-        {
-          title: "Walks and cycling",
-          body: "Winding trails and earthy air, at the pace the forest is actually lived at.",
-          mediaId: "forest-trail-canopy",
+          // NOT `tiger-crossing-track`, which is what his list names — a
+          // portrait card cannot hold it and its guest consent is size-bound.
+          // See `ExperienceCopy.mediaId`. **This substitution is his to
+          // overturn**, and the cost of overturning it is a portrait re-export
+          // of that frame with the vehicle and the tiger both inside a 0.74
+          // window, which the original scene may not contain at all.
+          mediaId: "tiger-golden-grass",
         },
       ],
     },
@@ -370,6 +461,7 @@ export const HOME = {
     brand: string;
     cta: string;
   };
+  strip: { region: string; hint: string; jump: string };
   chapters: Record<
     string,
     {

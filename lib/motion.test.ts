@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { media } from "./media";
 import {
-  COVERFLOW,
   DURATION,
   EASE,
   ENTER,
@@ -12,14 +11,19 @@ import {
   PARALLAX_MAX,
   ROOM_STACK,
   STICKY_SCREENS_MAX,
+  STRIP,
 } from "./motion";
 
 /**
  * This project's width-crop bound: `object-fit: cover` in a box taller than the
  * photograph may throw away at most a quarter of its width.
  *
- * It is `scripts/check_card_stack.mjs`'s assertion 6, which the coverflow's own
- * rig inherits and which `CoverflowCard`'s `CARD_BOX` was solved against. Height
+ * It is `scripts/check_card_stack.mjs`'s assertion 6, which the strip's own
+ * rig inherits and which `ExperienceCard`'s `CARD_BOX` is measured against —
+ * though not SOLVED against, and that difference is 19 Aug 2026's whole finding:
+ * no portrait box can hold this strip's photographs inside the bound, so the
+ * crops are made by hand in `scripts/build_images.mjs` and the box is their
+ * shape rather than the other way round. Height
  * crop is unbounded by the same convention — a box WIDER than the photograph
  * crops its top and bottom, and no rule on this project limits that.
  */
@@ -257,72 +261,73 @@ describe("ROOM_STACK", () => {
   });
 });
 
-describe("COVERFLOW", () => {
-  it("never reserves more scroll than the page's own pin ceiling", () => {
-    // Non-negotiable #9. `StickyScene` clamps to this; a second pinned chapter
-    // that quietly reserved four screens would be exactly the paid-for empty
-    // scroll that rule exists to stop.
-    expect(COVERFLOW.screens).toBeLessThanOrEqual(STICKY_SCREENS_MAX);
-    expect(COVERFLOW.screens).toBeGreaterThanOrEqual(1);
+describe("STRIP", () => {
+  it("shows three whole cards and most of a fourth at the width the client tests on", () => {
+    // At 1440 `ChapterSurface`'s container is 1440 − 2×48 = 1344px and a card
+    // plus a gap is 360, so 3.73 fit. **The fraction is the whole point**: a card
+    // breaking the container's edge is the best affordance the strip has, and an
+    // exact 4.0 would hide it — which is precisely why 320 was rejected in the
+    // density sweep on `STRIP.cardMaxPx`, where 1344 leaves a 4px sliver.
+    const CONTAINER_AT_1440 = 1440 - 2 * 48;
+    const visible = CONTAINER_AT_1440 / (STRIP.cardMaxPx + STRIP.gapPx);
+    expect(visible).toBeGreaterThan(3.5);
+    expect(visible).toBeLessThan(4.5);
+    // The peek, in pixels: what is left of the row after the last whole card and
+    // its gap. Under the gap's own width, no card pixel shows at all.
+    const peek = CONTAINER_AT_1440 % (STRIP.cardMaxPx + STRIP.gapPx);
+    expect(peek, "no card peeks past the container's edge at 1440").toBeGreaterThan(STRIP.gapPx);
   });
 
-  it("recedes a neighbour without hiding it", () => {
-    // The client asked for neighbours "out of focus … behind" — behind, not gone.
-    // Past this veil the photograph is a dark rectangle, which loses the depth
-    // the whole effect is for.
-    expect(COVERFLOW.sideVeil).toBeGreaterThan(0);
-    expect(COVERFLOW.sideVeil).toBeLessThanOrEqual(0.55);
-    expect(COVERFLOW.sideScale).toBeGreaterThan(0.7);
-    expect(COVERFLOW.sideScale).toBeLessThan(1);
+  it("leaves a card peeking past the edge of a 390px phone too", () => {
+    // Below 385px the card is `78vw`, and this is what that buys at the width
+    // every rig on this project measures: a 342px container, a 304px card, and
+    // 38px of the next one showing. Take `cardVw` to 100 and the affordance
+    // disappears at exactly the width where a visitor is most likely to think
+    // the strip is a single photograph.
+    const container = 390 - 2 * 24;
+    const card = Math.min(STRIP.cardMaxPx, (STRIP.cardVw / 100) * 390);
+    expect(card).toBeLessThan(container - 20);
   });
 
-  it("recedes by veil and never by opacity", () => {
-    // Correction C. A card's text sits ON its own photograph, so fading the card
-    // fades the type against the frame beneath it and the depth cue starts
-    // fighting the legibility floor. More scrim recedes the photograph AND
-    // raises cream type's contrast. This asserts the dial cannot grow the old
-    // lever back by accident.
-    expect(COVERFLOW).not.toHaveProperty("sideDim");
-    expect(COVERFLOW).not.toHaveProperty("sideOpacity");
-  });
-
-  it("shifts a neighbour far enough to be seen past the centre card", () => {
-    // Less than half a card's width and the neighbour is entirely hidden behind
-    // the centre one, which is a stack, not a coverflow.
-    expect(COVERFLOW.sideShiftPct).toBeGreaterThan(50);
-  });
-
-  it("keeps the stage's gutter a gutter at the viewport the client tests on", () => {
-    // **The coupling the 18 Aug 2026 stage rests on, and it is not obvious.**
-    // `--cf-stage-h` is `min(100svh − header, cardMaxH + 2 × gutter-y)`, so the
-    // gutter is only the number it says it is while the SECOND term is the
-    // smaller one. Raise `stageGutterYPx` past the cream it replaced and the
-    // `min()` flips at 1440x900: the stage goes back to filling the space under
-    // the header, the gutter silently becomes a remainder again, and the client's
-    // *"remove some of the buffer space"* quietly un-does itself while every
-    // browser assertion still passes — because a stage at `100svh − header` is a
-    // perfectly valid stage.
+  it("caps the card at a width every one of its photographs can actually fill", () => {
+    // **The lesson `docs/DECISIONS.md` §20.6 paid for, as an assertion.** The
+    // coverflow's card was swept to the exact largest size its six files could
+    // fill, and the rig that was supposed to guard it could not see past a
+    // photograph already serving its widest tier. The narrowest frame in this
+    // strip is `potters-hands` at 444px after its portrait crop, so a card wider
+    // than that is a soft photograph on the one screen the client tests on.
     //
-    // 107px is the header at 1440x900, measured. The rig proves the gutter holds
-    // at every height from 600 to 1200 (`check_coverflow.mjs` assertion 13); this
-    // is the arithmetic reason to expect it to.
-    const HEADER_AT_1440 = 107;
-    const cardMaxHeight = COVERFLOW.cardMaxPx * (COVERFLOW.cardBoxH / COVERFLOW.cardBoxW);
-    expect(cardMaxHeight + 2 * COVERFLOW.stageGutterYPx).toBeLessThanOrEqual(900 - HEADER_AT_1440);
-    // And a gutter of zero is not a gutter — the card would touch the stage's own
-    // edges and, at the pin's two ends, the chapter's.
-    expect(COVERFLOW.stageGutterYPx).toBeGreaterThan(0);
+    // Read off the manifest rather than transcribed: these are pipeline crops,
+    // and a re-cut window changes the number this depends on.
+    const STRIP_FRAMES = [
+      "bonfire-dinner",
+      "sound-healing",
+      "star-talks",
+      "guide-sunrise",
+      "potters-hands",
+      "tiger-golden-grass",
+    ] as const;
+    const narrowest = Math.min(...STRIP_FRAMES.map((id) => media(id).width));
+    expect(STRIP.cardMaxPx).toBeLessThanOrEqual(narrowest);
   });
 
-  it("draws its photographs at exactly their own width, which is what `stay sharp` means", () => {
-    // The client's ruling of 18 Aug 2026, as arithmetic. `CARD_BOX` is
-    // `cardBoxW / cardBoxH` and `cardMaxPx` is the largest card the files can
-    // fill; with the box equal to the photographs' own ratio the draw factor is
-    // 1.000 and those two numbers are the same number. `CoverflowCard.test.tsx`
-    // checks the other end of it — that the ceiling really is the library's — and
-    // this checks that the two constants have not drifted apart, which is the
-    // cheap half and the one that would otherwise be found in a screenshot.
-    expect(COVERFLOW.cardMaxPx).toBe(COVERFLOW.cardBoxW);
+  it("carries no lever the retired coverflow's dial had", () => {
+    // A strip is a native scroller: the browser computes every frame of it, so
+    // there is nothing here to tune. This asserts the dial cannot grow back the
+    // ten properties `COVERFLOW` published — most of all `sideDim`, which
+    // `docs/DECISIONS.md` §20.5 records as the "simplification" a future editor
+    // reaches for and which fades type against the frame beneath it.
+    for (const gone of [
+      "screens",
+      "sideScale",
+      "sideShiftPct",
+      "sideVeil",
+      "sideDim",
+      "stageGutterPx",
+      "stageGutterYPx",
+    ]) {
+      expect(STRIP, `STRIP grew back COVERFLOW's \`${gone}\``).not.toHaveProperty(gone);
+    }
   });
 });
 

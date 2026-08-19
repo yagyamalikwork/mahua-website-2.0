@@ -1,0 +1,1066 @@
+{
+  "measuredAt": "2026-08-19T19:09:38.143Z",
+  "url": "http://localhost:3110/mahua-tola",
+  "widths": {
+    "390": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.48,
+        "brightest": [
+          67,
+          75,
+          66
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.88,
+        "brightest": [
+          73,
+          80,
+          72
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.53,
+        "brightest": [
+          104,
+          106,
+          100
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.84,
+        "brightest": [
+          95,
+          103,
+          95
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.27,
+        "brightest": [
+          67,
+          77,
+          71
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.58,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.89,
+        "brightest": [
+          238,
+          230,
+          212
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.04,
+        "brightest": [
+          198,
+          191,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.4,
+        "brightest": [
+          202,
+          197,
+          181
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.56,
+        "brightest": [
+          104,
+          90,
+          65
+        ],
+        "boxes": 18,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.3,
+        "brightest": [
+          125,
+          129,
+          115
+        ],
+        "boxes": 17,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "768": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.68,
+        "brightest": [
+          66,
+          73,
+          66
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.25,
+        "brightest": [
+          80,
+          86,
+          78
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.52,
+        "brightest": [
+          92,
+          93,
+          84
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.53,
+        "brightest": [
+          87,
+          94,
+          86
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.77,
+        "brightest": [
+          56,
+          65,
+          56
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          179
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.43,
+        "brightest": [
+          204,
+          197,
+          181
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.27,
+        "brightest": [
+          200,
+          195,
+          179
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.12,
+        "brightest": [
+          95,
+          99,
+          83
+        ],
+        "boxes": 18,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.58,
+        "brightest": [
+          118,
+          123,
+          116
+        ],
+        "boxes": 17,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "1024": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.2,
+        "brightest": [
+          71,
+          77,
+          68
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          88,
+          95,
+          87
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 6.97,
+        "brightest": [
+          78,
+          78,
+          66
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.95,
+        "brightest": [
+          64,
+          71,
+          61
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.19,
+        "brightest": [
+          47,
+          55,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.35,
+        "brightest": [
+          202,
+          196,
+          179
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.14,
+        "brightest": [
+          198,
+          193,
+          177
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.29,
+        "brightest": [
+          201,
+          195,
+          180
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.49,
+        "brightest": [
+          111,
+          89,
+          58
+        ],
+        "boxes": 18,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.58,
+        "brightest": [
+          118,
+          123,
+          116
+        ],
+        "boxes": 17,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "1440": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.81,
+        "brightest": [
+          65,
+          72,
+          64
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.89,
+        "brightest": [
+          83,
+          90,
+          82
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.2,
+        "brightest": [
+          116,
+          110,
+          95
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.53,
+        "brightest": [
+          69,
+          74,
+          65
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.3,
+        "brightest": [
+          47,
+          54,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.09,
+        "brightest": [
+          198,
+          192,
+          176
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.2,
+        "brightest": [
+          199,
+          194,
+          178
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.76,
+        "brightest": [
+          115,
+          120,
+          105
+        ],
+        "boxes": 18,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.58,
+        "brightest": [
+          118,
+          123,
+          116
+        ],
+        "boxes": 17,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "1920": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.13,
+        "brightest": [
+          70,
+          78,
+          70
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.86,
+        "brightest": [
+          84,
+          90,
+          83
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.84,
+        "brightest": [
+          87,
+          106,
+          83
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.02,
+        "brightest": [
+          69,
+          69,
+          58
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.1,
+        "brightest": [
+          50,
+          55,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.9,
+        "brightest": [
+          238,
+          230,
+          212
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.15,
+        "brightest": [
+          199,
+          193,
+          177
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.14,
+        "brightest": [
+          198,
+          193,
+          177
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.33,
+        "brightest": [
+          201,
+          196,
+          180
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.85,
+        "brightest": [
+          114,
+          118,
+          106
+        ],
+        "boxes": 18,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.58,
+        "brightest": [
+          118,
+          123,
+          116
+        ],
+        "boxes": 17,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ]
+  }
+}

@@ -6,12 +6,15 @@ import {
   BOXES as INTRO_BOXES,
   SIZES as INTRO_SIZES,
 } from "@/components/sections/ChapterIntro";
-// `@/components/sections/Coverflow` is deliberately NOT imported: since 17 Aug
-// 2026 that file draws no `<Photo>` at all — the client deleted its header band
-// — so it exports no `SIZES`/`BOXES` and passes no `sizes` prop. The tripwire at
-// the foot of this file is what would notice if that ever changed back, and it
-// can only notice because its match now includes the closing quote (see below).
-import { CARD_BOX, CARD_SIZES } from "@/components/sections/CoverflowCard";
+// `@/components/sections/ExperienceStrip` is deliberately NOT imported: it
+// passes no `sizes` prop of its own — the strip lays cards out, and the card is
+// what draws a photograph — so the tripwire below does not name it. Its
+// predecessor `Coverflow.tsx` was in exactly this position, and the reason that
+// is worth restating is that the tripwire once read GREEN for it by accident:
+// `@/components/sections/Coverflow` is a SUBSTRING of
+// `@/components/sections/CoverflowCard`, so three unregistered `sizes` strings
+// passed for a day. The match carries its closing quote now.
+import { CARD_BOX, CARD_SIZES } from "@/components/sections/ExperienceCard";
 // `LodgeCards` is routed by nothing since 19 Aug 2026 — `01 · The Lodges` is
 // `LodgePanels` now — but it is still on disk and still passes a `sizes` prop,
 // so the tripwire at the foot of this file still demands this import and its
@@ -221,15 +224,19 @@ const LIVE_SLOTS: readonly Slot[] = [
   // new crop and a genuinely new width list, since nothing else on the page is
   // sized this small.
   { name: "SiteMenu.card", sizes: MENU_CARD_SIZES, box: MENU_CARD_BOX },
-  // `04 · Days in the Field`'s coverflow card (16 Aug 2026) — one activity, its
-  // photograph filling the card with the words laid on it. Both halves are
-  // derived rather than transcribed: `CARD_SIZES` is built from `COVERFLOW`'s
-  // own `cardMaxPx`/`stageGutterPx`, and `CARD_BOX` from `COVERFLOW.cardBoxW` /
-  // `cardBoxH`. **Since 18 Aug 2026 that box is the photographs' own 1344/685**
-  // — the client's *"wider only, stay sharp"* — so it crops neither axis, where
-  // the 16:9 it carried until then was solved against the 25% width-crop bound
-  // on files that no longer exist. See the component's own comments.
-  { name: "Coverflow.card", sizes: CARD_SIZES, box: CARD_BOX },
+  // `05 · Experiences`' card, 19 Aug 2026 — the strip's six activities, all one
+  // slot, because a strip's cards are one fixed size rather than a share of a
+  // container. Both halves derived rather than transcribed: `CARD_SIZES` is
+  // built from `STRIP.cardMaxPx`/`cardVw` and `CARD_BOX` from `STRIP.cardBoxW /
+  // cardBoxH`, so the breakpoint and the ratio each have exactly one home.
+  //
+  // **`Coverflow.card` was this row until 19 Aug 2026**, and the pairing was
+  // load-bearing there for a reason that has gone: its ratio was what made the
+  // card's resolution ceiling equal the file's width. Here it is load-bearing
+  // for a different one — the 0.74 box is what every photograph in the strip was
+  // cropped to in the image pipeline, so the class and this constant disagreeing
+  // means six frames cropped twice.
+  { name: "ExperienceStrip.card", sizes: CARD_SIZES, box: CARD_BOX },
   // `01 · The Lodges`' two panels (19 Aug 2026, spec §2) — one photograph per
   // lodge, edge to edge, half the screen each from `lg`. Both halves are derived
   // rather than transcribed: `PANEL_SIZES` interpolates
@@ -431,6 +438,17 @@ describe("the sizes the page actually serves", () => {
     // `ChapterIntro.solo` and still adds nothing. Read off this suite by running
     // it and reading the failure (`expected 21 to be 22`), not computed by hand,
     // per the same instruction as every step above.
+    // **Still 21 on 19 Aug 2026's card strip, and the flatness is the thing to
+    // record.** `Coverflow.card`'s `(min-width: 1440px) 1344px, (min-width:
+    // 768px) calc(100vw - 96px), calc(100vw - 48px)` goes out and
+    // `ExperienceStrip.card`'s `(min-width: 385px) 300px, 78vw` comes in — one
+    // genuinely distinct string each way, neither shared with any surviving
+    // slot, so the count does not move. Written down rather than left silent
+    // because a tripwire that happens not to fire is indistinguishable from one
+    // nobody thought about: this number was CHECKED against a suite run, not
+    // left alone. The new string is the simplest on the page, and that is the
+    // shape of the change — a strip's cards are a fixed size, so `sizes` has no
+    // container arithmetic to spell out for the first time here.
     expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
   });
 
@@ -598,15 +616,13 @@ describe("cover boxes match the markup they describe", () => {
     // that renders it), which is why this entry names that file and not the
     // client menu.
     { file: "components/ui/SiteHeader.tsx", declared: MENU_CARD_BOX },
-    // The coverflow card — `COVERFLOW.cardBoxW / cardBoxH`, the same shape as
-    // the `aspect-[1344/685]` class on its own `<li>`. This pairing is
-    // load-bearing rather than tidy: since 18 Aug 2026 the ratio is what makes
-    // the card's own resolution ceiling equal the file's width (draw factor
-    // 1.000), so a future editor who retunes the card's shape in the markup and
-    // leaves `CARD_BOX` alone gets a red test here instead of a photograph
-    // drawn wider than any file the library holds and a `sizes` describing a
-    // box that no longer exists.
-    { file: "components/sections/CoverflowCard.tsx", declared: CARD_BOX },
+    // The strip's card — `STRIP.cardBoxW / cardBoxH`, the same shape as the
+    // `aspect-[37/50]` class on its own `<li>`. The pairing is load-bearing
+    // rather than tidy: five of the six photographs are cut to exactly 0.74 in
+    // the image pipeline, so a markup ratio that drifts from this constant is
+    // six frames cropped a second time by the box, on top of the crop somebody
+    // chose with the file open. Retune the class alone and this goes red.
+    { file: "components/sections/ExperienceCard.tsx", declared: CARD_BOX },
     // The lodge panel — `LODGE_PANELS.boxW / boxH`, the same shape as the
     // `aspect-[4/3]` class on the frame inside its `<article>`. The pairing is
     // load-bearing: 4:3 crops a 1440x960 hero by 11.1%, and the crop table on
@@ -621,10 +637,12 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/JunglesBand.tsx", declared: BAND_BOX },
     // `components/sections/Coverflow.tsx` had a case here from 16 to 17 Aug 2026
     // — 3:2 for `guide-sunrise`, 16:9 for the pair, 1:1 for
-    // `tiger-crossing-track`. The client deleted that band, so the file now has
-    // no `aspect-*` class and no `<Photo>`, and a case with an empty set on both
-    // sides asserts nothing. The chapter's one remaining box is
-    // `CoverflowCard`'s, above.
+    // `tiger-crossing-track`. The client deleted that band, so the file had no
+    // `aspect-*` class and no `<Photo>` left, and a case with an empty set on
+    // both sides asserts nothing. The component itself was retired on 19 Aug
+    // 2026 with the coverflow; `05 · Experiences`' one box is
+    // `ExperienceCard`'s, above, and `ExperienceStrip.tsx` draws no photograph
+    // for the same reason `Coverflow.tsx` had stopped doing so.
   ];
 
   it.each(CASES.map((c) => [c.file, c.declared] as const))(

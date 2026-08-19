@@ -73,6 +73,57 @@ const MANIFEST_PATH = path.join(ROOT, "lib", "media-manifest.ts");
  * collage the client deleted the same day, so those three entries keep their
  * existing `reference/` sources: repointing them would be re-cutting artwork
  * for an element that no longer exists.
+ *
+ * ## THE PORTRAIT CROPS, 19 Aug 2026 — five entries, and why they exist
+ *
+ * `05 · Experiences` became a horizontal strip of **tall portrait cards**, 0.74:1,
+ * on the client's own ruling (spec §6). Five of its six photographs are
+ * landscape, and this is the arithmetic that forced a decision rather than a
+ * preference:
+ *
+ * | id | file | aspect | `object-cover` in a 0.74 box |
+ * |---|---|---|---|
+ * | `bonfire-dinner` | 1100x733 | 1.501 | **50.7%** of its width gone |
+ * | `sound-healing` | 1000x666 | 1.502 | **50.7%** |
+ * | `guide-sunrise` | 1000x666 | 1.502 | **50.7%** |
+ * | `potters-hands` | 700x466 | 1.502 | **50.7%** |
+ * | `tiger-crossing-track` | 1344x685 | 1.962 | **62.3%** |
+ * | `star-talks` | 900x1350 | 0.667 | 9.9% of its HEIGHT — allowed |
+ *
+ * This project's bound is 25% of a photograph's **width**, and it is a bound on
+ * the render: `check_card_stack.mjs` assertion 6 compares the loaded `<img>`'s
+ * natural aspect against its rendered box. Rearranged, it says the box may not
+ * be narrower than `0.75 x` the file's own aspect — **1.1265 for a 1.5:1 frame
+ * and 1.4715 for the panorama.** Both are landscape. So there is no portrait
+ * card, at any ratio, that this library can serve by `cover`: the tall card and
+ * these files are simply incompatible, and no card ratio negotiates that away.
+ *
+ * The three honest ways out were a shallower card (1.13:1 is not a vertical
+ * card and the client would reject it on sight), portrait re-exports from the
+ * client (which blocks the work), and **an editorial crop in this pipeline**,
+ * which is the one taken. It is the same mechanism the 13 Aug room photographs
+ * use, and the distinction it turns on is real rather than a loophole: an
+ * `object-cover` crop is a box silently discarding whatever happens to be at a
+ * photograph's edges, and that is what the 25% bound exists to stop; a crop
+ * here is a window chosen by a person who opened the file at full size and
+ * decided what the photograph is of. The served file's aspect then IS the
+ * card's, so the render-time crop is ~0% and the rig reads it as such honestly.
+ *
+ * **Every one of the five carries its window's reasoning on its own entry** —
+ * what is kept, what is discarded, and why that is the right half. Do not add a
+ * sixth without doing the same, and do not "simplify" any of them to a centred
+ * window: three of the five are deliberately off-centre.
+ *
+ * `tiger-crossing-track` is the one that could NOT be cropped — the crop would
+ * have enlarged guests whose consent clearance rests on how small they are — and
+ * `tiger-golden-grass` replaces it on the card. Both entries carry the working.
+ *
+ * **What it costs, stated plainly**: at DPR 2 these five are short. The card is
+ * ~321px at 1440 and ~274px at 390, so DPR 2 asks for ~642px and the five crops
+ * are 710 / 542 / 493 / 493 / 444 wide. Only the tiger clears it. The ask that
+ * closes it is the same one `docs/OWED-ORIGINALS.md` already carries for two
+ * other groups — **uncropped portrait originals, ~900px wide** — which is a
+ * re-export rather than a re-shoot for all five.
  */
 const CURATION = [
   // ---- lanternHour: dusk and after — flame, filament and firelight ----
@@ -85,11 +136,26 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    /*
+     * **Cropped to a 0.74 portrait on 19 Aug 2026, for `05 · Experiences`'
+     * card strip** — see the block comment on THE PORTRAIT CROPS below, which
+     * carries the arithmetic for all five of them and must be read before any
+     * of these five `crop` windows is touched.
+     *
+     * 1100x733 → 542x733. The fire sits at x≈583 and the laid table at
+     * 660-803, so the window is centred on the two of them together (their
+     * midpoint, 670, minus half the window) rather than on the frame. What it
+     * gives up is the cluster of lantern tripods on the left, x 55-385 — the
+     * whole of the left third. Looked at at full size before and after: the
+     * card's words are "Tables under the trees, a fire going", and the fire and
+     * the table are what survive.
+     */
     id: "bonfire-dinner",
     src: "reference/mockup-media/bonfire-dinner-under-lantern-lit-trees-111c897880.jpg",
-    alt: "A bonfire dinner laid beneath lantern-lit trees under a starlit sky.",
+    alt: "A bonfire burning beneath lantern-lit trees, a table laid beside it under a starlit sky.",
     category: "lanternHour",
-    orientation: "landscape",
+    orientation: "portrait",
+    crop: { left: 400, top: 0, width: 542, height: 733 },
     fullBleedSafe: false,
   },
   {
@@ -162,12 +228,39 @@ const CURATION = [
 
   // ---- forest: wildlife from the lodges' own drives at Pench and Tadoba ----
   {
+    /*
+     * **Cropped to a 0.74 portrait on 19 Aug 2026, and it is the card the
+     * client did NOT ask for.** His list for `05 · Experiences` names
+     * `tiger-crossing-track` against "Jungle Safari"; that frame is 1344x685
+     * (1.962:1) and a portrait card throws away **62.3%** of its width, which
+     * is over this project's 25% bound twice over — and the two things the
+     * photograph is *about*, the tiger and the vehicle of guests behind it,
+     * span x 0.34-0.85 and cannot both survive a 0.377 window. Worse, the
+     * frame's guest-consent clearance (see that entry) rests on the guests
+     * being "small, shaded and mostly turned toward the tiger": a portrait
+     * window would draw them **2.65x larger relative to the card**, and this
+     * pipeline's own standing rule is that a frame cleared at one size is not
+     * cleared at every size. So it is not cropped, it is replaced.
+     *
+     * This is the substitute, and it costs nothing to get: 1440x959 (1.502:1),
+     * freed on 19 Aug when `02 · The Jungles` took `jungle-cats-stitch`, with
+     * no people in it at all. 1440x959 → 710x959, the window centred on the
+     * tiger (x 346-893, centre ≈605). The bright vertical trunk at the right
+     * edge, x 1240-1370, is outside it, which the portrait crop improves
+     * rather than merely tolerates.
+     *
+     * **`fullBleedSafe` goes false with the crop**: 710px is under the 1400px
+     * floor non-negotiable #11 sets, and the assertion at the foot of
+     * `buildOne` would throw if this were left true. Nothing draws this frame
+     * full-bleed — the chapter that did left the page the same day.
+     */
     id: "tiger-golden-grass",
     src: "reference/mockup-media/a-bengal-tiger-moving-through-tall-golden-grass-b07148cf9b.jpg",
     alt: "A Bengal tiger moving through tall golden grass in the Pench forest.",
     category: "forest",
-    orientation: "landscape",
-    fullBleedSafe: true,
+    orientation: "portrait",
+    crop: { left: 250, top: 0, width: 710, height: 959 },
+    fullBleedSafe: false,
   },
   {
     // Was "tiger-yawning", from a source file named "tiger-yawning-in-the-
@@ -311,6 +404,16 @@ const CURATION = [
      * cap and its 1:1 box were all built around the narrow file and went with
      * the collage on 17 Aug.
      */
+    /*
+     * **Curated, cleared, and unused again as of 19 Aug 2026.** The coverflow
+     * that drew it was replaced by a strip of 0.74 portrait cards, and this
+     * frame is 1.962:1 — a portrait window keeps 37.7% of its width, which
+     * loses either the tiger or the vehicle, and would draw the guests 2.65x
+     * larger relative to the card than the frame they were cleared in. See the
+     * PORTRAIT CROPS note at the head of this file, and `tiger-golden-grass`,
+     * which took the card instead. **The consent note below stands unchanged
+     * and is the reason this entry was not cropped rather than a formality.**
+     */
     id: "tiger-crossing-track",
     src: "Activity-Carousel-Images/tiger-crossing-track-541-2.png",
     alt: "A tiger crossing the track ahead of a safari jeep and its watching guests.",
@@ -337,11 +440,29 @@ const CURATION = [
     fullBleedSafe: false,
   },
   {
+    /*
+     * **Cropped to a 0.74 portrait on 19 Aug 2026** — 1000x666 → 493x666, the
+     * window on the guide himself (x 130-680, his mass centred at ≈360) rather
+     * than on the frame. It keeps his whole body, the cap, the raised
+     * binoculars and the sun flare breaking through at 520-620; what it loses
+     * is empty scrub either side. A standing figure is the one shape in this
+     * set that a portrait window flatters.
+     *
+     * **This entry is NOT the 1344x685 file the strip's brief assumed.** The
+     * client's 17 Aug `Activity-Carousel-Images/guide-sunrise-1000-2.png`
+     * re-export was deliberately never wired up — it was cut for the header
+     * band he deleted the same day (see the note at the head of this file) —
+     * so this id has been the 1000x666 mockup-media frame throughout, and
+     * `reference/home-v2/guide-binoculars-sunrise.jpg` is byte-for-byte the
+     * same photograph at the same size. There was no gentler copy to reach
+     * for; this already was it.
+     */
     id: "guide-sunrise",
     src: "reference/mockup-media/a-guide-scanning-the-canopy-with-binoculars-at-sunrise-400151ad6e.jpg",
     alt: "A guide scanning the forest canopy with binoculars in the early sunrise light.",
     category: "lodgeLife",
-    orientation: "landscape",
+    orientation: "portrait",
+    crop: { left: 114, top: 0, width: 493, height: 666 },
     fullBleedSafe: false,
   },
   // "bush-breakfast" (mockup-media, guests-birdwatching-over-bush-breakfast-...jpg)
@@ -351,11 +472,21 @@ const CURATION = [
   // that, so the image is excluded rather than assumed clear. See
   // task-3-report.md for the fuller reasoning.
   {
+    /*
+     * **Cropped to a 0.74 portrait on 19 Aug 2026** — 1000x666 → 493x666,
+     * centred on the seated figure at x≈500. The easiest of the five by a
+     * distance: the subject is already dead centre, the singing bowls run
+     * along the foot of the frame, and the window keeps the figure whole with
+     * a bowl at each bottom corner. The photograph is symmetrical about its
+     * own centre line, so a centred window is the composition rather than a
+     * compromise with it.
+     */
     id: "sound-healing",
     src: "reference/mockup-media/sound-healing-session-by-candlelight-a65d35e28c.jpg",
     alt: "A sound healing session by candlelight, singing bowls set before a seated guest.",
     category: "lodgeLife",
-    orientation: "landscape",
+    orientation: "portrait",
+    crop: { left: 254, top: 0, width: 493, height: 666 },
     fullBleedSafe: false,
   },
   {
@@ -401,6 +532,13 @@ const CURATION = [
      *
      * 900x1350 (0.667:1) is genuinely portrait, which is what the reference's
      * tall cards want — the one source of the six that needs no re-crop.
+     *
+     * **Rendered since 19 Aug 2026**, on `05 · Experiences`' "Screenings and
+     * Star Talks" card. It is the only one of the six that reaches its card
+     * uncropped by this pipeline: the card is 0.74 and this file is 0.667, so
+     * `object-cover` trims 9.9% of its HEIGHT — off the night sky at the top,
+     * which is the half of the frame with nothing in it — and this project
+     * bounds width crops only.
      */
     id: "star-talks",
     src: "reference/home-v2/star-talks.jpg",
@@ -496,11 +634,40 @@ const CURATION = [
 
   // ---- details: the small things guests remember — clay, flowers, shrines, hands ----
   {
+    /*
+     * **Re-sourced and cropped to a 0.74 portrait on 19 Aug 2026.**
+     *
+     * The source moves from `reference/mockup-media/…forest-24…jpg` (700x466)
+     * to `reference/home-v2/potters-wheel.jpg` (900x600) — **the same
+     * photograph, 29% wider**, which the client supplied in the home-v2 pack.
+     * Checked side by side at full size before the swap: same wheel, same
+     * hands, same ring, same bamboo screen behind; nothing is added or
+     * recomposed, it is simply a bigger export. That matters because the crop
+     * below costs half the width, and 700px could not afford it — a 0.74
+     * window of the old file would have been 345px wide and emitted one 400px
+     * tier off a 345px base, i.e. a photograph narrower than the card that
+     * draws it on any laptop.
+     *
+     * 900x600 → 444x600, window at x 51-495: the pot complete, the hands
+     * complete, the arm cut at the wrist where it already ran off the frame's
+     * own left edge. What it gives up is the out-of-focus bamboo screen on the
+     * right, x 495-900 — which is nearly half the frame and none of the
+     * subject.
+     *
+     * **This frame moves chapters in the same change.** It was `03 · Rooted
+     * Like The Mahua`'s third photograph until 19 Aug; the strip's "Village
+     * Craft" card wants exactly it ("Pottery at the wheel"), and
+     * `content/chapters.test.ts` forbids one photograph appearing twice on the
+     * page — so `rooted` takes `vann-potters-village` (the Pachdhar potters'
+     * village its own third paragraph is actually about) and this comes here.
+     * See `content/chapters.ts`.
+     */
     id: "potters-hands",
-    src: "reference/mockup-media/mahua-brand-guidelines-v1-forest-24-63f192761b.jpg",
+    src: "reference/home-v2/potters-wheel.jpg",
     alt: "A potter's clay-covered hands shaping a vessel on the wheel.",
     category: "details",
-    orientation: "landscape",
+    orientation: "portrait",
+    crop: { left: 51, top: 0, width: 444, height: 600 },
     fullBleedSafe: false,
   },
   {

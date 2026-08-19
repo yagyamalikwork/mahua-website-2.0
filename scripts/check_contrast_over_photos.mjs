@@ -202,83 +202,78 @@ const MENU_RUNS = (heroId) => [
 ];
 
 /**
- * `04 · Days in the Field`'s six coverflow cards — added 16 Aug 2026 with the
- * coverflow itself (the plan's Task 8, Step 1b).
+ * `05 · Experiences`' six strip cards — 19 Aug 2026, replacing the six coverflow
+ * runs that stood here from 16 Aug.
  *
  * Every card is cream type laid straight onto a photograph, which is the exact
  * case CLAUDE.md says must be measured against the rendered result rather than
- * assumed. All six shipped a deliberate `{ flat: 0.5 }` placeholder until this
- * table learned about them, and **this table discovers nothing** — a card absent
- * from it is a card nobody has checked.
+ * assumed. **This table discovers nothing** — a card absent from it is a card
+ * nobody has checked — and all six figures in `ExperienceStrip.tsx`'s
+ * `CARD_SCRIM` were solved by running it, not by looking at the photographs.
  *
- * Four things about these runs are not the file's usual shape, and each is
- * load-bearing:
+ * **Not one figure was carried over from the coverflow's six**, and that is the
+ * standing lesson rather than caution: `docs/DECISIONS.md` §20.5 records what
+ * carrying a scrim across a re-crop cost — two cards at 3.47:1 and 3.61:1
+ * against a 4.5 floor, and a third over-washed to 8.00 — and here BOTH halves
+ * changed. Four of the six photographs are new to the page, five of the six were
+ * re-cropped to portrait in the image pipeline, and the type moved from the
+ * middle of a 1.96:1 card to the foot of a 0.74 one.
  *
- * 1. **`anchor: true`.** The other runs scroll their target to the very top of
- *    the viewport, which is fine for a section whose type is hundreds of px
- *    further down. A coverflow target is a zero-size box placed at exactly the
- *    scroll offset where its card is centred, and that placement is measured
- *    against an ANCHOR CLICK — which honours the scroll container's
- *    `scroll-padding-top` (`app/globals.css`, the header's own height). Ignore
- *    it and every run lands ~77px past its card's centred moment.
- * 2. **`card`.** The run then checks it got what it asked for: the named card is
- *    within 8px of the stage's centre, is the nearest card to it, and its
- *    `.coverflow-veil` is off. A contrast figure read off the wrong card, or off
- *    a veiled one, is a confident number about something nobody looks at — and
- *    the veil is what makes the CENTRED card the worst case (a flanking card
- *    gets scrim ADDED over its own, which raises cream type's contrast rather
- *    than lowering it, which is the whole reason the recede is a veil and not an
- *    opacity — the plan's correction C). Failing to place is fatal, like a
- *    missing target.
- * 3. **`lines: true`.** Every element on a card is block-level, so its own rect
- *    is the card's full content width — 844px at 1440, with "Jungle safari"
- *    sitting in the left third of it. Cropping that reports a blown-out pixel in
- *    the empty gutter as the worst case for type that is nowhere near it: it
- *    measured 1.00:1 on a card whose glyphs were at 1.33:1, and it moved the
+ * Three things about these runs are not the file's usual shape:
+ *
+ * 1. **`at` is the strip itself, not a card.** Every run scrolls the same
+ *    element to the top of the viewport — the strip is 419px tall, so all of it
+ *    is on screen at every height this rig samples — and which CARD is measured
+ *    is then a horizontal question, which is `stripCard` below. Targeting a card
+ *    vertically would put its own top at the viewport's top and its words, which
+ *    are at its foot, 405px below that.
+ * 2. **`stripCard` scrolls the STRIP, not the page.** `scrollIntoView({ inline:
+ *    "start", block: "nearest" })` moves the nearest scrollable ancestor on the
+ *    inline axis and leaves the block axis alone, which is exactly the pair of
+ *    facts this needs. The run then checks it got what it asked for — the named
+ *    card fully inside the strip's own client box — and failing to place is
+ *    fatal, like a missing target. **A contrast figure read off a card half of
+ *    which is outside the scroller is a confident number about pixels nobody can
+ *    see**, and with `scroll-snap-type: x proximity` on that container the
+ *    request and the result are genuinely allowed to differ.
+ * 3. **`lines: true`**, for the reason the coverflow's runs recorded and which
+ *    has not changed: every element in the block is block-level and as wide as
+ *    the card's content box, so cropping the element's own rect reports the
+ *    brightest pixel in an empty gutter as the worst case for glyphs nowhere
+ *    near it. It measured 1.00:1 on a card whose glyphs were at 1.33, and moved
  *    solved figures by whole steps. `lines` takes a `Range` over the text nodes
- *    instead and gets one rect per LINE BOX, tight to the glyph run — the same
- *    thing `[data-word]` does for the headlines above, without needing markup
- *    the cards do not have.
- * 4. **The selector is both text blocks, not just the words.** The two arrows
- *    are the same cream on the same photograph, they sit in the card's two
- *    bottom corners, and nothing else on this project measures them. A wash
- *    solved on the words alone leaves "NEXT" unchecked in the one corner a
- *    bottom-left wedge never reaches.
+ *    and gets one rect per LINE BOX instead.
+ *
+ * There is no fourth run-shape here where the coverflow had one. Its cards
+ * carried two arrows each in their bottom corners, cream on the same photograph,
+ * and the selector had to name them or a wash solved on the words alone left
+ * "NEXT" unchecked. **No card in this strip carries a link at all** — the pager
+ * is one row of six, below the strip and on cream — so the words are the whole
+ * of what sits on a photograph here.
  *
  * `min` is **4.5, not the 3 the quote runs above use**, and that is the
  * convention rather than a departure from it: 3 is WCAG's large-text floor and
  * the quotes are display type set at 40px and up. A card's body is
- * `clamp(0.76rem, 1.32vw, 0.98rem)` — 12.2px on a phone — its number and its
- * arrows are 9.9px, and its heading is 18.4px at 390 where the `clamp()` floors
- * out. None of that is large text at any width this rig samples.
+ * `clamp(0.8rem, 3.1vw, 0.9rem)` — 12.8px at its floor — its label is 9.9px, and
+ * its title tops out at 20.8px. None of that is large text at any width this rig
+ * samples.
  */
-const COVERFLOW_RUNS = Array.from({ length: 6 }, (_, i) => {
-  // Activity `i` is the `i + 1`-th card. **It was `i + 2` from 16 to 18 Aug
-  // 2026**, because the deck opened with a wrap-around ghost of the last
-  // activity; the client ruled the ghosts out and the deck is the six activities
-  // now (`docs/reviews/2026-08-16-coverflow/linear.md`).
-  //
-  // Worth knowing rather than quietly fixing: with the stale offset this file did
-  // not report six wrong figures, it CRASHED — `nth-child(7)` matches nothing, so
-  // `sharp` was handed an empty crop and threw `extract_area: bad extract area`
-  // from inside a `for` loop with no run name attached to it. The five runs
-  // before it had already measured the wrong card each, silently.
-  //
-  // Positional, and still deliberately so: a card carries no id of its own (the
-  // six ids belong to the scroll targets in the wrapper), so there is nothing
-  // else to name it by. `check_coverflow.mjs`'s assertion 10 is what holds the
-  // ordering — it fails if the deck is ever not exactly the six activities in
-  // order.
-  const card = `#field-days ul.coverflow-stage > li.coverflow-card:nth-child(${i + 1})`;
+const STRIP_RUNS = Array.from({ length: 6 }, (_, i) => {
+  // Positional AND by id, which is belt and braces on purpose: the `nth-child`
+  // is what the crop needs and the `#id` is what `ExperienceStrip.tsx` composes
+  // through `experienceCardId`, so a run pointed at the wrong card fails the
+  // placement check below rather than quietly measuring its neighbour. The
+  // coverflow's own runs were positional only, and a stale `i + 2` offset there
+  // measured five wrong cards in silence before crashing on the sixth.
+  const card = `#field-days ul.experience-strip > li.experience-card#field-days-card-${i}`;
   return {
-    name: `coverflow · card ${String(i + 1).padStart(2, "0")}`,
+    name: `strip · card ${String(i + 1).padStart(2, "0")}`,
     min: 4.5,
-    at: `#field-days-card-${i}`,
-    anchor: true,
-    card,
+    at: "#field-days .experience-strip",
+    stripCard: card,
     lines: true,
     container: card,
-    sel: `${card} [data-contrast="coverflow-card"], ${card} nav.coverflow-arrows a`,
+    sel: `${card} [data-contrast="experience-card"]`,
   };
 });
 
@@ -435,7 +430,7 @@ const HOME_RUNS = [
     hide: "color",
   },
   ...LODGE_PANEL_RUNS,
-  ...COVERFLOW_RUNS,
+  ...STRIP_RUNS,
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },
   ...MENU_RUNS("arrival"),
@@ -555,10 +550,12 @@ async function measure(page, run) {
       const el = document.querySelector(sel);
       if (!el) return null;
       // `anchor` reproduces what a click on this hash does, which includes the
-      // scroll container's `scroll-padding-top`. Only the coverflow runs need
-      // it: their targets are placed at the offsets an anchor click lands a
-      // card centred at, and without the inset every one of them lands a
-      // header's height past its own card.
+      // scroll container's `scroll-padding-top`. It was the coverflow's runs
+      // that needed it — their targets were zero-size boxes placed at the
+      // offsets an anchor click lands a card centred at — and **no run uses it
+      // today**: the strip that replaced them scrolls a container rather than
+      // the page, so `stripCard` below is what places a card and this stays for
+      // the next section that navigates by hash.
       const pad = anchor
         ? Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
         : 0;
@@ -580,7 +577,65 @@ async function measure(page, run) {
    * neighbour's veil — is a confident number about something no visitor looks
    * at, which is worse than no number at all.
    */
+  /**
+   * Bring the named card into the STRIP's own view, on the inline axis only.
+   *
+   * `block: "nearest"` is the half that matters: this runs after the page has
+   * already been scrolled to put the whole strip on screen, and a `block:
+   * "start"` here would undo that by scrolling the card's top to the viewport's
+   * top instead. `inline: "start"` moves the strip and nothing else.
+   *
+   * Then it waits for the strip's own `scrollLeft` to settle, for the same
+   * reason `scrollToAndSettle` exists for the page: the container carries
+   * `scroll-snap-type: x proximity` and `scroll-behavior` can be smooth, so the
+   * position immediately after the call is not the position that will be
+   * screenshotted.
+   */
+  if (run.stripCard) {
+    await page.evaluate((sel) => {
+      document.querySelector(sel)?.scrollIntoView({ inline: "start", block: "nearest" });
+    }, run.stripCard);
+    let prevLeft = null;
+    for (let i = 0; i < 40; i++) {
+      await page.waitForTimeout(30);
+      const cur = await page.evaluate(
+        (sel) => document.querySelector(sel)?.closest(".experience-strip")?.scrollLeft ?? null,
+        run.stripCard,
+      );
+      if (cur === null) break;
+      if (prevLeft !== null && Math.abs(cur - prevLeft) < SETTLE_TOLERANCE) break;
+      prevLeft = cur;
+    }
+  }
+
   let placement = null;
+  if (run.stripCard) {
+    /*
+     * Is the whole card inside the scroller?
+     *
+     * Fatal when it is not. A card clipped by the strip's edge is measured on
+     * pixels a visitor cannot see, and `scroll-snap-type: x proximity` means the
+     * browser is entitled to land somewhere other than where this asked — which
+     * is the same class of hazard the coverflow's own placement check existed
+     * for, arriving through a different mechanism. 1px of tolerance for
+     * sub-pixel layout.
+     */
+    placement = await page.evaluate((sel) => {
+      const card = document.querySelector(sel);
+      const strip = card ? card.closest(".experience-strip") : null;
+      if (!card || !strip) return { found: false };
+      const c = card.getBoundingClientRect();
+      const s = strip.getBoundingClientRect();
+      return {
+        found: true,
+        // How far each edge of the card is INSIDE the strip's box. Negative on
+        // either is a clipped card.
+        leftSlack: Number((c.left - s.left).toFixed(2)),
+        rightSlack: Number((s.right - c.right).toFixed(2)),
+      };
+    }, run.stripCard);
+  }
+
   if (run.card) {
     placement = await page.evaluate((sel) => {
       const card = document.querySelector(sel);
@@ -730,56 +785,34 @@ async function measure(page, run) {
 }
 
 /**
- * Whether a run that named a card sampled it at its own centred moment.
+ * Did the scroll place the card this run claims to measure?
  *
- * Returns `null` when the run made no such claim, and a reason string when the
- * claim failed.
+ * **The coverflow's version of this asked a completely different question and
+ * the difference is worth keeping.** There, a card was placed by the PAGE's
+ * scroll offset driving a CSS animation, so the check was "is this card at the
+ * stage's centre and is its veil off" — and it used `.coverflow-veil`'s own
+ * opacity to answer it, because the veil is the animation's own distance from
+ * the centred moment and is immune to whatever the layout is doing.
  *
- * **The test is the VEIL, not the card's x position, and that distinction was
- * earned on 16 Aug 2026.** The obvious form — "the card's centre is within 8px
- * of the stage's centre", `check_coverflow.mjs`'s own tolerance — fired on all
- * six cards at 768px, and the cause turned out to be a layout defect rather than
- * a mis-timed scroll: between 768px and 948px the card is *wider than its own
- * stage*, so its auto margins resolve to `0 / -48px` and every card sits ~24px
- * right of centre at every scroll position, centred moment or not (see
- * `docs/reviews/2026-08-16-coverflow/scrims.md` §6 — it is a real defect and it
- * belongs to `COVERFLOW.stageGutterPx`, not to this rig). An x-offset check
- * therefore cannot tell "the scroll landed in the wrong place" from "the card is
- * never in the right place", and it is only the first that makes a contrast
- * figure meaningless.
- *
- * `.coverflow-veil` answers the real question directly and is immune to the
- * layout: its opacity is keyframed to `sideVeil` at the two ends of the card's
- * own window and to **0 at the middle**, so it *is* the animation's own distance
- * from the centred moment. At the six sampled moments it reads 0.0001–0.0015.
- * Anything above 0.02 means the scroll did not land where the run says, or the
- * card is a flank — and a flank is the EASY case, since the recede adds scrim
- * and therefore RAISES cream type's contrast (the plan's correction C), so a
- * figure read there would understate the worst.
+ * A strip has no animation and no centre. What can go wrong here is smaller and
+ * more ordinary: `scrollIntoView` asked the container to bring a card to its
+ * inline start, `scroll-snap-type: x proximity` is entitled to land somewhere
+ * else, and a card clipped by the scroller's edge would be measured on pixels a
+ * visitor cannot see. So the question is "is the whole card inside the box", and
+ * a run that cannot answer it is as fatal as a missing target.
  */
 const misplacement = (run, row) => {
-  if (!run.card) return null;
+  if (!run.stripCard) return null;
   const p = row.placement;
-  if (!p || !p.found) return `${run.card} is not on the page, or is not inside a coverflow stage`;
-  if (p.veil === null) return `${run.card} has no .coverflow-veil — nothing here can tell when it is centred`;
-  if (p.veil > 0.02) {
-    return `card's veil is at ${p.veil} — the scroll did not land at this card's centred moment, or the card is a flank (a flank wears added scrim, so its type reads BETTER than the worst case this run claims to measure)`;
+  if (!p || !p.found) return `${run.stripCard} is not on the page, or is not inside a .experience-strip`;
+  if (p.leftSlack < -1) {
+    return `card is clipped by ${Math.abs(p.leftSlack)}px at the strip's left edge — the scroll did not land where this run asked (proximity snapping is allowed to move it)`;
   }
-  if (Math.abs(p.offset) > p.nearest + 1) {
-    return `card is ${Math.abs(p.offset)}px from the stage's centre but another is ${p.nearest}px — a different card is the one in front`;
+  if (p.rightSlack < -1) {
+    return `card is clipped by ${Math.abs(p.rightSlack)}px at the strip's right edge — the strip is too narrow to show one whole card, or the scroll did not land where this run asked`;
   }
   return null;
 };
-
-/**
- * The card's own x-offset from the stage's centre, reported and never fatal.
- *
- * Kept because it is what found the 768–948px centring defect, and kept
- * non-fatal because that defect is not this rig's to assert — see
- * `misplacement` above. A number printed every run is how it stays visible
- * until `check_coverflow.mjs` grows a width sweep that owns it.
- */
-const OFF_CENTRE_NOTE = 8;
 
 async function main() {
   const pathname = new globalThis.URL(URL).pathname.replace(/\/$/, "") || "/";
@@ -819,8 +852,6 @@ async function main() {
    * target: it looks like a pass.
    */
   let misplaced = 0;
-  /** Counted and printed, never fatal — see `OFF_CENTRE_NOTE`. */
-  let offCentre = 0;
 
   for (const width of WIDTHS) {
     const context = await browser.newContext({
@@ -881,11 +912,15 @@ async function main() {
         }`,
       );
       if (r.misplaced) console.log(`      MISPLACED @${width}px: ${r.misplaced}`);
-      if (r.placement?.found && Math.abs(r.placement.offset) > OFF_CENTRE_NOTE) {
-        offCentre++;
+      // How much of the strip's own box the placed card leaves either side of
+      // itself. Reported every run and never fatal — it is what would show a
+      // card's width or the strip's gutter drifting, and it is the number the
+      // coverflow's own off-centre note occupied before the effect that needed
+      // it was retired.
+      if (r.placement?.found) {
         console.log(
-          `      note: this card sits ${r.placement.offset}px off the stage's centre at ${width}px — ` +
-            `a layout defect, not a mis-timed sample (its veil is ${r.placement.veil}). See scrims.md §6.`,
+          `      placed: ${r.placement.leftSlack}px inside the strip's left edge, ` +
+            `${r.placement.rightSlack}px inside its right, at ${width}px`,
         );
       }
     }
@@ -893,14 +928,6 @@ async function main() {
   }
 
   await browser.close();
-  report.offCentre = offCentre;
-  if (offCentre > 0) {
-    console.log(
-      `\n${offCentre} sample(s) found their card off the stage's centre by more than ${OFF_CENTRE_NOTE}px. ` +
-        `Not a failure here — the contrast figure is still the one a visitor reads — but it is a real ` +
-        `layout defect and it is written up in docs/reviews/2026-08-16-coverflow/scrims.md §6.`,
-    );
-  }
   await mkdir(path.dirname(OUT), { recursive: true });
   await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`, "utf8");
   console.log(`Wrote ${OUT}`);

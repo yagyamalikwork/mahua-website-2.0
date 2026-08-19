@@ -522,256 +522,99 @@ export const ROOM_STACK = {
 } as const;
 
 /**
- * The `04 · Days in the Field` coverflow — `components/sections/Coverflow.tsx`.
+ * The `05 · Experiences` card strip — `components/sections/ExperienceStrip.tsx`.
  *
- * Client request, 16 Aug 2026: *"the next and previous cards sit out of focus on
- * left and right respectively behind the center card."* So a neighbour is
- * smaller, shifted out past the centre card's edge, and veiled — three quiet
- * changes rather than one loud one, which is the same restraint `ROOM_STACK`'s
- * recede is built with.
+ * **It replaced `COVERFLOW` on 19 Aug 2026, and the replacement is a demotion in
+ * kind rather than a retune.** That dial carried a pin length, a neighbour's
+ * scale, its shift, its veil and a solved card cap, because the coverflow was a
+ * scroll-driven animation whose every frame had to be computed. A strip is a
+ * native `overflow-x: auto` scroller: the browser does the whole of it, so the
+ * only numbers left are the ones that describe a card and the space between two
+ * of them.
  *
- * **`sideVeil` is scrim, not opacity, and the distinction is load-bearing.** A
- * card's type sits ON its own photograph (the client's second ruling the same
- * day — `FullBleedQuote`'s shape). Fading the whole card would fade that type
- * against the frame beneath it, so the depth cue would be working against the
- * contrast floor CLAUDE.md sets for text over a photograph. Adding scrim
- * recedes the photograph and RAISES cream type's contrast. Do not "simplify"
- * this back to an opacity — an earlier draft of this dial carried `sideDim` and
- * it was wrong; `motion.test.ts` asserts that lever cannot grow back, because
- * the "simplification" is exactly what a future editor would reach for.
+ * `docs/DECISIONS.md` §20 is what the retired dial was for and what each of its
+ * five numbers had been swept against; nothing here inherits any of them.
  *
- * **No rotation and no blur.** A `rotateY` is the thing most coverflows reach
- * for and it is the thing this page cannot have: it is the tilt the client
- * explicitly did not want on the photographs a day earlier (`FLOAT`, above), and
- * a blur costs a compositor layer per card for an effect non-negotiable #4 would
- * call noticeable. Depth here is scale and veil, the way the deck's is.
+ * **Every number below is the client's own design document's** —
+ * `Brand&Design-Guidelines/mahua-home-v2-dusk.html`, whose `.strip-wrap`/`.card`
+ * rules set `flex: 0 0 min(300px, 78vw)` and `gap: 20px`. They are transcribed
+ * rather than derived because they came from him; what IS derived from them is
+ * `ExperienceCard`'s `CARD_SIZES` breakpoint and `app/globals.css`'s card width,
+ * so the two copies of "300" that used to be possible are one.
  *
- * `screens` is the pin's length INCLUDING its own screen, matching
- * `StickyScene`'s `screens` so the two mean the same thing on this page. Both it
- * and `cardMaxPx` were **swept** rather than picked — `screens` on 16 Aug 2026
- * (`docs/reviews/2026-08-16-coverflow/density-sweep.md`) and `cardMaxPx` twice,
- * the second time on 17 Aug against the client's re-exported photographs
- * (`docs/reviews/2026-08-16-coverflow/geometry.md` §2). See each one's own note.
+ * The one number that is NOT his is the card's own aspect: his document draws a
+ * `3/3.6` figure with a body of type beneath it, and this card carries its words
+ * on the photograph — see `ExperienceStrip.tsx` for why a cream page cannot take
+ * his dark foot, and `ExperienceCard.tsx`'s `CARD_BOX` for what the 0.74 costs
+ * the six photographs.
  */
-export const COVERFLOW = {
+export const STRIP = {
   /**
-   * Screens of scroll the chapter's stage occupies, including its own.
+   * The widest a card is ever drawn.
    *
-   * **3 since 18 Aug 2026 — the client asked for the carousel to be slower**, and
-   * this is the whole of that answer: *"the scroll now feels very snappy, replace
-   * it with the smoother scroll effect we used previously with the smaller card
-   * size in the carousel … but just make it a bit slower this time."* The
-   * snapping he is describing is gone from `app/globals.css`, and pace is now a
-   * longer pin. It is `STICKY_SCREENS_MAX`, so this dial is spent.
+   * **340, and it is 300 in the client's own design document — the difference is
+   * non-negotiable #8 and it was swept, not guessed.** His
+   * `.card { flex: 0 0 min(300px, 78vw) }` measured `05 · Experiences` at
+   * **45.4% empty, over his own 45% ceiling**, because a strip is a short chapter
+   * and the header band above it is structurally sparse: one heading, one
+   * paragraph, a 300px drawing, and 1,344px of width to spend them across. The
+   * only lever this chapter has is the size of its photographs, exactly as the
+   * coverflow's was (`docs/DECISIONS.md` §20.4), so it was swept:
    *
-   * **Re-swept at 2 / 2.5 / 3 on the linear deck, and the direction REVERSED.**
-   * Four production builds, four density runs, `field-days` empty space:
+   * | `cardMaxPx` | `field-days` mean / worst | page mean | cards at 1440 |
+   * |---|---|---|---|
+   * | 300 (his) | **45.4% / 45.4%** — over | 38.4% | 4 whole + a 64px sliver |
+   * | 320 | 42.4% / 42.4% | 38.3% | 4 whole + **4px** — no peek at all |
+   * | **340** | **39.6% / 39.6%** | **38.2%** | **3 whole + 84% of a fourth** |
+   * | 360 | 39.8% / 39.8% | 38.0% | 3 whole + 62% of a fourth |
    *
-   * | screens | pin | centre-to-centre | mean | worst | page mean | images/screen |
-   * |---|---|---|---|---|---|---|
-   * | 2 | 1,007px | 201.4px | 30.6% | 44.4% | 36.2% | 2.18 |
-   * | 2.5 | 1,457px | 291.4px | 29.5% | 44.4% | 35.9% | 2.12 |
-   * | **3** | **1,907px** | **381.4px** | **29.1%** | **44.4%** | **35.6%** | **2.07** |
+   * 340 is chosen over 320 twice over: 320 clears the ceiling by 2.6pp, which is
+   * inside the density rig's own ±3-7pp sampling error (`docs/DECISIONS.md` §5a),
+   * and at exactly 1440 it leaves a **4px** sliver of the fifth card — no peek at
+   * all, on the one width the client tests on. It is chosen over 360 because the
+   * two are indistinguishable on density (0.2pp, well inside that same error) and
+   * 340 shows more of the fourth card.
    *
-   * The 16 Aug sweep read the opposite — mean 48.4 → 48.9 → 49.3% — and both are
-   * right about their own build. **The card was 900px then and is 1217px now**, so
-   * a pin screen used to be emptier than the chapter's average and is now denser
-   * than it. That is a property of the composition rather than of this dial, which
-   * is why the sweep was re-run rather than quoted.
+   * **It is a FIXED width rather than a share of the container**, which is the
+   * whole difference between a strip and a grid, and that shape is his and is
+   * unchanged.
    *
-   * **The worst screen does not move at any length**, which is the one thing that
-   * did hold from the earlier sweep: this changes how many screens the pin spends,
-   * never what is on the emptiest of them.
-   *
-   * **What it costs is `imagesPerScreen`, 2.18 → 2.07.** That is the figure
-   * non-negotiable #9 says to look at rather than at the chapter, and `rooted`'s
-   * own history is this same trade in the same units, decided the other way — the
-   * difference being that a longer pin there bought nothing anyone had asked for.
-   * If 3 reads as too slow, 2.5 is one number and costs nothing else measured.
+   * **It is also within every photograph's own width, which the coverflow's cap
+   * never was.** The five cropped frames are 710 / 542 / 493 / 493 / 444px wide
+   * (`scripts/build_images.mjs`), so a 340px card is served at 1.31-2.09 source
+   * pixels per CSS pixel at DPR 1 — the first time this chapter has had margin
+   * rather than a ceiling, and `potters-hands` at 444px is what bounds any
+   * further rise. At DPR 2 it asks for 680 and not one of the six clears it; that
+   * is the standing ask in `docs/OWED-ORIGINALS.md`, not a reason to shrink the
+   * card.
    */
-  screens: 3,
-  /** A neighbour's scale at full offset. */
-  sideScale: 0.82,
-  /** How far a neighbour sits from centre, as a percentage of a card's width. */
-  sideShiftPct: 62,
-  /** Extra `--overlay` wash over a neighbour at full offset. Never an opacity — see above. */
-  sideVeil: 0.4,
+  cardMaxPx: 340,
   /**
-   * The card's own shape, as the two integers the six photographs are exported
-   * at — **1344 × 685, since 18 Aug 2026.**
+   * The card's width below the cap, as a percentage of the viewport.
    *
-   * `CoverflowCard`'s `CARD_BOX` is `cardBoxW / cardBoxH`, and its
-   * `aspect-[1344/685]` class is the same pair written for Tailwind;
-   * `lib/sizes.test.ts` holds those two to each other in both directions. The
-   * ratio lives here rather than only in the component because `app/globals.css`
-   * needs it as well: since 18 Aug the card is bounded by the stage's HEIGHT as
-   * well as its width (see `stageGutterYPx`), and turning an available height
-   * into an available width is exactly this ratio.
-   *
-   * **It was 16/9 until 18 Aug 2026, and the change crops nothing.** The client
-   * was given four card sizes with a measured sharpness for each and chose
-   * *wider only, stay sharp*: **1344 × 685, +10% area, sharpness 1.00**, against
-   * 1344 × 754 (+22%, 0.91) and 1344 × 823 (+33%, 0.83). At 16/9 the same files
-   * were cropped 9.4% and drawn 1.1036 × the card's own width, which is what
-   * capped the card at 1217 — see `cardMaxPx`.
+   * His document's `78vw`, unchanged by the sweep above. The cap binds from
+   * 436px up (`ceil(340 / 0.78)`), so this arm is only ever what a phone gets —
+   * 304px at 390 — and the 38px of the next card it leaves showing past a 342px
+   * container is the best affordance the strip has at that width.
    */
-  cardBoxW: 1344,
-  cardBoxH: 685,
+  cardVw: 78,
+  /** The space between two cards. His document's `gap: 20px`. */
+  gapPx: 20,
   /**
-   * The widest a card is ever drawn — reached once the container it sits in is
-   * this wide, i.e. above `this + 2 × stageGutterMdPx` (1440px). Below that the
-   * card fills its container; see `stageGutterPx` and `CoverflowCard`'s
-   * `CARD_SIZES`.
+   * The card's own shape, as two integers — 37/50 = 0.74:1.
    *
-   * **This is the only lever this chapter's density has, and it is SOLVED against
-   * the photographs rather than chosen.** 1344 is the exact largest card every
-   * one of the six frames can still fill at full resolution, and
-   * `CoverflowCard.test.tsx` asserts both that figure and the rule that produced
-   * it. Read that test before changing this number.
+   * `ExperienceCard`'s `CARD_BOX` is `cardBoxW / cardBoxH` and its
+   * `aspect-[37/50]` class is the same pair written for Tailwind;
+   * `lib/sizes.test.ts` holds those two to each other in both directions.
    *
-   * ## The client's request, and the files that made it possible
-   *
-   * 17 Aug 2026: *"as big as the Room Type cards from the property pages"* —
-   * 1344 × 685 at 1440 — *"if the previous and next cards are flowing out of the
-   * canvas of our website it is completely fine, it adds to the depth."* The same
-   * day he re-exported all six card photographs at **1344 × 685 (1.9620:1)**,
-   * where three had been 1163 × 508 (2.2925:1) crops made for `/mahua-vann`. Every
-   * ceiling figure this comment used to carry belonged to those files.
-   *
-   * ## The cap is resolution, not taste
-   *
-   * `object-fit: cover` in `CARD_BOX` draws a photograph wider than its box
-   * whenever the photograph is wider than the box — `cardWidth × imageAspect /
-   * CARD_BOX`. **Since 18 Aug 2026 the box IS the photographs' own ratio, so that
-   * factor is exactly 1.000 and the ceiling is the file's own width, 1344.** At
-   * the 16/9 box it carried until then the factor was 1.1036 and the ceiling
-   * `1344 / 1.1036 = 1217.8`. Past the ceiling they ship soft on an ordinary
-   * 100%-scaled laptop, which is the screen the client tests on, and
-   * `scripts/check_image_resolution.mjs` will **NOT** stop you: a photograph
-   * already served its widest file is `atLibraryCeiling`, a class that rig reports
-   * and does not enforce. That is why the guard is a unit test.
-   *
-   * ## The sweep, 17 Aug 2026 — and the chapter finally clears the ceiling
-   *
-   * Four real builds, four real density runs, `check_image_resolution.mjs` at
-   * every arm (0 under-served throughout), on the build that carries the
-   * recomposed header band and the 16/9 box:
-   *
-   * | `cardMaxPx` | card at 1440 | `field-days` mean | worst | page mean | page worst |
-   * |---|---|---|---|---|---|
-   * | 900 (what shipped 16 Aug) | 900 × 506 | 47.1% | 55.0% | 38.4% | 77.8% |
-   * | 1000 | 1000 × 563 | 40.7% | 51.2% | 37.6% | 75.2% |
-   * | 1100 | 1100 × 619 | 33.8% | 46.5% | 36.6% | 71.8% |
-   * | **1217** | **1217 × 685** | **26.3%** | **41.0%** | **35.5%** | **71.4%** |
-   *
-   * About **−4.4 points of worst-screen empty per 100px of card, and it costs no
-   * scroll whatsoever** — the wrapper's height is `screens × 100svh` and has
-   * nothing to do with the card's size, so the chapter is ~2.7 screens at every
-   * arm. **At 1217 `field-days` passed non-negotiable #8 for the first time**:
-   * `passesWorst` true, 0 screens over budget, against three chapters over the
-   * ceiling before that work.
-   *
-   * (The 1217 row was swept at 1218 — one pixel above the integer ceiling, where
-   * the browser is asked for 1344.2px of a 1344px file. Shipped at 1217 so the
-   * test can state the ceiling exactly; the final figures are the gate run's.)
-   *
-   * **1217 → 1344 on 18 Aug 2026 is NOT another 127px of the same sweep**, and
-   * reading it as one over-predicts it. The card grew 10.4% in width and the box
-   * lost its 9.4% crop in the SAME edit, so the photograph is now drawn at exactly
-   * the card's width where it used to be drawn 1.1036 × past it: the card is
-   * bigger and the pixels it asks for are unchanged, which is the whole of *"stay
-   * sharp"*. What that was worth is measured, one change at a time, in
-   * `docs/reviews/2026-08-16-coverflow/wider.md`.
-   *
-   * **It was 560 for a day in Aug 2026**, on the strength of a comment saying it
-   * "matches `ROOM_STACK.heightMax`'s reasoning" — an analogy to a different
-   * component in a different composition, measured against nothing. That is this
-   * project's own named repeat defect (`DECISIONS.md` §18, §19, §20.4: a number
-   * picked in a plan is read downstream as a bound and reported spent rather than
-   * swept), and at 560 the chapter measured 70.7% / 83.1%.
-   *
-   * ## What the shape cost, and what now has to earn it back
-   *
-   * The 17 Aug reading of this box was *declined*, on one number: at 390 the
-   * card's own words left **5px** of clearance inside a 1.9620 box against 23px
-   * inside 16:9, in an `overflow: hidden` box that would clip a heading silently
-   * (`docs/reviews/2026-08-16-coverflow/geometry.md` §2.3). The client chose the
-   * shape anyway on 18 Aug, so that clearance is now something this page has to
-   * hold rather than something it inherits — which is why `check_coverflow.mjs`
-   * grew **assertion 12**, the card's own words measured against the card's own
-   * box across the whole continuous width sweep. Do not change the type on this
-   * card, or this ratio, without re-running it.
+   * **Retuning it does not buy a legal crop.** Five of the six photographs are
+   * 1.5:1 or wider, this project bounds a width crop at 25%, and the narrowest
+   * box that bound allows for a 1.5:1 frame is 1.1265 — a landscape box. So
+   * every portrait ratio is equally illegal by `cover`, and the crops are made
+   * by hand in the image pipeline instead. See `CARD_BOX`.
    */
-  cardMaxPx: 1344,
-  /**
-   * The container's own horizontal padding — `ChapterSurface`'s `px-6`, and the
-   * least cream a card may leave between itself and the viewport's edge.
-   *
-   * **These three numbers describe `ChapterSurface`, not the coverflow, and
-   * they are here for exactly one reason.** A card's width is
-   * `min(cardMaxPx, 100%)` in CSS — bounded by the stage it is centred in,
-   * whatever that stage's own padding turns out to be — but `CARD_SIZES` cannot
-   * say `100%`: `sizes` is an HTML attribute, evaluated before CSS custom
-   * properties or layout exist, so the only way for it to name the same width
-   * the browser will draw is to spell the container's arithmetic out in `vw`.
-   * These are that arithmetic, in one place, interpolated into the one string.
-   *
-   * **They were `stageGutterPx: 24` alone until 17 Aug 2026, and that single
-   * number was the defect.** The card's width was `min(cardMaxPx, 100vw − 2 ×
-   * 24px)` while `ChapterSurface`'s container is `md:px-12` — 48px a side —
-   * from 768px up, so from 768px to 996px the card came out up to 48px WIDER
-   * than the stage holding it. `margin-inline: auto` against `left: 0; right:
-   * 0` is then over-constrained, CSS 2.1 §10.3.7 resolves it by pushing the box
-   * to the inline start, and every card sat 22-25px right of centre with 47px
-   * of cream on one side and 1px on the other, at every scroll position, across
-   * a 228px band that no rig on this project had ever looked at
-   * (`docs/reviews/2026-08-16-coverflow/rig-failures.md`).
-   *
-   * The repair is that CSS no longer reads any of these for the card's width —
-   * `min(cardMaxPx, 100%)` cannot exceed its stage whatever the padding does,
-   * which is an invariant rather than a threshold. If a future edit changes
-   * `ChapterSurface`'s padding, the layout stays correct and only these three
-   * go stale; the symptom would be a photograph served one tier soft, and
-   * `scripts/check_image_resolution.mjs` is what reports it.
-   */
-  stageGutterPx: 24,
-  /** The same container's padding from `md` up — `ChapterSurface`'s `md:px-12`. */
-  stageGutterMdPx: 48,
-  /** …and the width it switches at, which is Tailwind's own `md`. */
-  stageGutterMdFromPx: 768,
-  /**
-   * The cream above and below the card INSIDE the pinned stage — 18 Aug 2026.
-   *
-   * Client: *"If the images cannot go taller, remove some of the buffer space
-   * from top and bottom of the carousel to make it look tighter and fuller
-   * horizontally."* They cannot go taller: 685px is the file's own height and
-   * `cardMaxPx` is already at the ceiling (`CoverflowCard.test.tsx`).
-   *
-   * **This number did not exist before, and its absence is the whole point.** The
-   * stage was `100svh − header` and the card was whatever its width made it, so
-   * the cream between them was a REMAINDER — 54px at 1440x900, 8px at 1440x800,
-   * and NEGATIVE at 1440x760, where the card was already taller than the box
-   * clipping it. `app/globals.css`'s own note recorded that as the reason not to
-   * touch the stage's height, and it was right about the danger and wrong about
-   * the conclusion: a remainder cannot be a dial, so the fix is to stop it being
-   * a remainder. The card is now bounded by the stage's height as well as its
-   * width, and this is the gap that bound leaves.
-   *
-   * At 1440x900 that turns 54px of cream into 24 at each end of the chapter —
-   * which is 60px out of the pin's two joins, at no cost to the card, because at
-   * 1440 the card is not the term that binds. On a viewport short enough for it to
-   * bind, the card SHRINKS and this gap is what it shrinks to leave. Nothing
-   * clips at any height, which `check_coverflow.mjs` assertion 13 sweeps
-   * continuously from 600 to 1200 rather than at three presets — this project has
-   * now shipped five defects that lived between fixed samples (`DECISIONS.md` §2
-   * #44-45, #52-53, §20.7).
-   *
-   * **It is not free scroll and it is not free pin.** The pin's length is
-   * `screens × 100svh − stageHeight`, so a shorter stage is a LONGER pin inside
-   * the same track — 1,907px → 1,967px at 1440x900, i.e. 3% slower per card. The
-   * chapter's own height does not change at all.
-   */
-  stageGutterYPx: 24,
+  cardBoxW: 37,
+  cardBoxH: 50,
 } as const;
 
 /**
@@ -796,7 +639,7 @@ export const COVERFLOW = {
  * | 3/4 = 0.75 | 50.0% | what spec §2's *"each full-height"* would cost |
  *
  * The 25% figure is `check_card_stack.mjs` assertion 6's bound, which the
- * coverflow's own box was solved against (`CoverflowCard.tsx`'s `CARD_BOX`);
+ * strip's own box is measured against (`ExperienceCard.tsx`'s `CARD_BOX`);
  * it binds the WIDTH crop only, height being unbounded by the same convention.
  * **Spec §2's "each full-height" is therefore not buildable on these two files**
  * — a full-height panel at 1440x900 is roughly 0.75:1 and would throw away half

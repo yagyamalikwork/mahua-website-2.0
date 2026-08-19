@@ -5,7 +5,6 @@ import LeafCursorMount from "@/components/signature/leaf-cursor";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { WelcomeScreen } from "@/components/ui/WelcomeScreen";
 import {
-  COVERFLOW,
   DURATION,
   ENTER,
   FLOAT,
@@ -14,6 +13,7 @@ import {
   PHOTO_ZOOM,
   RAISE,
   ROOM_STACK,
+  STRIP,
   WELCOME,
 } from "@/lib/motion";
 import { INDEXING_ALLOWED } from "@/lib/indexing";
@@ -117,27 +117,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "--room-card-scale-min": String(ROOM_STACK.scaleMin),
           "--room-card-dim": String(ROOM_STACK.dim),
           "--property-bar-reserve": `${ROOM_STACK.barReserve}px`,
-          // The `04 · Days in the Field` coverflow, on the same terms as the
-          // card stack above it: the numbers live in `lib/motion.ts`, the rules
-          // live in `app/globals.css`, and neither can drift from the other.
-          // `--coverflow-side-veil` is scrim opacity over a neighbour's
-          // photograph, never the card's own opacity — see the note on
-          // `COVERFLOW` for why the difference is load-bearing.
-          "--coverflow-screens": String(COVERFLOW.screens),
-          "--coverflow-side-scale": String(COVERFLOW.sideScale),
-          "--coverflow-side-shift": `${COVERFLOW.sideShiftPct}%`,
-          "--coverflow-side-veil": String(COVERFLOW.sideVeil),
-          "--coverflow-card-max": `${COVERFLOW.cardMaxPx}px`,
-          "--coverflow-gutter": `${COVERFLOW.stageGutterPx}px`,
-          // The cream above and below a centred card inside the pinned stage,
-          // and the card's own shape as the two integers it is exported at —
-          // both new on 18 Aug 2026. The stylesheet needs the ratio because the
-          // card is bounded by the stage's HEIGHT as well as its width, and
-          // turning an available height into an available width is exactly this
-          // division. Unitless, so `calc()` can use them as numbers.
-          "--coverflow-gutter-y": `${COVERFLOW.stageGutterYPx}px`,
-          "--coverflow-card-box-w": String(COVERFLOW.cardBoxW),
-          "--coverflow-card-box-h": String(COVERFLOW.cardBoxH),
+          // `05 · Experiences`' card strip, on the same terms as the card
+          // stack above it: the numbers live in `lib/motion.ts`, the rules live
+          // in `app/globals.css`, and neither can drift from the other.
+          //
+          // **Three properties where the coverflow published ten**, and the drop
+          // is the whole shape of the 19 Aug 2026 change: a pin length, a
+          // neighbour's scale, its shift, its veil, a stage gutter in each axis
+          // and a card box in two integers were all needed because that effect
+          // computed every frame. A native `overflow-x` scroller needs a card's
+          // width, its fallback width and the space between two of them.
+          "--strip-card-max": `${STRIP.cardMaxPx}px`,
+          "--strip-card-vw": `${STRIP.cardVw}vw`,
+          "--strip-gap": `${STRIP.gapPx}px`,
           // The base paper, under its own name.
           //
           // `--bg` cannot serve here: `ChapterSurface` shadows it with

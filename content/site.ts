@@ -47,22 +47,22 @@ export const SITE = {
     next: "Next room",
     close: "Close",
   },
-  /** The `04 · Days in the Field` coverflow's two arrows, per card (16 Aug
-   * 2026). Labels only; the mechanism is a plain `<a href="#…">` at the
-   * neighbour's own scroll target, so the arrows and the scroll drive one
-   * position rather than competing for it, and the loop the client asked for
-   * ("after 6 the 1 card comes back or visa-versa") costs no script.
+  /*
+   * **`coverflow: { previous, next }` was here from 16 to 19 Aug 2026** — the
+   * two arrow labels each card of the pinned carousel carried. That section is a
+   * horizontal card strip now and its pager is six numbered links, each named by
+   * its own activity's title, so there is no shared word for either of them to
+   * borrow: nothing was reworded, the control that needed the words stopped
+   * existing. `content/home.ts`'s `HOME.strip` carries the strip's three
+   * strings, because they belong to one section of one page and this dial is for
+   * strings the menu and the footer must not be able to disagree about.
    *
-   * **These two words are never the whole accessible name.** Six cards carry a
-   * pair each, so twelve links would otherwise be announced as "Previous" and
-   * "Next" twelve times with nothing to tell them apart;
-   * `CoverflowCard.tsx` appends the neighbouring activity's own title. The
-   * visible label stays exactly the word below, which is what keeps the
-   * accessible name a superset of the visible one (WCAG 2.5.3). */
-  coverflow: {
-    previous: "Previous",
-    next: "Next",
-  },
+   * The half of that entry worth keeping is its own last paragraph, and it still
+   * binds the pager: six links whose visible text is "01"…"06" are six links a
+   * screen reader cannot tell apart, so each `aria-label` appends the activity's
+   * own title — and the visible label stays a subset of the accessible name,
+   * which is WCAG 2.5.3.
+   */
   footer: {
     placesLabel: "The places",
     officeLabel: "The office",

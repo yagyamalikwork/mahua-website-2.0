@@ -243,10 +243,35 @@ const FRAME = (chapter) => {
   };
 };
 
+/**
+ * Scroll to `y` and wait for the page to actually stop there.
+ *
+ * **Lenis is running on this page**, so `window.scrollTo` sets a target the page
+ * then interpolates toward — a fixed wait afterwards reads whatever position it
+ * happens to have reached, which on a cold file cache or a loaded machine is not
+ * the one that was asked for. Every other rig on this project polls
+ * (`check_card_stack.mjs` solved it first); this file waited a flat 700ms, which
+ * is long enough on a warm run and is not a promise on any run.
+ *
+ * Added 19 Aug 2026. It is the difference between a rig that measures the page
+ * and one that measures the page most of the time, which is the worse of the two
+ * because it fails in the direction of a green report.
+ */
+async function scrollToAndSettle(page, y) {
+  await page.evaluate((yy) => window.scrollTo(0, yy), y);
+  let prev = null;
+  for (let i = 0; i < 40; i++) {
+    await page.waitForTimeout(30);
+    const cur = await page.evaluate(() => window.scrollY);
+    if (prev !== null && Math.abs(cur - prev) < 0.5) return cur;
+    prev = cur;
+  }
+  return prev;
+}
+
 /** Scroll the film into the middle of the screen and let it start. */
 async function reveal(page, chapter) {
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(600);
+  await scrollToAndSettle(page, 0);
   await page.evaluate(async () => {
     const step = window.innerHeight * 0.8;
     for (let y = 0; y < document.body.scrollHeight; y += step) {
@@ -256,12 +281,29 @@ async function reveal(page, chapter) {
   });
   const top = await page.evaluate((id) => {
     const el = document.querySelector(`#${id} [data-signature-film-frame]`);
+    // **A named failure rather than a TypeError on `null`, 19 Aug 2026.** When
+    // the client's restructure unmounted the potter, this line threw
+    // `Cannot read properties of null` from inside a `for` loop with no film
+    // name attached, and the entry was commented out to get the rig running —
+    // which is a rig going quiet about a page it can no longer describe. A film
+    // listed in `FILMS` and absent from the page is a real failure and now says
+    // so, with the chapters it CAN see, which is the sentence that tells a
+    // reader whether the page or the list is wrong.
+    if (!el) {
+      const seen = [...document.querySelectorAll("[data-signature-film-frame]")]
+        .map((f) => f.closest("section")?.id ?? "(no section)")
+        .join(", ");
+      throw new Error(
+        `no film in #${id}. Films on this page: ${seen || "none at all"}. ` +
+          `Either the page lost one, or FILMS names a chapter this branch does not have.`,
+      );
+    }
     return Math.round(el.getBoundingClientRect().top + window.scrollY);
   }, chapter);
-  await page.evaluate(
-    ({ y, h }) => window.scrollTo(0, y - h * 0.35),
-    { y: top, h: 900 },
-  );
+  await scrollToAndSettle(page, top - 900 * 0.35);
+  // On top of the settle, not instead of it: the entrance reveal and the
+  // parallax finish after the scroll does, and what is measured is the frame a
+  // visitor reads.
   await page.waitForTimeout(700);
 }
 
@@ -281,11 +323,46 @@ async function hover(page, chapter, on) {
   await page.waitForTimeout(160);
 }
 
-/** The chapter's own background colour, which is what the film has to disappear into. */
+/**
+ * The cream the film actually has to disappear into.
+ *
+ * **It read the chapter's own `background-color` and nothing else until 19 Aug
+ * 2026, and that is only right for a chapter that paints one.** `ChapterSurface`
+ * does (`bg-[color:var(--bg)]`), so the tiger's chapter answered correctly and
+ * the fault stayed invisible; `PinnedCollage` renders its own `<section>` and
+ * paints nothing, so `#rooted` returned **`rgba(0,0,0,0)`** — which this then
+ * parsed to `{0, 0, 0}` and compared every corner of the film against BLACK.
+ * A film blending perfectly into cream would have read a drift of ~230 levels
+ * and been reported as a broken blend; the arm that would have said so was
+ * commented out, so nobody saw it.
+ *
+ * `mix-blend-mode` blends against whatever is painted behind the element, which
+ * is the nearest ancestor with a non-transparent background — not the section
+ * the film happens to be in. So this walks up until it finds one, and returns
+ * which element it came from, because "the cream came from `<body>`" is a real
+ * finding about a chapter that was supposed to have its own.
+ *
+ * It throws rather than guessing if nothing in the chain paints. There is no
+ * honest default: a tolerance measured against an invented colour is the exact
+ * shape of a confident wrong number this project catalogues.
+ */
 const chapterCream = (page, chapter) =>
   page.evaluate((id) => {
-    const rgb = getComputedStyle(document.getElementById(id)).backgroundColor.match(/\d+/g).map(Number);
-    return { r: rgb[0], g: rgb[1], b: rgb[2] };
+    let el = document.getElementById(id);
+    if (!el) throw new Error(`no #${id} on this page — nothing to blend against`);
+    for (; el; el = el.parentElement) {
+      const raw = getComputedStyle(el).backgroundColor;
+      const n = raw.match(/[\d.]+/g)?.map(Number) ?? [];
+      // `rgba(r, g, b, a)` with a === 0 is transparent and paints nothing;
+      // `rgb(r, g, b)` has no alpha and always paints.
+      const alpha = n.length > 3 ? n[3] : 1;
+      if (n.length >= 3 && alpha > 0) {
+        return { r: n[0], g: n[1], b: n[2], from: el.tagName.toLowerCase() + (el.id ? `#${el.id}` : "") };
+      }
+    }
+    throw new Error(
+      `nothing from #${id} up to the root paints a background — there is no cream for the film to blend into`,
+    );
   }, chapter);
 
 /**
@@ -570,8 +647,10 @@ for (const { chapter, name } of FILMS) {
  * Scroll and wait for the page to actually stop.
  *
  * Lenis interpolates toward its target, so a fixed wait after `scrollTo` reads a
- * position the page has not reached. `check_card_stack.mjs` solved this first and
- * `check_coverflow.mjs` carries the same routine; this is it, trimmed.
+ * position the page has not reached. `check_card_stack.mjs` solved this first,
+ * and every rig on this project carries the same routine; this is it, trimmed.
+ * (`check_coverflow.mjs` did too, until it was retired on 19 Aug 2026 with the
+ * carousel it measured; `check_experience_strip.mjs` carries it now.)
  */
 async function settle(page, y) {
   await page.evaluate((yy) => window.scrollTo(0, yy), y);
