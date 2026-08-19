@@ -46,6 +46,11 @@ photographs side by side, each full-height, each carrying a small region label, 
 sentence, and a button.
 
 - Left: **Mahua Vann**, label `PENCH`. Right: **Mahua Tola**, label `TADOBA`.
+- **Photographs: `vann-hero` and `tola-hero`** (client, 19 Aug) — the property pages' own opening frames,
+  both 1440 x 960, cropping ~11% into the panel's ~1.33 shape. The cost he accepted is that the same
+  photograph greets a visitor again one click later.
+- **Copy already exists** in `content/home.ts`'s `lodges.lodges[]`: name, place, gate, rooms, body, cta,
+  href for both. Nothing new needs writing.
 - Buttons go to `/mahua-vann` and `/mahua-tola`.
 - **Names, regions and routes come from `content/site.ts`**, which already carries all three for both
   lodges — the closing section and the site menu read the same fields. No lodge name is written twice.
@@ -64,6 +69,9 @@ section more room to breathe with the newly created headroom and legroom, making
   carrying a black panther, two leopards on a rock, and a tiger.
 - **Height cropped, width kept.** The band is shorter than the viewport, with cream above and below it.
 - **The chapter is numbered now**: `02 · The Jungles`, in the page's own chapter-mark idiom.
+- **The heading is the line already there** (client, 19 Aug): *"The forest at its most alive, and you at
+  your most rested."* The Forest's own heading is dropped from the page with its section; only its
+  paragraph survives, on the right.
 - **Heading left-aligned**, at a smaller size than the current centred quote.
 - **The paragraph from `03 · The Forest` moves here**, set to the right of the heading.
 
@@ -80,6 +88,9 @@ An extension of 03, not a separate idea — *"make sure it is in continuity as i
 already existing section."*
 
 - **Text right, right-aligned. Photographs on the left**, scrolling — the mirror of 03.
+- **Photographs: `petal-bowl-map`, `veranda-through-leaves`, `lily-pond-fountain`** (client, 19 Aug) — the
+  three freed by removing `07 Details`. Two are 0.67 portraits, which is what a scrolling column wants,
+  and they are the page's quiet still lifes, which is what a section called Philosophy wants beside it.
 - **Its words are `05 · The Rooms`' intro paragraph**, moved here without that section's heading.
 
 ## 6. `05 · Experiences` — renamed, renumbered, re-carded
