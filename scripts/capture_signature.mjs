@@ -36,7 +36,16 @@ const OUT = flag("out", "docs/reviews/2026-08-05-signature");
 const WIDTHS = [390, 768, 1440, 1920];
 const heightFor = (w) => (w === 390 ? 844 : w === 768 ? 1024 : w === 1920 ? 1080 : 900);
 /** The chapters a signature interaction lives in. */
-const SCENES = ["rooted", "field-days", "lantern-hour"];
+/*
+ * **`lantern-hour` left this list on 19 Aug 2026, on `feat/home-v2` only.**
+ *
+ * The client's restructure removes that chapter from the home page, so the
+ * hanging lantern has no mount here. `HangingLantern`, `build_lantern.mjs`,
+ * `lib/lantern-art.ts` and `check_lantern.mjs` are all untouched and still work
+ * — `feat/image-sizing` keeps the chapter and the lantern shipping. If it ever
+ * returns to a chapter, put its id back; do not rebuild the arm.
+ */
+const SCENES = ["rooted", "field-days"];
 
 async function webp(page, file, clip) {
   const png = `${file}.png`;
