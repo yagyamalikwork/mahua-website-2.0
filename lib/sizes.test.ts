@@ -53,6 +53,9 @@ import {
 } from "@/components/ui/WelcomeScreen";
 import { FULL_BLEED_SIZES } from "@/components/ui/FullBleed";
 import { MEDIA } from "./media";
+// The band's floor lives on the dial and is written literally in the markup, so
+// the test that holds the two together has to read both — see it below `CASES`.
+import { JUNGLE_BAND } from "./motion";
 import {
   capDensity,
   type CoverBox,
@@ -246,10 +249,17 @@ const LIVE_SLOTS: readonly Slot[] = [
   { name: "LodgePanels.panel", sizes: PANEL_SIZES, box: PANEL_BOX },
   // `02 · The Jungles`' band (19 Aug 2026, spec §3). Its `sizes` repeats
   // `HERO_SIZES`/`FULL_BLEED_SIZES`' `100vw` verbatim — it is edge to edge, so
-  // there is no other honest answer — and adds no distinct string; the row is
-  // here for its BOX, which is new and is the whole point of the chapter: the
-  // photograph's own 1440/611, so `cover` crops it in neither axis and the drawn
-  // width is the element's width.
+  // there is no other honest answer — and adds no distinct string.
+  //
+  // **Its box was the photograph's own 1440/611 until 20 Aug 2026 and is now a
+  // floor, 0.6.** The client asked for the chapter's words back onto the
+  // photograph, so the band grows with its own text instead of holding a shape,
+  // and what `coverSizes` needs from a box that has a RANGE of aspects is the
+  // smallest of them — `JUNGLE_BAND.coverAspectFloor`, which carries the five
+  // measured aspects and the margin. This row is what still proves that number
+  // parses and survives `capDensity` for every photograph in the library; what
+  // it can no longer prove is that the box matches a class, because there is no
+  // class (see the removed `CASES` entry below).
   { name: "JunglesBand.band", sizes: BAND_SIZES, box: BAND_BOX },
   // The same chapter's header band had three more rows here — `Coverflow.wide`,
   // `.pair` and `.track`, the four photographs above the stage — registered on
@@ -630,11 +640,22 @@ describe("cover boxes match the markup they describe", () => {
     // 25% width-crop bound bites. Retune the class alone and this goes red,
     // rather than a photograph quietly losing a quarter of its width.
     { file: "components/sections/LodgePanels.tsx", declared: PANEL_BOX },
-    // The Jungles band — the photograph's OWN 1440/611, as `aspect-[1440/611]`.
-    // Equality here is the chapter's whole argument: box aspect == image aspect
-    // is what makes the drawn width the element's width and the served ratio
-    // 1.00 rather than the 0.53 the 100svh version measured.
-    { file: "components/sections/JunglesBand.tsx", declared: BAND_BOX },
+    // **`components/sections/JunglesBand.tsx` had a case here (1440/611) from
+    // 19 to 20 Aug 2026, and it is gone because the box it described is gone.**
+    // The band was a fixed `aspect-[1440/611]` box; the client asked for the
+    // chapter's words back onto the photograph, and a box that carries text has
+    // to grow rather than clip it — so the band is now a `min-h-[…vw]` floor plus
+    // whatever the words come to, and there is no `aspect-*` class in the file
+    // for this test to read. `BAND_BOX` is deliberately a LOWER BOUND on that
+    // range rather than a shape (see `JUNGLE_BAND.coverAspectFloor`), so set
+    // equality against the markup is not a question this test can ask any more —
+    // the same reason its own `ratiosDeclared` walks straight past a
+    // `{ viewportHeightVh }` box.
+    //
+    // It is replaced rather than dropped: the floor's own class is checked
+    // against its dial by the test below this block, and the figure it protects
+    // is checked in a browser by `scripts/check_image_resolution.mjs`, which is
+    // the only instrument that can see a box whose height is its content.
     // `components/sections/Coverflow.tsx` had a case here from 16 to 17 Aug 2026
     // — 3:2 for `guide-sunrise`, 16:9 for the pair, 1:1 for
     // `tiger-crossing-track`. The client deleted that band, so the file had no
@@ -658,6 +679,28 @@ describe("cover boxes match the markup they describe", () => {
       expect(inCode, `${file}: declared ratios do not match its aspect-* classes`).toEqual(inMarkup);
     },
   );
+
+  it("writes The Jungles band's floor as the class JUNGLE_BAND declares", () => {
+    // The replacement for the ratio case removed above, and the same shape of
+    // check `PANEL_SIZES`/`lg:grid-cols-2` needs: a Tailwind variant or arbitrary
+    // value has to appear literally in the source for the utility to be emitted
+    // at all, so the number cannot be interpolated from the dial and the two can
+    // only be held together by reading the file.
+    //
+    // What it protects: the floor is the client's crop of 20 Aug 2026 — 31vw
+    // against the photograph's own 42.4vw — and it is also the thing that keeps
+    // the band's box wider than the photograph at every width where the words
+    // fit inside it, which is what stops `cover` taking the width and losing a
+    // cat off either edge of a stitched composite.
+    const src = read("components/sections/JunglesBand.tsx");
+    const floors = [...src.matchAll(/min-h-\[(\d+(?:\.\d+)?)vw\]/g)].map((m) => Number(m[1]));
+    expect(floors, "JunglesBand.tsx has no min-h-[…vw] floor class").not.toHaveLength(0);
+    // EVERY occurrence, not the first — the comment above the class names the
+    // number too, and a comment that has drifted from the dial is exactly the
+    // kind of confident, wrong figure this project keeps finding in its own
+    // margins. Held to the same assertion, it cannot drift.
+    for (const floor of floors) expect(floor).toBe(JUNGLE_BAND.minHeightVw);
+  });
 
   it("passes a box to every Photo that sits in one", () => {
     // The other half. Set equality above cannot see a `box={...}` deleted from

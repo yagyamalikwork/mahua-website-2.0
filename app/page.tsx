@@ -59,16 +59,22 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  * and that is a real change to the page rather than a tidy-up.** All three were
  * routed until that day, so the creams below them shift.
  *
- * **`"lodgeCards"` → `"lodgePanels"` and `"junglesBand"` joined later the same
- * day.** Both new sections are cream chapters with a photograph reaching the
- * screen's edge inside them — they are not `ChapterSurface` (each needs a child
- * that escapes the 1,600px container) but they carry its padding, its `--bg`
- * redefinition and therefore its place in this alternation. `junglesBand` is a
- * genuine addition: `02 · The Jungles` was a full-screen photograph and counted
- * as no cream chapter at all, so **every cream chapter below it flips**. The new
- * order is `lodges` (base), `why-you-came` (deep), `rooted` (base), `philosophy`
- * (deep), `field-days` (base) — still alternating, which is the only property
- * this list owes anybody.
+ * **`"lodgeCards"` → `"lodgePanels"` on 19 Aug 2026.** It is a cream chapter
+ * with a photograph reaching the screen's edge inside it — not `ChapterSurface`,
+ * because it needs a child that escapes the 1,600px container, but it carries
+ * that component's padding, its `--bg` redefinition and therefore its place in
+ * this alternation.
+ *
+ * **`"junglesBand"` joined the same day and left again on 20 Aug 2026, and both
+ * moves flip every cream chapter below it.** It joined because the band was a
+ * photograph inside a cream section, with the chapter's words in the cream above
+ * and below it. The client then asked for those words back on the photograph and
+ * for the photograph to *"look like the background for this section"*, so the
+ * section is now `--overlay` from edge to edge with no cream in it at all — the
+ * same shape as the `fullBleedQuote` it originally replaced, which was not on
+ * this list either. The order is back to `lodges` (base), `rooted` (deep),
+ * `philosophy` (deep, continuing), `field-days` (base) — still alternating,
+ * which is the only property this list owes anybody.
  *
  * **That order has one deliberate break in it since 19 Aug 2026, and it is a
  * client ruling rather than an oversight.** `04 · Mahua Philosophy` is *"an
@@ -77,14 +83,13 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  * would say "two panels meeting", which is precisely what the pair must not say.
  * `positions()` below is what hands it down, and it does not advance the cycle
  * for a continuing chapter, so everything beneath the pair alternates as though
- * the two were one chapter: `lodges` (base), `why-you-came` (deep), `rooted`
- * (base), `philosophy` (**base**, continuing), `field-days` (deep). Alternation
- * is still the property this list owes; the one join it no longer draws is the
- * one join that is not supposed to be seen.
+ * the two were one chapter: `lodges` (base), `rooted` (deep), `philosophy`
+ * (**deep**, continuing), `field-days` (base). Alternation is still the property
+ * this list owes; the one join it no longer draws is the one join that is not
+ * supposed to be seen.
  */
 const CREAM_KINDS: readonly ChapterKind[] = [
   "lodgePanels",
-  "junglesBand",
   "pinnedCollage",
   // `"coverflow"` until 19 Aug 2026, renamed with its kind when the pinned
   // carousel became a horizontal strip. The surface it takes is unchanged, which
@@ -182,8 +187,15 @@ function renderChapter(chapter: Chapter, at: Position) {
      */
     case "lodgePanels":
       return <LodgePanels key={chapter.id} chapter={chapter} surface={at.surface} />;
+    /*
+     * **No `surface` since 20 Aug 2026, and the prop is gone rather than passed
+     * as `false`.** The band is `--overlay` from edge to edge now that the
+     * client has asked for the chapter's words back onto the photograph, so
+     * there is no cream in it for the alternation to choose between — see
+     * `CREAM_KINDS` above, which it also left.
+     */
     case "junglesBand":
-      return <JunglesBand key={chapter.id} chapter={chapter} surface={at.surface} />;
+      return <JunglesBand key={chapter.id} chapter={chapter} />;
     /*
      * **`case "chapterIntro"` was here until 19 Aug 2026, and it is what hung
      * the lantern.** `06 · The Lantern Hour` was the page's only `chapterIntro`,

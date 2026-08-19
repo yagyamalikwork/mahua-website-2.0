@@ -1737,6 +1737,40 @@ body {
 }
 
 /*
+ * A second trigger, for a composition whose words are a SIBLING of the
+ * photograph's frame rather than a child of it.
+ *
+ * **This was found by hovering the real page, not by reading it** (20 Aug 2026).
+ * `01 · The Lodges` lays each lodge's label, name, sentence and button in a block
+ * absolutely positioned over the foot of its panel — a later sibling of the
+ * frame, so it paints above and takes the pointer events. The rule above fires
+ * on `[data-image-frame]:hover`, which meant the photograph zoomed over the top
+ * 45% of the panel and sat dead over the bottom 55%, where the words are and
+ * where a visitor's pointer actually goes on its way to the button. The client
+ * asked for *"the zoom effect on the images for the cards"*; half a card is not
+ * the card.
+ *
+ * `ui/Plate.tsx` never had this problem because its caption is INSIDE the frame,
+ * so hovering the caption hovers an ancestor of the picture. Moving these words
+ * in there is not open to us: `ImageReveal` puts its children inside
+ * `[data-image-inner]`, which the arrival animation scales, and the words would
+ * arrive scaling with the photograph.
+ *
+ * Deliberately **not** `pointer-events: none` on the words. That would make the
+ * generic rule fire, and it would also make a lodge's name and description
+ * unselectable, which is a real loss of function traded for a hover effect.
+ *
+ * Same declarations and the same (0,5,0) specificity as the rule above, so the
+ * two cannot fight: whichever matches, the picture ends up at the same scale.
+ * The reduced-motion block below repeats this selector for the reason recorded
+ * there.
+ */
+[data-hover-zoom] .zoom-from-parent:hover [data-image-frame]:not([data-no-zoom]) :is(picture, img:not(picture img)) {
+  transform: scale(var(--photo-zoom));
+  transition-duration: var(--photo-zoom-out);
+}
+
+/*
  * A visitor who asked for less motion gets none of this. That is a different
  * request from pointing at a photograph, so unlike the lantern's swing this one
  * does not survive reduced motion — there is no information in it, only pleasure.
@@ -1755,6 +1789,7 @@ body {
    * repeats the hover selector exactly and wins on document order instead.
    */
   [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover :is(picture, img:not(picture img)),
+  [data-hover-zoom] .zoom-from-parent:hover [data-image-frame]:not([data-no-zoom]) :is(picture, img:not(picture img)),
   [data-hover-zoom] [data-image-frame]:not([data-no-zoom]) :is(picture, img:not(picture img)) {
     transform: none;
     transition: none;
@@ -1813,14 +1848,30 @@ body {
  *
  * Scoped exactly like the zoom — `[data-hover-zoom]`, set only by `app/page.tsx`
  * — and honouring the same `[data-no-zoom]` opt-out, so the hero stays still.
+ *
+ * **`.no-float` is a second opt-out, and it exists because the two effects
+ * stopped being one decision on 20 Aug 2026.** The client asked for the zoom on
+ * `01 · The Lodges`' two joined panels, which until then carried `noZoom` — one
+ * flag that switched off both. A panel is a photograph that reaches the edge of
+ * the screen: raising its frame 6px opens a 6px seam of the section's cream
+ * along its foot, running the full width of the window now that the two panels
+ * are joined, and slides the photograph out from under its `Scrim`, which is a
+ * sibling layer rather than a child of the frame. The zoom has neither problem —
+ * it scales the `<picture>` inside a frame that never moves, and the frame
+ * clips it.
+ *
+ * It is a class rather than a `data-` attribute only because
+ * `components/motion/ImageReveal.tsx` forwards a `className` to the frame and
+ * forwards no arbitrary attributes; the frame is still found by
+ * `[data-image-frame]`, so the hook this narrows has not moved.
  */
-[data-hover-zoom] [data-image-frame]:not([data-no-zoom]) {
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):not(.no-float) {
   transition:
     transform var(--float-back) var(--photo-zoom-ease),
     box-shadow var(--float-back) var(--photo-zoom-ease);
 }
 
-[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover {
+[data-hover-zoom] [data-image-frame]:not([data-no-zoom]):not(.no-float):hover {
   transform: translateY(calc(-1 * var(--float-rise)));
   box-shadow: 0 var(--float-shadow-drop) var(--float-shadow-blur)
     color-mix(in srgb, var(--overlay) calc(var(--float-shadow-alpha) * 100%), transparent);
@@ -1832,13 +1883,19 @@ body {
  * exactly, because the first reduced-motion rule written for the zoom lost a
  * specificity contest to its own hover rule and shipped a zoom to visitors who
  * had asked for none — measured, not theorised. See the note there.
+ *
+ * **`:not(.no-float)` is repeated here for exactly that reason and for no
+ * other.** Adding it to the float rules above took them from (0,4,0) to (0,5,0);
+ * a mirror left at (0,4,0) would lose inside this media query and hand a
+ * reduced-motion visitor the float — which is the identical defect, on the
+ * identical pair of rules, that this comment already records.
  */
 @media (prefers-reduced-motion: reduce) {
   .pill-raise,
   .pill-raise:hover,
   .pill-raise:focus-visible,
-  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]),
-  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):hover {
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):not(.no-float),
+  [data-hover-zoom] [data-image-frame]:not([data-no-zoom]):not(.no-float):hover {
     transform: none;
     transition: none;
   }

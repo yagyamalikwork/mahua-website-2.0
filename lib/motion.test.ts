@@ -363,14 +363,37 @@ describe("LODGE_PANELS", () => {
 });
 
 describe("JUNGLE_BAND", () => {
-  it("is the photograph's own box, which is the whole of the chapter's argument", () => {
-    // Box aspect == image aspect is what makes `cover` crop neither axis, the
-    // drawn width the element's width, and the served ratio 1.00 at 1440 — where
-    // the 100svh full-bleed version it replaces drew 2,706px from a 1,440px file
-    // (0.53) and put both edge cats off-screen. If the file is ever re-exported
-    // at another size, these two integers move with it or the argument is gone.
+  it("still records the photograph's own dimensions, which every crop figure is against", () => {
+    // These two were the band's BOX until 20 Aug 2026 — box aspect equal to
+    // image aspect, so `cover` cropped neither axis. They are now the reference
+    // the crop is measured from: `minHeightVw` is only meaningfully "a crop of
+    // 26.8%" against this photograph's own 42.4vw height at full width. If the
+    // file is ever re-exported at another size, these move with it or every
+    // figure quoted around them is about a photograph that no longer exists.
     const photo = media("jungle-cats-stitch");
     expect(JUNGLE_BAND.boxW).toBe(photo.width);
     expect(JUNGLE_BAND.boxH).toBe(photo.height);
+  });
+
+  it("crops the band's length and nothing else", () => {
+    // The client asked for the length cropped further (20 Aug 2026) and this is
+    // the assertion that the answer is a CROP rather than a squeeze: the floor
+    // has to be shorter than the photograph's own height at the same width, or
+    // nothing is cropped, and it has to leave the box WIDER than the photograph,
+    // or `cover` starts taking the width instead — which on a stitched composite
+    // with a panther at one edge and a tiger at the other loses a cat.
+    const photoHeightVw = 100 / (JUNGLE_BAND.boxW / JUNGLE_BAND.boxH);
+    expect(JUNGLE_BAND.minHeightVw).toBeLessThan(photoHeightVw);
+    expect(100 / JUNGLE_BAND.minHeightVw).toBeGreaterThan(JUNGLE_BAND.boxW / JUNGLE_BAND.boxH);
+  });
+
+  it("costs `sizes` at an aspect no narrower than the band can ever be", () => {
+    // `coverAspectFloor` is a LOWER bound on the box's aspect, not a shape: the
+    // band grows past its floor wherever its own words are taller, and
+    // under-stating the aspect over-states the pixels drawn, which is the
+    // direction `ui/Photo.tsx` says to err in. So it must sit below the floor's
+    // own aspect — above it would be an over-statement, i.e. a photograph served
+    // softer than it is drawn, with no instrument in this suite able to see it.
+    expect(JUNGLE_BAND.coverAspectFloor).toBeLessThan(100 / JUNGLE_BAND.minHeightVw);
   });
 });

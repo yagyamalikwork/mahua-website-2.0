@@ -681,37 +681,100 @@ export const LODGE_PANELS = {
  * keeping the width, giving the section more room to breathe with the newly
  * created headroom and legroom, making it look sleeker."*
  *
- * **These two integers are `jungle-cats-stitch`'s own emitted dimensions, and
- * that is the entire point of them.** The band's box is the photograph's box, so
- * `object-fit: cover` crops it in neither axis and the width the browser draws
- * is the width of the element — which is what takes this photograph from the
- * softest on the site to exactly served, with no new file:
+ * **`boxW`/`boxH` are `jungle-cats-stitch`'s own emitted dimensions.** They were
+ * the band's box until 20 Aug 2026 — box aspect equal to image aspect, so
+ * `object-fit: cover` cropped neither axis — and they are still what every crop
+ * figure below is measured against, but they are no longer a `sizes` box. See
+ * `minHeightVw` for what replaced them and why.
  *
- * | | drawn at 1440x900 | file | ratio |
- * |---|---|---|---|
- * | 100svh full-bleed (before) | 2,706px | 1,440 | **0.53** |
- * | its own aspect (after) | 1,440px | 1,440 | **1.00** |
+ * **The words went back onto the photograph on 20 Aug 2026, which reverses the
+ * 19 Aug arrangement, and the client has seen both.** His instruction: *"I
+ * wanted you to place and align all the text for 02-The Jungles on the image as
+ * it was on the earlier tiger image with the 3D raised effect… the image itself
+ * should look like the background for this section, exactly like we have done
+ * for the last section."*
  *
- * The before figure is what a `viewportHeightVh` box costs: `FullBleed`
- * oversizes to 127.6vh for parallax, so at 1440x900 the picture is 1,148px tall
- * and `cover` scales a 2.357:1 photograph until it covers that — 2,706px wide,
- * of which the visitor sees 1,440. **Both cats at the frame's edges are outside
- * the viewport in that arrangement**, which is a composition defect as much as a
- * resolution one: the black panther is in the left ~15% and the tiger in the
- * right ~25% of the photograph.
+ * That is also the fix for why 19 Aug moved them off. The band was then a box of
+ * a FIXED aspect with `overflow: hidden`, so at 390 it was 390 x 166px, the
+ * heading was cut off at the top and the paragraph's last line ran off the
+ * bottom of the photograph onto cream **as cream type on cream**. The section is
+ * now built the way `components/sections/Invitation.tsx` is — the photograph is
+ * an absolutely positioned background with a `Scrim` over it, and the section's
+ * height is its own content against a floor — and a section built that way
+ * cannot clip its text, it grows. That is the whole difference between the
+ * client's instruction and what failed.
  *
- * At 1920 the band is drawn 1,920px from the same 1,440px file (ratio 0.75) and
- * `check_image_resolution.mjs` reports it as `atLibraryCeiling` rather than as a
- * failure — the library has nothing wider. Holding the band at 1,440px with
- * cream either side would fix that number and breach non-negotiable #8 in the
- * same move, which is the trade the plate boards already settled (`DECISIONS.md`
- * §19: at one column the plate fills the container).
+ * Two figures kept from the arrangement it replaces, because both still bind:
+ *
+ * - At 100svh, `FullBleed` oversized the picture to 127.6vh for parallax and
+ *   `cover` drew this 2.357:1 photograph **2,706px wide from a 1,440px file** at
+ *   1440x900 — ratio 0.53, the softest on the site — with the panther at its
+ *   left edge and the tiger at its right both outside the viewport. Nothing here
+ *   goes near a `viewportHeightVh` box again.
+ * - At 1920 the band is drawn 1,920px from the same 1,440px file (ratio 0.75)
+ *   and `check_image_resolution.mjs` reports it `atLibraryCeiling` rather than
+ *   as a failure — the library has nothing wider. Holding the band at 1,440px
+ *   with cream either side would fix that number and breach non-negotiable #8 in
+ *   the same move, which is the trade the plate boards already settled
+ *   (`DECISIONS.md` §19: at one column the plate fills the container).
  */
 export const JUNGLE_BAND = {
-  /** `jungle-cats-stitch`'s emitted width, as the `aspect-[1440/611]` class. */
+  /** `jungle-cats-stitch`'s emitted width. */
   boxW: 1440,
   /** Its emitted height. 1440/611 = 2.357:1. */
   boxH: 611,
+  /**
+   * The band's floor, as a percentage of the viewport's WIDTH — the
+   * `min-h-[31vw]` class in `JunglesBand.tsx`, which `lib/sizes.test.ts` holds
+   * to this number by reading the component's own source.
+   *
+   * **This is the crop, and it is the client's third request of 20 Aug 2026**:
+   * *"I like that you have cropped the image length and made it thinner, but I
+   * would like for you to crop it a bit more on its length."* The photograph's
+   * own height at full width is 100/2.357 = **42.4vw**, which is what the band
+   * was; 31vw takes another **26.8%** off its length. Nothing is cropped
+   * horizontally at any width where the band is at its floor, which is the half
+   * that matters: this is a stitched composite with a black panther at its left
+   * edge and a tiger at its right, so height is the only axis it can lose.
+   *
+   * **A width unit, not a height one, and that is deliberate.** The band's shape
+   * is then a property of the band rather than of the visitor's screen: it is
+   * the same crop of the same photograph on a 1440x900 laptop, a 1366x768 one
+   * and a phone held sideways. Keying a photograph's geometry to viewport height
+   * is what CLAUDE.md's `short:`/`pocket:` note is about, and a `vh` floor here
+   * would also make the box's own aspect depend on the viewport's — which is
+   * exactly the coupling `coverAspectFloor` below exists to avoid.
+   */
+  minHeightVw: 31,
+  /**
+   * The smallest aspect ratio the band's box is ever asked to be, for `sizes`.
+   *
+   * **The band is a floor plus its own words, not a fixed shape** (20 Aug 2026 —
+   * the section grows rather than clipping, which is the entire point of the
+   * rebuild), so there is no one ratio to hand `coverSizes`. What it needs is a
+   * LOWER bound: `cover` draws `boxWidth x max(1, imageAspect / boxAspect)`, so
+   * under-stating the box's aspect over-states the pixels drawn, and
+   * `ui/Photo.tsx`'s rule is that a `sizes` rounds up where it is unsure.
+   *
+   * 0.6 is that bound with room. Measured on the built page across a thirteen-
+   * width sweep, the band's own box aspect runs **0.74 at 360x844** — its
+   * tallest and narrowest case, where the words plus the header's clearance are
+   * a long way past the floor — 0.85 at 390, 1.69 at 768, 2.77 at 1024, and
+   * exactly 3.23 (the floor) from 1100 up. Figures in
+   * `docs/reviews/2026-08-19-home-v2/panels-and-band.md`. The margin between
+   * 0.74 and 0.6 is what a later edit to `content/home.ts`'s two paragraphs is
+   * allowed to spend before this stops being true;
+   * `scripts/check_image_resolution.mjs` is the gate that says so, and it is the
+   * only gate — a growing box produces no `aspect-*` class for
+   * `lib/sizes.test.ts`'s ratio tripwire to read.
+   *
+   * **What the margin costs is one file tier on a DPR-1 phone, and that was
+   * checked.** At 0.6 the band asks for 393vw, so every viewport fetches the
+   * 1,440px file — the library's widest, and the right answer everywhere from
+   * 768 up and on any phone at DPR 2 or more, where the drawn width alone
+   * demands more than 1,440. Only a DPR-1 handset over-fetches, by one tier.
+   */
+  coverAspectFloor: 0.6,
 } as const;
 
 /** True when the visitor has asked their device to reduce motion. SSR-safe. */

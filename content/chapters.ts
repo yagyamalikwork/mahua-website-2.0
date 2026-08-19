@@ -72,9 +72,16 @@ export type ChapterKind =
    */
   | "lodgePanels"
   /**
-   * One band of forest at the photograph's own aspect, cream above and below,
-   * the heading left on it and a paragraph right — `02 · The Jungles`, 19 Aug
-   * 2026 (spec §3). `components/sections/JunglesBand.tsx`.
+   * One cropped band of forest carrying the whole chapter's words on it —
+   * `02 · The Jungles`, 19 Aug 2026 (spec §3).
+   * `components/sections/JunglesBand.tsx`.
+   *
+   * **It was cream above and below the band from 19 to 20 Aug 2026**, with the
+   * heading and paragraph in that cream. The client asked for them back on the
+   * photograph — *"the image itself should look like the background for this
+   * section"* — so the section is a scrimmed photograph edge to edge, as the
+   * `fullBleedQuote` before it was, and its floor is a crop of the photograph's
+   * own length rather than the whole of it (`JUNGLE_BAND.minHeightVw`).
    *
    * **It replaces `"fullBleedQuote"` on this chapter only.** That kind is still
    * in the union and still routed, because both property pages use it
@@ -273,17 +280,25 @@ const CHAPTER_LIST = [
      * see the entry's note in `scripts/build_images.mjs`.
      *
      * **A band since 19 Aug 2026, not a screen** (spec §3). It was `100svh` of
-     * full-bleed photograph with a centred quote on it; it is now a band at the
-     * photograph's OWN aspect — 1440 x 611, 2.357:1 — with cream above and below
-     * it, the heading left and `03 · The Forest`'s surviving paragraph right.
+     * full-bleed photograph with a centred quote on it, which the client found
+     * *"too overwhelming"*.
      *
      * The crop was a resolution fix as much as a compositional one. At 100svh
      * `FullBleed` oversized the picture for parallax and `cover` drew this
      * photograph **2,706px wide from a 1,440px file** at 1440x900 — ratio 0.53,
      * the softest image on the site — with the panther at its left edge and the
-     * tiger at its right both outside the viewport. At its own aspect nothing is
-     * cropped and the ratio is 1.00 with no new file. See `JUNGLE_BAND` in
-     * `lib/motion.ts`.
+     * tiger at its right both outside the viewport.
+     *
+     * **The band was cropped again on 20 Aug 2026, and the chapter's words went
+     * back onto it.** *"I like that you have cropped the image length and made
+     * it thinner, but I would like for you to crop it a bit more on its
+     * length"*, and *"place and align all the text for 02-The Jungles on the
+     * image… the image itself should look like the background for this
+     * section."* The band's floor is now 31vw against the photograph's own
+     * 42.4vw — 26.8% more of its length — and the section grows past that floor
+     * wherever its own words need the room, which is what stops the arrangement
+     * clipping its text the way the first attempt at it did. `JUNGLE_BAND` in
+     * `lib/motion.ts` carries both numbers and the working.
      */
     id: "why-you-came",
     number: "02",

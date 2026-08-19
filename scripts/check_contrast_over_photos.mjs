@@ -340,6 +340,71 @@ const LODGE_PANEL_RUNS = [1, 2].flatMap((n) => {
   ];
 });
 
+/**
+ * `02 · The Jungles`' three blocks of type — 20 Aug 2026, when the client asked
+ * for them back onto the photograph (`components/sections/JunglesBand.tsx`).
+ *
+ * Three runs and not one, because the three floors are genuinely different and a
+ * single run would have to take the strictest of them and buy it with wash the
+ * heading does not need — on a photograph 19 Aug already proved goes olive-grey
+ * under a flat heavy enough for its lit grass.
+ *
+ * | run | type | floor |
+ * |---|---|---|
+ * | `jungles · mark` | `ui/ChapterLabel`, 12px tracked small caps | 4.5 |
+ * | `jungles · heading` | display serif, `clamp(1.6rem, 3.4vw, 2.8rem)` | 3 |
+ * | `jungles · body` | body, `1.02-1.08rem` | 4.5 |
+ *
+ * **The heading's 3 is WCAG's large-text floor and it is earned rather than
+ * borrowed.** Its clamp bottoms out at 1.6rem = 25.6px, above the 24px large
+ * threshold at every width this rig samples, which is the same test `hero ·
+ * headline` and the property pages' `quote · *` runs pass. The other two are not
+ * large text at any width, and the mark is the smallest type anywhere on this
+ * photograph.
+ *
+ * **The mark is measured because it is the run most likely to be forgotten.**
+ * `ChapterLabel` sets itself from `--accent-text` — goldText, which
+ * non-negotiable #7 says is legible on cream and on nothing else — and the
+ * component keeps that colour here; what changes it is a redefinition of the
+ * property on the wrapping element. A probe is what proves the redefinition
+ * actually reached it, rather than a reviewer taking a `style` attribute's word
+ * for it.
+ *
+ * `at` is the section, which puts its top at the viewport's top. All three
+ * blocks sit at the FOOT of the band and the band is between 350 and 600px tall
+ * at every width sampled, so nothing here is below the fold and nothing needs a
+ * `from:`. `lines: true` on the mark and the body for the reason the panels'
+ * runs record: both are block-level and as wide as their column, so an
+ * element-rect crop would report the brightest pixel in an empty gutter as the
+ * worst case for glyphs nowhere near it. The heading needs no `lines` — every
+ * word in a `SplitLines` heading is already its own `[data-word]` box.
+ */
+const JUNGLES_RUNS = [
+  {
+    name: "jungles · mark",
+    min: 4.5,
+    at: "#why-you-came",
+    lines: true,
+    container: "#why-you-came",
+    sel: '#why-you-came [data-contrast="jungles-mark"] p',
+  },
+  {
+    name: "jungles · heading",
+    min: 3,
+    at: "#why-you-came",
+    container: "#why-you-came",
+    sel: "#why-you-came h2 [data-word]",
+  },
+  {
+    name: "jungles · body",
+    min: 4.5,
+    at: "#why-you-came",
+    lines: true,
+    container: "#why-you-came",
+    sel: '#why-you-came [data-contrast="jungles-body"]',
+  },
+];
+
 const HOME_RUNS = [
   { name: "header · menu", min: 4.5, at: "#arrival", container: "header", sel: "[aria-controls='site-menu']" },
   {
@@ -376,16 +441,18 @@ const HOME_RUNS = [
    * the file, and these runs exist because the file's arithmetic cannot see a
    * mask, a scale, or a second thing painted on top.
    *
-   * **`quote · after-dark` went the same day, and `quote · why-you-came` with
-   * it.** `after-dark` is one of the four chapters the restructure removes
-   * outright. `why-you-came` survives as `02 · The Jungles` and is no longer a
-   * target at all: it is a cropped band with cream above and below, and its
-   * heading and paragraph are laid on that cream rather than on the photograph
-   * — a decision made by building both arrangements and looking at them
-   * (`components/sections/JunglesBand.tsx`, `docs/reviews/2026-08-19-home-v2/
-   * shapes.md` §3). Ink and `--dim` on cream is `lib/palette.test.ts`'s job, not
-   * this rig's. **If type is ever laid back onto that band, a run belongs here
-   * again** — this table is hand-written and discovers nothing.
+   * **`quote · after-dark` went the same day.** It is one of the four chapters
+   * the restructure removes outright.
+   *
+   * **`quote · why-you-came` was deleted on 19 Aug and `02 · The Jungles` has
+   * three runs again from 20 Aug**, which is the sentence the 19 Aug note ended
+   * on — *"if type is ever laid back onto that band, a run belongs here again;
+   * this table is hand-written and discovers nothing"* — coming true within the
+   * day. The client asked for the chapter's words back on the photograph, so
+   * there are now three blocks of cream type over `jungle-cats-stitch` and each
+   * one is measured. They are `JUNGLES_RUNS` below rather than a single retarget
+   * of the old run: the old one measured a centred pull-quote over a different
+   * photograph in a different section.
    */
   { name: "hero · sub", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival > div > p" },
   { name: "hero · scroll cue", min: 4.5, at: "#arrival", container: "#arrival", sel: "#arrival div.flex > span:nth-child(2)" },
@@ -430,6 +497,7 @@ const HOME_RUNS = [
     hide: "color",
   },
   ...LODGE_PANEL_RUNS,
+  ...JUNGLES_RUNS,
   ...STRIP_RUNS,
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },

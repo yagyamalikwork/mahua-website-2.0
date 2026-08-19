@@ -1,5 +1,6 @@
 import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
+import { SplitLines } from "@/components/motion/SplitLines";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { Photo } from "@/components/ui/Photo";
 import { PillButton } from "@/components/ui/PillButton";
@@ -21,11 +22,13 @@ type LodgesCopy = {
  * How wide a panel is actually drawn.
  *
  * The band is edge-to-edge, so a panel is the whole viewport while the two are
- * stacked and half of it once they sit side by side. The 16px gutter between
- * them is deliberately NOT subtracted: `ui/Photo.tsx` is explicit that a `sizes`
- * must round *up* where it is unsure, and 50vw over-states a
- * `calc(50vw - 8px)` panel by eight pixels, which can only ever cost a tier and
- * can never ship a soft photograph.
+ * stacked and half of it once they sit side by side.
+ *
+ * **`50vw` is exact from 20 Aug 2026, where it used to round up.** There was a
+ * 16px gutter between the panels until the client asked for them joined, and
+ * this string deliberately over-stated a `calc(50vw - 8px)` panel by eight
+ * pixels on `ui/Photo.tsx`'s rule that a `sizes` rounds up where it is unsure.
+ * There is now nothing to round: the two panels share the viewport exactly.
  *
  * The breakpoint is interpolated from `LODGE_PANELS.twoUpFromPx` rather than
  * written as `1024`, for the same reason `CoverflowCard`'s `CARD_SIZES` is
@@ -129,12 +132,20 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { corner: 0.95, bottom: 0.95, flat: 0.3
  *    it; from `lg` it moves onto the frame in cream over a solved wash. One
  *    block, two placements — see the markup's own note on why it is not written
  *    twice.
- * 3. **`ImageReveal` carries `noZoom`.** A panel's photograph is a backdrop with
- *    a headline on it, exactly like the hero's, and the home page's hover zoom
- *    and float are both scoped `:not([data-no-zoom])`. The float in particular
- *    would translate the frame 6px up and open a 6px seam of cream at the foot
- *    of a full-bleed panel — the effect was built for a plate inside a margin,
- *    not for a photograph that reaches the edge of the screen.
+ * 3. **The panel takes the zoom and refuses the float, and they are one flag
+ *    apart.** Client, 20 Aug 2026: *"add the zoom effect on the images for the
+ *    cards as we have on other images on our homepage."* So `ImageReveal`'s
+ *    `noZoom` is gone. But `[data-no-zoom]` was switching off BOTH homepage
+ *    hover effects, and only one of them is wanted here: `FLOAT` translates the
+ *    frame 6px upward, which on a photograph that reaches the edge of the screen
+ *    opens a 6px seam of the section's cream along its foot — and now that the
+ *    two panels are joined, that seam runs the full width of the window. It
+ *    would also slide the photograph out from under its own `Scrim`, which is a
+ *    sibling layer rather than a child of the frame. So the frame carries
+ *    `no-float`, the class `app/globals.css` excludes from the float rules and
+ *    from their reduced-motion mirror; the zoom, which scales the `<picture>`
+ *    INSIDE a frame that never moves, is fully contained by the panel's own
+ *    `overflow-hidden` and shows nothing at the join.
  *
  * ## Where each word comes from
  *
@@ -198,11 +209,22 @@ export function LodgePanels({
         </Enter>
       </div>
 
-      {/* Edge to edge. `gap-4` at `lg` is 16px of cream down the middle — enough
-          that two different photographs read as two panels rather than as one
-          botched stitch, and 1.1% of the width at 1440, which is what it costs
-          against the ceiling this chapter is being rebuilt for. */}
-      <div className="mt-10 grid gap-12 md:mt-12 lg:grid-cols-2 lg:gap-4">
+      {/*
+        Edge to edge, and **joined** — client, 20 Aug 2026: *"Remove the gap
+        between the two property cards and I want them joined together, no gap
+        in between."* `lg:gap-4` was 16px of cream down the middle until then,
+        argued for on the grounds that two different photographs would otherwise
+        read as one botched stitch; the client looked at it and ruled the other
+        way, and the two frames turn out to be far enough apart in colour and
+        subject that the join reads as a join (see this task's report).
+
+        **`gap-12` below `lg` is not the same gap and stays.** There the panels
+        are stacked, and what sits between them is not two photographs meeting —
+        it is the first lodge's own words, on cream, under its photograph. Taking
+        that to zero would butt one lodge's paragraph against the next lodge's
+        frame.
+      */}
+      <div className="mt-10 grid gap-12 md:mt-12 lg:grid-cols-2 lg:gap-0">
         {copy.lodges.map((lodge, i) => {
           const mediaId = chapter.media[i];
           // The site's own record of this place. Matched by route rather than by
@@ -218,13 +240,25 @@ export function LodgePanels({
           }
 
           return (
-            <article key={lodge.href} className="relative">
+            /* `zoom-from-parent` makes the WHOLE panel the zoom's trigger, not
+               just the part of it the photograph's own frame can be hovered
+               through. The block of words below is a later sibling of that
+               frame and takes the pointer events over the bottom half of the
+               panel; `app/globals.css` carries the finding and the reason this
+               is a second selector rather than `pointer-events: none` on the
+               words. */
+            <article key={lodge.href} className="zoom-from-parent relative">
               {/* `isolate` so the frame is its own stacking context and the two
                   `-z-10` layers stay inside it rather than sliding under the
                   section. */}
               <div className="relative isolate aspect-[4/3] overflow-hidden">
                 <div className="absolute inset-0 -z-10">
-                  <ImageReveal noZoom className="h-full w-full">
+                  {/* `no-float` and no `noZoom` — see point 3 on the component.
+                      The class rides in on `className` because `ImageReveal`
+                      applies it to the frame element itself, which is the
+                      element `[data-image-frame]` names and the one the float
+                      would translate. */}
+                  <ImageReveal className="no-float h-full w-full">
                     <Photo
                       id={mediaId}
                       sizes={PANEL_SIZES}
@@ -284,9 +318,38 @@ export function LodgePanels({
                   <p className="font-[family-name:var(--font-label)] text-[clamp(0.55rem,1.7vw,0.7rem)] uppercase tracking-[0.28em] text-[color:var(--accent-text)] lg:text-[clamp(0.55rem,0.85vw,0.7rem)] lg:text-[color:var(--bg)]">
                     {place.region}
                   </p>
-                  <h3 className="mt-3 font-[family-name:var(--font-display)] text-[clamp(1.5rem,4.6vw,3rem)] font-light leading-[1.06] tracking-[-0.01em] text-[color:var(--text)] lg:mt-4 lg:text-[clamp(1.5rem,2.3vw,3rem)] lg:text-[color:var(--bg)]">
+                  {/*
+                    **`SplitLines`, not a plain `<h3>` — client, 20 Aug 2026:**
+                    *"add the 3D effect on the text that is on these cards,
+                    exactly like the one we have on the text we have placed over
+                    the images like on the last section."* The effect he is
+                    pointing at is the closing chapter's heading, which is a
+                    `TwoToneHeading`, which is this component with the page's
+                    standard chapter-heading classes wrapped round it: each
+                    visual line rises out from behind its own mask, staggered,
+                    once the block scrolls in.
+
+                    **It is `SplitLines` directly rather than `TwoToneHeading`,
+                    and the three reasons are all this composition's rather than
+                    preference.** (1) `TwoToneHeading` takes a `TwoTone` — a
+                    headline plus the run of words inside it to soften — and a
+                    lodge's name is a bare string off `content/site.ts` with no
+                    such run; inventing one would be writing copy, and passing an
+                    empty one would be lying to `content/home.test.ts`'s rule
+                    about it. (2) Its `onPhoto` sets `text-[color:var(--bg)]`
+                    unprefixed, and these words are on the photograph only from
+                    `lg` — below that they are ink on cream, and cream on cream
+                    is invisible. The pair below is the same idea written so the
+                    two arms cannot collide. (3) Its size is one unprefixed
+                    clamp, and this heading needs the `lg:` arm described above
+                    (a `vw` term does not halve when the panel does).
+                  */}
+                  <SplitLines
+                    as="h3"
+                    className="mt-3 font-[family-name:var(--font-display)] text-[clamp(1.5rem,4.6vw,3rem)] font-light leading-[1.06] tracking-[-0.01em] text-[color:var(--text)] lg:mt-4 lg:text-[clamp(1.5rem,2.3vw,3rem)] lg:text-[color:var(--bg)]"
+                  >
                     {place.label}
-                  </h3>
+                  </SplitLines>
                   <p className="mt-4 font-[family-name:var(--font-body)] text-[clamp(0.9rem,2.6vw,1.05rem)] leading-[1.62] text-[color:var(--text)] lg:mt-5 lg:text-[clamp(0.9rem,1.3vw,1.05rem)] lg:text-[color:var(--bg)]">
                     {lodge.body}
                   </p>
@@ -298,7 +361,14 @@ export function LodgePanels({
                     cream on a photograph. `ui/PillButton.tsx` explains why the
                     `<span>` inside it is the rectangle to crop. */}
                 <div data-contrast="lodge-panel-pill" className="mt-6 lg:mt-7">
-                  <PillButton href={place.href}>{lodge.cta}</PillButton>
+                  {/* `raise` — client, 20 Aug 2026: *"make the buttons rise when
+                      hovered on both of these like the section we have above the
+                      website directory."* That is `.pill-raise`, the class the
+                      two lodge buttons closing `08 · The Invitation` already
+                      carry, and it is the same prop with the same numbers. */}
+                  <PillButton href={place.href} raise>
+                    {lodge.cta}
+                  </PillButton>
                 </div>
               </div>
             </article>
