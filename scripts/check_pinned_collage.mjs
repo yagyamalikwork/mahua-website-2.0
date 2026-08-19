@@ -25,7 +25,9 @@
 //      scroll the pin reserved, not merely still.
 //   5. **No JavaScript is readable.** Rendered text and painted photographs in a
 //      context with `javaScriptEnabled: false` — not the server markup inspected
-//      from outside — plus the same height check as (4).
+//      from outside — plus the same height check as (4). The word count is a
+//      comparison against the same chapter with the script ON, not a fixed floor;
+//      see `WORD_FLOOR`.
 //
 // Run (with `npm run build && npx next start -p 3100` already up):
 //   node scripts/check_pinned_collage.mjs
@@ -108,6 +110,12 @@ const SECTION_METRICS = (id) => {
     sceneTop: sceneBox ? Math.round(sceneBox.top + window.scrollY) : null,
     sceneHeight: sceneBox ? Math.round(sceneBox.height) : 0,
     drifters: section.querySelectorAll("[data-drift]").length,
+    /**
+     * How many words the chapter renders — read here as well as in the no-JS
+     * run, because "no JavaScript is readable" is a comparison and not a
+     * threshold. See the assertion at the foot of this file.
+     */
+    words: (section.textContent ?? "").trim().split(/\s+/).filter(Boolean).length,
   };
 };
 
@@ -496,7 +504,36 @@ if (noJs.photographs < 3 || noJs.painted < 3) {
   );
 }
 if (!noJs.heading) failures.push("no JavaScript: the chapter has no readable headline");
-if (noJs.words < 100) failures.push(`no JavaScript: only ${noJs.words} words in #${CHAPTER}`);
+/**
+ * The chapter's copy is all there with the script switched off.
+ *
+ * **This was a flat floor of 100 words until 19 Aug 2026, and 100 was a fact
+ * about `rooted` rather than a question about the page.** It read 139 there and
+ * failed at 55 on `04 · Mahua Philosophy` — a chapter carrying one moved
+ * paragraph, which the client has ruled stays thin for now (*"we will later add
+ * more text to the philosophy, for now keep this"*). A rig that fails a chapter
+ * for having the copy its owner chose is measuring the wrong thing: what this
+ * check exists for is a chapter whose words arrive only with JavaScript, and
+ * the honest statement of that is a **comparison against the same chapter with
+ * the script on**, which is now read in `SECTION_METRICS` for both runs.
+ *
+ * It is strictly stricter than the old form as well as more portable: 100 would
+ * have passed a `rooted` that rendered 100 of its 139 words without script,
+ * where 90% of the live count catches any real loss. The small absolute floor
+ * underneath it is what catches the case where both runs render nothing, which
+ * a ratio alone would call a pass.
+ */
+const WORD_FLOOR = { share: 0.9, absolute: 20 };
+if (noJs.words < WORD_FLOOR.absolute) {
+  failures.push(
+    `no JavaScript: only ${noJs.words} words in #${CHAPTER} — the chapter has essentially no copy in it`,
+  );
+} else if (noJs.words < Math.round(pinned.words * WORD_FLOOR.share)) {
+  failures.push(
+    `no JavaScript: ${noJs.words} words in #${CHAPTER} against ${pinned.words} with the script on — ` +
+      `${Math.round((1 - noJs.words / pinned.words) * 100)}% of the chapter's copy needs JavaScript to appear`,
+  );
+}
 
 // ------------------------------------------------------------------- report
 

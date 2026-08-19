@@ -37,7 +37,9 @@ export const DURATION = {
   /**
    * Delay between successive items in a stacked group, multiplied by index so
    * item *n* enters `stagger * n` after the first: `ChapterIntro` and
-   * `PinnedCollage`'s body paragraphs, `Testimonials`' guest quotes.
+   * `PinnedCollage`'s body paragraphs, and the guest quotes — which sit at the
+   * foot of `Invitation` since 19 Aug 2026, where they were `Testimonials`' own
+   * until that component was retired with the `guests` chapter.
    */
   stagger: 0.06,
   /**

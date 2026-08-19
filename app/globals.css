@@ -693,6 +693,34 @@ body {
 }
 
 /*
+ * The pinned collage's chapter, set against the edge it stands on —
+ * `components/motion/PinnedCollage.tsx`, 19 Aug 2026, spec §4-§5. `03 · Rooted
+ * Like The Mahua` sets its words left against the left edge; `04 · Mahua
+ * Philosophy` mirrors it.
+ *
+ * **This is one line of CSS rather than one Tailwind class because of a cascade
+ * race that has already cost this project a build.** `ui/TwoToneHeading.tsx`
+ * writes `text-left` into the headline's own class list from its `align` prop,
+ * which has no `right`; adding `text-right` beside it puts two utilities from
+ * the same family on one element, and which one wins is decided by the order
+ * Tailwind happens to emit them in the stylesheet, not by the order they appear
+ * in the attribute. That is exactly how `ChapterIntro`'s solo flank came to sit
+ * on top of its own chapter's text (see the note there). Everything else in the
+ * column inherits `text-align` from the flex container, which owns no competing
+ * class, so only the headline needs saying twice.
+ *
+ * Deliberately unlayered: Tailwind's utilities live in `@layer` and unlayered
+ * rules beat layered ones whatever their specificity, so this cannot lose.
+ */
+[data-collage-align="right"] h2 {
+  text-align: right;
+}
+
+[data-collage-align="left"] h2 {
+  text-align: left;
+}
+
+/*
  * The entrance. `data-enter` carries the state returned by
  * `components/motion/useInView.ts`, and **its absence is the at-rest state** —
  * so markup that never meets JavaScript is simply visible, which is the

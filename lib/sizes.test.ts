@@ -28,10 +28,14 @@ import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
 import { GALLERY_SIZES } from "@/components/sections/RoomCardStack";
 import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
-import {
-  BOXES as TESTIMONIAL_BOXES,
-  SIZES as TESTIMONIAL_SIZES,
-} from "@/components/sections/Testimonials";
+// `@/components/sections/Testimonials` was imported here until 19 Aug 2026, for
+// its `SIZES.wide`/`.tall` and the boxes beside them. The `guests` band left the
+// page with the v2 restructure and its three quotes moved into `invitation`'s
+// copy, so nothing routed to the component; it is deleted, exactly as
+// `SplitFeature` was on 16 Aug when the coverflow took its one caller. Its two
+// slots come out of `LIVE_SLOTS` below and its case out of the `CASES` table at
+// the foot of this file — two distinct strings and one file, all three of which
+// the tripwires would otherwise still demand.
 import {
   BOXES as COLLAGE_BOXES,
   SIZES as COLLAGE_SIZES,
@@ -183,11 +187,8 @@ const LIVE_SLOTS: readonly Slot[] = [
       box: frame.ratio as CoverBox,
     })),
   ]),
-  ...(["wide", "tall"] as const).map((k) => ({
-    name: `Testimonials.${k}`,
-    sizes: TESTIMONIAL_SIZES[k],
-    box: TESTIMONIAL_BOXES[k] as CoverBox,
-  })),
+  // `Testimonials.wide` and `.tall` were here until 19 Aug 2026 — see the note
+  // on the deleted import at the head of this file.
   // The rooms, as a stack of cards (Task 5 of the room-card-stack plan, 11
   // Aug 2026), replacing `RoomShowcase`'s three-scale ledger of bands above
   // (see the distinct-string comment beneath the assertion this feeds).
@@ -418,7 +419,19 @@ describe("the sizes the page actually serves", () => {
     // failure, not computed by hand, per the same instruction as every step
     // above. `LodgeCards`' two slots stay: the component is unrouted but still
     // on disk and still passes `sizes`, which the tripwire below still checks.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(22);
+    // 21 later the same day, and it is two changes that happen to net to one.
+    // `Testimonials`' `wide` and `tall` come out with the component (−2; both
+    // were genuinely distinct — nothing else on the page serves 58vw or 41vw),
+    // and `PinnedCollage`'s realignment adds one (+1): its two pair frames now
+    // share `(min-width: 1024px) 30vw, …` because they share the column's edges,
+    // where they used to borrow `ChapterIntro`'s 40vw and 35vw entries. Those
+    // two strings do not leave the set — `ChapterIntro` still uses them, and it
+    // is still what this scene renders below the pin viewport — so the loss is
+    // the testimonials' alone. `PinnedCollage.solo` is still byte-identical to
+    // `ChapterIntro.solo` and still adds nothing. Read off this suite by running
+    // it and reading the failure (`expected 21 to be 22`), not computed by hand,
+    // per the same instruction as every step above.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -568,7 +581,8 @@ describe("cover boxes match the markup they describe", () => {
     { file: "components/sections/Hero.tsx", declared: HERO_BOX },
     { file: "components/sections/ChapterIntro.tsx", declared: INTRO_BOXES },
     { file: "components/sections/LodgeCards.tsx", declared: LODGE_BOXES },
-    { file: "components/sections/Testimonials.tsx", declared: TESTIMONIAL_BOXES },
+    // `components/sections/Testimonials.tsx` had a case here (3:2 and 4:5) until
+    // 19 Aug 2026, when the component was deleted with the `guests` chapter.
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
     // The day's six experiences: `hero` at 2:1, `quiet` at 4:5 — new crops
     // even though both `sizes` strings are borrowed from `PlateGrid`.

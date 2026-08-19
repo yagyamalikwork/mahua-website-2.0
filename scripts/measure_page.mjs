@@ -163,11 +163,42 @@ async function changedPercent(a, b) {
  * standing measurement, not a one-off.
  */
 async function measureMotion(browser) {
-  const ids = ["lodges", "rooted", "forest", "field-days", "rooms", "guests"];
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.goto(URL, { waitUntil: "load" });
   await page.waitForTimeout(1500);
+
+  /**
+   * The chapters, read off the page rather than restated here.
+   *
+   * **This was a hard-coded list until 19 Aug 2026 and it had rotted into a
+   * measurement of nothing.** It named `forest`, `rooms` and `guests`, three
+   * chapters the v2 restructure removed; `getElementById` returned `null` for
+   * each, the scroll expression fell back to `0`, the two screenshots were
+   * therefore the top of the page twice, and the rig recorded
+   * `changedPercent: 0` — a plausible-looking figure for a section that does not
+   * exist. Nothing failed. It is exactly the defect shape this project has been
+   * burned by: a check that reports on a mechanism instead of on behaviour.
+   *
+   * `main section[id]` is the page's own spine as rendered, in order, so a
+   * chapter added, renamed or removed is measured or not measured by virtue of
+   * being on the page. The first one is dropped because there is no such thing
+   * as *entering* the hero — the rig lands 120px above a section so it is
+   * arriving rather than settled, and 120px above the first section is the top
+   * of the document, which is where the old broken list was landing every time.
+   *
+   * **Descendant, not child, and that is `measure_density.mjs`'s selector for
+   * the same reason.** A pinned chapter is `main > div > section` once
+   * `components/motion/CollageStage.tsx` has switched the pin on, so `main >
+   * section` finds every chapter on the page except the two this rig most wants
+   * to watch enter.
+   */
+  const ids = (await page.evaluate(() =>
+    [...document.querySelectorAll("main section[id]")].map((s) => s.id).filter(Boolean),
+  )).slice(1);
+  if (ids.length === 0) {
+    throw new Error("no `main > section[id]` on the page — the rig is broken, not the page");
+  }
 
   const out = [];
   for (const id of ids) {

@@ -68,6 +68,18 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  * order is `lodges` (base), `why-you-came` (deep), `rooted` (base), `philosophy`
  * (deep), `field-days` (base) — still alternating, which is the only property
  * this list owes anybody.
+ *
+ * **That order has one deliberate break in it since 19 Aug 2026, and it is a
+ * client ruling rather than an oversight.** `04 · Mahua Philosophy` is *"an
+ * extension of an already existing section"*, so it stands on the same cream as
+ * `03 · Rooted Like The Mahua` instead of stepping off it — a tonal step there
+ * would say "two panels meeting", which is precisely what the pair must not say.
+ * `positions()` below is what hands it down, and it does not advance the cycle
+ * for a continuing chapter, so everything beneath the pair alternates as though
+ * the two were one chapter: `lodges` (base), `why-you-came` (deep), `rooted`
+ * (base), `philosophy` (**base**, continuing), `field-days` (deep). Alternation
+ * is still the property this list owes; the one join it no longer draws is the
+ * one join that is not supposed to be seen.
  */
 const CREAM_KINDS: readonly ChapterKind[] = [
   "lodgePanels",
@@ -91,7 +103,62 @@ type Position = {
   intro: number;
   /** True on every other cream chapter, for the second cream surface. */
   surface: boolean;
+  /**
+   * This chapter is the second half of the one above it.
+   *
+   * True where a `pinnedCollage` follows a `pinnedCollage` — today, `04 · Mahua
+   * Philosophy` after `03 · Rooted Like The Mahua`. The client asked for the
+   * second to read as *"an extension of an already existing section"*, and the
+   * two things that make two sections read as one idea both belong to the page
+   * rather than to either section: they stand on the same cream, and they meet
+   * without a band of cream between them. See `PinnedCollage`'s own `continues`.
+   */
+  continues: boolean;
 };
+
+/**
+ * Every chapter's place in the page, worked out in one pass before anything
+ * renders.
+ *
+ * It was two counters incremented inside the `map` until 19 Aug 2026, which was
+ * fine while every position depended only on the chapters *above* — but
+ * `continues` depends on the chapter above being of the same kind, and the
+ * surface it hands down is the one that chapter already took rather than the
+ * next in the cycle. An expression evaluated inside `map`'s own argument list
+ * cannot look backwards at what it decided last time round.
+ */
+function positions(): readonly Position[] {
+  let intro = 0;
+  let cream = 0;
+  let lastSurface = false;
+  const out: Position[] = [];
+
+  for (let i = 0; i < CHAPTERS.length; i++) {
+    const chapter = CHAPTERS[i];
+    const continues =
+      chapter.kind === "pinnedCollage" && CHAPTERS[i - 1]?.kind === "pinnedCollage";
+    /*
+     * A continuing chapter takes the cream the chapter above it is standing on
+     * and does not advance the cycle — so the alternation carries on beneath the
+     * pair as if it were one chapter, which is what it is meant to look like.
+     * The sequence today: `lodges` base, `why-you-came` deep, `rooted` base,
+     * `philosophy` base (continuing), `field-days` deep.
+     */
+    const surface: boolean = CREAM_KINDS.includes(chapter.kind)
+      ? continues
+        ? lastSurface
+        : cream++ % 2 === 1
+      : false;
+    if (CREAM_KINDS.includes(chapter.kind)) lastSurface = surface;
+    out.push({
+      intro: INTRO_KINDS.includes(chapter.kind) ? intro++ : 0,
+      surface,
+      continues,
+    });
+  }
+
+  return out;
+}
 
 function renderChapter(chapter: Chapter, at: Position) {
   const kind: ChapterKind = chapter.kind;
@@ -127,6 +194,26 @@ function renderChapter(chapter: Chapter, at: Position) {
      * chapter next sits under a lit facade. `check_lantern.mjs` fails against
      * this branch, and that failure is the ruling, not a regression.
      */
+    /*
+     * **The potter's film closed `rooted` until 19 Aug 2026 and this arm is
+     * where it was mounted.** Spec §4, in the client's own words: *"first the
+     * animated potter needs to be removed."* It went with the realignment the
+     * same section asks for — text left, photographs lined up on the right —
+     * and it went from here rather than from `PinnedCollage`, because a section
+     * component should not know which chapter it is drawing.
+     *
+     * **Nothing about the film is deleted.** `components/signature/
+     * SignatureFilm.tsx`, `/media/potter-film.mp4`, its poster and
+     * `scripts/check_films.mjs` are all untouched, and `feat/image-sizing` still
+     * ships it. What that rig loses on this branch is its `rooted` arm: it
+     * asserts two films and there is one, so the potter's play-once, hold and
+     * hover-replay assertions are no longer exercised here. The tiger's are, and
+     * they are the ones that still describe something on the page.
+     *
+     * `PinnedCollage` has no `footer` slot to give it back to — see the note
+     * there on why the pull-up that positioned it could not survive the
+     * recomposition.
+     */
     case "pinnedCollage":
       return (
         <PinnedCollage
@@ -134,53 +221,7 @@ function renderChapter(chapter: Chapter, at: Position) {
           chapter={chapter}
           mirrored={at.intro % 2 === 1}
           surface={at.surface}
-          /*
-           * The potter closes `rooted`, and ONLY `rooted`.
-           *
-           * **The `chapter.id` test is new on 19 Aug 2026 and it is load-bearing,
-           * not defensive.** This arm rendered one chapter until that day, so the
-           * film could be passed unconditionally; `philosophy` is a second
-           * `pinnedCollage` now, and without the test the same potter film would
-           * play twice on one page — once under a chapter whose copy names the
-           * potters of Pachdhar, and once under a chapter about rooms.
-           *
-           * `rooted` is the one chapter whose copy already names them — the
-           * potters of Pachdhar, whose wheel this page invites you to take a
-           * turn at — which is why it is the film's chapter and not the other's.
-           *
-           * **Spec §4 removes this film outright, and that is deliberately NOT
-           * done here.** It belongs with the realignment the same section
-           * describes (text left, photographs right), which is a component
-           * change. When it goes, `scripts/check_films.mjs` loses its `rooted`
-           * arm with it — that rig asserts two films and would then assert one.
-           */
-          footer={
-            chapter.id === "rooted" ? (
-              <SignatureFilm
-                src="/media/potter-film.mp4"
-                poster="/media/potter-film-poster.webp"
-                width={1080}
-                height={1255}
-                /*
-                 * Small, and tucked into the section's own bottom padding — an
-                 * accessory closing the chapter rather than a band of its own.
-                 *
-                 * It was 680px wide and centred in a new band until 7 Aug 2026.
-                 * That read as a feature the chapter had not asked for, and it
-                 * cost 823px of scroll. Measured at 1280 there are **24px** of
-                 * slack below the prose and at 1024 the text column is taller
-                 * than the photographs, so there is no large hole here to fill —
-                 * only the 80px of padding, which is what this now sits in.
-                 *
-                 * How far up it sits is `PinnedCollage`'s decision and not this
-                 * one's, because the answer is different in the two branches:
-                 * only the pinned composition leaves its photographs displaced
-                 * when the scene lets go. See the note on the footer there.
-                 */
-                className="block h-auto w-[150px] sm:w-[180px] lg:w-[220px]"
-              />
-            ) : undefined
-          }
+          continues={at.continues}
         />
       );
     /*
@@ -262,9 +303,10 @@ function renderChapter(chapter: Chapter, at: Position) {
     /*
      * **`case "testimonials"` was here until 19 Aug 2026.** The `guests` band is
      * gone as a chapter and its three quotes moved into `invitation`'s copy —
-     * the client's own placement, *"below the two property buttons"*. They are
-     * not rendered anywhere yet: `Invitation.tsx` has to be taught to read
-     * `chapterCopy("invitation").quotes`, which is the next task.
+     * the client's own placement, *"below the two property buttons"* — where
+     * `Invitation.tsx` now renders them, below the two pills.
+     * `components/sections/Testimonials.tsx` was deleted with them, along with
+     * its two rows and its box case in `lib/sizes.test.ts`.
      *
      * The two photographs the band carried, `lawn-picnic-golden-hour` and
      * `garden-path-lodge`, are curated and now unused. They were deliberately
@@ -284,8 +326,7 @@ function renderChapter(chapter: Chapter, at: Position) {
 }
 
 export default function Home() {
-  let intro = 0;
-  let cream = 0;
+  const at = positions();
 
   return (
     <>
@@ -301,12 +342,7 @@ export default function Home() {
        * `components/motion/ImageReveal.tsx` carries the per-photograph opt-out.
        */}
       <main data-hover-zoom>
-        {CHAPTERS.map((chapter) =>
-          renderChapter(chapter, {
-            intro: INTRO_KINDS.includes(chapter.kind) ? intro++ : 0,
-            surface: CREAM_KINDS.includes(chapter.kind) ? cream++ % 2 === 1 : false,
-          }),
-        )}
+        {CHAPTERS.map((chapter, i) => renderChapter(chapter, at[i]))}
       </main>
     </>
   );

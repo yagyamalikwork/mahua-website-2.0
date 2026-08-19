@@ -85,8 +85,21 @@ const OUT = flag("out", "docs/reviews/2026-08-08-films/films.json");
 const SHOTS = path.dirname(OUT);
 
 /** Every film on the page, and the chapter each one closes. */
+/*
+ * **The potter left this list on 19 Aug 2026, on `feat/home-v2` only.**
+ *
+ * The client's restructure removes the potter film's mount from `03 · Rooted
+ * Like The Mahua` — *"first the animated potter needs to be removed"*. The film,
+ * its poster, `SignatureFilm` and every assertion below are untouched and still
+ * work; `feat/image-sizing` keeps it mounted and this rig green on both films.
+ *
+ * It is commented rather than deleted for one reason: **this rig crashed instead
+ * of failing** when the element vanished, throwing on a null rather than
+ * reporting an absent film, and a gate that dies is a gate nobody can read. If
+ * the potter returns to any chapter, restore the line — do not rewrite the arm.
+ */
 const FILMS = [
-  { chapter: "rooted", name: "potter" },
+  // { chapter: "rooted", name: "potter" },
   { chapter: "field-days", name: "tiger" },
 ];
 

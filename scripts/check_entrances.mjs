@@ -41,11 +41,28 @@ const URL = flag("url", `http://localhost:${flag("port", "3100")}/`);
 const OUT = flag("out", "docs/reviews/2026-08-05-scroll-craft/entrances.json");
 const SHOTS = path.dirname(OUT);
 /**
- * The one chapter `scripts/check_pinned_collage.mjs` measures `[data-drift]` in
- * — its own `--chapter` default. Kept here so the seam between the two rigs is
- * asserted rather than assumed; see `DRIFT_ELEMENTS` below.
+ * The chapters `scripts/check_pinned_collage.mjs` is actually **run against**,
+ * comma separated. Kept here so the seam between the two rigs is asserted rather
+ * than assumed; see `DRIFT_ELEMENTS` below.
+ *
+ * **This was a single chapter — that rig's own `--chapter` default — until
+ * 19 Aug 2026, and a single chapter was the wrong shape.** `04 · Mahua
+ * Philosophy` is a second pinned collage since the v2 restructure, so three more
+ * `[data-drift]` photographs appeared on the page and this check reported them
+ * as measured by nobody. That was correct: `check_pinned_collage.mjs` scopes
+ * itself to ONE chapter per run and defaults to `rooted`, so the second chapter
+ * genuinely was unmeasured until somebody started running it a second time with
+ * `--chapter philosophy`.
+ *
+ * So what this names is not a property of that rig's source, it is a promise
+ * about how it is invoked — every id here must have its own run, and a drift
+ * element in a chapter that is not named is a failure. Both promises are in the
+ * gate list in `docs/reviews/2026-08-19-home-v2/collage.md`.
  */
-const DRIFT_CHAPTER = flag("drift-chapter", "rooted");
+const DRIFT_CHAPTERS = flag("drift-chapters", "rooted,philosophy")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 // Extended for Plan 4 Task 3, which moved the headline reveal off GSAP and onto
 // the same CSS engine. Two things the rig could not see before and now must:
@@ -66,8 +83,10 @@ const DRIFT_CHAPTER = flag("drift-chapter", "rooted");
 // `[data-drift]` — the pinned collage's photographs — is deliberately *not*
 // measured here; `scripts/check_pinned_collage.mjs` owns it, and the reason is
 // on `DRIFT_ELEMENTS`. What this rig does guard is the seam: that rig scopes
-// itself to one chapter, so a drift element added anywhere else would be
-// measured by nobody, and the check below names it.
+// itself to ONE chapter per run, so a drift element in a chapter nobody runs it
+// against would be measured by nobody, and the check below names both
+// directions — an uncovered chapter, and a covered one that has stopped
+// drifting.
 
 /** Every state change the page really went through, in order. */
 const RECORD_STATES = () => {
@@ -699,10 +718,18 @@ for (const e of report.parallaxReducedMotion.measured.filter((m) => m.shift >= M
 // The seam with `scripts/check_pinned_collage.mjs`, which measures `[data-drift]`
 // and scopes itself to one chapter. A drift element anywhere else is measured by
 // nobody, and this is the only place that would notice.
-for (const d of report.parallax.drift.filter((d) => d.section !== DRIFT_CHAPTER))
+for (const d of report.parallax.drift.filter((d) => !DRIFT_CHAPTERS.includes(d.section)))
   failures.push(
-    `drift: a [data-drift="${d.rate}"] element sits in #${d.section}, but check_pinned_collage.mjs only measures #${DRIFT_CHAPTER} — nothing measures this one`,
+    `drift: a [data-drift="${d.rate}"] element sits in #${d.section}, but check_pinned_collage.mjs is only run against ${DRIFT_CHAPTERS.map((c) => `#${c}`).join(", ")} — nothing measures this one`,
   );
+// The other direction, which the single-chapter form could not state: a chapter
+// promised a run of its own and no longer carrying a drifting photograph means
+// somebody is running an assertion against a composition that has gone.
+for (const chapter of DRIFT_CHAPTERS)
+  if (!report.parallax.drift.some((d) => d.section === chapter))
+    failures.push(
+      `drift: #${chapter} is listed as covered by check_pinned_collage.mjs but has no [data-drift] element — that run is measuring nothing`,
+    );
 
 for (const run of report.noScript) {
   if (run.enterAttributes > 0)

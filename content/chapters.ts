@@ -80,7 +80,7 @@ export type ChapterKind =
  * 2026**, by the two kinds above, and the two components are in different
  * positions afterwards. `components/sections/LodgeCards.tsx` is now routed by
  * nothing at all — `lodges` was its only caller on any page — and is a candidate
- * for retirement alongside `PlateGrid.tsx`, `Testimonials.tsx` and
+ * for retirement alongside `PlateGrid.tsx` and
  * `ui/ForestBackdrop.tsx`. `components/sections/FullBleedQuote.tsx` is very much
  * alive: both property pages route their own `"fullBleed"` kind to it
  * (`vann-table`, `tola-table`, `tola-guest-word`), so what has gone is this
@@ -91,9 +91,11 @@ export type ChapterKind =
  * and `07 · Details` were the three plate boards, and `guests` was the
  * testimonials band. The guest quotes are not gone: `content/home.ts` moves them
  * into `invitation`'s copy, to be rendered below the two property buttons (spec
- * §7). `components/sections/PlateGrid.tsx` and `Testimonials.tsx` are now unused
- * by any route and are candidates for retirement in a later task, along with
- * `components/ui/ForestBackdrop.tsx`.
+ * §7). **`Testimonials.tsx` was deleted later the same day**, once
+ * `Invitation.tsx` was rendering the quotes: component, its two rows in
+ * `lib/sizes.test.ts` and its case in that file's box tripwire, together.
+ * `components/sections/PlateGrid.tsx` and `components/ui/ForestBackdrop.tsx`
+ * are still on disk and still unused by any route.
  */
 
 export type Chapter = {
