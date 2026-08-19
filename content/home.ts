@@ -160,12 +160,30 @@ export const HOME = {
       ],
     },
 
-    // ── Pull-quote over the tiger ───────────────────────────────────────────
+    // ── 02 · The Jungles ────────────────────────────────────────────────────
+    /*
+     * **Was the unnumbered pull-quote over the tiger until 19 Aug 2026.** The
+     * client's own ruling keeps this exact line as the chapter's heading —
+     * *"The heading is the line already there"* — so it stays under `quote`,
+     * which is the key `FullBleedQuote` reads, and no word of it changes.
+     *
+     * `intro` is `03 · The Forest`'s own paragraph, moved here verbatim when
+     * that chapter left the page. Spec §3 sets it to the right of the heading;
+     * `FullBleedQuote` does not render it yet, so it is copy waiting for the
+     * band that will carry it. The Forest's heading — "Three hundred birds, and
+     * the cats you came for" — is deliberately NOT here: the spec drops it with
+     * the section and keeps only the paragraph.
+     */
     "why-you-came": {
       quote: "The forest at its most alive, and you at your most rested.",
+      intro:
+        "Bengal tiger and Indian leopard — and, rarely, the melanistic leopard that has made " +
+        "these hills briefly famous. Beyond them: gaur, sloth bear, dhole, and some three " +
+        "hundred recorded birds. Pench is the forest Kipling wrote into the Jungle Book without " +
+        "ever setting foot in it; Tadoba's tiger density is among the highest in the country.",
     },
 
-    // ── 02 · Rooted like the mahua ──────────────────────────────────────────
+    // ── 03 · Rooted Like The Mahua ──────────────────────────────────────────
     rooted: {
       heading: { text: "Rooted like the mahua", dim: "mahua" },
       body: [
@@ -183,34 +201,38 @@ export const HOME = {
       ],
     },
 
-    // ── 03 · The Forest ─────────────────────────────────────────────────────
-    forest: {
-      heading: { text: "Three hundred birds, and the cats you came for", dim: "cats" },
-      intro:
-        "Bengal tiger and Indian leopard — and, rarely, the melanistic leopard that has made " +
-        "these hills briefly famous. Beyond them: gaur, sloth bear, dhole, and some three " +
-        "hundred recorded birds. Pench is the forest Kipling wrote into the Jungle Book without " +
-        "ever setting foot in it; Tadoba's tiger density is among the highest in the country.",
-      plates: [
-        {
-          mediaId: "tiger-pair-profile",
-          plate: "I",
-          caption: "Bengal tiger — Panthera tigris tigris. A second cat passes just behind.",
-        },
-        {
-          mediaId: "leopard-on-rock",
-          plate: "II",
-          caption: "Indian leopard — Panthera pardus fusca.",
-        },
-        {
-          mediaId: "melanistic-leopard",
-          plate: "III",
-          caption: "The melanistic leopard, seen rarely and photographed less.",
-        },
+    // ── 04 · Mahua Philosophy ───────────────────────────────────────────────
+    /*
+     * **New on 19 Aug 2026, and every word of it is moved rather than written.**
+     * The client: this chapter is *"an extension of an already existing
+     * section"*, so it mirrors `rooted` above — same composition, opposite
+     * hand — and its words are `05 · The Rooms`' own intro paragraph, carried
+     * here verbatim when that chapter left the page. That paragraph's room
+     * counts were reconciled on 12 Aug 2026 (twenty-six at Vann, eleven at
+     * Tola, the Camping Hut retired and three machaans still being built); the
+     * note that recorded the working left with the `rooms` block, and the
+     * numbers here are the corrected ones.
+     *
+     * The heading is the chapter's own name. `Mahua` takes the dim tone, as it
+     * does in `rooted`'s "Rooted like the mahua" — the two headings are a pair
+     * and the brand word is the soft one in both.
+     */
+    philosophy: {
+      heading: { text: "Mahua Philosophy", dim: "Mahua" },
+      body: [
+        "Twenty-six rooms at Vann, eleven at Tola — deluxe rooms, cottages, suites and a family " +
+          "suite, eight of the cottages with a deck over the seasonal river. All of them " +
+          "handmade in mud and local wood. Air conditioning, a tea and coffee maker, a private " +
+          "vanity area; and then the doors thrown open.",
       ],
     },
 
-    // ── 04 · Days in the Field ──────────────────────────────────────────────
+    // ── 05 · Experiences ────────────────────────────────────────────────────
+    // Renamed and renumbered on 19 Aug 2026 (it was `04 · Days in the Field`).
+    // **Not one word below changed**, by the client's own ruling: *"We keep the
+    // text and the tiger where they are and not touch them."* The six activities
+    // and their photographs are re-carded in a later task; the six here are the
+    // ones the coverflow still shows.
     "field-days": {
       heading: { text: "The day the forest keeps", dim: "forest" },
       /*
@@ -285,124 +307,39 @@ export const HOME = {
       ],
     },
 
-    // ── 05 · The Rooms ──────────────────────────────────────────────────────
-    rooms: {
-      heading: { text: "Rooms with the forest left in", dim: "forest" },
+    // ── The close ───────────────────────────────────────────────────────────
+    invitation: {
+      heading: { text: "Two forests are expecting you", dim: "expecting" },
+      body: [
+        "The park opens on the first of October and closes at the end of June. December and " +
+          "January fill first. April and May are when the cats are easiest to find. The green " +
+          "season, when the forest is still wet and the vehicles are few, is the one we would " +
+          "choose.",
+        "Write to us and we will tell you honestly which of the two is right for what you want.",
+      ],
       /*
-       * **"Fourteen at Tola" and "a camping hut" were both wrong, corrected
-       * 12 Aug 2026** — and each was wrong in a different way worth recording.
+       * **The guest quotes moved here on 19 Aug 2026 and are not rendered yet.**
        *
-       * The hut is a *retired product*, confirmed by the client that day. It
-       * appeared at none of five date ranges sampled across nine months in his
-       * own booking engine, while three Super Deluxe Cottages appeared at every
-       * one and were named nowhere on this page.
+       * They were the `guests` chapter's, a band of its own between `07 · Details`
+       * and this close. The client: *"later when we get the TripAdvisor API we
+       * will change it to auto-scrolling reviews, but what I meant is that this
+       * will be the new place for the reviews, below the two property buttons."*
+       * So the chapter is gone, the three quotes are not, and their new home is
+       * the foot of this section — **`components/sections/Invitation.tsx` has to
+       * be taught to read them**, which is the next task's job and the reason
+       * they sit here unread rather than deleted.
        *
-       * Fourteen was a *future* number written in the present tense. The engine
-       * sells 5 Deluxe + 2 Suite + 3 Super Deluxe Cottage + 1 Family Suite =
-       * **eleven**; the brand record's fourteen counts three river-facing
-       * machaan rooms still under construction. Every source reconciles once
-       * both facts are in hand — see `content/mahua-tola.ts`'s own header —
-       * and nobody had put them together, so the home page has been quoting a
-       * count the property will not reach until those rooms open.
+       * The `guests` chapter's own heading ("Known by name") and its paragraph
+       * did NOT move. The paragraph stated "fourteen at Tadoba", a count the
+       * client corrected to eleven on 12 Aug 2026 and which had survived here
+       * only because nobody re-read it; it leaves the page with its section.
        *
-       * Vann's twenty-six is right and was checked the same way: 13 + 8 + 5.
+       * Verbatim from the Tripadvisor widget on the live site, trimmed only at
+       * sentence boundaries. Nothing here is written by us, and nothing is
+       * paraphrased. These are frozen copies of a live widget and should either
+       * be refreshed or re-embedded before launch — which is exactly what the
+       * client's own "later, the TripAdvisor API" note anticipates.
        */
-      intro:
-        "Twenty-six rooms at Vann, eleven at Tola — deluxe rooms, cottages, suites and a family " +
-        "suite, eight of the cottages with a deck over the seasonal river. All of them " +
-        "handmade in mud and local wood. Air conditioning, a tea and coffee maker, a private " +
-        "vanity area; and then the doors thrown open.",
-      plates: [
-        {
-          mediaId: "room-open-to-bamboo",
-          plate: "I",
-          caption: "Terracotta beams, and doors that open onto a wall of bamboo.",
-        },
-        {
-          mediaId: "suite-tiger-painting",
-          plate: "II",
-          // "A suite" until 9 Aug 2026 — but the live site's own filename for
-          // this photograph is Cottage-with-deck-2, and /mahua-vann's rooms
-          // index names it Cottage with Deck. Vann has no "suite" room type at
-          // all; one site must not call the same photograph two different
-          // rooms. Flagged to the client with the property-pages review.
-          caption: "A cottage with the glass folded back to the trees.",
-        },
-        {
-          mediaId: "room-hanging-chair-view",
-          plate: "III",
-          caption: "A private balcony, and a cane chair hung among the branches.",
-        },
-        {
-          mediaId: "hanging-chair-forest-deck",
-          plate: "IV",
-          caption: "A deck over the stream, for the part of the day nobody schedules.",
-        },
-      ],
-    },
-
-    // ── Pull-quote over the lodge at night ──────────────────────────────────
-    "after-dark": {
-      quote: "By the time you come back, the lanterns are already lit.",
-    },
-
-    // ── 06 · The Lantern Hour ───────────────────────────────────────────────
-    "lantern-hour": {
-      heading: { text: "The other half of the day", dim: "other" },
-      body: [
-        "Most jungle lodges make you choose between the intensity of the safari and the " +
-          "softness of a retreat. The same day holds both here: the alarm call at dawn and the " +
-          "slow afternoon, the tracker's focus and the wanderer's ease.",
-        "On full-moon nights we gather for breathwork and intention-setting, then a diya set " +
-          "afloat with water and flowers. Mahua Kheer simmers on the open chula; the Chulai ki " +
-          "Bhaaji came out of a field nearby this morning. Later somebody wheels a telescope " +
-          "onto the lawn and stays out to tell you what you are looking at.",
-      ],
-    },
-
-    // ── 07 · Details ────────────────────────────────────────────────────────
-    details: {
-      heading: { text: "The small things, which are the whole thing", dim: "small" },
-      intro:
-        "A welcome inked by hand on a leaf. Petals in a stone bowl. Incense at a shrine that " +
-        "was not put there for guests. What we are actually trying to do is meet the need " +
-        "before it is spoken.",
-      plates: [
-        {
-          mediaId: "petal-bowl-map",
-          plate: "I",
-          caption: "Rose petals in a stone bowl, before a hand-painted map of the forest.",
-        },
-        {
-          mediaId: "veranda-through-leaves",
-          plate: "II",
-          caption: "Rattan and lamplight, glimpsed through the leaves.",
-        },
-        {
-          mediaId: "lily-pond-fountain",
-          plate: "III",
-          caption: "Water lilies crowding a stone fountain.",
-        },
-        {
-          mediaId: "geese-garden-pond",
-          plate: "IV",
-          caption: "Geese crossing the garden pond, under the overhanging leaves.",
-        },
-      ],
-    },
-
-    // ── Guests ──────────────────────────────────────────────────────────────
-    guests: {
-      heading: { text: "Known by name", dim: "name" },
-      body: [
-        "Small enough that everyone is — twenty-six rooms at Pench, fourteen at Tadoba, and a " +
-          "family who have run them since the first one opened. More than one guest writing " +
-          "about a stay here mentions Shukla ji by name.",
-      ],
-      // Verbatim from the Tripadvisor widget on the live site, trimmed only at
-      // sentence boundaries. Nothing here is written by us, and nothing is
-      // paraphrased. See the Task 6 report: these are frozen copies of a live
-      // widget and should either be refreshed or re-embedded before launch.
       quotes: [
         {
           quote: "The place is secluded and gives you a feel of actually being in the jungle.",
@@ -424,18 +361,6 @@ export const HOME = {
           year: "2020",
           source: "Tripadvisor",
         },
-      ],
-    },
-
-    // ── The close ───────────────────────────────────────────────────────────
-    invitation: {
-      heading: { text: "Two forests are expecting you", dim: "expecting" },
-      body: [
-        "The park opens on the first of October and closes at the end of June. December and " +
-          "January fill first. April and May are when the cats are easiest to find. The green " +
-          "season, when the forest is still wet and the vehicles are few, is the one we would " +
-          "choose.",
-        "Write to us and we will tell you honestly which of the two is right for what you want.",
       ],
     },
   },

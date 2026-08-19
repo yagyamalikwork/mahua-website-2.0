@@ -1,44 +1,25 @@
 {
-  "url": "http://localhost:3100/",
-  "measuredAt": "2026-08-09T22:28:46.418Z",
+  "url": "http://localhost:3110/",
+  "measuredAt": "2026-08-19T12:24:40.263Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
     "reducedMotion": false,
     "atRest": {
-      "staged": 29,
-      "stagedImages": 29,
-      "stagedHeadlines": 11,
+      "staged": 11,
+      "stagedImages": 10,
+      "stagedHeadlines": 6,
       "stagedInView": 0,
       "settled": 0,
       "settledImages": 0,
       "settledHeadlines": 0,
-      "attributed": 29,
-      "displacedWords": 73,
+      "attributed": 11,
+      "displacedWords": 32,
       "peakWordOffset": 83.696,
-      "invisible": 29,
-      "displaced": 29,
+      "invisible": 11,
+      "displaced": 11,
       "maskCover": [
         0,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
         1,
         1,
         1,
@@ -52,46 +33,27 @@
       ]
     },
     "flickeredOnLoad": false,
-    "stagings": 69,
-    "settlings": 69,
-    "headlineStagings": 11,
-    "headlineSettlings": 11,
+    "stagings": 27,
+    "settlings": 27,
+    "headlineStagings": 6,
+    "headlineSettlings": 6,
     "peakMaskCover": 1,
     "peakWordOffset": 83.886,
-    "peakStagedAtOnce": 67,
+    "peakStagedAtOnce": 27,
     "afterScroll": {
       "staged": 0,
       "stagedImages": 0,
       "stagedHeadlines": 0,
       "stagedInView": 0,
-      "settled": 29,
-      "settledImages": 29,
-      "settledHeadlines": 11,
-      "attributed": 29,
+      "settled": 11,
+      "settledImages": 10,
+      "settledHeadlines": 6,
+      "attributed": 11,
       "displacedWords": 0,
       "peakWordOffset": 0,
       "invisible": 0,
       "displaced": 0,
       "maskCover": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0,
         0,
         0,
@@ -153,14 +115,12 @@
         ]
       },
       {
-        "text": "Three hundred birds, and the cats you came",
-        "wrappedInto": 3,
+        "text": "Mahua Philosophy",
+        "wrappedInto": 1,
         "splitLines": 0,
         "risesLineByLine": true,
         "delays": [
-          0,
-          0.09,
-          0.18
+          0
         ]
       },
       {
@@ -171,56 +131,6 @@
         "delays": [
           0,
           0.09
-        ]
-      },
-      {
-        "text": "Rooms with the forest left in",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "By the time you come back, the lanterns ar",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "The other half of the day",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "The small things, which are the whole thin",
-        "wrappedInto": 3,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09,
-          0.18
-        ]
-      },
-      {
-        "text": "Known by name",
-        "wrappedInto": 1,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0
         ]
       },
       {
@@ -258,57 +168,15 @@
         "maskedOver": 0
       },
       {
-        "id": "forest",
-        "words": 97,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
         "id": "field-days",
-        "words": 190,
+        "words": 183,
         "hidden": 0,
         "photographs": 7,
         "maskedOver": 0
       },
       {
-        "id": "rooms",
-        "words": 111,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "after-dark",
-        "words": 11,
-        "hidden": 0,
-        "photographs": 1,
-        "maskedOver": 0
-      },
-      {
-        "id": "lantern-hour",
-        "words": 106,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "details",
-        "words": 88,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "guests",
-        "words": 102,
-        "hidden": 0,
-        "photographs": 2,
-        "maskedOver": 0
-      },
-      {
         "id": "invitation",
-        "words": 78,
+        "words": 81,
         "hidden": 0,
         "photographs": 1,
         "maskedOver": 0
@@ -320,39 +188,20 @@
     "viewport": "390x844",
     "reducedMotion": false,
     "atRest": {
-      "staged": 29,
-      "stagedImages": 29,
-      "stagedHeadlines": 11,
+      "staged": 11,
+      "stagedImages": 10,
+      "stagedHeadlines": 6,
       "stagedInView": 0,
       "settled": 0,
       "settledImages": 0,
       "settledHeadlines": 0,
-      "attributed": 29,
-      "displacedWords": 73,
+      "attributed": 11,
+      "displacedWords": 32,
       "peakWordOffset": 45.652,
-      "invisible": 29,
-      "displaced": 29,
+      "invisible": 11,
+      "displaced": 11,
       "maskCover": [
         0,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
         1,
         1,
         1,
@@ -366,46 +215,27 @@
       ]
     },
     "flickeredOnLoad": false,
-    "stagings": 69,
-    "settlings": 69,
-    "headlineStagings": 11,
-    "headlineSettlings": 11,
+    "stagings": 27,
+    "settlings": 27,
+    "headlineStagings": 6,
+    "headlineSettlings": 6,
     "peakMaskCover": 1,
-    "peakWordOffset": 45.718,
-    "peakStagedAtOnce": 67,
+    "peakWordOffset": 45.653,
+    "peakStagedAtOnce": 26,
     "afterScroll": {
       "staged": 0,
       "stagedImages": 0,
       "stagedHeadlines": 0,
       "stagedInView": 0,
-      "settled": 29,
-      "settledImages": 29,
-      "settledHeadlines": 11,
-      "attributed": 29,
+      "settled": 11,
+      "settledImages": 10,
+      "settledHeadlines": 6,
+      "attributed": 11,
       "displacedWords": 0,
       "peakWordOffset": 0,
       "invisible": 0,
       "displaced": 0,
       "maskCover": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0,
         0,
         0,
@@ -466,14 +296,12 @@
         ]
       },
       {
-        "text": "Three hundred birds, and the cats you came",
-        "wrappedInto": 3,
+        "text": "Mahua Philosophy",
+        "wrappedInto": 1,
         "splitLines": 0,
         "risesLineByLine": true,
         "delays": [
-          0,
-          0.09,
-          0.18
+          0
         ]
       },
       {
@@ -484,56 +312,6 @@
         "delays": [
           0,
           0.09
-        ]
-      },
-      {
-        "text": "Rooms with the forest left in",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "By the time you come back, the lanterns ar",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "The other half of the day",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "The small things, which are the whole thin",
-        "wrappedInto": 3,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09,
-          0.18
-        ]
-      },
-      {
-        "text": "Known by name",
-        "wrappedInto": 1,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0
         ]
       },
       {
@@ -578,57 +356,22 @@
         "maskedOver": 0
       },
       {
-        "id": "forest",
-        "words": 97,
+        "id": "philosophy",
+        "words": 58,
         "hidden": 0,
-        "photographs": 4,
+        "photographs": 3,
         "maskedOver": 0
       },
       {
         "id": "field-days",
-        "words": 190,
+        "words": 183,
         "hidden": 0,
         "photographs": 7,
         "maskedOver": 0
       },
       {
-        "id": "rooms",
-        "words": 111,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "after-dark",
-        "words": 11,
-        "hidden": 0,
-        "photographs": 1,
-        "maskedOver": 0
-      },
-      {
-        "id": "lantern-hour",
-        "words": 106,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "details",
-        "words": 88,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "guests",
-        "words": 102,
-        "hidden": 0,
-        "photographs": 2,
-        "maskedOver": 0
-      },
-      {
         "id": "invitation",
-        "words": 78,
+        "words": 81,
         "hidden": 0,
         "photographs": 1,
         "maskedOver": 0
@@ -653,25 +396,6 @@
       "invisible": 0,
       "displaced": 0,
       "maskCover": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0,
         0,
         0,
@@ -717,25 +441,6 @@
         0,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0
       ]
     },
@@ -787,14 +492,12 @@
         ]
       },
       {
-        "text": "Three hundred birds, and the cats you came",
-        "wrappedInto": 3,
+        "text": "Mahua Philosophy",
+        "wrappedInto": 1,
         "splitLines": 0,
         "risesLineByLine": true,
         "delays": [
-          0,
-          0.09,
-          0.18
+          0
         ]
       },
       {
@@ -805,56 +508,6 @@
         "delays": [
           0,
           0.09
-        ]
-      },
-      {
-        "text": "Rooms with the forest left in",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "By the time you come back, the lanterns ar",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "The other half of the day",
-        "wrappedInto": 2,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09
-        ]
-      },
-      {
-        "text": "The small things, which are the whole thin",
-        "wrappedInto": 3,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0,
-          0.09,
-          0.18
-        ]
-      },
-      {
-        "text": "Known by name",
-        "wrappedInto": 1,
-        "splitLines": 0,
-        "risesLineByLine": true,
-        "delays": [
-          0
         ]
       },
       {
@@ -899,57 +552,22 @@
         "maskedOver": 0
       },
       {
-        "id": "forest",
-        "words": 97,
+        "id": "philosophy",
+        "words": 58,
         "hidden": 0,
-        "photographs": 4,
+        "photographs": 3,
         "maskedOver": 0
       },
       {
         "id": "field-days",
-        "words": 190,
+        "words": 183,
         "hidden": 0,
         "photographs": 7,
         "maskedOver": 0
       },
       {
-        "id": "rooms",
-        "words": 111,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "after-dark",
-        "words": 11,
-        "hidden": 0,
-        "photographs": 1,
-        "maskedOver": 0
-      },
-      {
-        "id": "lantern-hour",
-        "words": 106,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "details",
-        "words": 88,
-        "hidden": 0,
-        "photographs": 4,
-        "maskedOver": 0
-      },
-      {
-        "id": "guests",
-        "words": 102,
-        "hidden": 0,
-        "photographs": 2,
-        "maskedOver": 0
-      },
-      {
         "id": "invitation",
-        "words": 78,
+        "words": 81,
         "hidden": 0,
         "photographs": 1,
         "maskedOver": 0
@@ -968,19 +586,19 @@
   },
   "parallax": {
     "reducedMotion": false,
-    "elements": 12,
-    "moved": 12,
+    "elements": 2,
+    "moved": 2,
     "sampledAt": [
       0.2,
       0.8
     ],
     "strongest": 0.091,
-    "weakest": 0.03,
+    "weakest": 0.063,
     "still": [],
     "unreachable": [],
     "measured": [
       {
-        "label": "why-you-came[0] tiger-golden-grass-1440.avif",
+        "label": "why-you-came[0] jungle-cats-stitch-1440.avif",
         "section": "why-you-came",
         "layoutTop": 2345,
         "height": 1149,
@@ -997,190 +615,20 @@
         "unsampled": false
       },
       {
-        "label": "field-days[0] guide-sunrise-960.avif",
-        "section": "field-days",
-        "layoutTop": 6559,
-        "height": 501,
-        "scrubsBetween": [
-          5659,
-          7060
-        ],
-        "at": [
-          5939,
-          6780
-        ],
-        "shift": 21,
-        "ofHeight": 0.042,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[1] hammocks-shade-960.avif",
-        "section": "field-days",
-        "layoutTop": 7215,
-        "height": 501,
-        "scrubsBetween": [
-          6315,
-          7716
-        ],
-        "at": [
-          6595,
-          7436
-        ],
-        "shift": 21,
-        "ofHeight": 0.042,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[2] pool-daylight-forest-640.avif",
-        "section": "field-days",
-        "layoutTop": 7519,
-        "height": 226,
-        "scrubsBetween": [
-          6619,
-          7745
-        ],
-        "at": [
-          6844,
-          7520
-        ],
-        "shift": 7,
-        "ofHeight": 0.031,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
-        "section": "field-days",
-        "layoutTop": 7879,
-        "height": 805,
-        "scrubsBetween": [
-          6979,
-          8684
-        ],
-        "at": [
-          7320,
-          8343
-        ],
-        "shift": 24,
-        "ofHeight": 0.03,
-        "unsampled": false
-      },
-      {
-        "label": "after-dark[0] lodge-facade-night-1440.avif",
-        "section": "after-dark",
-        "layoutTop": 10552,
-        "height": 1149,
-        "scrubsBetween": [
-          9652,
-          11701
-        ],
-        "at": [
-          10062,
-          11291
-        ],
-        "shift": 104,
-        "ofHeight": 0.091,
-        "unsampled": false
-      },
-      {
-        "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
-        "section": "lantern-hour",
-        "layoutTop": 11532,
-        "height": 760,
-        "scrubsBetween": [
-          10632,
-          12292
-        ],
-        "at": [
-          10964,
-          11960
-        ],
-        "shift": 36,
-        "ofHeight": 0.047,
-        "unsampled": false
-      },
-      {
-        "label": "lantern-hour[1] sound-healing-640.avif",
-        "section": "lantern-hour",
-        "layoutTop": 11532,
-        "height": 375,
-        "scrubsBetween": [
-          10632,
-          11907
-        ],
-        "at": [
-          10887,
-          11652
-        ],
-        "shift": 22,
-        "ofHeight": 0.059,
-        "unsampled": false
-      },
-      {
-        "label": "lantern-hour[2] petal-table-night-1200.avif",
-        "section": "lantern-hour",
-        "layoutTop": 11934,
-        "height": 604,
-        "scrubsBetween": [
-          11034,
-          12538
-        ],
-        "at": [
-          11335,
-          12237
-        ],
-        "shift": 22,
-        "ofHeight": 0.036,
-        "unsampled": false
-      },
-      {
-        "label": "guests[0] lawn-picnic-golden-hour-960.avif",
-        "section": "guests",
-        "layoutTop": 13997,
-        "height": 514,
-        "scrubsBetween": [
-          13097,
-          14511
-        ],
-        "at": [
-          13380,
-          14228
-        ],
-        "shift": 19,
-        "ofHeight": 0.037,
-        "unsampled": false
-      },
-      {
-        "label": "guests[1] garden-path-lodge-1200.avif",
-        "section": "guests",
-        "layoutTop": 14061,
-        "height": 677,
-        "scrubsBetween": [
-          13161,
-          14738
-        ],
-        "at": [
-          13476,
-          14423
-        ],
-        "shift": 37,
-        "ofHeight": 0.055,
-        "unsampled": false
-      },
-      {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 15059,
+        "layoutTop": 10514,
         "height": 1149,
         "scrubsBetween": [
-          14159,
-          16208
+          9614,
+          11663
         ],
         "at": [
-          14569,
-          15059
+          10024,
+          10875
         ],
-        "shift": 41,
-        "ofHeight": 0.036,
+        "shift": 72,
+        "ofHeight": 0.063,
         "unsampled": false
       }
     ],
@@ -1196,12 +644,24 @@
       {
         "section": "rooted",
         "rate": "0.06"
+      },
+      {
+        "section": "philosophy",
+        "rate": "0.15"
+      },
+      {
+        "section": "philosophy",
+        "rate": "0.105"
+      },
+      {
+        "section": "philosophy",
+        "rate": "0.06"
       }
     ]
   },
   "parallaxReducedMotion": {
     "reducedMotion": true,
-    "elements": 15,
+    "elements": 8,
     "moved": 0,
     "sampledAt": [
       0.2,
@@ -1211,7 +671,7 @@
     "weakest": 0,
     "still": [
       {
-        "label": "why-you-came[0] tiger-golden-grass-1440.avif",
+        "label": "why-you-came[0] jungle-cats-stitch-1440.avif",
         "section": "why-you-came",
         "layoutTop": 2345,
         "height": 1149,
@@ -1279,170 +739,51 @@
         "unsampled": false
       },
       {
-        "label": "field-days[0] guide-sunrise-960.avif",
-        "section": "field-days",
-        "layoutTop": 5861,
-        "height": 501,
-        "scrubsBetween": [
-          4961,
-          6362
-        ],
-        "at": [
-          5241,
-          6082
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[1] hammocks-shade-960.avif",
-        "section": "field-days",
-        "layoutTop": 6517,
-        "height": 501,
-        "scrubsBetween": [
-          5617,
-          7018
-        ],
-        "at": [
-          5897,
-          6738
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[2] pool-daylight-forest-640.avif",
-        "section": "field-days",
-        "layoutTop": 6821,
-        "height": 226,
-        "scrubsBetween": [
-          5921,
-          7047
-        ],
-        "at": [
-          6146,
-          6822
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
-        "section": "field-days",
-        "layoutTop": 7181,
-        "height": 805,
-        "scrubsBetween": [
-          6281,
-          7986
-        ],
-        "at": [
-          6622,
-          7645
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "after-dark[0] lodge-facade-night-1440.avif",
-        "section": "after-dark",
-        "layoutTop": 9854,
-        "height": 1149,
-        "scrubsBetween": [
-          8954,
-          11003
-        ],
-        "at": [
-          9364,
-          10593
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
-        "section": "lantern-hour",
-        "layoutTop": 10834,
+        "label": "philosophy[0] veranda-through-leaves-640.avif",
+        "section": "philosophy",
+        "layoutTop": 4708,
         "height": 760,
         "scrubsBetween": [
-          9934,
-          11594
+          3808,
+          5468
         ],
         "at": [
-          10266,
-          11262
+          4140,
+          5136
         ],
         "shift": 0,
         "ofHeight": 0,
         "unsampled": false
       },
       {
-        "label": "lantern-hour[1] sound-healing-640.avif",
-        "section": "lantern-hour",
-        "layoutTop": 10834,
+        "label": "philosophy[1] petal-bowl-map-640.avif",
+        "section": "philosophy",
+        "layoutTop": 4708,
         "height": 375,
         "scrubsBetween": [
-          9934,
-          11209
+          3808,
+          5083
         ],
         "at": [
-          10189,
-          10954
+          4063,
+          4828
         ],
         "shift": 0,
         "ofHeight": 0,
         "unsampled": false
       },
       {
-        "label": "lantern-hour[2] petal-table-night-1200.avif",
-        "section": "lantern-hour",
-        "layoutTop": 11236,
+        "label": "philosophy[2] lily-pond-fountain-640.avif",
+        "section": "philosophy",
+        "layoutTop": 5111,
         "height": 604,
         "scrubsBetween": [
-          10336,
-          11840
+          4211,
+          5715
         ],
         "at": [
-          10637,
-          11539
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "guests[0] lawn-picnic-golden-hour-960.avif",
-        "section": "guests",
-        "layoutTop": 13299,
-        "height": 514,
-        "scrubsBetween": [
-          12399,
-          13813
-        ],
-        "at": [
-          12682,
-          13530
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "guests[1] garden-path-lodge-1200.avif",
-        "section": "guests",
-        "layoutTop": 13363,
-        "height": 677,
-        "scrubsBetween": [
-          12463,
-          14040
-        ],
-        "at": [
-          12778,
-          13725
+          4512,
+          5414
         ],
         "shift": 0,
         "ofHeight": 0,
@@ -1451,15 +792,15 @@
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 14361,
+        "layoutTop": 10593,
         "height": 1149,
         "scrubsBetween": [
-          13461,
-          15510
+          9693,
+          11742
         ],
         "at": [
-          13871,
-          14361
+          10103,
+          10954
         ],
         "shift": 0,
         "ofHeight": 0,
@@ -1469,7 +810,7 @@
     "unreachable": [],
     "measured": [
       {
-        "label": "why-you-came[0] tiger-golden-grass-1440.avif",
+        "label": "why-you-came[0] jungle-cats-stitch-1440.avif",
         "section": "why-you-came",
         "layoutTop": 2345,
         "height": 1149,
@@ -1537,170 +878,51 @@
         "unsampled": false
       },
       {
-        "label": "field-days[0] guide-sunrise-960.avif",
-        "section": "field-days",
-        "layoutTop": 5861,
-        "height": 501,
-        "scrubsBetween": [
-          4961,
-          6362
-        ],
-        "at": [
-          5241,
-          6082
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[1] hammocks-shade-960.avif",
-        "section": "field-days",
-        "layoutTop": 6517,
-        "height": 501,
-        "scrubsBetween": [
-          5617,
-          7018
-        ],
-        "at": [
-          5897,
-          6738
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[2] pool-daylight-forest-640.avif",
-        "section": "field-days",
-        "layoutTop": 6821,
-        "height": 226,
-        "scrubsBetween": [
-          5921,
-          7047
-        ],
-        "at": [
-          6146,
-          6822
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "field-days[3] forest-boardwalk-daylight-1440.avif",
-        "section": "field-days",
-        "layoutTop": 7181,
-        "height": 805,
-        "scrubsBetween": [
-          6281,
-          7986
-        ],
-        "at": [
-          6622,
-          7645
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "after-dark[0] lodge-facade-night-1440.avif",
-        "section": "after-dark",
-        "layoutTop": 9854,
-        "height": 1149,
-        "scrubsBetween": [
-          8954,
-          11003
-        ],
-        "at": [
-          9364,
-          10593
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "lantern-hour[0] bonfire-circle-night-1440.avif",
-        "section": "lantern-hour",
-        "layoutTop": 10834,
+        "label": "philosophy[0] veranda-through-leaves-640.avif",
+        "section": "philosophy",
+        "layoutTop": 4708,
         "height": 760,
         "scrubsBetween": [
-          9934,
-          11594
+          3808,
+          5468
         ],
         "at": [
-          10266,
-          11262
+          4140,
+          5136
         ],
         "shift": 0,
         "ofHeight": 0,
         "unsampled": false
       },
       {
-        "label": "lantern-hour[1] sound-healing-640.avif",
-        "section": "lantern-hour",
-        "layoutTop": 10834,
+        "label": "philosophy[1] petal-bowl-map-640.avif",
+        "section": "philosophy",
+        "layoutTop": 4708,
         "height": 375,
         "scrubsBetween": [
-          9934,
-          11209
+          3808,
+          5083
         ],
         "at": [
-          10189,
-          10954
+          4063,
+          4828
         ],
         "shift": 0,
         "ofHeight": 0,
         "unsampled": false
       },
       {
-        "label": "lantern-hour[2] petal-table-night-1200.avif",
-        "section": "lantern-hour",
-        "layoutTop": 11236,
+        "label": "philosophy[2] lily-pond-fountain-640.avif",
+        "section": "philosophy",
+        "layoutTop": 5111,
         "height": 604,
         "scrubsBetween": [
-          10336,
-          11840
+          4211,
+          5715
         ],
         "at": [
-          10637,
-          11539
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "guests[0] lawn-picnic-golden-hour-960.avif",
-        "section": "guests",
-        "layoutTop": 13299,
-        "height": 514,
-        "scrubsBetween": [
-          12399,
-          13813
-        ],
-        "at": [
-          12682,
-          13530
-        ],
-        "shift": 0,
-        "ofHeight": 0,
-        "unsampled": false
-      },
-      {
-        "label": "guests[1] garden-path-lodge-1200.avif",
-        "section": "guests",
-        "layoutTop": 13363,
-        "height": 677,
-        "scrubsBetween": [
-          12463,
-          14040
-        ],
-        "at": [
-          12778,
-          13725
+          4512,
+          5414
         ],
         "shift": 0,
         "ofHeight": 0,
@@ -1709,15 +931,15 @@
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
-        "layoutTop": 14361,
+        "layoutTop": 10593,
         "height": 1149,
         "scrubsBetween": [
-          13461,
-          15510
+          9693,
+          11742
         ],
         "at": [
-          13871,
-          14361
+          10103,
+          10954
         ],
         "shift": 0,
         "ofHeight": 0,
@@ -1760,57 +982,22 @@
           "maskedOver": 0
         },
         {
-          "id": "forest",
-          "words": 97,
+          "id": "philosophy",
+          "words": 58,
           "hidden": 0,
-          "photographs": 4,
+          "photographs": 3,
           "maskedOver": 0
         },
         {
           "id": "field-days",
-          "words": 190,
+          "words": 183,
           "hidden": 0,
           "photographs": 7,
           "maskedOver": 0
         },
         {
-          "id": "rooms",
-          "words": 111,
-          "hidden": 0,
-          "photographs": 4,
-          "maskedOver": 0
-        },
-        {
-          "id": "after-dark",
-          "words": 11,
-          "hidden": 0,
-          "photographs": 1,
-          "maskedOver": 0
-        },
-        {
-          "id": "lantern-hour",
-          "words": 106,
-          "hidden": 0,
-          "photographs": 4,
-          "maskedOver": 0
-        },
-        {
-          "id": "details",
-          "words": 88,
-          "hidden": 0,
-          "photographs": 4,
-          "maskedOver": 0
-        },
-        {
-          "id": "guests",
-          "words": 102,
-          "hidden": 0,
-          "photographs": 2,
-          "maskedOver": 0
-        },
-        {
           "id": "invitation",
-          "words": 78,
+          "words": 81,
           "hidden": 0,
           "photographs": 1,
           "maskedOver": 0
@@ -1850,57 +1037,22 @@
           "maskedOver": 0
         },
         {
-          "id": "forest",
-          "words": 97,
+          "id": "philosophy",
+          "words": 58,
           "hidden": 0,
-          "photographs": 4,
+          "photographs": 3,
           "maskedOver": 0
         },
         {
           "id": "field-days",
-          "words": 190,
+          "words": 183,
           "hidden": 0,
           "photographs": 7,
           "maskedOver": 0
         },
         {
-          "id": "rooms",
-          "words": 111,
-          "hidden": 0,
-          "photographs": 4,
-          "maskedOver": 0
-        },
-        {
-          "id": "after-dark",
-          "words": 11,
-          "hidden": 0,
-          "photographs": 1,
-          "maskedOver": 0
-        },
-        {
-          "id": "lantern-hour",
-          "words": 106,
-          "hidden": 0,
-          "photographs": 4,
-          "maskedOver": 0
-        },
-        {
-          "id": "details",
-          "words": 88,
-          "hidden": 0,
-          "photographs": 4,
-          "maskedOver": 0
-        },
-        {
-          "id": "guests",
-          "words": 102,
-          "hidden": 0,
-          "photographs": 2,
-          "maskedOver": 0
-        },
-        {
           "id": "invitation",
-          "words": 78,
+          "words": 81,
           "hidden": 0,
           "photographs": 1,
           "maskedOver": 0
@@ -1908,6 +1060,10 @@
       ]
     }
   ],
-  "failures": [],
-  "verdict": "pass"
+  "failures": [
+    "drift: a [data-drift=\"0.15\"] element sits in #philosophy, but check_pinned_collage.mjs only measures #rooted — nothing measures this one",
+    "drift: a [data-drift=\"0.105\"] element sits in #philosophy, but check_pinned_collage.mjs only measures #rooted — nothing measures this one",
+    "drift: a [data-drift=\"0.06\"] element sits in #philosophy, but check_pinned_collage.mjs only measures #rooted — nothing measures this one"
+  ],
+  "verdict": "fail"
 }

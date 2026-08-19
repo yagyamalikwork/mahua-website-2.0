@@ -268,7 +268,12 @@ describe("TOLA_CHAPTERS", () => {
     // diverging — an edit to one without the other would otherwise ship
     // unattributed words with nothing to catch it. Carried forward from the
     // pre-redesign file, updated only for quoteCopy's new field name.
-    const original = HOME.chapters.guests.quotes.find((q) => q.name === "Vedant");
+    // Reads `invitation` since 19 Aug 2026, not `guests`. The home page's
+    // testimonials band was removed as a chapter in the v2 restructure and the
+    // client moved its three quotes below the closing section's two property
+    // buttons, so they live in `invitation`'s copy now. Nothing about the
+    // attribution argument above changes — only where the original sits.
+    const original = HOME.chapters.invitation.quotes.find((q) => q.name === "Vedant");
     expect(original, "content/home.ts no longer carries Vedant's quote").toBeDefined();
     expect(TOLA_COPY.quoteCopy?.["tola-guest-word"]?.quote).toBe(original?.quote);
   });

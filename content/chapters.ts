@@ -17,14 +17,25 @@ import type { MediaId } from "@/lib/media";
 export type ChapterKind =
   | "hero"
   | "fullBleedQuote"
-  | "chapterIntro"
   /**
    * `chapterIntro`'s composition, held still while its photographs drift past —
-   * the reference site's signature effect, and the only pinned scene on the
-   * page. Below the viewport `components/motion/CollageStage.tsx` pins at, and
-   * for any visitor who has asked for less motion, it renders as an ordinary
-   * `chapterIntro` and reserves no extra scroll, so it is quiet in exactly the
-   * same way and the rhythm rule counts it the same way.
+   * the reference site's signature effect. Below the viewport
+   * `components/motion/CollageStage.tsx` pins at, and for any visitor who has
+   * asked for less motion, it renders as an ordinary `chapterIntro` and reserves
+   * no extra scroll, so it is quiet in exactly the same way and the rhythm rule
+   * counts it the same way.
+   *
+   * **It is no longer the only pinned scene: `03 · Rooted Like The Mahua` and
+   * `04 · Mahua Philosophy` are both this kind since 19 Aug 2026** (`feat/home-v2`,
+   * `docs/superpowers/specs/2026-08-19-home-v2-restructure.md` §4-§5), the second
+   * a deliberate mirror of the first. `app/page.tsx` counts them and alternates
+   * `mirrored`, so the two compositions are opposite handed without either
+   * section knowing the other exists.
+   *
+   * **`"chapterIntro"` itself was retired from this union the same day.** It is
+   * the composition `06 · The Lantern Hour` used, and that chapter left the page
+   * with the restructure; the *component* survives and still ships, because this
+   * kind renders through it (`components/motion/PinnedCollage.tsx`).
    */
   | "pinnedCollage"
   /**
@@ -38,10 +49,18 @@ export type ChapterKind =
    * (non-negotiable #5).
    */
   | "coverflow"
-  | "plateGrid"
   | "lodgeCards"
-  | "testimonials"
   | "invitation";
+/*
+ * **`"plateGrid"` and `"testimonials"` were retired from this union on 19 Aug
+ * 2026** with the chapters that used them — `03 · The Forest`, `05 · The Rooms`
+ * and `07 · Details` were the three plate boards, and `guests` was the
+ * testimonials band. The guest quotes are not gone: `content/home.ts` moves them
+ * into `invitation`'s copy, to be rendered below the two property buttons (spec
+ * §7). `components/sections/PlateGrid.tsx` and `Testimonials.tsx` are now unused
+ * by any route and are candidates for retirement in a later task, along with
+ * `components/ui/ForestBackdrop.tsx`.
+ */
 
 export type Chapter = {
   /** Stable key. `content/home.ts` keys its copy by this, and the test enforces the join. */
@@ -83,7 +102,16 @@ export type ChapterLike = {
 export const IMAGE_LED_KINDS: readonly ChapterKind[] = [
   "hero",
   "fullBleedQuote",
-  "plateGrid",
+  // `"plateGrid"` came out on 19 Aug 2026 with the kind itself.
+  //
+  // **`"pinnedCollage"` is deliberately NOT here, and that is the whole of the
+  // v2 restructure's one unresolved collision.** The spine the client approved
+  // puts `03 · Rooted Like The Mahua` next to `04 · Mahua Philosophy` and both
+  // are this kind — text held still with three photographs floating at the
+  // margins, which is exactly the composition non-negotiable #10 calls quiet.
+  // Adding it here would make the rhythm test pass by redefining the rule it
+  // enforces, so it has not been added; see the failing case in
+  // `chapters.test.ts` and the report on this task.
   // Six photographs, all six of them the cards themselves, and a card is a
   // photograph with its words laid on it. (It was nine, then ten, while the
   // chapter still carried a header band of photographs above the stage; the
@@ -125,6 +153,12 @@ const CHAPTER_LIST = [
     // Two lodges, two photographs each: [Vann exterior, Vann room, Tola pool,
     // Tola suite]. Orientation is Vann first, Tola second — Task 7 reads the
     // pairs positionally.
+    //
+    // **This is the OLD shape, kept deliberately for one task.** Spec §2 rebuilds
+    // this chapter as ecotriip's two full-height panels on `vann-hero` and
+    // `tola-hero`, which drops it to two photographs; the restructure ships the
+    // spine only, so `lodgeCards` and its four frames stand until the panels are
+    // built.
     id: "lodges",
     number: "01",
     label: "The Lodges",
@@ -132,9 +166,28 @@ const CHAPTER_LIST = [
     media: ["bungalow-exterior-palms", "mahua-vann-room", "mahua-tola-pool", "mahua-tola-suite"],
   },
   {
+    /*
+     * **`02 · The Jungles` since 19 Aug 2026** — numbered and labelled, where it
+     * was an unnumbered pull-quote over `tiger-golden-grass` from 4 Aug.
+     *
+     * The photograph is `jungle-cats-stitch`, the client's own 3168x1344
+     * composite of the three cats `03 · The Forest` used to show as plates: the
+     * black panther, the leopard on its rock and the tiger in profile, blended
+     * into one continuous forest frame. That chapter is deleted in the same
+     * change, which is what makes the composite honest rather than a repeat —
+     * see the entry's note in `scripts/build_images.mjs`.
+     *
+     * **Still `fullBleedQuote`, and that is temporary.** Spec §3 crops the band
+     * down from 100svh so it breathes with cream above and below, left-aligns
+     * the heading at a smaller size, and sets `03 · The Forest`'s surviving
+     * paragraph to its right. None of that is built yet — only the numbering,
+     * the label, the photograph and the copy have moved.
+     */
     id: "why-you-came",
+    number: "02",
+    label: "The Jungles",
     kind: "fullBleedQuote",
-    media: ["tiger-golden-grass"],
+    media: ["jungle-cats-stitch"],
   },
   {
     // The mahua tree, the Gond, building in the vernacular, the potters of
@@ -149,26 +202,58 @@ const CHAPTER_LIST = [
     // where the crop is shallow and it takes the one deep slot. Reordered 5 Aug
     // 2026 — with `potters-hands` in the tall slot it was being drawn 1,141px
     // wide from a 700px file at 1440, i.e. 0.61 source pixels per CSS pixel.
+    //
+    // **`03` since 19 Aug 2026, and no longer the only pinned scene** —
+    // `philosophy` below is its mirror. Spec §4 also removes the potter film
+    // from its footer and realigns the text left with the photographs on the
+    // right; neither is built yet.
     id: "rooted",
-    number: "02",
-    label: "Rooted like the mahua",
+    number: "03",
+    label: "Rooted Like The Mahua",
     kind: "pinnedCollage",
     media: ["lantern-bridge-dusk", "forest-shrine-incense", "potters-hands"],
   },
   {
-    // Three portraits, one orientation — a plate grid reads as a field guide
-    // only if the plates match. It was four until 4 Aug 2026, when two of them
-    // turned out to be the same tiger photograph under two ids.
-    id: "forest",
-    number: "03",
-    label: "The Forest",
-    kind: "plateGrid",
-    media: ["tiger-pair-profile", "leopard-on-rock", "melanistic-leopard"],
+    /*
+     * **New on 19 Aug 2026, and deliberately not a new idea** — spec §5: *"make
+     * sure it is in continuity as it is an extension of an already existing
+     * section."* Same kind as `rooted`, one place below it, so `app/page.tsx`'s
+     * intro counter hands it the mirrored composition with no section knowing
+     * the other exists.
+     *
+     * Its words are `05 · The Rooms`' intro paragraph, moved here without that
+     * chapter's heading — see `content/home.ts`.
+     *
+     * The three photographs are the ones `07 · Details` freed, and they are the
+     * client's own pick (19 Aug). Two are 0.67 portraits, which is what a
+     * scrolling column wants, and all three are the page's quiet still lifes,
+     * which is what a section called Philosophy wants beside it.
+     *
+     * **Slot order is a resolution decision and departs from the order the spec
+     * lists them in**, exactly as `rooted`'s comment above departs from taste.
+     * The tall flank is drawn at ~42vw — about 1,141px at 1440 — so it must take
+     * the widest file of the three: `veranda-through-leaves` at 1100px, not
+     * `petal-bowl-map` at 700px, which would be 0.61 source pixels per CSS
+     * pixel. The pair slots crop shallow and take the 700px and 1080px files.
+     */
+    id: "philosophy",
+    number: "04",
+    label: "Mahua Philosophy",
+    kind: "pinnedCollage",
+    media: ["veranda-through-leaves", "petal-bowl-map", "lily-pond-fountain"],
   },
   {
+    /*
+     * **`05 · Experiences` since 19 Aug 2026**, renamed and renumbered from
+     * `04 · Days in the Field`. Spec §6 keeps the heading, the body copy and the
+     * tiger film exactly as they are — *"We keep the text and the tiger where
+     * they are and not touch them"* — and replaces the pinned coverflow with a
+     * plain horizontal strip of tall portrait cards. **The strip is a later
+     * task; this is still the coverflow, on its own six frames.**
+     */
     id: "field-days",
-    number: "04",
-    label: "Days in the Field",
+    number: "05",
+    label: "Experiences",
     kind: "coverflow",
     /*
      * **Exactly the six cards since 17 Aug 2026 — one photograph per activity,
@@ -210,49 +295,6 @@ const CHAPTER_LIST = [
       "vann-potters-village",
       "forest-trail-canopy",
     ],
-  },
-  {
-    // The rooms had no chapter at all in the rejected build, on a site selling
-    // rooms. Four landscape interiors, 2×2.
-    id: "rooms",
-    number: "05",
-    label: "The Rooms",
-    kind: "plateGrid",
-    media: [
-      "room-open-to-bamboo",
-      "suite-tiger-painting",
-      "room-hanging-chair-view",
-      "hanging-chair-forest-deck",
-    ],
-  },
-  {
-    // Night-lit, so white type over it needs the least scrim of any full-bleed
-    // on the page. Task 7 still measures it rather than assuming.
-    id: "after-dark",
-    kind: "fullBleedQuote",
-    media: ["lodge-facade-night"],
-  },
-  {
-    id: "lantern-hour",
-    number: "06",
-    label: "The Lantern Hour",
-    kind: "chapterIntro",
-    // The petal table is the full-moon ritual this chapter's copy describes —
-    // "a diya set afloat with water and flowers" — and we had no photograph of
-    // it until one was harvested from the client's own property video.
-    media: ["bonfire-circle-night", "sound-healing", "petal-table-night"],
-  },
-  {
-    id: "details",
-    number: "07",
-    label: "Details",
-    kind: "plateGrid",
-    media: ["petal-bowl-map", "veranda-through-leaves", "lily-pond-fountain", "geese-garden-pond"],
-  },
-  {
-    id: "guests",
-    kind: "testimonials",
-    media: ["lawn-picnic-golden-hour", "garden-path-lodge"],
   },
   {
     id: "invitation",

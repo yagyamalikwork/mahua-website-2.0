@@ -1,8 +1,8 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { CHAPTERS } from "@/content/chapters";
-import { chapterCopy, type ChapterCopyKey } from "@/content/home";
-import { media } from "@/lib/media";
+import type { ChapterLike } from "@/content/chapters";
+import type { PlateGridCopy } from "./PlateGrid";
+import { media, type MediaId } from "@/lib/media";
 import {
   gapPx,
   PLATE_REF,
@@ -14,18 +14,60 @@ import {
 } from "./PlateGrid";
 
 /**
- * The three real boards, read off `content/home.ts` rather than hand-listed —
- * a synthetic chapter or a hard-coded column count could drift from what the
- * page actually renders, exactly the mistake this file's own predecessor
- * warned against. `plateColumns` (the same function `PlateGrid` calls) is
- * what turns real orientations into a real column count.
+ * The three boards, as fixtures.
+ *
+ * **They were read off `content/chapters.ts` and `content/home.ts` until 19 Aug
+ * 2026, and that was the better arrangement — this is a downgrade forced by the
+ * v2 restructure, not an improvement.** `03 · The Forest`, `05 · The Rooms` and
+ * `07 · Details` were the page's three plate boards; all three left the home
+ * spine with the client's own restructure, `app/page.tsx` dropped its
+ * `case "plateGrid"` arm, and `PlateGrid` is now routed from nowhere. Reading
+ * the boards off the content dial is no longer possible because the boards are
+ * not in it.
+ *
+ * What is preserved is the half that mattered: **the orientations still come
+ * from `media()`**, so a re-crop that changed a photograph's orientation still
+ * moves a column count here. Only the id lists are hand-held, and they are the
+ * exact lists the three chapters carried at the commit before the restructure.
+ *
+ * **The right end state is retiring this file with its component**, as
+ * `SplitFeature` and its test were retired together on 16 Aug 2026. These
+ * fixtures exist so the suite stays green through one task, not so the boards
+ * can live on as fiction.
  */
+const RETIRED_BOARDS = {
+  forest: ["tiger-pair-profile", "leopard-on-rock", "melanistic-leopard"],
+  rooms: [
+    "room-open-to-bamboo",
+    "suite-tiger-painting",
+    "room-hanging-chair-view",
+    "hanging-chair-forest-deck",
+  ],
+  details: ["petal-bowl-map", "veranda-through-leaves", "lily-pond-fountain", "geese-garden-pond"],
+} as const satisfies Record<string, readonly MediaId[]>;
+
 const BOARD_IDS = ["forest", "rooms", "details"] as const;
 
+const ROMAN = ["I", "II", "III", "IV"];
+
+function boardChapter(id: (typeof BOARD_IDS)[number]): ChapterLike {
+  return { id, media: RETIRED_BOARDS[id] };
+}
+
+function boardCopy(id: (typeof BOARD_IDS)[number]): PlateGridCopy {
+  return {
+    heading: { text: `The ${id} board`, dim: id },
+    intro: `A fixture standing in for the ${id} chapter's own intro.`,
+    plates: RETIRED_BOARDS[id].map((mediaId, i) => ({
+      mediaId,
+      plate: ROMAN[i],
+      caption: `Plate ${ROMAN[i]}.`,
+    })),
+  };
+}
+
 function boardColumns(id: (typeof BOARD_IDS)[number]): number {
-  const copy = chapterCopy(id as ChapterCopyKey);
-  if (!("plates" in copy) || !copy.plates) throw new Error(`chapter ${id} carries no plates`);
-  const orientations = copy.plates.map((p) => media(p.mediaId).orientation);
+  const orientations = RETIRED_BOARDS[id].map((mediaId) => media(mediaId).orientation);
   return plateColumns(orientations);
 }
 
@@ -76,9 +118,7 @@ describe("PlateGrid column reflow — 14 Aug 2026, the real rule", () => {
   });
 
   it.each(BOARD_IDS)("renders %s as flex-wrap with every plate's own REF as its flex-basis", (id) => {
-    const chapter = CHAPTERS.find((c) => c.id === id);
-    if (!chapter) throw new Error(`content/chapters no longer carries a ${id} chapter`);
-    const { container } = render(<PlateGrid chapter={chapter} />);
+    const { container } = render(<PlateGrid chapter={boardChapter(id)} copy={boardCopy(id)} />);
     const grid = container.querySelector("[data-plate-grid]") as HTMLElement | null;
     expect(grid).not.toBeNull();
 

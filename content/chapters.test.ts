@@ -14,11 +14,13 @@ const MIN_MEDIA = {
   hero: 1,
   fullBleedQuote: 1,
   // The reference's signature move is two or three photographs floating at the
-  // margins around centred text. With fewer it is just a text screen.
-  chapterIntro: 3,
-  // The same composition, pinned. If anything the floor is higher here — a
-  // pinned scene with one photograph in it is two screens of scroll spent on
-  // nothing — but three is what the layout is built for.
+  // margins around centred text — with fewer it is just a text screen — pinned,
+  // so if anything the floor is higher here: a pinned scene with one photograph
+  // in it is two screens of scroll spent on nothing. Three is what the layout is
+  // built for, and both `rooted` and `philosophy` sit exactly on it.
+  //
+  // `chapterIntro`'s own floor (also 3) came out on 19 Aug 2026 with the kind,
+  // when `06 · The Lantern Hour` left the page.
   pinnedCollage: 3,
   // Six activities, one card each. Below that it is not a carousel; the pin
   // reserves scroll for cards that are not there — non-negotiable #9.
@@ -31,9 +33,10 @@ const MIN_MEDIA = {
   // direction, but it does mean this assertion is load-bearing for the first
   // time rather than a comfortable floor.
   coverflow: 6,
-  plateGrid: 3,
+  // `plateGrid: 3` and `testimonials: 1` came out on 19 Aug 2026 with their
+  // kinds — the three plate boards and the guests band all left the page in the
+  // v2 restructure.
   lodgeCards: 2,
-  testimonials: 1,
   invitation: 1,
 } satisfies Record<ChapterKind, number>;
 
@@ -49,12 +52,19 @@ describe("CHAPTERS", () => {
     expect(new Set(CHAPTERS.map((c) => c.id)).size).toBe(CHAPTERS.length);
   });
 
-  it("runs eleven to thirteen chapters", () => {
+  it("runs six to nine chapters", () => {
     // The rejected build was 13.4 screens and felt empty; the reference is 8.2
     // and feels full. Length was never the problem, but there is no version of
     // this page that needs twenty chapters either.
-    expect(CHAPTERS.length).toBeGreaterThanOrEqual(11);
-    expect(CHAPTERS.length).toBeLessThanOrEqual(13);
+    //
+    // **Was eleven to thirteen until 19 Aug 2026.** The stakeholders' restructure
+    // takes the page from twelve chapters to seven — hero, five numbered
+    // chapters, close — so the old band would fail on a shape the client
+    // approved. The new band is drawn round that seven with one either side: it
+    // still catches a restructure that dissolves the page into fragments or
+    // collapses it into a landing page, which is all this ever did.
+    expect(CHAPTERS.length).toBeGreaterThanOrEqual(6);
+    expect(CHAPTERS.length).toBeLessThanOrEqual(9);
   });
 
   it("never runs two quiet screens back to back", () => {
@@ -137,17 +147,26 @@ describe("CHAPTERS", () => {
     }
   });
 
-  it("draws on at least twenty distinct photographs", () => {
-    // "Too few images" was the client's first complaint, and Task 8 measures it
-    // on the built page — too late to be cheap to fix. Asserting it on the spine
-    // means the page cannot be built failing it.
+  it("draws on at least seventeen distinct photographs", () => {
+    // "Too few images" was the client's first complaint, and the density rig
+    // measures it on the built page — too late to be cheap to fix. Asserting it
+    // on the spine means the page cannot be built failing it.
     //
-    // This does not guard against trimming a grid: `MIN_MEDIA` plus the
-    // no-repeats rule already force 24 on the current twelve-chapter shape (it
-    // carries 32). What it catches is a *restructure* onto the cheap kinds —
-    // eleven chapters of hero/pull-quote/testimonial alternate perfectly, pass
-    // every other assertion here, and show eleven photographs.
-    expect(new Set(ALL_MEDIA).size).toBeGreaterThanOrEqual(20);
+    // What it catches is a *restructure* onto the cheap kinds: a spine of
+    // hero/pull-quote/testimonial alternates perfectly, passes every other
+    // assertion here, and shows one photograph per chapter.
+    //
+    // **Twenty until 19 Aug 2026, and lowered because the page is half the
+    // length, not because a chapter was thinned.** The v2 spine carries 19
+    // distinct photographs across seven chapters (1 + 4 + 1 + 3 + 3 + 6 + 1),
+    // where the twelve-chapter page carried 32. Seventeen is that spine's own
+    // mechanical floor — `MIN_MEDIA` plus the no-repeats rule force exactly 17
+    // on it — which makes this assertion redundant for the *current* shape and
+    // load-bearing again the moment a chapter is swapped onto a cheaper kind.
+    // It is deliberately not set at 19: spec §2 rebuilds `01 · The Lodges` as
+    // two panels on two photographs, which takes the page to 17 by a change the
+    // client has already approved.
+    expect(new Set(ALL_MEDIA).size).toBeGreaterThanOrEqual(17);
   });
 
   it("shows all four of the guidelines' photography categories", () => {

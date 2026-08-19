@@ -1,16 +1,11 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
-import { HangingLantern } from "@/components/signature/lantern/HangingLantern";
 import { SignatureFilm } from "@/components/signature/SignatureFilm";
-import { ChapterIntro } from "@/components/sections/ChapterIntro";
 import { Coverflow } from "@/components/sections/Coverflow";
 import { FullBleedQuote } from "@/components/sections/FullBleedQuote";
 import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
 import { LodgeCards } from "@/components/sections/LodgeCards";
-import { PlateGrid } from "@/components/sections/PlateGrid";
-import { Testimonials } from "@/components/sections/Testimonials";
 import type { ScrimStrength } from "@/components/ui/Scrim";
-import { ForestBackdrop } from "@/components/ui/ForestBackdrop";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
 
@@ -27,52 +22,62 @@ import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
  * The two pieces of composition that genuinely belong to the page rather than to
  * any one section:
  *
- * - **Which margin each `chapterIntro` floats its images at.** Both instances
+ * - **Which margin each pinned collage floats its images at.** Both instances
  *   using the same composition would read as a template, and a section cannot
- *   know it is the second of its kind. The page counts them and alternates.
- *   `pinnedCollage` is counted among them: it *is* that composition, held still,
- *   and it renders as an ordinary `chapterIntro` at every viewport it does not
- *   pin at — so leaving it out of the count would flip `lantern-hour`'s
- *   composition on every screen in the world as a side effect of pinning
- *   `rooted` on some of them.
+ *   know it is the second of its kind. The page counts them and alternates —
+ *   which is exactly what makes `04 · Mahua Philosophy` the mirror of
+ *   `03 · Rooted Like The Mahua` that the client asked for on 19 Aug 2026,
+ *   with neither section knowing the other exists.
  * - **How heavy each full-bleed quote's scrim is.** It is a property of the
- *   photograph, not of the layout: `tiger-golden-grass` is a bright midday frame
- *   and `lodge-facade-night` is already lit for night. Both figures below were
- *   measured off a rendered browser frame with the type hidden, not chosen by
- *   eye — see `docs/reviews/2026-08-04-task-7/`.
+ *   photograph, not of the layout. The figure below was measured off a rendered
+ *   browser frame with the type hidden, not chosen by eye — see
+ *   `docs/reviews/2026-08-04-task-7/`.
  */
 
-/** Per-photograph, and only ever raised by measuring the rendered result. */
+/**
+ * Per-photograph, and only ever raised by measuring the rendered result.
+ *
+ * **The one figure here is now measured against a photograph that is no longer
+ * on the page, and it must be re-solved before the Jungles band ships.** 0.34 /
+ * 0.45 was solved on 4 Aug 2026 against `tiger-golden-grass` — noon, dry golden
+ * grass, no shadow anywhere in the frame, the heaviest wash on the page and
+ * still the tightest ratio. `why-you-came` draws `jungle-cats-stitch` since
+ * 19 Aug: a shaded sal forest, far darker overall but with a lit golden band at
+ * the right where the tiger stands. A re-crop is a re-solve — the coverflow
+ * learnt that on 18 Aug — and so is a re-photograph. Run
+ * `scripts/check_contrast_over_photos.mjs`.
+ *
+ * `"after-dark"` came out on 19 Aug with the chapter it described.
+ */
 const QUOTE_SCRIM: Record<string, ScrimStrength> = {
-  // Noon, dry golden grass, no shadow anywhere in the frame. The heaviest wash
-  // on the page and still the tightest ratio.
   "why-you-came": { flat: 0.34, centre: 0.45 },
-  // Lantern-lit facade against a night sky; the photograph does most of the work.
-  "after-dark": { flat: 0.32, centre: 0.36 },
 };
 
-/** The chapters that render on cream rather than on a photograph. */
-const CREAM_KINDS: readonly ChapterKind[] = [
-  "lodgeCards",
-  "chapterIntro",
-  "pinnedCollage",
-  "plateGrid",
-  // `coverflow` replaced `splitFeature` on `field-days` (16 Aug 2026) and has to
-  // be counted here for the same reason `pinnedCollage` is counted among the
-  // intros: this list is what alternates the two creams, so a chapter dropping
-  // out of it would flip the surface of every cream chapter BELOW it as a side
-  // effect. `"splitFeature"` sat beside it for one day and came out with the
-  // component on the same date — safely, and only because the two changes were
-  // made together: the kind was already unrouted, so removing it changed no
-  // chapter's position in this count. Removing a kind that IS routed would flip
-  // the cream of every chapter below it, silently, and this list is referenced
-  // by no plan.
-  "coverflow",
-  "testimonials",
-];
+/**
+ * The chapters that render on cream rather than on a photograph.
+ *
+ * This list is what alternates the two creams, so a chapter dropping out of it
+ * flips the surface of every cream chapter BELOW it as a side effect — which is
+ * why `coverflow` had to be added the day it replaced `splitFeature`, and why
+ * `"splitFeature"` could only be removed safely because it was already unrouted.
+ *
+ * **`"chapterIntro"`, `"plateGrid"` and `"testimonials"` came out on 19 Aug 2026,
+ * and that is a real change to the page rather than a tidy-up.** All three were
+ * routed until that day, so the creams below them shift. The new order is
+ * `lodges` (base), `rooted` (deep), `philosophy` (base), `field-days` (deep) —
+ * still alternating, which is the only property this list owes anybody.
+ */
+const CREAM_KINDS: readonly ChapterKind[] = ["lodgeCards", "pinnedCollage", "coverflow"];
 
-/** The kinds that share `ChapterIntro`'s composition, pinned or not. */
-const INTRO_KINDS: readonly ChapterKind[] = ["chapterIntro", "pinnedCollage"];
+/**
+ * The kinds that share `ChapterIntro`'s composition, pinned or not.
+ *
+ * One entry since 19 Aug 2026, `"chapterIntro"` having left `ChapterKind` with
+ * `06 · The Lantern Hour`. It is still a list rather than an equality check
+ * because the count it feeds is positional: anything sharing that composition
+ * has to be counted here or the mirroring silently desynchronises.
+ */
+const INTRO_KINDS: readonly ChapterKind[] = ["pinnedCollage"];
 
 type Position = {
   /** Index among the `chapterIntro` chapters, for the mirrored composition. */
@@ -97,33 +102,22 @@ function renderChapter(chapter: Chapter, at: Position) {
           scrim={QUOTE_SCRIM[chapter.id] ?? { flat: 0.4, centre: 0.4 }}
         />
       );
-    case "chapterIntro":
-      return (
-        <ChapterIntro
-          key={chapter.id}
-          chapter={chapter}
-          mirrored={at.intro % 2 === 1}
-          surface={at.surface}
-          /*
-           * The lantern hangs out of `after-dark` — the night facade with its
-           * eaves lit — down into the chapter named for the hour it belongs to.
-           * The client asked for exactly this on 7 Aug 2026, and for it to swing
-           * when pushed.
-           *
-           * It goes here rather than inside the section because only the page
-           * knows that `after-dark` is what sits above this chapter. Move either
-           * of them in `content/chapters.ts` and the lantern is hanging from
-           * whatever arrives instead, which is a thing to notice rather than a
-           * thing to prevent — `content/chapters.test.ts` owns the sequence.
-           */
-          /* Unsized here, unlike the two films. How large the potter and the
-             tiger should be is a question about a chapter's column; how large
-             the lantern may be is a measured fit against the room the
-             composition leaves above its own heading, so it belongs with the
-             component as `LANTERN_FIT`. */
-          hanging={chapter.id === "lantern-hour" ? <HangingLantern /> : undefined}
-        />
-      );
+    /*
+     * **`case "chapterIntro"` was here until 19 Aug 2026, and it is what hung
+     * the lantern.** `06 · The Lantern Hour` was the page's only `chapterIntro`,
+     * and the client's own restructure removes that chapter, so both the arm and
+     * the `hanging={chapter.id === "lantern-hour" ? <HangingLantern /> : …}`
+     * line went with it.
+     *
+     * **The lantern is not deleted, it is unmounted.** `HangingLantern`, its
+     * artwork (`lib/lantern-art.ts`), `build_lantern.mjs` and
+     * `scripts/check_lantern.mjs` are all untouched and all still work — this
+     * page is simply the only thing that ever mounted it, and nothing on the v2
+     * spine has a night photograph to hang it out of. `docs/DECISIONS.md` §13 is
+     * the record of what it cost to build; restoring it is one prop on whichever
+     * chapter next sits under a lit facade. `check_lantern.mjs` fails against
+     * this branch, and that failure is the ruling, not a regression.
+     */
     case "pinnedCollage":
       return (
         <PinnedCollage
@@ -132,62 +126,75 @@ function renderChapter(chapter: Chapter, at: Position) {
           mirrored={at.intro % 2 === 1}
           surface={at.surface}
           /*
-           * The potter closes this chapter. It is the one chapter whose copy
-           * already names them — the potters of Pachdhar, whose wheel this page
-           * invites you to take a turn at — and the join below it is one of the
-           * five emptiest screens on the page at 63.5%, so a figure here fills
-           * paper nobody was using rather than buying new paper to fill.
+           * The potter closes `rooted`, and ONLY `rooted`.
+           *
+           * **The `chapter.id` test is new on 19 Aug 2026 and it is load-bearing,
+           * not defensive.** This arm rendered one chapter until that day, so the
+           * film could be passed unconditionally; `philosophy` is a second
+           * `pinnedCollage` now, and without the test the same potter film would
+           * play twice on one page — once under a chapter whose copy names the
+           * potters of Pachdhar, and once under a chapter about rooms.
+           *
+           * `rooted` is the one chapter whose copy already names them — the
+           * potters of Pachdhar, whose wheel this page invites you to take a
+           * turn at — which is why it is the film's chapter and not the other's.
+           *
+           * **Spec §4 removes this film outright, and that is deliberately NOT
+           * done here.** It belongs with the realignment the same section
+           * describes (text left, photographs right), which is a component
+           * change. When it goes, `scripts/check_films.mjs` loses its `rooted`
+           * arm with it — that rig asserts two films and would then assert one.
            */
           footer={
-            <SignatureFilm
-              src="/media/potter-film.mp4"
-              poster="/media/potter-film-poster.webp"
-              width={1080}
-              height={1255}
-              /*
-               * Small, and tucked into the section's own bottom padding — an
-               * accessory closing the chapter rather than a band of its own.
-               *
-               * It was 680px wide and centred in a new band until 7 Aug 2026.
-               * That read as a feature the chapter had not asked for, and it cost
-               * 823px of scroll. Measured at 1280 there are **24px** of slack
-               * below the prose and at 1024 the text column is taller than the
-               * photographs, so there is no large hole here to fill — only the
-               * 80px of padding, which is what this now sits in.
-               *
-               * How far up it sits is `PinnedCollage`'s decision and not this
-               * one's, because the answer is different in the two branches: only
-               * the pinned composition leaves its photographs displaced when the
-               * scene lets go. See the note on the footer there.
-               */
-              className="block h-auto w-[150px] sm:w-[180px] lg:w-[220px]"
-            />
+            chapter.id === "rooted" ? (
+              <SignatureFilm
+                src="/media/potter-film.mp4"
+                poster="/media/potter-film-poster.webp"
+                width={1080}
+                height={1255}
+                /*
+                 * Small, and tucked into the section's own bottom padding — an
+                 * accessory closing the chapter rather than a band of its own.
+                 *
+                 * It was 680px wide and centred in a new band until 7 Aug 2026.
+                 * That read as a feature the chapter had not asked for, and it
+                 * cost 823px of scroll. Measured at 1280 there are **24px** of
+                 * slack below the prose and at 1024 the text column is taller
+                 * than the photographs, so there is no large hole here to fill —
+                 * only the 80px of padding, which is what this now sits in.
+                 *
+                 * How far up it sits is `PinnedCollage`'s decision and not this
+                 * one's, because the answer is different in the two branches:
+                 * only the pinned composition leaves its photographs displaced
+                 * when the scene lets go. See the note on the footer there.
+                 */
+                className="block h-auto w-[150px] sm:w-[180px] lg:w-[220px]"
+              />
+            ) : undefined
           }
         />
       );
-    case "plateGrid":
-      return (
-        <PlateGrid
-          key={chapter.id}
-          chapter={chapter}
-          surface={at.surface}
-          /*
-           * The hornbills go behind `03 · The Forest`, and only there. Client
-           * request, 10 Aug 2026, with their own drawing.
-           *
-           * It is the right chapter for them twice over: the copy already counts
-           * "three hundred recorded birds", and Malabar pied hornbills are native
-           * to Pench — Mahua Vann's own park. `details` and `rooms` are the other
-           * two plate grids and take no backdrop; a wash under every one of them
-           * would be a texture rather than a moment.
-           *
-           * `surface` is passed on because the tint is baked onto a cream at
-           * build time rather than blended at runtime, so it has to be given the
-           * one it is standing on. See `ForestBackdrop`.
-           */
-          backdrop={chapter.id === "forest" ? <ForestBackdrop surface={at.surface} /> : undefined}
-        />
-      );
+    /*
+     * **`case "plateGrid"` was here until 19 Aug 2026, and it is what carried the
+     * hornbill forest tint.** The three plate boards — `03 · The Forest`,
+     * `05 · The Rooms`, `07 · Details` — all leave the page with the restructure,
+     * and the tint was mounted on the first of them alone
+     * (`backdrop={chapter.id === "forest" ? <ForestBackdrop … /> : undefined}`).
+     *
+     * **The drawing is not deleted, it is unmounted**, exactly like the lantern
+     * above. `components/ui/ForestBackdrop.tsx`, `lib/forest-overlay.ts` and
+     * `scripts/build_forest_overlay.mjs` are untouched, and the two-segment solve
+     * that made the client's own re-rendered artwork legible (foliage 0.267,
+     * birds 0.135, both under the same 4.55:1 floor — `docs/DECISIONS.md` §15)
+     * still stands and still runs. What has gone is the chapter it stood behind:
+     * its copy counted "three hundred recorded birds", which is why the birds
+     * were there and not somewhere else, and that paragraph now sits in
+     * `02 · The Jungles` over a photograph rather than over cream.
+     *
+     * Note for whoever builds that band: the tint is baked onto a specific cream
+     * at build time rather than blended at runtime, so it cannot simply be laid
+     * under a photograph — it needs a cream chapter to stand on.
+     */
     case "coverflow":
       return (
         <Coverflow
@@ -243,8 +250,20 @@ function renderChapter(chapter: Chapter, at: Position) {
           }
         />
       );
-    case "testimonials":
-      return <Testimonials key={chapter.id} chapter={chapter} surface={at.surface} />;
+    /*
+     * **`case "testimonials"` was here until 19 Aug 2026.** The `guests` band is
+     * gone as a chapter and its three quotes moved into `invitation`'s copy —
+     * the client's own placement, *"below the two property buttons"*. They are
+     * not rendered anywhere yet: `Invitation.tsx` has to be taught to read
+     * `chapterCopy("invitation").quotes`, which is the next task.
+     *
+     * The two photographs the band carried, `lawn-picnic-golden-hour` and
+     * `garden-path-lodge`, are curated and now unused. They were deliberately
+     * NOT added to `invitation`'s media: that chapter is `FULL_BLEED_KINDS`, so
+     * every id it declares must be full-bleed-safe, and — more to the point —
+     * `measure_density.mjs` scores what is painted, so declaring photographs
+     * nothing draws would move no pixel and mislead the next reader.
+     */
     case "invitation":
       return <Invitation key={chapter.id} chapter={chapter} />;
     default: {

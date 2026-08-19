@@ -206,6 +206,40 @@ const CURATION = [
   // (forest-17) is the 700px twin of the entry above.
   {
     /*
+     * Client-supplied, 19 Aug 2026, for `02 · The Jungles` on `feat/home-v2` —
+     * the cropped band that replaces the 100svh tiger quote.
+     *
+     * **Looked at at full size before curating, and it is a COMPOSITE of the
+     * three plates directly above.** Left panel: `melanistic-leopard`, the black
+     * panther in the fork of a tree. Centre: `leopard-on-rock`, the leopard on
+     * its slab among slender trunks. Right: `tiger-pair-profile`, the tiger in
+     * close profile with the second cat's flank behind it. The three have been
+     * blended into one continuous 3168x1344 forest frame with the joins
+     * retouched — it is not a contact sheet, and at band size it reads as a
+     * single photograph.
+     *
+     * That matters for one rule and not for the other. The perceptual-hash
+     * duplicate guard in `lib/media.test.ts` compares whole frames and will not
+     * fire, correctly — this is a different image. What WOULD have been a
+     * problem is showing it beside its own three sources, and it cannot: the
+     * same restructure that introduces it deletes `03 · The Forest`, so all
+     * three leave the page in the same commit. **Do not restore a chapter
+     * carrying any of `melanistic-leopard`, `leopard-on-rock` or
+     * `tiger-pair-profile` while this band is on the page** — `chapters.test.ts`
+     * would not catch it, because by id they are four distinct photographs.
+     *
+     * 3168x1344 is 2.357:1 — the widest source in the library, and comfortably
+     * over the 1400px full-bleed floor even after the 1440 cap.
+     */
+    id: "jungle-cats-stitch",
+    src: "reference/home-v2/cats-stitch.png",
+    alt: "A stretch of sal forest holding three cats at once — a black panther in the trees at left, a leopard on a rock at centre, and a tiger in the golden grass at right.",
+    category: "forest",
+    orientation: "landscape",
+    fullBleedSafe: true,
+  },
+  {
+    /*
      * Re-exported by the client at 1344x685 on 17 Aug 2026 — see the
      * "1344x685 re-exports" note at the head of `CURATION`. Looked at against
      * the old 1440x960 derivative: the same photograph, wider and shallower —
@@ -322,6 +356,46 @@ const CURATION = [
     alt: "A sound healing session by candlelight, singing bowls set before a seated guest.",
     category: "lodgeLife",
     orientation: "landscape",
+    fullBleedSafe: false,
+  },
+  {
+    /*
+     * Client-supplied, 19 Aug 2026, for the "Screenings and Star Talks" card in
+     * `05 · Experiences` on `feat/home-v2`. **Curated here; nothing renders it
+     * yet** — the re-carded strip is a later task, so this entry is deliberately
+     * unused for now, exactly as `vann-safari` was between 16 and 17 Aug.
+     *
+     * **GUEST CONSENT: NOT YET CONFIRMED. Put to the client before this frame
+     * reaches a card, and do not treat this comment as the clearance.**
+     *
+     * Looked at at full size, 19 Aug 2026. Three people on the night lawn round
+     * a Dobsonian telescope, two of them pointing up at the sky:
+     *
+     * - **Left, a man in a grey T-shirt** — full left profile, lit, in focus,
+     *   glasses and moustache legible. **Recognisable.**
+     * - **Centre, a young woman at the eyepiece** — three-quarter face, hair
+     *   tied back, features legible even though one eye is at the telescope.
+     *   **Recognisable.**
+     * - **Right, a man in a hat and tan shirt** — back fully to camera, no face
+     *   in frame at any zoom. Not identifiable. Reads as a naturalist rather
+     *   than a guest, but that is an inference from the hat and the pointing,
+     *   not a fact this file knows.
+     *
+     * So this is the same question `tiger-crossing-track` was put to the client
+     * on 17 Aug, and a harder one: there the guests were a third of the frame's
+     * width, shaded and turned away, and here two faces are lit, near the
+     * foreground, and will be drawn at card size. The rule at the head of this
+     * file has cost two photographs already; a frame is not cleared because the
+     * client sent it, only because he was shown what is in it and said yes.
+     *
+     * 900x1350 (0.667:1) is genuinely portrait, which is what the reference's
+     * tall cards want — the one source of the six that needs no re-crop.
+     */
+    id: "star-talks",
+    src: "reference/home-v2/star-talks.jpg",
+    alt: "Guests and a naturalist round a telescope on the lawn at night, two of them pointing up at the sky.",
+    category: "lodgeLife",
+    orientation: "portrait",
     fullBleedSafe: false,
   },
   {

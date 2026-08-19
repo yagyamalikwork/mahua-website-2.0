@@ -392,7 +392,24 @@ export function PlateGrid({
    */
   backdrop?: React.ReactNode;
 }) {
-  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as PlateGridCopy);
+  /*
+   * **`as unknown as` since 19 Aug 2026, and the double cast is a symptom worth
+   * reading rather than a style choice.** `chapterCopy` returns the union of
+   * every entry in `content/home.ts`, and until that day at least one of them —
+   * `forest`, `rooms`, `details` — carried `plates`, so the single cast
+   * overlapped. The v2 restructure removes all three boards from the home spine,
+   * so no member of that union has `intro` and `plates` any more and TypeScript
+   * correctly refuses the narrowing.
+   *
+   * Nothing routes to this component now: `app/page.tsx` dropped its
+   * `case "plateGrid"` arm with the kind, and no property page ever used it. The
+   * honest end state is retiring this file the way `SplitFeature` was retired on
+   * 16 Aug 2026 — component, test and `lib/sizes.test.ts` rows together — and
+   * this cast is a deliberate placeholder until that decision is made, not a
+   * repair. **If a chapter is ever routed here again, its copy must be passed
+   * through the `copy` prop or this lookup will throw at render.**
+   */
+  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as unknown as PlateGridCopy);
   const { plates } = resolvedCopy;
 
   const orientations = plates.map((p) => media(p.mediaId).orientation);

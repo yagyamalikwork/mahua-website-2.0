@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-17T12:51:17.158Z",
+  "measuredAt": "2026-08-19T12:15:53.996Z",
   "url": "http://localhost:3110/",
   "films": [
     {
@@ -39,7 +39,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 3.02,
+        "currentTime": 2.62,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -52,8 +52,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 3.02,
-        "afterHover": 3.62
+        "beforeHover": 2.62,
+        "afterHover": 3.2
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -127,7 +127,7 @@
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.86
+        "to": 0.85
       },
       "pointerParked": {
         "paused": true,
@@ -136,7 +136,7 @@
       },
       "leaveAndReturn": {
         "from": 10,
-        "to": 0.85
+        "to": 0.87
       }
     },
     {
@@ -159,7 +159,7 @@
         "ended": false,
         "box": {
           "x": 1092,
-          "y": 6535,
+          "y": 7342,
           "w": 300,
           "h": 400
         },
@@ -176,7 +176,7 @@
           "still": "darken",
           "film": "darken"
         },
-        "currentTime": 2.94,
+        "currentTime": 2.35,
         "duration": 10,
         "paused": false,
         "ended": false,
@@ -189,8 +189,8 @@
         "onScreen": true
       },
       "hoverWhilePlaying": {
-        "beforeHover": 2.94,
-        "afterHover": 3.53
+        "beforeHover": 2.35,
+        "afterHover": 2.94
       },
       "afterItEnds": {
         "stillVisible": false,
@@ -251,7 +251,7 @@
         "worstChannelDriftPx": 1,
         "overlap": {
           "onScreen": true,
-          "scrollY": 6220,
+          "scrollY": 7027,
           "box": {
             "x": 1092,
             "y": 315,
@@ -264,7 +264,7 @@
       },
       "hoverReplay": {
         "from": 10,
-        "to": 0.86
+        "to": 0.87
       },
       "pointerParked": {
         "paused": true,
@@ -326,7 +326,7 @@
       "width": 390,
       "height": 844,
       "box": {
-        "top": 8190,
+        "top": 7402,
         "h": 320,
         "w": 240
       },
@@ -412,7 +412,7 @@
       "width": 1024,
       "height": 900,
       "box": {
-        "top": 7183,
+        "top": 5371,
         "h": 400,
         "w": 300
       },
@@ -498,7 +498,7 @@
       "width": 1280,
       "height": 900,
       "box": {
-        "top": 7746,
+        "top": 5527,
         "h": 400,
         "w": 300
       },
@@ -584,7 +584,7 @@
       "width": 1366,
       "height": 768,
       "box": {
-        "top": 7782,
+        "top": 5440,
         "h": 400,
         "w": 300
       },
@@ -670,7 +670,7 @@
       "width": 1440,
       "height": 900,
       "box": {
-        "top": 6535,
+        "top": 7342,
         "h": 400,
         "w": 300
       },
@@ -756,7 +756,7 @@
       "width": 1920,
       "height": 1080,
       "box": {
-        "top": 7272,
+        "top": 8359,
         "h": 400,
         "w": 300
       },
