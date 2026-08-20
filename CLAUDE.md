@@ -63,6 +63,29 @@ hand-drawn field-guide idiom.
 > [`docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md`](docs/superpowers/specs/2026-08-01-mahua-home-mvp-design.md),
 > still holds for everything the plan doesn't touch — its §3, §4.1 and §13 are superseded.
 
+## ⚠ WHICH BRANCH ARE YOU ON?
+
+**This file is checked out on `feat/home-v2`, and on that branch the home page is NOT what most of this
+document describes.** Run `git branch --show-current` before trusting a figure below.
+
+| | `feat/image-sizing` (and `main`, `demo`) | **`feat/home-v2`** |
+|---|---|---|
+| home page | **twelve chapters** — everything below | **seven** — hero, 01 The Lodges, 02 The Jungles, 03 Rooted Like The Mahua, 04 Mahua Philosophy, 05 Experiences, the close |
+| deployed | **yes** — `https://mahua-resorts.vercel.app` | **no, deliberately** — a stakeholder presentation, shown on localhost |
+| the lantern, the forest tint, the potter film | shipping | **no mount** — untouched, and still shipping on the other branch |
+| `04 · Days in the Field` | the pinned coverflow | a **sideways card strip**, coverflow retired |
+| tests | 481 | **477** |
+| density | page 27.0/31.1 for `field-days`; `lodges` and `rooms` over the ceiling | **page mean 33.2%, every chapter inside 45%** |
+
+**Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §21 and
+[`docs/reviews/2026-08-19-home-v2/README.md`](docs/reviews/2026-08-19-home-v2/README.md) before touching the
+home page on this branch.** §21 carries the client's rulings from 19-20 Aug, the four defects only a
+screenshot caught, the two photographs that changed for consent and repeat reasons and are **still unruled**,
+and the one dated exception to non-negotiable #10.
+
+**The property pages, the site chrome, the booking contract and both property routes are identical on both
+branches.** Everything this document says about them is true either way.
+
 ## Status
 
 | | |
