@@ -43,3 +43,6 @@ vitest.setup.ts
 # Client-supplied source photographs (~19 MB). The build never reads these —
 # `scripts/build_images.mjs` does, and its output lives in public/media.
 Activity-Carousel-Images
+
+# Client design references (~6.7 MB of HTML with embedded images). Never built.
+Brand&Design-Guidelines
