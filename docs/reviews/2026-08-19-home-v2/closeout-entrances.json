@@ -1,0 +1,1060 @@
+{
+  "url": "http://localhost:3110/",
+  "measuredAt": "2026-08-20T00:22:31.251Z",
+  "desktop": {
+    "label": "desktop",
+    "viewport": "1440x900",
+    "reducedMotion": false,
+    "atRest": {
+      "staged": 13,
+      "stagedImages": 9,
+      "stagedHeadlines": 8,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 13,
+      "displacedWords": 36,
+      "peakWordOffset": 83.696,
+      "invisible": 13,
+      "displaced": 13,
+      "maskCover": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 30,
+    "settlings": 30,
+    "headlineStagings": 8,
+    "headlineSettlings": 8,
+    "peakMaskCover": 1,
+    "peakWordOffset": 83.778,
+    "peakStagedAtOnce": 30,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 13,
+      "settledImages": 9,
+      "settledHeadlines": 8,
+      "attributed": 13,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "leftDisplacedWords": 0,
+    "lineStagger": [
+      {
+        "text": "The wild and the calm, held together",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Two forests, known deeply",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Mahua Vann",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Mahua Tola",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "The forest at its most alive, and you at y",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Rooted like the mahua",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Mahua Philosophy",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "The day the forest keeps",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Two forests are expecting you",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      }
+    ],
+    "staggerFaults": [],
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 122,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 71,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 147,
+        "hidden": 0,
+        "photographs": 7,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 141,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "phone": {
+    "label": "phone",
+    "viewport": "390x844",
+    "reducedMotion": false,
+    "atRest": {
+      "staged": 13,
+      "stagedImages": 9,
+      "stagedHeadlines": 8,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 13,
+      "displacedWords": 36,
+      "peakWordOffset": 45.653,
+      "invisible": 13,
+      "displaced": 13,
+      "maskCover": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 30,
+    "settlings": 30,
+    "headlineStagings": 8,
+    "headlineSettlings": 8,
+    "peakMaskCover": 1,
+    "peakWordOffset": 45.738,
+    "peakStagedAtOnce": 30,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 13,
+      "settledImages": 9,
+      "settledHeadlines": 8,
+      "attributed": 13,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "leftDisplacedWords": 0,
+    "lineStagger": [
+      {
+        "text": "The wild and the calm, held together",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Two forests, known deeply",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Mahua Vann",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Mahua Tola",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "The forest at its most alive, and you at y",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Rooted like the mahua",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Mahua Philosophy",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "The day the forest keeps",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Two forests are expecting you",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      }
+    ],
+    "staggerFaults": [],
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 122,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 71,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "philosophy",
+        "words": 58,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 147,
+        "hidden": 0,
+        "photographs": 7,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 141,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "reducedMotion": {
+    "label": "reduced-motion",
+    "viewport": "1440x900",
+    "reducedMotion": true,
+    "atRest": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 0,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "flickeredOnLoad": false,
+    "stagings": 0,
+    "settlings": 0,
+    "headlineStagings": 0,
+    "headlineSettlings": 0,
+    "peakMaskCover": 0,
+    "peakWordOffset": 0,
+    "peakStagedAtOnce": 0,
+    "afterScroll": {
+      "staged": 0,
+      "stagedImages": 0,
+      "stagedHeadlines": 0,
+      "stagedInView": 0,
+      "settled": 0,
+      "settledImages": 0,
+      "settledHeadlines": 0,
+      "attributed": 0,
+      "displacedWords": 0,
+      "peakWordOffset": 0,
+      "invisible": 0,
+      "displaced": 0,
+      "maskCover": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "leftStaged": 0,
+    "leftInvisible": 0,
+    "leftMasked": 0,
+    "leftDisplacedWords": 0,
+    "lineStagger": [
+      {
+        "text": "The wild and the calm, held together",
+        "wrappedInto": 3,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09,
+          0.18
+        ]
+      },
+      {
+        "text": "Two forests, known deeply",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Mahua Vann",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "Mahua Tola",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "The forest at its most alive, and you at y",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Rooted like the mahua",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Mahua Philosophy",
+        "wrappedInto": 1,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0
+        ]
+      },
+      {
+        "text": "The day the forest keeps",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      },
+      {
+        "text": "Two forests are expecting you",
+        "wrappedInto": 2,
+        "splitLines": 0,
+        "risesLineByLine": true,
+        "delays": [
+          0,
+          0.09
+        ]
+      }
+    ],
+    "staggerFaults": [],
+    "chapters": [
+      {
+        "id": "arrival",
+        "words": 20,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "lodges",
+        "words": 122,
+        "hidden": 0,
+        "photographs": 2,
+        "maskedOver": 0
+      },
+      {
+        "id": "why-you-came",
+        "words": 71,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      },
+      {
+        "id": "rooted",
+        "words": 144,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "philosophy",
+        "words": 58,
+        "hidden": 0,
+        "photographs": 3,
+        "maskedOver": 0
+      },
+      {
+        "id": "field-days",
+        "words": 147,
+        "hidden": 0,
+        "photographs": 7,
+        "maskedOver": 0
+      },
+      {
+        "id": "invitation",
+        "words": 141,
+        "hidden": 0,
+        "photographs": 1,
+        "maskedOver": 0
+      }
+    ]
+  },
+  "hero": {
+    "id": "arrival",
+    "state": null,
+    "maskCover": 0,
+    "imageScale": "none",
+    "imageVisible": 1,
+    "imageComplete": true,
+    "headlineState": null,
+    "headlineWordOffset": 0
+  },
+  "parallax": {
+    "reducedMotion": false,
+    "elements": 1,
+    "moved": 1,
+    "sampledAt": [
+      0.2,
+      0.8
+    ],
+    "strongest": 0.063,
+    "weakest": 0.063,
+    "still": [],
+    "unreachable": [],
+    "measured": [
+      {
+        "label": "invitation[0] birding-cairn-dusk-1440.avif",
+        "section": "invitation",
+        "layoutTop": 7084,
+        "height": 1149,
+        "scrubsBetween": [
+          6184,
+          8233
+        ],
+        "at": [
+          6594,
+          7449
+        ],
+        "shift": 72,
+        "ofHeight": 0.063,
+        "unsampled": false
+      }
+    ],
+    "drift": [
+      {
+        "section": "rooted",
+        "rate": "0.15"
+      },
+      {
+        "section": "rooted",
+        "rate": "0.105"
+      },
+      {
+        "section": "rooted",
+        "rate": "0.06"
+      },
+      {
+        "section": "philosophy",
+        "rate": "0.15"
+      },
+      {
+        "section": "philosophy",
+        "rate": "0.105"
+      },
+      {
+        "section": "philosophy",
+        "rate": "0.06"
+      }
+    ]
+  },
+  "parallaxReducedMotion": {
+    "reducedMotion": true,
+    "elements": 7,
+    "moved": 0,
+    "sampledAt": [
+      0.2,
+      0.8
+    ],
+    "strongest": 0,
+    "weakest": 0,
+    "still": [
+      {
+        "label": "rooted[0] lantern-bridge-dusk-1200.avif",
+        "section": "rooted",
+        "layoutTop": 2331,
+        "height": 760,
+        "scrubsBetween": [
+          1431,
+          3091
+        ],
+        "at": [
+          1763,
+          2759
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "rooted[1] forest-shrine-incense-640.avif",
+        "section": "rooted",
+        "layoutTop": 2331,
+        "height": 375,
+        "scrubsBetween": [
+          1431,
+          2706
+        ],
+        "at": [
+          1686,
+          2451
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "rooted[2] vann-potters-village-1344.avif",
+        "section": "rooted",
+        "layoutTop": 2734,
+        "height": 604,
+        "scrubsBetween": [
+          1834,
+          3338
+        ],
+        "at": [
+          2135,
+          3037
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "philosophy[0] veranda-through-leaves-640.avif",
+        "section": "philosophy",
+        "layoutTop": 3498,
+        "height": 760,
+        "scrubsBetween": [
+          2598,
+          4258
+        ],
+        "at": [
+          2930,
+          3926
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "philosophy[1] petal-bowl-map-640.avif",
+        "section": "philosophy",
+        "layoutTop": 3498,
+        "height": 375,
+        "scrubsBetween": [
+          2598,
+          3873
+        ],
+        "at": [
+          2853,
+          3618
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "philosophy[2] lily-pond-fountain-640.avif",
+        "section": "philosophy",
+        "layoutTop": 3901,
+        "height": 604,
+        "scrubsBetween": [
+          3001,
+          4505
+        ],
+        "at": [
+          3302,
+          4204
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "invitation[0] birding-cairn-dusk-1440.avif",
+        "section": "invitation",
+        "layoutTop": 5658,
+        "height": 1149,
+        "scrubsBetween": [
+          4758,
+          6807
+        ],
+        "at": [
+          5168,
+          6023
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      }
+    ],
+    "unreachable": [],
+    "measured": [
+      {
+        "label": "rooted[0] lantern-bridge-dusk-1200.avif",
+        "section": "rooted",
+        "layoutTop": 2331,
+        "height": 760,
+        "scrubsBetween": [
+          1431,
+          3091
+        ],
+        "at": [
+          1763,
+          2759
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "rooted[1] forest-shrine-incense-640.avif",
+        "section": "rooted",
+        "layoutTop": 2331,
+        "height": 375,
+        "scrubsBetween": [
+          1431,
+          2706
+        ],
+        "at": [
+          1686,
+          2451
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "rooted[2] vann-potters-village-1344.avif",
+        "section": "rooted",
+        "layoutTop": 2734,
+        "height": 604,
+        "scrubsBetween": [
+          1834,
+          3338
+        ],
+        "at": [
+          2135,
+          3037
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "philosophy[0] veranda-through-leaves-640.avif",
+        "section": "philosophy",
+        "layoutTop": 3498,
+        "height": 760,
+        "scrubsBetween": [
+          2598,
+          4258
+        ],
+        "at": [
+          2930,
+          3926
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "philosophy[1] petal-bowl-map-640.avif",
+        "section": "philosophy",
+        "layoutTop": 3498,
+        "height": 375,
+        "scrubsBetween": [
+          2598,
+          3873
+        ],
+        "at": [
+          2853,
+          3618
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "philosophy[2] lily-pond-fountain-640.avif",
+        "section": "philosophy",
+        "layoutTop": 3901,
+        "height": 604,
+        "scrubsBetween": [
+          3001,
+          4505
+        ],
+        "at": [
+          3302,
+          4204
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "invitation[0] birding-cairn-dusk-1440.avif",
+        "section": "invitation",
+        "layoutTop": 5658,
+        "height": 1149,
+        "scrubsBetween": [
+          4758,
+          6807
+        ],
+        "at": [
+          5168,
+          6023
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      }
+    ],
+    "drift": []
+  },
+  "noScript": [
+    {
+      "viewport": "1440x900",
+      "enterAttributes": 0,
+      "chapters": [
+        {
+          "id": "arrival",
+          "words": 20,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lodges",
+          "words": 122,
+          "hidden": 0,
+          "photographs": 2,
+          "maskedOver": 0
+        },
+        {
+          "id": "why-you-came",
+          "words": 71,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooted",
+          "words": 144,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "philosophy",
+          "words": 58,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "field-days",
+          "words": 147,
+          "hidden": 0,
+          "photographs": 7,
+          "maskedOver": 0
+        },
+        {
+          "id": "invitation",
+          "words": 141,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "enterAttributes": 0,
+      "chapters": [
+        {
+          "id": "arrival",
+          "words": 20,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "lodges",
+          "words": 122,
+          "hidden": 0,
+          "photographs": 2,
+          "maskedOver": 0
+        },
+        {
+          "id": "why-you-came",
+          "words": 71,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        },
+        {
+          "id": "rooted",
+          "words": 144,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "philosophy",
+          "words": 58,
+          "hidden": 0,
+          "photographs": 3,
+          "maskedOver": 0
+        },
+        {
+          "id": "field-days",
+          "words": 147,
+          "hidden": 0,
+          "photographs": 7,
+          "maskedOver": 0
+        },
+        {
+          "id": "invitation",
+          "words": 141,
+          "hidden": 0,
+          "photographs": 1,
+          "maskedOver": 0
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

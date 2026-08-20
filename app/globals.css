@@ -721,6 +721,78 @@ body {
 }
 
 /*
+ * `02 · The Jungles`' heading, aligned to the Mahua Vann panel's own text —
+ * `components/sections/JunglesBand.tsx`, 20 Aug 2026, the client's second
+ * request of that day: *"move just the heading a bit more on the left so that it
+ * aligns right under the text from the Mahua Vann property card from the 01-The
+ * Lodges section."*
+ *
+ * ## Why this is arithmetic and not a nudge
+ *
+ * The two blocks live in different frames, so the distance between them is a
+ * function of the viewport rather than a constant:
+ *
+ * | | the Vann panel's text | the band's container | gap |
+ * |---|---|---|---|
+ * | < 768 | 24px (`px-6`, stacked) | 24px | **0** |
+ * | 768-1023 | 48px (`md:px-12`, stacked) | 48px | **0** |
+ * | 1024-1279 | 28px (`lg:px-7`, side by side) | 48px | **20px** |
+ * | 1280-1695 | 40px (`xl:px-10`) | 48px | **8px** |
+ * | 1696+ | 40px | 48 + (100cqw − 1600)/2 | **8 + (100cqw − 1600)/2** |
+ *
+ * — because the panels are edge-to-edge with their own padding while the band's
+ * words sit in a 1,600px container centred inside this section's `md:px-12`.
+ * That container stops growing at 1,600px and the screen does not, so above
+ * 1,696px of layout viewport every extra pixel of width pushes the two blocks
+ * half a pixel further apart. 8px at 1440, 120px at 1920, 440px at 2560. **A
+ * single hand-tuned offset would be right on one screen and wrong on every
+ * other**, which is `DECISIONS.md` §2's most-repeated defect shape.
+ *
+ * Below `lg` there is deliberately no rule at all: the panels stack there and
+ * their words fall back to the same `px-6 md:px-12` the band uses, so the two
+ * already agree to the pixel and any offset would break an alignment that
+ * exists for free.
+ *
+ * ## Three things here are load bearing
+ *
+ * **`100cqw`, never `100vw`.** `.jungles-frame` is `container-type:
+ * inline-size`, so `100cqw` is the section's own content width — the layout
+ * viewport minus this section's padding. `100vw` includes a classic scrollbar,
+ * which is 15-17px on Windows and 0 on a Mac, so a `vw` version of this would
+ * have been ~8px off on the machine the client actually tests on and exactly
+ * right on the one it was written on.
+ *
+ * **The subtractions are written out rather than folded.** `40px - 48px` says
+ * where each number comes from; `-8px` says nothing, and the next person to move
+ * `LodgePanels`' padding needs to see both halves. `lib/sizes.test.ts` reads
+ * this file and `LodgePanels.tsx` together and goes red if either moves without
+ * the other.
+ *
+ * **`margin-inline-start` on a grid item widens it as it moves it**, which is
+ * wanted: the heading keeps its own `max-w-[24ch]` measure and the column simply
+ * starts further left. Nothing is clipped — the section is `overflow-hidden` and
+ * the heading's new left edge is 40px inside it, not outside.
+ */
+.jungles-frame {
+  container-type: inline-size;
+}
+
+/* `lg` — `LodgePanels`' `lg:px-7` against this section's `md:px-12`. */
+@media (min-width: 1024px) {
+  .jungles-heading {
+    margin-inline-start: calc(28px - 48px);
+  }
+}
+
+/* `xl` and up — `LodgePanels`' `xl:px-10`, plus half of whatever the viewport
+   has over the 1,600px container's own width. */
+@media (min-width: 1280px) {
+  .jungles-heading {
+    margin-inline-start: calc(40px - 48px - max(0px, (100cqw - 1600px) / 2));
+  }
+}
+
+/*
  * The entrance. `data-enter` carries the state returned by
  * `components/motion/useInView.ts`, and **its absence is the at-rest state** —
  * so markup that never meets JavaScript is simply visible, which is the

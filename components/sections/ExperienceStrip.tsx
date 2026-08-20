@@ -50,32 +50,78 @@ export function experienceCardId(chapterId: string, index: number) {
  *
  * **Unwashed, the six measure 1.04 / 1.03 / 1.14 / 1.66 / 2.01 / 1.08** in the
  * order below, against a 4.5 floor — two of them within a hundredth of 1.00:1,
- * which is cream type on pixels of exactly its own luminance. Solved, they are
- * **4.66 / 4.64 / 4.65 / 4.76 / 4.75 / 4.64**: a 12-hundredth spread, because
- * every one was taken to the same place and stopped.
+ * which is cream type on pixels of exactly its own luminance. Every solved
+ * figure since is in the per-card comments; the shipped set is the 20 Aug one
+ * below, and the numbers the 19 Aug sweep stopped at (4.64-4.76, every card
+ * taken to the floor and no further) are history rather than a target — see the
+ * next section for why stopping there was too fine.
+ *
+ * ## Four of the six were re-solved on 20 Aug 2026, and one of them was failing
+ *
+ * **The 19 Aug sweep solved these at 390 and up, where the card is a flat 340px.
+ * At 360 it is `78vw` = 281px, and that is a size nobody had measured.**
+ * `check_contrast_over_photos.mjs` sweeps from 360 now (its `WIDTHS` carries the
+ * reasoning) and read `strip · card 02` at **3.30 against its 4.5 floor** there.
+ *
+ * The cause is worth stating because it will recur on any fixed-size card whose
+ * words are bottom-anchored: **the card got 23px narrower and card 02's sentence
+ * wrapped from one line to two.** The block grows upward from the foot, so every
+ * line above the wrap moves up with it — the label's top went from **22.7% of
+ * the card's height to 29.6%** — and 29.6% is where `Scrim`'s `bottom` gradient
+ * has fallen to 59% of its own strength. Straight onto the one bright patch in
+ * this frame, the backlit white cotton: the pixel under the label is
+ * **[240, 228, 214]** at 360 against [181, 158, 142] at 390. Nothing about the
+ * photograph or the crop changed; a line of type moved 24px.
+ *
+ * **No `flat`+`bottom` pair can serve both.** Every layer in `ui/Scrim.tsx`
+ * except `top` gets *stronger* toward the foot, and `top` does not reach; so any
+ * figure that lifts the label at 360 lifts the two lines below it by at least as
+ * much, and the pair that carries 360 to 4.5 takes 390's foot to ~10:1 — a solid
+ * bar, which is what shipped at 0.85 and what the 19 Aug review already trimmed
+ * this card back from. What broke the deadlock is **`corner`**, whose wedge is
+ * thickest exactly where this block sits (bottom-left) and which is *lighter* at
+ * the top of the frame than the flat it replaces. Solved against every pixel of
+ * every line box at six widths: **mean alpha over the whole frame 0.362 →
+ * 0.416**, i.e. five points more wash on the photograph, and the top of the
+ * frame is lighter than before.
+ *
+ * **Three more were lifted while the instrument was pointed at them, and none of
+ * them was failing.** Cards 01, 03 and 04 measured 4.77-4.82 at their worst
+ * width — 0.27 above the floor, which is real margin but not much of it, and
+ * this project's standing instruction since `DECISIONS.md` §20.5 is to re-solve
+ * with headroom rather than to the floor. They are ~5.2-5.5 now. **Cards 05 and
+ * 06 were left exactly as they were** (4.90 and 5.13 at their worst), because a
+ * scrim raised for no measured reason is a photograph darkened for no measured
+ * reason.
  *
  * ## The shape is `bottom` + `flat`, and the geometry is why
  *
  * The words sit at the foot of a 0.74 card, so `bottom` — a gradient over the
  * lower 72% of the frame — is the layer whose shape matches the type, and it
- * carries most of every figure here. Where a `flat` appears beside it, it is
- * because that photograph's bright pixels are spread across the whole frame
- * rather than gathered at one end, which no shaped layer can answer: five of the
- * six carry one and `star-talks`, whose bright pixels are all lawn, does not.
+ * carries most of every figure here. The `flat` beside it is answering bright
+ * pixels spread across the whole frame rather than gathered at one end, which no
+ * shaped layer can reach — the lit canopy above `bonfire-dinner`'s fire is the
+ * clearest case. **All six carry one since 20 Aug 2026**; `star-talks`, whose
+ * bright pixels are all lawn and all low in the frame, went without until then
+ * and carries the lightest of the six.
  *
- * No `centre` and no `corner` anywhere in this set. `centre` is a radial for
- * centred type and there is none; `corner` is a wedge into the bottom-LEFT under
- * a headline standing on the floor of the frame, and these words span the card's
- * full measure.
+ * No `centre` anywhere in this set — that is a radial for centred type and there
+ * is none. **One `corner`, added 20 Aug 2026** on `sound-healing` alone: the
+ * argument against it was that these words span the card's full measure, which
+ * is true and is not the whole story — the block *starts* at the bottom-left,
+ * and on the one card where a `flat`+`bottom` pair could not reach the top line
+ * without drowning the bottom two, the wedge is what closed it.
  *
- * **All four widths bind something, and no two cards are bound by the same
- * one.** 390 binds cards 01 and 03, 768 binds 06, 1440 binds 02, 1920 binds 04
- * and 05. Re-run the rig at every width after touching any of these — a
- * desktop-only or phone-only check would pass a build that fails somewhere else.
+ * **360 is now the binding width for most of the six**, which is what happens
+ * when a rig's narrowest sample moves: 360 binds 01, 02, 03 and 05, 390 binds 06,
+ * and 04 is flat across the whole range. Re-run the rig at **every** width after
+ * touching any of these — a desktop-only or phone-only check would pass a build
+ * that fails somewhere else, and this set has now been caught by exactly that
+ * once.
  *
- * **Do not lighten these further.** The tightest three sit at 4.64-4.66, which is
- * 3% over the floor, and `check_contrast_over_photos.mjs` is the only instrument
- * on this project that can see it.
+ * **Do not lighten these further.** The tightest of the six sits at 4.90, and
+ * `check_contrast_over_photos.mjs` is the only instrument on this project that
+ * can see it.
  *
  * **Keyed by photograph, not by activity, and not in `content/`.** What a scrim
  * answers to is the exposure of a frame; the activity that happens to name it is
@@ -93,35 +139,52 @@ const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
   // **Unwashed 1.04:1 — the second-worst starting point of the six.** A night
   // forest lit by one fire, so the mid-tones under the words are firelit grass
   // and the bright pixels are the lit canopy high in the frame, which a `bottom`
-  // gradient never reaches. That is why the flat is the second heaviest here: it
-  // is answering the top of the frame, not the foot.
-  // → 4.66 at 390 (binding), 4.79 at 768, 4.72 at 1024, 4.73 at 1440, 4.66 at 1920.
-  "bonfire-dinner": { flat: 0.22, bottom: 0.95 },
+  // gradient never reaches. That is why the flat is the heaviest here: it is
+  // answering the top of the frame, not the foot.
+  //
+  // **`flat` 0.22 → 0.28 on 20 Aug 2026, for headroom rather than for a
+  // failure.** It read 4.78 at 360 and 4.97 at 390, its two narrowest widths and
+  // its two thinnest margins; it is ~5.1-5.5 across the range now. Six points of
+  // flat on a night photograph that is already mostly black.
+  "bonfire-dinner": { flat: 0.28, bottom: 0.95 },
   // **Unwashed 1.03:1, the theoretical floor** — cream type on pixels of very
   // nearly its own luminance. The figure is a surprise until the frame is
   // opened: it reads as a dark photograph, and it is, except that the woman's
   // white cotton is backlit and sits exactly where the sentence lands.
   //
-  // **Trimmed from `{ bottom: 0.95, flat: 0.24 }` when the card grew to 340px.**
-  // At the 300px card that pair solved to 4.64; at 340 the same pair measured
-  // **7.33** — the words are a smaller fraction of a bigger card, so they sit
-  // further inside the `bottom` gradient's strong end and the same figure does
-  // more. 7.33 on the darkest photograph of the six is mud, and this was the one
-  // card of the six where the difference is visible.
-  "sound-healing": { flat: 0.08, bottom: 0.85 },
-  // **Unwashed 1.14:1**, and the only card in the set that needs no flat at all.
-  // Night lawn under a floodlight: the bright pixels are the grass, they are low
-  // in the frame, and a `bottom` gradient is exactly the shape of that. It is
-  // also the one photograph here that arrived portrait, so its foot is the
-  // photographer's foot rather than a crop's.
-  // → 4.65 at 390 (binding), 4.75 at 768, 4.68 at 1024, 4.72 at 1440, 4.70 at 1920.
-  "star-talks": { bottom: 0.82 },
+  // **This is the card that failed at 360, and the only one in the set carrying
+  // a `corner`.** It was `{ flat: 0.08, bottom: 0.85 }` and measured **3.30**
+  // there — see the component's own note for why a line of type moving 24px did
+  // that, and why no `flat`+`bottom` pair can answer it. The wedge is thickest
+  // under the bottom-left block where these words are and *thinner than the
+  // 0.08 flat it replaces* at the top of the frame, which is why the subject
+  // survives a solve that adds five points of mean alpha.
+  //
+  // Its own history, kept because it is the same lesson twice: it was
+  // `{ bottom: 0.95, flat: 0.24 }` at the 300px card, where it solved to 4.64;
+  // at 340 the identical pair measured **7.33**, because the words are a smaller
+  // fraction of a bigger card and sit further inside the gradient's strong end.
+  // 7.33 was mud on the darkest photograph of the six. **A card's size is part
+  // of its solve, at both ends of the range.**
+  "sound-healing": { flat: 0.05, bottom: 0.45, corner: 0.75 },
+  // **Unwashed 1.14:1.** Night lawn under a floodlight: the bright pixels are
+  // the grass, they are low in the frame, and a `bottom` gradient is exactly the
+  // shape of that. It is also the one photograph here that arrived portrait, so
+  // its foot is the photographer's foot rather than a crop's.
+  //
+  // **It carried no `flat` at all until 20 Aug 2026 and now carries 0.10**, for
+  // headroom: 4.77 at 768 and 1440 was the thinnest reading anywhere in the set.
+  // It is the lightest wash of the six either way.
+  "star-talks": { bottom: 0.82, flat: 0.1 },
   // **Unwashed 1.66:1 — the best of the six**, and it takes the lightest wash to
   // match. The guide's dark fleece fills the lower half of the portrait crop and
   // the blown sunrise flare is up beside his binoculars, well clear of the type.
   // The flat is answering that flare, which is spread rather than gathered.
-  // → 4.83 at 390, 4.82 at 768 and 1024, 4.85 at 1440, 4.76 at 1920 (binding).
-  "guide-sunrise": { flat: 0.14, bottom: 0.7 },
+  //
+  // **Lifted from `{ flat: 0.14, bottom: 0.7 }` on 20 Aug 2026**, again for
+  // headroom rather than a failure: it was the flattest card in the set at
+  // 4.80-4.82 at *every* width, which is 0.3 of margin and no more. ~5.4-5.5 now.
+  "guide-sunrise": { flat: 0.2, bottom: 0.75 },
   // **Unwashed 2.01:1, by a distance the easiest frame here** — wet clay under
   // diffuse shade is mid-tone everywhere and has no specular highlight in it at
   // all. Worth contrasting with `vann-potters-village`, the *other* pottery
@@ -129,14 +192,18 @@ const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
   // `docs/OWED-ORIGINALS.md` asks for a different crop of: white-glazed pots
   // are the hardest surface on this page to put cream type over, and unglazed
   // clay is one of the easiest.
-  // → 4.99 at 390, 4.82 at 768/1024, 4.83 at 1440, 4.75 at 1920 (binding).
+  // → 4.90 at 360 (binding), 5.11 at 390, 7.51 at 768, 7.97 at 1024, 7.60 at
+  //   1440, 7.97 at 1920. Untouched on 20 Aug 2026: 4.90 is the thinnest margin
+  //   left in the set and it is still 0.40 of it.
   "potters-hands": { flat: 0.05, bottom: 0.85 },
   // **Unwashed 1.08:1.** Sunlit golden grass fills the bottom third of the
   // portrait crop and the tiger is DARKER than the grass around it, which is the
   // wrong way round for type: the wash is set by the grass the cat is walking
   // through, not by the cat. Nearly as heavy as the two night frames, on the
   // brightest photograph of the six.
-  // → 5.20 at 390, 4.64 at 768 (binding), 4.74 at 1024, 4.73 at 1440, 4.71 at 1920.
+  // → 5.21 at 360, 5.13 at 390 (binding), 5.19 at 768, 5.15 at 1024, 5.21 at
+  //   1440, 5.20 at 1920. The flattest reading in the set and comfortably clear,
+  //   so it was left alone on 20 Aug 2026.
   "tiger-golden-grass": { flat: 0.19, bottom: 0.95 },
 };
 
@@ -150,14 +217,19 @@ const CARD_SCRIM: Partial<Record<MediaId, ScrimStrength>> = {
  *
  * **It dominates every solved figure above, layer by layer, and that was
  * checked against the solved set rather than assumed**: the heaviest `bottom` in
- * the set is 0.95 and the heaviest `flat` 0.24, so this is 1.0 and 0.4. The same
- * promise was briefly untrue on the coverflow — one card there needed a `centre`
- * of 0.8 against a fallback of 0.7 — and saying so was cheaper than a reader
- * discovering it. The `centre` here answers to nothing in the solved set at all,
- * which is the point: an unsolved photograph gets a layer under the middle of
- * the card as well, because nobody knows where its bright pixels are.
+ * the set is 0.95, the heaviest `flat` 0.28 and the heaviest `corner` 0.75, so
+ * this is 1.0, 0.4 and 0.8. The same promise was briefly untrue on the coverflow
+ * — one card there needed a `centre` of 0.8 against a fallback of 0.7 — and
+ * saying so was cheaper than a reader discovering it.
+ *
+ * **`corner` joined it on 20 Aug 2026, the day a solved card first used one**
+ * (`sound-healing`), which is the whole of why it is here: a fallback that omits
+ * a layer the set uses is a fallback that can land *lighter* than a solved
+ * figure. The `centre` still answers to nothing in the set at all, and that is
+ * the point — an unsolved photograph gets a layer under the middle of the card
+ * as well, because nobody knows where its bright pixels are.
  */
-const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5 };
+const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, corner: 0.8 };
 
 /**
  * `05 · Experiences` as a horizontal card strip — six activities, six tall

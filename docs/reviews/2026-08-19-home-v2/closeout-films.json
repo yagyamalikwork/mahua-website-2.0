@@ -1,0 +1,448 @@
+{
+  "measuredAt": "2026-08-20T00:20:10.030Z",
+  "url": "http://localhost:3110/",
+  "films": [
+    {
+      "chapter": "field-days",
+      "name": "tiger",
+      "beforeReached": {
+        "stillVisible": true,
+        "filmVisible": false,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 0,
+        "duration": null,
+        "paused": true,
+        "ended": false,
+        "box": {
+          "x": 1092,
+          "y": 6067,
+          "w": 300,
+          "h": 400
+        },
+        "onScreen": false
+      },
+      "whilePlaying": {
+        "stillVisible": false,
+        "filmVisible": true,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 2.23,
+        "duration": 10,
+        "paused": false,
+        "ended": false,
+        "box": {
+          "x": 1092,
+          "y": 315,
+          "w": 300,
+          "h": 400
+        },
+        "onScreen": true
+      },
+      "hoverWhilePlaying": {
+        "beforeHover": 2.24,
+        "afterHover": 2.83
+      },
+      "afterItEnds": {
+        "stillVisible": false,
+        "filmVisible": true,
+        "stillLazy": true,
+        "hasPosterAttribute": false,
+        "preload": "none",
+        "ariaHidden": "true",
+        "blend": {
+          "still": "darken",
+          "film": "darken"
+        },
+        "currentTime": 10,
+        "duration": 10,
+        "paused": true,
+        "ended": true,
+        "box": {
+          "x": 1092,
+          "y": 315,
+          "w": 300,
+          "h": 400
+        },
+        "onScreen": true,
+        "sampledTimes": [
+          10,
+          10,
+          10
+        ]
+      },
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 240,
+            "g": 232,
+            "b": 214
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          }
+        ],
+        "worstChannelDriftPx": 1,
+        "overlap": {
+          "onScreen": true,
+          "scrollY": 5752,
+          "box": {
+            "x": 1092,
+            "y": 315,
+            "w": 300,
+            "h": 400
+          },
+          "visibleShare": 1,
+          "occluders": []
+        }
+      },
+      "hoverReplay": {
+        "from": 10,
+        "to": 0.88
+      },
+      "pointerParked": {
+        "paused": true,
+        "first": 10,
+        "second": 10
+      },
+      "leaveAndReturn": {
+        "from": 10,
+        "to": 0.86
+      }
+    }
+  ],
+  "groundSweep": [
+    {
+      "film": "tiger",
+      "width": 390,
+      "height": 844,
+      "box": {
+        "top": 6536,
+        "h": 320,
+        "w": 240
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 238,
+            "g": 230,
+            "b": 212
+          },
+          {
+            "r": 238,
+            "g": 230,
+            "b": 212
+          }
+        ],
+        "worstChannelDriftPx": 3
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1024,
+      "height": 900,
+      "box": {
+        "top": 4175,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 240,
+            "g": 232,
+            "b": 214
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          }
+        ],
+        "worstChannelDriftPx": 1
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1280,
+      "height": 900,
+      "box": {
+        "top": 4295,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1366,
+      "height": 768,
+      "box": {
+        "top": 4348,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1440,
+      "height": 900,
+      "box": {
+        "top": 6067,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    },
+    {
+      "film": "tiger",
+      "width": 1920,
+      "height": 1080,
+      "box": {
+        "top": 7296,
+        "h": 400,
+        "w": 300
+      },
+      "sampled": 12,
+      "coveredAt": 0,
+      "worstOverlap": null,
+      "ground": {
+        "chapterCream": {
+          "r": 241,
+          "g": 233,
+          "b": 215,
+          "from": "section#field-days"
+        },
+        "corners": [
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          },
+          {
+            "r": 241,
+            "g": 233,
+            "b": 215
+          }
+        ],
+        "worstChannelDriftPx": 0
+      }
+    }
+  ],
+  "reducedMotion": [
+    {
+      "name": "tiger",
+      "stillVisible": true,
+      "filmVisible": false,
+      "stillLazy": true,
+      "hasPosterAttribute": false,
+      "preload": "none",
+      "ariaHidden": "true",
+      "blend": {
+        "still": "darken",
+        "film": "darken"
+      },
+      "currentTime": 0,
+      "duration": null,
+      "paused": true,
+      "ended": false,
+      "box": {
+        "x": 1092,
+        "y": 315,
+        "w": 300,
+        "h": 400
+      },
+      "onScreen": true
+    }
+  ],
+  "noJs": [
+    {
+      "name": "tiger",
+      "stillPresent": true
+    }
+  ],
+  "firstLoad": {
+    "stillsFetched": 0,
+    "videosFetched": 0
+  },
+  "failures": [],
+  "verdict": "pass"
+}

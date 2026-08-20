@@ -89,29 +89,33 @@ export const COLLAGE_RATES = [0.15, 0.105, 0.06] as const;
  * compositions used to lay their photographs out in the same three columns at
  * the same fractions, so one width list described both. Since the client's
  * realignment (spec §4-§5) the pinned scene puts all three photographs in ONE
- * margin: the tall one keeps a third of the container plus its 13vw bleed, which
- * is still ~42vw, while the pair now share a plain third of the container with
- * no bleed at all — ~29.2vw at 1440 against the 40vw and 35vw they had when they
- * were the flank of a centred composition.
+ * margin: the tall one keeps its own column plus a 13vw bleed, while the pair
+ * share a column with no bleed at all — against the 40vw and 35vw they had when
+ * they were the flank of a centred composition.
  *
  * `pairTop` and `pairLower` are the same string because the two frames are the
  * same width: they share the column's edges, which is what "lined up" means and
  * what the client asked for. They are still two slots in `lib/sizes.test.ts`,
  * because their BOXES differ and so the file each one is served differs.
  *
- * Checked at the widths the pin actually runs at. The container caps at 1600px,
- * so a third of it stops growing there while `vw` does not: the tall photograph
- * is 42.3vw at 1440, 42.7vw at 1600 and 37.7vw at 1920, and the pair 29.2vw,
- * 29.7vw and 24.7vw. Both entries are honest at the bottom of the range and
- * over-stated above it, which is the direction to err in.
+ * **Both numbers rose on 20 Aug 2026 with `COLUMNS` below** — the photographs
+ * take 70% of the content where they used to take two thirds, and the gutters
+ * between the columns went from 40px to 32px, so every frame here is drawn
+ * wider. Checked at the widths the pin actually runs at: the container caps at
+ * 1,600px, so a column stops growing there while `vw` does not, and the tall
+ * photograph measures **44.1vw at 1440, 46.6vw at 1600 and 41.0vw at 1920**,
+ * the pair **31.1vw, 33.6vw and 28.0vw**. Each entry is the largest of the three
+ * rounded up, which is what `ui/Photo.tsx` asks for — over-stating a `sizes`
+ * fetches a wider file than needed, under-stating it ships a soft photograph,
+ * and `check_image_resolution.mjs` is the gate either way.
  */
 export const SIZES = {
-  /** The tall photograph: a third of the content + a 13vw bleed. */
-  solo: "(min-width: 1024px) 42vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
-  /** The upper of the pair: a plain third of the content, no bleed. */
-  pairTop: "(min-width: 1024px) 30vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
-  /** The lower of the pair: the same third, so the two line up. */
-  pairLower: "(min-width: 1024px) 30vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
+  /** The tall photograph: its share of the content + a 13vw bleed. */
+  solo: "(min-width: 1024px) 47vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
+  /** The upper of the pair: its share of the content, no bleed. */
+  pairTop: "(min-width: 1024px) 34vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
+  /** The lower of the pair: the same share, so the two line up. */
+  pairLower: "(min-width: 1024px) 34vw, (min-width: 768px) calc(100vw - 72px), calc(100vw - 24px)",
 } as const;
 
 /**
@@ -129,29 +133,49 @@ export const SIZES = {
  *
  * so `pairTop` is a **portrait** in both chapters and was being drawn in a 3:2
  * landscape box, which threw away 55% of its height. It is 7:8 now. `pairLower`
- * is 5:3 rather than 3:2, and `solo` is unchanged at 4:5.
+ * is 7:4 rather than 3:2, and `solo` is unchanged at 4:5.
  *
  * **`rooted`'s `pairLower` frame changed on 19 Aug 2026** — `potters-hands`
  * (700px, 1.502) went to `05 · Experiences`' strip and `vann-potters-village`
  * (1344px, 1.962) took its place; `content/chapters.ts` carries why. Both
- * numbers move in this slot's favour: 1344px into a ~421px column against 700,
- * and a 15.0% width crop in the 5:3 box, inside the 25% bound.
+ * numbers move in this slot's favour: 1344px into a ~448px column against 700,
+ * and a **10.8%** width crop in the 7:4 box, well inside the 25% bound (it was
+ * 15.0% while that box was 5:3).
  *
- * The second constraint is arithmetic. At 1440x900 a third of the container is
- * 421px, so the tall photograph is 421 + 13vw = 608.5px wide and 4:5 makes it
- * **760.7px** tall; 7:8 and 5:3 on a 421px column give 481.5 and 252.8, which
- * with the `1.83vw` gap between them come to **760.7**. The pair therefore ends
- * exactly where the tall photograph does, at rest — the three are lined up top
- * and bottom, and the drift is what pulls them out of line as the visitor
- * scrolls. Change either ratio and that alignment goes; the gap is the dial that
- * puts it back.
+ * The second constraint is arithmetic, and **it was re-solved on 20 Aug 2026
+ * when `COLUMNS` widened the photographs' tracks.** At 1440x900 an image column
+ * is now 448px, so the tall photograph is 448 + 13vw = 635.2px wide and 4:5
+ * makes it **794.0px** tall; 7:8 and 7:4 on a 448px column give 512.0 and 256.0,
+ * which with the `1.83vw` seam between them come to **794.4**. The pair
+ * therefore ends where the tall photograph does, at rest, to within half a pixel
+ * — the three are lined up top and bottom, and the drift is what pulls them out
+ * of line as the visitor scrolls. Change either ratio, either column or the seam
+ * and that alignment goes; the seam is the dial that puts it back, and `COLUMNS`
+ * records the column width at which it runs out.
+ *
+ * **`pairLower` went 5:3 → 7:4 to pay for that seam, and the seam is the reason
+ * rather than the crop.** Widening the columns made the pair grow faster than
+ * the tall frame, so holding the line-up at 5:3 forced the seam down to 0.92vw
+ * (13.2px) — and a seam is not free to shrink, because **the two frames drift at
+ * different rates and the gap between them sweeps by the difference in their
+ * travel.** Measured across the pin at 1440x900: 40.5px of sweep, so a 13.2px
+ * rest seam runs from **−7.0px to +33.5px** and the lower photograph *overlaps*
+ * the upper one for the first tenth of the hold. Shortening `pairLower` by 12.8px
+ * buys the seam back to 1.83vw and the sweep to +6.1px…+46.6px, which is the
+ * range the page shipped with before any of this. **The bound on the seam is
+ * half the pair's relative drift, not taste** — see `COLLAGE_RATES`, and re-run
+ * the measurement if either rate ever moves.
+ *
+ * The figures it replaced, for anyone reading an older screenshot: a 421.3px
+ * column, 608.5 x 760.7 for the tall frame, 481.5 and 252.8 for the pair.
  *
  * Resolution is better than it was on five of the six, because a portrait drawn
- * in a portrait box is drawn at its box's own width: `pairTop` is 421px from a
- * 700px file (1.66) where the 3:2 box asked for 562px (1.25), and `pairLower` is
- * 421px from 700 and 1080 (1.66 and 2.56). `solo` is the one that gives a little
- * back — 1141px from `lantern-bridge-dusk`'s 1300 (1.14), against 1108 before —
- * and it is the only one of the six with a file wide enough to spend.
+ * in a portrait box is drawn at its box's own width. **The 20 Aug widening
+ * spends some of that back**: `pairTop` is 448px from a 700px file (1.56, was
+ * 1.66 at a 421px column, and 1.25 when the 3:2 box asked for 562px), and
+ * `pairLower` 448px from 700 and 1080. `solo` is drawn 635px at 1440 from
+ * `lantern-bridge-dusk`'s 1300 (2.05) and `veranda-through-leaves`' 1100 (1.73).
+ * `check_image_resolution.mjs` is the gate and reads 0 under-served.
  *
  * Each entry mirrors the `aspect-[...]` class on the `ImageReveal` below it, and
  * `lib/sizes.test.ts` compares the two sets rather than trusting this comment.
@@ -161,8 +185,91 @@ export const BOXES = {
   solo: 4 / 5,
   /** `aspect-[7/8]`. */
   pairTop: 7 / 8,
-  /** `aspect-[5/3]`. */
-  pairLower: 5 / 3,
+  /** `aspect-[7/4]`. */
+  pairLower: 7 / 4,
+} as const;
+
+/**
+ * The three columns, and the seam between the pair — the density lever, swept
+ * on 20 Aug 2026 rather than picked.
+ *
+ * ## What it is answering
+ *
+ * `04 · Mahua Philosophy` read **46.5% empty on its worst screen against
+ * non-negotiable #8's 45% ceiling**, on a chapter whose height, composition and
+ * copy had not been touched: the band above it lost 692px and re-phased
+ * `measure_density.mjs`'s 150px sample grid, so a screen that had always been
+ * there was sampled for the first time. It was checked at a 50px step and reads
+ * 46.5% there too, so the screen is real and always was (`DECISIONS.md` §5a).
+ *
+ * **The worst screen is the last one of the pin, and the drift is why.** On the
+ * build that read 46.5%, the chapter sat at ~41.8% empty through the steady
+ * state and only its final screen reached 46.5: by the end of the hold the three
+ * photographs have drifted up by 63/44/25px, which opens a band of cream along
+ * the FOOT of both image columns and takes imagery from 51.6% to 46.6%.
+ * `COLLAGE_RATES` cannot be touched — non-negotiable #9, the leader is already
+ * at `PARALLAX_MAX` — so the only lever is how much of the screen the
+ * photographs occupy before the drift eats into it.
+ *
+ * **The copy is not a lever and was not treated as one.** The client has ruled
+ * that this chapter keeps its single paragraph (*"We will later add more text to
+ * the philosophy, for now keep this"*), so nothing here is padded, shortened or
+ * invented; what changed is the room the photographs are given, which is the
+ * same lever the 19 Aug recomposition used to bring `rooted` from 45.0% to
+ * 38.9%.
+ *
+ * ## The sweep
+ *
+ * Two dials, moved together: the share of the container the text column takes,
+ * and the gutter between the three columns. Measured with
+ * `node scripts/measure_density.mjs` against a production build at 1440x900,
+ * full table in `docs/reviews/2026-08-19-home-v2/closeout.md` §2.
+ *
+ * | text share | gutter | image column | `philosophy` mean / worst | `rooted` mean / worst |
+ * |---|---|---|---|---|
+ * | 33.3% | 40px | 421.3px | 42.7% / **46.5% — over** | 39.0% / 43.0% |
+ * | 30% | 32px | 448.0px | 36.9% / 41.8% | 34.2% / 39.0% — but see below |
+ * | **30%** | **32px** | **448.0px** | **37.3% / 42.3%** | **34.6% / 39.4%** |
+ *
+ * The two 30% rows are the same columns with a different `pairLower`: the first
+ * held the block's line-up at a 5:3 box and a 0.92vw seam, which turned out to
+ * make the pair overlap under drift (see the note on `BOXES`), and the second is
+ * the 7:4 box and 1.83vw seam that fixed it. **Half a point of density is what
+ * the fix cost**, and it is recorded rather than folded into one row because the
+ * first row is the number a reader would otherwise reproduce and wonder about.
+ * The bound past 30% is not density at all — it is that seam.
+ *
+ * 42.3% is **2.7 points clear, and it reads 42.3% at a 50px sample step too** —
+ * the check `DECISIONS.md` §5a asks for before a figure near the ceiling is
+ * believed, and the same check that proved the 46.5% was real rather than a
+ * phase of the grid.
+ *
+ * ## Why the pair's seam is a solved number and not a taste one
+ *
+ * The three frames line up top and bottom at 1440x900 — the client's own word
+ * for what they do — and that alignment is arithmetic: the tall photograph is
+ * `(column + 13vw bleed) / 0.8` and the pair is `column x (8/7 + 3/5)` plus the
+ * seam between them, so the seam is whatever makes the two equal. Widen the
+ * columns and the pair grows FASTER than the tall one (slope 1.743 against
+ * 1.25, because the tall one's bleed is fixed), so the seam closes as the
+ * columns widen and **runs out entirely at a column of ~475px** — which is the
+ * real bound on this lever, not taste. At the shipped 448px the seam is 13.2px
+ * against the 26.4px it was.
+ */
+export const COLUMNS = {
+  /**
+   * The grid's three tracks as `fr` units, text first.
+   *
+   * `6fr 7fr 7fr` is a 30% text column against the 33.3% of `grid-cols-3`.
+   * Written as integers because the markup needs a literal Tailwind class either
+   * way and `6/20` is easier to check against `7/20` than `0.3fr` is.
+   */
+  textFr: 6,
+  imageFr: 7,
+  /** The gutter between the three columns — `gap-x-8`, 40px until 20 Aug 2026. */
+  gutterPx: 32,
+  /** The seam between the pair, in `vw` — solved above, `gap-[1.83vw]`. */
+  pairSeamVw: 1.83,
 } as const;
 
 /**
@@ -199,9 +306,29 @@ export const BOXES = {
  * line) to over 50%. Three things bought it back and are all load bearing:
  * the block is as tall as the pin allows rather than centred at its natural
  * size, the pair shares the tall photograph's height so the inner column has no
- * cream above or below it, and the chapter's column is a third rather than the
- * 1.3fr the centred composition gave it. Measured after: 53.5% imagery,
- * `rooted` **35.1% mean / 40.1% worst**.
+ * cream above or below it, and the chapter's column is narrower than the 1.3fr
+ * the centred composition gave it.
+ *
+ * **That column narrowed again on 20 Aug 2026, from a third to 30%, and the
+ * gutters with it** — `COLUMNS`, which carries the sweep and the arithmetic
+ * bound on how far it can go. It is the same lever pulled a second time, for the
+ * same reason and against a chapter that had gone over the ceiling without being
+ * touched. Measured, 1440x900, production build:
+ *
+ * | | before 19 Aug | after 19 Aug | **after 20 Aug** |
+ * |---|---|---|---|
+ * | `rooted` mean / worst | 39.8% / 45.0% | 38.1% / 38.9% | **34.6% / 39.4%** |
+ * | `philosophy` mean / worst | 44.1% / 44.3% | 42.1% / 42.8% | **37.3% / 42.3%** |
+ * | the average screen | 56.8% imagery | 58.0% | **57.2%** |
+ *
+ * The 19 Aug figures and the 20 Aug ones were taken on different builds of the
+ * page above these chapters, so the middle column is not a like-for-like
+ * baseline for the last — the honest before/after pair for the 20 Aug change is
+ * `philosophy` **42.7% / 46.5% → 37.3% / 42.3%** and `rooted` **39.0% / 43.0% →
+ * 34.6% / 39.4%**, both on the same build with only `COLUMNS` differing.
+ * **`philosophy` reads 42.3% worst at a 50px sample step as well as at 150px**,
+ * so the margin is real rather than a phase of the grid — which is exactly the
+ * check `DECISIONS.md` §5a says to make before believing either number.
  *
  * ## Two compositions, one chapter
  *
@@ -326,12 +453,26 @@ export function PinnedCollage({
            * `h-full` against the scene's own 100vh, and `items-center` so the
            * chapter and the block of photographs are each centred in the screen.
            *
-           * Three equal columns rather than the `1.15fr 1.3fr 1.15fr` of the
-           * centred composition: the chapter takes one third and the
-           * photographs take two, which is what carries the imagery share (see
-           * the note on this component).
+           * **`6fr 7fr 7fr`, not `grid-cols-3`, and the hand it is written in
+           * follows the composition** — the text column is the one that is
+           * narrower, so the template has to be reversed when `mirrored` puts
+           * the chapter on the right. Both strings are literal because a
+           * Tailwind class assembled at runtime is a utility Tailwind never
+           * emits; `COLUMNS` is what they are held to and `lib/sizes.test.ts`
+           * reads this file to hold them.
+           *
+           * It was `grid-cols-3` with `gap-x-10` until 20 Aug 2026 — an equal
+           * third each, against the `1.15fr 1.3fr 1.15fr` of the centred
+           * composition before that. The photographs take 70% of the container
+           * now and the gutters are 32px, which is `COLUMNS` and is a measured
+           * density lever rather than a compositional preference; the sweep and
+           * the bound on it are on that constant.
            */}
-          <div className="grid h-full grid-cols-3 items-center gap-x-10">
+          <div
+            className={`grid h-full items-center gap-x-8 ${
+              mirrored ? "grid-cols-[7fr_7fr_6fr]" : "grid-cols-[6fr_7fr_7fr]"
+            }`}
+          >
             {/*
              * The tall one, on the outside, reaching 13vw past the edge of the
              * screen. It is first in `chapter.media` and it drifts fastest, so
@@ -348,7 +489,7 @@ export function PinnedCollage({
              */}
             <div className={`${soloColumn} ${soloBleed} row-start-1`}>
               <div data-drift={COLLAGE_RATES[0]}>
-                <ImageReveal className="block aspect-[4/5] max-h-[88vh] w-full">
+                <ImageReveal className="block aspect-[4/5] max-h-[90vh] w-full">
                   <Photo
                     id={solo}
                     sizes={SIZES.solo}
@@ -386,8 +527,8 @@ export function PinnedCollage({
                   {/*
                    * No `max-w-*`: the column is the measure now. The centred
                    * composition capped the headline at 18ch because it sat in a
-                   * 1.3fr column wider than a headline wants; a third of the
-                   * container is 421px at 1440 and 475px from 1600 up, which is
+                   * 1.3fr column wider than a headline wants; the text column is
+                   * 384px at 1440 and 460px from 1600 up (`COLUMNS`), well under
                    * the cap this used to impose, so imposing it again would only
                    * make the heading disagree with the copy beneath it.
                    */}
@@ -443,7 +584,7 @@ export function PinnedCollage({
              */}
             <div className={`flex flex-col gap-[1.83vw] ${pairColumn} row-start-1`}>
               <div data-drift={COLLAGE_RATES[1]}>
-                <ImageReveal className="block aspect-[7/8] max-h-[56vh] w-full">
+                <ImageReveal className="block aspect-[7/8] max-h-[58vh] w-full">
                   <Photo
                     id={pairTop}
                     sizes={SIZES.pairTop}
@@ -454,7 +595,7 @@ export function PinnedCollage({
                 </ImageReveal>
               </div>
               <div data-drift={COLLAGE_RATES[2]}>
-                <ImageReveal className="block aspect-[5/3] max-h-[29vh] w-full">
+                <ImageReveal className="block aspect-[7/4] max-h-[29vh] w-full">
                   <Photo
                     id={pairLower}
                     sizes={SIZES.pairLower}

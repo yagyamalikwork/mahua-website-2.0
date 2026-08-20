@@ -1,0 +1,933 @@
+{
+  "measuredAt": "2026-08-20T00:20:09.253Z",
+  "url": "http://localhost:3110/",
+  "densityCap": 2,
+  "results": [
+    {
+      "viewport": "390x844@1x",
+      "images": 19,
+      "softestServed": {
+        "file": "/media/birding-cairn-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 390,
+        "drawnWidth": 1616,
+        "needed": 1616,
+        "ratio": 0.89,
+        "ratioAtDeviceDensity": 0.89,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.89,
+        "median": 1.2,
+        "best": 4.21
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1616,
+          "ratio": 0.89
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 110,
+          "drawnWidth": 110,
+          "needed": 110,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 190,
+          "drawnWidth": 190,
+          "needed": 190,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-640.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.87
+        },
+        {
+          "file": "/media/tola-hero-640.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.87
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 19,
+          "drawnWidth": 19,
+          "needed": 19,
+          "ratio": 4.21
+        },
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1266,
+          "needed": 1266,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/vann-hero-640.avif",
+          "cssWidth": 390,
+          "drawnWidth": 440,
+          "needed": 440,
+          "ratio": 1.45
+        },
+        {
+          "file": "/media/tola-hero-640.avif",
+          "cssWidth": 390,
+          "drawnWidth": 440,
+          "needed": 440,
+          "ratio": 1.45
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1199,
+          "needed": 1199,
+          "ratio": 1.2
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 368,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/forest-shrine-incense-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 366,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/vann-potters-village-768.avif",
+          "cssWidth": 280,
+          "drawnWidth": 691,
+          "needed": 691,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/veranda-through-leaves-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 366,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/petal-bowl-map-400.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 366,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/lily-pond-fountain-400.avif",
+          "cssWidth": 280,
+          "drawnWidth": 351,
+          "needed": 351,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 304,
+          "drawnWidth": 304,
+          "needed": 304,
+          "ratio": 1.32
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 304,
+          "drawnWidth": 305,
+          "needed": 305,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1616,
+          "needed": 1616,
+          "ratio": 0.89
+        }
+      ]
+    },
+    {
+      "viewport": "390x844@3x",
+      "images": 19,
+      "softestServed": {
+        "file": "/media/birding-cairn-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 390,
+        "drawnWidth": 1616,
+        "needed": 3231,
+        "ratio": 0.45,
+        "ratioAtDeviceDensity": 0.3,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.3,
+        "median": 0.7,
+        "best": 2.11
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 2532,
+          "ratio": 0.57
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "needed": 2400,
+          "ratio": 0.6
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "needed": 732,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/vann-potters-village-1344.avif",
+          "needed": 1379,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/petal-bowl-map-700.avif",
+          "needed": 732,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/bonfire-dinner-542.avif",
+          "needed": 608,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/sound-healing-493.avif",
+          "needed": 608,
+          "ratio": 0.81
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 3231,
+          "ratio": 0.45
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-486.webp",
+          "cssWidth": 110,
+          "drawnWidth": 110,
+          "needed": 220,
+          "ratio": 2.21
+        },
+        {
+          "file": "/brand/welcome-wordmark-840.webp",
+          "cssWidth": 190,
+          "drawnWidth": 190,
+          "needed": 380,
+          "ratio": 2.21
+        },
+        {
+          "file": "/brand/leaf-78.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 52,
+          "ratio": 1.5
+        },
+        {
+          "file": "/media/vann-hero-960.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.4
+        },
+        {
+          "file": "/media/tola-hero-960.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.4
+        },
+        {
+          "file": "/brand/emblem-120.webp",
+          "cssWidth": 19,
+          "drawnWidth": 19,
+          "needed": 38,
+          "ratio": 3.16
+        },
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1266,
+          "needed": 2532,
+          "ratio": 0.57
+        },
+        {
+          "file": "/media/vann-hero-960.avif",
+          "cssWidth": 390,
+          "drawnWidth": 439,
+          "needed": 877,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/tola-hero-960.avif",
+          "cssWidth": 390,
+          "drawnWidth": 439,
+          "needed": 877,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1200,
+          "needed": 2400,
+          "ratio": 0.6
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-768.avif",
+          "cssWidth": 366,
+          "drawnWidth": 368,
+          "needed": 735,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 732,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/vann-potters-village-1344.avif",
+          "cssWidth": 280,
+          "drawnWidth": 689,
+          "needed": 1379,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/veranda-through-leaves-768.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 732,
+          "ratio": 1.05
+        },
+        {
+          "file": "/media/petal-bowl-map-700.avif",
+          "cssWidth": 366,
+          "drawnWidth": 366,
+          "needed": 732,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/lily-pond-fountain-768.avif",
+          "cssWidth": 280,
+          "drawnWidth": 351,
+          "needed": 702,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/bonfire-dinner-542.avif",
+          "cssWidth": 304,
+          "drawnWidth": 304,
+          "needed": 608,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/sound-healing-493.avif",
+          "cssWidth": 304,
+          "drawnWidth": 304,
+          "needed": 608,
+          "ratio": 0.81
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1616,
+          "needed": 3231,
+          "ratio": 0.45
+        }
+      ]
+    },
+    {
+      "viewport": "768x1024@1x",
+      "images": 19,
+      "softestServed": {
+        "file": "/media/birding-cairn-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 768,
+        "drawnWidth": 1961,
+        "needed": 1961,
+        "ratio": 0.73,
+        "ratioAtDeviceDensity": 0.73,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.73,
+        "median": 1.07,
+        "best": 3.02
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "needed": 720,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/vann-potters-village-1344.avif",
+          "needed": 1352,
+          "ratio": 0.99
+        },
+        {
+          "file": "/media/petal-bowl-map-700.avif",
+          "needed": 720,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1961,
+          "ratio": 0.73
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-960.avif",
+          "cssWidth": 316,
+          "drawnWidth": 318,
+          "needed": 318,
+          "ratio": 3.02
+        },
+        {
+          "file": "/media/tola-hero-960.avif",
+          "cssWidth": 316,
+          "drawnWidth": 318,
+          "needed": 318,
+          "ratio": 3.02
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 42,
+          "drawnWidth": 42,
+          "needed": 42,
+          "ratio": 1.9
+        },
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1536,
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
+          "file": "/media/vann-hero-960.avif",
+          "cssWidth": 768,
+          "drawnWidth": 864,
+          "needed": 864,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/tola-hero-960.avif",
+          "cssWidth": 768,
+          "drawnWidth": 864,
+          "needed": 864,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1239,
+          "needed": 1239,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-768.avif",
+          "cssWidth": 720,
+          "drawnWidth": 720,
+          "needed": 720,
+          "ratio": 1.07
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "cssWidth": 720,
+          "drawnWidth": 720,
+          "needed": 720,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/vann-potters-village-1344.avif",
+          "cssWidth": 551,
+          "drawnWidth": 1352,
+          "needed": 1352,
+          "ratio": 0.99
+        },
+        {
+          "file": "/media/veranda-through-leaves-768.avif",
+          "cssWidth": 720,
+          "drawnWidth": 720,
+          "needed": 720,
+          "ratio": 1.07
+        },
+        {
+          "file": "/media/petal-bowl-map-700.avif",
+          "cssWidth": 720,
+          "drawnWidth": 720,
+          "needed": 720,
+          "ratio": 0.97
+        },
+        {
+          "file": "/media/lily-pond-fountain-768.avif",
+          "cssWidth": 551,
+          "drawnWidth": 689,
+          "needed": 689,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1961,
+          "needed": 1961,
+          "ratio": 0.73
+        }
+      ]
+    },
+    {
+      "viewport": "1440x900@1x",
+      "images": 21,
+      "softestServed": {
+        "file": "/media/birding-cairn-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 1440,
+        "drawnWidth": 1724,
+        "needed": 1724,
+        "ratio": 0.84,
+        "ratioAtDeviceDensity": 0.84,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.84,
+        "median": 1.18,
+        "best": 2.67
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 1724,
+          "ratio": 0.84
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-960.avif",
+          "cssWidth": 652,
+          "drawnWidth": 654,
+          "needed": 654,
+          "ratio": 1.47
+        },
+        {
+          "file": "/media/tola-hero-960.avif",
+          "cssWidth": 652,
+          "drawnWidth": 654,
+          "needed": 654,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 42,
+          "drawnWidth": 42,
+          "needed": 42,
+          "ratio": 1.9
+        },
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1440,
+          "needed": 1440,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-960.avif",
+          "cssWidth": 720,
+          "drawnWidth": 810,
+          "needed": 810,
+          "ratio": 1.19
+        },
+        {
+          "file": "/media/tola-hero-960.avif",
+          "cssWidth": 720,
+          "drawnWidth": 810,
+          "needed": 810,
+          "ratio": 1.19
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1440,
+          "needed": 1440,
+          "ratio": 1
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-1300.avif",
+          "cssWidth": 635,
+          "drawnWidth": 1192,
+          "needed": 1192,
+          "ratio": 1.09
+        },
+        {
+          "file": "/media/forest-shrine-incense-640.avif",
+          "cssWidth": 448,
+          "drawnWidth": 448,
+          "needed": 448,
+          "ratio": 1.43
+        },
+        {
+          "file": "/media/vann-potters-village-1344.avif",
+          "cssWidth": 448,
+          "drawnWidth": 503,
+          "needed": 503,
+          "ratio": 2.67
+        },
+        {
+          "file": "/media/veranda-through-leaves-768.avif",
+          "cssWidth": 635,
+          "drawnWidth": 635,
+          "needed": 635,
+          "ratio": 1.21
+        },
+        {
+          "file": "/media/petal-bowl-map-640.avif",
+          "cssWidth": 448,
+          "drawnWidth": 448,
+          "needed": 448,
+          "ratio": 1.43
+        },
+        {
+          "file": "/media/lily-pond-fountain-640.avif",
+          "cssWidth": 448,
+          "drawnWidth": 448,
+          "needed": 448,
+          "ratio": 1.43
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/star-talks-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/guide-sunrise-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1724,
+          "needed": 1724,
+          "ratio": 0.84
+        }
+      ]
+    },
+    {
+      "viewport": "1920x1080@1x",
+      "images": 22,
+      "softestServed": {
+        "file": "/media/birding-cairn-dusk-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 1920,
+        "drawnWidth": 2068,
+        "needed": 2068,
+        "ratio": 0.7,
+        "ratioAtDeviceDensity": 0.7,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.7,
+        "median": 1.18,
+        "best": 2.37
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-1300.avif",
+          "needed": 1414,
+          "ratio": 0.92
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "needed": 2068,
+          "ratio": 0.7
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-1200.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.64
+        },
+        {
+          "file": "/media/tola-hero-1200.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.64
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 42,
+          "drawnWidth": 42,
+          "needed": 42,
+          "ratio": 1.9
+        },
+        {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 1920,
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/vann-hero-1200.avif",
+          "cssWidth": 960,
+          "drawnWidth": 1080,
+          "needed": 1080,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/tola-hero-1200.avif",
+          "cssWidth": 960,
+          "drawnWidth": 1080,
+          "needed": 1080,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 1920,
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/lantern-bridge-dusk-1300.avif",
+          "cssWidth": 754,
+          "drawnWidth": 1414,
+          "needed": 1414,
+          "ratio": 0.92
+        },
+        {
+          "file": "/media/forest-shrine-incense-700.avif",
+          "cssWidth": 504,
+          "drawnWidth": 504,
+          "needed": 504,
+          "ratio": 1.39
+        },
+        {
+          "file": "/media/vann-potters-village-1344.avif",
+          "cssWidth": 504,
+          "drawnWidth": 566,
+          "needed": 566,
+          "ratio": 2.37
+        },
+        {
+          "file": "/media/veranda-through-leaves-960.avif",
+          "cssWidth": 754,
+          "drawnWidth": 754,
+          "needed": 754,
+          "ratio": 1.27
+        },
+        {
+          "file": "/media/petal-bowl-map-700.avif",
+          "cssWidth": 504,
+          "drawnWidth": 504,
+          "needed": 504,
+          "ratio": 1.39
+        },
+        {
+          "file": "/media/lily-pond-fountain-768.avif",
+          "cssWidth": 504,
+          "drawnWidth": 504,
+          "needed": 504,
+          "ratio": 1.52
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/star-talks-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/guide-sunrise-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/potters-hands-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/birding-cairn-dusk-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 2068,
+          "needed": 2068,
+          "ratio": 0.7
+        }
+      ]
+    }
+  ],
+  "galleryFailures": []
+}

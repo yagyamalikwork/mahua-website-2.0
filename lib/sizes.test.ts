@@ -41,6 +41,7 @@ import { MENU_CARD_BOX, MENU_CARD_SIZES } from "@/components/ui/SiteHeader";
 // the tripwires would otherwise still demand.
 import {
   BOXES as COLLAGE_BOXES,
+  COLUMNS as COLLAGE_COLUMNS,
   SIZES as COLLAGE_SIZES,
 } from "@/components/motion/PinnedCollage";
 import { INVITATION_BOX, INVITATION_SIZES } from "@/components/property/PropertyInvitation";
@@ -459,7 +460,17 @@ describe("the sizes the page actually serves", () => {
     // left alone. The new string is the simplest on the page, and that is the
     // shape of the change — a strip's cards are a fixed size, so `sizes` has no
     // container arithmetic to spell out for the first time here.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
+    // **22 on 20 Aug 2026, and the +1 is the pinned collage's `solo` becoming
+    // its own string for the first time.** The density lever that widened its
+    // image columns (`PinnedCollage`'s `COLUMNS`) took that entry from 42vw to
+    // 47vw, and 42vw was the number it had been SHARING with `ChapterIntro.solo`
+    // ever since the 19 Aug realignment left the unpinned composition alone. The
+    // two are genuinely different boxes now — the pinned scene gives its
+    // photographs 70% of the container and the flowing one still gives them two
+    // thirds — so a shared string would have been the defect, not the saving.
+    // `ChapterIntro.solo` keeps 42vw and does not leave the set. Read off a
+    // suite run (`expected 22 to be 21`), not computed by hand.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(22);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -700,6 +711,122 @@ describe("cover boxes match the markup they describe", () => {
     // kind of confident, wrong figure this project keeps finding in its own
     // margins. Held to the same assertion, it cannot drift.
     for (const floor of floors) expect(floor).toBe(JUNGLE_BAND.minHeightVw);
+  });
+
+  it("aligns The Jungles' heading with the Mahua Vann panel's own text", () => {
+    // **This is the tripwire for a client instruction, not for a constant.**
+    // 20 Aug 2026: *"move just the heading a bit more on the left so that it
+    // aligns right under the text from the Mahua Vann property card from the
+    // 01-The Lodges section."* The two blocks live in different frames — the
+    // panels are edge-to-edge with their own padding, the band's words sit in a
+    // centred 1,600px container inside this section's own padding — so the
+    // offset that aligns them is `panelPad − sectionPad`, plus half of whatever
+    // the viewport has over the container's width once the container has
+    // stopped growing.
+    //
+    // Nothing in the running page connects those numbers: `app/globals.css` has
+    // to write them out, because a Tailwind arbitrary value cannot be
+    // interpolated from a dial and a browser cannot read one component's
+    // padding from another's stylesheet. **So this test is the connection.**
+    // Move `LodgePanels`' `lg:px-7`/`xl:px-10`, or this section's `md:px-12`, or
+    // the container's `max-w-[1600px]`, and the heading silently stops lining up
+    // on every screen — which is a defect no rig on this project measures and no
+    // screenshot at one width would show.
+    const panels = read("components/sections/LodgePanels.tsx");
+    const band = read("components/sections/JunglesBand.tsx");
+    const css = read("app/globals.css");
+
+    // The panel's words: `lg:px-7 xl:px-10` on the block that carries them.
+    const panelLg = panels.match(/lg:px-(\d+)/);
+    const panelXl = panels.match(/xl:px-(\d+)/);
+    expect(panelLg, "LodgePanels.tsx has no lg:px-* on its words").not.toBeNull();
+    expect(panelXl, "LodgePanels.tsx has no xl:px-* on its words").not.toBeNull();
+
+    // The band's own frame: `md:px-12` on the section, `max-w-[1600px]` on the
+    // container the words are centred in.
+    const bandMd = band.match(/md:px-(\d+)/);
+    expect(bandMd, "JunglesBand.tsx has no md:px-* on its section").not.toBeNull();
+    const bandCap = band.match(/max-w-\[(\d+)px\]/);
+    expect(bandCap, "JunglesBand.tsx has no max-w-[…px] container").not.toBeNull();
+
+    // Tailwind's spacing scale is 0.25rem = 4px a step.
+    const px = (m: RegExpMatchArray | null) => Number(m![1]) * 4;
+
+    // What `app/globals.css` actually says. Both rules are deliberately written
+    // as unfolded subtractions so the two halves are readable and matchable —
+    // `calc(40px - 48px - …)`, never `calc(-8px - …)`.
+    const lgRule = css.match(
+      /\.jungles-heading\s*\{\s*margin-inline-start:\s*calc\((\d+)px\s*-\s*(\d+)px\);/,
+    );
+    expect(lgRule, "app/globals.css has no lg .jungles-heading offset").not.toBeNull();
+    expect(Number(lgRule![1]), "the lg offset does not start from LodgePanels' lg:px-*").toBe(
+      px(panelLg),
+    );
+    expect(Number(lgRule![2]), "the lg offset does not subtract the band's own md:px-*").toBe(
+      px(bandMd),
+    );
+
+    const xlRule = css.match(
+      /\.jungles-heading\s*\{\s*margin-inline-start:\s*calc\((\d+)px\s*-\s*(\d+)px\s*-\s*max\(0px,\s*\(100cqw\s*-\s*(\d+)px\)\s*\/\s*2\)\);/,
+    );
+    expect(xlRule, "app/globals.css has no xl .jungles-heading offset").not.toBeNull();
+    expect(Number(xlRule![1]), "the xl offset does not start from LodgePanels' xl:px-*").toBe(
+      px(panelXl),
+    );
+    expect(Number(xlRule![2]), "the xl offset does not subtract the band's own md:px-*").toBe(
+      px(bandMd),
+    );
+    expect(Number(xlRule![3]), "the xl offset does not use the band container's own cap").toBe(
+      Number(bandCap![1]),
+    );
+
+    // `100cqw` is only the section's content width if something declares the
+    // container. Written in `vw` it would include a classic scrollbar — 15-17px
+    // on Windows, 0 on a Mac — and be wrong by ~8px on the machine the client
+    // tests on. The measuring element has to exist and the heading has to be
+    // inside it.
+    expect(css, "app/globals.css must declare .jungles-frame as a query container").toMatch(
+      /\.jungles-frame\s*\{[^}]*container-type:\s*inline-size/,
+    );
+    expect(band, "JunglesBand.tsx must render the .jungles-frame wrapper").toContain(
+      "jungles-frame",
+    );
+    expect(band, "JunglesBand.tsx must put the heading column in .jungles-heading").toContain(
+      "jungles-heading",
+    );
+  });
+
+  it("writes the pinned collage's columns as the classes COLUMNS declares", () => {
+    // The density lever of 20 Aug 2026 — the photographs take 70% of the
+    // container and the gutters are 32px, which took `04 · Mahua Philosophy`
+    // from 46.5% empty on its worst screen to 41.8% against the 45% ceiling.
+    // `COLUMNS` carries the sweep and the arithmetic bound; the markup has to
+    // write the same numbers literally, because a Tailwind class assembled at
+    // runtime is a utility Tailwind never emits.
+    //
+    // **Both hands, and that is the half a reader forgets**: `mirrored` reverses
+    // the template so the narrow track stays with the chapter. A build that
+    // updated one string and not the other would put the text column under the
+    // photographs on exactly one of the two chapters — which at 1440 is a
+    // 64px error nobody would notice in a screenshot of the other one.
+    const src = read("components/motion/PinnedCollage.tsx");
+    const { textFr, imageFr, gutterPx } = COLLAGE_COLUMNS;
+    expect(src, "the un-mirrored grid template does not match COLUMNS").toContain(
+      `grid-cols-[${textFr}fr_${imageFr}fr_${imageFr}fr]`,
+    );
+    expect(src, "the mirrored grid template does not match COLUMNS").toContain(
+      `grid-cols-[${imageFr}fr_${imageFr}fr_${textFr}fr]`,
+    );
+    // Tailwind's spacing scale, 4px a step.
+    expect(src, "the grid's gutter does not match COLUMNS.gutterPx").toContain(
+      `gap-x-${gutterPx / 4}`,
+    );
+    // The seam between the pair is what makes the three line up top and bottom;
+    // it is solved from the columns rather than chosen, so it cannot drift from
+    // them silently either.
+    expect(src, "the pair's seam does not match COLUMNS.pairSeamVw").toContain(
+      `gap-[${COLLAGE_COLUMNS.pairSeamVw}vw]`,
+    );
   });
 
   it("passes a box to every Photo that sits in one", () => {

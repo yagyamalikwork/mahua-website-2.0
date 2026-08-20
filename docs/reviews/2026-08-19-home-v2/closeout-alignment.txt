@@ -1,0 +1,13 @@
+ 360x844  panelWordsL      24  panelPad   24px  bandContainerL      24  markL      24  headWordL      24  bodyR     336  bandH  536.66  padT   96px  markTop   95.78  bodyBottom  440.43  hdr    75.4
+ 390x844  panelWordsL      24  panelPad   24px  bandContainerL      24  markL      24  headWordL      24  bodyR     366  bandH  508.61  padT   96px  markTop   95.78  bodyBottom  412.39  hdr    75.4
+ 768x1024  panelWordsL      48  panelPad   48px  bandContainerL      48  markL      48  headWordL      48  bodyR  556.06  bandH  526.03  padT  128px  markTop  128.02  bodyBottom  398.04  hdr     107
+ 900x768  panelWordsL      48  panelPad   48px  bandContainerL      48  markL      48  headWordL      48  bodyR  556.06  bandH  535.88  padT  128px  markTop  128.45  bodyBottom  408.32  hdr     107
+1024x768  panelWordsL      28  panelPad   28px  bandContainerL      48  markL      28  headWordL      28  bodyR     976  bandH  434.31  padT  128px  markTop  190.22  bodyBottom  306.78  hdr     107
+1279x900  panelWordsL      28  panelPad   28px  bandContainerL      48  markL      28  headWordL      28  bodyR    1231  bandH  404.59  padT  128px  markTop  141.28  bodyBottom  276.93  hdr     107
+1280x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    1232  bandH  404.59  padT  128px  markTop  140.69  bodyBottom   276.4  hdr     107
+1440x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    1392  bandH  446.39  padT  128px  markTop  159.42  bodyBottom  297.95  hdr     107
+1600x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    1552  bandH     496  padT  128px  markTop  184.24  bodyBottom  322.76  hdr     107
+1695x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    1647  bandH  525.44  padT  128px  markTop  198.58  bodyBottom  337.11  hdr     107
+1696x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    1648  bandH  525.75  padT  128px  markTop  199.11  bodyBottom  337.64  hdr     107
+1920x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    1760  bandH  595.19  padT  128px  markTop  233.83  bodyBottom  372.36  hdr     107
+2560x900  panelWordsL      40  panelPad   40px  bandContainerL      48  markL      40  headWordL      40  bodyR    2080  bandH  793.59  padT  128px  markTop  333.04  bodyBottom  471.56  hdr     107

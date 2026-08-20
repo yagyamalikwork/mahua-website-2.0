@@ -41,7 +41,28 @@ const OUT = flag("out", "docs/reviews/2026-08-04-task-7/contrast-over-photos.jso
 // from the nearest width this rig used to sample. Five defects on this project
 // have now lived between its fixed samples (`DECISIONS.md` §2 #44-45, #52-53,
 // §20.7); a scrim solved at a width nothing measures would have been the sixth.
-const WIDTHS = flag("widths", "390,768,1024,1440,1920").split(",").map(Number);
+//
+// **360 joined them on 20 Aug 2026, and it was the sixth.** The 19 Aug sweep of
+// unsampled widths in `docs/reviews/2026-08-19-home-v2/panels-and-band.md` §6.5
+// found `strip · card 02` at **3.30 against its 4.5 floor at 360px** — a card
+// whose six scrims had all been solved at 390 and up, where the card is a flat
+// 340px, while at 360 it is `78vw` = 281px and every glyph sits on a different
+// crop of the photograph. A scrim answers to the pixels under the glyphs
+// (`DECISIONS.md` §20.5), so a card that CHANGES SIZE below the narrowest width
+// anybody measures is a card nobody has measured. 360 is the narrowest viewport
+// this project's rigs sweep (`check_experience_strip.mjs` starts there), and it
+// is now the narrowest one that is *solved* there too.
+const WIDTHS = flag("widths", "360,390,768,1024,1440,1920").split(",").map(Number);
+/**
+ * The viewport shape each width is measured at.
+ *
+ * A phone is 844 tall and a laptop is 900, and **1024 is 768 rather than 900 on
+ * purpose** — a real laptop shape, and what decides how much of a section is in
+ * frame when a run scrolls to it. 360 takes the phone's height for the same
+ * reason 390 does: at 360 × 900 the browser would report a device nobody holds,
+ * and `02 · The Jungles`' band is a box whose aspect depends on both axes.
+ */
+const heightFor = (width) => (width <= 430 ? 844 : width <= 800 ? 1024 : width <= 1100 ? 768 : 900);
 
 /** The type colour over every photograph on the page — cream, not white. */
 const CREAM = [0xf1, 0xe9, 0xd7];
@@ -923,13 +944,12 @@ async function main() {
 
   for (const width of WIDTHS) {
     const context = await browser.newContext({
-      // 1024x768 is a real laptop shape, not 1024x900 — and it matters here,
-      // because a shorter viewport is what decides how much of a section is in
-      // frame when a run scrolls to it.
-      viewport: {
-        width,
-        height: width === 390 ? 844 : width === 768 ? 1024 : width === 1024 ? 768 : 900,
-      },
+      // Shape per width — see `heightFor`. It is a function of the width rather
+      // than a table of equalities because this rig is routinely run with
+      // `--widths` at values nobody ships (the 19 Aug sweep used seven), and an
+      // equality table silently gave every one of them 900px, i.e. a phone the
+      // shape of a laptop.
+      viewport: { width, height: heightFor(width) },
     });
     const page = await context.newPage();
     await page.goto(URL, { waitUntil: "load" });

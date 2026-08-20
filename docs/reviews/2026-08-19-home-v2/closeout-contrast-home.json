@@ -1,0 +1,2550 @@
+{
+  "measuredAt": "2026-08-20T00:06:19.454Z",
+  "url": "http://localhost:3110/",
+  "widths": {
+    "360": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.35,
+        "brightest": [
+          69,
+          76,
+          66
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.44,
+        "brightest": [
+          78,
+          84,
+          76
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.49,
+        "brightest": [
+          150,
+          119,
+          47
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.87,
+        "brightest": [
+          117,
+          97,
+          76
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.89,
+        "brightest": [
+          74,
+          69,
+          57
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.58,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 01",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "skipped": 1024
+      },
+      {
+        "name": "lodges · pill 01",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 02",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "skipped": 1024
+      },
+      {
+        "name": "lodges · pill 02",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · mark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.03,
+        "brightest": [
+          94,
+          100,
+          92
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.96,
+        "brightest": [
+          95,
+          101,
+          93
+        ],
+        "boxes": 12,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.29,
+        "brightest": [
+          88,
+          98,
+          82
+        ],
+        "boxes": 8,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.1,
+        "brightest": [
+          102,
+          98,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 31.2
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.28,
+        "brightest": [
+          95,
+          96,
+          85
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.8,
+          "rightSlack": 11.41
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.38,
+        "brightest": [
+          96,
+          95,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.59,
+          "rightSlack": 11.61
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.4,
+        "brightest": [
+          94,
+          95,
+          76
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.39,
+          "rightSlack": 10.81
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.9,
+        "brightest": [
+          95,
+          102,
+          94
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.19,
+          "rightSlack": 11.02
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          106,
+          95,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 30.98,
+          "rightSlack": 0.22
+        },
+        "misplaced": null
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.58,
+        "brightest": [
+          101,
+          106,
+          99
+        ],
+        "boxes": 10,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.71,
+        "brightest": [
+          99,
+          106,
+          74
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.06,
+        "brightest": [
+          200,
+          191,
+          174
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.13,
+        "brightest": [
+          201,
+          192,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.35,
+        "brightest": [
+          202,
+          196,
+          180
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "390": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.21,
+        "brightest": [
+          71,
+          77,
+          67
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.44,
+        "brightest": [
+          78,
+          84,
+          76
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.01,
+        "brightest": [
+          122,
+          114,
+          73
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.77,
+        "brightest": [
+          120,
+          98,
+          74
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.95,
+        "brightest": [
+          66,
+          61,
+          48
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.58,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 01",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "skipped": 1024
+      },
+      {
+        "name": "lodges · pill 01",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 02",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "skipped": 1024
+      },
+      {
+        "name": "lodges · pill 02",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · mark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.05,
+        "brightest": [
+          93,
+          100,
+          91
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.03,
+        "brightest": [
+          94,
+          100,
+          92
+        ],
+        "boxes": 12,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.22,
+        "brightest": [
+          93,
+          97,
+          92
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.3,
+        "brightest": [
+          102,
+          95,
+          66
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 37.81
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.53,
+        "brightest": [
+          83,
+          82,
+          69
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.19,
+          "rightSlack": 17.63
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          92,
+          94,
+          86
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.38,
+          "rightSlack": 17.44
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          95,
+          94,
+          74
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.56,
+          "rightSlack": 18.25
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.11,
+        "brightest": [
+          93,
+          99,
+          91
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.75,
+          "rightSlack": 18.06
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.13,
+        "brightest": [
+          107,
+          96,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 37.94,
+          "rightSlack": -0.13
+        },
+        "misplaced": null
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.59,
+        "brightest": [
+          100,
+          106,
+          99
+        ],
+        "boxes": 10,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.85,
+        "brightest": [
+          97,
+          104,
+          72
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.07,
+        "brightest": [
+          200,
+          191,
+          175
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.11,
+        "brightest": [
+          200,
+          192,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          178
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "768": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.87,
+        "brightest": [
+          74,
+          80,
+          71
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.78,
+        "brightest": [
+          85,
+          91,
+          83
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.71,
+        "brightest": [
+          93,
+          90,
+          80
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.68,
+        "brightest": [
+          103,
+          88,
+          70
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.37,
+        "brightest": [
+          63,
+          67,
+          58
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 01",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "skipped": 1024
+      },
+      {
+        "name": "lodges · pill 01",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 02",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "skipped": 1024
+      },
+      {
+        "name": "lodges · pill 02",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · mark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.08,
+        "brightest": [
+          56,
+          72,
+          55
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.53,
+        "brightest": [
+          87,
+          94,
+          87
+        ],
+        "boxes": 12,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.63,
+        "brightest": [
+          84,
+          94,
+          77
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.51,
+        "brightest": [
+          101,
+          92,
+          62
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 332
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.33,
+        "brightest": [
+          85,
+          84,
+          71
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.28,
+        "brightest": [
+          94,
+          96,
+          88
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.51,
+        "brightest": [
+          70,
+          74,
+          64
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.19,
+        "brightest": [
+          107,
+          95,
+          69
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 332,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.61,
+        "brightest": [
+          87,
+          93,
+          83
+        ],
+        "boxes": 10,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.44,
+        "brightest": [
+          89,
+          95,
+          86
+        ],
+        "boxes": 8,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.24,
+        "brightest": [
+          202,
+          194,
+          176
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.13,
+        "brightest": [
+          201,
+          192,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "1024": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.88,
+        "brightest": [
+          74,
+          80,
+          69
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.95,
+        "brightest": [
+          95,
+          101,
+          94
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.19,
+        "brightest": [
+          96,
+          97,
+          88
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.99,
+        "brightest": [
+          66,
+          70,
+          61
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.34,
+        "brightest": [
+          56,
+          60,
+          50
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.06,
+        "brightest": [
+          94,
+          100,
+          87
+        ],
+        "boxes": 6,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · pill 01",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.59,
+        "brightest": [
+          86,
+          94,
+          79
+        ],
+        "boxes": 6,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · pill 02",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · mark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.53,
+        "brightest": [
+          61,
+          75,
+          76
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.88,
+        "brightest": [
+          83,
+          90,
+          83
+        ],
+        "boxes": 12,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.1,
+        "brightest": [
+          94,
+          99,
+          89
+        ],
+        "boxes": 6,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.67,
+        "brightest": [
+          100,
+          90,
+          58
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 588
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.33,
+        "brightest": [
+          85,
+          84,
+          71
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.14,
+        "brightest": [
+          90,
+          85,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.03,
+        "brightest": [
+          66,
+          70,
+          56
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 228,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.15,
+        "brightest": [
+          106,
+          96,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 588,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.79,
+        "brightest": [
+          85,
+          91,
+          81
+        ],
+        "boxes": 10,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.7,
+        "brightest": [
+          85,
+          92,
+          85
+        ],
+        "boxes": 8,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.13,
+        "brightest": [
+          198,
+          193,
+          176
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.15,
+        "brightest": [
+          199,
+          193,
+          177
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "1440": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.88,
+        "brightest": [
+          66,
+          71,
+          63
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.36,
+        "brightest": [
+          90,
+          96,
+          85
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.16,
+        "brightest": [
+          145,
+          128,
+          107
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.93,
+        "brightest": [
+          68,
+          70,
+          62
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.52,
+        "brightest": [
+          54,
+          59,
+          48
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.73,
+        "brightest": [
+          236,
+          228,
+          210
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.63,
+        "brightest": [
+          87,
+          93,
+          80
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · pill 01",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.69,
+        "brightest": [
+          84,
+          92,
+          89
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · pill 02",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · mark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.68,
+        "brightest": [
+          57,
+          65,
+          63
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.78,
+        "brightest": [
+          85,
+          91,
+          82
+        ],
+        "boxes": 12,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.05,
+        "brightest": [
+          94,
+          100,
+          88
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.51,
+        "brightest": [
+          101,
+          92,
+          62
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 1004
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.32,
+        "brightest": [
+          85,
+          84,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 984
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.28,
+        "brightest": [
+          94,
+          96,
+          88
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 984
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.39,
+        "brightest": [
+          94,
+          95,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 284,
+          "rightSlack": 720
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.6,
+        "brightest": [
+          70,
+          73,
+          63
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 644,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          106,
+          95,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 1004,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.34,
+        "brightest": [
+          90,
+          96,
+          89
+        ],
+        "boxes": 10,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.78,
+        "brightest": [
+          85,
+          91,
+          82
+        ],
+        "boxes": 8,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.09,
+        "brightest": [
+          198,
+          192,
+          176
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.17,
+        "brightest": [
+          200,
+          193,
+          177
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.09,
+        "brightest": [
+          198,
+          192,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ],
+    "1920": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.22,
+        "brightest": [
+          62,
+          69,
+          57
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.43,
+        "brightest": [
+          89,
+          95,
+          88
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.43,
+        "brightest": [
+          123,
+          127,
+          100
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.45,
+        "brightest": [
+          72,
+          74,
+          66
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.03,
+        "brightest": [
+          59,
+          62,
+          52
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 8.9,
+        "brightest": [
+          238,
+          230,
+          212
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "text": "#7f5c24",
+        "worst": 4.71,
+        "brightest": [
+          234,
+          226,
+          209
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.91,
+        "brightest": [
+          73,
+          70,
+          45
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · pill 01",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · panel 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.21,
+        "brightest": [
+          65,
+          68,
+          60
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "lodges · pill 02",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.67,
+        "brightest": [
+          182,
+          139,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · mark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.01,
+        "brightest": [
+          80,
+          89,
+          82
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.88,
+        "brightest": [
+          83,
+          90,
+          83
+        ],
+        "boxes": 12,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "jungles · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.18,
+        "brightest": [
+          85,
+          86,
+          72
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.76,
+        "brightest": [
+          99,
+          89,
+          56
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 1164
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.32,
+        "brightest": [
+          85,
+          84,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 1144
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.04,
+        "brightest": [
+          91,
+          86,
+          74
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 84,
+          "rightSlack": 1080
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 444,
+          "rightSlack": 720
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.97,
+        "brightest": [
+          65,
+          71,
+          55
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 804,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.2,
+        "brightest": [
+          106,
+          95,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 1164,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      },
+      {
+        "name": "invitation · heading",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.43,
+        "brightest": [
+          89,
+          95,
+          88
+        ],
+        "boxes": 10,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "invitation · body",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.76,
+        "brightest": [
+          86,
+          91,
+          83
+        ],
+        "boxes": 8,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.08,
+        "brightest": [
+          198,
+          192,
+          175
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.05,
+        "brightest": [
+          199,
+          191,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.21,
+        "brightest": [
+          200,
+          194,
+          177
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      }
+    ]
+  }
+}

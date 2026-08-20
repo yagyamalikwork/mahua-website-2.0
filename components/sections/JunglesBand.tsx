@@ -85,6 +85,30 @@ export const BAND_BOX = JUNGLE_BAND.coverAspectFloor;
  *
  * For scale: the closing chapter, the section the client named as the model for
  * this one, composites to **~0.78** under its centred text.
+ *
+ * ## Re-solved on 20 Aug 2026 when the type moved, and it came back 0.74
+ *
+ * The client's centring lifted this block ~85px up the band at 1440, onto a
+ * different part of the photograph — and `DECISIONS.md` §20.5's rule is that new
+ * glyph positions are a new solve whatever the wash was before. So it was
+ * re-solved from scratch against the moved type, every pixel of every line box
+ * at six widths. **Unwashed, the three runs now read 4.43 / 1.00 / 1.00 at 360
+ * and 3.51 / 1.00 / 1.00 at 390** — genuinely different pixels from the ones the
+ * 19 Aug solve answered, and no better.
+ *
+ * `flat: 0.74` is what the solver returns again, and the reason is structural
+ * rather than luck: **a pure flat is the one wash whose strength does not depend
+ * on where the type sits**, so moving a block inside it can only change the
+ * result through the photograph underneath. Here the photograph's brightest
+ * pixels are spread through the canopy rather than gathered at one end, and the
+ * new position is no worse than the old one. Measured on the shipped build:
+ * mark **5.03-8.68**, heading **4.96-5.88**, body **5.05-6.29**, against floors
+ * of 4.5 / 3.0 / 4.5 — still on the 5.0/3.5 target this figure was bought for.
+ *
+ * **This is the argument for a flat that the geometry section above could not
+ * make.** A shaped layer would have had to be re-solved to a new number here;
+ * this one had to be re-CHECKED and was not moved. If the type ever moves again,
+ * re-check it again — the immunity is to the layer's shape, not to the frame.
  */
 const BAND_SCRIM: ScrimStrength = { flat: 0.74 };
 
@@ -178,40 +202,59 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
        * `lib/sizes.test.ts` reads this file and holds the two together — the
        * same arrangement `PANEL_SIZES` and `lg:grid-cols-2` have next door.
        *
-       * `justify-end` rather than `items-center`: the words sit on the floor of
-       * the band and the clear photograph is above them, which is where this
-       * frame's subjects are — the leopard on its rock and the tiger's head are
-       * both in the upper half of every crop of it.
+       * **`justify-center`, and the padding is symmetric because of it —
+       * client, 20 Aug 2026:** *"Centre the heading and text for 02-The Jungles
+       * on the length of the image of the section."* "Length" is his word for
+       * the band's HEIGHT, the same way he used it asking for the crop, so this
+       * is vertical centring. It was `justify-end` with `pt-24 md:pt-32 pb-12
+       * md:pb-14 lg:pb-16` until then — the words on the floor of the band, the
+       * clear photograph above them, which is where this frame's subjects are.
+       * The client has seen that and asked for the other thing.
+       *
+       * **Symmetric padding is what makes the centring true, and the value is
+       * still the header's.** With `justify-center` the content is centred
+       * between the two paddings, so an asymmetric pair centres it on something
+       * that is not the band: at 1440 the old 128/64 would have left the block
+       * 32px below the band's own middle. Equal paddings centre it exactly
+       * wherever the floor is what sets the height, and pin it at `padding-top`
+       * wherever the content is what sets the height — which is the case the
+       * header clearance below is about. One value does both jobs.
        *
        * `overflow-hidden` is safe here in a way it was not in the arrangement
        * this replaces — nothing can be clipped by it, because nothing sets this
        * box's height except the content inside it.
        *
-       * **The top padding is not symmetric with the bottom, and the number is
-       * the header's — the same finding `Invitation.tsx` records, arriving here
-       * by a different route.** `ui/SiteHeader.tsx` is `position: fixed` and
-       * paints an opaque cream bar once the page has scrolled, which this
-       * chapter always has: 107px deep from `md`, 75px at 390. Park this
-       * section's top at the viewport's top — which is what a scroll-stop or a
-       * hash link does, and what `check_contrast_over_photos.mjs` does — and
-       * with symmetric `py-16` the band's own floor was too shallow to hold its
-       * words below that bar. `jungles · body` read **1.00:1 at 1024, cream on
-       * the cream bar itself**, with `mark` and `heading` doing the same at 768
-       * and `mark` at 390; a screenshot shows the paragraph's first line sliced
-       * off. 96/128px is the bar plus the display face's own ascender plus air.
+       * **The padding's value is the header's — the same finding
+       * `Invitation.tsx` records, arriving here by a different route.**
+       * `ui/SiteHeader.tsx` is `position: fixed` and paints an opaque cream bar
+       * once the page has scrolled, which this chapter always has: 107px deep
+       * from `md`, 75px at 390. Park this section's top at the viewport's top —
+       * which is what a scroll-stop or a hash link does, and what
+       * `check_contrast_over_photos.mjs` does — and with `py-16` the band was
+       * too shallow to hold its words below that bar. `jungles · body` read
+       * **1.00:1 at 1024, cream on the cream bar itself**, with `mark` and
+       * `heading` doing the same at 768 and `mark` at 390; a screenshot shows
+       * the paragraph's first line sliced off. 96/128px is the bar plus the
+       * display face's own ascender plus air.
        *
-       * **It costs the band nothing at the widths it was cropped for.** With
-       * `justify-end` a top padding only reserves space, so it can only make the
-       * section taller where the words plus both paddings already exceed the
-       * floor — 1024 and below. At 1440 and 1920 the floor still wins and the
-       * band is exactly `minHeightVw` tall.
+       * **It costs the band nothing from 1024 up, which is where it was cropped
+       * for, and it costs it 48-72px below that.** The padding can only make the
+       * section taller where the words plus both paddings exceed the floor. At
+       * 1440 and 1920 the floor still wins and the band is exactly
+       * `minHeightVw` tall; at 1024 it grows by 2px; at 768 and 390, where the
+       * words already set the height, symmetric padding costs 72px and 48px
+       * against the asymmetric pair it replaces. Measured, not modelled — the
+       * table is in `docs/reviews/2026-08-19-home-v2/closeout.md` §1. The
+       * band's own box aspect at its narrowest and tallest case (360 x 844) goes
+       * 0.74 → 0.67, which is still well above `JUNGLE_BAND.coverAspectFloor`'s
+       * 0.6 and is the margin that dial's comment says is there to be spent.
        *
-       * There is deliberately no `short:` arm on the top padding, for the reason
+       * There is deliberately no `short:` arm on it, for the reason
        * `Invitation.tsx` gives: `short:` is a height and `md:` is a width, and
        * which of them applies on a 1366x768 laptop would be decided by the order
        * Tailwind emits two media blocks rather than by anything written here.
        */
-      className="relative isolate flex min-h-[31vw] w-full flex-col justify-end overflow-hidden px-6 pt-24 pb-12 md:px-12 md:pt-32 md:pb-14 lg:pb-16"
+      className="relative isolate flex min-h-[31vw] w-full flex-col justify-center overflow-hidden px-6 py-24 md:px-12 md:py-32"
       style={{ backgroundColor: "var(--overlay)" }}
     >
       <div className="absolute inset-0 -z-10">
@@ -234,9 +277,27 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
         <Scrim {...BAND_SCRIM} />
       </div>
 
-      <div className="mx-auto w-full max-w-[1600px]">
-        <Enter>
-          {/*
+      {/*
+        `.jungles-frame` is a **measuring** element and nothing else: it is
+        `container-type: inline-size`, so `100cqw` inside it is the section's own
+        content width — 100vw minus this section's `px-*` — and that is the one
+        quantity the heading's offset below needs and cannot otherwise get.
+
+        **It is deliberately not `100vw`.** A classic Windows scrollbar makes
+        `100vw` 15-17px wider than the layout viewport, which on this page is
+        exactly the difference between a laptop showing the pinned collage and
+        not (CLAUDE.md, "demo above 1500px"). Written in `vw` the heading would
+        have sat ~8px left of its target on every Windows machine and been right
+        on a Mac, which is the shape of defect nobody finds in a screenshot.
+
+        A wrapper rather than the container below, because `100cqw` on the
+        container would be `min(1600px, …)` — the capped width — and the offset
+        is precisely about the difference between the two.
+      */}
+      <div className="jungles-frame">
+        <div className="mx-auto w-full max-w-[1600px]">
+          <Enter>
+            {/*
             Heading left, paragraph right, on ONE row from `lg` — and that is a
             crop decision before it is a compositional one. Stacked, the two
             blocks are ~430px of type at 1440 and the band could not be thinner
@@ -245,22 +306,58 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
             header `01 · The Lodges` uses immediately above, which is what makes
             the pair read as one idea rather than as two experiments.
           */}
-          <div className="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-x-10">
-            <div className="lg:col-span-6">
-              {chapter.number && chapter.label && (
-                <div
-                  data-contrast="jungles-mark"
-                  /* goldText cannot follow this label onto a photograph
+            <div className="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-x-10">
+              {/*
+                **`jungles-heading` is the client's second request of 20 Aug
+                2026**: *"move just the heading a bit more on the left so that it
+                aligns right under the text from the Mahua Vann property card from
+                the 01-The Lodges section."*
+
+                The chapter mark travels with the heading and the paragraph does
+                not, which is what "just the heading" means here — the mark and
+                the headline are one block, and leaving the mark behind would put
+                an 8px stagger between a label and the line it labels at 1440 and
+                a 120px one at 1920. The Vann panel's own label and name share an
+                edge for the same reason.
+
+                **The offset is arithmetic, not a nudge, and that is the whole
+                point** — the two blocks live in different frames. The panels are
+                edge-to-edge with their own padding (`lg:px-7 xl:px-10` in
+                `LodgePanels.tsx`), and this band's words are inside a centred
+                1,600px container inside this section's `md:px-12`. So the gap
+                between them is 20px at `lg`, 8px from `xl`, and **8px + half of
+                whatever the viewport has over 1,696px** above that: 8px at 1440,
+                120px at 1920, 440px at 2560. A hand-tuned single value would have
+                been right on one screen and wrong on every other, which is this
+                project's most-catalogued defect shape. Below `lg` there is no
+                offset at all and none is needed: the panels stack there and their
+                words fall back to the same `px-6 md:px-12` this section uses, so
+                the two already agree to the pixel.
+
+                `app/globals.css` carries the rule and the derivation;
+                `lib/sizes.test.ts` reads both files and fails if either padding
+                moves without the other.
+              */}
+              <div className="jungles-heading lg:col-span-6">
+                {chapter.number && chapter.label && (
+                  <div
+                    data-contrast="jungles-mark"
+                    /* goldText cannot follow this label onto a photograph
                      (non-negotiable #7), so the channel it reads is redefined
                      for this subtree rather than the component re-styled. The
                      hairline stays `--accent`: gold as a decorative rule with no
                      text in it is exactly what that rule permits. */
-                  style={{ "--accent-text": "var(--bg)" } as React.CSSProperties}
-                >
-                  <ChapterMark number={chapter.number} label={chapter.label} />
-                </div>
-              )}
-              {/*
+                    style={
+                      { "--accent-text": "var(--bg)" } as React.CSSProperties
+                    }
+                  >
+                    <ChapterMark
+                      number={chapter.number}
+                      label={chapter.label}
+                    />
+                  </div>
+                )}
+                {/*
                 `SplitLines` — the client's *"3D raised effect"*, and the thing
                 that was already true of this heading before it moved onto the
                 photograph: each visual line rises out from behind its own mask,
@@ -278,14 +375,14 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
                 top against `TwoToneHeading`'s 3.5rem): the client asked for this
                 heading smaller on 19 Aug and has not asked for it back.
               */}
-              <SplitLines
-                as="h2"
-                className="mt-6 max-w-[24ch] font-[family-name:var(--font-display)] text-[clamp(1.6rem,3.4vw,2.8rem)] font-light leading-[1.1] tracking-[-0.01em] text-[color:var(--bg)]"
-              >
-                {copy.quote}
-              </SplitLines>
-            </div>
-            {/*
+                <SplitLines
+                  as="h2"
+                  className="mt-6 max-w-[24ch] font-[family-name:var(--font-display)] text-[clamp(1.6rem,3.4vw,2.8rem)] font-light leading-[1.1] tracking-[-0.01em] text-[color:var(--bg)]"
+                >
+                  {copy.quote}
+                </SplitLines>
+              </div>
+              {/*
               `03 · The Forest`'s own paragraph, moved here when that chapter
               left the page (spec §3). That chapter's heading — "Three hundred
               birds, and the cats you came for" — is deliberately not here: the
@@ -295,14 +392,15 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
               reason it was set that way on cream: four lines of ragged-LEFT body
               copy is a legibility cost paid for a compositional effect.
             */}
-            <p
-              data-contrast="jungles-body"
-              className="max-w-[52ch] font-[family-name:var(--font-body)] text-[1.02rem] leading-[1.72] text-[color:var(--bg)] md:text-[1.08rem] lg:col-span-6 lg:ml-auto"
-            >
-              {copy.intro}
-            </p>
-          </div>
-        </Enter>
+              <p
+                data-contrast="jungles-body"
+                className="max-w-[52ch] font-[family-name:var(--font-body)] text-[1.02rem] leading-[1.72] text-[color:var(--bg)] md:text-[1.08rem] lg:col-span-6 lg:ml-auto"
+              >
+                {copy.intro}
+              </p>
+            </div>
+          </Enter>
+        </div>
       </div>
     </section>
   );
