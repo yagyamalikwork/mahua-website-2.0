@@ -72,6 +72,42 @@ frame from that shoot rather than more darkening.
 
 ---
 
+## Group 4 — five photographs for the Experiences cards — **`feat/home-v2` only**
+
+Added 20 August 2026. **Only relevant if the restructured home page is the one you keep** — these cards do
+not exist on the live site.
+
+The Experiences strip uses **tall portrait cards**, and a portrait card cannot hold a landscape photograph:
+the 25% crop rule works out to *the card may not be narrower than three-quarters of the photograph's own
+shape*, which for an ordinary landscape frame is still landscape. So no card shape at all could have served
+these files. They are hand-cropped in the pipeline instead — each window chosen with the file open — and
+that works, but it throws away most of each frame.
+
+| Photograph | Have | Cropped to | Want |
+|---|---|---|---|
+| `bonfire-dinner` — Private Bush Dinners | 1100 × 733 | 710px | **~900px wide, portrait, uncropped** |
+| `sound-healing` — Wellness | 1000 × 666 | 542px | ~900px |
+| `guide-sunrise` — Nature Walks and Birding | 1000 × 666 | 493px | ~900px |
+| `potters-hands` — Village Craft | 900 × 600 | 493px | ~900px |
+| `tiger-golden-grass` — Jungle Safari | 1440 × 959 | 444px | ~900px |
+
+Sharp on an ordinary screen today; a Retina screen asks for 680px and four of the five are under it.
+
+**A portrait frame is worth far more here than a wider one** — the same lesson as group 1. If these were
+shot portrait, or the original allows a portrait crop, that removes the hand-cropping entirely.
+
+### And one that is not about resolution at all
+
+**`tiger-crossing-track` is not on the safari card**, and this needs your ruling rather than a file. It could
+not be cropped to a portrait card: the tiger and the guest-carrying vehicle span most of its width, so a tall
+window draws the guests **2.65× larger** than they are today — and your consent for that photograph was given
+when they were small and turned away. `tiger-golden-grass` is in its place, which has no people in it.
+
+If you want the original frame back, the options are a shallower card, a different crop of that scene, or a
+fresh look at the consent question at the new size.
+
+---
+
 ## Group 2 — the three forest cats
 
 `03 · The Forest`. When the photograph boards were rebuilt on 14 August they gained a one-column state that

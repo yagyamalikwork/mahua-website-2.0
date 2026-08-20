@@ -596,10 +596,13 @@ async function capture(browser) {
   console.log("wordmark…");      await wordmarkPixels(browser);
   console.log("entrances…");
   findings.sections.entrances = [
-    await entrance(browser, "forest", 1440),
-    await entrance(browser, "rooms", 1440),
-    await entrance(browser, "guests", 1440),
-    await entrance(browser, "forest", 390, 844),
+    // Chapter ids, so branch-dependent: `forest`, `rooms` and `guests` left the
+    // home page on `feat/home-v2` (20 Aug 2026). These are the surviving
+    // chapters with staged entrances at the same three shapes.
+    await entrance(browser, "rooted", 1440),
+    await entrance(browser, "philosophy", 1440),
+    await entrance(browser, "field-days", 1440),
+    await entrance(browser, "rooted", 390, 844),
   ];
   console.log("stagger…");       await stagger(browser);
   console.log("emblem…");        await emblem(browser);

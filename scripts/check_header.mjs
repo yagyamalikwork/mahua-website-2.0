@@ -22,6 +22,23 @@ import { chromium } from "playwright";
 import sharp from "sharp";
 import { PALETTE } from "../lib/palette.ts";
 
+/**
+ * The chapter this rig jumps to when it checks that a fragment link does not
+ * land a section underneath the fixed bar.
+ *
+ * **A chapter id, and therefore branch-dependent.** It was `rooms` until 20 Aug
+ * 2026, when `feat/home-v2` removed that chapter from the home page and this rig
+ * started crashing on a null after passing all nine of its real assertions — a
+ * gate that dies is a gate nobody can read.
+ *
+ * Any chapter well below the fold does the job; what is being measured is the
+ * bar, not the chapter. If this id ever goes the same way, move it rather than
+ * deleting the assertion: the defect it catches (a fragment jump parking a
+ * heading behind the header) has shipped on this project twice.
+ */
+const ANCHOR_CHAPTER = "field-days";
+
+
 const args = process.argv.slice(2);
 const flag = (n, d) => {
   const i = args.indexOf(`--${n}`);
@@ -294,13 +311,16 @@ for (const { w, h } of VIEWPORTS) {
     fail(`${w}: scroll-padding-top is ${end.scrollPaddingTop} for a ${end.height}px bar`);
   } else ok(`scroll-padding-top = ${end.scrollPaddingTop}, the bar's own measured height`);
 
-  const anchor = (rows.anchor = await page.evaluate(() => {
+  // `ANCHOR_CHAPTER` is a Node-side constant and this body runs in the browser,
+  // so it has to be passed in — not closed over.
+  const anchor = (rows.anchor = await page.evaluate((id) => {
     location.hash = "";
     window.scrollTo(0, 0);
-    location.hash = "#rooms";
+    location.hash = `#${id}`;
     return new Promise((res) =>
       setTimeout(() => {
-        const el = document.querySelector("#rooms");
+        const el = document.querySelector(`#${id}`);
+        if (!el) throw new Error(`check_header: no #${id} on this page — retarget ANCHOR_CHAPTER`);
         const bar = document.querySelector("[data-site-header]");
         res({
           sectionTop: Math.round(el.getBoundingClientRect().top),
@@ -308,10 +328,10 @@ for (const { w, h } of VIEWPORTS) {
         });
       }, 900),
     );
-  }));
+  }, ANCHOR_CHAPTER));
   if (anchor.sectionTop < anchor.barHeight - 2) {
-    fail(`${w}: #rooms lands at y=${anchor.sectionTop}, underneath the ${anchor.barHeight}px bar`);
-  } else ok(`#rooms lands at y=${anchor.sectionTop}, clear of the ${anchor.barHeight}px bar`);
+    fail(`${w}: #${ANCHOR_CHAPTER} lands at y=${anchor.sectionTop}, underneath the ${anchor.barHeight}px bar`);
+  } else ok(`#${ANCHOR_CHAPTER} lands at y=${anchor.sectionTop}, clear of the ${anchor.barHeight}px bar`);
 
   report.viewports[`${w}x${h}`] = rows;
   await context.close();

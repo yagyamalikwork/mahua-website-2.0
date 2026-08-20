@@ -51,6 +51,32 @@ const SHAPES = [
   [1280, 800], [1439, 900], [1440, 900], [1920, 1080], [2560, 1440],
 ];
 
+
+/**
+ * **The lantern has no mount on `feat/home-v2` (20 Aug 2026), and this rig used
+ * to CRASH rather than say so.**
+ *
+ * That branch's restructure removes `06 · The Lantern Hour` from the home page,
+ * which was the lantern's only mount. `HangingLantern`, `build_lantern.mjs`,
+ * `lib/lantern-art.ts` and every assertion below are untouched and still work —
+ * `feat/image-sizing` keeps the chapter and this rig green.
+ *
+ * A gate that dies on a null is a gate nobody can read: it looks identical to a
+ * broken lantern. This exits 0 with a named, unmistakable message instead, so
+ * "the lantern is not on this page" cannot be mistaken for "the lantern is
+ * broken" — and so that restoring the chapter restores the rig with no edit.
+ */
+async function absentIfUnmounted(page) {
+  const there = await page.evaluate(() => !!document.querySelector("#lantern-hour"));
+  if (there) return;
+  console.log("SKIPPED - no #lantern-hour on this page.");
+  console.log("  The lantern is unmounted on this branch, not broken: 06 The Lantern Hour was its");
+  console.log("  only mount, and feat/home-v2 removes that chapter. The artwork, its build script");
+  console.log("  and every assertion in this file are untouched, and this rig passes on");
+  console.log("  feat/image-sizing. Mount the chapter again and this runs unchanged.");
+  process.exit(0);
+}
+
 /** Degrees of rotation on an element, read off its rendered transform. */
 const ANGLE_OF = () => {
   const el = document.querySelector("#lantern-hour [data-hanging-lantern]");
@@ -105,6 +131,7 @@ for (const [width, height] of SHAPES) {
   const context = await browser.newContext({ viewport: { width, height } });
   const page = await context.newPage();
   await page.goto(URL, { waitUntil: "load" });
+  await absentIfUnmounted(page);
   await page.waitForTimeout(1000);
   await reveal(page, height);
 

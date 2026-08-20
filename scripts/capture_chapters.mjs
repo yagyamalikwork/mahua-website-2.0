@@ -39,7 +39,10 @@ const WIDTHS = flag("widths", "390,768,1440,1920").split(",").map(Number);
 const heightFor = (width) => (width === 390 ? 844 : width === 768 ? 1024 : width === 1920 ? 1080 : 900);
 
 /** Chapters whose entrance is worth three frames — one masked photograph, one staggered headline. */
-const MID_REVEAL = ["forest", "rooms", "guests"];
+// Chapter ids, so branch-dependent — `forest`, `rooms` and `guests` left the
+// home page on `feat/home-v2` (20 Aug 2026). What is captured is a mid-scroll
+// reveal, so any chapter that has one will do.
+const MID_REVEAL = ["rooted", "philosophy", "field-days"];
 
 /**
  * What the motion primitives are doing right now, read off the live elements.
