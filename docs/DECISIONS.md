@@ -2400,7 +2400,20 @@ moves over a photograph has to be measured over its whole travel, never at one p
 asserting the hero's headline is never staged. `LINES.from` survives as the literal `115%` lifted into the
 dial file. **491 tests, first-load JS back to 167.5 KB brotli** — the figure before any of it.
 
-**Still open: the hero has no parallax and the client asked for the effect on that section too.** Not added
-unasked, because `ui/Hero.tsx` records a deliberate decision against it and giving it one draws the page's
-most important photograph ~28% larger, showing the middle 78% — a re-crop whose scrim (`top: 0.92,
-bottom: 0.5, corner: 0.78`) would have to be re-solved. His call.
+**The hero drifts too, at HALF strength, by the client's own choice the same day.** Offered the full effect,
+a gentler one, or none — with the crop each costs stated — he took the middle: *"yes, but gentler."*
+`HERO_DRIFT` is `PARALLAX_MAX / 2`, so that photograph is drawn **13.8% larger and shows 88% of the frame**
+rather than 78%.
+
+**`Hero.tsx`'s "no parallax" is narrowed rather than overturned**, and the distinction is worth keeping. Its
+reasoning was *"all risk, no visible return"*: the risk half was overstated in its own sentence — a scrubbed
+transform costs nothing until the visitor scrolls, and `Parallax` does not fetch its library until the
+element is within a screen — and the return half was always a judgement rather than a measurement, which is
+exactly the kind of thing a client may reverse. Its points 2 and 3 stand untouched.
+
+Measured after: `hero · headline` **3.53-5.41** against its 3.0 floor across four scroll positions and five
+viewports (it was 3.49 before, so the closer crop helps rather than hurts), `DEFAULT_SCRIM` unchanged, and
+the arrival budget unmoved — hero `responseEnd` **4,611ms against 4,589ms**, medians of five, inside the run
+range. **Parallax 3/3 moved, 0.023-0.087 of their own heights against the 0.15 cap; first-load JS 167.5 KB
+brotli, unchanged.** Three drifting photographs cost exactly what one did, because the tween library was
+already being fetched for the closing chapter.

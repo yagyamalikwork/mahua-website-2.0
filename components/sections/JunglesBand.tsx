@@ -259,13 +259,13 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
       className="relative isolate flex min-h-[31vw] w-full flex-col justify-center overflow-hidden px-6 py-24 md:px-12 md:py-32"
       style={{ backgroundColor: "var(--overlay)" }}
     >
-      <div className="jungles-photo absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10">
         {/* `noZoom` — this is a backdrop with a headline on it, exactly like the
             hero's, and the home page's zoom and float are both for photographs
             that read as discrete objects. The float would also drag the frame
             out from under the `Scrim` below, which is a sibling and not a
             child. */}
-        <ImageReveal noZoom className="h-full w-full">
+        <ImageReveal noZoom className="drift-frame h-full w-full">
           {/*
             **The drift — client, 21 Aug 2026.** *"The text should look like it
             is floating/raised over the image, like we have for the last section
@@ -281,12 +281,13 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
             Wrapped the other way round, the mask would drift with the picture
             and the frame's own clip would travel off the band's edge.
 
-            `[data-parallax]` gets its height from `app/globals.css` rather than
-            from a class here: `Parallax` renders a bare `<div>` with no
-            `className` prop, and it needs the band's own height for two separate
+            `.drift-frame` is what gives `[data-parallax]` the band's height, in
+            `app/globals.css`: `Parallax` renders a bare `<div>` with no
+            `className` prop, and it needs a definite height for two separate
             reasons — its `offsetHeight` is what the translate is a fraction of,
             so an auto-height wrapper drifts by exactly nothing; and the
-            picture's `%` height below has to resolve against something definite.
+            picture's `%` height below has to resolve against something. The hero
+            carries the same class for the same reason.
           */}
           <Parallax>
             <Photo

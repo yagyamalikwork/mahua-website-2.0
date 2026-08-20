@@ -778,24 +778,27 @@ body {
 }
 
 /*
- * `02 · The Jungles`' photograph drifts as the section scrolls, so its words
- * read as lifted off the frame — client, 21 Aug 2026, pointing at the closing
- * chapter, whose photograph is the only other parallaxed element on the page.
+ * A photograph that drifts inside a frame whose height comes from its content —
+ * `02 · The Jungles` and, at half strength, the hero. Client, 21 Aug 2026,
+ * pointing at the closing chapter, whose photograph was the only parallaxed one
+ * on the page: it moves while the words stay still, and that is what lifts the
+ * type off the frame.
  *
  * **This one rule exists because `components/motion/Parallax.tsx` renders a bare
- * `<div>` with no `className` prop**, and that wrapper needs the band's own
- * height for two separate reasons: `Parallax` translates it by a fraction of its
+ * `<div>` with no `className` prop**, and that wrapper needs its frame's height
+ * for two separate reasons: `Parallax` translates it by a fraction of its own
  * `offsetHeight`, so an auto-height wrapper drifts by exactly zero; and the
  * picture inside is sized in `%`, which needs a definite height to resolve
- * against. `ui/FullBleed.tsx` needs neither because it sizes its picture in `vh`
- * and its own container has an explicit height — this band's height is
- * `max(floor, its own words)` and has no `vh` to key to.
+ * against. `ui/FullBleed.tsx` needs neither, because it sizes its picture in
+ * `vh` and gives its own container an explicit height — which the two frames
+ * here cannot do, one being `max(floor, its own words)` tall and the other an
+ * `absolute inset-0` layer.
  *
- * Scoped to `.jungles-photo` and not written as a global `[data-parallax]` rule:
- * every other parallaxed element on this site is inside a container that already
- * gives it one.
+ * A class rather than a bare `[data-parallax]` rule: every other parallaxed
+ * element on this site is inside a container that already gives it a height, and
+ * a global rule would be reaching past the two that need it.
  */
-.jungles-photo [data-parallax] {
+.drift-frame [data-parallax] {
   height: 100%;
 }
 

@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-20T22:06:06.372Z",
+  "measuredAt": "2026-08-20T22:30:26.012Z",
   "url": "http://localhost:3131/",
   "widths": {
     "360": [
@@ -7,11 +7,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.35,
+        "worst": 6.99,
         "brightest": [
-          69,
-          76,
-          66
+          72,
+          79,
+          71
         ],
         "boxes": 1,
         "pass": true,
@@ -22,10 +22,10 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.44,
+        "worst": 6.37,
         "brightest": [
           78,
-          84,
+          85,
           76
         ],
         "boxes": 1,
@@ -52,11 +52,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 3.49,
+        "worst": 3.87,
         "brightest": [
-          150,
-          119,
-          47
+          126,
+          116,
+          75
         ],
         "boxes": 7,
         "pass": true,
@@ -67,11 +67,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 4.87,
+        "worst": 4.79,
         "brightest": [
-          117,
-          97,
-          76
+          119,
+          98,
+          74
         ],
         "boxes": 1,
         "pass": true,
@@ -82,11 +82,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.89,
+        "worst": 7.28,
         "brightest": [
+          80,
           74,
-          69,
-          57
+          60
         ],
         "boxes": 1,
         "pass": true,
@@ -392,10 +392,10 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.13,
+        "worst": 6.08,
         "brightest": [
           201,
-          192,
+          191,
           175
         ],
         "boxes": 2,
@@ -407,11 +407,11 @@
         "name": "menu · hint over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.35,
+        "worst": 6.47,
         "brightest": [
-          202,
-          196,
-          180
+          203,
+          198,
+          182
         ],
         "boxes": 1,
         "pass": true,
@@ -424,11 +424,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.21,
+        "worst": 6.78,
         "brightest": [
-          71,
-          77,
-          67
+          74,
+          81,
+          72
         ],
         "boxes": 1,
         "pass": true,
@@ -439,11 +439,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.44,
+        "worst": 6.17,
         "brightest": [
-          78,
-          84,
-          76
+          80,
+          87,
+          78
         ],
         "boxes": 1,
         "pass": true,
@@ -469,11 +469,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 4.01,
+        "worst": 4.28,
         "brightest": [
-          122,
-          114,
-          73
+          109,
+          112,
+          71
         ],
         "boxes": 7,
         "pass": true,
@@ -484,11 +484,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 4.77,
+        "worst": 4.82,
         "brightest": [
-          120,
-          98,
-          74
+          113,
+          99,
+          81
         ],
         "boxes": 1,
         "pass": true,
@@ -499,11 +499,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.95,
+        "worst": 7.37,
         "brightest": [
-          66,
-          61,
-          48
+          80,
+          73,
+          59
         ],
         "boxes": 1,
         "pass": true,
@@ -794,11 +794,11 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.07,
+        "worst": 6.05,
         "brightest": [
-          200,
+          199,
           191,
-          175
+          174
         ],
         "boxes": 3,
         "pass": true,
@@ -824,11 +824,11 @@
         "name": "menu · hint over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.28,
+        "worst": 6.35,
         "brightest": [
-          201,
-          195,
-          178
+          202,
+          196,
+          180
         ],
         "boxes": 1,
         "pass": true,
@@ -841,11 +841,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.87,
+        "worst": 7.56,
         "brightest": [
+          68,
           74,
-          80,
-          71
+          63
         ],
         "boxes": 1,
         "pass": true,
@@ -856,11 +856,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.78,
+        "worst": 5.77,
         "brightest": [
           85,
           91,
-          83
+          84
         ],
         "boxes": 1,
         "pass": true,
@@ -886,11 +886,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.71,
+        "worst": 5.41,
         "brightest": [
+          98,
           93,
-          90,
-          80
+          83
         ],
         "boxes": 7,
         "pass": true,
@@ -901,11 +901,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.68,
+        "worst": 6.17,
         "brightest": [
-          103,
-          88,
-          70
+          97,
+          83,
+          63
         ],
         "boxes": 1,
         "pass": true,
@@ -916,11 +916,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.37,
+        "worst": 9.5,
         "brightest": [
-          63,
-          67,
-          58
+          59,
+          58,
+          45
         ],
         "boxes": 1,
         "pass": true,
@@ -1211,10 +1211,10 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.24,
+        "worst": 6.3,
         "brightest": [
-          202,
-          194,
+          203,
+          195,
           176
         ],
         "boxes": 3,
@@ -1226,11 +1226,11 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.13,
+        "worst": 6.06,
         "brightest": [
-          201,
-          192,
-          175
+          200,
+          191,
+          174
         ],
         "boxes": 2,
         "pass": true,
@@ -1241,11 +1241,11 @@
         "name": "menu · hint over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.22,
+        "worst": 6.28,
         "brightest": [
-          200,
-          194,
-          178
+          201,
+          195,
+          179
         ],
         "boxes": 1,
         "pass": true,
@@ -1258,11 +1258,11 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.88,
+        "worst": 6.73,
         "brightest": [
-          74,
-          80,
-          69
+          76,
+          81,
+          73
         ],
         "boxes": 1,
         "pass": true,
@@ -1303,11 +1303,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.19,
+        "worst": 5.4,
         "brightest": [
-          96,
-          97,
-          88
+          91,
+          95,
+          86
         ],
         "boxes": 7,
         "pass": true,
@@ -1318,11 +1318,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.99,
+        "worst": 8.35,
         "brightest": [
+          68,
           66,
-          70,
-          61
+          55
         ],
         "boxes": 1,
         "pass": true,
@@ -1333,11 +1333,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 9.34,
+        "worst": 8.92,
         "brightest": [
-          56,
-          60,
-          50
+          59,
+          63,
+          53
         ],
         "boxes": 1,
         "pass": true,
@@ -1642,9 +1642,9 @@
         "name": "menu · place over frost",
         "min": 3,
         "text": "#31402c",
-        "worst": 6.13,
+        "worst": 6.18,
         "brightest": [
-          198,
+          201,
           193,
           176
         ],
@@ -1657,11 +1657,11 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.15,
+        "worst": 6.06,
         "brightest": [
-          199,
-          193,
-          177
+          200,
+          191,
+          174
         ],
         "boxes": 2,
         "pass": true,
@@ -1672,10 +1672,10 @@
         "name": "menu · hint over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.22,
+        "worst": 6.28,
         "brightest": [
-          200,
-          194,
+          201,
+          195,
           178
         ],
         "boxes": 1,
@@ -1689,10 +1689,10 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.88,
+        "worst": 7.82,
         "brightest": [
-          66,
-          71,
+          65,
+          72,
           63
         ],
         "boxes": 1,
@@ -1704,11 +1704,11 @@
         "name": "header · wordmark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.36,
+        "worst": 5.41,
         "brightest": [
           90,
-          96,
-          85
+          95,
+          88
         ],
         "boxes": 1,
         "pass": true,
@@ -1734,11 +1734,11 @@
         "name": "hero · headline",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 3.16,
+        "worst": 3.57,
         "brightest": [
-          145,
-          128,
-          107
+          118,
+          123,
+          118
         ],
         "boxes": 7,
         "pass": true,
@@ -1749,11 +1749,11 @@
         "name": "hero · sub",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.93,
+        "worst": 7.82,
         "brightest": [
-          68,
-          70,
-          62
+          69,
+          71,
+          61
         ],
         "boxes": 1,
         "pass": true,
@@ -1764,11 +1764,11 @@
         "name": "hero · scroll cue",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 9.52,
+        "worst": 9.37,
         "brightest": [
-          54,
-          59,
-          48
+          55,
+          60,
+          50
         ],
         "boxes": 1,
         "pass": true,
@@ -2088,11 +2088,11 @@
         "name": "menu · region over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.17,
+        "worst": 6.19,
         "brightest": [
-          200,
+          202,
           193,
-          177
+          176
         ],
         "boxes": 2,
         "pass": true,
@@ -2103,11 +2103,11 @@
         "name": "menu · hint over frost",
         "min": 4.5,
         "text": "#31402c",
-        "worst": 6.09,
+        "worst": 6.15,
         "brightest": [
-          198,
-          192,
-          176
+          199,
+          193,
+          177
         ],
         "boxes": 1,
         "pass": true,
@@ -2120,9 +2120,9 @@
         "name": "header · menu",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.22,
+        "worst": 8.19,
         "brightest": [
-          62,
+          63,
           69,
           57
         ],

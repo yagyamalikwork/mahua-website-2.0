@@ -1,11 +1,13 @@
 import { preload } from "react-dom";
 import { ImageReveal } from "@/components/motion/ImageReveal";
+import { Parallax } from "@/components/motion/Parallax";
 import { SplitLines } from "@/components/motion/SplitLines";
 import { Photo, servedSizes } from "@/components/ui/Photo";
 import { Scrim, type ScrimStrength } from "@/components/ui/Scrim";
 import type { ChapterLike } from "@/content/chapters";
 import { chapterCopy, type ChapterCopyKey } from "@/content/home";
 import { media } from "@/lib/media";
+import { HERO_DRIFT } from "@/lib/motion";
 
 export type HeroCopy = {
   readonly headline: string;
@@ -20,7 +22,24 @@ export type HeroCopy = {
  * actually draws. Used by both the preload and the `<img>`, through one call.
  */
 export const HERO_SIZES = "100vw";
-export const HERO_BOX = { viewportHeightVh: 100 } as const;
+/**
+ * **`100 * HERO_DRIFT.oversize`, not 100, since 21 Aug 2026.** The photograph is
+ * drawn taller than the viewport so its drift has somewhere to go, and `box` has
+ * to describe the box that is actually drawn or `sizes` under-states it.
+ *
+ * **Both the `<img>` and the `preload()` below read this one constant**, which
+ * is what keeps them asking for the same candidate. They must: a preload that
+ * names a different width from the one the `<picture>` then chooses makes the
+ * page fetch the hero twice, and `scripts/measure_first_fold.mjs` fails a run
+ * where any photograph is downloaded at two widths.
+ *
+ * It changes no file in practice — `sizes` already resolved to the library's
+ * widest tier at every viewport — but stating the wrong box would be a figure
+ * `check_image_resolution.mjs` reasons from.
+ */
+export const HERO_BOX = {
+  viewportHeightVh: 100 * HERO_DRIFT.oversize,
+} as const;
 
 /**
  * The photograph fills the viewport; the headline sits bottom-left in cream
@@ -28,9 +47,14 @@ export const HERO_BOX = { viewportHeightVh: 100 } as const;
  *
  * Three deliberate absences:
  *
- * 1. **No parallax.** This photograph is the LCP element. Parallax is a scrubbed
- *    transform, so it costs nothing until the visitor scrolls — by which time the
- *    hero is leaving anyway. All risk, no visible return.
+ * 1. **Parallax at half strength, since 21 Aug 2026 — and this point used to say
+ *    "none".** The old reasoning was that this photograph is the LCP element and
+ *    that the effect is "all risk, no visible return" because the hero is leaving
+ *    by the time anyone scrolls. The risk half was always overstated in its own
+ *    sentence: a scrubbed transform costs nothing until the visitor scrolls, so
+ *    the arrival clock never sees it. The return half was a judgement, and the
+ *    client made the opposite one — the drift is the whole of the "floating"
+ *    effect he asked for. `HERO_DRIFT` carries the strength and what it crops.
  * 2. **`<ImageReveal static>`.** Lighthouse stops the LCP timer on the *final*
  *    frame of any animation applied to the element, so a 1.2s mask here is 1.2s
  *    straight onto the metric (CLAUDE.md non-negotiable #6).
@@ -122,20 +146,46 @@ export function Hero({
       style={{ backgroundColor: "var(--overlay)" }}
     >
       <div className="absolute inset-0 -z-10">
-        <ImageReveal static noZoom className="h-full w-full">
-          <Photo
-            id={chapter.media[0]}
-            decorative
-            priority
-            // The one photograph on the page that genuinely is the viewport, and
-            // the only one whose arrival the visitor sits and waits for. It is
-            // also the one whose tier is a deliberate trade rather than an
-            // arithmetic result — see the note on `HERO_SIZES`.
-            sizes={HERO_SIZES}
-            box={HERO_BOX}
-            pictureClassName="block h-full w-full"
-            className="h-full w-full object-cover"
-          />
+        <ImageReveal static noZoom className="drift-frame h-full w-full">
+          {/*
+            **The drift — client, 21 Aug 2026, at half strength by his own
+            choice.** He asked for the closing chapter's depth here too: the
+            photograph moving while the words stay still, which is what lifts the
+            type off the frame. `HERO_DRIFT` carries why it is half and what the
+            crop costs.
+
+            **Point 1 above is narrowed rather than overturned.** It said no
+            parallax on this photograph, on the grounds that it is the LCP
+            element and the effect is "all risk, no visible return" — the risk
+            half is answered (the tween library is fetched only when the element
+            is within a screen, and scrubs nothing until the visitor scrolls, so
+            the arrival clock never sees it), and the client has ruled on the
+            return half, which was always a judgement rather than a measurement.
+            Points 2 and 3 stand untouched: `static` still keeps a 1.2s mask off
+            the LCP timer, and the headline still does not move.
+          */}
+          <Parallax strength={HERO_DRIFT.strength}>
+            <Photo
+              id={chapter.media[0]}
+              decorative
+              priority
+              // The one photograph on the page that genuinely is the viewport, and
+              // the only one whose arrival the visitor sits and waits for. It is
+              // also the one whose tier is a deliberate trade rather than an
+              // arithmetic result — see the note on `HERO_SIZES`.
+              sizes={HERO_SIZES}
+              box={HERO_BOX}
+              pictureClassName="block w-full"
+              /* Oversized and re-centred before `Parallax` touches it, from the
+                 one dial — see `HERO_DRIFT` and `driftOversize`. */
+              pictureStyle={{
+                height: `${HERO_DRIFT.oversize * 100}%`,
+                position: "relative",
+                top: `-${((HERO_DRIFT.oversize - 1) / 2) * 100}%`,
+              }}
+              className="h-full w-full object-cover"
+            />
+          </Parallax>
         </ImageReveal>
       </div>
 

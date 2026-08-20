@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-20T20:14:52.690Z",
+  "measuredAt": "2026-08-20T22:44:03.915Z",
   "url": "http://localhost:3131/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
@@ -18,12 +18,12 @@
       {
         "id": "reception-path-dusk",
         "instances": 1,
-        "area": 1296000
+        "area": 1475123
       },
       {
         "id": "jungle-cats-stitch",
         "instances": 1,
-        "area": 642803
+        "area": 820485
       },
       {
         "id": "lantern-bridge-dusk",
@@ -556,16 +556,16 @@
     },
     {
       "at": 6450,
-      "occupied": 76.3,
-      "empty": 23.7,
+      "occupied": 76.4,
+      "empty": 23.6,
       "imagePercent": 68.8,
-      "typePercent": 7.5
+      "typePercent": 7.6
     },
     {
       "at": 6600,
-      "occupied": 82.3,
-      "empty": 17.7,
-      "imagePercent": 72.3,
+      "occupied": 82.2,
+      "empty": 17.8,
+      "imagePercent": 72.2,
       "typePercent": 10
     },
     {
@@ -586,36 +586,36 @@
       "at": 7050,
       "occupied": 94.1,
       "empty": 5.9,
-      "imagePercent": 81.8,
-      "typePercent": 12.3
+      "imagePercent": 81.7,
+      "typePercent": 12.4
     },
     {
       "at": 7200,
       "occupied": 85.3,
       "empty": 14.7,
-      "imagePercent": 72.6,
-      "typePercent": 12.7
+      "imagePercent": 72.7,
+      "typePercent": 12.6
     },
     {
       "at": 7350,
       "occupied": 71.2,
       "empty": 28.8,
-      "imagePercent": 58.9,
-      "typePercent": 12.3
+      "imagePercent": 59.4,
+      "typePercent": 11.8
     },
     {
       "at": 7500,
       "occupied": 55.3,
       "empty": 44.7,
-      "imagePercent": 44.7,
-      "typePercent": 10.6
+      "imagePercent": 45,
+      "typePercent": 10.3
     },
     {
       "at": 7535,
-      "occupied": 51.9,
-      "empty": 48.1,
-      "imagePercent": 43,
-      "typePercent": 8.9
+      "occupied": 52,
+      "empty": 48,
+      "imagePercent": 42.3,
+      "typePercent": 9.7
     }
   ]
 }

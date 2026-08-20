@@ -129,6 +129,66 @@ export const EASE = {
 export const PARALLAX_MAX = 0.15;
 
 /**
+ * How much taller than its own frame a drifting photograph has to be drawn.
+ *
+ * `Parallax` translates its wrapper by `±(height × strength) / 2`, so a
+ * photograph the same size as its frame would uncover whatever is behind it at
+ * one edge or the other for most of the scroll-through. The image is therefore
+ * oversized and re-centred **before** `Parallax` ever touches it.
+ *
+ * `oversize = 1 + strength × DRIFT_MARGIN`, which is the same arithmetic
+ * `ui/FullBleed.tsx` writes out in `vh` — at `PARALLAX_MAX` this returns
+ * **1.2765**, against that component's `100 / (1 - 0.15) + 10 = 127.647vh`, the
+ * same number to four decimals. It is a function here because the second and
+ * third drifting photographs on this page do not have a `vh` to key to: `02 ·
+ * The Jungles` is `max(floor, its own words)` tall, and both want the margin
+ * expressed as a ratio rather than restated.
+ *
+ * **1.843 is that component's own margin, read back out of it rather than
+ * chosen.** The overhang is 13.8% each side against a 7.5% translate — "a
+ * comfortable, not knife-edge, margin", in its words. Keeping the ratio fixed
+ * is what makes a gentler drift cost a proportionally smaller crop: halve the
+ * strength and the photograph is drawn 13.8% larger instead of 27.6%, with the
+ * same safety.
+ */
+export const DRIFT_MARGIN = 1.843;
+
+/** See `DRIFT_MARGIN`. Returns a multiplier on the frame's own height. */
+export function driftOversize(strength: number = PARALLAX_MAX): number {
+  return 1 + strength * DRIFT_MARGIN;
+}
+
+/**
+ * The hero's own drift — **half of `PARALLAX_MAX`, by the client's choice**,
+ * 21 Aug 2026.
+ *
+ * Offered the same effect the other two chapters carry, a gentler one, or none,
+ * he took the gentler: *"yes, but gentler."* The reason it was a question at all
+ * is that this photograph is the one the page's arrival time is measured on and
+ * `Hero.tsx` carries a written decision that it should not move — and because
+ * drift is bought with crop. At full strength the hero would be drawn 27.6%
+ * larger and show the middle 78% of the frame he chose; at half it is **13.8%
+ * larger and shows 88%**, which is a change to the opening shot small enough to
+ * be worth the depth.
+ *
+ * **The drift costs the arrival nothing**, which is the objection `Hero.tsx`
+ * raised: `Parallax` fetches its tween library only when the element is within a
+ * screen, and scrubs nothing until the visitor scrolls. And the file does not
+ * change — `sizes` already asks for the library's widest tier at every viewport,
+ * so a 13.8% larger draw asks for no more bytes.
+ *
+ * **At the top of the page the drift is at its midpoint, not at one end**, which
+ * is what makes the crop symmetric where it matters most: ScrollTrigger's range
+ * runs from the hero's top meeting the viewport's bottom to its bottom meeting
+ * the top, so a hero filling the first screen sits at progress 0.5 with `y = 0`
+ * before anything is scrolled.
+ */
+export const HERO_DRIFT = {
+  strength: PARALLAX_MAX / 2,
+  oversize: 1 + (PARALLAX_MAX / 2) * DRIFT_MARGIN,
+} as const;
+
+/**
  * The leaf that follows the pointer.
  *
  * `follow` and `swing` are **per-frame easing factors, not seconds**: each frame
@@ -840,9 +900,9 @@ export const JUNGLE_BAND = {
    * It reads as the words being lifted off the frame, and it only appears while
    * scrolling, which is exactly what he described.
    *
-   * The arithmetic is `ui/FullBleed.tsx`'s, expressed as a fraction rather than
-   * in `vh` because this band's height is `max(floor, its own words)` and there
-   * is no `vh` to key it to. `Parallax` translates its wrapper by
+   * The arithmetic is `driftOversize` above — `ui/FullBleed.tsx`'s, expressed as
+   * a fraction rather than in `vh` because this band's height is `max(floor, its
+   * own words)` and there is no `vh` to key it to. `Parallax` translates its wrapper by
    * `±(height × PARALLAX_MAX) / 2` — **±7.5% of the band** — so the photograph
    * has to overhang by more than that at both ends or the drift uncovers the
    * section's `--overlay` at one edge. At this value the overhang is **13.8%**,
@@ -855,7 +915,7 @@ export const JUNGLE_BAND = {
    * says this stitched composite can afford to lose. Both edge cats stay in
    * frame at every width where the floor binds.
    */
-  driftOversize: 1 / (1 - PARALLAX_MAX) + 0.1,
+  driftOversize: driftOversize(PARALLAX_MAX),
   /**
    * The smallest aspect ratio the band's box is ever asked to be, for `sizes`.
    *

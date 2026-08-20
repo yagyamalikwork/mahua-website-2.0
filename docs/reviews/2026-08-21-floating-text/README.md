@@ -43,8 +43,9 @@ is where every other number of its kind lives. The Jungles heading travels **56p
 
 **491 tests** — five fewer than yesterday, which is the four curtain tests plus the `deep` one, and no
 regression. **First-load JavaScript is back to 167.5 KB brotli**, the figure before any of this began: the
-hook that cost 0.2 KB took it with it, and `Parallax` costs nothing on load (GSAP is fetched only when a
-parallaxed element is within a screen, and this page already fetched it for the closing chapter).
+hook that cost 0.2 KB took it with it, and `Parallax` costs nothing on load — GSAP is fetched only when a
+parallaxed element is within a screen, and this page already fetched it for the closing chapter, so three
+drifting photographs cost exactly what one did.
 
 ## 3 · What was built — `02 · The Jungles` now drifts
 
@@ -67,8 +68,7 @@ The words' 16–18px is the `Enter` block rise that was always there. The two se
 each other, and the Jungles' figure is smaller only because parallax is a fraction of an element's height and
 that band is 446px against 1,149px.
 
-`check_entrances.mjs`: **parallax 2/2 moved**, 0.087 and 0.069 of their own heights against the 0.15 cap, and
-**0 of 8 under reduced motion**.
+`check_entrances.mjs` read **parallax 2/2 moved** at this point, before the hero joined them — see §4.
 
 ### The re-crop, and what it cost
 
@@ -100,11 +100,43 @@ the section's top is *above* the viewport, the type sits under `SiteHeader`'s fi
 `driftOversize` so `sizes` describes the box that is actually drawn — and it changes nothing in practice,
 because at `coverAspectFloor` the band already asks for the library's widest file at every viewport.
 
-## 4 · Still open
+## 4 · The hero, at half strength — the client's own choice
 
-**The hero.** Its headline is still again, which is where it was before 20 August — so `The Journey Begins`
-has none of this effect, and the client asked for it on both sections. It was not added unasked because it is
-not free there: `ui/Hero.tsx` records a deliberate decision that the hero carries no parallax, and giving it
-one would draw that photograph ~28% larger and show the middle 78% of it. **That is a re-crop of the page's
-most important photograph, and its scrim (`top: 0.92, bottom: 0.5, corner: 0.78`) would have to be re-solved
-against the new pixels.** Worth doing if he wants it; his call, not an oversight.
+Put to him as three options with the crop stated, he took the middle one: *"yes, but gentler."* `HERO_DRIFT`
+is `PARALLAX_MAX / 2`, so the photograph is drawn **13.8% larger and shows 88% of the frame**, against 27.6%
+and 78% at full strength.
+
+**`Hero.tsx`'s point 1 said "no parallax" and is narrowed rather than overturned.** Its reasoning was that
+this is the LCP element and the effect is *"all risk, no visible return"*. The risk half was overstated in its
+own sentence — a scrubbed transform costs nothing until the visitor scrolls, and `Parallax` does not even
+fetch its library until the element is within a screen. The return half was a judgement, and the client made
+the opposite one. **Points 2 and 3 are untouched**: `static` still keeps a 1.2s mask off the LCP timer, and
+the headline still does not move.
+
+**A re-crop is a re-solve, and this is the tightest run on the page** — `hero · headline` measured 3.49:1
+against a 3.0 floor before any of this. Measured again over the new crop *and* its drift, four scroll
+positions × five viewports, type hidden and real pixels read:
+
+| | headline (floor 3) | sub-line (floor 4.5) |
+|---|---|---|
+| 360 × 844 | 3.87 | 4.79 |
+| 390 × 844 | 4.28 | 4.82 |
+| 768 × 1024 | 5.41 | 6.17 |
+| 1440 × 900 | **3.53** | 7.56 |
+| 1920 × 1080 | 4.19 | 8.48 |
+
+`DEFAULT_SCRIM` is unchanged and needed no re-solving; the closer crop turns out to help slightly rather than
+hurt. `check_contrast_over_photos.mjs` agrees at its own six widths — **156 probes, 0 failures**.
+
+**And the arrival budget did not move**, which was the whole basis of the original objection. Medians of five
+at 390×844: hero `responseEnd` **4,611ms** against **4,589ms** before, inside a run range of 4,573–4,619. The
+file is identical — `sizes` already asked for the library's widest tier at every viewport, so a 13.8% larger
+draw asks for no more bytes.
+
+`check_entrances.mjs`: **parallax 3/3 moved**, 0.023–0.087 of their own heights against the 0.15 cap, **0 of 9
+under reduced motion**. First-load JavaScript **167.5 KB brotli**, unchanged.
+
+## 5 · Still open
+
+Nothing on this. The two sections the client named both have the effect, and the third — the closing chapter —
+is what they were matched against.

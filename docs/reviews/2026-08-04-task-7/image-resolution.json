@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-20T22:15:23.157Z",
+  "measuredAt": "2026-08-20T22:38:13.568Z",
   "url": "http://localhost:3131/",
   "densityCap": 2,
   "results": [
@@ -82,9 +82,9 @@
         {
           "file": "/media/reception-path-dusk-1440.avif",
           "cssWidth": 390,
-          "drawnWidth": 1266,
-          "needed": 1266,
-          "ratio": 1.14
+          "drawnWidth": 1442,
+          "needed": 1442,
+          "ratio": 1
         },
         {
           "file": "/media/vann-hero-640.avif",
@@ -196,8 +196,8 @@
       "atLibraryCeiling": [
         {
           "file": "/media/reception-path-dusk-1440.avif",
-          "needed": 2532,
-          "ratio": 0.57
+          "needed": 2883,
+          "ratio": 0.5
         },
         {
           "file": "/media/jungle-cats-stitch-1440.avif",
@@ -281,9 +281,9 @@
         {
           "file": "/media/reception-path-dusk-1440.avif",
           "cssWidth": 390,
-          "drawnWidth": 1266,
-          "needed": 2532,
-          "ratio": 0.57
+          "drawnWidth": 1442,
+          "needed": 2883,
+          "ratio": 0.5
         },
         {
           "file": "/media/vann-hero-960.avif",
@@ -395,8 +395,8 @@
       "atLibraryCeiling": [
         {
           "file": "/media/reception-path-dusk-1440.avif",
-          "needed": 1536,
-          "ratio": 0.94
+          "needed": 1749,
+          "ratio": 0.82
         },
         {
           "file": "/media/jungle-cats-stitch-1440.avif",
@@ -470,9 +470,9 @@
         {
           "file": "/media/reception-path-dusk-1440.avif",
           "cssWidth": 768,
-          "drawnWidth": 1536,
-          "needed": 1536,
-          "ratio": 0.94
+          "drawnWidth": 1749,
+          "needed": 1749,
+          "ratio": 0.82
         },
         {
           "file": "/media/vann-hero-960.avif",
@@ -583,6 +583,11 @@
       "understatedSizes": [],
       "atLibraryCeiling": [
         {
+          "file": "/media/reception-path-dusk-1440.avif",
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
           "file": "/media/birding-cairn-dusk-1440.avif",
           "needed": 1724,
           "ratio": 0.84
@@ -634,9 +639,9 @@
         {
           "file": "/media/reception-path-dusk-1440.avif",
           "cssWidth": 1440,
-          "drawnWidth": 1440,
-          "needed": 1440,
-          "ratio": 1
+          "drawnWidth": 1536,
+          "needed": 1536,
+          "ratio": 0.94
         },
         {
           "file": "/media/vann-hero-960.avif",

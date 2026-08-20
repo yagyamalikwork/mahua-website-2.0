@@ -1,24 +1,23 @@
 {
   "url": "http://localhost:3131/",
-  "measuredAt": "2026-08-20T18:46:51.757Z",
+  "measuredAt": "2026-08-20T22:36:36.234Z",
   "desktop": {
     "label": "desktop",
     "viewport": "1440x900",
     "reducedMotion": false,
     "atRest": {
-      "staged": 13,
+      "staged": 10,
       "stagedImages": 9,
-      "stagedHeadlines": 9,
-      "curtainOpacity": 0.035,
+      "stagedHeadlines": 8,
       "stagedInView": 0,
       "settled": 0,
       "settledImages": 0,
       "settledHeadlines": 0,
-      "attributed": 13,
-      "displacedWords": 43,
-      "peakWordOffset": 107.902,
-      "invisible": 13,
-      "displaced": 13,
+      "attributed": 10,
+      "displacedWords": 36,
+      "peakWordOffset": 83.697,
+      "invisible": 10,
+      "displaced": 10,
       "maskCover": [
         0,
         1,
@@ -39,23 +38,22 @@
       ]
     },
     "flickeredOnLoad": false,
-    "stagings": 31,
-    "settlings": 31,
-    "headlineStagings": 9,
-    "headlineSettlings": 9,
+    "stagings": 27,
+    "settlings": 27,
+    "headlineStagings": 8,
+    "headlineSettlings": 8,
     "peakMaskCover": 1,
-    "peakWordOffset": 83.778,
-    "peakStagedAtOnce": 30,
+    "peakWordOffset": 83.697,
+    "peakStagedAtOnce": 27,
     "afterScroll": {
       "staged": 0,
       "stagedImages": 0,
       "stagedHeadlines": 0,
-      "curtainOpacity": 0,
       "stagedInView": 0,
-      "settled": 13,
+      "settled": 10,
       "settledImages": 9,
-      "settledHeadlines": 9,
-      "attributed": 13,
+      "settledHeadlines": 8,
+      "attributed": 10,
       "displacedWords": 0,
       "peakWordOffset": 0,
       "invisible": 0,
@@ -206,7 +204,7 @@
       },
       {
         "id": "invitation",
-        "words": 141,
+        "words": 201,
         "hidden": 0,
         "photographs": 1,
         "maskedOver": 0
@@ -218,19 +216,18 @@
     "viewport": "390x844",
     "reducedMotion": false,
     "atRest": {
-      "staged": 13,
+      "staged": 10,
       "stagedImages": 9,
-      "stagedHeadlines": 9,
-      "curtainOpacity": 0.014,
+      "stagedHeadlines": 8,
       "stagedInView": 0,
       "settled": 0,
       "settledImages": 0,
       "settledHeadlines": 0,
-      "attributed": 13,
-      "displacedWords": 43,
-      "peakWordOffset": 48.785,
-      "invisible": 13,
-      "displaced": 13,
+      "attributed": 10,
+      "displacedWords": 36,
+      "peakWordOffset": 45.653,
+      "invisible": 10,
+      "displaced": 10,
       "maskCover": [
         0,
         1,
@@ -251,23 +248,22 @@
       ]
     },
     "flickeredOnLoad": false,
-    "stagings": 31,
-    "settlings": 31,
-    "headlineStagings": 9,
-    "headlineSettlings": 9,
+    "stagings": 27,
+    "settlings": 27,
+    "headlineStagings": 8,
+    "headlineSettlings": 8,
     "peakMaskCover": 1,
-    "peakWordOffset": 47.552,
-    "peakStagedAtOnce": 29,
+    "peakWordOffset": 45.756,
+    "peakStagedAtOnce": 26,
     "afterScroll": {
       "staged": 0,
       "stagedImages": 0,
       "stagedHeadlines": 0,
-      "curtainOpacity": 0,
       "stagedInView": 0,
-      "settled": 13,
+      "settled": 10,
       "settledImages": 9,
-      "settledHeadlines": 9,
-      "attributed": 13,
+      "settledHeadlines": 8,
+      "attributed": 10,
       "displacedWords": 0,
       "peakWordOffset": 0,
       "invisible": 0,
@@ -430,7 +426,7 @@
       },
       {
         "id": "invitation",
-        "words": 141,
+        "words": 201,
         "hidden": 0,
         "photographs": 1,
         "maskedOver": 0
@@ -445,7 +441,6 @@
       "staged": 0,
       "stagedImages": 0,
       "stagedHeadlines": 0,
-      "curtainOpacity": 0,
       "stagedInView": 0,
       "settled": 0,
       "settledImages": 0,
@@ -486,7 +481,6 @@
       "staged": 0,
       "stagedImages": 0,
       "stagedHeadlines": 0,
-      "curtainOpacity": 0,
       "stagedInView": 0,
       "settled": 0,
       "settledImages": 0,
@@ -655,7 +649,7 @@
       },
       {
         "id": "invitation",
-        "words": 141,
+        "words": 201,
         "hidden": 0,
         "photographs": 1,
         "maskedOver": 0
@@ -669,30 +663,56 @@
     "imageScale": "none",
     "imageVisible": 1,
     "imageComplete": true,
-    "headlineState": "pending",
-    "headlineWordOffset": 108,
-    "curtainOpacity": 0.0179695,
-    "revealWindowS": 5.5,
-    "settled": {
-      "headlineState": "in",
-      "worstWordOffset": 0,
-      "words": 7,
-      "curtainOpacity": 0
-    }
+    "headlineState": null,
+    "headlineWordOffset": 0
   },
   "parallax": {
     "reducedMotion": false,
-    "elements": 1,
-    "moved": 1,
+    "elements": 3,
+    "moved": 3,
     "sampledAt": [
       0.2,
       0.8
     ],
-    "strongest": 0.063,
-    "weakest": 0.063,
+    "strongest": 0.087,
+    "weakest": 0.023,
     "still": [],
     "unreachable": [],
     "measured": [
+      {
+        "label": "arrival[0] reception-path-dusk-1440.avif",
+        "section": "arrival",
+        "layoutTop": 0,
+        "height": 900,
+        "scrubsBetween": [
+          -900,
+          900
+        ],
+        "at": [
+          0,
+          540
+        ],
+        "shift": 21,
+        "ofHeight": 0.023,
+        "unsampled": false
+      },
+      {
+        "label": "why-you-came[0] jungle-cats-stitch-1440.avif",
+        "section": "why-you-came",
+        "layoutTop": 1804,
+        "height": 446,
+        "scrubsBetween": [
+          904,
+          2250
+        ],
+        "at": [
+          1173,
+          1981
+        ],
+        "shift": 39,
+        "ofHeight": 0.087,
+        "unsampled": false
+      },
       {
         "label": "invitation[0] birding-cairn-dusk-1440.avif",
         "section": "invitation",
@@ -704,10 +724,10 @@
         ],
         "at": [
           6594,
-          7449
+          7535
         ],
-        "shift": 72,
-        "ofHeight": 0.063,
+        "shift": 79,
+        "ofHeight": 0.069,
         "unsampled": false
       }
     ],
@@ -740,7 +760,7 @@
   },
   "parallaxReducedMotion": {
     "reducedMotion": true,
-    "elements": 7,
+    "elements": 9,
     "moved": 0,
     "sampledAt": [
       0.2,
@@ -750,6 +770,40 @@
     "weakest": 0,
     "still": [
       {
+        "label": "arrival[0] reception-path-dusk-1440.avif",
+        "section": "arrival",
+        "layoutTop": 0,
+        "height": 900,
+        "scrubsBetween": [
+          -900,
+          900
+        ],
+        "at": [
+          0,
+          540
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "why-you-came[0] jungle-cats-stitch-1440.avif",
+        "section": "why-you-came",
+        "layoutTop": 1804,
+        "height": 446,
+        "scrubsBetween": [
+          904,
+          2250
+        ],
+        "at": [
+          1173,
+          1981
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
         "label": "rooted[0] lantern-bridge-dusk-1200.avif",
         "section": "rooted",
         "layoutTop": 2331,
@@ -862,7 +916,7 @@
         ],
         "at": [
           5168,
-          6023
+          6109
         ],
         "shift": 0,
         "ofHeight": 0,
@@ -872,6 +926,40 @@
     "unreachable": [],
     "measured": [
       {
+        "label": "arrival[0] reception-path-dusk-1440.avif",
+        "section": "arrival",
+        "layoutTop": 0,
+        "height": 900,
+        "scrubsBetween": [
+          -900,
+          900
+        ],
+        "at": [
+          0,
+          540
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
+        "label": "why-you-came[0] jungle-cats-stitch-1440.avif",
+        "section": "why-you-came",
+        "layoutTop": 1804,
+        "height": 446,
+        "scrubsBetween": [
+          904,
+          2250
+        ],
+        "at": [
+          1173,
+          1981
+        ],
+        "shift": 0,
+        "ofHeight": 0,
+        "unsampled": false
+      },
+      {
         "label": "rooted[0] lantern-bridge-dusk-1200.avif",
         "section": "rooted",
         "layoutTop": 2331,
@@ -984,7 +1072,7 @@
         ],
         "at": [
           5168,
-          6023
+          6109
         ],
         "shift": 0,
         "ofHeight": 0,
@@ -1042,7 +1130,7 @@
         },
         {
           "id": "invitation",
-          "words": 141,
+          "words": 201,
           "hidden": 0,
           "photographs": 1,
           "maskedOver": 0
@@ -1097,7 +1185,7 @@
         },
         {
           "id": "invitation",
-          "words": 141,
+          "words": 201,
           "hidden": 0,
           "photographs": 1,
           "maskedOver": 0
