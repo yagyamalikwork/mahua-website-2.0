@@ -1,7 +1,10 @@
 # Photographs we need at a higher resolution
 
-**For Yagya. One list, replacing the three partial asks scattered through `DECISIONS.md` §5, §19 and the
-coverflow reviews.** Last compiled 17 August 2026.
+**For Yagya. One list.** Last compiled **20 August 2026**.
+
+**Group 1 is closed** — you delivered it within hours on 17 Aug. Groups 2 and 3 apply to the site as it
+ships today. **Group 4 applies only to `feat/home-v2`**, the restructured home page, and is worth nothing
+if that branch is not the one you keep.
 
 Nothing here is broken today on an ordinary laptop at 100% zoom, which is what you test on. Each row is a
 photograph the page has grown large enough to outrun — either on a high-resolution screen (a Mac, an iPad,
@@ -72,6 +75,34 @@ frame from that shoot rather than more darkening.
 
 ---
 
+## Group 2 — the three forest cats
+
+`03 · The Forest`. When the photograph boards were rebuilt on 14 August they gained a one-column state that
+can draw a plate roughly twice its old size, and these three cannot fill it on a high-resolution screen.
+
+| Photograph | Have | Need |
+|---|---|---|
+| `tiger-pair-profile` | 900 × 1133 | **~1,800px wide**, uncropped |
+| `leopard-on-rock` | 900 × 1352 | ~1,800px |
+| `melanistic-leopard` | 900 × 1352 | ~1,800px |
+
+Between 22% and 46% short at the moment, on a Retina screen only.
+
+---
+
+## Group 3 — the four room photographs
+
+`05 · The Rooms`, same cause as group 2.
+
+| Photograph | Have | Need |
+|---|---|---|
+| `room-open-to-bamboo` | 1440 × 811 | **~2,600px wide**, uncropped |
+| `room-hanging-chair-view` | 1440 × 810 | ~2,600px |
+| `hanging-chair-forest-deck` | 1440 × 810 | ~2,600px |
+| `bungalow-exterior-palms` | 1440 × 1080 | ~2,600px |
+
+---
+
 ## Group 4 — five photographs for the Experiences cards — **`feat/home-v2` only**
 
 Added 20 August 2026. **Only relevant if the restructured home page is the one you keep** — these cards do
@@ -108,34 +139,6 @@ fresh look at the consent question at the new size.
 
 ---
 
-## Group 2 — the three forest cats
-
-`03 · The Forest`. When the photograph boards were rebuilt on 14 August they gained a one-column state that
-can draw a plate roughly twice its old size, and these three cannot fill it on a high-resolution screen.
-
-| Photograph | Have | Need |
-|---|---|---|
-| `tiger-pair-profile` | 900 × 1133 | **~1,800px wide**, uncropped |
-| `leopard-on-rock` | 900 × 1352 | ~1,800px |
-| `melanistic-leopard` | 900 × 1352 | ~1,800px |
-
-Between 22% and 46% short at the moment, on a Retina screen only.
-
----
-
-## Group 3 — the four room photographs
-
-`05 · The Rooms`, same cause as group 2.
-
-| Photograph | Have | Need |
-|---|---|---|
-| `room-open-to-bamboo` | 1440 × 811 | **~2,600px wide**, uncropped |
-| `room-hanging-chair-view` | 1440 × 810 | ~2,600px |
-| `hanging-chair-forest-deck` | 1440 × 810 | ~2,600px |
-| `bungalow-exterior-palms` | 1440 × 1080 | ~2,600px |
-
----
-
 ## What happens when they arrive
 
 Drop the files over the sources and one script re-encodes everything: `node scripts/build_images.mjs`.
@@ -144,9 +147,15 @@ be a duplicate of one we already have — both of which have happened before.
 
 ## Priority, if you can only do some
 
-**Group 1 is closed.** What remains:
+**Group 1 is closed.** What remains, in order:
 
 1. **Group 3, the rooms** — the largest photographs on two property pages, and the biggest visible shortfall.
-2. **Group 2, the cats** — real, but only shows on a high-resolution screen.
-3. The DPR-2 half of group 1, which only matters on a Retina or scaled screen and which you would get for
-   free if either of the above is exported from camera originals at ~2,700px.
+   These ship on the live site today.
+2. **Group 2, the cats** — real, but only shows on a high-resolution screen. Also live today.
+3. **Group 4, the Experiences cards** — only if you keep the restructured home page. Sharp on your screen
+   as it stands; the ask buys back the two-thirds of each frame the hand-cropping throws away.
+4. The DPR-2 half of group 1, which only matters on a Retina or scaled screen and which you would get for
+   free if any of the above is exported from camera originals at ~2,700px.
+
+**And one ruling rather than a file: the safari card's photograph changed**, for the consent reason in group
+4. That one needs a decision from you, not an export.
