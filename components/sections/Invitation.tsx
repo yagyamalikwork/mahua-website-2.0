@@ -139,7 +139,21 @@ export function Invitation({ chapter }: { chapter: Chapter }) {
            * paragraphs. The outer block is what they get; the inner one keeps the
            * chapter's own copy exactly where it was.
            */}
-          <div className="flex w-full max-w-[62rem] flex-col items-center text-center">
+          {/*
+            **`mx-auto` since 21 Aug 2026, and its absence was a real defect the
+            client caught by eye.** This block used to be centred by the
+            section's own `justify-center`, because it was (a descendant of) the
+            section's only flex item and that item was content-sized. Wrapping
+            `Enter` in a full-width div — necessary, see the note above it —
+            made the flex item fill the section, so `justify-center` had nothing
+            left to centre and this 992px block sat against the left edge of a
+            1,344px one. **Everything in the chapter moved left together**: the
+            heading, both paragraphs, the two pills and the carousel.
+
+            A width and a position are two decisions, and the old arrangement
+            made one of them a side effect of the other.
+          */}
+          <div className="mx-auto flex w-full max-w-[62rem] flex-col items-center text-center">
             <div className="flex w-full max-w-[60ch] flex-col items-center">
               <TwoToneHeading
                 heading={copy.heading}

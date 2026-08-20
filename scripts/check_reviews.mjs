@@ -403,6 +403,43 @@ if (geo.found && geo.mode === "loop") {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
+ * 12 — The carousel is CENTRED in its section, not merely the right width.
+ *
+ * **This assertion exists because its absence shipped a defect the client caught
+ * by eye, on 21 Aug 2026.** The rig measured `containerW` and was satisfied: 986px
+ * at 1440, exactly the width of the three review blocks it replaced. It was also
+ * sitting hard against the left edge of the section, along with the chapter's
+ * heading, both paragraphs and both pills — because the fix for a *width*
+ * problem had removed the thing that was doing the *centring*.
+ *
+ * A width and a position are two facts. Measuring one and reporting the other as
+ * satisfied is this project's most-repeated instrument failure, and it does not
+ * stop being that when the measurement itself is correct.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+if (geo.found) {
+  const centring = await page.evaluate(() => {
+    const section = document.querySelector("#invitation").getBoundingClientRect();
+    const frame = document.querySelector(".reviews").getBoundingClientRect();
+    return {
+      left: Math.round(frame.left - section.left),
+      right: Math.round(section.right - frame.right),
+      sectionW: Math.round(section.width),
+    };
+  });
+  // A pixel of rounding is fine; anything more is a block that is not centred.
+  if (Math.abs(centring.left - centring.right) > 2) {
+    fail(
+      12,
+      where,
+      `the carousel sits ${centring.left}px from the section's left edge and ${centring.right}px from its right — ` +
+        `it is the right width and the wrong place, which is what shipped on 21 Aug`,
+    );
+  }
+  notes.push(`centring: ${centring.left}px left, ${centring.right}px right, in a ${centring.sectionW}px section`);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
  * 11 — Contrast, at every point in the loop rather than at one of them.
  *
  * **This is the assertion the obvious rig cannot make, and it is why the two
@@ -689,7 +726,7 @@ for (const n of notes) console.log(`  note: ${n}`);
 console.log(`Wrote ${OUT}`);
 
 if (failures.length === 0) {
-  console.log("\nPASS — 10 assertions.");
+  console.log("\nPASS — 12 assertions.");
 } else {
   console.error(`\nFAILED: ${failures.length} finding(s)`);
   for (const f of failures) console.error(`  [${f.assertion}] ${f.where}: ${f.message}`);

@@ -1,0 +1,153 @@
+{
+  "url": "http://localhost:3131",
+  "mode": "loop",
+  "geometry": {
+    "found": true,
+    "mode": "loop",
+    "containerW": 987,
+    "railW": 2053,
+    "trackWidths": [
+      1026,
+      1026
+    ],
+    "tracks": 2,
+    "cards": 6,
+    "cardW": 302,
+    "cardH": 207,
+    "pitch": 342,
+    "overflow": "hidden",
+    "duration": "21s",
+    "panels": [
+      "review-1",
+      "review-2",
+      "review-3"
+    ],
+    "links": [
+      "#review-1",
+      "#review-2",
+      "#review-3",
+      "#review-1",
+      "#review-2",
+      "#review-3"
+    ],
+    "echoInert": true,
+    "echoHidden": "true",
+    "cardText": [
+      {
+        "clipped": false,
+        "saysSo": false,
+        "text": "The place is secluded and gives you a feel of actually being in the jungle.",
+        "circles": [],
+        "srRating": null
+      },
+      {
+        "clipped": false,
+        "saysSo": false,
+        "text": "One of the best forests for seeing tigers and one of the best resorts to stay in Tadoba.",
+        "circles": [],
+        "srRating": null
+      },
+      {
+        "clipped": false,
+        "saysSo": false,
+        "text": "Spacious rooms and bathrooms. Food is very good and the staff is very helpful and courteous.",
+        "circles": [],
+        "srRating": null
+      },
+      {
+        "clipped": false,
+        "saysSo": false,
+        "text": "The place is secluded and gives you a feel of actually being in the jungle.",
+        "circles": [],
+        "srRating": null
+      },
+      {
+        "clipped": false,
+        "saysSo": false,
+        "text": "One of the best forests for seeing tigers and one of the best resorts to stay in Tadoba.",
+        "circles": [],
+        "srRating": null
+      },
+      {
+        "clipped": false,
+        "saysSo": false,
+        "text": "Spacious rooms and bathrooms. Food is very good and the staff is very helpful and courteous.",
+        "circles": [],
+        "srRating": null
+      }
+    ]
+  },
+  "contrast": {
+    "floor": 4.5,
+    "phases": [
+      {
+        "phase": 0,
+        "offset": 0,
+        "boxes": 6,
+        "worst": 7.41
+      },
+      {
+        "phase": 1,
+        "offset": -128,
+        "boxes": 8,
+        "worst": 6.91
+      },
+      {
+        "phase": 2,
+        "offset": -256,
+        "boxes": 8,
+        "worst": 6.91
+      },
+      {
+        "phase": 3,
+        "offset": -385,
+        "boxes": 6,
+        "worst": 7.26
+      },
+      {
+        "phase": 4,
+        "offset": -513,
+        "boxes": 8,
+        "worst": 6.8
+      },
+      {
+        "phase": 5,
+        "offset": -641,
+        "boxes": 6,
+        "worst": 6.8
+      },
+      {
+        "phase": 6,
+        "offset": -769,
+        "boxes": 8,
+        "worst": 6.8
+      },
+      {
+        "phase": 7,
+        "offset": -898,
+        "boxes": 8,
+        "worst": 6.8
+      }
+    ],
+    "worst": {
+      "ratio": 6.8,
+      "px": [
+        76,
+        80,
+        75
+      ],
+      "run": ".review-quote p",
+      "phase": 4
+    }
+  },
+  "notes": [
+    "loop: 73.14px of travel in 1.4s (52px/s), duration 21s",
+    "no review carries a rating yet, so the gold circles are unmeasured on the page — `content/home.ts` has no `rating` on any entry (this is expected until the client's own set arrives)",
+    "panel review-1: 75 chars against the card's 75, box 544px, z 60",
+    "centring: 224px left, 224px right, in a 1440px section",
+    "contrast over 8 phases: worst 6.8:1 (.review-quote p, phase 4), per phase 7.41 6.91 6.91 7.26 6.8 6.8 6.8 6.8",
+    "reduced motion: rail still (0px), 3 card(s) in frame",
+    "360x800: card 279px in 310px, 31px of peek"
+  ],
+  "failures": []
+}
