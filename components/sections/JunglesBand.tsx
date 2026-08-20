@@ -374,9 +374,25 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
                 The scale is unchanged from the cream arrangement (2.8rem at the
                 top against `TwoToneHeading`'s 3.5rem): the client asked for this
                 heading smaller on 19 Aug and has not asked for it back.
+
+                **`deep` — client, 20 Aug 2026:** *"the 3D effect on … 02-The
+                Jungles section is not noticeable as it is on the last section."*
+                Measured at 1440x900 before anything was changed, and he was
+                right by exactly the amount the arithmetic predicts: a word rises
+                `LINES.from` of its own box, so this 45px heading travelled
+                **56px** against the closing chapter's 70px heading travelling
+                **84px**. Same rule, same duration, two-thirds the movement.
+
+                **The size is not the lever here, because the size is his** — see
+                the paragraph above. `deep` starts each word further below its
+                own mask instead: **76px** of travel at the same duration and on
+                the same curve, on a heading that is set exactly as he set it.
+                `LINES.deepFrom` carries the number; `app/globals.css` carries
+                the rule and why it wins on specificity rather than order.
               */}
                 <SplitLines
                   as="h2"
+                  deep
                   className="mt-6 max-w-[24ch] font-[family-name:var(--font-display)] text-[clamp(1.6rem,3.4vw,2.8rem)] font-light leading-[1.1] tracking-[-0.01em] text-[color:var(--bg)]"
                 >
                   {copy.quote}

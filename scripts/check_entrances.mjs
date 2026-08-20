@@ -147,6 +147,47 @@ const SNAPSHOT = () => {
   };
 
   /**
+   * How much of the welcome screen is still painted over the viewport, 0 to 1.
+   *
+   * **On screen and visible are not the same thing, and this rig assumed they
+   * were until 20 Aug 2026.** The welcome curtain is `position: fixed; inset: 0`
+   * over the whole page for `WELCOME.hold` and then fades over `WELCOME.fade`,
+   * so for that window the first fold is on screen and cannot be seen. That is
+   * the whole licence `components/motion/useCurtainReveal.ts` operates under —
+   * the hero's headline is staged there, deliberately, because nobody is looking
+   * at it — and without this reading `stagedInView` would report the effect
+   * working as a flicker.
+   *
+   * Measured as computed opacity rather than assumed from the clock, because the
+   * clock is what the rig would have to model and the opacity is what the
+   * visitor actually gets: a curtain that failed to fade reads 1 here forever,
+   * which is a different failure that `scripts/check_welcome.mjs` owns.
+   */
+  const curtain = document.querySelector("[data-welcome]");
+  const curtainOpacity = curtain
+    ? round(Number(getComputedStyle(curtain).opacity) || 0)
+    : 0;
+  /**
+   * **Still going, not still opaque, and the difference is the whole of it.**
+   *
+   * An opacity threshold was tried first and is wrong twice over. It is
+   * arbitrary — the fade runs on `--enter-ease`, which is heavily front-loaded,
+   * so the curtain is at 0.04 three-quarters of the way through and spends its
+   * last 150ms in the noise below any number anyone would pick. And it measures
+   * the wrong thing: what licenses the hero's staging is not that the curtain is
+   * *dark* but that the welcome is *unfinished*, which is a binary fact the
+   * browser will simply state.
+   *
+   * The rise begins at `CURTAIN_LINES.delay` — three-quarters through the fade —
+   * so the headline has left `pending` about 160ms before this goes false. The
+   * window this opens is therefore bounded by the welcome screen's own length
+   * and closes on its own; everything after it is measured with no exemption at
+   * all, at every scroll position, for the whole of the page.
+   */
+  const fade = curtain?.getAnimations?.()[0];
+  const curtained = Boolean(fade) && fade.playState !== "finished";
+
+  /**
    * How far each word is currently displaced inside its own mask, in pixels,
    * measured off rendered boxes. The mask does not move; the span inside it
    * does. 0 is a word at rest; anything else is a word mid-reveal or stuck.
@@ -163,15 +204,31 @@ const SNAPSHOT = () => {
     staged: document.querySelectorAll('[data-enter="pending"]').length,
     stagedImages: document.querySelectorAll('[data-image-enter="pending"]').length,
     stagedHeadlines: document.querySelectorAll('[data-lines-enter="pending"]').length,
+    /** How much of the welcome curtain is still painted. See above. */
+    curtainOpacity,
     /**
      * Staged *while the visitor can see it* — the flicker, and the only staging
      * that is ever wrong. Everything below the fold is supposed to be staged.
+     *
+     * **"Can see it" excludes anything staged while the welcome screen is still
+     * running**, which is on screen and not yet done with the viewport; see
+     * `curtained` above for why that is a play state and not an opacity. The
+     * hero's headline is staged from hydration until three-quarters of the way
+     * through the fade (`CURTAIN_LINES`), so any threshold inside the fade would
+     * report the shipped, intended behaviour as a defect.
+     *
+     * The moment the welcome has finished this is absolute again, at every
+     * scroll position, for the rest of the page — which is the 4 Aug finding
+     * intact. That flicker is settled text moving in front of somebody, and it
+     * happens on a page with nothing over it.
      */
-    stagedInView: [
-      ...document.querySelectorAll(
-        '[data-enter="pending"], [data-image-enter="pending"], [data-lines-enter="pending"]',
-      ),
-    ].filter(onScreen).length,
+    stagedInView: curtained
+      ? 0
+      : [
+          ...document.querySelectorAll(
+            '[data-enter="pending"], [data-image-enter="pending"], [data-lines-enter="pending"]',
+          ),
+        ].filter(onScreen).length,
     settled: document.querySelectorAll('[data-enter="in"]').length,
     settledImages: document.querySelectorAll('[data-image-enter="in"]').length,
     settledHeadlines: document.querySelectorAll('[data-lines-enter="in"]').length,
@@ -554,9 +611,44 @@ async function checkParallax(browser, { reducedMotion = false } = {}) {
   };
 }
 
-/** The hero, which is the LCP element and must never be tweened. */
+/**
+ * The hero: its photograph is the LCP element and must never be tweened, and its
+ * headline now rises once, behind the welcome curtain.
+ *
+ * **Read twice, because one reading cannot tell the two failures apart.** Taken
+ * only at load, a settled headline could mean "the reveal is finished" or "the
+ * reveal never happened" — and the second is what this page shipped until 20 Aug
+ * 2026 and what the client reported. Taken only at the end, a headline stuck
+ * behind its mask for two seconds in front of a visitor would pass. So: the
+ * first reading is the photograph's guarantee, unchanged; the second is the
+ * headline's, and it asserts the reveal both *played* and *finished*.
+ */
 async function checkHero(browser) {
   const { context, page } = await open(browser, { width: 1440, height: 900 });
+
+  /*
+   * The reveal's own window, read off the page's dials rather than restated
+   * here. `app/layout.tsx` publishes all three onto <html> out of
+   * `lib/motion.ts`, so a rig that reads them cannot disagree with the build it
+   * is measuring — the alternative is a second copy of three numbers, which is
+   * the shape of drift this project has caught four times.
+   *
+   * `CURTAIN_LINES.delay` is `hold + fade * 0.75` and is deliberately NOT
+   * published as a custom property: no stylesheet needs it. The margin below
+   * covers it and then some, which is the right trade for a rig whose job is
+   * "was it finished", not "was it finished to the millisecond".
+   */
+  const dials = await page.evaluate(() => {
+    const cs = getComputedStyle(document.documentElement);
+    const seconds = (name) => parseFloat(cs.getPropertyValue(name)) || 0;
+    return {
+      hold: seconds("--welcome-hold"),
+      fade: seconds("--welcome-fade"),
+      slow: seconds("--lines-slow-duration"),
+      now: performance.now() / 1000,
+    };
+  });
+
   const hero = await page.evaluate(() => {
     const section = document.querySelector("main > section");
     const frame = section.querySelector("[data-image-mask]")?.parentElement;
@@ -575,20 +667,60 @@ async function checkHero(browser) {
       imageScale: img ? getComputedStyle(img.parentElement).scale : null,
       imageVisible: img ? Number(getComputedStyle(img).opacity) : null,
       imageComplete: img ? img.complete : null,
-      // The headline is on screen at mount, so it must be left alone for the
-      // same reason: it is the flicker, and it would put a 1s transition on the
-      // LCP clock. Both the state and the rendered offset, because either one
-      // alone could be the wrong half of the story.
+      // The headline's state as the curtain is going. Both the attribute and the
+      // rendered offset, because either one alone could be the wrong half of the
+      // story — and neither is asserted here any more. What this reading is for
+      // is the record: `hero-at-load.png` beside it shows what the visitor sees
+      // at this instant, and the numbers say why.
       headlineState: headline?.getAttribute("data-lines-enter") ?? null,
       headlineWordOffset:
         inner && word
           ? Math.round(inner.getBoundingClientRect().top - word.getBoundingClientRect().top)
           : null,
+      curtainOpacity: Number(
+        getComputedStyle(document.querySelector("[data-welcome]") ?? document.body).opacity,
+      ),
     };
   });
   await shot(page, "hero-at-load");
+
+  /*
+   * Second reading: past the end of the reveal, with margin. The wait is
+   * computed from the page's own dials plus a second, and taken from `load`
+   * rather than from now, so a slow first paint cannot shorten it.
+   */
+  /*
+   * Two seconds of margin, and one of them is not slack. The reveal runs on the
+   * welcome curtain's own animation clock, which starts at first paint — 380ms
+   * behind navigation on a local production build and further behind on a cold
+   * one — while this wait is taken from `load`. The rest is ordinary headroom.
+   */
+  const endsAt = dials.hold + dials.fade + dials.slow + 2;
+  await page.waitForTimeout(Math.max(0, Math.round((endsAt - dials.now) * 1000)));
+  const settled = await page.evaluate(() => {
+    const headline = document.querySelector("main > section h1");
+    const words = [...(headline?.querySelectorAll("[data-word]") ?? [])];
+    const offsets = words.map((word) => {
+      const inner = word.querySelector("[data-line-inner]");
+      return inner
+        ? Math.round(inner.getBoundingClientRect().top - word.getBoundingClientRect().top)
+        : 0;
+    });
+    return {
+      headlineState: headline?.getAttribute("data-lines-enter") ?? null,
+      // Every word, not the first: a reveal that settled line one and stranded
+      // line three is exactly the failure a single sample cannot see.
+      worstWordOffset: offsets.length ? Math.max(...offsets.map(Math.abs)) : null,
+      words: offsets.length,
+      curtainOpacity: Number(
+        getComputedStyle(document.querySelector("[data-welcome]") ?? document.body).opacity,
+      ),
+    };
+  });
+  await shot(page, "hero-after-reveal");
+
   await context.close();
-  return hero;
+  return { ...hero, revealWindowS: Math.round(endsAt * 100) / 100, settled };
 }
 
 /** No JavaScript at all — the fail-safe the whole arrangement exists for. */
@@ -692,12 +824,38 @@ if (report.reducedMotion.afterScroll.invisible > 0)
 if (report.reducedMotion.afterScroll.displacedWords > 0)
   failures.push("reduced motion: a word was left outside its own mask");
 
+// The photograph, unchanged and not negotiable: it is the LCP element, and
+// Lighthouse stops the timer on the final frame of any animation applied to it.
 if (report.hero.state !== null) failures.push(`hero: was staged (${report.hero.state})`);
 if (report.hero.maskCover > 0.05) failures.push(`hero: a mask covered ${report.hero.maskCover}`);
-if (report.hero.headlineState !== null)
-  failures.push(`hero: the headline was staged (${report.hero.headlineState})`);
-if (report.hero.headlineWordOffset !== 0)
-  failures.push(`hero: the headline is displaced by ${report.hero.headlineWordOffset}px`);
+
+/*
+ * The headline, which since 20 Aug 2026 rises once as the welcome curtain lifts.
+ *
+ * **Two assertions, and the first one is the one that would have caught what the
+ * client caught.** Until that date this rig asserted the headline was never
+ * staged — which was true, and passed, on a page where the effect the client
+ * believed he had asked for was simply not happening. "It is configured
+ * correctly" and "it moved" are different questions and this file's own header
+ * says so; the old check was asking the first about a mechanism that was off.
+ *
+ * So: it must have played (the attribute reaches `in`), and it must have
+ * finished (every word back at zero, not just the first). Requiring `in` rather
+ * than accepting `null` is deliberate even though `useCurtainReveal` may
+ * legitimately decline on a slow device: this rig runs against a local
+ * production build on a developer machine, where hydration is hundreds of
+ * milliseconds inside a 1.45s curtain. If it ever declines *here*, something is
+ * broken, and a rig that shrugged at that would be the old rig again.
+ */
+if (report.hero.settled.headlineState !== "in")
+  failures.push(
+    `hero: the headline's reveal did not play — it was ${report.hero.settled.headlineState ?? "never staged"} ` +
+      `at ${report.hero.revealWindowS}s, past the end of its own window`,
+  );
+if (report.hero.settled.worstWordOffset !== 0)
+  failures.push(
+    `hero: a word is still ${report.hero.settled.worstWordOffset}px outside its mask at ${report.hero.revealWindowS}s`,
+  );
 
 if (report.parallax.elements === 0) failures.push("parallax: nothing on the page is parallaxed");
 // **Every element, named.** The old rule was "fail if nothing moved", which one
@@ -760,8 +918,12 @@ for (const run of runs.concat(report.reducedMotion)) {
   );
 }
 console.log(
-  `hero            state=${report.hero.state} maskCover=${report.hero.maskCover} ` +
-    `headline=${report.hero.headlineState} headlineOffset=${report.hero.headlineWordOffset}px`,
+  `hero            state=${report.hero.state} maskCover=${report.hero.maskCover}\n` +
+    `                headline at load: ${report.hero.headlineState} ` +
+    `offset=${report.hero.headlineWordOffset}px curtain=${report.hero.curtainOpacity}\n` +
+    `                headline at ${report.hero.revealWindowS}s: ${report.hero.settled.headlineState} ` +
+    `worstOffset=${report.hero.settled.worstWordOffset}px over ${report.hero.settled.words} words ` +
+    `curtain=${report.hero.settled.curtainOpacity}`,
 );
 console.log(
   `parallax        ${report.parallax.moved}/${report.parallax.elements} moved (every one must), ` +

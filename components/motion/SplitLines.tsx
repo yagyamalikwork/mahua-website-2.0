@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect } from "react";
 import { DURATION } from "@/lib/motion";
+import { useCurtainReveal } from "./useCurtainReveal";
 import { useInView } from "./useInView";
 
 /**
@@ -28,6 +29,15 @@ import { useInView } from "./useInView";
  * alone, which is the 4 Aug flicker fix and also what keeps the hero headline
  * off the LCP clock.
  *
+ * **`curtained` is the one exception to that, added 20 Aug 2026, and it does not
+ * weaken the rule.** It swaps the scroll observer for a timer keyed to the
+ * welcome screen, which is an opaque curtain over the whole viewport while the
+ * staging happens — so the premise the rule rests on, that somebody is looking
+ * at this, is false for that window and false in a way the code can check. It
+ * declines to run rather than run late. `useCurtainReveal` carries the argument
+ * in full, including why the LCP objection does not apply to it and would have
+ * applied to the obvious CSS-only version.
+ *
  * **On rising twice.** Six sections wrap a `TwoToneHeading` in an `<Enter>`, so
  * the headline sits inside a block that rises 16px of its own. That is kept, and
  * it is what the reference does too: it ships SplitText for per-line reveals
@@ -47,6 +57,8 @@ export function SplitLines({
   className,
   delay = 0,
   slow = false,
+  deep = false,
+  curtained = false,
   dim,
   dimColour = "var(--dim)",
 }: {
@@ -55,6 +67,33 @@ export function SplitLines({
   className?: string;
   delay?: number;
   slow?: boolean;
+  /**
+   * Start each word further below its own mask, so the headline travels further
+   * without being set larger.
+   *
+   * **A headline's travel is its type size times `LINES.from`**, which means the
+   * effect is quieter on a smaller heading whether or not that is what anyone
+   * intended. `02 · The Jungles` is the case: 45px type against the closing
+   * chapter's 70px, so 56px of travel against 84px, measured on the shipped page
+   * — and the client reported exactly that as the effect being *"not
+   * noticeable"* there on 20 Aug 2026. His own ruling of 19 Aug set that heading
+   * smaller, so the size is not available as a lever; this is.
+   *
+   * `LINES.deepFrom` carries the number and the arithmetic. Use it where a
+   * heading has to hold its own beside a much larger one, not as a way of making
+   * an entrance louder — non-negotiable #4 has not moved.
+   */
+  deep?: boolean;
+  /**
+   * Reveal on a timer as the welcome screen lifts, rather than on scroll.
+   *
+   * **For the hero's headline and nothing else today.** `useInView` will not
+   * stage anything already on screen at mount — a rule worth keeping, see the
+   * note there — so without this the page's largest headline is the one place
+   * this effect does not happen at all. `useCurtainReveal` carries the whole
+   * argument, including why it declines to run rather than run late.
+   */
+  curtained?: boolean;
   /**
    * The reference site's signature move: one run of words inside the headline
    * dropped to a lighter tone while the rest stays ink. Passed as the words
@@ -73,7 +112,18 @@ export function SplitLines({
    */
   dimColour?: string;
 }) {
-  const { ref, state } = useInView<HTMLElement>();
+  const { ref, state: onScroll } = useInView<HTMLElement>();
+  const onCurtain = useCurtainReveal(curtained);
+  /*
+   * One state, from one of two sources, never both. `useInView` returns `rest`
+   * forever for anything on screen at mount — which every `curtained` headline
+   * is, by definition — so the two could safely be OR'd; choosing between them
+   * explicitly is what stops that being an accident of the other hook's
+   * behaviour rather than a decision made here. The ref stays attached either
+   * way: its own effect bails on the first line for an on-screen element, so it
+   * costs an observer that is never created.
+   */
+  const state = curtained ? onCurtain : onScroll;
 
   useEffect(() => {
     const el = ref.current;
@@ -119,6 +169,12 @@ export function SplitLines({
       // than `data-enter`, because that one would add the block rise and fade on
       // top of the per-line reveal — a third movement on one headline.
       {...(state === "rest" ? {} : { "data-lines-enter": state })}
+      /* Written whether or not this headline is ever staged, and empty rather
+         than "true": the rule it selects only exists under
+         `[data-lines-enter="pending"]`, so on its own it is inert, and an
+         attribute whose presence depends on two conditions is one nobody can
+         check in a screenshot of the markup. */
+      {...(deep ? { "data-lines-deep": "" } : {})}
       style={
         slow
           ? ({ "--lines-duration": "var(--lines-slow-duration)" } as React.CSSProperties)

@@ -31,9 +31,16 @@ no mount here.
 
 ### The numbers
 
-**477 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
+**482 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
 screen.** Contrast: 318 probes, 0 failures across three routes. Resolution: 0 under-served. First-load JS
-**167.5 KB brotli, delta 0** — every effect added here is CSS. Initial transfer 669 KB at 390, 965 KB at 1440.
+**167.7 KB brotli** — 167.5 through the restructure itself, where every effect was CSS, plus 0.2 KB for the
+hero's reveal hook on 20 Aug. Initial transfer 669 KB at 390, 965 KB at 1440.
+
+**Three client changes landed on top of it on 20 Aug 2026** — the hero's headline now rises as the welcome
+screen lifts (it did not move at all before, by `useInView`'s design), `02 · The Jungles`' heading travels
+83px against the closing chapter's 84px without its type size changing, and the Experiences cards take the
+hover zoom. Density is identical to the decimal; LCP was measured against a control and did not move.
+`docs/DECISIONS.md` §21.9, `docs/reviews/2026-08-20-reveals-and-zoom/README.md`.
 
 **`imagesPerScreen` went 2.2 → 1.65 → 2.05 across this work.** The dip is the lesson: removing six chapters
 took thirteen photographs and only ~5 screens of scroll. It is the figure the client's original density

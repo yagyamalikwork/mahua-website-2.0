@@ -9,6 +9,7 @@ import {
   ENTER,
   FLOAT,
   IMAGE_FROM,
+  LINES,
   LIVING,
   PHOTO_ZOOM,
   RAISE,
@@ -88,6 +89,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // the component swaps between them rather than carrying a number.
           "--lines-duration": `${DURATION.reveal}s`,
           "--lines-slow-duration": `${DURATION.revealSlow}s`,
+          // How far below its own mask a word starts. Two values for the same
+          // reason as the two durations above: one headline on the page needs a
+          // deeper rise than its type size would otherwise give it, and the
+          // component swaps between them rather than carrying a number. See
+          // `LINES` for the measurement that produced the second one.
+          "--lines-from": LINES.from,
+          "--lines-deep-from": LINES.deepFrom,
           // The emblem's single half-turn as the page arrives. Same terms again:
           // the number lives in `lib/motion.ts`, the keyframes in
           // `app/globals.css`, and neither can drift from the other.

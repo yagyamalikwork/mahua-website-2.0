@@ -300,6 +300,161 @@ describe("SplitLines", () => {
     expect(container.querySelector("p")).not.toBeNull();
     expect(container.querySelector("h2")).toBeNull();
   });
+
+  it("marks a deep reveal without touching anything a reader can see", () => {
+    // `deep` is one attribute and one CSS rule — the words themselves are
+    // identical, which is the whole point of it being available to a heading
+    // whose size the client fixed. If this ever starts changing the markup, the
+    // rule it selects has moved into the component.
+    withReducedMotion(false);
+    const plain = renderToStaticMarkup(<SplitLines as="h2">{HEADLINE}</SplitLines>);
+    const deep = renderToStaticMarkup(
+      <SplitLines as="h2" deep>
+        {HEADLINE}
+      </SplitLines>,
+    );
+    expect(deep).toContain("data-lines-deep");
+    expect(plain).not.toContain("data-lines-deep");
+    expect(deep.replace(/ data-lines-deep=""/, "")).toBe(plain);
+  });
+});
+
+/**
+ * The hero's headline, which is the one on the page that is already on screen
+ * when the page loads — so `useInView` leaves it alone, and until 20 Aug 2026
+ * that meant the effect the client believed he had asked for was not happening
+ * there at all. `useCurtainReveal` is the exception, and these are the three
+ * things it must never get wrong.
+ */
+describe("SplitLines, revealed as the welcome curtain lifts", () => {
+  /**
+   * How far into the welcome screen's fade the page is.
+   *
+   * In a browser the hook reads this off the curtain's own `Animation`; jsdom has
+   * no `getAnimations`, so it takes the documented fallback and reads
+   * `performance.now()` — which is what makes it stubbable here. The 380ms gap
+   * between the two clocks is a browser fact and is measured by
+   * `scripts/check_entrances.mjs`, not by this file.
+   */
+  function atPageAge(ms: number) {
+    vi.spyOn(performance, "now").mockReturnValue(ms);
+  }
+
+  /**
+   * The curtain itself. **Without one there is no reveal at all**, which is the
+   * hook's fail-safe rather than an implementation detail: the whole licence for
+   * staging text somebody could otherwise see is that something opaque is over
+   * it. Rendered here as the bare hook the component looks for.
+   */
+  function withCurtain() {
+    const el = document.createElement("div");
+    el.setAttribute("data-welcome", "");
+    document.body.appendChild(el);
+    return () => el.remove();
+  }
+
+  it("stages an on-screen headline while the curtain still covers it, then settles it", () => {
+    withReducedMotion(false);
+    const removeCurtain = withCurtain();
+    vi.useFakeTimers();
+    // Hydrated a fifth of a second in: deep inside `WELCOME.hold`, so the words
+    // are moved behind a cream screen nobody can see through.
+    atPageAge(200);
+    const { container } = render(
+      <SplitLines as="h1" curtained>
+        {HEADLINE}
+      </SplitLines>,
+    );
+    const heading = () => container.querySelector("h1");
+
+    // Staged on the next frame rather than in the effect body, so the browser
+    // has painted the staged state before the settled one is written.
+    expect(heading()?.getAttribute("data-lines-enter")).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(20);
+    });
+    expect(
+      heading()?.getAttribute("data-lines-enter"),
+      "the hero headline was never staged, so its reveal cannot play",
+    ).toBe("pending");
+
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    expect(
+      heading()?.getAttribute("data-lines-enter"),
+      "the hero headline was staged and never settled — a headline behind a mask that never lifts",
+    ).toBe("in");
+    expect(visibleText(heading() as HTMLElement)).toBe(HEADLINE);
+    vi.useRealTimers();
+    removeCurtain();
+  });
+
+  it("declines when there is no curtain to hide the staging behind", () => {
+    // The property the whole exception rests on, asserted rather than assumed.
+    // A page that does not mount the welcome screen — any future route, or this
+    // one with it removed — gets `useInView`'s answer, which is to leave an
+    // on-screen headline alone.
+    withReducedMotion(false);
+    vi.useFakeTimers();
+    atPageAge(200);
+    const { container } = render(
+      <SplitLines as="h1" curtained>
+        {HEADLINE}
+      </SplitLines>,
+    );
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    expect(
+      container.querySelector("h1")?.getAttribute("data-lines-enter"),
+      "a headline was staged on a page with nothing covering it",
+    ).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("declines entirely if the curtain has already started to lift", () => {
+    // The 4 Aug 2026 finding, kept: staging text somebody can see is a flicker.
+    // A slow device that hydrates late must get the page exactly as it was
+    // before this prop existed — no reveal, not a late one.
+    withReducedMotion(false);
+    const removeCurtain = withCurtain();
+    vi.useFakeTimers();
+    atPageAge(3000);
+    const { container } = render(
+      <SplitLines as="h1" curtained>
+        {HEADLINE}
+      </SplitLines>,
+    );
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    expect(
+      container.querySelector("h1")?.getAttribute("data-lines-enter"),
+      "a headline was staged after the curtain had gone — that is the flicker",
+    ).toBeNull();
+    expect(visibleText(container.querySelector("h1") as HTMLElement)).toBe(HEADLINE);
+    vi.useRealTimers();
+    removeCurtain();
+  });
+
+  it("gives a reduced-motion visitor nothing at all", () => {
+    withReducedMotion(true);
+    const removeCurtain = withCurtain();
+    vi.useFakeTimers();
+    atPageAge(200);
+    const { container } = render(
+      <SplitLines as="h1" curtained>
+        {HEADLINE}
+      </SplitLines>,
+    );
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    expect(container.querySelector("h1")?.getAttribute("data-lines-enter")).toBeNull();
+    vi.useRealTimers();
+    removeCurtain();
+  });
 });
 
 describe("the JavaScript budget", () => {

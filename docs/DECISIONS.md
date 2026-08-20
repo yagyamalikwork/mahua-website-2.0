@@ -2233,3 +2233,54 @@ the copy lands.** If it still fails afterwards, the extra words were not the pro
 - **The joined panels read as two photographs, unmistakably** — a warm lit veranda beside a cool grey-green
   exterior is a diptych, not a seam. The gutter was defending against a risk *those two frames* do not
   present; it would come back with two frames of the same place at the same hour.
+
+### 21.9 The three reveals, 20 Aug 2026 — and a headline's travel is its type size
+
+Client, after looking at the deployed page: *"the 3D effect on the section where our website opens (The
+Journey Begins) and 02-The Jungles section is not noticeable as it is on the last section where we have our
+reviews."* Evidence: `docs/reviews/2026-08-20-reveals-and-zoom/README.md`.
+
+**Measured before it was believed, and he was understating half of it.** A `SplitLines` word rises
+`LINES.from` (115%) of its own box, so travel is a pure function of type size: at 1440x900 the closing
+chapter's 70px heading travels **84px**, `02 · The Jungles`' 45px heading travels **56px** — and the hero's
+92px headline travelled **0px**, because `useInView` refuses to stage anything on screen at mount and the
+hero always is. **This is the general lesson: an effect defined as a percentage of type is quieter on smaller
+type whether or not anybody decided that.**
+
+- **The hero — `curtained`.** `components/motion/useCurtainReveal.ts`. The 4 Aug flicker rule says never
+  stage text somebody is looking at; the welcome screen is an opaque curtain over the whole viewport, so for
+  that window the premise is false **and the code can check it**. It declines rather than running late, and
+  declines outright with no `[data-welcome]` in the document.
+
+  **The clock was wrong first time and that is the part worth keeping.** `performance.now()` counts from
+  navigation; the curtain's fade starts at first paint, **380ms later**. Timed off the wrong one, the rise
+  began while the curtain was still fully opaque and had 13px of its 108px left when it cleared. It reads
+  `Animation.currentTime` off the curtain now: staged while opaque in every run, rise begins ~140ms before
+  the curtain clears, ~1,260ms of the 1,400ms rise in plain sight.
+
+  **LCP is unmoved, against a control.** 1,592ms with, 1,612ms without, both equal to FCP and both naming the
+  `<h1>` — the metric's floor. The obvious CSS-only build would have hidden that `<h1>` until 1.9s.
+
+- **The Jungles — `deep`.** `LINES.deepFrom` (170%) starts each word further below its own mask: **83px** of
+  travel against the close's 84px, same duration, same curve. **The type size was not touched because the
+  type size is the client's** (19 Aug, asking for it smaller) — solved to his reference rather than nudged
+  toward it.
+
+- **The Experiences cards — the zoom.** *"Exactly like the one we added to the property cards where the image
+  zooms and the text stays."* `ImageReveal static` + `no-float` + `zoom-from-parent`; 1.06 from every point
+  on the card, 1.000 under reduced motion, frame movement 0px.
+
+  **`zoom-from-parent` is not an enhancement on this card, it is the only selector that ever matches** —
+  established by removing it and watching all three probe points drop to 1.000, not by reading the CSS. The
+  generic rule is `[data-image-frame]:hover` and this frame is `absolute inset-0 -z-10`, a descendant painted
+  behind the content; `:hover` matches the hit element and its **ancestors**, so the frame is never hovered
+  anywhere on the card. **Every composition that puts its photograph behind its content needs this class.**
+
+**Both rigs that touch this got stronger, and one of them had been passing while describing nothing.**
+`check_entrances.mjs` asserted the hero headline was *never staged* — true, green, and a perfect description
+of a page where the client's effect was simply absent. It now asserts the reveal **played** and **finished**,
+every word rather than the first. And `stagedInView` discounts staging behind the welcome by the curtain's
+**play state**, never by an opacity threshold: the fade is front-loaded, so the curtain sits at 0.04
+three-quarters through and spends its last 150ms below any number anyone would pick.
+`check_experience_strip.mjs` gained assertion 13, the hover zoom from three points plus its reduced-motion
+and no-float arms, watched failing.

@@ -244,6 +244,94 @@ export const WELCOME = {
 } as const;
 
 /**
+ * How far below its own mask a word starts before it rises — `SplitLines`, and
+ * the movement the client calls *"the 3D raised effect"*.
+ *
+ * **Both values are percentages of the word's own box, so a headline's travel is
+ * its type size times one of these** — which is exactly why the two numbers
+ * exist. Measured on the shipped page at 1440x900, 20 Aug 2026: the closing
+ * chapter's heading is 70px type and travels **84px**; `02 · The Jungles`' is
+ * 45px type and travels **56px**, two-thirds of it, on the identical rule. The
+ * client saw that difference and reported it as the effect being *"not
+ * noticeable"* on the second — which it is, by a third, and the arithmetic says
+ * so.
+ *
+ * `deepFrom` is the answer to that **without touching a type size the client set
+ * himself** (19 Aug 2026, asking for the Jungles heading smaller): 45px x 1.70 =
+ * **76px** of travel against the close's 84px, on the same duration and the same
+ * curve. Solved to the target rather than nudged towards it — the standing
+ * instruction on this project since the forest tint (`docs/DECISIONS.md` §15).
+ *
+ * **`from` may not go below 115%**, and that is a layout constraint rather than
+ * a stylistic one: the mask is `overflow-hidden` on a box padded by `0.16em` so
+ * descenders can exist inside it, and a start position that does not clear that
+ * padding leaves the tails of g, y and p showing above the mask at the moment
+ * the word begins to move.
+ *
+ * CSS values, like `ENTER`: `app/layout.tsx` writes them onto <html> as
+ * `--lines-from` and `--lines-deep-from`, and `app/globals.css` reads them back.
+ * The numbers live here and only here.
+ */
+export const LINES = {
+  from: "115%",
+  deepFrom: "170%",
+} as const;
+
+/**
+ * When a headline that is **already on screen at load** may rise — the hero's,
+ * and today the hero's alone.
+ *
+ * `components/motion/useInView.ts` refuses to stage anything on screen at mount,
+ * for a good reason measured on 4 Aug 2026: staging settled text means dropping
+ * it out of view in front of somebody who is looking at it, which is a flicker.
+ * **The welcome screen is what makes the hero an exception** — it is an opaque
+ * cream curtain over the whole viewport for `WELCOME.hold`, so for that window
+ * the staging is not merely quick, it is *unobservable*.
+ *
+ * **Both are measured on the curtain's own animation clock, not the document's**
+ * — `useCurtainReveal` reads `Animation.currentTime` off the welcome screen, and
+ * the gap between the two is 380ms on a local production build, which was enough
+ * to spend the whole rise behind the curtain the first time this shipped. The
+ * note there carries the trace.
+ *
+ * So both numbers are read off `WELCOME` rather than chosen:
+ *
+ * - **`stageBy`** is the moment the curtain starts to thin. Past it, staging
+ *   would be visible, so `useCurtainReveal` declines to stage at all and the
+ *   headline stays exactly as it is today. That is the guard that keeps the
+ *   4 Aug finding true: a slow device that hydrates late gets no reveal rather
+ *   than a flicker.
+ * - **`delay`** is three-quarters of the way through the fade. Later and the
+ *   hero would show for a beat with a hole where its headline goes; earlier and
+ *   the movement is spent behind the curtain — `ENTER.ease` has travelled 58% of
+ *   its distance by a quarter of the way through, so an entrance that starts as
+ *   the fade begins is 93% finished by the time anyone can see it. At this value
+ *   the words are ~35% risen when the curtain clears, and the remaining 1.2s of
+ *   a `slow` reveal happens in plain sight.
+ *
+ * **LCP is unaffected, and that was measured against a control rather than
+ * argued.** The words are server-rendered at rest and painted at rest; script
+ * only stages them *after* hydration, by which time the browser has already
+ * recorded the paint. `scripts/measure_lcp_arms.mjs`, medians of five at
+ * 1440x900, on two builds one commit apart: **LCP 1,592ms with this and 1,612ms
+ * without**, both equal to FCP to the millisecond and both naming the `<h1>` —
+ * which is the metric's floor and cannot be improved on. The hero photograph's
+ * own arrival was 5,359ms against 5,370ms. Both differences are inside the run
+ * range.
+ *
+ * The obvious simpler build — a CSS `animation` with a backwards fill, no
+ * JavaScript at all — does not have this property. It would hide the page's
+ * largest text until 1.9s, and on this page LCP resolves to that `<h1>` at every
+ * desktop width.
+ */
+export const CURTAIN_LINES = {
+  /** Seconds from page load. */
+  delay: WELCOME.hold + WELCOME.fade * 0.75,
+  /** Seconds from page load. Past this, nothing is staged at all. */
+  stageBy: WELCOME.hold,
+} as const;
+
+/**
  * The lantern that hangs out of `after-dark` into `06 · The Lantern Hour`, and
  * swings when a visitor pushes it.
  *

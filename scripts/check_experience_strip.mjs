@@ -733,6 +733,115 @@ for (const [width, height] of SHAPES) {
   await context.close();
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+ * 13 — The hover zoom, from everywhere on the card.
+ *
+ * Client, 20 Aug 2026: *"I want the image zoom effect, exactly like the one we
+ * added to the property cards where the image zooms and the text stays."*
+ *
+ * **The whole assertion is the word "everywhere", and it exists because the
+ * obvious build of this is half-broken in a way no code review catches.**
+ * `01 · The Lodges` shipped the same effect and it fired on **less than half of
+ * each panel**: the block of words is a later SIBLING of the photograph's frame,
+ * so it paints above and takes the pointer over the bottom of the card —
+ * including the whole path a visitor's pointer travels. It read correctly, it
+ * passed every rig, and it was found by a human hovering the page. This card has
+ * the identical structure, so the identical defect is one edit away at all
+ * times.
+ *
+ * So three points, and the middle one is the one that matters: over the
+ * photograph, **over the words**, and at the very foot of the card. Plus the two
+ * things the zoom must NOT do — move the frame (`FLOAT` would open a band of the
+ * card's own `--overlay` along its foot and slide the photograph out from under
+ * its `Scrim`, which is a sibling), and happen at all for a visitor who asked
+ * for less motion.
+ *
+ * At 1440x900 only, deliberately: hover is a pointer, and a continuous width
+ * sweep of a pointer effect measures the same CSS 99 times.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+const ZOOM_AT = { photograph: 0.2, words: 0.78, foot: 0.99 };
+
+for (const reduced of [false, true]) {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    ...(reduced ? { reducedMotion: "reduce" } : {}),
+  });
+  const page = await context.newPage();
+  await page.goto(BASE, { waitUntil: "networkidle" });
+  await showStrip(page);
+
+  // The card's foot has to be ON SCREEN or `elementFromPoint` returns nothing
+  // and the pointer lands on the browser chrome — which reads exactly like a
+  // zoom that did not fire. Cost one wrong reading while this was being built.
+  await page.evaluate((chapter) => {
+    const card = document.querySelector(`#${chapter} li.experience-card`);
+    window.scrollBy(0, card.getBoundingClientRect().bottom - innerHeight + 40);
+  }, CHAPTER);
+  await page.waitForTimeout(900);
+
+  const where13 = reduced ? "zoom/reduced-motion" : "zoom/1440x900";
+  const scale = async () =>
+    page.evaluate((chapter) => {
+      const pic = document.querySelector(`#${chapter} li.experience-card picture`);
+      if (!pic) return null;
+      return Math.round(new DOMMatrixReadOnly(getComputedStyle(pic).transform).a * 1000) / 1000;
+    }, CHAPTER);
+
+  const rest = await scale();
+  if (rest === null) fail(13, where13, "no <picture> inside the first card — nothing to zoom");
+  else if (Math.abs(rest - 1) > 0.001)
+    fail(13, where13, `the card's photograph is already at scale ${rest} with nothing hovered`);
+
+  for (const [name, downTheCard] of Object.entries(ZOOM_AT)) {
+    const point = await page.evaluate(
+      ({ chapter, f }) => {
+        const r = document.querySelector(`#${chapter} li.experience-card`).getBoundingClientRect();
+        return { x: Math.round(r.x + r.width / 2), y: Math.round(Math.min(r.y + r.height * f, innerHeight - 6)) };
+      },
+      { chapter: CHAPTER, f: downTheCard },
+    );
+    await page.mouse.move(8, 8);
+    await page.waitForTimeout(700);
+    await page.mouse.move(point.x, point.y);
+    // Past `--photo-zoom-out` in full: a half-finished transition would read as
+    // a weaker zoom rather than as a missing one, which is the wrong finding.
+    await page.waitForTimeout(2200);
+    const hovered = await scale();
+
+    if (reduced) {
+      if (hovered !== null && Math.abs(hovered - 1) > 0.001) {
+        fail(13, where13, `the photograph zoomed to ${hovered} over the ${name} for a visitor who asked for less motion`);
+      }
+    } else if (hovered === null || hovered <= 1.001) {
+      fail(
+        13,
+        where13,
+        `the photograph did not zoom (scale ${hovered}) with the pointer over the ${name} — ` +
+          `this is the defect 01 · The Lodges shipped, where the words take the pointer and half the card is dead`,
+      );
+    }
+
+    if (name === "words" && !reduced) {
+      const frameY = await page.evaluate((chapter) => {
+        const frame = document.querySelector(`#${chapter} li.experience-card [data-image-frame]`);
+        if (!frame) return null;
+        return Math.round(new DOMMatrixReadOnly(getComputedStyle(frame).transform).m42 * 100) / 100;
+      }, CHAPTER);
+      if (frameY === null) fail(13, where13, "no [data-image-frame] in the card — the zoom has no hook");
+      else if (Math.abs(frameY) > 0.01) {
+        fail(
+          13,
+          where13,
+          `the frame itself moved ${frameY}px while hovered — FLOAT is not switched off, so the photograph ` +
+            `has slid out from under its own Scrim and opened a band of --overlay along the card's foot`,
+        );
+      }
+    }
+  }
+  await context.close();
+}
+
 await browser.close();
 
 const report = {
@@ -771,7 +880,9 @@ if (sweep.length) {
 console.log(`Wrote ${OUT}`);
 
 if (failures.length === 0) {
-  console.log("\nPASS — 12 assertions, every width.");
+  console.log(
+    "\nPASS — 13 assertions; 1-9 at every swept width, 10-12 at three shapes, 13 (the hover zoom) at 1440x900.",
+  );
 } else {
   console.error(`\nFAILED: ${failures.length} finding(s)`);
   for (const f of failures.slice(0, 40)) {

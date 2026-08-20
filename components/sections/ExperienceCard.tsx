@@ -1,3 +1,4 @@
+import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Photo } from "@/components/ui/Photo";
 import { Scrim, type ScrimStrength } from "@/components/ui/Scrim";
 import type { ExperienceCopy } from "@/content/home";
@@ -146,7 +147,26 @@ export function ExperienceCard({
       // `flex: 0 0 min(300px, 78vw)`, in `app/globals.css` beside the strip that
       // lays it out — the one number this card does not own, because a strip's
       // gap and its card's width have to be solved together.
-      className="experience-card relative isolate flex aspect-[37/50] flex-col justify-end overflow-hidden p-5"
+      //
+      // **`zoom-from-parent` is the zoom's ONLY trigger here — client, 20 Aug
+      // 2026:** *"I want the image zoom effect, exactly like the one we added to
+      // the property cards where the image zooms and the text stays."*
+      //
+      // It was added by analogy with `01 · The Lodges`, where it is the *second*
+      // of two selectors and covers the part of the panel the words take the
+      // pointer over. **On this card it is the only one that ever matches, and
+      // that was measured rather than assumed**: removing it drops the zoom at
+      // all three points the rig hovers, not just the ones over the words.
+      //
+      // The reason is this card's own shape. `app/globals.css`'s generic rule is
+      // `[data-image-frame]:hover`, and the frame here is `absolute inset-0
+      // -z-10` — a *descendant* of the card, painted behind everything. The
+      // element under the pointer is the card, and `:hover` matches only the hit
+      // element and its ANCESTORS, so the frame is never hovered anywhere on the
+      // card. Every composition that puts its photograph behind its content this
+      // way needs this class, and `check_experience_strip.mjs` assertion 13 is
+      // what says so out loud — it was watched failing with the class removed.
+      className="experience-card zoom-from-parent relative isolate flex aspect-[37/50] flex-col justify-end overflow-hidden p-5"
       style={{
         // The one dark colour on the page, UNDER the photograph rather than over
         // it — so a card is a card before a byte of imagery arrives and the blur
@@ -156,19 +176,43 @@ export function ExperienceCard({
       }}
     >
       <div className="absolute inset-0 -z-10">
-        <Photo
-          id={experience.mediaId}
-          sizes={CARD_SIZES}
-          box={CARD_BOX}
-          // The words on this card ARE its accessible content, exactly as with
-          // `FullBleed` under a quote — see `ui/Photo.tsx`'s note on
-          // `decorative`. Announcing the alt text as well would read the activity
-          // twice, once as a caption of a place and once as a description of a
-          // picture of it.
-          decorative
-          pictureClassName="block h-full w-full"
-          className="h-full w-full object-cover"
-        />
+        {/*
+         * **`ImageReveal` for the hover zoom and for nothing else**, which is why
+         * it is `static`. `[data-image-frame]` is the hook `app/globals.css`
+         * scopes the homepage zoom to, and that attribute belongs to this
+         * component rather than being hand-written onto a `<div>` — one owner,
+         * so a rule and its target cannot drift apart (the note there records
+         * this project doing exactly that twice).
+         *
+         * `static` because the client asked for a zoom and not for an arrival.
+         * Without it every card off the right-hand edge of the strip would be
+         * staged behind a cream mask and settle only when scrolled to, which
+         * costs the strip its one affordance: the ~38px of the next card that
+         * shows past the screen's edge at 390 would be a cream sliver instead of
+         * a photograph.
+         *
+         * **`no-float`, for the same reason `01 · The Lodges`' panels carry it.**
+         * `FLOAT` raises the frame 6px; this frame is `absolute inset-0` inside a
+         * card that clips, so a rise would open a 6px band of the card's own
+         * `--overlay` along its foot and slide the photograph out from under the
+         * `Scrim`, which is a sibling layer and not a child. The zoom has neither
+         * problem — it scales the `<picture>` inside a frame that never moves.
+         */}
+        <ImageReveal static className="no-float h-full w-full">
+          <Photo
+            id={experience.mediaId}
+            sizes={CARD_SIZES}
+            box={CARD_BOX}
+            // The words on this card ARE its accessible content, exactly as with
+            // `FullBleed` under a quote — see `ui/Photo.tsx`'s note on
+            // `decorative`. Announcing the alt text as well would read the
+            // activity twice, once as a caption of a place and once as a
+            // description of a picture of it.
+            decorative
+            pictureClassName="block h-full w-full"
+            className="h-full w-full object-cover"
+          />
+        </ImageReveal>
       </div>
       <div className="absolute inset-0 -z-10">
         <Scrim {...scrim} />

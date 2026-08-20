@@ -868,11 +868,52 @@ body {
   transition-delay: var(--enter-delay, 0s);
 }
 
-/* Staged instantly, for the reason given above [data-enter="pending"]. 115% and
-   not 100% because the mask has to clear the descenders it is padded for. */
+/*
+ * Staged instantly, for the reason given above [data-enter="pending"].
+ *
+ * **`--lines-from` is `LINES.from` in `lib/motion.ts`, written onto <html> by
+ * `app/layout.tsx`** — it was the literal `115%` until 20 Aug 2026, and it is a
+ * dial now because a headline's travel is its type size times this number, so
+ * this is the one lever that changes how far a heading rises without changing
+ * how large it is set. 115% and not 100% because the mask has to clear the
+ * descenders it is padded for; see `LINES` for why it may not go lower.
+ *
+ * The fallback in the `var()` is the same number written twice, deliberately: a
+ * stylesheet that arrives before `<html>`'s inline style would otherwise stage
+ * every word at `0`, which is a headline that never appears to move rather than
+ * one that never appears — but it is still wrong, and a literal costs nothing.
+ */
 [data-lines-enter="pending"] [data-line-inner] {
   transition: none;
-  translate: 0 115%;
+  translate: 0 var(--lines-from, 115%);
+}
+
+/*
+ * One headline on the page rises further than its own type size would give it —
+ * `02 · The Jungles`, whose heading the client set smaller on 19 Aug 2026 and
+ * whose reveal he then reported as *"not noticeable"* beside the closing
+ * chapter's on 20 Aug. Both things are true at once: it is 45px type against 70,
+ * so it travelled 56px against 84 on the identical rule.
+ *
+ * `deep` is what closes that gap from the only end that does not overrule his
+ * own design decision. Same duration, same curve, same mask — the word simply
+ * starts further down inside it. `SplitLines`' `deep` prop is what writes the
+ * attribute; `LINES.deepFrom` is the number and the measurement behind it.
+ *
+ * **It wins on specificity and not on document order, and the difference is
+ * stated because this project has been bitten by assuming the other one.** Both
+ * attributes are on the heading, so this selector is (0,3,0) against the rule
+ * above's (0,2,0) — it would win written above it too. That is the deliberate
+ * arrangement: `DECISIONS.md` §2 catalogues two rules matching one element
+ * settled by something other than intent as this page's most repeated defect,
+ * and a minifier is free to reorder rules it believes cannot collide.
+ *
+ * A whole rule rather than an element-level `--lines-from`, because a custom
+ * property set on the heading is inherited by every `[data-line-inner]` beneath
+ * it — correct today, and silently wrong the first time anything nests.
+ */
+[data-lines-deep][data-lines-enter="pending"] [data-line-inner] {
+  translate: 0 var(--lines-deep-from, 170%);
 }
 
 [data-lines-enter="in"] [data-line-inner] {
