@@ -2105,3 +2105,129 @@ person who wrote it.
 
 `app/page.tsx`'s `CREAM_KINDS` appears in no task at all; omitting the new kind there would have flipped the
 cream surface of every chapter below `field-days`.
+
+## 21. Home page v2 — the stakeholders' restructure, on a branch, 19-20 Aug 2026
+
+**`feat/home-v2` only, and NOT deployed.** The twelve-chapter page still ships on `feat/image-sizing` and
+still serves `https://mahua-resorts.vercel.app`. Read this section only when working on that branch; nothing
+here describes the live site.
+
+Spec: `docs/superpowers/specs/2026-08-19-home-v2-restructure.md`. Evidence:
+`docs/reviews/2026-08-19-home-v2/README.md`.
+
+### 21.1 The branch is the decision, and it is why the rest could be aggressive
+
+The client, after a stakeholder meeting: *"rather than deleting, let us create a completely new branch for
+these changes so we don't need to redo or undo or delete and remove any of the work we did… and we don't
+push it to Vercel, I just present it on localhost to them."*
+
+Three pieces of artwork lose their home on this branch — **the hanging lantern (§11), the hornbill forest
+tint (§15) and the potter film (§9)** — and two of them the client supplied or re-rendered himself. On a
+branch none of it is deleted, made dormant, or explained away. **That framing is worth reaching for again**:
+it converted a conversation about what to sacrifice into one about what to try.
+
+Twelve chapters became seven: `forest`, `rooms`, `after-dark`, `lantern-hour`, `details` and `guests` all
+leave, `philosophy` arrives, and the reviews move under the closing section's two lodge pills.
+
+### 21.2 Density — and the figure that fell before it recovered
+
+Every chapter is inside the 45% ceiling; **page mean 33.2%**, against 37.9% for the twelve-chapter page,
+where `lodges` (48.6%) and `rooms` (46.5%) both failed.
+
+**`imagesPerScreen` went 2.2 → 1.65 → 2.05 across this work**, and the dip is the lesson. Removing six
+chapters removed **thirteen photographs and only about five screens of scroll**, so what remained was spread
+thinner — the exact complaint the whole page was rebuilt to answer. It recovered only when the strip and the
+band put imagery back. **Quote it beside the mean, never instead of it**: a page can get emptier per
+photograph while every chapter's own figure improves.
+
+Two chapters moved without being touched, both by the §5a effect: `philosophy` reached 46.5% when the band
+above it lost 692px, and `rooms` had done the same earlier. **`philosophy` was then verified at a 50px
+sample step as well as 150px — the empty screen was real and always had been; the old grid never landed on
+it.** That is the first time §5a's error bar has been used to *confirm* a defect rather than to excuse one.
+
+### 21.3 Four defects a screenshot caught and no rig did
+
+Recorded together because the pattern is the point — every one would have shipped:
+
+- **The Jungles heading landed on the black panther's head and its paragraph on the tiger's face.** The one
+  photograph showing all three cats was covering two of them with its own words.
+- **At 390 that paragraph's last line ran off the photograph onto cream, as cream type on cream** — the band
+  was a fixed-height box clipping its own text.
+- **The section's words sat behind `SiteHeader`'s cream bar at 1024**, reading 1.00:1 with the first line
+  sliced off.
+- **Two collage photographs overlapped each other** for the first tenth of the pin, because tightening the
+  columns shrank the pair's seam to 13.2px and the two frames drift at different rates, so the seam *sweeps*
+  40.5px. **`check_pinned_collage.mjs` passes with the frames overlapping.**
+
+And one found only by hovering the real page: **the lodge panels' hover zoom fired on less than half of each
+card.** The words are a later *sibling* of the photograph's frame, so they take the pointer over the bottom
+55% — including the whole path to the button. The code read correctly.
+
+### 21.4 The client reversed himself twice more, and both reversals were right
+
+- **The Jungles text: cream → photograph.** On 19 Aug the words moved off the band because of the three
+  defects above. On 20 Aug he asked for them back on it — *"the image itself should look like the background
+  for this section, exactly like we have done for the last section"* — and that instruction is also the fix.
+  Built like `Invitation.tsx` (photograph absolutely positioned behind, scrim over it, height driven by
+  content against a floor) **the section grows and cannot clip**. The 19 Aug failure was never about where
+  the words sat; it was about a fixed-height box.
+- **`scroll-snap`, twice on this project now.** Removed from the coverflow on 18 Aug as *"very snappy"*, then
+  used again in the horizontal strip — where it is the ordinary idiom — and removed again when the new rig's
+  own assertion caught it **quantising the rig's own samples: 11 requested offsets, 3 distinct**. Third
+  instance of that defect. It is now guarded by an assertion rather than a comment.
+
+### 21.5 Two photographs changed for reasons the client has not ruled on
+
+**Both are open items.** A portrait card cannot hold a landscape photograph: the 25% crop bound rearranges to
+*the box may not be narrower than 0.75 × the file's aspect*, which for a 1.5:1 frame is **1.1265 — landscape**.
+So no portrait card at any ratio can serve these files by `cover`, and a shallower card was never an option.
+Five were solved with hand-positioned editorial crops in `build_images.mjs`; two could not be:
+
+- **`tiger-crossing-track` left the safari card.** The tiger and the guest-carrying vehicle span 0.34–0.85 of
+  its width, and **its consent clearance (§20, 17 Aug) rests on those guests being small and turned away — a
+  portrait window draws them 2.65× larger.** `tiger-golden-grass` replaced it; no people in frame. **A
+  consent ruling does not survive a crop that changes the size of the faces**, which is the same rule the
+  three August consent decisions all turned on.
+- **`potters-hands` moved from `03 · Rooted` to Village Craft**, because the client chose it for the card and
+  the page forbids a repeat. `rooted` took `vann-potters-village` — the Pachdhar village its own third
+  paragraph is about, and a 1344px file against a 700px one.
+
+### 21.6 An alignment target is a function of the viewport, not a constant
+
+The client asked for the Jungles heading to line up under the Mahua Vann panel's text. Measured at 13 widths,
+the gap between the panel's text and the band's container is **0px below 1024, 20px to 1279, 8px to 1696, and
+120px at 1920** — because `ChapterSurface`'s container saturates at 1600 while the panel keeps reaching the
+screen edge. A single hand-tuned offset would have been right at one width and wrong everywhere else.
+
+Built as `calc(40px - 48px - max(0px, (100cqw - 1600px)/2))` on a `container-type: inline-size` wrapper.
+**`100cqw`, never `100vw`:** a Windows scrollbar makes `vw` 15-17px wider than the layout viewport, which
+would have put it ~8px off **on the machine the client tests on**. Asserted across three files and watched
+failing.
+
+### 21.7 One dated exception to non-negotiable #10, and how it is kept honest
+
+`03 · Rooted` and `04 · Philosophy` are both `pinnedCollage`, which `content/chapters.ts` classes as **quiet**
+— it renders as an ordinary `chapterIntro` under reduced motion and below its pin viewport. Two quiet screens
+back to back is exactly what #10 forbids, and the measurements agreed with the rule rather than the layout:
+`philosophy` carries **55 words against `rooted`'s 139** in a composition built for three.
+
+Put to the client with four ways out. His ruling: *"We will later add more text to the philosophy, for now
+keep this."* So `content/chapters.test.ts` carries a **named, dated exception for that one pair** — the rule
+still guards every other adjacency on all three pages — **plus a second test that fails the day the exception
+stops being needed**, so it cannot outlive its reason by sitting there looking principled. **Delete it when
+the copy lands.** If it still fails afterwards, the extra words were not the problem.
+
+### 21.8 Smaller things worth not rediscovering
+
+- **Changing a card's *size* is a scrim re-solve**, as much as re-cropping it or moving its type. Growing the
+  strip's card 300 → 340 took `sound-healing` to 7.33 and visible mud, because the words become a smaller
+  fraction of a bigger card and sit deeper in the `bottom` gradient.
+- **A pure `flat` is the one wash whose strength does not depend on where the type sits** — which is why the
+  Jungles scrim came back at `flat: 0.74` unchanged after the text was re-centred.
+- **`measure_page.mjs` was passing while measuring nothing.** Its motion probe hard-coded six chapter ids,
+  three of which no longer existed, so it scrolled to 0 and recorded `changedPercent: 0`. It now reads the
+  page's own sections.
+- **The client's own 300px card width breached his own 45% ceiling** (45.4%). Swept to 340.
+- **The joined panels read as two photographs, unmistakably** — a warm lit veranda beside a cool grey-green
+  exterior is a diptych, not a seam. The gutter was defending against a risk *those two frames* do not
+  present; it would come back with two frames of the same place at the same hour.
