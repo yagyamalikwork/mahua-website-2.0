@@ -71,7 +71,7 @@ document describes.** Run `git branch --show-current` before trusting a figure b
 | | `feat/image-sizing` (and `main`, `demo`) | **`feat/home-v2`** |
 |---|---|---|
 | home page | **twelve chapters** — everything below | **seven** — hero, 01 The Lodges, 02 The Jungles, 03 Rooted Like The Mahua, 04 Mahua Philosophy, 05 Experiences, the close |
-| deployed | **yes** — `https://mahua-resorts.vercel.app` | **no, deliberately** — a stakeholder presentation, shown on localhost |
+| deployed | no — the previous demo, revertible with one command | **YES, since 20 Aug** — `https://mahua-resorts.vercel.app` serves this, and `demo` points here |
 | the lantern, the forest tint, the potter film | shipping | **no mount** — untouched, and still shipping on the other branch |
 | `04 · Days in the Field` | the pinned coverflow | a **sideways card strip**, coverflow retired |
 | tests | 481 | **477** |

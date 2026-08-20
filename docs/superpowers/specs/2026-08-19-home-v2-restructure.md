@@ -1,7 +1,10 @@
 # Home page v2 — the stakeholders' restructure
 
 **Date:** 19 August 2026
-**Status:** **APPROVED by the client, on `feat/home-v2`. NOT to be deployed to production.**
+**Status:** **BUILT, and DEPLOYED to production on 20 August 2026.** Approved on `feat/home-v2`, shown to
+the client on a preview URL, then promoted at his instruction. This document is the brief as written on
+19 Aug; where it and the build disagree, `DECISIONS.md` §21 and
+`docs/reviews/2026-08-19-home-v2/README.md` are what shipped.
 **Scope:** the home page (`/`) only. Neither property page changes.
 
 ---
@@ -18,8 +21,9 @@ in `rooted` — and two of them the client supplied or re-rendered himself. On a
 deleted, made dormant, or explained away: `feat/image-sizing` keeps them intact and shipping. If the
 stakeholders prefer what exists, walking away from this branch costs nothing.
 
-**`https://mahua-resorts.vercel.app` must keep serving the current build.** A production deploy from this
-branch is the one thing that would make this irreversible.
+~~**`https://mahua-resorts.vercel.app` must keep serving the current build.**~~ **Superseded 20 Aug:** the
+client reviewed the branch on a preview URL and promoted it. The reversibility the branch bought is intact
+anyway — the twelve-chapter page still exists on three branches and returns with one command.
 
 ## 1. The page, before and after
 

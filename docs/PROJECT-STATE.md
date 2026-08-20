@@ -9,9 +9,14 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 stakeholders' restructure; everything after this section describes the twelve-chapter page that still ships
 on `feat/image-sizing`, `main` and `demo`, and still serves the live demo.
 
-**Not deployed, deliberately.** The client's own framing, and the reason the restructure could be aggressive:
-*"rather than deleting, let us create a completely new branch… we don't push it to Vercel, I just present it
-on localhost to them."* If the stakeholders prefer what exists, walking away from this branch costs nothing.
+**DEPLOYED to production on 20 Aug 2026**, after being built on a branch and shown on a preview URL — the
+client's own framing was *"rather than deleting, let us create a completely new branch… we don't push it to
+Vercel, I just present it on localhost to them,"* and he promoted it once he had seen it. **`demo` was moved
+to match, because that branch exists to name what is live.**
+
+**What the branch bought survives the deploy:** the twelve-chapter page is intact on `feat/image-sizing`,
+`main` and `feat/chapters-rebuild` at `e0e3f69` — lantern, hornbill tint and potter film all still mounted —
+and returns with `git checkout feat/image-sizing && npx vercel --prod --yes`.
 
 ### The page
 

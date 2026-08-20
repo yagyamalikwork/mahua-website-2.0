@@ -1,16 +1,19 @@
 # Home page v2 — the stakeholders' restructure — evidence
 
-**19-20 August 2026, on `feat/home-v2`. NOT DEPLOYED, and that is deliberate.**
+**19-20 August 2026, on `feat/home-v2`. DEPLOYED TO PRODUCTION on 20 August** — `https://mahua-resorts.vercel.app`
+now serves this page, and `demo` was moved to match. It was built on a branch and shown on a preview URL
+first; the client promoted it after reviewing it.
 
 The client, after a stakeholder discussion, asked for the home page to be restructured and chose to do it on
 a branch rather than by deleting: *"rather than deleting, let us create a completely new branch for these
 changes so we don't need to redo or undo or delete and remove any of the work we did… and we don't push it
 to Vercel, I just present it on localhost to them."*
 
-**`https://mahua-resorts.vercel.app` still serves the twelve-chapter page, and `feat/image-sizing` keeps
-every part of it — the hanging lantern, the hornbill forest tint and the potter film all still ship there.**
-Nothing on this branch deletes them; they simply have no mount on a six-chapter page. If the stakeholders
-prefer what exists, walking away from this branch costs nothing.
+**The twelve-chapter page is not lost.** It is intact on `feat/image-sizing`, `main` and
+`feat/chapters-rebuild` at `e0e3f69`, with the hanging lantern, the hornbill forest tint and the potter film
+all still mounted — nothing here deletes them; they simply have no mount on a seven-chapter page. Putting it
+back is one command: `git checkout feat/image-sizing && npx vercel --prod --yes`. **That reversibility is
+what the branch bought, and it survives the deploy.**
 
 The brief is [`specs/2026-08-19-home-v2-restructure.md`](../../superpowers/specs/2026-08-19-home-v2-restructure.md);
 the narrative and the expensive findings are `DECISIONS.md` §21.
