@@ -3,6 +3,53 @@
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
+## ⚠ ON `feat/home-v2` THE HOME PAGE IS SEVEN CHAPTERS, NOT TWELVE — 19-20 Aug 2026
+
+**Check `git branch --show-current` before reading any home-page state below.** This branch carries the
+stakeholders' restructure; everything after this section describes the twelve-chapter page that still ships
+on `feat/image-sizing`, `main` and `demo`, and still serves the live demo.
+
+**Not deployed, deliberately.** The client's own framing, and the reason the restructure could be aggressive:
+*"rather than deleting, let us create a completely new branch… we don't push it to Vercel, I just present it
+on localhost to them."* If the stakeholders prefer what exists, walking away from this branch costs nothing.
+
+### The page
+
+Hero → **01 The Lodges** (two joined panels, the property heroes) → **02 The Jungles** (a cropped band, all
+its words on the photograph) → **03 Rooted Like The Mahua** (text left, photographs right, potter removed) →
+**04 Mahua Philosophy** (the mirror) → **05 Experiences** (a sideways strip of six cards) → the close, with
+the reviews now under the two lodge pills.
+
+Gone from the home page: `forest`, `rooms`, `after-dark`, `lantern-hour`, `details`, `guests`. **The lantern,
+the hornbill tint and the potter film are untouched and still ship on the other branch** — they simply have
+no mount here.
+
+### The numbers
+
+**477 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
+screen.** Contrast: 318 probes, 0 failures across three routes. Resolution: 0 under-served. First-load JS
+**167.5 KB brotli, delta 0** — every effect added here is CSS. Initial transfer 669 KB at 390, 965 KB at 1440.
+
+**`imagesPerScreen` went 2.2 → 1.65 → 2.05 across this work.** The dip is the lesson: removing six chapters
+took thirteen photographs and only ~5 screens of scroll. It is the figure the client's original density
+complaint turns on — quote it beside the mean, never instead of it.
+
+### What is still owed, and what he has not ruled on
+
+1. **The extra Philosophy copy.** It passes at 42.3% but reads as the shorter half of its pair — 55 words in
+   a composition built for 139. `content/chapters.test.ts` carries a **named, dated exception** to
+   non-negotiable #10 for that one adjacency, plus a test that fails the day the exception stops being
+   needed. **Delete it when the copy lands.**
+2. **The safari card's photograph changed and he has not ruled.** `tiger-crossing-track` could not be cropped
+   to a portrait card without drawing its guests **2.65× larger**, and its consent clearance rests on them
+   being small and turned away. `tiger-golden-grass` is in its place.
+3. **`potters-hands` moved** from Rooted to Village Craft, because he chose it for the card and the page
+   forbids a repeat. Rooted took `vann-potters-village`. Also unruled.
+4. **Uncropped portrait originals ~900px wide for five strip photographs** — `docs/OWED-ORIGINALS.md`.
+
+Full reasoning: [`DECISIONS.md` §21](DECISIONS.md). Evidence:
+[`reviews/2026-08-19-home-v2/README.md`](reviews/2026-08-19-home-v2/README.md).
+
 ## `04 · Days in the Field` is a coverflow, and it passes non-negotiable #8 — 16-17 Aug 2026
 
 Client: *"looks flat even though it has beautiful images."* Six activity cards on a pinned stage, advancing
