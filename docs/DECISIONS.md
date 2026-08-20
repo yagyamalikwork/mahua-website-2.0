@@ -2284,3 +2284,69 @@ every word rather than the first. And `stagedInView` discounts staging behind th
 three-quarters through and spends its last 150ms below any number anyone would pick.
 `check_experience_strip.mjs` gained assertion 13, the hover zoom from three points plus its reduced-motion
 and no-float arms, watched failing.
+
+### 21.10 The guests' review carousel, 20 Aug 2026 — and why it is not the Tripadvisor widget
+
+Client: *"replace the placeholder reviews on the last section with the Tripadvisor carousel widget, with slow
+auto-scrolling review cards and the scroll pauses when the viewer hovers … the cards should be rectangles
+with same dimensions for the review we have placed for now, showing the rating/stars as solid golden … add a
+clickable read more button on the reviews that get cut in the middle … for these reviews we need to scrape at
+least 100 reviews from our Tripadvisor."* Evidence:
+`docs/reviews/2026-08-20-reviews/README.md`.
+
+**Everything he described is built. The 100 scraped reviews are not, by his own ruling once he had four
+facts** — and the fourth is the one that decided it:
+
+- The official **Content API returns five reviews per property.** Their ceiling, with their logo and bubbles
+  required beside them.
+- **Scraping is not available**: their terms forbid it, they block it, and the text belongs to the guests.
+- **Both properties are rated 4.0, so an unfiltered feed publishes the one-star reviews on the home page** —
+  *"It's Not Resort…it's a military school"*, *"Scaring experience"*, one about polythene in a dinner. **A
+  business argument, not a technical one, and it is what settled it.**
+- **His reviews are split across at least five listings**, some under previous operators (V Resorts, Beyond
+  Stay): Vann 421 on one plus a second listing; Tola 22 on one, 131 on another, plus a third. Worth
+  consolidating with Tripadvisor whatever the website does.
+
+So the reviews are a curated set he assembles, in `content/home.ts` like every other word on this site, and
+**`rating` is optional** — the three standing there came off the live site's widget as text alone, and a
+plausible figure written in would read as a guest's own. A review with no rating draws no circles.
+
+**Zero JavaScript, all three parts**: a CSS animation moves it, `:hover` pauses it, and `:target` opens the
+full text — the room gallery's own construction (§18). First-load JS **167.7 KB brotli, unchanged to the
+byte**.
+
+**Gold as a fill is legitimate here and it is the one case non-negotiable #7 reserves it for.** That rule
+forbids gold carrying *text*; a rating circle is an ornament, like the pill's fill. But the circles carry no
+text, so they are `aria-hidden` with a written rating beside them: **a rating is information, and information
+that exists only as a coloured shape does not exist for everyone.**
+
+#### Four findings that generalise
+
+- **A card in a marquee cannot be measured by one screenshot.** Two runs added to
+  `check_contrast_over_photos.mjs` were removed the same hour — that rig crops one frame to an element's rect
+  and half the cards are outside the viewport at any moment, which is a crash rather than a wrong number. And
+  a card visits every part of the photograph behind it, so **a scrim solved for one position is a scrim solved
+  for one twentieth of a second.** `check_reviews.mjs` freezes the loop at eight phases and reads real
+  composited pixels: worst **7.04:1** against a 4.5 floor.
+- **A rig that shares one page across assertions must restore what it disturbed.** Its own assertion 6
+  navigates to a fragment; assertion 11 then measured the carousel under `SiteHeader`'s cream bar and reported
+  **1.00:1 on all eight phases**. Third instance on this project of an instrument steering what it measures,
+  after `scroll-snap` quantising two rigs' samples (§5a) and a per-frame layout read pushing the hero's reveal
+  by 700ms (§21.9).
+- **`transform` and `translate` are different properties.** The rig's first run said "the carousel is not
+  scrolling" because it read `getComputedStyle(el).transform`, which is `"none"` for the whole of a loop that
+  animates `translate` — the property Tailwind v4 and this stylesheet both use. It reads a bounding rect now,
+  which is agnostic about how the element got where it is.
+- **A width that is the emergent maximum of what is inside it changes when the content does.** `08 · The
+  Invitation` is a flex container and `Enter` takes no `className`, so its flex item had no width of its own
+  and was ~992px *by accident* — a three-column grid of quotes happened to be the widest child. Replacing them
+  broke it in both directions: **986px inside a 360px viewport** when a `max-content` rail reached up the
+  chain, then **540px at 1440** once `contain: inline-size` stopped that and a paragraph became the widest
+  child. `min-width: 0` fixes neither: it lets an element shrink and says nothing about the min-content
+  contribution it makes to its ancestors. Fixed by stating the width.
+
+**`REVIEWS.mode` is a switch the client asked for, and one of the two is meant to be deleted.** Offered a
+carousel that runs continuously against one that comes to rest, he said *"build both, and you choose"*.
+`loop` ships — what he originally described, and **the first thing on this site that never stops**, which
+non-negotiable #5 is the reason to say out loud rather than ship quietly. `settle` is a real scroller whose
+cards slide into place once on a `view()` timeline and then rest.

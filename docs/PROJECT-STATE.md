@@ -31,10 +31,17 @@ no mount here.
 
 ### The numbers
 
-**482 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
+**496 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
 screen.** Contrast: 318 probes, 0 failures across three routes. Resolution: 0 under-served. First-load JS
 **167.7 KB brotli** — 167.5 through the restructure itself, where every effect was CSS, plus 0.2 KB for the
 hero's reveal hook on 20 Aug. Initial transfer 669 KB at 390, 965 KB at 1440.
+
+**The guests' reviews became a carousel on 20 Aug 2026** — auto-scrolling, pausing under the pointer, gold
+rating circles, and a read-more panel on `:target`, all at **zero added JavaScript** (167.7 KB brotli,
+unchanged to the byte). **It is not the Tripadvisor widget and it holds no scraped reviews**: their API caps
+at five per property, scraping is not available, and — the argument that settled it — both lodges are rated
+4.0, so an unfiltered feed publishes the one-star reviews on the home page. **He is assembling 15–20 himself;
+that is the one thing outstanding.** `docs/DECISIONS.md` §21.10, `docs/reviews/2026-08-20-reviews/README.md`.
 
 **Three client changes landed on top of it on 20 Aug 2026** — the hero's headline now rises as the welcome
 screen lifts (it did not move at all before, by `useInView`'s design), `02 · The Jungles`' heading travels
@@ -47,6 +54,17 @@ took thirteen photographs and only ~5 screens of scroll. It is the figure the cl
 complaint turns on — quote it beside the mean, never instead of it.
 
 ### What is still owed, and what he has not ruled on
+
+0. **The 15–20 Tripadvisor reviews, and it is the one thing blocking finished work.** The carousel is built,
+   measured and shipping; it is running on the three reviews that were already there. Each new one needs the
+   **text in full** (not an excerpt — the card cuts it with CSS so the site never stores an edited version of
+   what a guest wrote), the **name** as Tripadvisor shows it, the **year**, and the **rating out of five**.
+   `rating` is optional in the type and a review without one draws no circles, deliberately: the three
+   standing there came off the live site's widget as text alone, and a plausible figure written in would read
+   as that guest's own.
+
+   **He also has `REVIEWS.mode` to rule on** — `loop` (continuous, pausing under the pointer, what he first
+   described) against `settle` (slides in once, then rests). Both are built; one is meant to be deleted.
 
 1. **The extra Philosophy copy.** It passes at 42.3% but reads as the shorter half of its pair — 55 words in
    a composition built for 139. `content/chapters.test.ts` carries a **named, dated exception** to

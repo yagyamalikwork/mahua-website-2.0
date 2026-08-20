@@ -105,10 +105,40 @@ export type ExperienceCopy = {
 };
 
 export type GuestQuote = {
+  /**
+   * The review **in full**, exactly as the guest wrote it.
+   *
+   * Not an excerpt. The card shows the first `REVIEW_CARD.quoteLines` of it and
+   * the whole card is a link to a panel carrying the rest — client, 20 Aug 2026:
+   * *"I understand the complete reviews cannot be shown in such small space, so
+   * add a clickable read more button on the reviews that get cut in the middle,
+   * and when the viewer clicks on it the popup will show the complete text."*
+   *
+   * **So the cutting is done by CSS at render time and never here.** A second
+   * field holding a hand-written excerpt is how a quotation drifts from what its
+   * author actually said, and it would put the site in the position of having
+   * edited somebody's review.
+   */
   readonly quote: string;
   readonly name: string;
   readonly year: string;
   readonly source: string;
+  /**
+   * The guest's own rating, out of five, in halves.
+   *
+   * **Optional, and it is optional because inventing one is not available.** The
+   * client asked for the rating drawn as gold circles on 20 Aug 2026; the three
+   * reviews standing here came off the Tripadvisor widget on the live site as
+   * text alone, with no figure attached, and a plausible number written in here
+   * would read as the guest's own. This project has been within one edit of that
+   * before — a capacity figure invented in a worked example nearly shipped as a
+   * claim about the property.
+   *
+   * So a review with no rating renders with no circles, which is honest, and the
+   * set the client is assembling carries its own. `scripts/check_reviews.mjs`
+   * asserts the circles against this figure wherever it exists.
+   */
+  readonly rating?: number;
 };
 
 export const HOME = {

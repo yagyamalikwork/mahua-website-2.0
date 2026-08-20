@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-08-20T00:27:44.538Z",
-  "url": "http://localhost:3110/",
+  "measuredAt": "2026-08-20T20:14:52.690Z",
+  "url": "http://localhost:3131/",
   "viewport": "1440x900",
   "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
   "imagery": {
     "distinctImages": 19,
     "imgElements": 21,
-    "documentHeightPx": 8349,
-    "screensOfScroll": 9.3,
-    "imagesPerScreen": 2.05,
+    "documentHeightPx": 8435,
+    "screensOfScroll": 9.4,
+    "imagesPerScreen": 2.03,
     "ids": [
       {
         "id": "birding-cairn-dusk",
@@ -108,14 +108,14 @@
     ]
   },
   "page": {
-    "screens": 51,
-    "meanEmptyPercent": 33.2,
-    "medianEmptyPercent": 34.2,
+    "screens": 52,
+    "meanEmptyPercent": 33.6,
+    "medianEmptyPercent": 35,
     "bestEmptyPercent": 0.4,
     "worstEmptyPercent": 66.4,
     "worstAt": 5700,
-    "overBudget": 6,
-    "meanImagePercent": 57.2,
+    "overBudget": 7,
+    "meanImagePercent": 56.8,
     "meanTypePercent": 9.6
   },
   "chapters": [
@@ -211,15 +211,15 @@
     },
     {
       "id": "invitation",
-      "heightPx": 903,
-      "screensTall": 1,
+      "heightPx": 989,
+      "screensTall": 1.1,
       "wholeScreensAvailable": false,
       "screens": 1,
-      "meanEmptyPercent": 6,
-      "medianEmptyPercent": 6,
-      "bestEmptyPercent": 6,
-      "worstEmptyPercent": 6,
-      "worstAt": 7050,
+      "meanEmptyPercent": 14.7,
+      "medianEmptyPercent": 14.7,
+      "bestEmptyPercent": 14.7,
+      "worstEmptyPercent": 14.7,
+      "worstAt": 7200,
       "overBudget": 0,
       "passesMean": true,
       "passesWorst": true
@@ -556,16 +556,16 @@
     },
     {
       "at": 6450,
-      "occupied": 76.4,
-      "empty": 23.6,
+      "occupied": 76.3,
+      "empty": 23.7,
       "imagePercent": 68.8,
-      "typePercent": 7.6
+      "typePercent": 7.5
     },
     {
       "at": 6600,
-      "occupied": 82.2,
-      "empty": 17.8,
-      "imagePercent": 72.2,
+      "occupied": 82.3,
+      "empty": 17.7,
+      "imagePercent": 72.3,
       "typePercent": 10
     },
     {
@@ -584,31 +584,38 @@
     },
     {
       "at": 7050,
-      "occupied": 94,
-      "empty": 6,
-      "imagePercent": 81.1,
-      "typePercent": 12.9
+      "occupied": 94.1,
+      "empty": 5.9,
+      "imagePercent": 81.8,
+      "typePercent": 12.3
     },
     {
       "at": 7200,
-      "occupied": 86.4,
-      "empty": 13.6,
-      "imagePercent": 72.9,
-      "typePercent": 13.5
+      "occupied": 85.3,
+      "empty": 14.7,
+      "imagePercent": 72.6,
+      "typePercent": 12.7
     },
     {
       "at": 7350,
       "occupied": 71.2,
       "empty": 28.8,
-      "imagePercent": 59.2,
-      "typePercent": 12
+      "imagePercent": 58.9,
+      "typePercent": 12.3
     },
     {
-      "at": 7449,
-      "occupied": 60.5,
-      "empty": 39.5,
-      "imagePercent": 49.3,
-      "typePercent": 11.2
+      "at": 7500,
+      "occupied": 55.3,
+      "empty": 44.7,
+      "imagePercent": 44.7,
+      "typePercent": 10.6
+    },
+    {
+      "at": 7535,
+      "occupied": 51.9,
+      "empty": 48.1,
+      "imagePercent": 43,
+      "typePercent": 8.9
     }
   ]
 }

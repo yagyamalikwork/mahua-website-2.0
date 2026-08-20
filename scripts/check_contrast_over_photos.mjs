@@ -521,7 +521,32 @@ const HOME_RUNS = [
   ...JUNGLES_RUNS,
   ...STRIP_RUNS,
   { name: "invitation · heading", min: 3, at: "#invitation", container: "#invitation", sel: "#invitation h2 span" },
-  { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation p" },
+  /*
+   * **`sel` was `#invitation p` until 20 Aug 2026 and had to change, because the
+   * page changed under it.** That selector was this chapter's own two paragraphs
+   * and nothing else — until the review carousel put a quote and an attribution
+   * inside every card in the same section, at which point one run would have
+   * been quietly reporting the worst of a dozen unrelated blocks under the name
+   * "invitation · body". A `data-contrast` hook is what this file's own
+   * `brand-wordmark` note prescribes for exactly this: a structural selector
+   * that goes stale is neither a pass nor a failure.
+   */
+  { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation [data-contrast='invitation-body']" },
+  /*
+   * **The review carousel is deliberately NOT measured here, and the reason is
+   * worth stating so nobody adds it back.** Two runs for it were written on
+   * 20 Aug 2026 and removed the same hour: this rig crops one screenshot to an
+   * element's rect, and a card in a marquee is at a different place on the
+   * photograph in every frame — half of them outside the frame entirely, which
+   * is a `bad extract area` crash rather than a wrong answer. Measuring the
+   * position a card happens to be in when the shutter falls answers a question
+   * nobody asked.
+   *
+   * `scripts/check_reviews.mjs` owns it instead, and asks the question this
+   * composition actually poses: the worst pixel under the type at **any** point
+   * in the loop, taken by freezing the marquee at eight phases and reading real
+   * pixels at each. See the note there.
+   */
   ...MENU_RUNS("arrival"),
 ];
 

@@ -13,10 +13,12 @@ import {
   LIVING,
   PHOTO_ZOOM,
   RAISE,
+  REVIEWS,
   ROOM_STACK,
   STRIP,
   WELCOME,
 } from "@/lib/motion";
+import { REVIEW_CARD } from "@/lib/reviews";
 import { INDEXING_ALLOWED } from "@/lib/indexing";
 import { PALETTE } from "@/lib/palette";
 import { HOME } from "@/content/home";
@@ -96,6 +98,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // `LINES` for the measurement that produced the second one.
           "--lines-from": LINES.from,
           "--lines-deep-from": LINES.deepFrom,
+          // The guests' review carousel. Same terms as everything above: the
+          // numbers live in `lib/motion.ts` and `lib/reviews.ts`, the rules live
+          // in `app/globals.css`, and neither can drift from the other. The card
+          // dimensions are here rather than as Tailwind classes because the
+          // marquee's own arithmetic reads them — a duplicate track only lands
+          // on the seam if the card's width and its gap are the same two numbers
+          // the keyframes were solved against.
+          "--reviews-seconds-per-card": `${REVIEWS.secondsPerCard}s`,
+          "--reviews-settle-cards": String(REVIEWS.settleCards),
+          "--review-card-w": `min(${REVIEW_CARD.widthPx}px, ${REVIEW_CARD.vw}vw)`,
+          "--review-card-h": `${REVIEW_CARD.heightPx}px`,
+          "--review-card-gap": `${REVIEW_CARD.gapPx}px`,
+          "--review-quote-lines": String(REVIEW_CARD.quoteLines),
           // The emblem's single half-turn as the page arrives. Same terms again:
           // the number lives in `lib/motion.ts`, the keyframes in
           // `app/globals.css`, and neither can drift from the other.
