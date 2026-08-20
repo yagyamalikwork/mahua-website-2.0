@@ -245,90 +245,27 @@ export const WELCOME = {
 
 /**
  * How far below its own mask a word starts before it rises — `SplitLines`, and
- * the movement the client calls *"the 3D raised effect"*.
+ * the movement `app/globals.css` calls the line reveal.
  *
- * **Both values are percentages of the word's own box, so a headline's travel is
- * its type size times one of these** — which is exactly why the two numbers
- * exist. Measured on the shipped page at 1440x900, 20 Aug 2026: the closing
- * chapter's heading is 70px type and travels **84px**; `02 · The Jungles`' is
- * 45px type and travels **56px**, two-thirds of it, on the identical rule. The
- * client saw that difference and reported it as the effect being *"not
- * noticeable"* on the second — which it is, by a third, and the arithmetic says
- * so.
- *
- * `deepFrom` is the answer to that **without touching a type size the client set
- * himself** (19 Aug 2026, asking for the Jungles heading smaller): 45px x 1.70 =
- * **76px** of travel against the close's 84px, on the same duration and the same
- * curve. Solved to the target rather than nudged towards it — the standing
- * instruction on this project since the forest tint (`docs/DECISIONS.md` §15).
- *
- * **`from` may not go below 115%**, and that is a layout constraint rather than
- * a stylistic one: the mask is `overflow-hidden` on a box padded by `0.16em` so
+ * **It may not go below 115%, and that is a layout constraint rather than a
+ * stylistic one:** the mask is `overflow-hidden` on a box padded by `0.16em` so
  * descenders can exist inside it, and a start position that does not clear that
  * padding leaves the tails of g, y and p showing above the mask at the moment
  * the word begins to move.
  *
- * CSS values, like `ENTER`: `app/layout.tsx` writes them onto <html> as
- * `--lines-from` and `--lines-deep-from`, and `app/globals.css` reads them back.
- * The numbers live here and only here.
+ * **A second value, `deepFrom`, lived here for one day (20-21 Aug 2026) and is
+ * gone.** It existed to make `02 · The Jungles`' heading travel as far as the
+ * closing chapter's without being set larger — sound arithmetic answering the
+ * wrong question. The client's *"3D effect"* was never the rise; it was the
+ * closing chapter's depth, its photograph drifting while its words stay still.
+ * The travel is back at `from` for every headline on the page.
+ *
+ * A CSS value like `ENTER`'s: `app/layout.tsx` writes it onto <html> as
+ * `--lines-from` and `app/globals.css` reads it back. The number lives here and
+ * only here.
  */
 export const LINES = {
   from: "115%",
-  deepFrom: "170%",
-} as const;
-
-/**
- * When a headline that is **already on screen at load** may rise — the hero's,
- * and today the hero's alone.
- *
- * `components/motion/useInView.ts` refuses to stage anything on screen at mount,
- * for a good reason measured on 4 Aug 2026: staging settled text means dropping
- * it out of view in front of somebody who is looking at it, which is a flicker.
- * **The welcome screen is what makes the hero an exception** — it is an opaque
- * cream curtain over the whole viewport for `WELCOME.hold`, so for that window
- * the staging is not merely quick, it is *unobservable*.
- *
- * **Both are measured on the curtain's own animation clock, not the document's**
- * — `useCurtainReveal` reads `Animation.currentTime` off the welcome screen, and
- * the gap between the two is 380ms on a local production build, which was enough
- * to spend the whole rise behind the curtain the first time this shipped. The
- * note there carries the trace.
- *
- * So both numbers are read off `WELCOME` rather than chosen:
- *
- * - **`stageBy`** is the moment the curtain starts to thin. Past it, staging
- *   would be visible, so `useCurtainReveal` declines to stage at all and the
- *   headline stays exactly as it is today. That is the guard that keeps the
- *   4 Aug finding true: a slow device that hydrates late gets no reveal rather
- *   than a flicker.
- * - **`delay`** is three-quarters of the way through the fade. Later and the
- *   hero would show for a beat with a hole where its headline goes; earlier and
- *   the movement is spent behind the curtain — `ENTER.ease` has travelled 58% of
- *   its distance by a quarter of the way through, so an entrance that starts as
- *   the fade begins is 93% finished by the time anyone can see it. At this value
- *   the words are ~35% risen when the curtain clears, and the remaining 1.2s of
- *   a `slow` reveal happens in plain sight.
- *
- * **LCP is unaffected, and that was measured against a control rather than
- * argued.** The words are server-rendered at rest and painted at rest; script
- * only stages them *after* hydration, by which time the browser has already
- * recorded the paint. `scripts/measure_lcp_arms.mjs`, medians of five at
- * 1440x900, on two builds one commit apart: **LCP 1,592ms with this and 1,612ms
- * without**, both equal to FCP to the millisecond and both naming the `<h1>` —
- * which is the metric's floor and cannot be improved on. The hero photograph's
- * own arrival was 5,359ms against 5,370ms. Both differences are inside the run
- * range.
- *
- * The obvious simpler build — a CSS `animation` with a backwards fill, no
- * JavaScript at all — does not have this property. It would hide the page's
- * largest text until 1.9s, and on this page LCP resolves to that `<h1>` at every
- * desktop width.
- */
-export const CURTAIN_LINES = {
-  /** Seconds from page load. */
-  delay: WELCOME.hold + WELCOME.fade * 0.75,
-  /** Seconds from page load. Past this, nothing is staged at all. */
-  stageBy: WELCOME.hold,
 } as const;
 
 /**
@@ -891,6 +828,34 @@ export const JUNGLE_BAND = {
    * exactly the coupling `coverAspectFloor` below exists to avoid.
    */
   minHeightVw: 31,
+  /**
+   * How much taller than the band its photograph is drawn, so the drift has
+   * somewhere to go.
+   *
+   * **Client, 21 Aug 2026, correcting a wrong reading of an earlier request:**
+   * *"the text should look like it is floating/raised over the image, like we
+   * have for the last section … where when we scroll the text gives a 3D
+   * effect."* That is `08 · The Invitation`'s depth — its photograph is the only
+   * parallaxed element on the page and drifts 72px while every word stays still.
+   * It reads as the words being lifted off the frame, and it only appears while
+   * scrolling, which is exactly what he described.
+   *
+   * The arithmetic is `ui/FullBleed.tsx`'s, expressed as a fraction rather than
+   * in `vh` because this band's height is `max(floor, its own words)` and there
+   * is no `vh` to key it to. `Parallax` translates its wrapper by
+   * `±(height × PARALLAX_MAX) / 2` — **±7.5% of the band** — so the photograph
+   * has to overhang by more than that at both ends or the drift uncovers the
+   * section's `--overlay` at one edge. At this value the overhang is **13.8%**,
+   * which is 1.84× what the translate can ever ask for. The `+ 0.1` is the same
+   * "comfortable, not knife-edge" margin `FullBleed` adds as `+ 10` vh.
+   *
+   * **It crops the band further, and that is the cost.** The photograph is drawn
+   * 27.6% larger, so the band shows the middle ~78% of what it showed before —
+   * on the height axis only, which is the one axis `minHeightVw` above already
+   * says this stitched composite can afford to lose. Both edge cats stay in
+   * frame at every width where the floor binds.
+   */
+  driftOversize: 1 / (1 - PARALLAX_MAX) + 0.1,
   /**
    * The smallest aspect ratio the band's box is ever asked to be, for `sizes`.
    *

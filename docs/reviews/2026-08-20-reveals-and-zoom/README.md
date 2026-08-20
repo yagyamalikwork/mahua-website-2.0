@@ -1,5 +1,22 @@
 # The hero's reveal, the Jungles' depth, and the Experiences zoom — evidence
 
+> ## ⚠ TWO OF THE THREE THINGS BELOW WERE REMOVED ON 21 AUGUST 2026
+>
+> **The client's *"3D effect"* was never the line rise.** Shown the built result he corrected it: *"I meant
+> the text should look like it is floating/raised over the image, like we have for the last section … where
+> when we scroll the text gives a 3D effect on."* That is `08 · The Invitation`'s **parallax** — its
+> photograph is the only one on the page that drifts, and the words staying still against it is what lifts
+> them off the frame.
+>
+> So **§2 (the hero's curtained reveal) and §3 (the Jungles' `deep`) are history**: both are reverted, the
+> `curtained` prop, `useCurtainReveal.ts`, `CURTAIN_LINES` and `LINES.deepFrom` are all deleted, and
+> `check_entrances.mjs` is back to asserting the hero headline is never staged. **§4, the Experiences zoom,
+> is untouched and shipping.**
+>
+> What replaced them is in `docs/reviews/2026-08-21-floating-text/README.md` and `DECISIONS.md` §21.11. The
+> two sections' measurements below are kept because the *diagnosis* was sound and the numbers are still the
+> ones that describe those headlines — it was the prescription that answered the wrong question.
+
 **20 August 2026, on `feat/home-v2`.** Three client requests after looking at the deployed page, and one
 finding that came out of building them.
 

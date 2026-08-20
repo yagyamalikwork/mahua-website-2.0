@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-20T20:04:57.362Z",
+  "measuredAt": "2026-08-20T22:06:06.372Z",
   "url": "http://localhost:3131/",
   "widths": {
     "360": [
@@ -188,11 +188,11 @@
         "name": "jungles · mark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.03,
+        "worst": 5.43,
         "brightest": [
-          94,
-          100,
-          92
+          85,
+          97,
+          76
         ],
         "boxes": 2,
         "pass": true,
@@ -203,11 +203,11 @@
         "name": "jungles · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 4.96,
+        "worst": 5.03,
         "brightest": [
-          95,
-          101,
-          93
+          94,
+          100,
+          92
         ],
         "boxes": 12,
         "pass": true,
@@ -218,11 +218,11 @@
         "name": "jungles · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.29,
+        "worst": 5.46,
         "brightest": [
-          88,
-          98,
-          82
+          86,
+          96,
+          80
         ],
         "boxes": 8,
         "pass": true,
@@ -605,11 +605,11 @@
         "name": "jungles · mark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.05,
+        "worst": 5.37,
         "brightest": [
-          93,
-          100,
-          91
+          85,
+          98,
+          75
         ],
         "boxes": 2,
         "pass": true,
@@ -635,11 +635,11 @@
         "name": "jungles · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.22,
+        "worst": 5.37,
         "brightest": [
-          93,
+          87,
           97,
-          92
+          81
         ],
         "boxes": 7,
         "pass": true,
@@ -1022,11 +1022,11 @@
         "name": "jungles · mark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.08,
+        "worst": 7.73,
         "brightest": [
-          56,
-          72,
-          55
+          53,
+          77,
+          44
         ],
         "boxes": 2,
         "pass": true,
@@ -1037,11 +1037,11 @@
         "name": "jungles · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.53,
+        "worst": 5.14,
         "brightest": [
-          87,
-          94,
-          87
+          91,
+          99,
+          91
         ],
         "boxes": 12,
         "pass": true,
@@ -1052,11 +1052,11 @@
         "name": "jungles · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.63,
+        "worst": 5.37,
         "brightest": [
-          84,
-          94,
-          77
+          87,
+          97,
+          81
         ],
         "boxes": 5,
         "pass": true,
@@ -1453,11 +1453,11 @@
         "name": "jungles · mark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 7.53,
+        "worst": 9.16,
         "brightest": [
-          61,
-          75,
-          76
+          51,
+          64,
+          33
         ],
         "boxes": 2,
         "pass": true,
@@ -1468,11 +1468,11 @@
         "name": "jungles · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.88,
+        "worst": 7.69,
         "brightest": [
-          83,
-          90,
-          83
+          53,
+          77,
+          51
         ],
         "boxes": 12,
         "pass": true,
@@ -1483,11 +1483,11 @@
         "name": "jungles · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.1,
+        "worst": 5.69,
         "brightest": [
-          94,
-          99,
-          89
+          82,
+          93,
+          85
         ],
         "boxes": 6,
         "pass": true,
@@ -1884,11 +1884,11 @@
         "name": "jungles · mark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 8.68,
+        "worst": 9.27,
         "brightest": [
-          57,
-          65,
-          63
+          52,
+          61,
+          58
         ],
         "boxes": 2,
         "pass": true,
@@ -1899,11 +1899,11 @@
         "name": "jungles · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.78,
+        "worst": 5.89,
         "brightest": [
-          85,
-          91,
-          82
+          82,
+          90,
+          84
         ],
         "boxes": 12,
         "pass": true,
@@ -1914,11 +1914,11 @@
         "name": "jungles · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.05,
+        "worst": 5.03,
         "brightest": [
-          94,
+          95,
           100,
-          88
+          90
         ],
         "boxes": 5,
         "pass": true,
@@ -2043,11 +2043,11 @@
         "name": "invitation · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.05,
+        "worst": 5.26,
         "brightest": [
-          94,
-          100,
-          89
+          91,
+          97,
+          90
         ],
         "boxes": 10,
         "pass": true,
@@ -2058,11 +2058,11 @@
         "name": "invitation · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 5.84,
+        "worst": 5.78,
         "brightest": [
-          84,
+          85,
           91,
-          76
+          82
         ],
         "boxes": 2,
         "pass": true,
@@ -2315,11 +2315,11 @@
         "name": "jungles · mark",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.01,
+        "worst": 6.83,
         "brightest": [
-          80,
-          89,
-          82
+          69,
+          81,
+          79
         ],
         "boxes": 2,
         "pass": true,
@@ -2330,11 +2330,11 @@
         "name": "jungles · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.88,
+        "worst": 5.89,
         "brightest": [
           83,
           90,
-          83
+          81
         ],
         "boxes": 12,
         "pass": true,
@@ -2345,10 +2345,10 @@
         "name": "jungles · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.18,
+        "worst": 6.05,
         "brightest": [
-          85,
-          86,
+          88,
+          87,
           72
         ],
         "boxes": 5,
@@ -2474,11 +2474,11 @@
         "name": "invitation · heading",
         "min": 3,
         "text": "#f1e9d7",
-        "worst": 5.03,
+        "worst": 5.35,
         "brightest": [
-          94,
-          100,
-          92
+          90,
+          96,
+          87
         ],
         "boxes": 10,
         "pass": true,
@@ -2489,11 +2489,11 @@
         "name": "invitation · body",
         "min": 4.5,
         "text": "#f1e9d7",
-        "worst": 6.51,
+        "worst": 5.76,
         "brightest": [
-          78,
-          83,
-          77
+          86,
+          91,
+          83
         ],
         "boxes": 2,
         "pass": true,

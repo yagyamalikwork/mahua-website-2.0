@@ -1,5 +1,6 @@
 import { Enter } from "@/components/motion/Enter";
 import { ImageReveal } from "@/components/motion/ImageReveal";
+import { Parallax } from "@/components/motion/Parallax";
 import { SplitLines } from "@/components/motion/SplitLines";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { Photo } from "@/components/ui/Photo";
@@ -30,7 +31,8 @@ export const BAND_SIZES = "100vw";
  * `ui/Photo.tsx` says to err in. The working, the measured aspects at five
  * widths and the margin left over are all on `JUNGLE_BAND.coverAspectFloor`.
  */
-export const BAND_BOX = JUNGLE_BAND.coverAspectFloor;
+export const BAND_BOX =
+  JUNGLE_BAND.coverAspectFloor / JUNGLE_BAND.driftOversize;
 
 /**
  * The wash between the three cats and the cream type laid on them.
@@ -257,20 +259,53 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
       className="relative isolate flex min-h-[31vw] w-full flex-col justify-center overflow-hidden px-6 py-24 md:px-12 md:py-32"
       style={{ backgroundColor: "var(--overlay)" }}
     >
-      <div className="absolute inset-0 -z-10">
+      <div className="jungles-photo absolute inset-0 -z-10">
         {/* `noZoom` — this is a backdrop with a headline on it, exactly like the
             hero's, and the home page's zoom and float are both for photographs
             that read as discrete objects. The float would also drag the frame
             out from under the `Scrim` below, which is a sibling and not a
             child. */}
         <ImageReveal noZoom className="h-full w-full">
-          <Photo
-            id={chapter.media[0]}
-            sizes={BAND_SIZES}
-            box={BAND_BOX}
-            pictureClassName="block h-full w-full"
-            className="h-full w-full object-cover"
-          />
+          {/*
+            **The drift — client, 21 Aug 2026.** *"The text should look like it
+            is floating/raised over the image, like we have for the last section
+            … where when we scroll the text gives a 3D effect."* The closing
+            chapter's photograph is the only parallaxed element on the page; it
+            moves while every word stays still, and that difference in rate is
+            what lifts the type off the frame. This is the same component doing
+            the same thing.
+
+            **Inside `ImageReveal`, not outside it, and the order is load
+            bearing.** The frame is what clips (`overflow-hidden`) and what the
+            entrance mask wipes across; only the photograph inside it may move.
+            Wrapped the other way round, the mask would drift with the picture
+            and the frame's own clip would travel off the band's edge.
+
+            `[data-parallax]` gets its height from `app/globals.css` rather than
+            from a class here: `Parallax` renders a bare `<div>` with no
+            `className` prop, and it needs the band's own height for two separate
+            reasons — its `offsetHeight` is what the translate is a fraction of,
+            so an auto-height wrapper drifts by exactly nothing; and the
+            picture's `%` height below has to resolve against something definite.
+          */}
+          <Parallax>
+            <Photo
+              id={chapter.media[0]}
+              sizes={BAND_SIZES}
+              box={BAND_BOX}
+              pictureClassName="block w-full"
+              /* Oversized and re-centred BEFORE `Parallax` ever touches it —
+                 `JUNGLE_BAND.driftOversize` carries the arithmetic and what it
+                 costs the crop. Written as a style rather than a class because
+                 both numbers are derived from one dial. */
+              pictureStyle={{
+                height: `${JUNGLE_BAND.driftOversize * 100}%`,
+                position: "relative",
+                top: `-${((JUNGLE_BAND.driftOversize - 1) / 2) * 100}%`,
+              }}
+              className="h-full w-full object-cover"
+            />
+          </Parallax>
         </ImageReveal>
       </div>
       <div className="absolute inset-0 -z-10">
@@ -374,25 +409,9 @@ export function JunglesBand({ chapter }: { chapter: ChapterLike }) {
                 The scale is unchanged from the cream arrangement (2.8rem at the
                 top against `TwoToneHeading`'s 3.5rem): the client asked for this
                 heading smaller on 19 Aug and has not asked for it back.
-
-                **`deep` — client, 20 Aug 2026:** *"the 3D effect on … 02-The
-                Jungles section is not noticeable as it is on the last section."*
-                Measured at 1440x900 before anything was changed, and he was
-                right by exactly the amount the arithmetic predicts: a word rises
-                `LINES.from` of its own box, so this 45px heading travelled
-                **56px** against the closing chapter's 70px heading travelling
-                **84px**. Same rule, same duration, two-thirds the movement.
-
-                **The size is not the lever here, because the size is his** — see
-                the paragraph above. `deep` starts each word further below its
-                own mask instead: **76px** of travel at the same duration and on
-                the same curve, on a heading that is set exactly as he set it.
-                `LINES.deepFrom` carries the number; `app/globals.css` carries
-                the rule and why it wins on specificity rather than order.
               */}
                 <SplitLines
                   as="h2"
-                  deep
                   className="mt-6 max-w-[24ch] font-[family-name:var(--font-display)] text-[clamp(1.6rem,3.4vw,2.8rem)] font-light leading-[1.1] tracking-[-0.01em] text-[color:var(--bg)]"
                 >
                   {copy.quote}

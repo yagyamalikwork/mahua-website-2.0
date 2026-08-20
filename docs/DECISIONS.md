@@ -2350,3 +2350,57 @@ carousel that runs continuously against one that comes to rest, he said *"build 
 `loop` ships — what he originally described, and **the first thing on this site that never stops**, which
 non-negotiable #5 is the reason to say out loud rather than ship quietly. `settle` is a real scroller whose
 cards slide into place once on a `view()` timeline and then rest.
+
+### 21.11 "3D effect" meant PARALLAX, and it took two goes to hear it (21 Aug 2026)
+
+Client, having looked at what §21.9 built: *"I think you misunderstood my request. When I asked you to add a
+3D effect I meant the text should look like it is floating/raised over the image, like we have for the last
+section … where when we scroll the text gives a 3D effect on. And not the rise effect."* Evidence:
+`docs/reviews/2026-08-21-floating-text/README.md`.
+
+**The thing he was pointing at is `08 · The Invitation`'s parallax, and it was the only one on the page.**
+`ui/FullBleed.tsx` wraps that chapter's photograph in `components/motion/Parallax.tsx`; nothing else did. The
+photograph drifts while every word stays put, and **the difference in rate is the effect** — it reads as the
+type lifted off the frame, it exists only while the section is passing, and **it cannot be seen in a
+screenshot.** `check_entrances.mjs` had been printing it for weeks: `parallax 1/1 moved … invitation[0]`.
+
+**Two lessons, and the first is about listening rather than about code.**
+
+- **"Like the last section" is a pointer at a rendered thing, not a description of a mechanism.** Both
+  readings — the line rise and the parallax — are genuinely present in that chapter, so the phrase was
+  ambiguous and the ambiguity was resolvable *by looking at what differs between the sections he named*.
+  `check_entrances.mjs`'s own output said "1/1" — one parallaxed element on a page of seven chapters — and
+  that single line was the whole answer, a day before it was read. **When a client says "like X", diff X
+  against the thing he is unhappy with before building anything.**
+- **A correct measurement of the wrong quantity is still wrong.** §21.9 measured travel (0px / 56px / 84px),
+  proved the hero's effect was absent, solved the Jungles to within 1px of its reference, and verified LCP
+  against a control. All of it was true. None of it was the question.
+
+**What shipped instead:** `02 · The Jungles`' photograph is now parallaxed, measured at **70.6px of drift
+against 16.1px of text movement — 54.5px of separation**, where the closing chapter reads 79.5 / 18.3 / 61.2.
+The band's own drift is smaller only because parallax is a fraction of an element's height and that band is
+446px against 1,149px.
+
+**`JUNGLE_BAND.driftOversize`** is `FullBleed`'s arithmetic as a fraction rather than in `vh`, because this
+band's height is `max(floor, its own words)`. The photograph is drawn 27.6% taller and re-centred before
+`Parallax` touches it: translate ±7.5% of the band, overhang 13.8% each end, **1.84× margin**. One CSS rule
+gives `[data-parallax]` the band's height — `Parallax` renders a bare `<div>` with no `className`, and it
+needs a definite height twice over: its `offsetHeight` is what the translate is a fraction of (an auto-height
+wrapper drifts by exactly zero), and the picture's `%` height must resolve against something.
+
+**A re-crop is a re-solve, and this one had to be solved across the DRIFT.** The pixels under the glyphs now
+change as the section passes, so eight scroll positions at three viewports were measured with the type hidden
+and the real composited pixels read: worst **5.03 / 5.37 / 5.03** against a 4.5 floor. `flat: 0.74` needed no
+change, which is what its own note predicts — a pure flat is the one wash whose strength does not depend on
+where the type sits. Same shape of question as the review carousel's eight phases (§21.10): **anything that
+moves over a photograph has to be measured over its whole travel, never at one position.**
+
+**Everything §21.9 built for the headlines is deleted rather than switched off**: `curtained`,
+`useCurtainReveal.ts`, `CURTAIN_LINES`, `LINES.deepFrom` and five tests. `check_entrances.mjs` is back to
+asserting the hero's headline is never staged. `LINES.from` survives as the literal `115%` lifted into the
+dial file. **491 tests, first-load JS back to 167.5 KB brotli** — the figure before any of it.
+
+**Still open: the hero has no parallax and the client asked for the effect on that section too.** Not added
+unasked, because `ui/Hero.tsx` records a deliberate decision against it and giving it one draws the page's
+most important photograph ~28% larger, showing the middle 78% — a re-crop whose scrim (`top: 0.92,
+bottom: 0.5, corner: 0.78`) would have to be re-solved. His call.

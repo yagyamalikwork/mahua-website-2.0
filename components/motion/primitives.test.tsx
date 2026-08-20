@@ -35,7 +35,9 @@ const HEADLINE = "A legacy of conservation woven through generations";
  */
 function withMedia({ reducedMotion = false, pinnable = false } = {}) {
   vi.stubGlobal("matchMedia", (query: string) => ({
-    matches: query.includes("prefers-reduced-motion") ? reducedMotion : pinnable,
+    matches: query.includes("prefers-reduced-motion")
+      ? reducedMotion
+      : pinnable,
     media: query,
     onchange: null,
     addListener: vi.fn(),
@@ -61,7 +63,16 @@ function visibleText(node: HTMLElement) {
  * GSAP applies its "from" state at mount and the words really are displaced.
  */
 function placeBelowTheFold() {
-  const rect = { top: 5000, bottom: 5400, left: 0, right: 900, width: 900, height: 400, x: 0, y: 5000 };
+  const rect = {
+    top: 5000,
+    bottom: 5400,
+    left: 0,
+    right: 900,
+    width: 900,
+    height: 400,
+    x: 0,
+    y: 5000,
+  };
   vi.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue({
     ...rect,
     toJSON: () => rect,
@@ -81,19 +92,23 @@ function placeBelowTheFold() {
  * correct however many times the component reads it.
  */
 function wrapEvery(perLine: number) {
-  vi.spyOn(HTMLElement.prototype, "offsetTop", "get").mockImplementation(function (
-    this: HTMLElement,
-  ) {
-    if (!this.hasAttribute("data-word")) return 0;
-    const words = [...(this.closest("h1, h2, h3, p")?.querySelectorAll("[data-word]") ?? [])];
-    const index = words.indexOf(this);
-    return index < 0 ? 0 : Math.floor(index / perLine) * 60;
-  });
+  vi.spyOn(HTMLElement.prototype, "offsetTop", "get").mockImplementation(
+    function (this: HTMLElement) {
+      if (!this.hasAttribute("data-word")) return 0;
+      const words = [
+        ...(this.closest("h1, h2, h3, p")?.querySelectorAll("[data-word]") ??
+          []),
+      ];
+      const index = words.indexOf(this);
+      return index < 0 ? 0 : Math.floor(index / perLine) * 60;
+    },
+  );
 }
 
 /** Source of a motion component, for the two budget rules below. */
 const MOTION_DIR = path.join(process.cwd(), "components", "motion");
-const motionSource = (file: string) => readFileSync(path.join(MOTION_DIR, file), "utf8");
+const motionSource = (file: string) =>
+  readFileSync(path.join(MOTION_DIR, file), "utf8");
 
 /**
  * jsdom ships no `IntersectionObserver`, and `useInView` deliberately leaves the
@@ -113,7 +128,10 @@ function installIntersectionObserver() {
       constructor(private cb: IntersectionObserverCallback) {
         firstLooks.push((isIntersecting) =>
           this.cb(
-            this.targets.map((target) => ({ target, isIntersecting }) as IntersectionObserverEntry),
+            this.targets.map(
+              (target) =>
+                ({ target, isIntersecting }) as IntersectionObserverEntry,
+            ),
             this as unknown as IntersectionObserver,
           ),
         );
@@ -155,14 +173,22 @@ describe("SplitLines", () => {
   it("renders the headline as ordinary readable text with no JavaScript at all", () => {
     // Server markup is what a visitor gets before hydration, and all a visitor
     // with JavaScript disabled will ever get.
-    const html = renderToStaticMarkup(<SplitLines as="h1">{HEADLINE}</SplitLines>);
-    const text = html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    const html = renderToStaticMarkup(
+      <SplitLines as="h1">{HEADLINE}</SplitLines>,
+    );
+    const text = html
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
     expect(text).toBe(HEADLINE);
-    expect(html, "nothing may be hidden in markup that script has to undo").not.toMatch(
-      /opacity:\s*0|visibility:\s*hidden|display:\s*none/,
+    expect(
+      html,
+      "nothing may be hidden in markup that script has to undo",
+    ).not.toMatch(/opacity:\s*0|visibility:\s*hidden|display:\s*none/);
+    expect(html, "no transform may displace the words at rest").not.toMatch(
+      /transform:/,
     );
-    expect(html, "no transform may displace the words at rest").not.toMatch(/transform:/);
   });
 
   it("leaves a headline that is already on screen completely alone", () => {
@@ -201,7 +227,9 @@ describe("SplitLines", () => {
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
     look(false);
     look(true);
-    expect(container.querySelector("h2")?.getAttribute("data-lines-enter")).toBe("in");
+    expect(
+      container.querySelector("h2")?.getAttribute("data-lines-enter"),
+    ).toBe("in");
   });
 
   it("leaves the words untransformed when the visitor asked for less motion", () => {
@@ -217,7 +245,9 @@ describe("SplitLines", () => {
       container.querySelector("h2")?.getAttribute("data-lines-enter"),
       "reduced motion must be a still state, not a slow one",
     ).toBeNull();
-    expect(visibleText(container.querySelector("h2") as HTMLElement)).toBe(HEADLINE);
+    expect(visibleText(container.querySelector("h2") as HTMLElement)).toBe(
+      HEADLINE,
+    );
   });
 
   it("never writes a displacement of its own, so an unmount cannot strand a word", () => {
@@ -233,7 +263,9 @@ describe("SplitLines", () => {
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
     look(false);
 
-    for (const inner of container.querySelectorAll<HTMLElement>("[data-line-inner]")) {
+    for (const inner of container.querySelectorAll<HTMLElement>(
+      "[data-line-inner]",
+    )) {
       expect(
         inner.getAttribute("style") ?? "",
         "a word carries an inline displacement no unmount would clear",
@@ -247,8 +279,12 @@ describe("SplitLines", () => {
     // Without a wrap there is one line, one delay of zero, and nothing to sort.
     wrapEvery(3);
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
-    const delays = [...container.querySelectorAll<HTMLElement>("[data-line-inner]")].map((e) =>
-      Number((e.style.getPropertyValue("--enter-delay") || "0s").replace("s", "")),
+    const delays = [
+      ...container.querySelectorAll<HTMLElement>("[data-line-inner]"),
+    ].map((e) =>
+      Number(
+        (e.style.getPropertyValue("--enter-delay") || "0s").replace("s", ""),
+      ),
     );
     expect(delays.length).toBeGreaterThan(0);
     expect(delays).toEqual([...delays].sort((a, b) => a - b));
@@ -272,13 +308,14 @@ describe("SplitLines", () => {
 
     wrapEvery(4);
     const wide = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
-    const wideDelays = [...wide.container.querySelectorAll<HTMLElement>("[data-line-inner]")].map(
-      (e) => e.style.getPropertyValue("--enter-delay"),
-    );
+    const wideDelays = [
+      ...wide.container.querySelectorAll<HTMLElement>("[data-line-inner]"),
+    ].map((e) => e.style.getPropertyValue("--enter-delay"));
 
-    expect(new Set(narrowDelays).size, "a two-word wrap produced one line").toBeGreaterThan(
-      new Set(wideDelays).size,
-    );
+    expect(
+      new Set(narrowDelays).size,
+      "a two-word wrap produced one line",
+    ).toBeGreaterThan(new Set(wideDelays).size);
   });
 
   it("carries every delay with a unit on it", () => {
@@ -289,8 +326,12 @@ describe("SplitLines", () => {
     placeBelowTheFold();
     wrapEvery(3);
     const { container } = render(<SplitLines as="h2">{HEADLINE}</SplitLines>);
-    for (const inner of container.querySelectorAll<HTMLElement>("[data-line-inner]")) {
-      expect(inner.style.getPropertyValue("--enter-delay")).toMatch(/^\d+(\.\d+)?s$/);
+    for (const inner of container.querySelectorAll<HTMLElement>(
+      "[data-line-inner]",
+    )) {
+      expect(inner.style.getPropertyValue("--enter-delay")).toMatch(
+        /^\d+(\.\d+)?s$/,
+      );
     }
   });
 
@@ -300,161 +341,6 @@ describe("SplitLines", () => {
     expect(container.querySelector("p")).not.toBeNull();
     expect(container.querySelector("h2")).toBeNull();
   });
-
-  it("marks a deep reveal without touching anything a reader can see", () => {
-    // `deep` is one attribute and one CSS rule — the words themselves are
-    // identical, which is the whole point of it being available to a heading
-    // whose size the client fixed. If this ever starts changing the markup, the
-    // rule it selects has moved into the component.
-    withReducedMotion(false);
-    const plain = renderToStaticMarkup(<SplitLines as="h2">{HEADLINE}</SplitLines>);
-    const deep = renderToStaticMarkup(
-      <SplitLines as="h2" deep>
-        {HEADLINE}
-      </SplitLines>,
-    );
-    expect(deep).toContain("data-lines-deep");
-    expect(plain).not.toContain("data-lines-deep");
-    expect(deep.replace(/ data-lines-deep=""/, "")).toBe(plain);
-  });
-});
-
-/**
- * The hero's headline, which is the one on the page that is already on screen
- * when the page loads — so `useInView` leaves it alone, and until 20 Aug 2026
- * that meant the effect the client believed he had asked for was not happening
- * there at all. `useCurtainReveal` is the exception, and these are the three
- * things it must never get wrong.
- */
-describe("SplitLines, revealed as the welcome curtain lifts", () => {
-  /**
-   * How far into the welcome screen's fade the page is.
-   *
-   * In a browser the hook reads this off the curtain's own `Animation`; jsdom has
-   * no `getAnimations`, so it takes the documented fallback and reads
-   * `performance.now()` — which is what makes it stubbable here. The 380ms gap
-   * between the two clocks is a browser fact and is measured by
-   * `scripts/check_entrances.mjs`, not by this file.
-   */
-  function atPageAge(ms: number) {
-    vi.spyOn(performance, "now").mockReturnValue(ms);
-  }
-
-  /**
-   * The curtain itself. **Without one there is no reveal at all**, which is the
-   * hook's fail-safe rather than an implementation detail: the whole licence for
-   * staging text somebody could otherwise see is that something opaque is over
-   * it. Rendered here as the bare hook the component looks for.
-   */
-  function withCurtain() {
-    const el = document.createElement("div");
-    el.setAttribute("data-welcome", "");
-    document.body.appendChild(el);
-    return () => el.remove();
-  }
-
-  it("stages an on-screen headline while the curtain still covers it, then settles it", () => {
-    withReducedMotion(false);
-    const removeCurtain = withCurtain();
-    vi.useFakeTimers();
-    // Hydrated a fifth of a second in: deep inside `WELCOME.hold`, so the words
-    // are moved behind a cream screen nobody can see through.
-    atPageAge(200);
-    const { container } = render(
-      <SplitLines as="h1" curtained>
-        {HEADLINE}
-      </SplitLines>,
-    );
-    const heading = () => container.querySelector("h1");
-
-    // Staged on the next frame rather than in the effect body, so the browser
-    // has painted the staged state before the settled one is written.
-    expect(heading()?.getAttribute("data-lines-enter")).toBeNull();
-    act(() => {
-      vi.advanceTimersByTime(20);
-    });
-    expect(
-      heading()?.getAttribute("data-lines-enter"),
-      "the hero headline was never staged, so its reveal cannot play",
-    ).toBe("pending");
-
-    act(() => {
-      vi.advanceTimersByTime(4000);
-    });
-    expect(
-      heading()?.getAttribute("data-lines-enter"),
-      "the hero headline was staged and never settled — a headline behind a mask that never lifts",
-    ).toBe("in");
-    expect(visibleText(heading() as HTMLElement)).toBe(HEADLINE);
-    vi.useRealTimers();
-    removeCurtain();
-  });
-
-  it("declines when there is no curtain to hide the staging behind", () => {
-    // The property the whole exception rests on, asserted rather than assumed.
-    // A page that does not mount the welcome screen — any future route, or this
-    // one with it removed — gets `useInView`'s answer, which is to leave an
-    // on-screen headline alone.
-    withReducedMotion(false);
-    vi.useFakeTimers();
-    atPageAge(200);
-    const { container } = render(
-      <SplitLines as="h1" curtained>
-        {HEADLINE}
-      </SplitLines>,
-    );
-    act(() => {
-      vi.advanceTimersByTime(4000);
-    });
-    expect(
-      container.querySelector("h1")?.getAttribute("data-lines-enter"),
-      "a headline was staged on a page with nothing covering it",
-    ).toBeNull();
-    vi.useRealTimers();
-  });
-
-  it("declines entirely if the curtain has already started to lift", () => {
-    // The 4 Aug 2026 finding, kept: staging text somebody can see is a flicker.
-    // A slow device that hydrates late must get the page exactly as it was
-    // before this prop existed — no reveal, not a late one.
-    withReducedMotion(false);
-    const removeCurtain = withCurtain();
-    vi.useFakeTimers();
-    atPageAge(3000);
-    const { container } = render(
-      <SplitLines as="h1" curtained>
-        {HEADLINE}
-      </SplitLines>,
-    );
-    act(() => {
-      vi.advanceTimersByTime(4000);
-    });
-    expect(
-      container.querySelector("h1")?.getAttribute("data-lines-enter"),
-      "a headline was staged after the curtain had gone — that is the flicker",
-    ).toBeNull();
-    expect(visibleText(container.querySelector("h1") as HTMLElement)).toBe(HEADLINE);
-    vi.useRealTimers();
-    removeCurtain();
-  });
-
-  it("gives a reduced-motion visitor nothing at all", () => {
-    withReducedMotion(true);
-    const removeCurtain = withCurtain();
-    vi.useFakeTimers();
-    atPageAge(200);
-    const { container } = render(
-      <SplitLines as="h1" curtained>
-        {HEADLINE}
-      </SplitLines>,
-    );
-    act(() => {
-      vi.advanceTimersByTime(4000);
-    });
-    expect(container.querySelector("h1")?.getAttribute("data-lines-enter")).toBeNull();
-    vi.useRealTimers();
-    removeCurtain();
-  });
 });
 
 describe("the JavaScript budget", () => {
@@ -462,12 +348,19 @@ describe("the JavaScript budget", () => {
     // The budget rule this task exists to enforce: a tween library may only be
     // imported by something that scrubs. An entrance that reaches for GSAP is
     // 115 KB paying for a transition CSS already does.
-    const mayScrub = new Set(["Parallax.tsx", "SmoothScroll.tsx", "PinnedCollage.tsx"]);
+    const mayScrub = new Set([
+      "Parallax.tsx",
+      "SmoothScroll.tsx",
+      "PinnedCollage.tsx",
+    ]);
     for (const f of readdirSync(MOTION_DIR).filter(
       (n) => /\.tsx?$/.test(n) && !n.includes(".test."),
     )) {
       if (mayScrub.has(f)) continue;
-      expect(motionSource(f), `${f} imports gsap but does not scrub`).not.toMatch(/from "gsap/);
+      expect(
+        motionSource(f),
+        `${f} imports gsap but does not scrub`,
+      ).not.toMatch(/from "gsap/);
     }
   });
 
@@ -484,7 +377,9 @@ describe("the JavaScript budget", () => {
     // if a GSAP-carrying chunk is among it. Keep this test for the fast, free
     // catch of the obvious regression; do not let it stand in for the rig.
     for (const f of ["Parallax.tsx", "SmoothScroll.tsx", "scrub.ts"]) {
-      expect(motionSource(f), `${f} imports gsap statically`).not.toMatch(/^import .* from "gsap/m);
+      expect(motionSource(f), `${f} imports gsap statically`).not.toMatch(
+        /^import .* from "gsap/m,
+      );
     }
   });
 
@@ -501,9 +396,10 @@ describe("Enter", () => {
   it("renders its children at rest with no JavaScript", () => {
     const html = renderToStaticMarkup(<Enter>visible</Enter>);
     expect(html).toContain("visible");
-    expect(html, "nothing may be staged in markup that script must undo").not.toMatch(
-      /data-enter="pending"|opacity:\s*0/,
-    );
+    expect(
+      html,
+      "nothing may be staged in markup that script must undo",
+    ).not.toMatch(/data-enter="pending"|opacity:\s*0/);
   });
 
   it("leaves an element that is already on screen alone", () => {
@@ -522,7 +418,9 @@ describe("Enter", () => {
     placeBelowTheFold();
     const { container } = render(<Enter>visible</Enter>);
     look(false);
-    expect(container.firstElementChild?.getAttribute("data-enter")).toBe("pending");
+    expect(container.firstElementChild?.getAttribute("data-enter")).toBe(
+      "pending",
+    );
   });
 
   it("settles what it staged, rather than leaving it invisible", () => {
@@ -560,7 +458,10 @@ describe("ImageReveal", () => {
   it("shows the photograph, not a cream panel, with no JavaScript", () => {
     const html = renderToStaticMarkup(
       <ImageReveal>
-        <img src="/media/tiger-golden-grass-1440.jpg" alt="A tiger in golden grass" />
+        <img
+          src="/media/tiger-golden-grass-1440.jpg"
+          alt="A tiger in golden grass"
+        />
       </ImageReveal>,
     );
     // The mask must be collapsed in the markup. `scale-y-0` is the Tailwind
@@ -568,18 +469,24 @@ describe("ImageReveal", () => {
     // every photograph on the page goes blank without script.
     expect(html).toMatch(/data-image-mask[^>]*class="[^"]*scale-y-0/);
     expect(html).toContain("A tiger in golden grass");
-    expect(html, "server markup staged a photograph script may never un-stage").not.toContain(
-      "data-image-enter",
-    );
+    expect(
+      html,
+      "server markup staged a photograph script may never un-stage",
+    ).not.toContain("data-image-enter");
   });
 
   it("hides the mask from assistive technology", () => {
     const { container } = render(
       <ImageReveal>
-        <img src="/media/tiger-golden-grass-1440.jpg" alt="A tiger in golden grass" />
+        <img
+          src="/media/tiger-golden-grass-1440.jpg"
+          alt="A tiger in golden grass"
+        />
       </ImageReveal>,
     );
-    expect(container.querySelector("[data-image-mask]")?.getAttribute("aria-hidden")).toBe("true");
+    expect(
+      container.querySelector("[data-image-mask]")?.getAttribute("aria-hidden"),
+    ).toBe("true");
   });
 
   it("lowers the mask over a photograph below the fold, then wipes it off", () => {
@@ -587,11 +494,16 @@ describe("ImageReveal", () => {
     placeBelowTheFold();
     const { container } = render(
       <ImageReveal>
-        <img src="/media/tiger-golden-grass-1440.jpg" alt="A tiger in golden grass" />
+        <img
+          src="/media/tiger-golden-grass-1440.jpg"
+          alt="A tiger in golden grass"
+        />
       </ImageReveal>,
     );
     look(false);
-    expect(container.firstElementChild?.getAttribute("data-image-enter")).toBe("pending");
+    expect(container.firstElementChild?.getAttribute("data-image-enter")).toBe(
+      "pending",
+    );
     look(true);
     expect(
       container.firstElementChild?.getAttribute("data-image-enter"),
@@ -603,11 +515,16 @@ describe("ImageReveal", () => {
     withReducedMotion(false);
     const { container } = render(
       <ImageReveal>
-        <img src="/media/tiger-golden-grass-1440.jpg" alt="A tiger in golden grass" />
+        <img
+          src="/media/tiger-golden-grass-1440.jpg"
+          alt="A tiger in golden grass"
+        />
       </ImageReveal>,
     );
     look(false);
-    expect(container.firstElementChild?.getAttribute("data-image-enter")).toBeNull();
+    expect(
+      container.firstElementChild?.getAttribute("data-image-enter"),
+    ).toBeNull();
   });
 
   it("is a still photograph under reduced motion, not a fast one", () => {
@@ -615,11 +532,16 @@ describe("ImageReveal", () => {
     placeBelowTheFold();
     const { container } = render(
       <ImageReveal>
-        <img src="/media/tiger-golden-grass-1440.jpg" alt="A tiger in golden grass" />
+        <img
+          src="/media/tiger-golden-grass-1440.jpg"
+          alt="A tiger in golden grass"
+        />
       </ImageReveal>,
     );
     look(false);
-    expect(container.firstElementChild?.getAttribute("data-image-enter")).toBeNull();
+    expect(
+      container.firstElementChild?.getAttribute("data-image-enter"),
+    ).toBeNull();
   });
 
   it("never stages the photograph at all when told it is static", () => {
@@ -631,7 +553,10 @@ describe("ImageReveal", () => {
     placeBelowTheFold();
     const { container } = render(
       <ImageReveal static>
-        <img src="/media/reception-path-dusk-1440.jpg" alt="A lantern-lit path at dusk" />
+        <img
+          src="/media/reception-path-dusk-1440.jpg"
+          alt="A lantern-lit path at dusk"
+        />
       </ImageReveal>,
     );
     look(false);
@@ -639,7 +564,9 @@ describe("ImageReveal", () => {
 
     // The LCP escape hatch: the hero is never handed to the observer, so no
     // state is ever written and nothing can be charged to the metric.
-    expect(container.firstElementChild?.getAttribute("data-image-enter")).toBeNull();
+    expect(
+      container.firstElementChild?.getAttribute("data-image-enter"),
+    ).toBeNull();
     const inner = container.querySelector<HTMLElement>("[data-image-inner]");
     expect(inner?.style.transform).toBe("");
     expect(inner?.style.scale).toBe("");
@@ -654,8 +581,12 @@ describe("StickyScene", () => {
       [-4, 1],
       [2, 2],
     ] as const) {
-      const html = renderToStaticMarkup(<StickyScene screens={asked}>scene</StickyScene>);
-      expect(html, `asked for ${asked} screens`).toContain(`--sticky-screens:${expected}`);
+      const html = renderToStaticMarkup(
+        <StickyScene screens={asked}>scene</StickyScene>,
+      );
+      expect(html, `asked for ${asked} screens`).toContain(
+        `--sticky-screens:${expected}`,
+      );
     }
   });
 });
@@ -674,23 +605,30 @@ describe("PinnedCollage", () => {
     // sparse. STICKY_SCREENS_MAX exists for this and must bind here too.
     withMedia({ pinnable: true });
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
-    const screens = Number(sceneIn(container)?.style.getPropertyValue("--sticky-screens"));
+    const screens = Number(
+      sceneIn(container)?.style.getPropertyValue("--sticky-screens"),
+    );
     expect(screens).toBeGreaterThanOrEqual(1);
     expect(screens).toBeLessThanOrEqual(STICKY_SCREENS_MAX);
-    expect(screens, "the component asked for a number the clamp then changed").toBe(
-      COLLAGE_SCREENS,
-    );
+    expect(
+      screens,
+      "the component asked for a number the clamp then changed",
+    ).toBe(COLLAGE_SCREENS);
   });
 
   it("renders every photograph and the headline with no JavaScript", () => {
     // Server markup is what a visitor gets before hydration, and all a visitor
     // with JavaScript disabled will ever get.
     const html = renderToStaticMarkup(<PinnedCollage chapter={ROOTED} />);
-    for (const id of ROOTED.media) expect(html, `${id} is missing`).toContain(id);
-    expect(html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ")).toContain(HEADING);
-    expect(html, "nothing may be hidden in markup that script has to undo").not.toMatch(
-      /opacity:\s*0|visibility:\s*hidden|display:\s*none/,
+    for (const id of ROOTED.media)
+      expect(html, `${id} is missing`).toContain(id);
+    expect(html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ")).toContain(
+      HEADING,
     );
+    expect(
+      html,
+      "nothing may be hidden in markup that script has to undo",
+    ).not.toMatch(/opacity:\s*0|visibility:\s*hidden|display:\s*none/);
   });
 
   it("reserves no scroll at all with no JavaScript", () => {
@@ -700,9 +638,10 @@ describe("PinnedCollage", () => {
     // never move. That is two paid-for empty screens, which is the exact thing
     // `StickyScene` was written not to be.
     const html = renderToStaticMarkup(<PinnedCollage chapter={ROOTED} />);
-    expect(html, "the server markup pinned a scene nothing can advance").not.toContain(
-      "sticky-scene",
-    );
+    expect(
+      html,
+      "the server markup pinned a scene nothing can advance",
+    ).not.toContain("sticky-scene");
   });
 
   it("drifts each photograph at its own rate, all within the parallax cap", () => {
@@ -710,8 +649,12 @@ describe("PinnedCollage", () => {
     // read as one sliding sheet; anything past the cap is movement rather than
     // depth (spec section 4.3 law 3).
     const rates = COLLAGE_RATES;
-    expect(new Set(rates).size, "every photograph drifts at the same rate").toBe(rates.length);
-    for (const r of rates) expect(Math.abs(r)).toBeLessThanOrEqual(PARALLAX_MAX);
+    expect(
+      new Set(rates).size,
+      "every photograph drifts at the same rate",
+    ).toBe(rates.length);
+    for (const r of rates)
+      expect(Math.abs(r)).toBeLessThanOrEqual(PARALLAX_MAX);
   });
 
   it("puts one rate on each photograph, where a browser can read it back", () => {
@@ -722,9 +665,9 @@ describe("PinnedCollage", () => {
     // that finishes there.
     withMedia({ pinnable: true });
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
-    const written = [...container.querySelectorAll<HTMLElement>("[data-drift]")].map((el) =>
-      Number(el.dataset.drift),
-    );
+    const written = [
+      ...container.querySelectorAll<HTMLElement>("[data-drift]"),
+    ].map((el) => Number(el.dataset.drift));
     expect(written).toEqual([...COLLAGE_RATES]);
   });
 
@@ -747,7 +690,9 @@ describe("PinnedCollage", () => {
     withMedia({ pinnable: false });
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
     expect(sceneIn(container)).toBeNull();
-    expect(container.innerHTML, "the chapter vanished with the pin").toContain(ROOTED.media[0]);
+    expect(container.innerHTML, "the chapter vanished with the pin").toContain(
+      ROOTED.media[0],
+    );
   });
 
   it("gives the reserved scroll back when the tween library fails to load", async () => {
@@ -758,10 +703,15 @@ describe("PinnedCollage", () => {
     // network and reads the section's height back
     // (`scripts/check_pinned_collage.mjs`); this is the fast half.
     withMedia({ pinnable: true });
-    vi.spyOn(scrub, "loadScrubTools").mockRejectedValue(new Error("chunk failed"));
+    vi.spyOn(scrub, "loadScrubTools").mockRejectedValue(
+      new Error("chunk failed"),
+    );
 
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
-    expect(sceneIn(container), "the scene was never pinned, so this proves nothing").not.toBeNull();
+    expect(
+      sceneIn(container),
+      "the scene was never pinned, so this proves nothing",
+    ).not.toBeNull();
 
     // `whenNear` fires on the observer's first look — but since 9 Aug 2026 it
     // also waits for the visitor to have scrolled at all (the property pages'
@@ -775,7 +725,10 @@ describe("PinnedCollage", () => {
       await Promise.resolve();
     });
 
-    expect(sceneIn(container), "a failed scrub left the scene pinned").toBeNull();
+    expect(
+      sceneIn(container),
+      "a failed scrub left the scene pinned",
+    ).toBeNull();
     // And the chapter is still all there, on the ordinary composition.
     for (const id of ROOTED.media) expect(container.innerHTML).toContain(id);
   });
@@ -796,7 +749,8 @@ describe("PinnedCollage", () => {
     withMedia({ pinnable: true });
     const { container } = render(<PinnedCollage chapter={ROOTED} />);
     expect(sceneIn(container)).not.toBeNull();
-    for (const id of ROOTED.media) expect(container.innerHTML, `${id} is missing`).toContain(id);
+    for (const id of ROOTED.media)
+      expect(container.innerHTML, `${id} is missing`).toContain(id);
     expect(visibleText(container)).toContain(HEADING);
   });
 });

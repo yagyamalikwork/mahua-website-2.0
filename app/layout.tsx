@@ -42,10 +42,19 @@ export const metadata: Metadata = {
    */
   robots: INDEXING_ALLOWED
     ? undefined
-    : { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
+    : {
+        index: false,
+        follow: false,
+        nocache: true,
+        googleBot: { index: false, follow: false },
+      },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   // Written once from PALETTE, server-rendered so there is no flash of unstyled
   // colour. The page no longer moves through a scroll-driven sequence of light
   // states, so these values never change after paint (retired 3 Aug 2026).
@@ -91,13 +100,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // the component swaps between them rather than carrying a number.
           "--lines-duration": `${DURATION.reveal}s`,
           "--lines-slow-duration": `${DURATION.revealSlow}s`,
-          // How far below its own mask a word starts. Two values for the same
-          // reason as the two durations above: one headline on the page needs a
-          // deeper rise than its type size would otherwise give it, and the
-          // component swaps between them rather than carrying a number. See
-          // `LINES` for the measurement that produced the second one.
+          // How far below its own mask a word starts — `LINES.from`, which was
+          // the literal `115%` in the stylesheet until 20 Aug 2026. See that
+          // token for why it may not go lower.
           "--lines-from": LINES.from,
-          "--lines-deep-from": LINES.deepFrom,
           // The guests' review carousel. Same terms as everything above: the
           // numbers live in `lib/motion.ts` and `lib/reviews.ts`, the rules live
           // in `app/globals.css`, and neither can drift from the other. The card
@@ -192,14 +198,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // close — and so the numbers stay in `lib/motion.ts` rather than being
           // written twice.
           "--living-breath": `${LIVING.breath}s`,
-          "--living-breath-count": String(Math.floor(LIVING.phase / LIVING.breath)),
+          "--living-breath-count": String(
+            Math.floor(LIVING.phase / LIVING.breath),
+          ),
           "--living-blink": `${LIVING.blink}s`,
-          "--living-blink-count": String(Math.floor(LIVING.phase / LIVING.blink)),
+          "--living-blink-count": String(
+            Math.floor(LIVING.phase / LIVING.blink),
+          ),
           "--living-phase": `${LIVING.phase}s`,
         } as React.CSSProperties
       }
     >
-      <body className={`${display.variable} ${label.variable} ${body.variable}`}>
+      <body
+        className={`${display.variable} ${label.variable} ${body.variable}`}
+      >
         {/*
          * The welcome, outside `SmoothScroll` and before everything else.
          *

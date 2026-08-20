@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-08-19T20:46:27.001Z",
-  "url": "http://localhost:3110/",
+  "measuredAt": "2026-08-20T22:15:23.157Z",
+  "url": "http://localhost:3131/",
   "densityCap": 2,
   "results": [
     {
@@ -20,11 +20,16 @@
       },
       "deviceDensity": {
         "worst": 0.89,
-        "median": 1.31,
+        "median": 1.14,
         "best": 4.21
       },
       "understatedSizes": [],
       "atLibraryCeiling": [
+        {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "needed": 1531,
+          "ratio": 0.94
+        },
         {
           "file": "/media/birding-cairn-dusk-1440.avif",
           "needed": 1616,
@@ -98,9 +103,9 @@
         {
           "file": "/media/jungle-cats-stitch-1440.avif",
           "cssWidth": 390,
-          "drawnWidth": 1086,
-          "needed": 1086,
-          "ratio": 1.33
+          "drawnWidth": 1531,
+          "needed": 1531,
+          "ratio": 0.94
         },
         {
           "file": "/media/lantern-bridge-dusk-400.avif",
@@ -196,8 +201,8 @@
         },
         {
           "file": "/media/jungle-cats-stitch-1440.avif",
-          "needed": 2174,
-          "ratio": 0.66
+          "needed": 3061,
+          "ratio": 0.47
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
@@ -297,9 +302,9 @@
         {
           "file": "/media/jungle-cats-stitch-1440.avif",
           "cssWidth": 390,
-          "drawnWidth": 1087,
-          "needed": 2174,
-          "ratio": 0.66
+          "drawnWidth": 1530,
+          "needed": 3061,
+          "ratio": 0.47
         },
         {
           "file": "/media/lantern-bridge-dusk-768.avif",
@@ -394,6 +399,11 @@
           "ratio": 0.94
         },
         {
+          "file": "/media/jungle-cats-stitch-1440.avif",
+          "needed": 1582,
+          "ratio": 0.91
+        },
+        {
           "file": "/media/forest-shrine-incense-700.avif",
           "needed": 720,
           "ratio": 0.97
@@ -481,9 +491,9 @@
         {
           "file": "/media/jungle-cats-stitch-1440.avif",
           "cssWidth": 768,
-          "drawnWidth": 1070,
-          "needed": 1070,
-          "ratio": 1.35
+          "drawnWidth": 1582,
+          "needed": 1582,
+          "ratio": 0.91
         },
         {
           "file": "/media/lantern-bridge-dusk-768.avif",
@@ -568,7 +578,7 @@
       "deviceDensity": {
         "worst": 0.84,
         "median": 1.18,
-        "best": 2.71
+        "best": 2.67
       },
       "understatedSizes": [],
       "atLibraryCeiling": [
@@ -650,46 +660,46 @@
           "ratio": 1
         },
         {
-          "file": "/media/lantern-bridge-dusk-1200.avif",
-          "cssWidth": 609,
-          "drawnWidth": 1143,
-          "needed": 1143,
-          "ratio": 1.05
+          "file": "/media/lantern-bridge-dusk-1300.avif",
+          "cssWidth": 635,
+          "drawnWidth": 1192,
+          "needed": 1192,
+          "ratio": 1.09
         },
         {
           "file": "/media/forest-shrine-incense-640.avif",
-          "cssWidth": 421,
-          "drawnWidth": 421,
-          "needed": 421,
-          "ratio": 1.52
+          "cssWidth": 448,
+          "drawnWidth": 448,
+          "needed": 448,
+          "ratio": 1.43
         },
         {
           "file": "/media/vann-potters-village-1344.avif",
-          "cssWidth": 421,
-          "drawnWidth": 496,
-          "needed": 496,
-          "ratio": 2.71
+          "cssWidth": 448,
+          "drawnWidth": 503,
+          "needed": 503,
+          "ratio": 2.67
         },
         {
-          "file": "/media/veranda-through-leaves-640.avif",
-          "cssWidth": 609,
-          "drawnWidth": 609,
-          "needed": 609,
-          "ratio": 1.05
+          "file": "/media/veranda-through-leaves-768.avif",
+          "cssWidth": 635,
+          "drawnWidth": 635,
+          "needed": 635,
+          "ratio": 1.21
         },
         {
           "file": "/media/petal-bowl-map-640.avif",
-          "cssWidth": 421,
-          "drawnWidth": 421,
-          "needed": 421,
-          "ratio": 1.52
+          "cssWidth": 448,
+          "drawnWidth": 448,
+          "needed": 448,
+          "ratio": 1.43
         },
         {
           "file": "/media/lily-pond-fountain-640.avif",
-          "cssWidth": 421,
-          "drawnWidth": 421,
-          "needed": 421,
-          "ratio": 1.52
+          "cssWidth": 448,
+          "drawnWidth": 448,
+          "needed": 448,
+          "ratio": 1.43
         },
         {
           "file": "/media/bonfire-dinner-400.avif",
@@ -746,7 +756,7 @@
       "deviceDensity": {
         "worst": 0.7,
         "median": 1.18,
-        "best": 2.4
+        "best": 2.37
       },
       "understatedSizes": [],
       "atLibraryCeiling": [
@@ -762,8 +772,8 @@
         },
         {
           "file": "/media/lantern-bridge-dusk-1300.avif",
-          "needed": 1359,
-          "ratio": 0.96
+          "needed": 1414,
+          "ratio": 0.92
         },
         {
           "file": "/media/birding-cairn-dusk-1440.avif",
@@ -844,45 +854,45 @@
         },
         {
           "file": "/media/lantern-bridge-dusk-1300.avif",
-          "cssWidth": 724,
-          "drawnWidth": 1359,
-          "needed": 1359,
-          "ratio": 0.96
+          "cssWidth": 754,
+          "drawnWidth": 1414,
+          "needed": 1414,
+          "ratio": 0.92
         },
         {
           "file": "/media/forest-shrine-incense-700.avif",
-          "cssWidth": 475,
-          "drawnWidth": 475,
-          "needed": 475,
-          "ratio": 1.47
+          "cssWidth": 504,
+          "drawnWidth": 504,
+          "needed": 504,
+          "ratio": 1.39
         },
         {
           "file": "/media/vann-potters-village-1344.avif",
-          "cssWidth": 475,
-          "drawnWidth": 559,
-          "needed": 559,
-          "ratio": 2.4
+          "cssWidth": 504,
+          "drawnWidth": 566,
+          "needed": 566,
+          "ratio": 2.37
         },
         {
           "file": "/media/veranda-through-leaves-960.avif",
-          "cssWidth": 724,
-          "drawnWidth": 724,
-          "needed": 724,
-          "ratio": 1.33
+          "cssWidth": 754,
+          "drawnWidth": 754,
+          "needed": 754,
+          "ratio": 1.27
         },
         {
-          "file": "/media/petal-bowl-map-640.avif",
-          "cssWidth": 475,
-          "drawnWidth": 475,
-          "needed": 475,
-          "ratio": 1.35
+          "file": "/media/petal-bowl-map-700.avif",
+          "cssWidth": 504,
+          "drawnWidth": 504,
+          "needed": 504,
+          "ratio": 1.39
         },
         {
-          "file": "/media/lily-pond-fountain-640.avif",
-          "cssWidth": 475,
-          "drawnWidth": 475,
-          "needed": 475,
-          "ratio": 1.35
+          "file": "/media/lily-pond-fountain-768.avif",
+          "cssWidth": 504,
+          "drawnWidth": 504,
+          "needed": 504,
+          "ratio": 1.52
         },
         {
           "file": "/media/bonfire-dinner-400.avif",

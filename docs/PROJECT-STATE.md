@@ -31,7 +31,7 @@ no mount here.
 
 ### The numbers
 
-**496 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
+**491 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
 screen.** Contrast: 318 probes, 0 failures across three routes. Resolution: 0 under-served. First-load JS
 **167.7 KB brotli** — 167.5 through the restructure itself, where every effect was CSS, plus 0.2 KB for the
 hero's reveal hook on 20 Aug. Initial transfer 669 KB at 390, 965 KB at 1440.
@@ -43,11 +43,12 @@ at five per property, scraping is not available, and — the argument that settl
 4.0, so an unfiltered feed publishes the one-star reviews on the home page. **He is assembling 15–20 himself;
 that is the one thing outstanding.** `docs/DECISIONS.md` §21.10, `docs/reviews/2026-08-20-reviews/README.md`.
 
-**Three client changes landed on top of it on 20 Aug 2026** — the hero's headline now rises as the welcome
-screen lifts (it did not move at all before, by `useInView`'s design), `02 · The Jungles`' heading travels
-83px against the closing chapter's 84px without its type size changing, and the Experiences cards take the
-hover zoom. Density is identical to the decimal; LCP was measured against a control and did not move.
-`docs/DECISIONS.md` §21.9, `docs/reviews/2026-08-20-reveals-and-zoom/README.md`.
+**The Experiences cards took the hover zoom on 20 Aug 2026**, and two other changes made the same day were
+**reverted on 21 Aug**: the client's *"3D effect"* turned out to mean the closing chapter's **parallax** — its
+photograph drifting while its words stay still — not a line-by-line rise. `02 · The Jungles`' photograph now
+drifts too (39px within a 446px band, against the closing chapter's 79px in 1,149px), and the hero's headline
+is still again. `docs/DECISIONS.md` §21.9 and §21.11,
+`docs/reviews/2026-08-21-floating-text/README.md`.
 
 **`imagesPerScreen` went 2.2 → 1.65 → 2.05 across this work.** The dip is the lesson: removing six chapters
 took thirteen photographs and only ~5 screens of scroll. It is the figure the client's original density

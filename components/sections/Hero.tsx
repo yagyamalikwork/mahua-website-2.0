@@ -34,23 +34,18 @@ export const HERO_BOX = { viewportHeightVh: 100 } as const;
  * 2. **`<ImageReveal static>`.** Lighthouse stops the LCP timer on the *final*
  *    frame of any animation applied to the element, so a 1.2s mask here is 1.2s
  *    straight onto the metric (CLAUDE.md non-negotiable #6).
- * 3. **`SplitLines` will not animate this headline off the scroll**, by its own
- *    design — it is on screen at hydration, and animating settled text means
- *    dropping it out of view to lift it back. That was measured as a real
- *    flicker in Task 5.
+ * 3. **`SplitLines` will not animate this headline**, by its own design — it is
+ *    on screen at hydration, and animating settled text means dropping it out of
+ *    view to lift it back. That was measured as a real flicker in Task 5.
  *
- *    **Since 20 Aug 2026 it does animate it off the welcome screen instead**, on
- *    the client's report that the effect was not noticeable here — it was not
- *    happening here. `curtained` is the opt-in and
- *    `components/motion/useCurtainReveal.ts` is the argument; the short version
- *    is that the flicker above is a statement about a visitor who can see the
- *    headline, and for the length of the welcome curtain there is no such
- *    visitor. Nothing about the photograph changed: points 1 and 2 are untouched
- *    and `<ImageReveal static>` is still what keeps the LCP timer clean.
+ *    **A `curtained` variant that staged it behind the welcome screen shipped
+ *    for one day, 20-21 Aug 2026, and the client removed it.** He had asked for
+ *    a *"3D effect"* here and this was the wrong reading of it: what he meant was
+ *    the closing chapter's depth — its photograph drifting while its words stay
+ *    still — not a line-by-line rise. The machinery is gone rather than left
+ *    switched off; the effect he wanted is point 1 above, reversed.
  *
- * So the hero photograph is still, and its headline moves once, as the welcome
- * lifts. Everything else starts one screen down, which is also where the visitor
- * starts scrolling.
+ * So the hero's words are still, and its photograph is not.
  *
  * Cream type over a photograph, not white: `--bg` is already the page's paper and
  * reads warmer over a dusk photograph than pure white does. Its contrast against
@@ -70,7 +65,11 @@ export const HERO_BOX = { viewportHeightVh: 100 } as const;
  * the original figure was: worst pixel under the type, raised until it
  * clears) brings it to 3.07. See `docs/reviews/2026-08-08-property-pages/`.
  */
-export const DEFAULT_SCRIM: ScrimStrength = { top: 0.92, bottom: 0.5, corner: 0.78 };
+export const DEFAULT_SCRIM: ScrimStrength = {
+  top: 0.92,
+  bottom: 0.5,
+  corner: 0.78,
+};
 
 export function Hero({
   chapter,
@@ -84,7 +83,8 @@ export function Hero({
   // One documented narrowing per section: `Chapter.id` is widened to `string` on
   // the exported type, and nothing in the type system ties a `kind` to the shape
   // of the copy that kind renders. `content/home.test.ts` guards the join itself.
-  const resolvedCopy = copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as HeroCopy);
+  const resolvedCopy =
+    copy ?? (chapterCopy(chapter.id as ChapterCopyKey) as HeroCopy);
   const heroImage = media(chapter.media[0]);
 
   // `react-dom`'s `preload`, not a `<link>` in the JSX. A hand-written
@@ -108,7 +108,9 @@ export function Hero({
   preload(heroImage.avif, {
     as: "image",
     type: "image/avif",
-    imageSrcSet: heroImage.sources.map((s) => `${s.avif} ${s.width}w`).join(", "),
+    imageSrcSet: heroImage.sources
+      .map((s) => `${s.avif} ${s.width}w`)
+      .join(", "),
     imageSizes: servedSizes(chapter.media[0], HERO_SIZES, HERO_BOX),
     fetchPriority: "high",
   });
@@ -149,33 +151,8 @@ export function Hero({
       </div>
 
       <div className="mx-auto w-full max-w-[1600px] px-6 pb-14 md:px-12 md:pb-20 short:pb-8">
-        {/*
-         * **`curtained slow` — client, 20 Aug 2026:** *"the 3D effect on the
-         * section where our website opens (The Journey Begins) … is not
-         * noticeable as it is on the last section."* Measured before it was
-         * believed, and he was understating it: this headline's lines travelled
-         * **0px**, because `useInView` refuses to stage anything already on
-         * screen at mount and this is the one headline that always is.
-         *
-         * `curtained` is the exception `components/motion/useCurtainReveal.ts`
-         * exists for, and the welcome screen is the whole reason it is safe —
-         * the staging happens behind an opaque curtain and the rise begins
-         * three-quarters of the way through that curtain's fade. **Point 3
-         * below still holds and is not being argued with**: a headline on screen
-         * with somebody looking at it is still left alone, and if hydration
-         * arrives after the curtain has started to thin, the hook declines and
-         * this headline behaves exactly as it did before.
-         *
-         * `slow` because the travel is the page's largest — 92px of type rises
-         * ~108px at 1440 — and `DURATION.reveal` over that distance reads as a
-         * jump where 1.4s reads as the page opening. It is also the only reveal
-         * on the page that starts partly hidden, so a longer one puts more of
-         * itself in plain sight: ~1.24s visible against ~0.84s.
-         */}
         <SplitLines
           as="h1"
-          curtained
-          slow
           className="max-w-[15ch] font-[family-name:var(--font-display)] text-[clamp(2.6rem,6.6vw,5.75rem)] font-light leading-[1.02] tracking-[-0.015em] text-[color:var(--bg)] short:text-[clamp(2rem,5vw,3.25rem)]"
         >
           {resolvedCopy.headline}
