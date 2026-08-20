@@ -1,5 +1,28 @@
 # Deploying the demo
 
+> **20 August 2026 — the demo is now the RESTRUCTURED home page, from `feat/home-v2`.**
+>
+> The client promoted it after reviewing it on a preview URL: seven chapters, the two joined lodge panels,
+> the cropped Jungles band, the mirrored collages, the sideways Experiences strip, and the reviews under the
+> closing pills. **`demo` was fast-forwarded to `feat/home-v2` to match**, because this file's whole premise
+> is that `demo` names whatever is deployed.
+>
+> **The twelve-chapter page is not lost and is one command from returning:** it is intact on
+> `feat/image-sizing`, `main` and `feat/chapters-rebuild` at `e0e3f69`, with the hanging lantern, the
+> hornbill forest tint and the potter film all still mounted. To put it back:
+> `git checkout feat/image-sizing && npx vercel --prod --yes`.
+>
+> **Two photographs are live without a client ruling** (`DECISIONS.md` §21.5): the safari card's frame
+> changed for a consent reason, and the potters' photograph moved sections. Neither is a defect; both are
+> recorded as open.
+>
+> **Preview deployments are private, and that is a trap worth knowing before a stakeholder meeting.**
+> `npx vercel` without `--prod` gives a separate URL and leaves production alone — but Deployment
+> Protection bounces anonymous visitors to a Vercel login, so a preview link cannot be shared until that is
+> turned off in **Settings → Deployment Protection**. Verified anonymously, not from a logged-in session,
+> which is the only way to see it.
+
+
 Written for whoever has to do this next, including a future session. Everything here was verified on
 12 August 2026 against a real production build.
 
