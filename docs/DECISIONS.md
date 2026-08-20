@@ -2108,9 +2108,11 @@ cream surface of every chapter below `field-days`.
 
 ## 21. Home page v2 — the stakeholders' restructure, on a branch, 19-20 Aug 2026
 
-**`feat/home-v2` only, and NOT deployed.** The twelve-chapter page still ships on `feat/image-sizing` and
-still serves `https://mahua-resorts.vercel.app`. Read this section only when working on that branch; nothing
-here describes the live site.
+**Built on `feat/home-v2`, and DEPLOYED to production on 20 Aug 2026** — `https://mahua-resorts.vercel.app`
+serves this page and `demo` points at it. **This section describes the live site.** The twelve-chapter page
+is intact on `feat/image-sizing`, `main` and `feat/chapters-rebuild` at `e0e3f69`, lantern and hornbill tint
+and potter film all still mounted, and returns with one command — the reversibility the branch bought
+survives the deploy.
 
 Spec: `docs/superpowers/specs/2026-08-19-home-v2-restructure.md`. Evidence:
 `docs/reviews/2026-08-19-home-v2/README.md`.
