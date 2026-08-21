@@ -131,7 +131,7 @@ Copied from the spec and CLAUDE.md. Every task's requirements implicitly include
 ### Method this project requires
 
 - **Watch every new assertion fail against a deliberately broken build before trusting it.** Not optional;
-  it is the countermeasure to this project's one repeated defect (`DECISIONS.md` §2, fifty-three instances).
+  it is the countermeasure to this project's one repeated defect (`DECISIONS.md` §2, which was at fifty-three instances when this plan was written).
 - **Ask what a broken build would score** before believing a measurement.
 - **Sweep widths continuously**, not at 390/768/1440/1920. The last four defects all lived between those
   fixed samples.
