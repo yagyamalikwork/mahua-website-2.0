@@ -36,11 +36,14 @@ The movement is a CSS animation, the pause is `:hover`, and the full-text panel 
 construction the room gallery was rebuilt on after the Popover API was measured nesting its own panels
 (`DECISIONS.md` §18).
 
-**First-load JavaScript: 167.7 KB brotli, identical to the figure before this work.**
+**First-load JavaScript: 167.7 KB brotli on the day, identical to the figure before this work — and
+167.5 KB since 21 Aug, when the reverted headline reveal took its own hook out.** The carousel itself has
+never cost a byte.
 
 ## 3 · Measured, on the shipped build
 
-`node scripts/check_reviews.mjs --port 3131` — **11 assertions, PASS.**
+`node scripts/check_reviews.mjs --port 3131` — **12 assertions, PASS.** (Eleven on the day; assertion 12,
+centring, was added on 21 Aug after the client caught what §4 records.)
 
 | | |
 |---|---|
@@ -54,7 +57,8 @@ construction the room gallery was rebuilt on after the Popover API was measured 
 | no JavaScript | cards and panels server-rendered; `:target` still opens the panel |
 | 360 × 800 | card 279px in a 310px frame, **31px of peek**, no horizontal page scroll |
 
-Page gates: **496 tests**, build / `tsc` / lint clean, `check_contrast_over_photos.mjs` **156 probes, 0
+Page gates on the day: **496 tests** (**491 since 21 Aug**, when the five tests for the reverted headline
+rises went with them — see `2026-08-21-floating-text/README.md`), build / `tsc` / lint clean, `check_contrast_over_photos.mjs` **156 probes, 0
 failures**, density **all seven chapters inside 45%** (page mean 33.6%, worst 66.4% — `invitation` 6.0% → 14.7%
 as the section grew, still the emptiest chapter on the page by a wide margin).
 
@@ -72,7 +76,9 @@ review's fragment; assertion 11 then measured the carousel sitting under `SiteHe
 reported **1.00:1 on all eight phases** — cream on cream, which is a real failure mode of this section and
 was not what was happening. **Third instance on this project of an instrument steering what it measures**,
 after `scroll-snap` quantising two rigs' samples and a per-frame layout read pushing the hero's reveal by
-700ms.
+700ms. It happened twice more the next day, measuring the hero's scrim: the same header artefact at deep
+scroll offsets, and a lazy `span:last-child` selector that matched the headline's own word spans instead of
+the scroll cue.
 
 **`transform` and `translate` are different properties, and this stylesheet uses the second.** The rig's first
 run reported "the carousel is not scrolling" because it read `getComputedStyle(rail).transform`, which is the
@@ -87,6 +93,14 @@ widest child. The carousel broke that in both directions: first to **986px insid
 number only possible if the frame is three times the screen); then, once `contain: inline-size` stopped that,
 down to **540px at 1440**, because with the rail hidden from intrinsic sizing the widest remaining child was a
 paragraph. Both fixed by stating the width.
+
+### And a fifth, found by the client rather than by any of this
+
+**The fix for the width problem above removed the section's CENTRING**, because `justify-center` had been
+doing both jobs: the heading, both paragraphs, both pills and the carousel moved 176px left together. **This
+rig measured `containerW` = 986px, exactly right, and reported PASS.** A width and a position are two facts.
+Assertion 12 now measures the gap on both sides and was watched failing against the shipped defect, where it
+reads "48px from the section's left edge and 400px from its right". Catalogue instance §2 #54.
 
 ## 5 · Still open — one thing, and it is the client's
 

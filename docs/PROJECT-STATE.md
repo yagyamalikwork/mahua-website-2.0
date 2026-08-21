@@ -31,10 +31,16 @@ no mount here.
 
 ### The numbers
 
-**491 tests. Every chapter inside the 45% ceiling; page mean 33.2%, worst 66.4%, imagery 57.2% of the average
-screen.** Contrast: 318 probes, 0 failures across three routes. Resolution: 0 under-served. First-load JS
-**167.7 KB brotli** — 167.5 through the restructure itself, where every effect was CSS, plus 0.2 KB for the
-hero's reveal hook on 20 Aug. Initial transfer 669 KB at 390, 965 KB at 1440.
+**491 tests. Every chapter inside the 45% ceiling; page mean 33.6%, worst 66.4%, imagery 56.8% of the average
+screen, 2.03 photographs per screen.** Contrast: 156 probes on the home route, 0 failures; 318 across all
+three. Resolution: 0 under-served at every width, DPR 1 and 3. First-load JS **167.5 KB brotli** — the same
+figure the restructure shipped at, because every effect added since has been CSS. Initial transfer 669 KB at
+390, 965 KB at 1440. Hero arrival 4,611ms at 390x844, medians of five, against the standing 2,500ms budget
+that CLAUDE.md non-negotiable #6 records as knowingly failed.
+
+**The page mean moved 33.2 → 33.6% when the review carousel landed** and `invitation` went 6.0 → 14.7%: the
+closing section grew, and `measure_density.mjs` scores the band below a photograph as empty. It is still the
+emptiest chapter on the page by a wide margin and every chapter is still inside 45%.
 
 **The guests' reviews became a carousel on 20 Aug 2026** — auto-scrolling, pausing under the pointer, gold
 rating circles, and a read-more panel on `:target`, all at **zero added JavaScript** (167.7 KB brotli,
@@ -45,10 +51,15 @@ that is the one thing outstanding.** `docs/DECISIONS.md` §21.10, `docs/reviews/
 
 **The Experiences cards took the hover zoom on 20 Aug 2026**, and two other changes made the same day were
 **reverted on 21 Aug**: the client's *"3D effect"* turned out to mean the closing chapter's **parallax** — its
-photograph drifting while its words stay still — not a line-by-line rise. `02 · The Jungles`' photograph now
-drifts too (39px within a 446px band, against the closing chapter's 79px in 1,149px), and the hero's headline
-is still again. `docs/DECISIONS.md` §21.9 and §21.11,
-`docs/reviews/2026-08-21-floating-text/README.md`.
+photograph drifting while its words stay still — not a line-by-line rise.
+
+**Three photographs drift now, where one did.** `02 · The Jungles` moves 70.6px against 16.1px of text (the
+closing chapter reads 79.5 / 18.3), and the hero joined them at **half strength by the client's own choice**,
+which overturns half of a documented decision that it should never move — the risk half of that decision was
+overstated in its own sentence, and the return half was a judgement he reversed. **A drifting photograph is
+drawn oversized, so it is a re-crop, and a re-crop is a re-solve**: both scrims were re-measured across the
+drift rather than at one position and neither needed changing. Hero arrival unmoved. `docs/DECISIONS.md`
+§21.9 and §21.11, `docs/reviews/2026-08-21-floating-text/README.md`.
 
 **`imagesPerScreen` went 2.2 → 1.65 → 2.05 across this work.** The dip is the lesson: removing six chapters
 took thirteen photographs and only ~5 screens of scroll. It is the figure the client's original density
