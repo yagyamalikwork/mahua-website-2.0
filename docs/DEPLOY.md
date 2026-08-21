@@ -1,5 +1,16 @@
 # Deploying the demo
 
+> **What `demo` names, stated precisely (21 Aug 2026).** It names the deployed **page**, not the deployed
+> commit — it may run ahead by commits that touch no source. To tell the difference in one command:
+> `git diff --stat <deployed-commit>..demo -- app components lib content public`. Empty output means the
+> live page is byte-identical however many commits are in front of it. It sat two docs-only commits ahead the
+> day this note was written, and a redeploy would have changed nothing but the deployment id.
+>
+> **The CLI token expired mid-session that same day** — `npx vercel --prod` returned **"Not authorized"**
+> while `npx vercel whoami` still answered `yagyamalikwork`. That is the trap this file already records:
+> **read commands keep working after the token dies**, so "logged in" proves nothing about being able to
+> deploy. `npx vercel login` fixes it, and it needs a human — it cannot be done from a headless session.
+>
 > **21 August 2026 — republished. Same page, three additions since the 20 Aug promotion:** the hover zoom on
 > `05 · Experiences`' cards, the guests' reviews as an auto-scrolling carousel, and **three photographs that
 > drift as you scroll** (the hero at half strength, `02 · The Jungles`, and the closing chapter that always
