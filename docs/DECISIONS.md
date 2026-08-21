@@ -2238,6 +2238,17 @@ the copy lands.** If it still fails afterwards, the extra words were not the pro
 
 ### 21.9 The three reveals, 20 Aug 2026 — and a headline's travel is its type size
 
+> **TWO OF THE THREE THINGS IN THIS SECTION WERE REVERTED THE NEXT DAY. READ §21.11 FIRST.** The client's
+> *"3D effect"* was never the line rise this section builds; it was the closing chapter's parallax. The
+> hero's `curtained` reveal and the Jungles' `deep` are both **deleted** — along with
+> `components/motion/useCurtainReveal.ts`, `CURTAIN_LINES` and `LINES.deepFrom` — and everything below that
+> describes them is a record of what was built, not of what ships. **The Experiences hover zoom is the one
+> part still shipping.**
+>
+> The measurements are kept because they are still the ones that describe those headlines, and because the
+> lesson they cost is worth more than the code was: a correct measurement of the wrong quantity is still
+> wrong.
+
 Client, after looking at the deployed page: *"the 3D effect on the section where our website opens (The
 Journey Begins) and 02-The Jungles section is not noticeable as it is on the last section where we have our
 reviews."* Evidence: `docs/reviews/2026-08-20-reveals-and-zoom/README.md`.
@@ -2419,3 +2430,35 @@ the arrival budget unmoved — hero `responseEnd` **4,611ms against 4,589ms**, m
 range. **Parallax 3/3 moved, 0.023-0.087 of their own heights against the 0.15 cap; first-load JS 167.5 KB
 brotli, unchanged.** Three drifting photographs cost exactly what one did, because the tween library was
 already being fetched for the closing chapter.
+
+### 21.12 The documentation has a rig now (21 Aug 2026)
+
+**The client has asked three times in three days for a full sweep** — *"everything, everywhere needs to be
+updated so we don't lose or miss any crucial information, context or knowledge … and everything stays up to
+date."* `scripts/check_docs.mjs` is the answer, because a promise to remember is not a mechanism.
+
+**Prose rots silently.** Nothing goes red when a component is deleted and four documents still describe it in
+the present tense — and `CLAUDE.md` instructs every session to read four documents *before doing any work*,
+so a stale one does not merely mislead a reader, it seeds the next session with a wrong model of the page.
+The record: five documents said this branch was "deliberately not deployed" the day after it was promoted;
+`CLAUDE.md` carried a page mean that disagreed with `density.json` beside it for three days; a retired rig was
+still listed as current.
+
+It checks four things a machine can settle — every path the docs name exists; every rig is findable from
+`CLAUDE.md`; quoted figures match the files they come from; deleted things are marked as gone rather than
+described as present. **It does not check whether the prose is TRUE**, and cannot: a sentence naming a file
+that exists and wrong about what it does passes here forever. It narrows the surface a human sweep has to
+cover; it does not remove it.
+
+**On its first run it found seven things a careful human sweep had missed an hour earlier**: four rigs
+unnamed in `CLAUDE.md` — one of them `measure_first_fold.mjs`, which `Hero.tsx` names as the guard against
+the hero being fetched at two widths — and §21.9 reading as current with no forward pointer to its own
+reversal. Then, after being strengthened, a stale page mean in the branch table.
+
+**Its own figure check was wrong first, and the way it was wrong is the lesson.** It asked whether the current
+page mean appeared *anywhere* in a document. A sentence about the property pages' room chapters satisfied that
+by coincidence, so changing the real figure to a wrong one left the check green — **watched failing to fail**,
+which is the only way that class of hole is found. It now checks every occurrence of the *phrase*, and
+requires any differing figure to be marked as a different build or a past one. That is what caught
+non-negotiable #8's *"Current, re-measured 11 Aug 2026"*, which had described a superseded branch since the
+day `feat/home-v2` was cut.

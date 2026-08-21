@@ -75,7 +75,7 @@ document describes.** Run `git branch --show-current` before trusting a figure b
 | the lantern, the forest tint, the potter film | shipping | **no mount** — untouched, and still shipping on the other branch |
 | `04 · Days in the Field` | the pinned coverflow | a **sideways card strip**, coverflow retired |
 | tests | 481 | **491** |
-| density | page 27.0/31.1 for `field-days`; `lodges` and `rooms` over the ceiling | **page mean 33.2%, every chapter inside 45%** |
+| density | page 27.0/31.1 for `field-days`; `lodges` and `rooms` over the ceiling | **page mean 33.6%, every chapter inside 45%** (33.2% until the review carousel grew the closing section, 20 Aug) |
 
 **Read [`docs/DECISIONS.md`](docs/DECISIONS.md) §21 and
 [`docs/reviews/2026-08-19-home-v2/README.md`](docs/reviews/2026-08-19-home-v2/README.md) before touching the
@@ -287,9 +287,12 @@ Decided and reasoned through with the client. **Do not relitigate these without 
    of screen width moved from the prose column to the photographs). Page mean 42.9% → **39%**; imagery is
    53.8% of the average screen, up from 49.7%.
 
-   **Current, re-measured 11 Aug 2026 on the build that carries both films, the lantern and the client's
-   re-rendered forest tint: page mean 37.9%, worst screen 73.4%, 2.2 photographs per screen, imagery 54.2% of
-   the average screen.** (This entry read 36.6% for the page mean from 11 Aug until 14 Aug 2026 — a
+   **On `feat/image-sizing` — the TWELVE-chapter page — re-measured 11 Aug 2026 on the build that carries
+   both films, the lantern and the client's re-rendered forest tint: page mean 37.9%, worst screen 73.4%,
+   2.2 photographs per screen, imagery 54.2% of the average screen.** (It opened with the word "Current"
+   until 21 Aug 2026, which stopped being true the day `feat/home-v2` was cut, and was caught by
+   `scripts/check_docs.mjs` — **on this branch the page mean is 33.6%**, in the banner at the top of this
+   file.) (This entry read 36.6% for the page mean from 11 Aug until 14 Aug 2026 — a
    transcription error against `density.json`'s own committed figure of 37.9%, present at this same commit;
    corrected by the image-sizing plan's Task 8 whole-branch review, which needed the real baseline to judge
    its own +1.3pp reading and found CLAUDE.md's own cited number did not match the evidence file beside it.)
@@ -511,6 +514,8 @@ npm test                # vitest
 npm run build           # production build — must pass before any commit claiming completion
 npm run lint
 npm run verify:budget   # the JS budget guard, end to end — see below
+
+node scripts/check_docs.mjs   # DO THE DOCUMENTS STILL DESCRIBE THE REPOSITORY? Reads files; no build, no server
 ```
 
 **`npm run verify:budget` is not optional before a commit that touches motion.** It builds, starts a
@@ -579,6 +584,10 @@ node scripts/capture_signature.mjs               # the 20 evidence frames: every
 node scripts/capture_property_pages.mjs          # full-page captures of /mahua-vann and /mahua-tola at the four review widths
 node scripts/measure_js_budget.mjs --port 3100   # what JS a visitor pays for before scrolling — or `npm run verify:budget`
 node scripts/measure_lcp_arms.mjs --runs 5       # LCP + hero, MEDIANS. --arm no-fonts / no-font-preload costs a lever
+node scripts/measure_first_fold.mjs             # what a visitor actually waits for on the first screen — and it FAILS a run where any photograph is fetched at two widths, which is what a preload naming a different candidate from its own <picture> looks like (`Hero.tsx` names it as exactly that guard)
+node scripts/measure_sharpness.mjs              # are the photographs actually SHARP? `check_image_resolution.mjs` answers "did the browser fetch a big enough file"; this answers whether what landed is crisp
+node scripts/capture_chapters.mjs               # every chapter at four widths, plus the scroll choreography caught in the act — frames for a human to read, not assertions
+node scripts/build_tiger.mjs                    # the client's licensed tiger vector -> the artwork `InkTiger` inks in. DORMANT: he supplied film instead (`DECISIONS.md` §8), and the component is one line from returning
 node scripts/capture_motion_filmstrips.mjs       # filmstrips for a human to read; its one real check is a floor on distinct entrance samples
 ```
 
