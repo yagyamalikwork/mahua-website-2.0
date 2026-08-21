@@ -1,6 +1,15 @@
 # Deploying the demo
 
-> **20 August 2026 — the demo is now the RESTRUCTURED home page, from `feat/home-v2`.**
+> **21 August 2026 — republished. Same page, three additions since the 20 Aug promotion:** the hover zoom on
+> `05 · Experiences`' cards, the guests' reviews as an auto-scrolling carousel, and **three photographs that
+> drift as you scroll** (the hero at half strength, `02 · The Jungles`, and the closing chapter that always
+> did). `demo` was fast-forwarded to `4f1eef3` to match.
+>
+> **The carousel is live carrying three PLACEHOLDER reviews and no star ratings**, which is deliberate and
+> recorded: the client is assembling 15-20 himself, and `rating` is optional so that no invented figure can
+> read as a guest's own. If a stakeholder link goes out before they arrive, that is what they will see.
+>
+> **20 August 2026 — the demo is the RESTRUCTURED home page, from `feat/home-v2`.**
 >
 > The client promoted it after reviewing it on a preview URL: seven chapters, the two joined lodge panels,
 > the cropped Jungles band, the mirrored collages, the sideways Experiences strip, and the reviews under the
