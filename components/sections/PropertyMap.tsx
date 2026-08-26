@@ -320,10 +320,35 @@ export function PropertyMap({
   chapter,
   copy,
   surface = true,
+  continues = false,
 }: {
   chapter: PropertyChapter;
   copy: PropertyMapCopy;
   surface?: boolean;
+  /**
+   * This chapter is the second half of the one above it, and the seam between
+   * them closes.
+   *
+   * The client's own words: *"the map is an extention to the first sections on
+   * both the pages 01-The Forest and 01-The Reserve respectively"* (26 Aug
+   * 2026). "Extension of" already has a defined meaning on this site — his
+   * 19 Aug ruling on `04 · Mahua Philosophy` — and it is two things, not one:
+   * the same cream, and no band of cream between. `content/mahua-vann.ts` and
+   * `content/mahua-tola.ts` already dropped this chapter's heading; that is
+   * only half of it. The surface is `PropertyPage`'s to hand down (see its own
+   * `surfaces()`), and the seam is this prop: the chapter drops its own top
+   * padding and pulls up by the rhythm the chapter above it ends with.
+   *
+   * **The pull-up and `ChapterSurface`'s own `tight` rhythm are one decision
+   * written in two places, exactly as `PinnedCollage`'s own `continues` is.**
+   * They cancel, so changing the rhythm there without changing it here leaves
+   * a gap or an overlap. `vann-forest` / `tola-reserve` — the only chapters a
+   * map ever continues today — both render with `OpeningColumn`'s own
+   * `ChapterSurface … tight`, i.e. `py-10 md:py-12 lg:py-14`; the figures below
+   * cancel exactly that, not the untight `py-14 md:py-16 lg:py-20` a
+   * non-`tight` chapter above would need instead.
+   */
+  continues?: boolean;
 }) {
   const art = ART[copy.art];
   const { width, height } = art.viewBox;
@@ -361,7 +386,15 @@ export function PropertyMap({
   const mobileDropped = declutterMobile(copy.labels, width, height);
 
   return (
-    <ChapterSurface id={chapter.id} surface={surface} tight>
+    <ChapterSurface
+      id={chapter.id}
+      surface={surface}
+      tight
+      // See `continues` above: the top padding goes and the pull-up cancels
+      // the `tight` rhythm the chapter above ends with. Both halves are
+      // written here so neither can drift from the other.
+      className={continues ? "pt-0 md:pt-0 lg:pt-0 -mt-10 md:-mt-12 lg:-mt-14" : undefined}
+    >
       <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-12 lg:gap-x-12">
         <div className="lg:col-span-2">
           <Enter>

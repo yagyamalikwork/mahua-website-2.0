@@ -82,6 +82,15 @@ export function ChapterSurface({
   return (
     <section
       id={id}
+      // A testing seam, added 26 Aug 2026 for the property pages' `continues`
+      // work (Task 6) — it needed to assert which of the two creams a chapter
+      // actually stands on, and the alternative was asserting on a Tailwind
+      // class string, which is brittle (a class *name* is not a promise; this
+      // attribute is). Deliberately a plain boolean rather than "paper" /
+      // "paperDeep": `surface` is already what every caller passes, and a
+      // second vocabulary for the same fact would be one more thing to keep in
+      // step with it.
+      data-surface={surface}
       // `overflow-x-clip`, never `overflow-x-hidden`: several chapters push a
       // photograph past the viewport edge on purpose, and `hidden` would make
       // the page a scroll container and break `position: sticky` inside it.

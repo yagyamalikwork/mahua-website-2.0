@@ -30,6 +30,45 @@ export type PropertyPageCopy = {
 const CREAM_SHAPES: readonly PropertyShape[] = ["column", "map", "showcase", "pair", "press", "invitation"];
 
 /**
+ * Every chapter's cream, worked out in one pass before anything renders.
+ *
+ * It was `cream++ % 2 === 1` inline, inside `.map()`'s own argument list,
+ * until 26 August 2026 — which was fine while every surface depended only on
+ * the chapters above it, but a chapter can now **continue** the one above it
+ * (the map "is an extention to the first sections", the client's own words,
+ * 26 Aug 2026), and a continuing chapter takes the surface the one above it
+ * already has rather than the next one in the cycle. An expression evaluated
+ * inside `map`'s own argument list cannot look backwards at what it decided
+ * last time round — `app/page.tsx`'s `positions()` learned exactly this on
+ * 19 Aug 2026, for the same reason, when `04 · Mahua Philosophy` became the
+ * continuation of `03 · Rooted Like The Mahua`. This is that fix, ported.
+ *
+ * **A continuing chapter does not advance the cycle**, so everything beneath
+ * the pair alternates as though the two were one chapter — which is what they
+ * are meant to look like. Missing this is the knock-on that breaks silently:
+ * every cream chapter below the pair would flip surface, and no test written
+ * against one page in isolation would fail, because each individual chapter's
+ * `surface` is still a valid boolean — it is simply the wrong one.
+ */
+function surfaces(
+  chapters: readonly PropertyChapter[],
+): readonly { surface: boolean; continues: boolean }[] {
+  let cream = 0;
+  let last = false;
+  return chapters.map((chapter, i) => {
+    // The map is an extension of the chapter above it — the client's ruling,
+    // 26 Aug 2026. Identified by shape and the absence of a heading rather
+    // than by id, so a future unheaded section inherits the behaviour rather
+    // than needing a new special case here.
+    const continues =
+      chapter.shape === "map" && !chapter.number && CREAM_SHAPES.includes(chapters[i - 1]?.shape);
+    const surface = CREAM_SHAPES.includes(chapter.shape) ? (continues ? last : cream++ % 2 === 1) : false;
+    if (CREAM_SHAPES.includes(chapter.shape)) last = surface;
+    return { surface, continues };
+  });
+}
+
+/**
  * A bare full-bleed photograph carrying the chapter's own number/label
  * instead of a quote — the third of `fullBleed`'s three jobs (see the long
  * comment in the switch below). No chapter in either spine reaches this as
@@ -97,7 +136,9 @@ export function PropertyPage({
   bar: { name: string; bookLabel: string };
   siblingHref: string;
 }) {
-  let cream = 0;
+  // See `surfaces()` above for why this is a pass over the whole spine rather
+  // than a counter incremented inside the `.map()` below.
+  const at = surfaces(chapters);
 
   const lastChapter = chapters[chapters.length - 1];
   // `PropertyBar`'s own contact block is sourced from the closing chapter's
@@ -119,7 +160,7 @@ export function PropertyPage({
       />
       <main>
         {chapters.map((chapter, index) => {
-          const surface = CREAM_SHAPES.includes(chapter.shape) ? cream++ % 2 === 1 : false;
+          const { surface, continues } = at[index];
 
           switch (chapter.shape) {
             case "fullBleed": {
@@ -179,7 +220,15 @@ export function PropertyPage({
             case "map": {
               const mapCopy = copy.mapCopy?.[chapter.id];
               if (!mapCopy) throw new Error(`No map copy for "${chapter.id}"`);
-              return <PropertyMap key={chapter.id} chapter={chapter} copy={mapCopy} surface={surface} />;
+              return (
+                <PropertyMap
+                  key={chapter.id}
+                  chapter={chapter}
+                  copy={mapCopy}
+                  surface={surface}
+                  continues={continues}
+                />
+              );
             }
             case "showcase": {
               const showcaseCopy = copy.showcaseCopy?.[chapter.id];
