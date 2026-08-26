@@ -1,0 +1,53 @@
+/**
+ * The client's Elfsight reviews widget — its identifiers, and nothing else.
+ *
+ * **Config, not copy, which is why it is here and not in `content/`.** That
+ * directory holds words a visitor reads; an app id is a key into a third
+ * party's system. The distinction matters because `content/` is reviewed by the
+ * client line by line and this string is not something he can check by reading.
+ *
+ * ## This is the first third-party script on this site
+ *
+ * `platform.js` is loaded from Elfsight's CDN with **no Subresource Integrity
+ * hash**, which means this site executes whatever that CDN serves. SRI is the
+ * usual answer and it is not available: a widget platform is updated by its
+ * vendor without notice, and a pinned hash would break the widget the first
+ * time they shipped a change. That is the ordinary bargain of every third-party
+ * embed, the client chose the embed knowing it, and it is recorded rather than
+ * solved — see `docs/superpowers/specs/2026-08-26-restructure-and-reviews-design.md` §2.3.
+ *
+ * Two things keep it bounded and both are load-bearing:
+ * **it is loaded only by the pages that use it, never from `app/layout.tsx`**,
+ * and it keeps `async` + `data-elfsight-app-lazy` so it cannot block the first
+ * screen.
+ */
+
+/** The vendor's platform loader. */
+export const ELFSIGHT_SCRIPT = "https://elfsightcdn.com/platform.js";
+
+/**
+ * The reviews app, exactly as the client supplied it on 26 August 2026.
+ *
+ * It replaced `ReviewCarousel` — a curated set of three placeholder quotes in
+ * `content/home.ts` — and with it the open `REVIEWS.mode` question that
+ * non-negotiable #5 carried a dated exception for.
+ */
+export const REVIEWS_APP_ID = "9735be0a-7667-475d-938e-2de773f1c7de";
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * The class name Elfsight's platform scans the document for.
+ *
+ * Their embed is `class="elfsight-app-<uuid>"`, and the platform finds its
+ * mounts by that class alone — so a typo here is not a crash, it is a silently
+ * empty section. **Hence the throw**: a malformed id fails the build, which a
+ * developer sees, rather than shipping a mount nothing will ever fill, which
+ * nobody sees until a stakeholder opens the page.
+ */
+export function elfsightClass(appId: string): string {
+  if (!UUID.test(appId)) {
+    throw new Error(`Elfsight app id is not a uuid: "${appId}"`);
+  }
+  return `elfsight-app-${appId}`;
+}
