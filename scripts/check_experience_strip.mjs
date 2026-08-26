@@ -4,6 +4,14 @@
 // Run (with `npx next start -p 3110` already up):
 //   node scripts/check_experience_strip.mjs --port 3110
 //   node scripts/check_experience_strip.mjs --port 3110 --out docs/reviews/2026-08-19-home-v2/strip.json
+//   node scripts/check_experience_strip.mjs --port 3110 --url http://localhost:3110/mahua-vann --chapter vann-day
+//   node scripts/check_experience_strip.mjs --port 3110 --url http://localhost:3110/mahua-tola --chapter tola-day
+//
+// `--chapter` (default `field-days`) and a full `--url` (NOT a bare path — it
+// replaces the whole base, same trap as `measure_density.mjs` and
+// `check_contrast_over_photos.mjs`) are what let this rig measure `03 · The
+// Experience` on both property pages since 26 Aug 2026, when the client asked
+// for the home page's own card strip there too.
 //
 // **This replaces `scripts/check_coverflow.mjs`, retired 19 Aug 2026 with the
 // pinned carousel it measured.** Nine of that rig's thirteen assertions were
@@ -63,7 +71,15 @@ const BASE = flag("url", `http://localhost:${PORT}`);
 const OUT = flag("out", "docs/reviews/2026-08-19-home-v2/strip.json");
 const STEP = Number(flag("step", "16"));
 
-const CHAPTER = "field-days";
+/*
+ * **`--chapter`, added 26 August 2026** so this rig can measure `03 · The
+ * Experience` on `/mahua-vann` (`vann-day`) and `/mahua-tola` (`tola-day`) as
+ * well as the home page's own `field-days` — the client asked for the
+ * identical card strip on both property pages, and this rig is what verifies
+ * the scrims and the sweep actually hold at the same card size there too.
+ * Defaults to `field-days` so every existing invocation is unchanged.
+ */
+const CHAPTER = flag("chapter", "field-days");
 const CARDS = 6;
 
 /** This project's width-crop bound — `check_card_stack.mjs` assertion 6. */
@@ -703,8 +719,17 @@ for (const [width, height] of SHAPES) {
   await page.goto(BASE, { waitUntil: "load" });
   // No Lenis, so a plain anchor jump is the whole navigation. The section is
   // server-rendered, so all six cards are in the document.
+  //
+  // `#${CHAPTER}` rather than the literal `#field-days` this used to read —
+  // both selectors below hardcoded the home page's own chapter id until
+  // 26 Aug 2026, which this rig's own `--chapter` flag could not fix, since
+  // `readStrip()` (assertion 11, just above) and every other selector in this
+  // file already used `CHAPTER`. Found running this rig against `/mahua-vann`
+  // for the first time: it reported a false "not server-rendered" (0 cards),
+  // when the real cause was asking the DOM about a chapter id that page does
+  // not have.
   const noJs = await page.$$eval(
-    "#field-days ul.experience-strip li.experience-card",
+    `#${CHAPTER} ul.experience-strip li.experience-card`,
     (els) => els.map((el) => ({ id: el.id, w: Math.round(el.getBoundingClientRect().width) })),
   ).catch(() => []);
   if (noJs.length !== CARDS) {
@@ -715,7 +740,7 @@ for (const [width, height] of SHAPES) {
     );
   }
   const scrolls = await page
-    .$eval("#field-days ul.experience-strip", (el) => ({
+    .$eval(`#${CHAPTER} ul.experience-strip`, (el) => ({
       scrollWidth: el.scrollWidth,
       clientWidth: el.clientWidth,
       overflowX: getComputedStyle(el).overflowX,
@@ -762,84 +787,115 @@ for (const [width, height] of SHAPES) {
 
 const ZOOM_AT = { photograph: 0.2, words: 0.78, foot: 0.99 };
 
-for (const reduced of [false, true]) {
-  const context = await browser.newContext({
-    viewport: { width: 1440, height: 900 },
-    ...(reduced ? { reducedMotion: "reduce" } : {}),
-  });
-  const page = await context.newPage();
-  await page.goto(BASE, { waitUntil: "networkidle" });
-  await showStrip(page);
+/*
+ * **Route-scoped since 26 August 2026, when `--chapter` let this rig target
+ * `vann-day`/`tola-day` as well as `field-days`.** The zoom is CSS scoped to
+ * `[data-hover-zoom]`, which `app/page.tsx` alone sets ("the client asked for
+ * it on the homepage … and asked for nothing else to change, so the property
+ * pages are deliberately untouched" — its own comment, 12 Aug 2026); `03 · The
+ * Experience` mounts this exact component on both property pages with the
+ * effect genuinely, deliberately absent there, not broken. Asked of the DOM
+ * rather than assumed from the URL, so a future page that DOES opt in is
+ * measured rather than skipped by a stale guess.
+ */
+const hoverZoomApplies = await (async () => {
+  const probeContext = await browser.newContext();
+  const probePage = await probeContext.newPage();
+  await probePage.goto(BASE, { waitUntil: "networkidle" });
+  const applies = await probePage.evaluate(
+    (chapter) => !!document.querySelector(`[data-hover-zoom] #${chapter}`),
+    CHAPTER,
+  );
+  await probeContext.close();
+  return applies;
+})();
 
-  // The card's foot has to be ON SCREEN or `elementFromPoint` returns nothing
-  // and the pointer lands on the browser chrome — which reads exactly like a
-  // zoom that did not fire. Cost one wrong reading while this was being built.
-  await page.evaluate((chapter) => {
-    const card = document.querySelector(`#${chapter} li.experience-card`);
-    window.scrollBy(0, card.getBoundingClientRect().bottom - innerHeight + 40);
-  }, CHAPTER);
-  await page.waitForTimeout(900);
+if (!hoverZoomApplies) {
+  console.log(
+    `Assertion 13 (hover zoom) skipped for #${CHAPTER} — no [data-hover-zoom] ancestor on ${BASE}. ` +
+      `The zoom is scoped to the home page alone by the client's own 12 Aug 2026 ruling; this is the ` +
+      `rig learning that from the DOM, not the page needing a new attribute.`,
+  );
+} else {
+  for (const reduced of [false, true]) {
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 900 },
+      ...(reduced ? { reducedMotion: "reduce" } : {}),
+    });
+    const page = await context.newPage();
+    await page.goto(BASE, { waitUntil: "networkidle" });
+    await showStrip(page);
 
-  const where13 = reduced ? "zoom/reduced-motion" : "zoom/1440x900";
-  const scale = async () =>
-    page.evaluate((chapter) => {
-      const pic = document.querySelector(`#${chapter} li.experience-card picture`);
-      if (!pic) return null;
-      return Math.round(new DOMMatrixReadOnly(getComputedStyle(pic).transform).a * 1000) / 1000;
+    // The card's foot has to be ON SCREEN or `elementFromPoint` returns nothing
+    // and the pointer lands on the browser chrome — which reads exactly like a
+    // zoom that did not fire. Cost one wrong reading while this was being built.
+    await page.evaluate((chapter) => {
+      const card = document.querySelector(`#${chapter} li.experience-card`);
+      window.scrollBy(0, card.getBoundingClientRect().bottom - innerHeight + 40);
     }, CHAPTER);
+    await page.waitForTimeout(900);
 
-  const rest = await scale();
-  if (rest === null) fail(13, where13, "no <picture> inside the first card — nothing to zoom");
-  else if (Math.abs(rest - 1) > 0.001)
-    fail(13, where13, `the card's photograph is already at scale ${rest} with nothing hovered`);
-
-  for (const [name, downTheCard] of Object.entries(ZOOM_AT)) {
-    const point = await page.evaluate(
-      ({ chapter, f }) => {
-        const r = document.querySelector(`#${chapter} li.experience-card`).getBoundingClientRect();
-        return { x: Math.round(r.x + r.width / 2), y: Math.round(Math.min(r.y + r.height * f, innerHeight - 6)) };
-      },
-      { chapter: CHAPTER, f: downTheCard },
-    );
-    await page.mouse.move(8, 8);
-    await page.waitForTimeout(700);
-    await page.mouse.move(point.x, point.y);
-    // Past `--photo-zoom-out` in full: a half-finished transition would read as
-    // a weaker zoom rather than as a missing one, which is the wrong finding.
-    await page.waitForTimeout(2200);
-    const hovered = await scale();
-
-    if (reduced) {
-      if (hovered !== null && Math.abs(hovered - 1) > 0.001) {
-        fail(13, where13, `the photograph zoomed to ${hovered} over the ${name} for a visitor who asked for less motion`);
-      }
-    } else if (hovered === null || hovered <= 1.001) {
-      fail(
-        13,
-        where13,
-        `the photograph did not zoom (scale ${hovered}) with the pointer over the ${name} — ` +
-          `this is the defect 01 · The Lodges shipped, where the words take the pointer and half the card is dead`,
-      );
-    }
-
-    if (name === "words" && !reduced) {
-      const frameY = await page.evaluate((chapter) => {
-        const frame = document.querySelector(`#${chapter} li.experience-card [data-image-frame]`);
-        if (!frame) return null;
-        return Math.round(new DOMMatrixReadOnly(getComputedStyle(frame).transform).m42 * 100) / 100;
+    const where13 = reduced ? "zoom/reduced-motion" : "zoom/1440x900";
+    const scale = async () =>
+      page.evaluate((chapter) => {
+        const pic = document.querySelector(`#${chapter} li.experience-card picture`);
+        if (!pic) return null;
+        return Math.round(new DOMMatrixReadOnly(getComputedStyle(pic).transform).a * 1000) / 1000;
       }, CHAPTER);
-      if (frameY === null) fail(13, where13, "no [data-image-frame] in the card — the zoom has no hook");
-      else if (Math.abs(frameY) > 0.01) {
+
+    const rest = await scale();
+    if (rest === null) fail(13, where13, "no <picture> inside the first card — nothing to zoom");
+    else if (Math.abs(rest - 1) > 0.001)
+      fail(13, where13, `the card's photograph is already at scale ${rest} with nothing hovered`);
+
+    for (const [name, downTheCard] of Object.entries(ZOOM_AT)) {
+      const point = await page.evaluate(
+        ({ chapter, f }) => {
+          const r = document.querySelector(`#${chapter} li.experience-card`).getBoundingClientRect();
+          return { x: Math.round(r.x + r.width / 2), y: Math.round(Math.min(r.y + r.height * f, innerHeight - 6)) };
+        },
+        { chapter: CHAPTER, f: downTheCard },
+      );
+      await page.mouse.move(8, 8);
+      await page.waitForTimeout(700);
+      await page.mouse.move(point.x, point.y);
+      // Past `--photo-zoom-out` in full: a half-finished transition would read as
+      // a weaker zoom rather than as a missing one, which is the wrong finding.
+      await page.waitForTimeout(2200);
+      const hovered = await scale();
+
+      if (reduced) {
+        if (hovered !== null && Math.abs(hovered - 1) > 0.001) {
+          fail(13, where13, `the photograph zoomed to ${hovered} over the ${name} for a visitor who asked for less motion`);
+        }
+      } else if (hovered === null || hovered <= 1.001) {
         fail(
           13,
           where13,
-          `the frame itself moved ${frameY}px while hovered — FLOAT is not switched off, so the photograph ` +
-            `has slid out from under its own Scrim and opened a band of --overlay along the card's foot`,
+          `the photograph did not zoom (scale ${hovered}) with the pointer over the ${name} — ` +
+            `this is the defect 01 · The Lodges shipped, where the words take the pointer and half the card is dead`,
         );
       }
+
+      if (name === "words" && !reduced) {
+        const frameY = await page.evaluate((chapter) => {
+          const frame = document.querySelector(`#${chapter} li.experience-card [data-image-frame]`);
+          if (!frame) return null;
+          return Math.round(new DOMMatrixReadOnly(getComputedStyle(frame).transform).m42 * 100) / 100;
+        }, CHAPTER);
+        if (frameY === null) fail(13, where13, "no [data-image-frame] in the card — the zoom has no hook");
+        else if (Math.abs(frameY) > 0.01) {
+          fail(
+            13,
+            where13,
+            `the frame itself moved ${frameY}px while hovered — FLOAT is not switched off, so the photograph ` +
+              `has slid out from under its own Scrim and opened a band of --overlay along the card's foot`,
+          );
+        }
+      }
     }
+    await context.close();
   }
-  await context.close();
 }
 
 await browser.close();
@@ -853,6 +909,7 @@ const report = {
   sweep,
   reach,
   noPeek,
+  hoverZoomApplies,
   failures,
 };
 
@@ -881,7 +938,10 @@ console.log(`Wrote ${OUT}`);
 
 if (failures.length === 0) {
   console.log(
-    "\nPASS — 13 assertions; 1-9 at every swept width, 10-12 at three shapes, 13 (the hover zoom) at 1440x900.",
+    hoverZoomApplies
+      ? "\nPASS — 13 assertions; 1-9 at every swept width, 10-12 at three shapes, 13 (the hover zoom) at 1440x900."
+      : "\nPASS — 12 assertions (1-9 at every swept width, 10-12 at three shapes); 13 (the hover zoom) does not " +
+          "apply here — no [data-hover-zoom] ancestor, by the client's own 12 Aug 2026 ruling.",
   );
 } else {
   console.error(`\nFAILED: ${failures.length} finding(s)`);

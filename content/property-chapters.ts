@@ -10,12 +10,20 @@ import type { MediaId } from "@/lib/media";
  * what one section component applied down a page produces. See
  * `findRepeatedShape` below; it is the fix, and it is mechanical.
  */
+/*
+ * **`"pair"` until 26 August 2026.** The client replaced both property pages'
+ * activity sections with the home page's own card strip — *"replace it with
+ * the exact same copy-pasted activities carousel from our homepage … for now
+ * just place the entire carousel as it is."* `ExperiencePair.tsx` is deleted
+ * rather than left unrouted: a shape in this union that nothing renders is a
+ * shape the next reader will believe in. See `docs/DECISIONS.md` §22.
+ */
 export type PropertyShape =
   | "fullBleed"
   | "column"
   | "map"
   | "showcase"
-  | "pair"
+  | "strip"
   | "press"
   | "invitation";
 
@@ -41,7 +49,7 @@ export const PROPERTY_IMAGE_LED_SHAPES: readonly PropertyShape[] = [
   "fullBleed",
   "map",
   "showcase",
-  "pair",
+  "strip",
   "invitation",
 ];
 

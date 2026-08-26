@@ -1,3 +1,4 @@
+import type { StripLabels } from "@/components/sections/ExperienceStrip";
 import type { MediaId } from "@/lib/media";
 
 /**
@@ -53,9 +54,15 @@ export const SITE = {
    * horizontal card strip now and its pager is six numbered links, each named by
    * its own activity's title, so there is no shared word for either of them to
    * borrow: nothing was reworded, the control that needed the words stopped
-   * existing. `content/home.ts`'s `HOME.strip` carries the strip's three
-   * strings, because they belong to one section of one page and this dial is for
-   * strings the menu and the footer must not be able to disagree about.
+   * existing.
+   *
+   * **The strip's own three strings (`region`/`hint`/`jump`) lived in
+   * `content/home.ts`'s `HOME.strip` from 19 Aug until 26 Aug 2026**, on the
+   * reasoning that they belonged to one section of one page while this dial
+   * was for strings the menu and the footer must not be able to disagree
+   * about. The client's ruling that both property pages carry the identical
+   * card strip made that reasoning false — see `STRIP_LABELS`, below `SITE`,
+   * for where they live now and why.
    *
    * The half of that entry worth keeping is its own last paragraph, and it still
    * binds the pager: six links whose visible text is "01"…"06" are six links a
@@ -76,3 +83,52 @@ export const SITE = {
     copyright: "© 2026 Mahua Resorts. All rights reserved.",
   },
 } as const;
+
+/**
+ * The three fixed strings around `05 · Experiences`'/`03 · The Experience`'s
+ * card strip that are not per-card: the scroll region's accessible name, the
+ * "Scroll →" hint, and the pager's "Jump to" prefix.
+ *
+ * **Moved here from `content/home.ts`'s `HOME.strip` on 26 August 2026**, the
+ * day the client asked for the identical card strip on both property pages
+ * (*"replace it with the exact same copy-pasted activities carousel from our
+ * homepage"*). A string all three pages must agree on belongs beside
+ * `SITE.nav`'s own four — the ones the menu and the footer must never name
+ * differently — not inside one page's own content module. `content/home.ts`
+ * now reads `strip: STRIP_LABELS` and re-exports it as `HOME.strip` unchanged,
+ * so nothing that already reached for `HOME.strip` had to change.
+ *
+ * Not folded into `SITE` itself: `SITE.nav`/`.places`/`.footer` are strings
+ * that appear on every route regardless of what a page is about; these three
+ * belong to one specific chapter that happens to now recur on three pages,
+ * which is a narrower claim. A standalone export says exactly that.
+ */
+export const STRIP_LABELS: StripLabels = {
+  /**
+   * The accessible name of the scroll container, and of the pager beside it.
+   *
+   * A scrollable region is announced by its label or not at all, and "list"
+   * on its own tells a screen-reader user nothing about why they have landed
+   * in one that moves horizontally. It names the thing and says which way.
+   */
+  region: "Experiences — scroll sideways",
+  /**
+   * The visible affordance under the strip.
+   *
+   * **The client's own document's, verbatim** —
+   * `Brand&Design-Guidelines/mahua-home-v2-dusk.html` sets
+   * `.hint { Scroll → }` beneath its filmstrip. `aria-hidden` in the markup:
+   * it duplicates what `region` already says, and the arrow is a glyph rather
+   * than a word.
+   */
+  hint: "Scroll →",
+  /**
+   * The accessible name of a pager link, followed by the activity's own title.
+   *
+   * The visible text of each is a two-digit number, and six numbers are six
+   * links a screen reader cannot tell apart. "Show — Village Craft" is
+   * distinct by construction and invents no copy: the second half is the
+   * card's own title.
+   */
+  jump: "Show",
+};

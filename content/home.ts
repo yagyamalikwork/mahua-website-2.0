@@ -1,4 +1,5 @@
 import type { MediaId } from "@/lib/media";
+import { STRIP_LABELS } from "@/content/site";
 
 /**
  * THE DIAL for copy. Every word on the page lives here, so text edits never touch
@@ -104,6 +105,120 @@ export type ExperienceCopy = {
   readonly mediaId: MediaId;
 };
 
+/**
+ * The card strip's six activities — extracted to a named export on 26 August
+ * 2026, so `content/mahua-vann.ts` and `content/mahua-tola.ts` can import the
+ * SAME six rather than copy them a second and third time.
+ *
+ * Client, 26 Aug: *"replace it with the exact same copy-pasted activities
+ * carousel from our homepage … for now just place the entire carousel as it
+ * is."* Both property pages keep their own heading and intro above the strip
+ * (his ruling when asked — three pages opening on identical sentences is the
+ * *"very wordpress and templaty"* verdict that started this whole redesign);
+ * only the six cards themselves are shared, because he says the activities
+ * "will be changed later" and three literal copies is three places a future
+ * edit would have to remember to make. `docs/DECISIONS.md` §22.
+ *
+ * **This is a pure extraction — no string or value below changed.** Moving
+ * the array out from under `HOME.chapters["field-days"]` and giving it a name
+ * does not touch what it contains; `content/chapters.test.ts` and
+ * `ExperienceStrip.test.tsx` watch the home page's own copy and layout for
+ * exactly this reason, and both stayed green against this file unchanged.
+ *
+ * The long comment that used to introduce this array inline, kept in full
+ * because every word of it is still true of what is exported here:
+ *
+ * Six activities, re-carded on 19 Aug 2026, in the client's own order.
+ *
+ * Every word below except the sixth card's sentence comes from
+ * `Brand&Design-Guidelines/mahua-home-v2-dusk.html`, which is his own
+ * document; "Private Bush Dinners" is his rename of its "Lantern dinners",
+ * and he added Jungle Safari to that document's five and set this running
+ * order himself. Nothing here is written by us — the sixth card carries
+ * the *old* safari card's sentence verbatim, which is the one line that
+ * survives the previous six.
+ *
+ * **The labels are the reference's status pill, and this site has no
+ * status to put in one** — see `ExperienceCopy.label`. Five are his
+ * document's; `At the gate` is ours, written to the same register and to
+ * this chapter's own opening paragraph ("The gates open before the light
+ * does"), which is the nearest thing to a source there was.
+ *
+ * **Nothing on a card is a link, and that is a decision.** The reference's
+ * card ends in one because a departure has a page to go to; not one of
+ * these six activities has a page, a date or a price anywhere on this
+ * site, and the two lodges that run them are already the chapter after
+ * next. Six links to the same two pages would be six controls that all do
+ * the same not-very-much, and a link that goes nowhere is worse than no
+ * link — so the card is the photograph, its label, its title and one
+ * sentence, and the strip is scrolled rather than clicked through.
+ *
+ * Each names its own photograph; `chapters.test.ts` holds every id to one
+ * the chapter itself declares in `chapters.ts`, so a card can never reach
+ * for a frame the chapter has not counted. The property pages carry no
+ * such guard of their own — `content/mahua-vann.test.ts` and
+ * `content/mahua-tola.test.ts` instead check that `vann-day`/`tola-day`'s
+ * own `media` list is exactly these six ids, in this order.
+ */
+export const HOME_EXPERIENCES: readonly ExperienceCopy[] = [
+  {
+    label: "Fireside",
+    title: "Private Bush Dinners",
+    body: "Tables under the trees, a fire going, the forest listening in.",
+    mediaId: "bonfire-dinner",
+  },
+  {
+    label: "Stillness",
+    title: "Wellness",
+    body: "Lawn yoga, pranayama and candlelit sound baths.",
+    mediaId: "sound-healing",
+  },
+  {
+    label: "After dark",
+    title: "Screenings and Star Talks",
+    body: "Telescopes on the lawn and wildlife documentaries under the trees.",
+    // The only one of the six a portrait card fits without a crop — 900 x
+    // 1350, supplied by the client for this card. Guest consent granted
+    // 19 Aug 2026 after he was shown exactly which two faces are legible
+    // in it; `scripts/build_images.mjs` carries that ruling in full.
+    mediaId: "star-talks",
+  },
+  {
+    label: "On foot",
+    title: "Nature Walks and Birding",
+    body: "Guided trails around the lodge — pugmarks, birdcalls, small dramas.",
+    mediaId: "guide-sunrise",
+  },
+  {
+    label: "Local hands",
+    title: "Village Craft",
+    body: "Pottery at the wheel, learnt from the villages next door.",
+    // The client's own choice, and it had to be taken off `03 · Rooted
+    // Like The Mahua` to be used here — see `ExperienceCopy.mediaId`. It
+    // is also re-sourced from a 900px export of the same photograph,
+    // because a 0.74 window of the old 700px file was 345px wide.
+    mediaId: "potters-hands",
+  },
+  {
+    label: "At the gate",
+    title: "Jungle Safari",
+    // The one sentence carried over from the coverflow's own six, word for
+    // word: the client ruled that this chapter's text is not to be
+    // touched, and the strip's brief asks for "the current safari card's
+    // own words".
+    body:
+      "Morning and evening drives in open vehicles, led by naturalists who have followed " +
+      "these particular tigresses and their lineages for years.",
+    // NOT `tiger-crossing-track`, which is what his list names — a
+    // portrait card cannot hold it and its guest consent is size-bound.
+    // See `ExperienceCopy.mediaId`. **This substitution is his to
+    // overturn**, and the cost of overturning it is a portrait re-export
+    // of that frame with the vehicle and the tiger both inside a 0.74
+    // window, which the original scene may not contain at all.
+    mediaId: "tiger-golden-grass",
+  },
+] as const;
+
 export const HOME = {
   meta: {
     title: "Mahua Resorts — The wild and the calm, held together",
@@ -128,41 +243,22 @@ export const HOME = {
   },
 
   /**
-   * The words the card strip needs that are not a card's own — `05 · Experiences`.
+   * The words the card strip needs that are not a card's own — `05 ·
+   * Experiences` on the home page, `03 · The Experience` on both property
+   * pages.
    *
-   * Here rather than in `content/site.ts` because they belong to one section of
-   * one page. `SITE.nav` exists for strings the menu and the footer must not be
-   * able to disagree about; nothing else on this site scrolls sideways.
+   * **Moved to `content/site.ts`'s `STRIP_LABELS` on 26 August 2026 and
+   * re-exported here unchanged.** Until then this comment correctly said
+   * these three strings belonged in one page's own content module because
+   * only one page scrolled sideways; the client's ruling that both property
+   * pages get "the exact same … activities carousel" made that false — a
+   * string three pages must not be able to disagree about belongs beside
+   * `SITE.nav`'s own four, not inside `content/home.ts`. Kept as a property
+   * of `HOME` too so `app/page.tsx`'s existing `labels={HOME.strip}` and
+   * every test written against it keep working with no edit required — one
+   * value, reached two ways.
    */
-  strip: {
-    /**
-     * The accessible name of the scroll container, and of the pager beside it.
-     *
-     * A scrollable region is announced by its label or not at all, and "list"
-     * on its own tells a screen-reader user nothing about why they have landed
-     * in one that moves horizontally. It names the thing and says which way.
-     */
-    region: "Experiences — scroll sideways",
-    /**
-     * The visible affordance under the strip.
-     *
-     * **The client's own document's, verbatim** —
-     * `Brand&Design-Guidelines/mahua-home-v2-dusk.html` sets
-     * `.hint { Scroll → }` beneath its filmstrip. `aria-hidden` in the markup:
-     * it duplicates what `region` already says, and the arrow is a glyph rather
-     * than a word.
-     */
-    hint: "Scroll →",
-    /**
-     * The accessible name of a pager link, followed by the activity's own title.
-     *
-     * The visible text of each is a two-digit number, and six numbers are six
-     * links a screen reader cannot tell apart. "Show — Village Craft" is
-     * distinct by construction and invents no copy: the second half is the
-     * card's own title.
-     */
-    jump: "Show",
-  },
+  strip: STRIP_LABELS,
 
   /**
    * Interface furniture for the guests' reviews, not brand copy — the same
@@ -317,94 +413,13 @@ export const HOME = {
           "first vehicles through, which matters most in the hour when the forest is still " +
           "saying out loud where everything is.",
       ],
-      /*
-       * **Six activities, re-carded on 19 Aug 2026, in the client's own order.**
-       *
-       * Every word below except the sixth card's sentence comes from
-       * `Brand&Design-Guidelines/mahua-home-v2-dusk.html`, which is his own
-       * document; "Private Bush Dinners" is his rename of its "Lantern dinners",
-       * and he added Jungle Safari to that document's five and set this running
-       * order himself. Nothing here is written by us — the sixth card carries
-       * the *old* safari card's sentence verbatim, which is the one line that
-       * survives the previous six.
-       *
-       * **The labels are the reference's status pill, and this site has no
-       * status to put in one** — see `ExperienceCopy.label`. Five are his
-       * document's; `At the gate` is ours, written to the same register and to
-       * this chapter's own opening paragraph ("The gates open before the light
-       * does"), which is the nearest thing to a source there was.
-       *
-       * **Nothing on a card is a link, and that is a decision.** The reference's
-       * card ends in one because a departure has a page to go to; not one of
-       * these six activities has a page, a date or a price anywhere on this
-       * site, and the two lodges that run them are already the chapter after
-       * next. Six links to the same two pages would be six controls that all do
-       * the same not-very-much, and a link that goes nowhere is worse than no
-       * link — so the card is the photograph, its label, its title and one
-       * sentence, and the strip is scrolled rather than clicked through.
-       *
-       * Each names its own photograph; `chapters.test.ts` holds every id to one
-       * the chapter itself declares in `chapters.ts`, so a card can never reach
-       * for a frame the chapter has not counted.
-       */
-      experiences: [
-        {
-          label: "Fireside",
-          title: "Private Bush Dinners",
-          body: "Tables under the trees, a fire going, the forest listening in.",
-          mediaId: "bonfire-dinner",
-        },
-        {
-          label: "Stillness",
-          title: "Wellness",
-          body: "Lawn yoga, pranayama and candlelit sound baths.",
-          mediaId: "sound-healing",
-        },
-        {
-          label: "After dark",
-          title: "Screenings and Star Talks",
-          body: "Telescopes on the lawn and wildlife documentaries under the trees.",
-          // The only one of the six a portrait card fits without a crop — 900 x
-          // 1350, supplied by the client for this card. Guest consent granted
-          // 19 Aug 2026 after he was shown exactly which two faces are legible
-          // in it; `scripts/build_images.mjs` carries that ruling in full.
-          mediaId: "star-talks",
-        },
-        {
-          label: "On foot",
-          title: "Nature Walks and Birding",
-          body: "Guided trails around the lodge — pugmarks, birdcalls, small dramas.",
-          mediaId: "guide-sunrise",
-        },
-        {
-          label: "Local hands",
-          title: "Village Craft",
-          body: "Pottery at the wheel, learnt from the villages next door.",
-          // The client's own choice, and it had to be taken off `03 · Rooted
-          // Like The Mahua` to be used here — see `ExperienceCopy.mediaId`. It
-          // is also re-sourced from a 900px export of the same photograph,
-          // because a 0.74 window of the old 700px file was 345px wide.
-          mediaId: "potters-hands",
-        },
-        {
-          label: "At the gate",
-          title: "Jungle Safari",
-          // The one sentence carried over from the coverflow's own six, word for
-          // word: the client ruled that this chapter's text is not to be
-          // touched, and the strip's brief asks for "the current safari card's
-          // own words".
-          body:
-            "Morning and evening drives in open vehicles, led by naturalists who have followed " +
-            "these particular tigresses and their lineages for years.",
-          // NOT `tiger-crossing-track`, which is what his list names — a
-          // portrait card cannot hold it and its guest consent is size-bound.
-          // See `ExperienceCopy.mediaId`. **This substitution is his to
-          // overturn**, and the cost of overturning it is a portrait re-export
-          // of that frame with the vehicle and the tiger both inside a 0.74
-          // window, which the original scene may not contain at all.
-          mediaId: "tiger-golden-grass",
-        },
-      ],
+      // **Extracted to `HOME_EXPERIENCES`, above, on 26 August 2026** — the
+      // client asked for "the exact same copy-pasted activities carousel"
+      // on both property pages, and an import is what keeps three copies
+      // from drifting once his own "the activities will be changed later"
+      // comes true. See that export's own comment for the full history;
+      // nothing about these six cards changed in the move.
+      experiences: HOME_EXPERIENCES,
     },
 
     // ── The close ───────────────────────────────────────────────────────────

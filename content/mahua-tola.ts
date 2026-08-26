@@ -1,18 +1,30 @@
 import type { OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
 import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
-import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
+import type { StripCopy } from "@/components/sections/ExperienceStrip";
 import type { HeroCopy } from "@/components/sections/Hero";
 import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
 import type { PropertyContactCopy } from "@/components/property/PropertyContact";
+/*
+ * **The home page's six activities, imported rather than copied.** Client,
+ * 26 Aug 2026: *"replace it with the exact same copy-pasted activities
+ * carousel from our homepage … for now just place the entire carousel as it
+ * is."*
+ *
+ * An import rather than a paste because "the activities will be changed
+ * later" — and when they are, three copies would drift. The day they are
+ * meant to differ per property, this becomes three arrays on purpose rather
+ * than by accident.
+ */
+import { HOME_EXPERIENCES } from "@/content/home";
 import type { PropertyChapter } from "./property-chapters";
 
 /**
  * Mahua Tola's spine, in the redesign's shape vocabulary. **Six moments as of
  * 26 August 2026** (was eight — two `fullBleed` bands, `tola-guest-word` and
  * `tola-table`, both removed the same day on the client's own ruling; see
- * their removal comments below): hero → column → map → showcase → pair →
+ * their removal comments below): hero → column → map → showcase → strip →
  * invitation.
  *
  * This page no longer diverges from Vann's own shape sequence the way it did
@@ -92,32 +104,23 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
    * `measure_density.mjs` scores what is painted, and a chapter that needs
    * imagery needs a composition. See `docs/DECISIONS.md` §22.
    */
+  /*
+   * **`shape: "pair"` and six Tola-specific photographs until 26 August 2026.**
+   * The client asked for the home page's own card strip here instead — "the
+   * exact same … activities carousel … place the entire carousel as it is" —
+   * so `media` below is now `HOME_EXPERIENCES`' own six ids, in its own order,
+   * not this lodge's. `tola-tiger-safari`, `tola-river-walk`,
+   * `bonfire-circle-night`, `tola-candlelit-dinner`, `tola-swimming` and
+   * `tola-experiences` are released and now curated-but-unused — not parked
+   * in another chapter to keep a density figure up, per this project's own
+   * standing rule. See `docs/DECISIONS.md` §22.
+   */
   {
-    // Six experiences, matching Vann's own tola-day/vann-day rhythm of two
-    // "hero" (full-row) entries with an even run of "quiet" ones before each
-    // — see the long comment on TOLA_COPY.pairCopy below for why the sixth
-    // is not "Village Walk & Bamboo Crafts Market" despite that being one of
-    // the six the brief named.
     id: "tola-day",
     number: "03",
     label: "The Experience",
-    shape: "pair",
-    media: [
-      "tola-tiger-safari",
-      "tola-river-walk",
-      // `bonfire-circle-night`, not `tola-bonfire`. The live site's own
-      // bonfire photograph shows a guest's face clearly enough to identify
-      // her, and the client asked for it off the page on consent grounds
-      // (10 Aug 2026) — the same rule the original curation already applied
-      // to another frame (see `scripts/build_images.mjs`'s CURATION note).
-      // This frame is from the client's own Mahua Tola property video
-      // (docs/PROJECT-STATE.md), so it is honestly this lodge's own bonfire
-      // and not a stand-in from Pench, and it carries no people at all.
-      "bonfire-circle-night",
-      "tola-candlelit-dinner",
-      "tola-swimming",
-      "tola-experiences",
-    ],
+    shape: "strip",
+    media: HOME_EXPERIENCES.map((e) => e.mediaId),
   },
   {
     // vann-hero, the same cross-page move Vann's own invitation makes with
@@ -461,73 +464,47 @@ export const TOLA_COPY: PropertyPageCopy = {
     } satisfies RoomShowcaseCopy,
   },
 
-  pairCopy: {
+  /*
+   * **`pairCopy` (`ExperiencePairCopy`, six of this lodge's own photographs at
+   * two weights) was here until 26 August 2026.** The client asked for the
+   * home page's own card strip instead — see the removal comment on
+   * `TOLA_CHAPTERS` above for his words and where the six Tola-specific
+   * photographs went (including the note on why `tola-experiences` was
+   * captioned "Time in the Bamboo" rather than "Village Walk & Bamboo Crafts
+   * Market" — moot now that the card itself is gone, but the Village Walk
+   * and Bamboo Crafts Market content is still real and still not dropped: it
+   * remains in `TOLA_COPY.columnCopy["tola-reserve"]`'s second paragraph, in
+   * prose, where no photograph is required). `stripCopy` below keeps this
+   * page's own heading and intro (his ruling when asked: cards only, not the
+   * whole section) and imports `experiences` from `content/home.ts` rather
+   * than restating it.
+   *
+   * **`alsoLine` does not survive the move, and it is a deferred item, not a
+   * deletion.** It named an evening with the naturalist or a wildlife
+   * documentary, and carrom, table tennis and other indoor/outdoor games —
+   * the same honest-leftovers treatment Vann's own `alsoLine` gave its own —
+   * and `StripCopy` has no slot for a line like it. Told this and that the
+   * six activities will change later anyway, the client chose to drop it for
+   * now and revisit once that later work decides where it lives (26 Aug
+   * 2026, same ruling as Vann's). The string itself is kept below, commented
+   * at its own site, per this project's rule that a decision to revisit is
+   * not a decision to discard. See `docs/DECISIONS.md` §22 and
+   * `docs/PROJECT-STATE.md`'s owed list.
+   */
+  stripCopy: {
     "tola-day": {
       heading: { text: "The day at Tola", dim: "day" },
-      intro:
+      body: [
         "Tiger safaris at dawn and dusk, an afternoon along the Hattinala, a bonfire once the light " +
-        "goes, and a pool to come back to between drives.",
-      experiences: [
-        {
-          mediaId: "tola-tiger-safari",
-          name: "Tiger Safari",
-          line: "Dawn and dusk drives through one of the country's most tiger-dense forests, with trackers who know this reserve's cats by name.",
-          weight: "hero",
-        },
-        {
-          mediaId: "tola-river-walk",
-          name: "River Walk",
-          line: "A walk along the Hattinala, with nothing scheduled on it but flowing water and birdsong.",
-          weight: "quiet",
-        },
-        {
-          mediaId: "bonfire-circle-night",
-          name: "Bonfire",
-          line: "A fire lit once the evening drive comes in, and conversation that runs late under the stars.",
-          weight: "quiet",
-        },
-        {
-          mediaId: "tola-candlelit-dinner",
-          name: "Candle Light Dinner",
-          line: "A table laid by candlelight, the forest's own sounds for company and whatever the kitchen is cooking that night.",
-          weight: "hero",
-        },
-        {
-          mediaId: "tola-swimming",
-          name: "Swimming",
-          line: "A pool tucked into the greenery, for the hours between drives.",
-          weight: "quiet",
-        },
-        {
-          // NOT captioned "Village Walk & Bamboo Crafts Market" — that is
-          // one of the six experiences the brief named, but tola-experiences
-          // (looked at directly: reference is
-          // public/media/tola-experiences-1163.jpg) shows rope hammocks
-          // slung between trees on a garden path, not a village or a
-          // market. Forcing that caption onto this photograph would repeat
-          // the exact defect Task 12's review caught on this branch —
-          // captioning a photograph as something it does not show ("do not
-          // caption the pool as a forest path"). The Village Walk & Bamboo
-          // Crafts Market content is real and is not dropped: it is in
-          // TOLA_COPY.columnCopy["tola-reserve"]'s second paragraph, in
-          // prose, where no photograph is required. This slot is captioned
-          // for what the photograph actually is instead.
-          mediaId: "tola-experiences",
-          name: "Time in the Bamboo",
-          line: "Rope hammocks slung between the trees, for whoever wants the afternoon to do nothing in particular.",
-          weight: "quiet",
-        },
+          "goes, and a pool to come back to between drives.",
       ],
-      alsoLine:
-        // Wildlife documentaries and indoor/outdoor games — the live site's
-        // own two remaining experience sections, named honestly in one
-        // quiet line rather than promoted to their own photograph or
-        // deleted, same treatment Vann's alsoLine gives its own leftovers.
-        // No capacity or count invented for either — see Task 12's "seats
-        // forty" finding, which traced to nothing.
-        "Also: an evening with the in-house naturalist or a wildlife documentary, and carrom, " +
-        "table tennis and other indoor and outdoor games.",
-    } satisfies ExperiencePairCopy,
+      experiences: HOME_EXPERIENCES,
+      // alsoLine (dropped for now, revisit later — client's ruling, 26 Aug 2026,
+      // see the long comment above `stripCopy`):
+      // "Also: an evening with the in-house naturalist or a wildlife
+      // documentary, and carrom, table tennis and other indoor and outdoor
+      // games."
+    } satisfies StripCopy,
   },
 
   invitationCopy: {

@@ -279,24 +279,34 @@ const MENU_RUNS = (heroId) => [
  * its title tops out at 20.8px. None of that is large text at any width this rig
  * samples.
  */
-const STRIP_RUNS = Array.from({ length: 6 }, (_, i) => {
-  // Positional AND by id, which is belt and braces on purpose: the `nth-child`
-  // is what the crop needs and the `#id` is what `ExperienceStrip.tsx` composes
-  // through `experienceCardId`, so a run pointed at the wrong card fails the
-  // placement check below rather than quietly measuring its neighbour. The
-  // coverflow's own runs were positional only, and a stale `i + 2` offset there
-  // measured five wrong cards in silence before crashing on the sixth.
-  const card = `#field-days ul.experience-strip > li.experience-card#field-days-card-${i}`;
-  return {
-    name: `strip · card ${String(i + 1).padStart(2, "0")}`,
-    min: 4.5,
-    at: "#field-days .experience-strip",
-    stripCard: card,
-    lines: true,
-    container: card,
-    sel: `${card} [data-contrast="experience-card"]`,
-  };
-});
+/**
+ * Parameterised by chapter id since 26 August 2026, when the client asked for
+ * this exact card strip on both property pages too (`vann-day`, `tola-day`)
+ * — the six runs below are otherwise unchanged from the home page's own, and
+ * this is the function that lets a second and third page reuse them rather
+ * than re-typing six selectors twice more.
+ */
+const makeStripRuns = (chapterId) =>
+  Array.from({ length: 6 }, (_, i) => {
+    // Positional AND by id, which is belt and braces on purpose: the `nth-child`
+    // is what the crop needs and the `#id` is what `ExperienceStrip.tsx` composes
+    // through `experienceCardId`, so a run pointed at the wrong card fails the
+    // placement check below rather than quietly measuring its neighbour. The
+    // coverflow's own runs were positional only, and a stale `i + 2` offset there
+    // measured five wrong cards in silence before crashing on the sixth.
+    const card = `#${chapterId} ul.experience-strip > li.experience-card#${chapterId}-card-${i}`;
+    return {
+      name: `strip · card ${String(i + 1).padStart(2, "0")}`,
+      min: 4.5,
+      at: `#${chapterId} .experience-strip`,
+      stripCard: card,
+      lines: true,
+      container: card,
+      sel: `${card} [data-contrast="experience-card"]`,
+    };
+  });
+
+const STRIP_RUNS = makeStripRuns("field-days");
 
 /**
  * `01 · The Lodges`' two panels — added 19 Aug 2026 with
@@ -606,6 +616,20 @@ const propertyRuns = (heroId, scrolledAt) => [
  * targets, an exit code of 1, and the artefact still landed in a commit that
  * said "verified". A rig must refuse to measure a page it has no probes for.
  */
+/*
+ * **Found running this rig for Task 7 (26 Aug 2026), not caused by it and
+ * not fixed here: both `propertyRuns` calls below name a `scrolledAt` and a
+ * `quote · …` probe that no longer exist.** Task 5 of this same restructure
+ * deleted `vann-table`, `tola-guest-word` and `tola-table` outright (the
+ * client's ruling), and neither this file nor Task 5's own fix round updated
+ * to match — 24 "NOT FOUND" targets across the six widths on each property
+ * route, confirmed by actually running it. Left alone rather than patched
+ * over: `scrolledAt` exists so the scrolled header is checked over a real
+ * PHOTOGRAPH, and neither property page has a non-hero `fullBleed` chapter
+ * left at all any more (`PropertyPage.tsx`'s own dispatcher comment says so),
+ * so there may be no honest photograph anchor left to point it at — a
+ * judgement call this task did not make unasked. See the task report.
+ */
 const RUN_SETS = {
   "/": HOME_RUNS,
   "/mahua-vann": [
@@ -616,6 +640,10 @@ const RUN_SETS = {
     // (`{ flat: 0.4, centre: 0.4 }`), tuned for no composition in particular.
     // Added alongside `tola-table`'s equivalent below.
     { name: "quote · vann-table", min: 3, at: "#vann-table", container: "#vann-table", sel: "#vann-table [data-word]" },
+    // `03 · The Experience`'s six cards, added 26 Aug 2026 — the client's own
+    // card strip, mounted here unmodified. Same six runs as the home page's
+    // `STRIP_RUNS`, retargeted at this page's own chapter id.
+    ...makeStripRuns("vann-day"),
   ],
   "/mahua-tola": [
     ...propertyRuns("tola-hero", "#tola-guest-word"),
@@ -623,6 +651,9 @@ const RUN_SETS = {
     // `tola-table`, this page's other generic-scrim `FullBleedQuote` chapter
     // — same gap `vann-table` had, closed the same way, Task 15.
     { name: "quote · tola-table", min: 3, at: "#tola-table", container: "#tola-table", sel: "#tola-table [data-word]" },
+    // `03 · The Experience`'s six cards, added 26 Aug 2026 — see the identical
+    // note on `/mahua-vann` above.
+    ...makeStripRuns("tola-day"),
   ],
 };
 

@@ -1,4 +1,4 @@
-import { ExperiencePair, type ExperiencePairCopy } from "@/components/sections/ExperiencePair";
+import { ExperienceStrip, type StripCopy } from "@/components/sections/ExperienceStrip";
 import { FullBleedQuote, type FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
 import { Hero, type HeroCopy } from "@/components/sections/Hero";
 import { OpeningColumn, type OpeningColumnCopy } from "@/components/sections/OpeningColumn";
@@ -13,21 +13,28 @@ import { FullBleed } from "@/components/ui/FullBleed";
 import { Scrim, type ScrimStrength } from "@/components/ui/Scrim";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import type { PropertyChapter, PropertyShape } from "@/content/property-chapters";
-import { SITE_FOOTER_ID } from "@/content/site";
+import { SITE_FOOTER_ID, STRIP_LABELS } from "@/content/site";
 
 export type PropertyPageCopy = {
   readonly heroCopy?: HeroCopy;
   readonly columnCopy?: Record<string, OpeningColumnCopy>;
   readonly mapCopy?: Record<string, PropertyMapCopy>;
   readonly showcaseCopy?: Record<string, RoomShowcaseCopy>;
-  readonly pairCopy?: Record<string, ExperiencePairCopy>;
+  /**
+   * **`pairCopy` (`ExperiencePairCopy`) until 26 August 2026** — replaced by
+   * the home page's own `StripCopy`, imported rather than defined a second
+   * time, when the client asked for the identical card strip on both
+   * property pages. See `content/property-chapters.ts`'s `PropertyShape`
+   * comment and `docs/DECISIONS.md` §22.
+   */
+  readonly stripCopy?: Record<string, StripCopy>;
   readonly pressCopy?: Record<string, PressBandCopy>;
   readonly quoteCopy?: Record<string, FullBleedQuoteCopy>;
   readonly invitationCopy?: Record<string, PropertyInvitationCopy>;
 };
 
 /** The shapes that carry a screen on cream rather than on a photograph. */
-const CREAM_SHAPES: readonly PropertyShape[] = ["column", "map", "showcase", "pair", "press", "invitation"];
+const CREAM_SHAPES: readonly PropertyShape[] = ["column", "map", "showcase", "strip", "press", "invitation"];
 
 /**
  * Every chapter's cream, worked out in one pass before anything renders.
@@ -239,10 +246,25 @@ export function PropertyPage({
                 <RoomCardStack key={chapter.id} chapter={chapter} copy={showcaseCopy} surface={surface} />
               );
             }
-            case "pair": {
-              const pairCopy = copy.pairCopy?.[chapter.id];
-              if (!pairCopy) throw new Error(`No pair copy for "${chapter.id}"`);
-              return <ExperiencePair key={chapter.id} chapter={chapter} copy={pairCopy} surface={surface} />;
+            case "strip": {
+              // `ExperienceStrip` is the home page's own `05 · Experiences`
+              // component (`components/sections/ExperienceStrip.tsx`),
+              // mounted here unmodified — the client's own words were "place
+              // the entire carousel as it is". `labels` is `STRIP_LABELS`,
+              // the same three interface strings the home page reads via
+              // `HOME.strip`, so a screen-reader announcement can never
+              // differ between the three routes that now show this strip.
+              const stripCopy = copy.stripCopy?.[chapter.id];
+              if (!stripCopy) throw new Error(`No strip copy for "${chapter.id}"`);
+              return (
+                <ExperienceStrip
+                  key={chapter.id}
+                  chapter={chapter}
+                  copy={stripCopy}
+                  labels={STRIP_LABELS}
+                  surface={surface}
+                />
+              );
             }
             case "press": {
               const pressCopy = copy.pressCopy?.[chapter.id];

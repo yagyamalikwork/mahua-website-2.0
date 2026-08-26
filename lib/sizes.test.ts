@@ -22,11 +22,13 @@ import { CARD_BOX, CARD_SIZES } from "@/components/sections/ExperienceCard";
 import { BOXES as LODGE_BOXES, SIZES as LODGE_SIZES } from "@/components/sections/LodgeCards";
 import { PANEL_BOX, PANEL_SIZES } from "@/components/sections/LodgePanels";
 import { BAND_BOX, BAND_SIZES } from "@/components/sections/JunglesBand";
-import {
-  EXPERIENCE_BOXES,
-  EXPERIENCE_SIZES,
-  type ExperienceWeight,
-} from "@/components/sections/ExperiencePair";
+// `EXPERIENCE_BOXES`/`EXPERIENCE_SIZES`/`ExperienceWeight` were imported here
+// from `@/components/sections/ExperiencePair` until 26 August 2026 — the
+// component is deleted with the chapter it rendered (`content/property-
+// chapters.ts`'s `PropertyShape` lost `"pair"` the same day). Both property
+// pages' `03 · The Experience` now mounts `ExperienceStrip`, whose card is
+// already covered below by the `ExperienceStrip.card` row and case — nothing
+// replaces this import because nothing new needs one.
 import { PLATE_FRAME, PLATE_SIZES } from "@/components/sections/PlateGrid";
 import { ROOM_CARD_SIZES } from "@/components/sections/RoomCard";
 import { GALLERY_SIZES } from "@/components/sections/RoomCardStack";
@@ -209,15 +211,11 @@ const LIVE_SLOTS: readonly Slot[] = [
   // the box column is the widest room photo again; a genuinely new width list
   // (nothing else on the page serves ~80vw).
   { name: "RoomCardStack.gallery", sizes: GALLERY_SIZES, box: 1.51 as CoverBox },
-  // The day's six experiences, two weights. `hero` repeats `PLATE_SIZES[1]`
-  // and `quiet` repeats `PLATE_SIZES[2]` verbatim — same container, same
-  // columns — so neither adds a distinct string; both still get their own
-  // rows because their boxes (2:1, 4:5) are new crops.
-  ...(["hero", "quiet"] as const).map((k: ExperienceWeight) => ({
-    name: `ExperiencePair.${k}`,
-    sizes: EXPERIENCE_SIZES[k],
-    box: EXPERIENCE_BOXES[k] as CoverBox,
-  })),
+  // `ExperiencePair.hero`/`.quiet` were here until 26 August 2026 — see the
+  // note on the deleted import at the head of this file. Both property
+  // pages' `03 · The Experience` renders `ExperienceStrip` now, which is
+  // already the `ExperienceStrip.card` row below; no replacement row is
+  // needed because no new `sizes` string was introduced.
   // The closing band's sister-lodge photograph — full container width at
   // 21:9. Repeats `PLATE_SIZES[1]`'s string verbatim (same 1600px container,
   // one column, no `50vw` tier), so this row adds no new distinct string;
@@ -470,7 +468,19 @@ describe("the sizes the page actually serves", () => {
     // thirds — so a shared string would have been the defect, not the saving.
     // `ChapterIntro.solo` keeps 42vw and does not leave the set. Read off a
     // suite run (`expected 22 to be 21`), not computed by hand.
-    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(22);
+    // 22 → 21 on 26 August 2026, when `ExperiencePair.tsx` was deleted with
+    // the `pair` shape it rendered (both property pages' `03 · The
+    // Experience` mounts `ExperienceStrip` now, whose card was already a
+    // slot below). `EXPERIENCE_SIZES.hero` repeated `PLATE_SIZES[1]`
+    // verbatim, so losing `ExperiencePair.hero` costs nothing — that string
+    // is still in the set via every row that already shared it. `.quiet` is
+    // the whole of the drop: its own comment recorded it as "left holding
+    // the old [pre-reflow `PLATE_SIZES[2]`] string alone" since 14 Aug 2026,
+    // and nothing else on the page ever came to share it. One row shared,
+    // one row not — net −1, read off this suite by running it and reading
+    // the failure (`expected 21 to be 22`), not computed by hand, per the
+    // same instruction as every step above.
+    expect(new Set(LIVE_SLOTS.map((s) => s.sizes)).size).toBe(21);
   });
 
   it.each(LIVE_SLOTS.map((s) => [s.name, s.sizes] as const))(
@@ -623,9 +633,11 @@ describe("cover boxes match the markup they describe", () => {
     // `components/sections/Testimonials.tsx` had a case here (3:2 and 4:5) until
     // 19 Aug 2026, when the component was deleted with the `guests` chapter.
     { file: "components/sections/PlateGrid.tsx", declared: PLATE_FRAME },
-    // The day's six experiences: `hero` at 2:1, `quiet` at 4:5 — new crops
-    // even though both `sizes` strings are borrowed from `PlateGrid`.
-    { file: "components/sections/ExperiencePair.tsx", declared: EXPERIENCE_BOXES },
+    // `components/sections/ExperiencePair.tsx` had a case here (2:1, 4:5)
+    // until 26 August 2026, when the component was deleted with the `pair`
+    // shape it rendered. `03 · The Experience` on both property pages draws
+    // no box of its own now — `ExperienceCard`'s 0.74 box, below, covers it,
+    // same as it already covered the home page's own strip.
     { file: "components/motion/PinnedCollage.tsx", declared: COLLAGE_BOXES },
     // The closing band's one photograph, the sister lodge at 21:9 — a bare
     // ratio rather than a `BOXES` map, because there is only the one crop on

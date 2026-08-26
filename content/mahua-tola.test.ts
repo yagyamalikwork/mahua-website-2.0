@@ -14,7 +14,11 @@ const MIN_MEDIA = {
   column: 0,
   map: 0,
   showcase: 1,
-  pair: 2,
+  // 2 until 26 Aug 2026, when `pair` (`ExperiencePair`, any even count from 2
+  // up) became `strip` (`ExperienceStrip`, the home page's own six-card
+  // import, always exactly six) — mirrors `content/chapters.test.ts`'s own
+  // `MIN_MEDIA.experienceStrip: 6` for the home page's identical shape.
+  strip: 6,
   press: 0,
   invitation: 1,
 } satisfies Record<PropertyShape, number>;
@@ -124,9 +128,9 @@ describe("TOLA_CHAPTERS", () => {
           expect(rooms?.map((r) => r.mediaId)).toEqual([...c.media]);
           break;
         }
-        case "pair": {
-          const experiences = TOLA_COPY.pairCopy?.[c.id]?.experiences;
-          expect(experiences, `"${c.id}" has no pair copy`).toBeDefined();
+        case "strip": {
+          const experiences = TOLA_COPY.stripCopy?.[c.id]?.experiences;
+          expect(experiences, `"${c.id}" has no strip copy`).toBeDefined();
           expect(experiences?.map((e) => e.mediaId)).toEqual([...c.media]);
           break;
         }
@@ -169,25 +173,31 @@ describe("TOLA_CHAPTERS", () => {
     }
   });
 
-  it("keeps an even number of quiet experiences between each hero", () => {
-    // ExperiencePair lays out in a two-column grid where a `hero` spans both
-    // columns. If a `hero` is preceded by an ODD number of `quiet` entries,
-    // CSS grid cannot fit it in the half-row left over and leaves a visible
-    // empty cell (Task 6's carry-forward note, same guard as Vann's file).
-    const experiences = TOLA_COPY.pairCopy?.["tola-day"]?.experiences ?? [];
-    expect(experiences.length, "tola-day has no experiences to check").toBeGreaterThan(0);
-    let quietRun = 0;
-    for (const e of experiences) {
-      if (e.weight === "quiet") {
-        quietRun++;
-        continue;
-      }
-      expect(
-        quietRun % 2,
-        `"${e.name}" is a hero preceded by ${quietRun} quiet experience(s) — an odd run orphans a grid cell`,
-      ).toBe(0);
-      quietRun = 0;
-    }
+  // **"keeps an even number of quiet experiences between each hero" was
+  // here until 26 August 2026** — see the identical removal note in
+  // `content/mahua-vann.test.ts`. `ExperiencePair`'s two-column `hero`/
+  // `quiet` grid is gone with the component; `ExperienceStrip`'s cards carry
+  // no `weight` at all.
+
+  it("runs the home page's card strip at 03 · The Experience, not the old pair", () => {
+    // The client's own words, 26 Aug 2026: "replace it with the exact same
+    // copy-pasted activities carousel from our homepage … for now just
+    // place the entire carousel as it is."
+    const day = TOLA_CHAPTERS.find((c) => c.id === "tola-day");
+    expect(day?.shape).toBe("strip");
+    // `pairCopy` no longer exists on `PropertyPageCopy` at all — cast rather
+    // than access directly, mirroring `content/home.test.ts`'s own guard for
+    // this shape of check (a field removed from the type, not merely unset).
+    expect((TOLA_COPY as Record<string, unknown>).pairCopy).toBeUndefined();
+    expect(TOLA_COPY.stripCopy?.["tola-day"].experiences).toHaveLength(6);
+  });
+
+  it("keeps its own words above the strip — the client's ruling, cards only", () => {
+    // Cards only, not the whole section — his ruling when asked, because
+    // three pages opening on identical sentences is the "very wordpress and
+    // templaty" verdict that started this redesign. Tola's own heading and
+    // intro survive the swap untouched.
+    expect(TOLA_COPY.stripCopy?.["tola-day"].heading.text).toBe("The day at Tola");
   });
 
   it("dims a word that is actually in its heading, exactly once", () => {

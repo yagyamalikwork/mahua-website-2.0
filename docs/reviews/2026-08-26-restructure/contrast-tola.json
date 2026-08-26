@@ -1,0 +1,1752 @@
+{
+  "measuredAt": "2026-08-26T12:49:40.198Z",
+  "url": "http://localhost:3100/mahua-tola",
+  "widths": {
+    "360": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.34,
+        "brightest": [
+          69,
+          76,
+          67
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.67,
+        "brightest": [
+          75,
+          82,
+          74
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.68,
+        "brightest": [
+          120,
+          120,
+          114
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.33,
+        "brightest": [
+          84,
+          98,
+          86
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.05,
+        "brightest": [
+          70,
+          79,
+          69
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.27,
+        "brightest": [
+          200,
+          195,
+          179
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.04,
+        "brightest": [
+          198,
+          191,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.42,
+        "brightest": [
+          203,
+          197,
+          181
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.03,
+        "brightest": [
+          106,
+          98,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 31.2
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.14,
+        "brightest": [
+          96,
+          98,
+          87
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.8,
+          "rightSlack": 11.41
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.4,
+        "brightest": [
+          95,
+          95,
+          72
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.59,
+          "rightSlack": 11.61
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.4,
+        "brightest": [
+          94,
+          95,
+          76
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.39,
+          "rightSlack": 10.81
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.9,
+        "brightest": [
+          95,
+          102,
+          94
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.19,
+          "rightSlack": 11.02
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.29,
+        "brightest": [
+          105,
+          94,
+          68
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 30.98,
+          "rightSlack": 0.22
+        },
+        "misplaced": null
+      }
+    ],
+    "390": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.45,
+        "brightest": [
+          68,
+          75,
+          67
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.68,
+        "brightest": [
+          75,
+          82,
+          73
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.72,
+        "brightest": [
+          120,
+          119,
+          113
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          84,
+          100,
+          87
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.34,
+        "brightest": [
+          65,
+          77,
+          67
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.04,
+        "brightest": [
+          198,
+          191,
+          176
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.4,
+        "brightest": [
+          202,
+          197,
+          181
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.3,
+        "brightest": [
+          102,
+          95,
+          66
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 37.81
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.52,
+        "brightest": [
+          83,
+          82,
+          70
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.19,
+          "rightSlack": 17.63
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.14,
+        "brightest": [
+          90,
+          85,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.38,
+          "rightSlack": 17.44
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          95,
+          94,
+          75
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.56,
+          "rightSlack": 18.25
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.12,
+        "brightest": [
+          92,
+          99,
+          91
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.75,
+          "rightSlack": 18.06
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.13,
+        "brightest": [
+          107,
+          96,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 37.94,
+          "rightSlack": -0.13
+        },
+        "misplaced": null
+      }
+    ],
+    "768": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.46,
+        "brightest": [
+          68,
+          75,
+          66
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.15,
+        "brightest": [
+          81,
+          87,
+          79
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.64,
+        "brightest": [
+          100,
+          105,
+          99
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.11,
+        "brightest": [
+          83,
+          87,
+          79
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.13,
+        "brightest": [
+          55,
+          62,
+          53
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.43,
+        "brightest": [
+          204,
+          197,
+          181
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.6,
+        "brightest": [
+          100,
+          91,
+          59
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 332
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.23,
+        "brightest": [
+          86,
+          85,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.16,
+        "brightest": [
+          89,
+          85,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.47,
+        "brightest": [
+          93,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.91,
+        "brightest": [
+          67,
+          71,
+          56
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          106,
+          95,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 332,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ],
+    "1024": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.99,
+        "brightest": [
+          72,
+          79,
+          71
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.44,
+        "brightest": [
+          88,
+          95,
+          88
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 6.2,
+        "brightest": [
+          83,
+          86,
+          76
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.54,
+        "brightest": [
+          62,
+          66,
+          53
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.22,
+        "brightest": [
+          46,
+          55,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.35,
+        "brightest": [
+          202,
+          196,
+          180
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          179
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.74,
+        "brightest": [
+          100,
+          89,
+          57
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 588
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.33,
+        "brightest": [
+          85,
+          84,
+          71
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.28,
+        "brightest": [
+          94,
+          96,
+          88
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.05,
+        "brightest": [
+          65,
+          70,
+          56
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 228,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.2,
+        "brightest": [
+          106,
+          95,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 588,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ],
+    "1440": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.97,
+        "brightest": [
+          56,
+          63,
+          56
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.87,
+        "brightest": [
+          84,
+          90,
+          82
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.52,
+        "brightest": [
+          111,
+          105,
+          90
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.92,
+        "brightest": [
+          69,
+          70,
+          60
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.44,
+        "brightest": [
+          47,
+          53,
+          43
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.09,
+        "brightest": [
+          198,
+          192,
+          177
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          179
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.51,
+        "brightest": [
+          101,
+          92,
+          62
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 1004
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.32,
+        "brightest": [
+          85,
+          84,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 984
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.28,
+        "brightest": [
+          94,
+          96,
+          88
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 984
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.39,
+        "brightest": [
+          94,
+          95,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 284,
+          "rightSlack": 720
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.6,
+        "brightest": [
+          70,
+          73,
+          63
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 644,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          106,
+          95,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 1004,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ],
+    "1920": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.13,
+        "brightest": [
+          70,
+          78,
+          70
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.86,
+        "brightest": [
+          84,
+          90,
+          83
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.84,
+        "brightest": [
+          87,
+          106,
+          83
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.02,
+        "brightest": [
+          69,
+          69,
+          58
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.1,
+        "brightest": [
+          50,
+          55,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · menu",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · wordmark",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "header scrolled · pill",
+        "min": 4.5,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.15,
+        "brightest": [
+          199,
+          193,
+          177
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.14,
+        "brightest": [
+          198,
+          193,
+          177
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.33,
+        "brightest": [
+          201,
+          196,
+          180
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-guest-word",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "quote · tola-table",
+        "min": 3,
+        "worst": null,
+        "boxes": 0,
+        "pass": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.69,
+        "brightest": [
+          99,
+          90,
+          57
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 1164
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.32,
+        "brightest": [
+          85,
+          84,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 1144
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.36,
+        "brightest": [
+          93,
+          95,
+          87
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 84,
+          "rightSlack": 1080
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 444,
+          "rightSlack": 720
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.97,
+        "brightest": [
+          65,
+          71,
+          55
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 804,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.2,
+        "brightest": [
+          106,
+          95,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 1164,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ]
+  }
+}

@@ -1,12 +1,24 @@
 import type { OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
 import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
-import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
+import type { StripCopy } from "@/components/sections/ExperienceStrip";
 import type { PressBandCopy } from "@/components/sections/PressBand";
 import type { HeroCopy } from "@/components/sections/Hero";
 import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
 import type { PropertyContactCopy } from "@/components/property/PropertyContact";
+/*
+ * **The home page's six activities, imported rather than copied.** Client,
+ * 26 Aug 2026: *"replace it with the exact same copy-pasted activities
+ * carousel from our homepage … for now just place the entire carousel as it
+ * is."*
+ *
+ * An import rather than a paste because "the activities will be changed
+ * later" — and when they are, three copies would drift. The day they are
+ * meant to differ per property, this becomes three arrays on purpose rather
+ * than by accident.
+ */
+import { HOME_EXPERIENCES } from "@/content/home";
 import type { PropertyChapter } from "./property-chapters";
 
 /**
@@ -73,19 +85,23 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
    * `measure_density.mjs` scores what is painted, and a chapter that needs
    * imagery needs a composition. See `docs/DECISIONS.md` §22.
    */
+  /*
+   * **`shape: "pair"` and six Vann-specific photographs until 26 August 2026.**
+   * The client asked for the home page's own card strip here instead — "the
+   * exact same … activities carousel … place the entire carousel as it is" —
+   * so `media` below is now `HOME_EXPERIENCES`' own six ids, in its own order,
+   * not this lodge's. `vann-tiger`, `vann-kohka-lake`, `vann-bird-watching`,
+   * `vann-dining`, `vann-potters-village` and `forest-trail-canopy` are
+   * released and now curated-but-unused — not parked in another chapter to
+   * keep a density figure up, per this project's own standing rule. See
+   * `docs/DECISIONS.md` §22.
+   */
   {
     id: "vann-day",
     number: "03",
     label: "The Experience",
-    shape: "pair",
-    media: [
-      "vann-tiger",
-      "vann-kohka-lake",
-      "vann-bird-watching",
-      "vann-dining",
-      "vann-potters-village",
-      "forest-trail-canopy",
-    ],
+    shape: "strip",
+    media: HOME_EXPERIENCES.map((e) => e.mediaId),
   },
   {
     id: "vann-press",
@@ -285,78 +301,51 @@ export const VANN_COPY: PropertyPageCopy = {
    * whatever the season gives — under the open sky."). Deleted whole with the
    * chapter it belonged to; see the removal comment on `VANN_CHAPTERS` above
    * for the client's own words and what happened to the photograph.
-   * `vann-dining` (discussed at length in the deleted comment that used to sit
-   * here, weighing it against `lawn-picnic-golden-hour` for this now-gone
-   * slot) is untouched and still appears once on this page, in `pairCopy`
-   * below, as "Candlelight Bush Dinner".
+   *
+   * **`vann-dining` (which this comment used to say "is untouched and still
+   * appears once on this page, in `pairCopy` below, as 'Candlelight Bush
+   * Dinner'") is released too, the same day and for a different reason** —
+   * see the removal comment on the `vann-day` chapter above: `pairCopy`
+   * itself is gone, replaced by the home page's own six-activity strip, and
+   * `vann-dining` went with it. It is not shown anywhere on this page any
+   * more.
    */
 
-  pairCopy: {
+  /*
+   * **`pairCopy` (`ExperiencePairCopy`, six of this lodge's own photographs at
+   * two weights) was here until 26 August 2026.** The client asked for the
+   * home page's own card strip instead — see the removal comment on
+   * `VANN_CHAPTERS` above for his words and where the six Vann-specific
+   * photographs went. `stripCopy` below keeps this page's own heading and
+   * intro (his ruling when asked: cards only, not the whole section, because
+   * three pages opening on identical sentences is the "very wordpress and
+   * templaty" verdict this whole redesign answers) and imports `experiences`
+   * from `content/home.ts` rather than restating it.
+   *
+   * **`alsoLine` does not survive the move, and it is a deferred item, not a
+   * deletion.** It named cycling, swimming, table tennis, carrom, karaoke and
+   * the conference hall — the client's own 9 Aug ruling to name honestly what
+   * does not carry the brand rather than promote or hide it — and `StripCopy`
+   * has no slot for a line like it. Told this and that the six activities
+   * will change later anyway, he chose to drop it for now and revisit once
+   * that later work decides where it lives (26 Aug 2026). The string itself
+   * is kept below, commented at its own site, per this project's rule that a
+   * decision to revisit is not a decision to discard. See
+   * `docs/DECISIONS.md` §22 and `docs/PROJECT-STATE.md`'s owed list.
+   */
+  stripCopy: {
     "vann-day": {
       heading: { text: "The day at Vann", dim: "day" },
-      intro:
+      body: [
         "Morning and evening game drives, birdwatching in the lodge's own private eco park, " +
-        "and a quieter afternoon at Kohka Lake or the Pachdhar potters' wheel.",
-      experiences: [
-        {
-          mediaId: "vann-tiger",
-          name: "Jungle Safari",
-          line: "Open vehicles through Turia Gate at first light, with the naturalists who know this forest.",
-          weight: "hero",
-        },
-        {
-          mediaId: "vann-kohka-lake",
-          name: "Kohka Lake",
-          line: "Still water at the forest's edge, where the birds come down as the day does.",
-          weight: "quiet",
-        },
-        {
-          mediaId: "vann-bird-watching",
-          name: "Bird Watching",
-          line: "Thirty-seven acres of private eco park, and a guide who can name what is calling.",
-          weight: "quiet",
-        },
-        {
-          mediaId: "vann-dining",
-          name: "Candlelight Bush Dinner",
-          line: "A table laid in an open space in the forest, and the stars coming out over it.",
-          weight: "hero",
-        },
-        {
-          mediaId: "vann-potters-village",
-          name: "The Potters of Pachdhar",
-          line: "More than a hundred Kumhar families have kept the wheel turning here. Sit down at one.",
-          weight: "quiet",
-        },
-        {
-          // NOT "vann-pool" — the brief flagged that id as a stand-in that
-          // "must be checked": the live site pairs Serene Nature Walk with a
-          // different photograph (RAG1474-scaled.jpg, not curated), and
-          // vann-pool shows the pool, not a walk. "do not caption the pool
-          // as a forest path" — five alt texts on this branch already
-          // described photographs they were not.
-          //
-          // forest-trail-canopy (already curated, fullBleedSafe not
-          // required here — this is a contained "quiet" box) is a genuine
-          // sunlit forest trail: looked at directly
-          // (reference/wp-media/DSC00170-scaled.jpg), not inferred from its
-          // alt text. Its "dappled" quality is what the line below was
-          // already written around.
-          mediaId: "forest-trail-canopy",
-          name: "Serene Nature Walk",
-          line: "No vehicle, no schedule — earthy air, dappled light, and whatever the woods are saying.",
-          weight: "quiet",
-        },
+          "and a quieter afternoon at Kohka Lake or the Pachdhar potters' wheel.",
       ],
-      alsoLine:
-        // "seats forty" was cut 9 Aug (fix round 1): it traced to nothing —
-        // not the live site's own copy, not the brand record, not
-        // docs/copy-provenance.md, not the task brief. It existed only in
-        // the master plan's illustrative worked example, which was never
-        // sourced. Do not reintroduce a capacity figure without a source.
-        "Also: cycling the estate's trails, swimming, table tennis and carrom, karaoke, " +
-        "and a conference hall.",
-    } satisfies ExperiencePairCopy,
+      experiences: HOME_EXPERIENCES,
+      // alsoLine (dropped for now, revisit later — client's ruling, 26 Aug 2026,
+      // see the long comment above `stripCopy`):
+      // "Also: cycling the estate's trails, swimming, table tennis and carrom,
+      // karaoke, and a conference hall."
+    } satisfies StripCopy,
   },
 
   pressCopy: {
