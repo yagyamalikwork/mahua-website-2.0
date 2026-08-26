@@ -66,6 +66,41 @@ export const GALLERY_SIZES = "(min-width: 768px) 80vw, calc(100vw - 32px)";
  *
  * The mechanics live in `app/globals.css` under `.room-stack`; the numbers live
  * in `lib/motion.ts` as `ROOM_STACK`. Neither is written here.
+ *
+ * **`ChapterSurface`'s `tight` rhythm was TRIED here in Task 7's fix round (26
+ * Aug 2026) and reverted — measured to make the thing it was meant to fix
+ * WORSE, not better.** This chapter carries the default `py-14 md:py-16
+ * lg:py-20` rhythm while `03 · The Experience` immediately below it
+ * (`ExperienceStrip`) has been `tight` since 19 Aug — an asymmetric join
+ * nobody had measured, 80px of this chapter's own bottom padding against
+ * 56px of the strip's top, **136px of cream between the two chapters' own
+ * content** at 1440px, before either drew a card. Because the strip is only
+ * 0.86 screens tall (it collapsed from ExperiencePair's ~4.4 screens when
+ * Task 7 swapped it in), `measure_density.mjs` cannot take a real interior
+ * sample of it — it falls back to ONE sample centred on the chapter, per
+ * that script's own documented rule for a chapter shorter than one screen.
+ *
+ * Giving this chapter `tight` too (136px → 112px of join) shifts every
+ * chapter below it up by 48px. **That is a real change to the page and it
+ * moved `vann-day` from 45.8% to 47.7% worst, and `tola-day` from 45.8% to
+ * 47.2% — both got EMPTIER, in the wrong direction, from removing cream.**
+ * The mechanism, found by reading the rig's own raw per-position samples
+ * rather than guessing: the single sample this rig picks is whichever of
+ * its FIXED, page-anchored 150px-grid positions (0, 150, 300, …) lands
+ * nearest the chapter's geometric centre — a position that does not move
+ * with the page's content. Shifting 48px of real height out of the page
+ * does not smoothly improve the one number sampled; it can just as easily
+ * move which fixed grid line gets picked, onto a WORSE one, which is
+ * exactly what measuring (not assuming) found here. Full sweep table,
+ * the raw-sample evidence and the 1440px screenshots of both states are in
+ * the Task 7 report's fix-round section.
+ *
+ * **Left at the default rhythm.** `vann-rooms`/`tola-rooms` were already
+ * comfortably inside the 45% ceiling either way (43.7%/45.3% worst) and the
+ * room stack's own pin/recede mechanics (`.room-slot`, `--room-card-height`)
+ * are keyed to viewport height and the header/bar reserves, not to this
+ * padding — nothing about the pin itself is affected by this finding either
+ * way, which is why it was safe to try and cheap to revert.
  */
 export function RoomCardStack({
   chapter,
@@ -77,6 +112,13 @@ export function RoomCardStack({
   surface?: boolean;
 }) {
   return (
+    // NOT `tight` — tried in Task 7's fix round (26 Aug 2026) and reverted.
+    // See this component's own top-of-file comment for the measured reason:
+    // giving this chapter the same tight rhythm `ExperienceStrip` below it
+    // already carries shrinks the 136px join to 112px, but that real height
+    // change moved `vann-day`/`tola-day`'s single-sample density reading
+    // WORSE (45.8% → 47.7%/47.2%), not better, by shifting which fixed
+    // 150px-grid sample the rig's own sub-screen fallback happens to land on.
     <ChapterSurface id={chapter.id} surface={surface}>
       <div>
         <div className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
