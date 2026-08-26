@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { VANN_CHAPTERS, VANN_COPY } from "@/content/mahua-vann";
 import { PressBand, type PressBandCopy } from "./PressBand";
 
 const COPY: PressBandCopy = {
@@ -43,5 +44,52 @@ describe("PressBand", () => {
     );
     expect(getByText("Condé Nast Traveller")).toBeTruthy();
     expect(getByText("Where to stay in Pench")).toBeTruthy();
+  });
+
+  it("renders with no articles at all — Mahua Tola has no press mentions", () => {
+    // The client's own ruling, recorded at content/mahua-tola.ts's tola-press
+    // entry: Tola has no press mentions and inventing three would be
+    // fabrication, so "Written About" on that page is a heading over the
+    // reviews widget and nothing else. A supported state, not a broken one.
+    const { container } = render(
+      <PressBand
+        chapter={{ id: "tola-press", number: "04", label: "Written About", shape: "press", media: [] }}
+        copy={{ heading: { text: "Written about", dim: "about" } }}
+      >
+        <div data-testid="widget" />
+      </PressBand>,
+    );
+    // Not `getByText("Written about")`: `TwoToneHeading` (via `SplitLines`)
+    // renders "Written" and "about" as separate word spans, which Testing
+    // Library's node-level text matcher cannot see as one string — the same
+    // reason `RoomCardStack.test.tsx` reaches for `container.textContent`
+    // rather than `getByText` for anything that passes through a heading.
+    expect(container.textContent).toContain("Written about");
+    expect(container.querySelector("[data-testid=widget]")).not.toBeNull();
+    expect(container.querySelector("article")).toBeNull();
+  });
+
+  it("still renders three articles where a property has them", () => {
+    const vannPressChapter = VANN_CHAPTERS.find((c) => c.id === "vann-press");
+    expect(vannPressChapter, "vann-press is not in VANN_CHAPTERS").toBeDefined();
+    const { container } = render(
+      <PressBand chapter={vannPressChapter!} copy={VANN_COPY.pressCopy!["vann-press"]} />,
+    );
+    expect(container.querySelectorAll("article")).toHaveLength(3);
+  });
+
+  it("renders the widget beneath the articles when a property has both — Mahua Vann's real composition", () => {
+    // The two tests above each prove one arm of the branch in isolation.
+    // Neither is what actually ships on Mahua Vann, where PropertyPage passes
+    // BOTH three real articles AND the reviews widget as children — this is
+    // the combination.
+    const vannPressChapter = VANN_CHAPTERS.find((c) => c.id === "vann-press");
+    const { container } = render(
+      <PressBand chapter={vannPressChapter!} copy={VANN_COPY.pressCopy!["vann-press"]}>
+        <div data-testid="widget" />
+      </PressBand>,
+    );
+    expect(container.querySelectorAll("article")).toHaveLength(3);
+    expect(container.querySelector("[data-testid=widget]")).not.toBeNull();
   });
 });

@@ -1,5 +1,5 @@
 import type { MediaId } from "@/lib/media";
-import { STRIP_LABELS } from "@/content/site";
+import { REVIEWS_LABEL, STRIP_LABELS } from "@/content/site";
 
 /**
  * THE DIAL for copy. Every word on the page lives here, so text edits never touch
@@ -262,18 +262,19 @@ export const HOME = {
 
   /**
    * Interface furniture for the guests' reviews, not brand copy — the same
-   * distinction `strip` above draws. Nobody at Mahua wrote this sentence and no
-   * client review will ever ask for it to change; it exists so the widget's
-   * `aria-label` says something truthful to a screen reader instead of nothing.
+   * distinction `strip` above draws.
    *
-   * **Named Tripadvisor on purpose.** `ReviewWidget` mounts the client's own
-   * Elfsight embed, and that embed genuinely is a live Tripadvisor feed — see
-   * `lib/elfsight.ts`. The wording claims nothing about what the reviews say,
-   * only where they come from, which is the one thing this site can state
-   * about them without having read them.
+   * **Moved to `content/site.ts`'s own `REVIEWS_LABEL` on 26 August 2026**, the
+   * day `ReviewWidget` gained a second and third call site — `04 · Written
+   * About` on both property pages, alongside this page's own closing chapter
+   * — and a string all three must not be able to disagree about belongs beside
+   * `SITE.nav`'s own four, not inside one page's content module. `region`
+   * still reads as `HOME.reviews.region` below, so `Invitation.tsx`'s existing
+   * call site and every test written against it keep working unchanged — one
+   * value, reached two ways, exactly as `strip`/`STRIP_LABELS` above.
    */
   reviews: {
-    region: "Guest reviews from Tripadvisor",
+    region: REVIEWS_LABEL,
   },
 
   chapters: {

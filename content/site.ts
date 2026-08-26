@@ -132,3 +132,29 @@ export const STRIP_LABELS: StripLabels = {
    */
   jump: "Show",
 };
+
+/**
+ * The reviews widget's one shared string — its region landmark's accessible
+ * name.
+ *
+ * **Moved here from `content/home.ts`'s own `HOME.reviews.region` on 26 August
+ * 2026, for the identical reason `STRIP_LABELS` moved here above it the same
+ * day.** `ReviewWidget` mounts under `04 · Written About` on both property
+ * pages now, as well as at the foot of the home page, and this project's own
+ * rule is one string, one place: three call sites reaching for their own copy
+ * of the same sentence is exactly the drift `content/site.ts` exists to rule
+ * out, not a second, unrelated instance of it.
+ *
+ * `content/home.ts` still reads `HOME.reviews.region` — it now points here
+ * rather than holding the literal — so `Invitation.tsx`'s existing call site
+ * and every test written against it keep working with no edit required, the
+ * same trick `STRIP_LABELS` played for `HOME.strip`.
+ *
+ * Nobody at Mahua wrote this sentence and no client review will ever ask for
+ * it to change: it exists so the widget's `aria-label` says something truthful
+ * to a screen reader instead of nothing. **Named Tripadvisor on purpose** —
+ * `ReviewWidget` mounts the client's own Elfsight embed, and that embed
+ * genuinely is a live Tripadvisor feed (`lib/elfsight.ts`). The wording claims
+ * nothing about what the reviews say, only where they come from.
+ */
+export const REVIEWS_LABEL = "Guest reviews from Tripadvisor";

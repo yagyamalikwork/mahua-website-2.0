@@ -10,10 +10,11 @@ import { PropertyBar } from "@/components/property/PropertyBar";
 import { PropertyInvitation, type PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { FullBleed } from "@/components/ui/FullBleed";
+import { ReviewWidget } from "@/components/ui/ReviewWidget";
 import { Scrim, type ScrimStrength } from "@/components/ui/Scrim";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import type { PropertyChapter, PropertyShape } from "@/content/property-chapters";
-import { SITE_FOOTER_ID, STRIP_LABELS } from "@/content/site";
+import { REVIEWS_LABEL, SITE_FOOTER_ID, STRIP_LABELS } from "@/content/site";
 
 export type PropertyPageCopy = {
   readonly heroCopy?: HeroCopy;
@@ -267,9 +268,34 @@ export function PropertyPage({
               );
             }
             case "press": {
+              // Carries the client's own reviews widget as of 26 August 2026,
+              // on both property pages — Mahua Vann keeps its three press
+              // articles above it (`vann-press`), Mahua Tola has none and
+              // renders the widget alone under the same "Written About"
+              // heading (`tola-press`; see that chapter's own doc comment in
+              // content/mahua-tola.ts for why that is a ruling, not a gap).
+              // `PressBand`'s `children` slot exists for exactly this.
+              //
+              // No `fallback` prop, deliberately — the same omission
+              // `Invitation.tsx` records for the home page's own widget: the
+              // client has not supplied the sentence a visitor with no
+              // JavaScript should read here, and inventing one is exactly the
+              // placeholder-prose defect this project has shipped before. An
+              // empty `<noscript>` is honest; a sentence attributed to the
+              // lodge that nobody at the lodge wrote is not. Owed, not missed.
+              //
+              // `label` is `REVIEWS_LABEL` from `content/site.ts`, the same
+              // string the home page's own widget uses via `HOME.reviews.region`
+              // — one sentence, read from one place, so a screen-reader
+              // announcement can never differ between the three routes that
+              // now mount this widget.
               const pressCopy = copy.pressCopy?.[chapter.id];
               if (!pressCopy) throw new Error(`No press copy for "${chapter.id}"`);
-              return <PressBand key={chapter.id} chapter={chapter} copy={pressCopy} surface={surface} />;
+              return (
+                <PressBand key={chapter.id} chapter={chapter} copy={pressCopy} surface={surface}>
+                  <ReviewWidget label={REVIEWS_LABEL} />
+                </PressBand>
+              );
             }
             case "invitation": {
               const invitationCopy = copy.invitationCopy?.[chapter.id];

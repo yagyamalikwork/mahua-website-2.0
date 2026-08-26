@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Enter } from "@/components/motion/Enter";
 import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
@@ -16,7 +17,20 @@ export type PressArticleCopy = {
 
 export type PressBandCopy = {
   readonly heading: TwoTone;
-  readonly articles: readonly PressArticleCopy[];
+  /**
+   * **Optional since 26 August 2026, and the reason is a real asymmetry rather
+   * than a convenience.** Mahua Vann has three press mentions and Mahua Tola
+   * has none — `content/mahua-tola.ts` records that the section was left off
+   * that page rather than filled with three invented ones (non-negotiable: do
+   * not invent facts).
+   *
+   * The client asked for the section on both pages anyway, carrying his
+   * reviews widget, and chose to keep the heading "Written About" on both when
+   * offered a rename. So a band with no articles at all is a supported state,
+   * not a broken one — see `PressBand`'s own render, which draws the article
+   * grid only when this has entries.
+   */
+  readonly articles?: readonly PressArticleCopy[];
 };
 
 /**
@@ -52,16 +66,24 @@ export type PressBandCopy = {
  * not be brought inside of without either enlarging three press citations
  * past what "set quietly" (this component's own opening line) means, or
  * inventing content non-negotiable #6 already forbids.
+ *
+ * **`children` since 26 August 2026** — a slot beneath the articles (or,
+ * on Mahua Tola, beneath the bare heading) that renders unconditionally, for
+ * the client's reviews widget. Optional so a `PressBand` used anywhere without
+ * it — none, currently, but the type should not lie — costs nothing.
  */
 export function PressBand({
   chapter,
   copy,
   surface = false,
+  children,
 }: {
   chapter: PropertyChapter;
   copy: PressBandCopy;
   surface?: boolean;
+  children?: ReactNode;
 }) {
+  const hasArticles = (copy.articles?.length ?? 0) > 0;
   return (
     <ChapterSurface id={chapter.id} surface={surface} tight>
       <div>
@@ -74,38 +96,44 @@ export function PressBand({
           </div>
         </Enter>
 
-        <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-10 md:mt-12 lg:grid-cols-3">
-          {copy.articles.map((article, i) => (
-            <Enter key={article.href} delay={ENTER.stagger * i}>
-              <article className="border-t pt-5" style={{ borderColor: "var(--accent)" }}>
-                <p
-                  className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]"
-                  style={{ color: "var(--accent-text)" }}
-                >
-                  {article.publication}
-                </p>
-                <h3 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-light leading-snug text-[color:var(--text)]">
-                  {article.headline}
-                </h3>
-                <p
-                  className="mt-3 font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.7]"
-                  style={{ color: "var(--dim)" }}
-                >
-                  {article.standfirst}
-                </p>
-                <a
-                  href={article.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="rule-in mt-5 inline-block pb-1 font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.22em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
-                  style={{ color: "var(--accent-text)" }}
-                >
-                  {article.linkLabel}
-                </a>
-              </article>
-            </Enter>
-          ))}
-        </div>
+        {hasArticles && (
+          <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-10 md:mt-12 lg:grid-cols-3">
+            {copy.articles!.map((article, i) => (
+              <Enter key={article.href} delay={ENTER.stagger * i}>
+                <article className="border-t pt-5" style={{ borderColor: "var(--accent)" }}>
+                  <p
+                    className="font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em]"
+                    style={{ color: "var(--accent-text)" }}
+                  >
+                    {article.publication}
+                  </p>
+                  <h3 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-light leading-snug text-[color:var(--text)]">
+                    {article.headline}
+                  </h3>
+                  <p
+                    className="mt-3 font-[family-name:var(--font-body)] text-[1.05rem] leading-[1.7]"
+                    style={{ color: "var(--dim)" }}
+                  >
+                    {article.standfirst}
+                  </p>
+                  <a
+                    href={article.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="rule-in mt-5 inline-block pb-1 font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.22em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+                    style={{ color: "var(--accent-text)" }}
+                  >
+                    {article.linkLabel}
+                  </a>
+                </article>
+              </Enter>
+            ))}
+          </div>
+        )}
+
+        {children && (
+          <div className={hasArticles ? "mt-12 md:mt-14" : "mt-10 md:mt-12"}>{children}</div>
+        )}
       </div>
     </ChapterSurface>
   );

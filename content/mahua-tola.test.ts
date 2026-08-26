@@ -35,10 +35,11 @@ describe("TOLA_CHAPTERS", () => {
   });
 
   it("never runs two moments of the same shape back to back", () => {
-    // Tola's spine is deliberately not Vann's: a guest's word where Vann has
-    // a press band, moved earlier in the run, so this page has two fullBleed
-    // moments (tola-guest-word, tola-table) rather than one. This test is
-    // what proves they never end up adjacent to each other or to the hero.
+    // As of 26 Aug 2026 this page's spine matches Vann's own shape sequence
+    // exactly (hero -> column -> map -> showcase -> strip -> press ->
+    // invitation) — the two fullBleed bands that used to set it apart
+    // (tola-guest-word, tola-table) are gone and tola-press has landed. This
+    // test is what proves no two adjacent moments share a shape regardless.
     const repeat = findRepeatedShape(TOLA_CHAPTERS);
     expect(
       repeat && `"${repeat.first}" and "${repeat.second}" are both ${repeat.shape}`,
@@ -46,9 +47,10 @@ describe("TOLA_CHAPTERS", () => {
   });
 
   it("never runs two quiet screens back to back", () => {
-    // Independent of the rule above and equally binding: `column` is this
-    // page's only quiet shape (there is no `press` band), flanked on both
-    // sides by image-led moments.
+    // Independent of the rule above and equally binding: `column` and `press`
+    // are this page's two quiet shapes, same as Vann's since tola-press
+    // landed (26 Aug 2026), and neither sits next to the other — each is
+    // flanked by image-led moments.
     for (let i = 0; i < TOLA_CHAPTERS.length - 1; i++) {
       const a = PROPERTY_IMAGE_LED_SHAPES.includes(TOLA_CHAPTERS[i].shape);
       const b = PROPERTY_IMAGE_LED_SHAPES.includes(TOLA_CHAPTERS[i + 1].shape);
@@ -134,6 +136,9 @@ describe("TOLA_CHAPTERS", () => {
           expect(experiences?.map((e) => e.mediaId)).toEqual([...c.media]);
           break;
         }
+        case "press":
+          expect(TOLA_COPY.pressCopy?.[c.id], `"${c.id}" has no press copy`).toBeDefined();
+          break;
         case "invitation": {
           const invitation = TOLA_COPY.invitationCopy?.[c.id];
           expect(invitation, `"${c.id}" has no invitation copy`).toBeDefined();
@@ -287,22 +292,20 @@ describe("TOLA_CHAPTERS", () => {
    * either is worse than removing it here and letting Task 5 finish the job.
    */
 
-  it("has the client's 26 Aug spine — two fewer full-bleed bands, an unheaded map, renumbered chapters", () => {
-    // `tola-press` does not exist yet — Task 8 of this restructure adds it
-    // between `tola-day` and `tola-invitation`
-    // (docs/superpowers/plans/2026-08-26-restructure-and-reviews.md §3.1), so
-    // this assertion checks the whole spine as it stands today rather than a
-    // slice of a bigger one: Task 8's own edit is "insert tola-press here",
-    // not "extend a truncated assertion". `numbered` is one entry short of
-    // Vann's four for the same reason — "04 Written About" is `tola-press`'s
-    // own number/label, and it ships with the chapter, not before it.
+  it("has the client's 26 Aug spine — two fewer full-bleed bands, an unheaded map, renumbered chapters, and Written About", () => {
+    // Restored to the FULL spine (Task 8): this assertion was deliberately
+    // split by Task 5 because `tola-press` did not exist yet, and the split
+    // comment there said explicitly to restore it here once it did. The
+    // chapter list now matches Vann's own shape sequence exactly, hero
+    // through invitation, and `numbered` carries Vann's own fourth entry too —
+    // "04 Written About" is `tola-press`'s own number/label.
     const ids = TOLA_CHAPTERS.map((c) => c.id);
     expect(ids).toEqual([
-      "tola-hero", "tola-reserve", "tola-where", "tola-rooms", "tola-day", "tola-invitation",
+      "tola-hero", "tola-reserve", "tola-where", "tola-rooms", "tola-day", "tola-press", "tola-invitation",
     ]);
     const numbered = TOLA_CHAPTERS.filter((c) => c.number).map((c) => `${c.number} ${c.label}`);
     expect(numbered).toEqual([
-      "01 The Reserve", "02 The Rooms", "03 The Experience",
+      "01 The Reserve", "02 The Rooms", "03 The Experience", "04 Written About",
     ]);
   });
 

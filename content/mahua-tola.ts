@@ -2,6 +2,7 @@ import type { OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
 import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
 import type { StripCopy } from "@/components/sections/ExperienceStrip";
+import type { PressBandCopy } from "@/components/sections/PressBand";
 import type { HeroCopy } from "@/components/sections/Hero";
 import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
@@ -21,26 +22,29 @@ import { HOME_EXPERIENCES } from "@/content/home";
 import type { PropertyChapter } from "./property-chapters";
 
 /**
- * Mahua Tola's spine, in the redesign's shape vocabulary. **Six moments as of
- * 26 August 2026** (was eight — two `fullBleed` bands, `tola-guest-word` and
- * `tola-table`, both removed the same day on the client's own ruling; see
- * their removal comments below): hero → column → map → showcase → strip →
+ * Mahua Tola's spine, in the redesign's shape vocabulary. **Seven moments as
+ * of 26 August 2026** (was eight — two `fullBleed` bands, `tola-guest-word`
+ * and `tola-table`, removed the same day on the client's own ruling; see
+ * their removal comments below — then `tola-press` (Task 8, same day) put the
+ * count back to seven): hero → column → map → showcase → strip → press →
  * invitation.
  *
  * This page no longer diverges from Vann's own shape sequence the way it did
  * before 26 Aug — both of the extra `fullBleed` moments that used to set it
- * apart (the guest's word, the table) are gone, and `tola-press` (Task 8 of
- * this same restructure) is what will make the two pages' spines match
- * exactly, hero through invitation.
+ * apart (the guest's word, the table) are gone, and `tola-press` is what
+ * makes the two pages' spines match exactly, hero through invitation.
  *
  * No two adjacent moments share a shape (`findRepeatedShape`,
- * `content/mahua-tola.test.ts`). `column` is this page's one quiet shape
- * (there is no `press` band yet to be a second one), and it sits between two
- * image-led moments (`tola-hero`, `tola-where`) — CLAUDE.md's older rhythm
- * rule (non-negotiable #10) holds even though only one quiet screen exists to
- * check it against.
+ * `content/mahua-tola.test.ts`). `column` and `press` are this page's two
+ * quiet shapes now, same as Vann's, and neither sits adjacent to the other:
+ * `column` is flanked by `tola-hero`/`tola-where` (both image-led), and
+ * `press` is flanked by `tola-day`/`tola-invitation` (`strip` is image-led;
+ * `invitation` carries the sister lodge's photograph for exactly this reason
+ * — see `PROPERTY_IMAGE_LED_SHAPES`'s own comment in `content/property-chapters.ts`).
+ * CLAUDE.md's older rhythm rule (non-negotiable #10) holds under the same
+ * reasoning.
  *
- * Numbered chapters are 01–03 (`tola-reserve` through `tola-day`) — `tola-where`
+ * Numbered chapters are 01–04 (`tola-reserve` through `tola-press`) — `tola-where`
  * (the map) carries no number, same reasoning as Vann's own map, below.
  */
 export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
@@ -121,6 +125,26 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
     label: "The Experience",
     shape: "strip",
     media: HOME_EXPERIENCES.map((e) => e.mediaId),
+  },
+  /*
+   * **New on 26 August 2026, and it exists to carry the reviews widget.**
+   * Client: *"I just saw that you have not created a 'Written About' section
+   * for Mahua Tola, do that and simply copy paste the widget as you'll be doing
+   * for the Mahua Vann page."*
+   *
+   * **It has no articles, and that is not an omission.** There are no press
+   * mentions of Mahua Tola; the section was deliberately left off this page for
+   * that reason (see the note at the head of this file), and three invented ones
+   * are what non-negotiable "verify hard numbers, do not trust the sources"
+   * forbids. He was offered a heading covering press and reviews together and
+   * chose to keep "Written About" on both pages. Recorded as a ruling.
+   */
+  {
+    id: "tola-press",
+    number: "04",
+    label: "Written About",
+    shape: "press",
+    media: [],
   },
   {
     // vann-hero, the same cross-page move Vann's own invitation makes with
@@ -505,6 +529,16 @@ export const TOLA_COPY: PropertyPageCopy = {
       // documentary, and carrom, table tennis and other indoor and outdoor
       // games."
     } satisfies StripCopy,
+  },
+
+  pressCopy: {
+    "tola-press": {
+      heading: { text: "Written about", dim: "about" },
+      // No `articles` — see the doc comment on TOLA_CHAPTERS' own tola-press
+      // entry above, and PressBandCopy.articles' own comment
+      // (components/sections/PressBand.tsx) for why a band with none is a
+      // supported state rather than an omission on this page.
+    } satisfies PressBandCopy,
   },
 
   invitationCopy: {
