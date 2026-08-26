@@ -328,62 +328,21 @@ export const LINES = {
   from: "115%",
 } as const;
 
-/**
- * The guests' reviews at the foot of `08 · The Invitation`, and how they move.
+/*
+ * **`REVIEWS` — the guests' review carousel's two modes and its pacing — was
+ * here until 26 August 2026.** Client, 20 Aug: *"slow auto-scrolling review
+ * cards, and the scroll pauses when the viewer hovers over the carousel."* He
+ * was offered a choice between a carousel that runs continuously (`loop`) and
+ * one that comes to rest (`settle`) and answered *"build both, and you
+ * choose"* — so both were built, `loop` shipped as the default, and
+ * non-negotiable #5 carried a dated exception for it as the one thing on this
+ * site that never stopped.
  *
- * Client, 20 Aug 2026: *"slow auto-scrolling review cards, and the scroll pauses
- * when the viewer hovers over the carousel."*
- *
- * ## `mode` is a switch the client asked for, not a configuration option
- *
- * Offered the choice between a carousel that runs continuously and one that
- * comes to rest, he answered *"build both, and you choose"* — so both are built
- * and this is the one word that picks. **One of them is meant to be deleted**
- * once he has looked at the real page; leaving both here indefinitely is two
- * compositions to keep true, not a feature.
- *
- * - **`loop`** is what he originally described: the track runs continuously and
- *   pauses under the pointer. It is the first thing on this site that never
- *   stops, and that is worth stating plainly rather than burying — CLAUDE.md
- *   non-negotiable #5 is *"the tiger arrives, performs, then dozes … permanent
- *   peripheral motion contradicts #2 and #4"*, and it is why the two films play
- *   once and hold their last frame. A carousel that loops forever is the same
- *   shape of motion that rule refuses.
- * - **`settle`** drifts once as the section comes into view and then stops, and
- *   the visitor can still push it themselves at any time. It keeps the sense of
- *   many reviews without the permanent movement.
- *
- * **Neither mode moves at all under `prefers-reduced-motion`.** In `loop` the
- * animation is switched off and the track sits at rest; in `settle` there is
- * nothing to switch off. Both remain a real horizontal scroller either way, so
- * the reviews stay reachable — the movement is decoration, the scroller is the
- * function, and this project's rule is that a visitor who asks for less motion
- * loses the first and never the second.
- *
- * ## `secondsPerCard`
- *
- * How long one card takes to travel its own width plus the gap — 344px at
- * 1440x900, so 7s is **49px per second**. Slow is the point (law 4), and it is
- * bounded from below by reading rather than by taste: a full card holds about
- * 184 characters, roughly 35 words, roughly 9 seconds of reading, and at this
- * speed a card is on screen for about 26 seconds in a 992px frame. Halve it and
- * the arithmetic stops working.
- *
- * The whole track's duration is this times the number of reviews, which is why
- * the figure is per card and not per loop: adding reviews must not make the
- * carousel faster.
+ * He supplied an Elfsight embed instead, which answers the `mode` question
+ * rather than leaving it open: the widget supersedes both arms, and with them
+ * the dated exception non-negotiable #5 was carrying. See `content/home.ts`'s
+ * own removal comment and `docs/DECISIONS.md` §22.
  */
-export const REVIEWS = {
-  mode: "loop" as "loop" | "settle",
-  secondsPerCard: 7,
-  /**
-   * Seconds for `settle`'s single drift, and how far it travels as a fraction of
-   * one card's pitch. One card and a bit: enough that the row is visibly a row
-   * that continues, not so much that it reads as a carousel which stopped early.
-   */
-  settleSeconds: 3.2,
-  settleCards: 1.35,
-} as const;
 
 /**
  * The lantern that hangs out of `after-dark` into `06 · The Lantern Hour`, and

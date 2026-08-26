@@ -1,24 +1,22 @@
 import { Enter } from "@/components/motion/Enter";
-import {
-  ReviewCarousel,
-  ReviewPanels,
-} from "@/components/sections/ReviewCarousel";
 import { FullBleed } from "@/components/ui/FullBleed";
 import { PillButton } from "@/components/ui/PillButton";
+import { ReviewWidget } from "@/components/ui/ReviewWidget";
 import { SITE } from "@/content/site";
 import { Scrim } from "@/components/ui/Scrim";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
 import type { Chapter } from "@/content/chapters";
 import {
   chapterCopy,
+  HOME,
   type ChapterCopyKey,
-  type GuestQuote,
   type TwoTone,
 } from "@/content/home";
 
 /**
  * The close: a full-bleed photograph at dusk, the season laid out honestly, two
- * pills, and — since 19 Aug 2026 — what three guests said, below them.
+ * pills, and — since 19 Aug 2026, first as a curated set and since 26 Aug 2026
+ * as the client's own Tripadvisor widget — what guests said, below them.
  *
  * Everything on it is cream over a scrim — the heading (its dimmed word in
  * `--surface` rather than `--dim`, which would disappear), both paragraphs, and
@@ -33,18 +31,19 @@ import {
  * `--overlay` behind it means a section grown past 100vh shows the scrim's own
  * colour at the bottom rather than a strip of cream.
  *
- * **The quotes make that arrangement load bearing rather than defensive.** They
- * add roughly 190px at 1440x900 and stack to three rows below `md`, so this
- * section is taller than a screen at every viewport narrower than a laptop —
- * which is the state the paragraph above describes and the reason nothing here
- * clips. `measure_density.mjs` scores the band below the photograph as empty
- * (it stops at the first opaque background), so growing the section is not free:
- * see this chapter's own figure in `docs/reviews/2026-08-19-home-v2/collage.md`.
+ * **The reviews make that arrangement load bearing rather than defensive.**
+ * Whatever the widget renders sits below both paragraphs and the two pills, so
+ * this section is taller than a screen at most viewports narrower than a
+ * laptop — which is the state the paragraph above describes and the reason
+ * nothing here clips. `measure_density.mjs` scores the band below the
+ * photograph as empty (it stops at the first opaque background), so growing
+ * the section is not free — see `docs/reviews/2026-08-26-restructure/` for
+ * this chapter's figure with the widget mounted, against the three-quote
+ * grid's own figure in `docs/reviews/2026-08-19-home-v2/collage.md`.
  */
 type InvitationCopy = {
   readonly heading: TwoTone;
   readonly body: readonly string[];
-  readonly quotes: readonly GuestQuote[];
 };
 
 export function Invitation({ chapter }: { chapter: Chapter }) {
@@ -134,10 +133,10 @@ export function Invitation({ chapter }: { chapter: Chapter }) {
           {/*
            * Two measures, not one. Everything the chapter says is 60ch — the
            * measure the two paragraphs were set and their scrim solved at — and
-           * the guests' three quotes below the buttons need a wider frame than
-           * that to stand as three columns rather than as three stacked
-           * paragraphs. The outer block is what they get; the inner one keeps the
-           * chapter's own copy exactly where it was.
+           * the reviews widget below the buttons wants a wider frame than that,
+           * the same argument that held when this was three quotes standing as
+           * columns rather than stacked paragraphs. The outer block is what it
+           * gets; the inner one keeps the chapter's own copy exactly where it was.
            */}
           {/*
             **`mx-auto` since 21 Aug 2026, and its absence was a real defect the
@@ -234,68 +233,49 @@ export function Invitation({ chapter }: { chapter: Chapter }) {
              * What guests said, **below the two buttons** — the client's own
              * placement, 19 Aug 2026: *"move the sample/placeholder reviews …
              * to the bottom of this last section, below the two property
-             * buttons. Later when we get the TripAdvisor API we will change it
-             * to auto-scrolling reviews."*
+             * buttons."* That placement outlived everything else about the
+             * mechanism: first three static blocks, then (20 Aug) a curated
+             * carousel of the same three quotes, and since **26 August 2026**
+             * the client's own Elfsight embed — a live Tripadvisor feed, so
+             * there is no copy of ours to place here at all. See
+             * `content/home.ts`'s own removal comment for the quotes' history
+             * and `components/ui/ReviewWidget.tsx` for what the widget does and
+             * does not do.
              *
-             * They were a band of their own (`components/sections/
-             * Testimonials.tsx`, retired the same day) between `07 · Details`
-             * and this close. **The band's own heading and paragraph did not
-             * come with them**: that paragraph said "fourteen at Tadoba", a
-             * count the client corrected to eleven on 12 Aug 2026, and it left
-             * the page with its section. Nothing was written to replace it — a
-             * heading here would be new copy, and copy is the client's.
+             * **No `fallback` prop, and that is an omission rather than a
+             * choice.** `ReviewWidget` renders a `<noscript>` line only when
+             * handed one, and the client has not supplied the sentence a
+             * visitor with no JavaScript should read here — inventing one would
+             * be exactly the placeholder-prose defect this project has shipped
+             * before. An empty `<noscript>` is honest; a sentence attributed to
+             * the lodge that nobody at the lodge wrote is not. Owed, not missed.
              *
-             * **What is placeholder about these is the mechanism, not the
-             * words.** All three are verbatim from the Tripadvisor widget on the
-             * live site, trimmed only at sentence boundaries, and
-             * `content/home.test.ts` refuses an unattributed one — so the name,
-             * the source and the year are the honest thing to print, and the
-             * year is what says these are frozen copies rather than a live feed.
-             * Nothing here dresses them as one: no star rating, no Tripadvisor
-             * mark, no count of reviews, no "latest". If the client wants them
-             * visibly marked as samples for the stakeholders, that is one string
-             * in `content/home.ts` and it has to be his.
+             * **The wrapper is wider than the chapter's own measure, still
+             * deliberately.** Everything above sits in `max-w-[60ch]`, ~530px,
+             * the width the two paragraphs were set and their scrim solved at —
+             * too narrow for whatever the widget lays out. This block keeps the
+             * outer `max-w-[62rem]`, 992px, that the three-quote carousel used
+             * for the same reason.
              *
-             * **`<p>` inside the `<blockquote>` and the `<figcaption>`, and that
-             * is load bearing rather than tidy.** This is cream type over a
-             * photograph, so it is governed by the contrast rule, and
-             * `scripts/check_contrast_over_photos.mjs`'s `invitation · body` run
-             * selects `#invitation p`. Setting the quotes in anything else would
-             * put nine new blocks of type on the page's darkest photograph with
-             * no instrument pointed at them.
+             * `Enter` still wraps this div and not anything inside it: the
+             * widget is a third-party mount whose internal motion, if any, is
+             * the vendor's to own, not this component's to stagger.
              */}
-            {/*
-            **A carousel since 20 Aug 2026, where this was three static blocks
-            in a grid** — client request, and `ReviewCarousel.tsx` carries it in
-            his own words along with why it is a curated set rather than the
-            Tripadvisor widget he first asked for.
-
-            **The block is wider than the chapter's own measure, deliberately.**
-            Everything above sits in `max-w-[60ch]`, ~530px, which is the width
-            the two paragraphs were set and their scrim solved at. A carousel in
-            that frame shows one and a half cards and reads as a mistake. This
-            one takes the outer `max-w-[62rem]` — 992px, the same width the three
-            blocks it replaces spanned — so it shows the same three cards they
-            did, with the third cut by the edge mask, which is the whole
-            affordance that there are more.
-
-            `Enter` is gone from the individual cards and not replaced. It
-            staggered three blocks in a grid; on a rail that is already moving it
-            would be a second movement laid over the first, which is the mistake
-            `SplitLines`' own note records being made once and undone.
-          */}
             <div className="mt-10 w-full md:mt-12 short:mt-7">
-              <ReviewCarousel reviews={copy.quotes} />
+              <ReviewWidget label={HOME.reviews.region} />
             </div>
           </div>
         </Enter>
       </div>
 
-      {/* Outside the `<Enter>`, and that is not tidiness — see `ReviewPanels`.
-          `Enter` sets a transform while it is staged, and a transform on any
-          ancestor stops `position: fixed` escaping this section's own
-          `overflow-hidden`. */}
-      <ReviewPanels reviews={copy.quotes} />
+      {/*
+        **`ReviewPanels` sat outside the `<Enter>` until 26 August 2026, and the
+        reason it did still binds anything that goes here.** `Enter` sets a transform
+        while it is staged, and a transform on any ancestor stops `position: fixed`
+        escaping this section's `overflow-hidden`. The widget below is an iframe-like
+        third-party mount and does not need to escape — but the next thing that does
+        will, and this is where that was learned.
+      */}
     </section>
   );
 }

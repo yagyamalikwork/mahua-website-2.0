@@ -116,20 +116,8 @@ describe("HOME.chapters", () => {
     }
   });
 
-  it("attributes every guest quote to a named person and a source", () => {
-    // Guardrail against inventing testimonials. These are verbatim from the
-    // Tripadvisor widget on the live site; an unattributed quote here would mean
-    // someone had written one.
-    //
-    // Reads `invitation` since 19 Aug 2026, not `guests`: the band is gone as a
-    // chapter and the client put the reviews below the closing section's two
-    // property buttons. Nothing renders them yet — `Invitation.tsx` is taught to
-    // in the next task — so this guard is, for now, the only thing looking at
-    // them at all.
-    for (const q of HOME.chapters.invitation.quotes) {
-      expect(q.name.trim().length, "an unattributed quote").toBeGreaterThan(1);
-      expect(q.source.trim().length, `${q.name} has no source`).toBeGreaterThan(1);
-      expect(q.year, `${q.name} has no year`).toMatch(/^(19|20)\d{2}$/);
-    }
+  it("carries no guest quotes — the reviews are the client's own widget since 26 Aug 2026", () => {
+    const invitation = HOME.chapters.invitation as Record<string, unknown>;
+    expect(invitation.quotes).toBeUndefined();
   });
 });

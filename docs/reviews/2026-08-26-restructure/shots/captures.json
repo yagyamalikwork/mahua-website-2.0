@@ -1,0 +1,272 @@
+{
+  "measuredAt": "2026-08-26T09:12:18.702Z",
+  "url": "http://localhost:3100/",
+  "widths": {
+    "390": [
+      "w390-00-arrival.webp",
+      "w390-01-lodges.webp",
+      "w390-02-why-you-came.webp",
+      "w390-03-rooted.webp",
+      "w390-04-philosophy.webp",
+      "w390-05-field-days.webp",
+      "w390-06-invitation.webp"
+    ],
+    "768": [
+      "w768-00-arrival.webp",
+      "w768-01-lodges.webp",
+      "w768-02-why-you-came.webp",
+      "w768-03-rooted.webp",
+      "w768-04-philosophy.webp",
+      "w768-05-field-days.webp",
+      "w768-06-invitation.webp"
+    ],
+    "1440": [
+      "w1440-00-arrival.webp",
+      "w1440-01-lodges.webp",
+      "w1440-02-why-you-came.webp",
+      "w1440-03-rooted.webp",
+      "w1440-04-philosophy.webp",
+      "w1440-05-field-days.webp",
+      "w1440-06-invitation.webp"
+    ],
+    "1920": [
+      "w1920-00-arrival.webp",
+      "w1920-01-lodges.webp",
+      "w1920-02-why-you-came.webp",
+      "w1920-03-rooted.webp",
+      "w1920-04-philosophy.webp",
+      "w1920-05-field-days.webp",
+      "w1920-06-invitation.webp"
+    ]
+  },
+  "midReveal": [
+    {
+      "id": "rooted",
+      "frames": [
+        {
+          "file": "motion-rooted-a-entering.webp",
+          "landedShortBy": 460,
+          "msAfterLanding": 120,
+          "scrollY": 1791,
+          "masksCovering": [
+            0.763,
+            0.763,
+            0.763
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 16
+        },
+        {
+          "file": "motion-rooted-b-halfway.webp",
+          "landedShortBy": 240,
+          "msAfterLanding": 200,
+          "scrollY": 2011,
+          "masksCovering": [
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 16
+        },
+        {
+          "file": "motion-rooted-c-arrived.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 280,
+          "scrollY": 2211,
+          "masksCovering": [
+            0,
+            0,
+            0.309
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 4
+        },
+        {
+          "file": "motion-rooted-d-settled.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 1800,
+          "scrollY": 2211,
+          "masksCovering": [
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 4
+        }
+      ]
+    },
+    {
+      "id": "philosophy",
+      "frames": [
+        {
+          "file": "motion-philosophy-a-entering.webp",
+          "landedShortBy": 460,
+          "msAfterLanding": 120,
+          "scrollY": 3671,
+          "masksCovering": [
+            0,
+            0.658,
+            0.658
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 2
+        },
+        {
+          "file": "motion-philosophy-b-halfway.webp",
+          "landedShortBy": 240,
+          "msAfterLanding": 200,
+          "scrollY": 3891,
+          "masksCovering": [
+            0,
+            0,
+            1
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 2
+        },
+        {
+          "file": "motion-philosophy-c-arrived.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 280,
+          "scrollY": 4091,
+          "masksCovering": [
+            0,
+            0,
+            0.338
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 2
+        },
+        {
+          "file": "motion-philosophy-d-settled.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 1800,
+          "scrollY": 4091,
+          "masksCovering": [
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 2
+        }
+      ]
+    },
+    {
+      "id": "field-days",
+      "frames": [
+        {
+          "file": "motion-field-days-a-entering.webp",
+          "landedShortBy": 460,
+          "msAfterLanding": 120,
+          "scrollY": 5551,
+          "masksCovering": [
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 5
+        },
+        {
+          "file": "motion-field-days-b-halfway.webp",
+          "landedShortBy": 240,
+          "msAfterLanding": 200,
+          "scrollY": 5771,
+          "masksCovering": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 5
+        },
+        {
+          "file": "motion-field-days-c-arrived.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 280,
+          "scrollY": 5971,
+          "masksCovering": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 5
+        },
+        {
+          "file": "motion-field-days-d-settled.webp",
+          "landedShortBy": 40,
+          "msAfterLanding": 1800,
+          "scrollY": 5971,
+          "masksCovering": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "linesDisplaced": [],
+          "linesOnScreen": 5
+        }
+      ]
+    }
+  ],
+  "reducedMotion": [
+    {
+      "id": "arrival",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 1
+    },
+    {
+      "id": "lodges",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 2,
+      "textVisible": 10
+    },
+    {
+      "id": "why-you-came",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 4
+    },
+    {
+      "id": "rooted",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 6
+    },
+    {
+      "id": "philosophy",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 3,
+      "textVisible": 4
+    },
+    {
+      "id": "field-days",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 5,
+      "textVisible": 27
+    },
+    {
+      "id": "invitation",
+      "masksStillCovering": [],
+      "linesStillDisplaced": [],
+      "imagesDrawn": 1,
+      "textVisible": 3
+    }
+  ]
+}

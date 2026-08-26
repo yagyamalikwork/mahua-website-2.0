@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { HOME } from "@/content/home";
 import { media } from "@/lib/media";
 import {
   findRepeatedShape,
@@ -257,24 +256,24 @@ describe("TOLA_CHAPTERS", () => {
     ).not.toBe(stripGateNames(vannOpener!));
   });
 
-  it("reuses its guest quote byte-identical to the attributed original in content/home.ts", () => {
-    // FullBleedQuoteCopy carries only `quote` — there is nowhere on a
-    // full-bleed photograph to set a name, source and year in the display
-    // serif the home page uses for pull-quotes. So this page's attribution
-    // lives one level up: "tola-guest-word" is Vedant, 2019, Tripadvisor —
-    // content/home.ts's own guests.quotes[1], which content/home.test.ts's
-    // "attributes every guest quote" test already holds to a name, a source
-    // and a year. This test is what keeps the two copies from silently
-    // diverging — an edit to one without the other would otherwise ship
-    // unattributed words with nothing to catch it. Carried forward from the
-    // pre-redesign file, updated only for quoteCopy's new field name.
-    // Reads `invitation` since 19 Aug 2026, not `guests`. The home page's
-    // testimonials band was removed as a chapter in the v2 restructure and the
-    // client moved its three quotes below the closing section's two property
-    // buttons, so they live in `invitation`'s copy now. Nothing about the
-    // attribution argument above changes — only where the original sits.
-    const original = HOME.chapters.invitation.quotes.find((q) => q.name === "Vedant");
-    expect(original, "content/home.ts no longer carries Vedant's quote").toBeDefined();
-    expect(TOLA_COPY.quoteCopy?.["tola-guest-word"]?.quote).toBe(original?.quote);
-  });
+  /*
+   * **"reuses its guest quote byte-identical to the attributed original in
+   * content/home.ts" was here until 26 August 2026, and it is retired rather
+   * than repaired.** It cross-checked `TOLA_COPY.quoteCopy["tola-guest-word"]`
+   * against `HOME.chapters.invitation.quotes` — Vedant, 2019, Tripadvisor — so
+   * an edit to one without the other could not silently ship unattributed
+   * words.
+   *
+   * **The original it checked against no longer exists.** Task 2 of the 26 Aug
+   * restructure deleted `invitation.quotes` outright: the client's own Elfsight
+   * widget replaced the curated three-quote set, and there is nothing left in
+   * `content/home.ts` for this page's `tola-guest-word` to stay byte-identical
+   * WITH. This is not this page's change — `content/mahua-tola.ts` itself is
+   * untouched here, on that task's own ruling, because `tola-guest-word` is
+   * scheduled to be deleted outright in Task 5 of the same restructure
+   * (`docs/superpowers/plans/2026-08-26-restructure-and-reviews.md` §3.1). A
+   * guard with nothing left to compare would either fail on a defect that
+   * belongs to a different task's copy or be quietly weakened to pass, and
+   * either is worse than removing it here and letting Task 5 finish the job.
+   */
 });

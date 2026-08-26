@@ -104,43 +104,6 @@ export type ExperienceCopy = {
   readonly mediaId: MediaId;
 };
 
-export type GuestQuote = {
-  /**
-   * The review **in full**, exactly as the guest wrote it.
-   *
-   * Not an excerpt. The card shows the first `REVIEW_CARD.quoteLines` of it and
-   * the whole card is a link to a panel carrying the rest — client, 20 Aug 2026:
-   * *"I understand the complete reviews cannot be shown in such small space, so
-   * add a clickable read more button on the reviews that get cut in the middle,
-   * and when the viewer clicks on it the popup will show the complete text."*
-   *
-   * **So the cutting is done by CSS at render time and never here.** A second
-   * field holding a hand-written excerpt is how a quotation drifts from what its
-   * author actually said, and it would put the site in the position of having
-   * edited somebody's review.
-   */
-  readonly quote: string;
-  readonly name: string;
-  readonly year: string;
-  readonly source: string;
-  /**
-   * The guest's own rating, out of five, in halves.
-   *
-   * **Optional, and it is optional because inventing one is not available.** The
-   * client asked for the rating drawn as gold circles on 20 Aug 2026; the three
-   * reviews standing here came off the Tripadvisor widget on the live site as
-   * text alone, with no figure attached, and a plausible number written in here
-   * would read as the guest's own. This project has been within one edit of that
-   * before — a capacity figure invented in a worked example nearly shipped as a
-   * claim about the property.
-   *
-   * So a review with no rating renders with no circles, which is honest, and the
-   * set the client is assembling carries its own. `scripts/check_reviews.mjs`
-   * asserts the circles against this figure wherever it exists.
-   */
-  readonly rating?: number;
-};
-
 export const HOME = {
   meta: {
     title: "Mahua Resorts — The wild and the calm, held together",
@@ -199,6 +162,22 @@ export const HOME = {
      * card's own title.
      */
     jump: "Show",
+  },
+
+  /**
+   * Interface furniture for the guests' reviews, not brand copy — the same
+   * distinction `strip` above draws. Nobody at Mahua wrote this sentence and no
+   * client review will ever ask for it to change; it exists so the widget's
+   * `aria-label` says something truthful to a screen reader instead of nothing.
+   *
+   * **Named Tripadvisor on purpose.** `ReviewWidget` mounts the client's own
+   * Elfsight embed, and that embed genuinely is a live Tripadvisor feed — see
+   * `lib/elfsight.ts`. The wording claims nothing about what the reviews say,
+   * only where they come from, which is the one thing this site can state
+   * about them without having read them.
+   */
+  reviews: {
+    region: "Guest reviews from Tripadvisor",
   },
 
   chapters: {
@@ -439,50 +418,16 @@ export const HOME = {
         "Write to us and we will tell you honestly which of the two is right for what you want.",
       ],
       /*
-       * **The guest quotes moved here on 19 Aug 2026 and are not rendered yet.**
+       * **The three guest quotes were here until 26 August 2026.** They were verbatim
+       * from the live site's Tripadvisor widget, trimmed at sentence boundaries, and
+       * they were placeholders for a curated set the client was assembling.
        *
-       * They were the `guests` chapter's, a band of its own between `07 · Details`
-       * and this close. The client: *"later when we get the TripAdvisor API we
-       * will change it to auto-scrolling reviews, but what I meant is that this
-       * will be the new place for the reviews, below the two property buttons."*
-       * So the chapter is gone, the three quotes are not, and their new home is
-       * the foot of this section — **`components/sections/Invitation.tsx` has to
-       * be taught to read them**, which is the next task's job and the reason
-       * they sit here unread rather than deleted.
-       *
-       * The `guests` chapter's own heading ("Known by name") and its paragraph
-       * did NOT move. The paragraph stated "fourteen at Tadoba", a count the
-       * client corrected to eleven on 12 Aug 2026 and which had survived here
-       * only because nobody re-read it; it leaves the page with its section.
-       *
-       * Verbatim from the Tripadvisor widget on the live site, trimmed only at
-       * sentence boundaries. Nothing here is written by us, and nothing is
-       * paraphrased. These are frozen copies of a live widget and should either
-       * be refreshed or re-embedded before launch — which is exactly what the
-       * client's own "later, the TripAdvisor API" note anticipates.
+       * He supplied an Elfsight embed instead, which is a live Tripadvisor feed and
+       * therefore needs no copy here at all. `ReviewCarousel`, `lib/reviews.ts`,
+       * `REVIEWS` and `scripts/check_reviews.mjs` went with them — and so did the
+       * open `REVIEWS.mode` question, which non-negotiable #5 was carrying a dated
+       * exception for. See `docs/DECISIONS.md` §22.
        */
-      quotes: [
-        {
-          quote: "The place is secluded and gives you a feel of actually being in the jungle.",
-          name: "Saurav R",
-          year: "2021",
-          source: "Tripadvisor",
-        },
-        {
-          quote:
-            "One of the best forests for seeing tigers and one of the best resorts to stay in Tadoba.",
-          name: "Vedant",
-          year: "2019",
-          source: "Tripadvisor",
-        },
-        {
-          quote:
-            "Spacious rooms and bathrooms. Food is very good and the staff is very helpful and courteous.",
-          name: "Amit Pednekar",
-          year: "2020",
-          source: "Tripadvisor",
-        },
-      ],
     },
   },
 } as const satisfies {
@@ -492,6 +437,7 @@ export const HOME = {
     cta: string;
   };
   strip: { region: string; hint: string; jump: string };
+  reviews: { region: string };
   chapters: Record<
     string,
     {
@@ -505,7 +451,6 @@ export const HOME = {
       plates?: readonly PlateCopy[];
       lodges?: readonly LodgeCopy[];
       experiences?: readonly ExperienceCopy[];
-      quotes?: readonly GuestQuote[];
       cta?: string;
       href?: string;
     }
