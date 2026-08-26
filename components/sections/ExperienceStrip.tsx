@@ -256,10 +256,11 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, co
  * ## The three shapes this section is made of
  *
  * 1. **A header band**, carrying the chapter mark, the heading and the
- *    dawn-gate paragraph. **A single column since 26 Aug 2026** — it carried
- *    the tiger film in a 7/5 grid from 19 Aug until the client asked for the
- *    film gone, and closing the grid with it is what this file's own top-of-file
- *    comment records.
+ *    dawn-gate paragraph — **a two-column grid again as of the same day's fix
+ *    round**, this time 5/7 rather than the tiger's 7/5, heading narrow and
+ *    paragraph wide. It was briefly one column for a few hours on 26 Aug 2026;
+ *    see this file's top-of-file comment for why that measured worse, not
+ *    better, and the sweep that replaced it.
  * 2. **The strip**, a flex row in a native `overflow-x: auto` scroller.
  * 3. **The pager**, six links below it, one per card.
  *
@@ -287,15 +288,13 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, co
  * foot — which is the cream page's own way of saying the same thing, and the one
  * that has an instrument behind it.
  *
- * ## The tiger came off on 26 Aug 2026, and the header band closed behind it
+ * ## The tiger came off on 26 Aug 2026, and it took two goes to close the band
  *
  * Client: *"Remove the tiger from 'The Experience' section, hence removing the
  * big gap between the activities and the text for this section."* The film was
  * the header band's right-hand column in a 12-column grid — copy in
  * `lg:col-span-7`, film in `lg:col-span-5` — and the gap he is pointing at is
- * those five columns, empty, once the film is gone. Taking the film out alone
- * would have fixed nothing: the band is now a single column, not a 7/5 split
- * with one side vacated.
+ * those five columns, empty, once the film is gone.
  *
  * **The film is unmounted, not deleted** — `components/signature/
  * SignatureFilm.tsx`, `/media/tiger-film.mp4`, its poster and
@@ -307,12 +306,55 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, co
  * regression; see `docs/DECISIONS.md` §22 and `CLAUDE.md`. Do not "fix" it by
  * remounting the film.
  *
- * **The 7/5 split's own reasoning is spent, not wrong.** It was 7/5 rather than
- * 5/7 because a 7-column slot for a 300px film left 461px of bare cream inside
- * its own column, and `lg:items-start` because the film column was the taller of
- * the two and bottom-aligning would have pushed the chapter mark 210px down the
- * page. Both facts were about a film that is no longer here, so neither survives
- * as a reason to keep any part of the grid.
+ * **First attempt, same day: the band collapsed to one column, and it measured
+ * worse, not better.** Taking the film out alone leaves five empty columns, so
+ * the copy was widened to `max-w-[20ch]`/`max-w-[62ch]` and allowed to run the
+ * full row's width. Read at 1920px, the widened paragraph is a real column, not
+ * a stretched line — but the chapter's own imagery fell by one film while its
+ * height fell by only 173px (1073px → 900px), and `field-days` moved from
+ * 42.4%/42.4% mean/worst (this branch's own pre-task baseline, from the reviews
+ * widget's own measurement earlier the same day — CLAUDE.md's cited 27.0%/31.1%
+ * for this chapter was already stale by then) to **48.3%/48.3%, over the 45%
+ * ceiling**. A single column of type in a ~1500-1600px container cannot fill
+ * that width at any measure worth reading, and widening the caps further would
+ * have been bad typography for no density gained.
+ *
+ * **Second attempt, fix round 1: a two-column band again, with the paragraph
+ * in the slot the film vacated.** Same grid shape the tiger used, `lg:items-
+ * start lg:gap-x-10`, but the paragraph — not the film — now fills the wide
+ * side, so the row's own width is used by the chapter's words rather than by
+ * cream. Swept per this project's own standing rule (solve for the bound,
+ * don't stop at the first value under it — a photo-width share was once
+ * declared "spent" at 65% without being swept and shipped a breach, §18):
+ *
+ * | split (heading/paragraph) | field-days mean/worst | passesWorst |
+ * |---|---|---|
+ * | 7/5 | 38.3% / 38.3% | true, 6.7pts margin |
+ * | 6/6 | 35.6% / 35.6% | true, 9.4pts margin |
+ * | **5/7 (shipped)** | **35.6% / 35.6%** | **true, 9.4pts margin** |
+ *
+ * 5/7 and 6/6 tie exactly — both cap the paragraph at `max-w-[54ch]`
+ * (~611px), which is narrower than either split's own paragraph column at
+ * both 1440 and 1920px, so the text wraps identically either way and the
+ * measured difference between splits is purely the header row's own height:
+ * 7/5 gives the paragraph only 536-603px to wrap in, forcing a fourth line at
+ * 1440px (+34px of row height against the other two); 6/6 and 5/7 both give it
+ * room for the 54ch cap to bind, wrapping to three lines both ways. Chosen
+ * between the tied pair on the client's own stated shape — heading in the
+ * narrow slot, paragraph in the wide one — which 5/7 states directly and 6/6
+ * only approximates with equal columns holding unequal content. Screenshots at
+ * 1440 and 1920 (`docs/reviews/2026-08-26-restructure/shots-tworcol-5-7/`)
+ * read as one composed band: chapter mark, heading and paragraph all top-
+ * aligned on one line of the grid, cards starting immediately below with no
+ * stray gap.
+ *
+ * **The 7/5 split's own *original* reasoning (the tiger's) is spent, not
+ * wrong.** It was 7/5 rather than 5/7 because a 7-column slot for a 300px film
+ * left 461px of bare cream inside its own column, and `lg:items-start` because
+ * the film column was the taller of the two and bottom-aligning would have
+ * pushed the chapter mark 210px down the page. Both facts were about a film
+ * that is no longer here — the `lg:items-start` alignment survives on its own
+ * merit (measured again above), the 7/5 ratio does not.
  */
 export function ExperienceStrip({
   chapter,
@@ -331,20 +373,30 @@ export function ExperienceStrip({
     // lg:py-14` against the default `py-14 md:py-16 lg:py-20`.
     <ChapterSurface id={chapter.id} surface={surface} tight>
       {/*
-        The header band.
+        The header band — a 5/7 grid, heading narrow, paragraph wide.
 
-        **It was a 7/5 grid until 26 August 2026, and the tiger held the five.**
-        Client: *"Remove the tiger from 'The Experience' section, hence removing
-        the big gap between the activities and the text for this section."* The
-        gap he is pointing at is those five columns, empty — so the film going
-        was only half the fix and the band collapses to one column with it.
+        **The tiger held the five in a 7/5 grid until 26 August 2026.** Client:
+        *"Remove the tiger from 'The Experience' section, hence removing the
+        big gap between the activities and the text for this section."*
 
-        **The 7/5 was not arbitrary and its reasoning is now spent rather than
-        wrong:** 7/5 rather than 5/7 because a 7-column slot for a 300px film
-        left 461px of bare cream inside its own column, and `lg:items-start`
-        because bottom-aligning the shorter column would push the chapter mark
-        210px down the page. Both facts were about a film that is no longer
-        here.
+        **It was one column for a few hours the same day, and that measured
+        worse.** Taking the film out alone leaves five columns of cream, so the
+        first fix collapsed the grid entirely and widened the copy to fill the
+        row — but a single text column cannot fill a ~1500-1600px row at any
+        readable measure, and losing the film's imagery cost more density than
+        closing the band recovered: `field-days` moved from 42.4%/42.4% to
+        48.3%/48.3%, over the 45% ceiling.
+
+        **Fix round 1 put it back into two columns — 5/7 this time, not the
+        tiger's 7/5 — with the paragraph in the slot the film vacated.** Swept
+        against 6/6 and 7/5 too (`node scripts/measure_density.mjs`); 5/7 and
+        6/6 tie for the best margin (35.6%/35.6%, 9.4 points clear), 7/5 trails
+        at 38.3%/38.3% because its narrower paragraph column forces a fourth
+        line. 5/7 wins the tie because it states the client's own shape —
+        narrow heading, wide paragraph — directly, where 6/6 only approximates
+        it with equal columns holding unequal content. Full sweep table and
+        screenshot judgement on this component's own top-of-file comment and
+        `.superpowers/sdd/2026-08-26-restructure-and-reviews/task-3-report.md`.
 
         **The film is unmounted, not deleted** —
         `components/signature/SignatureFilm.tsx`, `/media/tiger-film.mp4` and
@@ -358,17 +410,21 @@ export function ExperienceStrip({
         it by remounting the film.
       */}
       <Enter>
-        <div>
-          {chapter.number && chapter.label && (
-            <ChapterMark number={chapter.number} label={chapter.label} />
-          )}
-          <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[20ch]" />
-          <p
-            className="mt-7 max-w-[62ch] font-[family-name:var(--font-body)] text-[1.15rem] leading-[1.68] md:text-xl"
-            style={{ color: "var(--text)" }}
-          >
-            {copy.body[0]}
-          </p>
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-x-10">
+          <div className="lg:col-span-5">
+            {chapter.number && chapter.label && (
+              <ChapterMark number={chapter.number} label={chapter.label} />
+            )}
+            <TwoToneHeading heading={copy.heading} className="mt-6" />
+          </div>
+          <div className="lg:col-span-7">
+            <p
+              className="max-w-[54ch] font-[family-name:var(--font-body)] text-[1.15rem] leading-[1.68] md:text-xl"
+              style={{ color: "var(--text)" }}
+            >
+              {copy.body[0]}
+            </p>
+          </div>
         </div>
       </Enter>
 

@@ -1765,11 +1765,16 @@ body {
 }
 
 /* `.experience-figure` — the tiger's column in the header band — was here until
-   26 Aug 2026. The client asked for the tiger removed from this chapter and the
-   header band collapsed from a 7/5 grid to one column with it, so there is no
-   column left for this rule to describe. The film itself is unmounted, not
-   deleted — see the header-band comment in `ExperienceStrip.tsx` and
-   `docs/DECISIONS.md` §22. */
+   26 Aug 2026. The client asked for the tiger removed from this chapter; the
+   header band briefly collapsed to one column the same day, then (fix round 1)
+   went back to a two-column grid with the paragraph in the wide slot instead of
+   a mounted figure. Either way, this rule's own subject — a column holding a
+   `mix-blend-mode: darken` film with no stacking context allowed above it — has
+   no replacement: a `<p>` needs none of those constraints, so the Tailwind
+   utility classes on `ExperienceStrip.tsx`'s two columns are enough on their
+   own, with no dedicated rule here. The film itself is unmounted, not deleted —
+   see the header-band comment in `ExperienceStrip.tsx` and `docs/DECISIONS.md`
+   §22. */
 
 @media (prefers-reduced-motion: reduce) {
   /*

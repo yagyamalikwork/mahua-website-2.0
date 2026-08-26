@@ -267,9 +267,12 @@ function renderChapter(chapter: Chapter, at: Position) {
      * mounted.** Client: *"Remove the tiger from 'The Experience' section, hence
      * removing the big gap between the activities and the text for this
      * section."* The film held the header band's five-column half of a 7/5
-     * grid; `ExperienceStrip` itself now collapses that band to one column
-     * (see its own top-of-file comment), so the `figure` slot the film used to
-     * fill is gone from the component's signature along with it.
+     * grid. `ExperienceStrip` collapsed that band to one column for a few hours
+     * the same day, then rebuilt it as a 5/7 grid once the one-column version
+     * measured over the 45% density ceiling (fix round 1 — see its own
+     * top-of-file comment for the sweep). Either way, the `figure` slot the
+     * film used to fill is gone from the component's signature: the paragraph
+     * fills the wide column now, not a mounted element passed in from here.
      *
      * **Nothing about the film is deleted.** `components/signature/
      * SignatureFilm.tsx`, `/media/tiger-film.mp4`, its poster and
