@@ -539,6 +539,270 @@ EOF
 
 ---
 
+### Task 2b: The widget loads only when a visitor scrolls to it
+
+**Added 26 August 2026, after Task 2's measurements, on the client's ruling.** Not in the original plan —
+it exists because Task 2 measured something the plan assumed away.
+
+**Files:**
+- Create: `components/ui/ElfsightLoader.tsx` (`"use client"`)
+- Create: `components/ui/ElfsightLoader.test.tsx`
+- Modify: `components/ui/ReviewWidget.tsx`, `components/ui/ReviewWidget.test.tsx`
+
+**Interfaces:**
+- Consumes: `ELFSIGHT_SCRIPT`, `elfsightClass` from `lib/elfsight.ts`.
+- Produces: `<ElfsightLoader />` — injects the platform script once, on approach.
+  `ReviewWidget`'s public signature is unchanged.
+
+**Why this exists.** `data-elfsight-app-lazy` does not defer the platform script. Task 2 measured **588 KB
+over 9 requests fetched on `load`**, with the widget sitting in the page's last chapter —
+`tripadvisorReviews.js` alone is **533 KB**, three times this entire site's own first-load JavaScript. That
+took desktop initial transfer to **1,554 KB against non-negotiable #6's 1,500 KB ceiling** and the hero's
+arrival from 4,616 ms to **5,377 ms**. Evidence:
+`docs/reviews/2026-08-26-restructure/widget-network-cost.md`.
+
+**And neither committed rig can see any of it.** Both read `PerformanceResourceTiming.transferSize`, which
+a cross-origin response with no `Timing-Allow-Origin` header reports as **0**. Elfsight sends no such
+header. Both rigs said PASS at byte-identical figures with and without the widget. **Do not "fix" the rigs
+to guess** — the blind spot is a documented property of the Resource Timing spec, and a guessed number is
+worse than a known gap. The CDP probe in that evidence file is the instrument that can see it.
+
+**This task trades a small known cost for a large measured one.** A client boundary adds a few hundred
+bytes to the first load; it removes 588 KB from it. **Measure both** — if the boundary somehow costs more
+than it saves, that is a finding, not a formality.
+
+- [ ] **Step 1: Write the failing test**
+
+```tsx
+// components/ui/ElfsightLoader.test.tsx
+import { render, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { ElfsightLoader } from "@/components/ui/ElfsightLoader";
+import { ELFSIGHT_SCRIPT } from "@/lib/elfsight";
+
+/** jsdom has no IntersectionObserver. This one lets a test fire it by hand. */
+function stubObserver() {
+  const instances: { cb: IntersectionObserverCallback; disconnect: () => void }[] = [];
+  vi.stubGlobal(
+    "IntersectionObserver",
+    class {
+      disconnect = vi.fn();
+      unobserve = vi.fn();
+      observe = vi.fn();
+      constructor(cb: IntersectionObserverCallback) {
+        instances.push({ cb, disconnect: this.disconnect });
+      }
+    },
+  );
+  return instances;
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  document.querySelectorAll(`script[src="${ELFSIGHT_SCRIPT}"]`).forEach((s) => s.remove());
+});
+
+describe("ElfsightLoader", () => {
+  it("does not load 533 KB of vendor JavaScript before a visitor comes near it", () => {
+    stubObserver();
+    render(<ElfsightLoader />);
+    expect(document.querySelector(`script[src="${ELFSIGHT_SCRIPT}"]`)).toBeNull();
+  });
+
+  it("loads the platform once the section approaches the viewport", async () => {
+    const observers = stubObserver();
+    render(<ElfsightLoader />);
+    observers[0].cb([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    await waitFor(() => {
+      expect(document.querySelector(`script[src="${ELFSIGHT_SCRIPT}"]`)).not.toBeNull();
+    });
+  });
+
+  it("loads it once, not once per widget — two on a page must not fetch it twice", async () => {
+    const observers = stubObserver();
+    render(<><ElfsightLoader /><ElfsightLoader /></>);
+    observers.forEach((o) =>
+      o.cb([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver),
+    );
+    await waitFor(() => {
+      expect(document.querySelectorAll(`script[src="${ELFSIGHT_SCRIPT}"]`)).toHaveLength(1);
+    });
+  });
+
+  it("stops observing once it has fired", async () => {
+    const observers = stubObserver();
+    render(<ElfsightLoader />);
+    observers[0].cb([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+    await waitFor(() => expect(observers[0].disconnect).toHaveBeenCalled());
+  });
+});
+```
+
+- [ ] **Step 2: Run it and watch it fail**
+
+Run: `npx vitest run components/ui/ElfsightLoader.test.tsx`
+Expected: FAIL — `Failed to resolve import "@/components/ui/ElfsightLoader"`.
+
+- [ ] **Step 3: Write the loader**
+
+```tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+import { ELFSIGHT_SCRIPT } from "@/lib/elfsight";
+
+/**
+ * How far ahead of the viewport the platform starts loading.
+ *
+ * Far enough that the widget has drawn by the time a visitor arrives at it, and
+ * near enough that most visitors who never reach the foot of the page never pay
+ * for it. 600px is roughly two-thirds of a laptop screen — one unhurried scroll
+ * gesture's worth of warning on the page this sits at the bottom of.
+ */
+const APPROACH_MARGIN = "600px";
+
+/**
+ * Loads Elfsight's platform when the visitor comes near it, and not before.
+ *
+ * **This exists because `data-elfsight-app-lazy` does not defer the platform
+ * script.** Measured 26 August 2026: 588 KB over 9 requests, fetched on `load`,
+ * with the widget in the page's LAST chapter. `tripadvisorReviews.js` alone is
+ * 533 KB — three times this whole site's own first-load JavaScript. It took
+ * desktop initial transfer to 1,554 KB against non-negotiable #6's 1,500 KB
+ * ceiling, and the hero's arrival from 4,616 ms to 5,377 ms.
+ * `docs/reviews/2026-08-26-restructure/widget-network-cost.md` has the working.
+ *
+ * **Neither committed rig can see any of that**, and that is a property of the
+ * platform rather than a bug: both read `PerformanceResourceTiming.transferSize`,
+ * which is reported as 0 for a cross-origin response with no
+ * `Timing-Allow-Origin` header, and Elfsight sends none. Both said PASS at
+ * byte-identical figures with and without the widget mounted. **Do not "fix"
+ * them to guess.** A guessed number is worse than a known gap; the CDP probe in
+ * that evidence file is what can actually see this.
+ *
+ * ## Why this is allowed to be a client component when almost nothing here is
+ *
+ * It trades a few hundred bytes of our own JavaScript for 588 KB of somebody
+ * else's, and the trade was measured in both directions rather than assumed.
+ *
+ * ## The guard is the DOM, not a module flag
+ *
+ * Two widgets on one page — which is exactly what the property pages will have
+ * once `04 · Written About` lands — must load the platform once. The check is
+ * for an existing `script[src]` in the document rather than a module-level
+ * boolean, because a module flag is per-bundle state and the DOM is the thing
+ * that actually decides whether a second request goes out.
+ *
+ * ## With no JavaScript, nothing here runs and nothing here breaks
+ *
+ * `ReviewWidget` renders its mount and its `<noscript>` line server-side; this
+ * component contributes nothing to that markup. A visitor with script off sees
+ * the fallback, exactly as they did before this existed.
+ */
+export function ElfsightLoader() {
+  const anchor = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = anchor.current;
+    if (!el) return;
+    if (document.querySelector(`script[src="${ELFSIGHT_SCRIPT}"]`)) return;
+
+    const load = () => {
+      if (document.querySelector(`script[src="${ELFSIGHT_SCRIPT}"]`)) return;
+      const script = document.createElement("script");
+      script.src = ELFSIGHT_SCRIPT;
+      script.async = true;
+      document.head.appendChild(script);
+    };
+
+    // No IntersectionObserver — a browser old enough to lack it is a browser we
+    // would rather serve the reviews to slowly than not at all.
+    if (typeof IntersectionObserver === "undefined") {
+      load();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        load();
+      },
+      { rootMargin: APPROACH_MARGIN },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return <span ref={anchor} aria-hidden="true" />;
+}
+```
+
+- [ ] **Step 4: Take the eager script out of `ReviewWidget`**
+
+Replace `<script src={ELFSIGHT_SCRIPT} async />` with `<ElfsightLoader />`, and update the Task 1 test that
+asserted the script is in `document.head` on render — it must now assert the **opposite**, that it is
+absent until approach. Record why at the changed assertion, citing the measurement.
+
+- [ ] **Step 5: Run and watch pass**
+
+Run: `npx vitest run components/ui/ && npm test && npm run lint && npm run build`
+Expected: green. Report the exact test count.
+
+- [ ] **Step 6: Measure both directions — the point of the task**
+
+```bash
+npm run build && npx next start -p 3100 &
+node scripts/measure_js_budget.mjs --port 3100 --out docs/reviews/2026-08-26-restructure/js-budget-gated-1440.json
+node scripts/measure_page.mjs --port 3100 --out docs/reviews/2026-08-26-restructure/page-gated.json
+node scripts/measure_lcp_arms.mjs --runs 5 --port 3100 --out docs/reviews/2026-08-26-restructure/lcp-arms-gated.json
+```
+
+Report against Task 2's figures: **first-load JS** (this task's own cost — it must be small), **initial
+transfer at 390 and 1440** (must be back under 1,500 KB), and **hero `responseEnd`, medians of five**
+(should return to ≈4,616 ms). Then re-run the CDP probe from
+`docs/reviews/2026-08-26-restructure/widget-network-cost.md` **without scrolling**, and confirm the nine
+Elfsight requests are **absent** on load — that, not the rigs, is the assertion that this worked.
+
+- [ ] **Step 7: Confirm it still works when scrolled to**
+
+Scroll to the foot of the page in a real browser and confirm the reviews render. **A gate that never opens
+is worse than no gate**, and no unit test can tell you the vendor's platform still boots this way.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add -A
+git commit -m "$(cat <<'EOF'
+perf: the reviews widget loads when you scroll to it, not on arrival
+
+data-elfsight-app-lazy does not defer the platform script. Measured: 588 KB
+over 9 requests fetched on load, with the widget in the page's LAST
+chapter. tripadvisorReviews.js alone is 533 KB — three times this whole
+site's own first-load JavaScript. Desktop initial transfer went to 1,554 KB
+against a 1,500 KB ceiling and the hero's arrival from 4,616 to 5,377 ms.
+
+Neither committed rig could see any of it, and that is the platform rather
+than a bug: both read transferSize, which is 0 for a cross-origin response
+with no Timing-Allow-Origin header, and Elfsight sends none. Both reported
+PASS at byte-identical figures with and without the widget. They are not
+"fixed" to guess here — a guessed number is worse than a known gap.
+
+A client boundary of a few hundred bytes buys back 588 KB. Measured both
+directions rather than assumed. The load guard is the DOM rather than a
+module flag, because two widgets on one page — which the property pages
+will have — must fetch the platform once, and the DOM is what actually
+decides that.
+
+Client's ruling, 26 Aug 2026, given the figures.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+---
+
 ### Task 3: The tiger comes off, and the header band closes
 
 **Files:**
