@@ -1,11 +1,12 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
-import { ExperienceStrip } from "@/components/sections/ExperienceStrip";
+import { ExperienceStrip, type StripCopy } from "@/components/sections/ExperienceStrip";
 import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
 import { JunglesBand } from "@/components/sections/JunglesBand";
 import { LodgePanels } from "@/components/sections/LodgePanels";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { CHAPTERS, type Chapter, type ChapterKind } from "@/content/chapters";
+import { chapterCopy, HOME, type ChapterCopyKey } from "@/content/home";
 
 /**
  * The home page is `content/chapters.ts`, rendered.
@@ -287,7 +288,15 @@ function renderChapter(chapter: Chapter, at: Position) {
      * on 6 Aug 2026, is likewise untouched and one line from returning.
      */
     case "experienceStrip":
-      return <ExperienceStrip key={chapter.id} chapter={chapter} surface={at.surface} />;
+      return (
+        <ExperienceStrip
+          key={chapter.id}
+          chapter={chapter}
+          surface={at.surface}
+          copy={chapterCopy(chapter.id as ChapterCopyKey) as StripCopy}
+          labels={HOME.strip}
+        />
+      );
     /*
      * **`case "testimonials"` was here until 19 Aug 2026.** The `guests` band is
      * gone as a chapter and its three quotes moved into `invitation`'s copy —

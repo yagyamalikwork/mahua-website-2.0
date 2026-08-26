@@ -4,14 +4,39 @@ import { ChapterMark } from "@/components/ui/ChapterMark";
 import { ChapterSurface } from "@/components/ui/ChapterSurface";
 import type { ScrimStrength } from "@/components/ui/Scrim";
 import { TwoToneHeading } from "@/components/ui/TwoToneHeading";
-import type { Chapter } from "@/content/chapters";
-import { chapterCopy, HOME, type ChapterCopyKey, type ExperienceCopy, type TwoTone } from "@/content/home";
+import type { ExperienceCopy, TwoTone } from "@/content/home";
 import type { MediaId } from "@/lib/media";
 
-type StripCopy = {
+/**
+ * The words this section draws — a heading, one paragraph and six activities.
+ *
+ * **Exported since 26 August 2026, when this component stopped reading
+ * `chapterCopy(chapter.id)` off `content/home.ts` directly.** The client wants
+ * this exact strip on both property pages, whose copy lives in a different
+ * module entirely (`content/property-home.ts`, not yet written) — a shared
+ * section cannot import one page's content module and still render another
+ * page's words, so the shape of what it needs is named here and each page
+ * supplies its own values. A later task imports this type by this exact name;
+ * do not rename it without checking what breaks.
+ */
+export type StripCopy = {
   readonly heading: TwoTone;
   readonly body: readonly string[];
   readonly experiences: readonly ExperienceCopy[];
+};
+
+/**
+ * The three fixed strings around the strip that are not per-card: the
+ * scroll-region's accessible name, the "Scroll →" hint, and the pager's
+ * "Jump to" prefix. Split out from `StripCopy` because they are the same
+ * words regardless of which six activities are showing — `content/home.ts`
+ * keeps them at `HOME.strip` today, and whatever module the property pages'
+ * copy grows into can reuse the identical three rather than restate them.
+ */
+export type StripLabels = {
+  readonly region: string;
+  readonly hint: string;
+  readonly jump: string;
 };
 
 /**
@@ -358,14 +383,25 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, co
  */
 export function ExperienceStrip({
   chapter,
+  copy,
+  labels,
   surface = false,
 }: {
-  chapter: Chapter;
+  /**
+   * **`chapter` is structural rather than `Chapter`, since 26 August 2026.**
+   * This section now draws on three pages — `field-days` on the home page and
+   * `03 · The Experience` on both property pages — and those spines have
+   * different types (`Chapter` in `content/chapters.ts`, `PropertyChapter` in
+   * `content/property-chapters.ts`). All this component ever reads is an id and
+   * an optional number and label, so it asks for exactly that and both satisfy it.
+   * Importing either concrete type here would tie a shared section to one page's
+   * spine.
+   */
+  chapter: { readonly id: string; readonly number?: string; readonly label?: string };
+  copy: StripCopy;
+  labels: StripLabels;
   surface?: boolean;
 }) {
-  const copy = chapterCopy(chapter.id as ChapterCopyKey) as StripCopy;
-  const strip = HOME.strip;
-
   return (
     // `tight`, carried over from the coverflow unchanged — the client's third
     // change of 18 Aug 2026, *"make sure it fits snugly and has no large
@@ -444,7 +480,7 @@ export function ExperienceStrip({
       <ul
         className="experience-strip mt-8 lg:mt-10"
         tabIndex={0}
-        aria-label={strip.region}
+        aria-label={labels.region}
       >
         {copy.experiences.map((experience, i) => (
           <ExperienceCard
@@ -480,9 +516,9 @@ export function ExperienceStrip({
           style={{ color: "var(--dim)" }}
           aria-hidden="true"
         >
-          {strip.hint}
+          {labels.hint}
         </p>
-        <nav aria-label={strip.region} className="flex items-center gap-4">
+        <nav aria-label={labels.region} className="flex items-center gap-4">
           {copy.experiences.map((experience, i) => (
             <a
               key={experience.title}
@@ -490,7 +526,7 @@ export function ExperienceStrip({
               // The visible text is a number and six numbers tell a screen
               // reader nothing apart. The activity's own title is the name — no
               // new copy, and distinct by construction.
-              aria-label={`${strip.jump} — ${experience.title}`}
+              aria-label={`${labels.jump} — ${experience.title}`}
               className="rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
               style={{ color: "var(--dim)" }}
             >
