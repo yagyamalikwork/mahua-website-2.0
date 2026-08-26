@@ -1202,8 +1202,17 @@ than copying the literal:
 import { HOME_EXPERIENCES } from "@/content/home";
 ```
 
-**`alsoLine` is a real loss and must be raised, not silently dropped.** If the client wants it kept, it
-needs a home in the strip — that is a new composition and belongs in its own task, not this one.
+**`alsoLine` was raised with the client and he ruled: dropped for now, revisited later.** 26 Aug 2026,
+having been told the strip has no slot for it and that it encodes his own 9 Aug decision to name karaoke,
+the conference hall and the indoor games plainly rather than promote or hide them. His reasoning: the
+activities themselves change later, so where that line lives is a question for that work.
+
+**It is therefore a deferred item, not a deletion.** Keep the two strings in `content/mahua-vann.ts` and
+`content/mahua-tola.ts`, commented out at their own sites with the ruling and its date, so the words are
+not lost and the next session finds them where they belong. Record it in `docs/DECISIONS.md` §22 and in
+`docs/PROJECT-STATE.md`'s owed list. **Do not `git rm` the copy** — a decision to revisit is not a decision
+to discard, and this project has an explicit rule that a rejected item is either deleted *with its
+reasoning* or kept where the next reader will find it.
 
 - [ ] **Step 4: Delete the pair and run the suite**
 
