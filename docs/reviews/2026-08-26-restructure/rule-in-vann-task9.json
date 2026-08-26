@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-08-26T17:23:28.985Z",
+  "measuredAt": "2026-08-26T18:10:09.719Z",
   "url": "http://localhost:3100/mahua-vann",
   "ruleInDuration": 0.4,
   "coverage": {
@@ -12,7 +12,7 @@
     "atFifteenPercent": 0.554011,
     "atFiftyFivePercent": 0.974493
   },
-  "complete": 0.133145,
+  "complete": 1,
   "keyboard": {
     "reachedByTab": true,
     "tabsUsed": 22,
@@ -36,8 +36,6 @@
       "delta": 0.7738328703029722
     }
   ],
-  "failures": [
-    "the rule never completed (scaleX 0.133)"
-  ],
-  "verdict": "fail"
+  "failures": [],
+  "verdict": "pass"
 }

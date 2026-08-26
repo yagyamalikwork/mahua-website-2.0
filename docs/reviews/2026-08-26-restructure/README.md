@@ -96,20 +96,29 @@ cards, white text, a green Tripadvisor roundel, directly on the site's cream —
 `docs/reviews/2026-08-26-restructure/density-variance-NOTE.md` is the standing caveat: any chapter hosting
 the Elfsight widget (`invitation` on the home page; `vann-press`, `tola-press` on the property pages) swings
 between two `heightPx` modes because the widget's own carousel autoplays and its rendered height is not
-fully deterministic between loads. This task's own fresh run:
+fully deterministic between loads.
+
+**Fix round 2 correction.** This section previously named `density-home.json` and quoted figures that file
+does not contain — `density-home.json` is Task 2's own pre-tiger-removal baseline (committed at `046ea41`
+and untouched since), and the figures actually quoted here traced to `density-home-shadowfix-after.json`
+(Task 8b, `ae26bd6`), reused without being relabelled. Both property routes got a genuinely fresh,
+explicitly-named run in §4; the home route did not, until now. Re-run against the current commit's build,
+output named to match:
 
 ```
-node scripts/measure_density.mjs --port 3100 --out density-home.json
+node scripts/measure_density.mjs --port 3100 --out density-home-task9.json
 ```
 
-`invitation` read **19.9% empty, `heightPx` 1068** (the "widget rendered" mode — 5 of 6 prior runs landed
-here too; the 6th read 900px / 14.3%). Page: **50 screens sampled, mean 32.9% empty** (CLAUDE.md's own
-banner cites 33.6% — within the noise this same variance produces on a 150px-grid re-sample), worst
-**61.4%** at a join, **all 7 chapters pass `passesWorst`**. `field-days` — the chapter the tiger's removal
-touched — reads **35.6% mean / 35.6% worst**, identical to Task 4's own confirmation that the copy-as-props
-refactor moved nothing. `imagesPerScreen`: **2.08** (`documentHeightPx` 8,215px, 19 distinct images).
+`invitation` read **19.7% empty, `heightPx` 1068** (the "widget rendered" mode — the same mode 5 of 6 prior
+runs on this same widget landed in; the 6th read `heightPx` 900 / 14.3% empty — see the variance note, this
+0.2-point difference from the previously-quoted 19.9% is that same variance, observed again, not
+reconciled). Page: **50 screens sampled, mean 32.9% empty** (CLAUDE.md's own banner cites 33.6% — within
+the noise this same variance produces on a 150px-grid re-sample), worst **61.4%** at a join, **all 7
+chapters pass `passesWorst`**. `field-days` — the chapter the tiger's removal touched — reads **35.6% mean
+/ 35.6% worst**, identical to Task 4's own confirmation that the copy-as-props refactor moved nothing.
+`imagesPerScreen`: **2.08** (`documentHeightPx` 8,215px, 19 distinct images).
 
-**Do not quote `invitation`'s 19.9%/14.3% split, or the page mean/worst that inherits it, as a fixed fact.**
+**Do not quote `invitation`'s 19.7%/14.3% split, or the page mean/worst that inherits it, as a fixed fact.**
 Re-run the command above if a settled number is needed for something that binds.
 
 ---
@@ -133,7 +142,7 @@ node scripts/measure_density.mjs --port 3100 --url http://localhost:3100/mahua-t
 | | Vann before | Vann after | Tola before | Tola after |
 |---|---|---|---|---|
 | `imagesPerScreen` | 1.26 | **1.55** | 1.28 | **1.57** |
-| distinct images | 16 | 13 | — | 14 |
+| distinct images | 16 | 13 | 18 | 14 |
 | document height | 11,440px | 7,540px | 12,641px | 8,011px |
 | sampled screens | 72 | 46 | 80 | 49 |
 | page mean empty | 35.3% | 45.2% | 30.9% | 43.0% |
