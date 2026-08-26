@@ -1,4 +1,5 @@
-import { ELFSIGHT_SCRIPT, elfsightClass, REVIEWS_APP_ID } from "@/lib/elfsight";
+import { ElfsightLoader } from "@/components/ui/ElfsightLoader";
+import { elfsightClass, REVIEWS_APP_ID } from "@/lib/elfsight";
 
 /**
  * The client's Tripadvisor reviews, as his own Elfsight widget.
@@ -7,12 +8,26 @@ import { ELFSIGHT_SCRIPT, elfsightClass, REVIEWS_APP_ID } from "@/lib/elfsight";
  * `ReviewCarousel` on the home page and appears under `04 · Written About` on
  * both property pages.
  *
- * ## A server component, and no client boundary
+ * ## The platform script is gated, not rendered here
  *
- * React 19 hoists `<script async src>` rendered anywhere in the tree and
- * **de-duplicates by src**, so two of these on one page load the platform once
- * and neither section needs `"use client"`. That is the whole budget claim, and
- * `npm run verify:budget` is what proves it rather than this paragraph.
+ * This used to render `<script src={ELFSIGHT_SCRIPT} async />` directly and
+ * lean on React 19's hoist-and-dedupe-by-`src` behaviour for `<script async
+ * src>` tags, on the theory that `async` plus the vendor's own
+ * `data-elfsight-app-lazy` attribute meant the platform could never cost the
+ * first load. **Measured 26 August 2026, that theory was wrong**:
+ * `data-elfsight-app-lazy` does not defer the platform script at all — it
+ * fetched 588 KB over 9 requests on `load`, regardless of the widget sitting in
+ * the page's last chapter, taking desktop initial transfer to 1,554 KB against
+ * non-negotiable #6's 1,500 KB ceiling and the hero's arrival from 4,616 ms to
+ * 5,377 ms. See `docs/reviews/2026-08-26-restructure/widget-network-cost.md`.
+ *
+ * `ElfsightLoader` is the fix: an `IntersectionObserver` that injects the same
+ * script only once the mount approaches the viewport. This component stays a
+ * server component regardless — it hands the loading decision to that one
+ * client boundary rather than becoming one itself, for the same reason
+ * `PinnedCollage` does (CLAUDE.md, Architecture rule): a client component's
+ * `import`s are what ship to the browser, and `ElfsightLoader`'s own import
+ * list is a few hundred bytes, not 30-odd curated media entries.
  *
  * ## What it does with no JavaScript, and why that is a `<noscript>` and not
  * a spinner
@@ -44,7 +59,7 @@ export function ReviewWidget({
 }) {
   const mount = (
     <>
-      <script src={ELFSIGHT_SCRIPT} async />
+      <ElfsightLoader />
       <div className={elfsightClass(appId)} data-elfsight-app-lazy />
       {fallback && (
         <noscript>
