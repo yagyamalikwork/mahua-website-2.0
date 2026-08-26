@@ -255,11 +255,11 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, co
  *
  * ## The three shapes this section is made of
  *
- * 1. **A header band**, carrying the chapter mark, the heading, the dawn-gate
- *    paragraph and the tiger film. **Unchanged from the coverflow's, deliberately
- *    and to the pixel** — the client: *"We keep the text and the tiger where they
- *    are and not touch them."* Same 7/5 split, same `gap-x-10`, same
- *    `lg:items-start`, same type sizes, same `figure` slot.
+ * 1. **A header band**, carrying the chapter mark, the heading and the
+ *    dawn-gate paragraph. **A single column since 26 Aug 2026** — it carried
+ *    the tiger film in a 7/5 grid from 19 Aug until the client asked for the
+ *    film gone, and closing the grid with it is what this file's own top-of-file
+ *    comment records.
  * 2. **The strip**, a flex row in a native `overflow-x: auto` scroller.
  * 3. **The pager**, six links below it, one per card.
  *
@@ -287,42 +287,39 @@ const PLACEHOLDER_SCRIM: ScrimStrength = { flat: 0.4, bottom: 1, centre: 0.5, co
  * foot — which is the cream page's own way of saying the same thing, and the one
  * that has an instrument behind it.
  *
- * ## The tiger, and the blend that can break
+ * ## The tiger came off on 26 Aug 2026, and the header band closed behind it
  *
- * The film is the header band's right-hand column, exactly where the coverflow
- * put it and where the client reaffirmed it on 17 Aug (*"keep the tiger where it
- * is now"*). Its white ground is erased by `mix-blend-mode: darken` against the
- * chapter's cream, so **no ancestor between it and that cream may become a
- * stacking context** — not `.experience-figure`, not the grid row, not
- * `ChapterSurface`'s container (`docs/DECISIONS.md` §14). The gate for that claim
- * is `scripts/check_films.mjs` passing on pixels at six widths, never a reading
- * of this markup.
+ * Client: *"Remove the tiger from 'The Experience' section, hence removing the
+ * big gap between the activities and the text for this section."* The film was
+ * the header band's right-hand column in a 12-column grid — copy in
+ * `lg:col-span-7`, film in `lg:col-span-5` — and the gap he is pointing at is
+ * those five columns, empty, once the film is gone. Taking the film out alone
+ * would have fixed nothing: the band is now a single column, not a 7/5 split
+ * with one side vacated.
  *
- * **One thing about the film is genuinely better here than under the coverflow**,
- * and it is worth recording because it removes a constraint rather than moving
- * it: there is no pinned stage any more, so the film's old hard rule — that it
- * can never be inside the pinned viewport at any desktop shape, which is what
- * ruled out both of its earlier homes — no longer binds anything. If it is ever
- * asked to move again, that argument is spent and the question is open.
+ * **The film is unmounted, not deleted** — `components/signature/
+ * SignatureFilm.tsx`, `/media/tiger-film.mp4`, its poster and
+ * `scripts/check_films.mjs` are all untouched, exactly as the lantern, the
+ * potter's film and the hornbill tint were handled when the v2 restructure
+ * dropped them (see the unmount comments in `app/page.tsx`). `feat/image-sizing`
+ * still ships it. `scripts/check_films.mjs` therefore has nothing left to check
+ * on this branch and fails — that failure is the client's ruling, not a
+ * regression; see `docs/DECISIONS.md` §22 and `CLAUDE.md`. Do not "fix" it by
+ * remounting the film.
+ *
+ * **The 7/5 split's own reasoning is spent, not wrong.** It was 7/5 rather than
+ * 5/7 because a 7-column slot for a 300px film left 461px of bare cream inside
+ * its own column, and `lg:items-start` because the film column was the taller of
+ * the two and bottom-aligning would have pushed the chapter mark 210px down the
+ * page. Both facts were about a film that is no longer here, so neither survives
+ * as a reason to keep any part of the grid.
  */
 export function ExperienceStrip({
   chapter,
   surface = false,
-  figure,
 }: {
   chapter: Chapter;
   surface?: boolean;
-  /**
-   * The chapter's drawn figure. `field-days` passes the ink tiger; nothing else
-   * uses it.
-   *
-   * The same slot name and shape the coverflow had, on purpose: mounting this
-   * section is one component name in `app/page.tsx` and nothing else. A slot
-   * rather than a `chapter.id` check in here, because every chapter section is
-   * self-contained and *which* chapter carries the tiger belongs to the page's
-   * spine.
-   */
-  figure?: React.ReactNode;
 }) {
   const copy = chapterCopy(chapter.id as ChapterCopyKey) as StripCopy;
   const strip = HOME.strip;
@@ -333,41 +330,47 @@ export function ExperienceStrip({
     // unnecessary, disconnecting space before or after"*. `py-10 md:py-12
     // lg:py-14` against the default `py-14 md:py-16 lg:py-20`.
     <ChapterSurface id={chapter.id} surface={surface} tight>
-      {/* The header band. **Not one class in this block changed on 19 Aug 2026**,
-          and that is the client's ruling rather than laziness: *"We keep the
-          text and the tiger where they are and not touch them."* Its
-          composition was solved against a measurement — 7/5 rather than 5/7
-          because a 7-column slot for a 300px film left 461px of bare cream
-          inside its own column, and `lg:items-start` because the film column is
-          the taller of the two and bottom-aligning would push the chapter mark
-          210px down the page. Both are still true. */}
-      <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-x-10">
-        <div className="lg:col-span-7">
-          <Enter>
-            <div>
-              {chapter.number && chapter.label && (
-                <ChapterMark number={chapter.number} label={chapter.label} />
-              )}
-              <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[16ch]" />
-              <p
-                className="mt-7 max-w-[54ch] font-[family-name:var(--font-body)] text-[1.15rem] leading-[1.68] md:text-xl"
-                style={{ color: "var(--text)" }}
-              >
-                {copy.body[0]}
-              </p>
-            </div>
-          </Enter>
-        </div>
+      {/*
+        The header band.
 
-        <div className="lg:col-span-5">
-          {/* The tiger. Deliberately NOT wrapped in `ImageReveal`: that is a
-              masked entrance, and a mask is a stacking context, which is what
-              erases this film's white ground. `.experience-figure` must not
-              become one either — see the note on this component, and
-              `scripts/check_films.mjs`, which is the gate. */}
-          {figure && <div className="experience-figure">{figure}</div>}
+        **It was a 7/5 grid until 26 August 2026, and the tiger held the five.**
+        Client: *"Remove the tiger from 'The Experience' section, hence removing
+        the big gap between the activities and the text for this section."* The
+        gap he is pointing at is those five columns, empty — so the film going
+        was only half the fix and the band collapses to one column with it.
+
+        **The 7/5 was not arbitrary and its reasoning is now spent rather than
+        wrong:** 7/5 rather than 5/7 because a 7-column slot for a 300px film
+        left 461px of bare cream inside its own column, and `lg:items-start`
+        because bottom-aligning the shorter column would push the chapter mark
+        210px down the page. Both facts were about a film that is no longer
+        here.
+
+        **The film is unmounted, not deleted** —
+        `components/signature/SignatureFilm.tsx`, `/media/tiger-film.mp4` and
+        `scripts/check_films.mjs` are untouched, exactly as the lantern, the
+        potter's film and the hornbill tint were handled when the v2
+        restructure dropped them. `feat/image-sizing` still ships it.
+
+        **`scripts/check_films.mjs` therefore has nothing left to check on this
+        branch and will fail. That failure is the client's ruling, not a
+        regression** — see `docs/DECISIONS.md` §22 and CLAUDE.md. Do not "fix"
+        it by remounting the film.
+      */}
+      <Enter>
+        <div>
+          {chapter.number && chapter.label && (
+            <ChapterMark number={chapter.number} label={chapter.label} />
+          )}
+          <TwoToneHeading heading={copy.heading} className="mt-6 max-w-[20ch]" />
+          <p
+            className="mt-7 max-w-[62ch] font-[family-name:var(--font-body)] text-[1.15rem] leading-[1.68] md:text-xl"
+            style={{ color: "var(--text)" }}
+          >
+            {copy.body[0]}
+          </p>
         </div>
-      </div>
+      </Enter>
 
       {/*
         The strip.

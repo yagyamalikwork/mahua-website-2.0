@@ -1,5 +1,4 @@
 import { PinnedCollage } from "@/components/motion/PinnedCollage";
-import { SignatureFilm } from "@/components/signature/SignatureFilm";
 import { ExperienceStrip } from "@/components/sections/ExperienceStrip";
 import { Hero } from "@/components/sections/Hero";
 import { Invitation } from "@/components/sections/Invitation";
@@ -263,62 +262,29 @@ function renderChapter(chapter: Chapter, at: Position) {
      * at build time rather than blended at runtime, so it cannot simply be laid
      * under a photograph — it needs a cream chapter to stand on.
      */
+    /*
+     * **The tiger came off `field-days` on 26 Aug 2026, and this is where it was
+     * mounted.** Client: *"Remove the tiger from 'The Experience' section, hence
+     * removing the big gap between the activities and the text for this
+     * section."* The film held the header band's five-column half of a 7/5
+     * grid; `ExperienceStrip` itself now collapses that band to one column
+     * (see its own top-of-file comment), so the `figure` slot the film used to
+     * fill is gone from the component's signature along with it.
+     *
+     * **Nothing about the film is deleted.** `components/signature/
+     * SignatureFilm.tsx`, `/media/tiger-film.mp4`, its poster and
+     * `scripts/check_films.mjs` are all untouched — the same unmount shape as
+     * the lantern and the potter's film above — and `feat/image-sizing` still
+     * ships it. `check_films.mjs` asserted two films on this branch; the
+     * potter left on 19 Aug and the tiger leaves now, so it has nothing left to
+     * check here and fails. That failure is the client's ruling, not a
+     * regression — `docs/DECISIONS.md` §22.
+     *
+     * `components/signature/InkTiger.tsx`, the drawn tiger this film replaced
+     * on 6 Aug 2026, is likewise untouched and one line from returning.
+     */
     case "experienceStrip":
-      return (
-        <ExperienceStrip
-          key={chapter.id}
-          chapter={chapter}
-          surface={at.surface}
-          /*
-           * The tiger goes here — the chapter about going out to look for
-           * animals, and the one that owned the emptiest screen belonging to any
-           * chapter.
-           *
-           * It was an ink drawing that inked itself in until 6 Aug 2026, when the
-           * client supplied this film. `components/signature/InkTiger.tsx` and its
-           * artwork are still here, tested, and one line from returning — see
-           * `docs/DECISIONS.md` for the trade that was made and what it cost.
-           *
-           * This arm carried the same film as a `case "splitFeature"` beside it
-           * for one day; that component was retired on 16 Aug 2026 once the
-           * coverflow's measurement said it shipped, and nothing has routed to it
-           * since `field-days` changed shape. The coverflow itself was retired on
-           * 19 Aug, and this arm outlived it too.
-           *
-           * **The prop is `figure`, not `footer`, and the word is now history
-           * rather than a live constraint.** `SplitFeature` put its slot at the
-           * foot of the chapter, where a prose band leaves cream to hang a
-           * drawing in; a pinned stage left none, which is why the film moved
-           * into the header band's own slack (measured against both alternatives
-           * in `docs/reviews/2026-08-16-coverflow/flanks-and-tiger.md`). **There
-           * is no pinned stage any more**, so that argument is spent — the film
-           * stays exactly where it is because the client asked for it to
-           * (*"keep the tiger where it is now"*, 17 Aug), and if it is ever asked
-           * to move again the question is genuinely open.
-           *
-           * **Two things about the film are still load-bearing wherever it goes.**
-           * It erases its own white ground with `mix-blend-mode: darken` against
-           * the chapter's cream, so no ancestor between it and that cream may
-           * become a stacking context (`DECISIONS.md` §14, asserted as pixels at
-           * six widths by `scripts/check_films.mjs`); and nothing may paint over
-           * its box, which is the same rig's separate geometric assertion.
-           */
-          figure={
-            chapter.id === "field-days" ? (
-              /* Sized here rather than in the component, because how large the
-                 tiger should be is a question about this chapter's column and not
-                 about the film. 420px is sharp to DPR 2 against an 810px source. */
-              <SignatureFilm
-                src="/media/tiger-film.mp4"
-                poster="/media/tiger-film-poster.webp"
-                width={810}
-                height={1080}
-                className="block h-auto w-[240px] sm:w-[280px] lg:w-[300px]"
-              />
-            ) : undefined
-          }
-        />
-      );
+      return <ExperienceStrip key={chapter.id} chapter={chapter} surface={at.surface} />;
     /*
      * **`case "testimonials"` was here until 19 Aug 2026.** The `guests` band is
      * gone as a chapter and its three quotes moved into `invitation`'s copy —

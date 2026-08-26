@@ -1764,17 +1764,12 @@ body {
   width: min(var(--strip-card-max), var(--strip-card-vw));
 }
 
-/* The tiger's column in the header band. Kept from the retired coverflow
-   unchanged, including the fact that it is deliberately NOT a stacking context:
-   the film erases its own white ground with `mix-blend-mode: darken` against the
-   chapter's cream, and any ancestor between the two becoming one is what breaks
-   it (`docs/DECISIONS.md` §14). No `z-index`, no `transform`, no `filter`, no
-   `isolation` may be added here. `scripts/check_films.mjs` is the gate, on
-   pixels, at six widths. */
-.experience-figure {
-  display: flex;
-  justify-content: flex-end;
-}
+/* `.experience-figure` — the tiger's column in the header band — was here until
+   26 Aug 2026. The client asked for the tiger removed from this chapter and the
+   header band collapsed from a 7/5 grid to one column with it, so there is no
+   column left for this rule to describe. The film itself is unmounted, not
+   deleted — see the header-band comment in `ExperienceStrip.tsx` and
+   `docs/DECISIONS.md` §22. */
 
 @media (prefers-reduced-motion: reduce) {
   /*
