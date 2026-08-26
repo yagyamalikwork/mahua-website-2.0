@@ -1,0 +1,1153 @@
+{
+  "measuredAt": "2026-08-26T17:24:50.002Z",
+  "url": "http://localhost:3100/",
+  "viewports": {
+    "320x800": {
+      "top": {
+        "position": "fixed",
+        "top": 0,
+        "height": 75,
+        "background": "rgba(0, 0, 0, 0)",
+        "borderBottomColor": "rgba(0, 0, 0, 0)",
+        "pointerEvents": "none",
+        "scrolled": false,
+        "wordmark": {
+          "colour": "rgb(241, 233, 215)",
+          "fontSize": "10px",
+          "box": {
+            "x": 92.53125,
+            "y": 32.1875,
+            "width": 82.9375,
+            "height": 10
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(241, 233, 215)",
+          "box": {
+            "x": 8,
+            "y": 21.1875,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 183.46875,
+            "y": 20,
+            "width": 120.53125,
+            "height": 34.390625
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "75px",
+        "docScrollWidth": 320,
+        "innerWidth": 320,
+        "scrollY": 0
+      },
+      "scrolled": {
+        "position": "fixed",
+        "top": 0,
+        "height": 75,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "10px",
+          "box": {
+            "x": 92.53125,
+            "y": 32.1875,
+            "width": 82.9375,
+            "height": 10
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 8,
+            "y": 21.1875,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 183.46875,
+            "y": 20,
+            "width": 120.53125,
+            "height": 34.390625
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "75px",
+        "docScrollWidth": 320,
+        "innerWidth": 320,
+        "scrollY": 2320
+      },
+      "wordmarkDarkestPixel": "#A97F5B",
+      "bottom": {
+        "position": "fixed",
+        "top": 0,
+        "height": 75,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "10px",
+          "box": {
+            "x": 92.53125,
+            "y": 32.1875,
+            "width": 82.9375,
+            "height": 10
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 8,
+            "y": 21.1875,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 183.46875,
+            "y": 20,
+            "width": 120.53125,
+            "height": 34.390625
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "75px",
+        "docScrollWidth": 320,
+        "innerWidth": 320,
+        "scrollY": 7738
+      },
+      "anchor": {
+        "sectionTop": 75,
+        "barHeight": 75
+      }
+    },
+    "390x844": {
+      "top": {
+        "position": "fixed",
+        "top": 0,
+        "height": 75,
+        "background": "rgba(0, 0, 0, 0)",
+        "borderBottomColor": "rgba(0, 0, 0, 0)",
+        "pointerEvents": "none",
+        "scrolled": false,
+        "wordmark": {
+          "colour": "rgb(241, 233, 215)",
+          "fontSize": "11px",
+          "box": {
+            "x": 137.59375,
+            "y": 31.6875,
+            "width": 99.8125,
+            "height": 11
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(241, 233, 215)",
+          "box": {
+            "x": 8,
+            "y": 21.1875,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 245.40625,
+            "y": 20,
+            "width": 128.59375,
+            "height": 34.390625
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "75px",
+        "docScrollWidth": 390,
+        "innerWidth": 390,
+        "scrollY": 0
+      },
+      "scrolled": {
+        "position": "fixed",
+        "top": 0,
+        "height": 75,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "11px",
+          "box": {
+            "x": 137.59375,
+            "y": 31.6875,
+            "width": 99.8125,
+            "height": 11
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 8,
+            "y": 21.1875,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 245.40625,
+            "y": 20,
+            "width": 128.59375,
+            "height": 34.390625
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "75px",
+        "docScrollWidth": 390,
+        "innerWidth": 390,
+        "scrollY": 2393
+      },
+      "wordmarkDarkestPixel": "#9B7F6C",
+      "bottom": {
+        "position": "fixed",
+        "top": 0,
+        "height": 75,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "11px",
+          "box": {
+            "x": 137.59375,
+            "y": 31.6875,
+            "width": 99.8125,
+            "height": 11
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 8,
+            "y": 21.1875,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 245.40625,
+            "y": 20,
+            "width": 128.59375,
+            "height": 34.390625
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "75px",
+        "docScrollWidth": 390,
+        "innerWidth": 390,
+        "scrollY": 7818
+      },
+      "anchor": {
+        "sectionTop": 75,
+        "barHeight": 75
+      }
+    },
+    "768x1024": {
+      "top": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgba(0, 0, 0, 0)",
+        "borderBottomColor": "rgba(0, 0, 0, 0)",
+        "pointerEvents": "none",
+        "scrolled": false,
+        "wordmark": {
+          "colour": "rgb(241, 233, 215)",
+          "fontSize": "24px",
+          "box": {
+            "x": 230.78125,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(241, 233, 215)",
+          "box": {
+            "x": 40,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 541.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 768,
+        "innerWidth": 768,
+        "scrollY": 0
+      },
+      "scrolled": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "24px",
+          "box": {
+            "x": 230.78125,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 40,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 541.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 768,
+        "innerWidth": 768,
+        "scrollY": 3182
+      },
+      "wordmarkDarkestPixel": "#7F5C24",
+      "bottom": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "24px",
+          "box": {
+            "x": 230.78125,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 40,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 541.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 768,
+        "innerWidth": 768,
+        "scrollY": 9858
+      },
+      "anchor": {
+        "sectionTop": 107,
+        "barHeight": 107
+      }
+    },
+    "1440x900": {
+      "top": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgba(0, 0, 0, 0)",
+        "borderBottomColor": "rgba(0, 0, 0, 0)",
+        "pointerEvents": "none",
+        "scrolled": false,
+        "wordmark": {
+          "colour": "rgb(241, 233, 215)",
+          "fontSize": "24px",
+          "box": {
+            "x": 603.796875,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(241, 233, 215)",
+          "box": {
+            "x": 40,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 1213.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 1440,
+        "innerWidth": 1440,
+        "scrollY": 0
+      },
+      "scrolled": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "24px",
+          "box": {
+            "x": 603.796875,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 40,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 1213.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 1440,
+        "innerWidth": 1440,
+        "scrollY": 1804
+      },
+      "wordmarkDarkestPixel": "#7F5C24",
+      "bottom": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "24px",
+          "box": {
+            "x": 603.796875,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 40,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 1213.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 1440,
+        "innerWidth": 1440,
+        "scrollY": 7146
+      },
+      "anchor": {
+        "sectionTop": 107,
+        "barHeight": 107
+      }
+    },
+    "1920x900": {
+      "top": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgba(0, 0, 0, 0)",
+        "borderBottomColor": "rgba(0, 0, 0, 0)",
+        "pointerEvents": "none",
+        "scrolled": false,
+        "wordmark": {
+          "colour": "rgb(241, 233, 215)",
+          "fontSize": "24px",
+          "box": {
+            "x": 843.796875,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(241, 233, 215)",
+          "box": {
+            "x": 200,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 1533.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 1920,
+        "innerWidth": 1920,
+        "scrollY": 0
+      },
+      "scrolled": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "24px",
+          "box": {
+            "x": 843.796875,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 200,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 1533.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 1920,
+        "innerWidth": 1920,
+        "scrollY": 1984
+      },
+      "wordmarkDarkestPixel": "#7F5C24",
+      "bottom": {
+        "position": "fixed",
+        "top": 0,
+        "height": 107,
+        "background": "rgb(241, 233, 215)",
+        "borderBottomColor": "rgb(187, 143, 46)",
+        "pointerEvents": "auto",
+        "scrolled": true,
+        "wordmark": {
+          "colour": "rgb(127, 92, 36)",
+          "fontSize": "24px",
+          "box": {
+            "x": 843.796875,
+            "y": 41,
+            "width": 286.40625,
+            "height": 24
+          },
+          "text": "Mahua Resorts"
+        },
+        "menu": {
+          "colour": "rgb(49, 64, 44)",
+          "box": {
+            "x": 200,
+            "y": 37,
+            "width": 40,
+            "height": 32
+          }
+        },
+        "pill": {
+          "box": {
+            "x": 1533.1875,
+            "y": 33,
+            "width": 178.8125,
+            "height": 40
+          }
+        },
+        "emblemTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "scrollPaddingTop": "107px",
+        "docScrollWidth": 1920,
+        "innerWidth": 1920,
+        "scrollY": 7475
+      },
+      "anchor": {
+        "sectionTop": 107,
+        "barHeight": 107
+      }
+    }
+  },
+  "emblem": {
+    "early": "matrix(0.00857236, -0.999963, 0.999963, 0.00857236, 0, 0)",
+    "late": "matrix(1, 0, 0, 1, 0, 0)"
+  },
+  "reducedMotion": {
+    "emblem": "none",
+    "top": {
+      "position": "fixed",
+      "top": 0,
+      "height": 107,
+      "background": "rgba(0, 0, 0, 0)",
+      "borderBottomColor": "rgba(0, 0, 0, 0)",
+      "pointerEvents": "none",
+      "scrolled": false,
+      "wordmark": {
+        "colour": "rgb(241, 233, 215)",
+        "fontSize": "24px",
+        "box": {
+          "x": 603.796875,
+          "y": 41,
+          "width": 286.40625,
+          "height": 24
+        },
+        "text": "Mahua Resorts"
+      },
+      "menu": {
+        "colour": "rgb(241, 233, 215)",
+        "box": {
+          "x": 40,
+          "y": 37,
+          "width": 40,
+          "height": 32
+        }
+      },
+      "pill": {
+        "box": {
+          "x": 1213.1875,
+          "y": 33,
+          "width": 178.8125,
+          "height": 40
+        }
+      },
+      "emblemTransform": "none",
+      "scrollPaddingTop": "107px",
+      "docScrollWidth": 1440,
+      "innerWidth": 1440,
+      "scrollY": 0
+    },
+    "scrolled": {
+      "position": "fixed",
+      "top": 0,
+      "height": 107,
+      "background": "rgb(241, 233, 215)",
+      "borderBottomColor": "rgb(187, 143, 46)",
+      "pointerEvents": "auto",
+      "scrolled": true,
+      "wordmark": {
+        "colour": "rgb(127, 92, 36)",
+        "fontSize": "24px",
+        "box": {
+          "x": 603.796875,
+          "y": 41,
+          "width": 286.40625,
+          "height": 24
+        },
+        "text": "Mahua Resorts"
+      },
+      "menu": {
+        "colour": "rgb(49, 64, 44)",
+        "box": {
+          "x": 40,
+          "y": 37,
+          "width": 40,
+          "height": 32
+        }
+      },
+      "pill": {
+        "box": {
+          "x": 1213.1875,
+          "y": 33,
+          "width": 178.8125,
+          "height": 40
+        }
+      },
+      "emblemTransform": "none",
+      "scrollPaddingTop": "107px",
+      "docScrollWidth": 1440,
+      "innerWidth": 1440,
+      "scrollY": 1804
+    }
+  },
+  "noJs": {
+    "position": "absolute",
+    "background": "rgba(0, 0, 0, 0)",
+    "scrolled": false,
+    "wordmark": "rgb(241, 233, 215)",
+    "text": "Mahua Resorts",
+    "emblem": "matrix(1, 0, 0, 1, 0, 0)",
+    "scrollPaddingTop": "0px"
+  },
+  "clickThrough": {
+    "barHeight": 107,
+    "barBackground": "rgb(241, 233, 215)",
+    "linkText": "Discover Mahua Vann",
+    "linkHref": "/mahua-vann",
+    "linkTop": 25,
+    "point": {
+      "x": 160,
+      "y": 45
+    },
+    "hitIsTheLink": false,
+    "openedTab": null,
+    "navigated": false
+  },
+  "midScrollReload": {
+    "sawScrolled": true,
+    "scrolledAt": 379,
+    "scrollY": 1804,
+    "settledOnFrame": 2,
+    "samples": [
+      {
+        "frame": 0,
+        "t": 6,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 1,
+        "t": 14,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 2,
+        "t": 39,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 3,
+        "t": 54,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 4,
+        "t": 65,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 5,
+        "t": 81,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 6,
+        "t": 98,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 7,
+        "t": 114,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 8,
+        "t": 131,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 9,
+        "t": 147,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 10,
+        "t": 165,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 11,
+        "t": 181,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 12,
+        "t": 197,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 13,
+        "t": 214,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 14,
+        "t": 231,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 15,
+        "t": 247,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 16,
+        "t": 265,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 17,
+        "t": 282,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 18,
+        "t": 298,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 19,
+        "t": 314,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 20,
+        "t": 332,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 21,
+        "t": 348,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 22,
+        "t": 364,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 23,
+        "t": 381,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 24,
+        "t": 399,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 25,
+        "t": 414,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 26,
+        "t": 432,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 27,
+        "t": 449,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 28,
+        "t": 465,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 29,
+        "t": 481,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 30,
+        "t": 498,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 31,
+        "t": 514,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 32,
+        "t": 532,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 33,
+        "t": 547,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 34,
+        "t": 565,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 35,
+        "t": 582,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 36,
+        "t": 598,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 37,
+        "t": 614,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 38,
+        "t": 631,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 39,
+        "t": 647,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 40,
+        "t": 666,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 41,
+        "t": 681,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 42,
+        "t": 697,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 43,
+        "t": 715,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 44,
+        "t": 731,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 45,
+        "t": 747,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 46,
+        "t": 765,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 47,
+        "t": 780,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 48,
+        "t": 798,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 49,
+        "t": 813,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 50,
+        "t": 830,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 51,
+        "t": 847,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 52,
+        "t": 865,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 53,
+        "t": 881,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 54,
+        "t": 897,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 55,
+        "t": 915,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 56,
+        "t": 931,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 57,
+        "t": 948,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 58,
+        "t": 965,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      },
+      {
+        "frame": 59,
+        "t": 981,
+        "background": "rgb(241, 233, 215)",
+        "wordmark": "rgb(127, 92, 36)"
+      }
+    ]
+  }
+}

@@ -2339,8 +2339,9 @@ that exists only as a coloured shape does not exist for everyone.**
   `check_contrast_over_photos.mjs` were removed the same hour — that rig crops one frame to an element's rect
   and half the cards are outside the viewport at any moment, which is a crash rather than a wrong number. And
   a card visits every part of the photograph behind it, so **a scrim solved for one position is a scrim solved
-  for one twentieth of a second.** `check_reviews.mjs` freezes the loop at eight phases and reads real
-  composited pixels: worst **7.04:1** against a 4.5 floor.
+  for one twentieth of a second.** `check_reviews.mjs` (retired 26 Aug 2026 with the carousel it checked —
+  see §22) froze the loop at eight phases and read real composited pixels: worst **7.04:1** against a 4.5
+  floor.
 - **A rig that shares one page across assertions must restore what it disturbed.** Its own assertion 6
   navigates to a fragment; assertion 11 then measured the carousel under `SiteHeader`'s cream bar and reported
   **1.00:1 on all eight phases**. Third instance on this project of an instrument steering what it measures,
@@ -2462,3 +2463,283 @@ which is the only way that class of hole is found. It now checks every occurrenc
 requires any differing figure to be marked as a different build or a past one. That is what caught
 non-negotiable #8's *"Current, re-measured 11 Aug 2026"*, which had described a superseded branch since the
 day `feat/home-v2` was cut.
+
+## 22. The 26 August restructure, and the reviews widget (`feat/journal-and-mobile`)
+
+Whole-branch verification, Task 9 of `docs/superpowers/plans/2026-08-26-restructure-and-reviews.md`. Several
+comments across the codebase already cite this section by name; it did not exist until this task wrote it.
+Read this alongside CLAUDE.md's Status/Tests/Evidence rows and `docs/reviews/2026-08-26-restructure/README.md`,
+which carries every figure below with the command that produced it.
+
+### 22.1 The eleven rulings of 26 August 2026, in the client's own words where he gave them
+
+1. **The tiger comes off `05 · Experiences`.** *"Remove the tiger from 'The Experience' section, hence
+   removing the big gap between the activities and the text for this section."* Not a swap — the header
+   band's 7/5 grid collapses to one column, because the film held the five columns and taking it out alone
+   would have left them empty. See §22.2.
+2. **The Elfsight reviews widget replaces the hand-built carousel.** He supplied the embed himself (app id
+   `9735be0a-7667-475d-938e-2de773f1c7de`, `https://elfsightcdn.com/platform.js`), unprompted. `ReviewCarousel`/
+   `lib/reviews.ts`/`REVIEWS.mode` are retired outright rather than chosen between `loop` and `settle`. See
+   §22.3.
+3. **Three full-bleed quote bands come out**, one instruction covering all three because he described them
+   by what they looked like rather than by name: *"Remove the section that comes just above 05-The Day that
+   has a wide image and text in the center."* It matched `vann-table`, `tola-guest-word` and `tola-table`.
+   See §22.4.
+4. **The park map loses its heading on both property pages.** *"the map is an extention to the first
+   sections on both the pages 01-The Forest and 01-The Reserve respectively."* See §22.7.
+5. **Both property pages' chapters are renumbered** behind rulings 3 and 4 taking chapters out: Rooms → 02,
+   The Day → **03 · The Experience**, Written About → 04.
+6. **The home page's six-card activities carousel replaces both property pages' own activity lists, cards
+   only.** *"remove all the activities we have in listed in the '05-The Day' sections … and replace it with
+   the exact same copy-pasted activities carousel from our homepage. The activities will be changed later
+   for now just place the entire carousel as it is."* Each property keeps its own heading and intro —
+   offered the whole section verbatim instead, he chose cards-only, because three pages opening on
+   identical sentences was the *"very wordpress and templaty"* verdict that started the property redesign
+   in the first place.
+7. **`alsoLine` is dropped, not deleted.** Told `StripCopy` has no slot for the honest "also: cycling,
+   swimming, table tennis and carrom, karaoke, and a conference hall" line ruling 6 needs somewhere to live,
+   and that the six activities will change later anyway, he said to drop it for now and revisit once that
+   later work decides where it lives. See §22.5.
+8. **"Written About" goes on Tola too, carrying the widget, with no articles.** *"I just saw that you have
+   not created a 'Written About' section for Mahua Tola, do that and simply copy paste the widget as you'll
+   be doing for the Mahua Vann page."* Told first that the section was left off Tola on purpose — there are
+   no real press mentions of that lodge, and three invented ones would be exactly what "verify hard numbers,
+   do not trust the sources" forbids — and offered a rename covering press and reviews together, he chose to
+   keep the name anyway. See §22.6.
+9. **The widget is gated to load only when a visitor scrolls near it**, once its true cost was measured and
+   presented to him (588 KB / 9 requests fetched on arrival regardless of scroll position, desktop initial
+   transfer over the 1.5 MB ceiling, hero arrival 4,616→5,377 ms) — his ruling, given the figures, was to
+   gate it ourselves rather than accept the cost or ask the vendor. See §22.3 and
+   `docs/reviews/2026-08-26-restructure/README.md`.
+10. **He accepts the widget's own auto-scroll**, once told it is the first thing on the page that never
+    stops and why that rule exists, in place of the `REVIEWS.mode: "loop"` ruling he had not yet made. He
+    will restyle the widget's black-on-cream cards himself in his own Elfsight dashboard (values given: card
+    background `#F1E9D7`, text `#31402C`, meta `#5A5240`, rating `#BB8F2E`, link `#7A5C18`) and upgrade the Elfsight plan to
+    remove the free-tier badge before launch. See §22.3 and `docs/PROJECT-STATE.md`'s owed list.
+11. **The closing "Stay at Mahua Vann/Tola" CTA is deferred, deliberately last.** *"we need to work on our
+    CTA the 'Stay at Mahua Vann/Tola' section as it looks very bland and not at all appealing, but we'll do
+    that in the last once we are done with everything above."* Out of scope for this plan; nothing in it may
+    touch the invitation chapter beyond what renumbering above it forces.
+
+### 22.2 The tiger is unmounted, and `check_films.mjs` fails on this branch by design
+
+Ruling 1 above. The film is **unmounted, not deleted** — `components/signature/SignatureFilm.tsx`,
+`/media/tiger-film.mp4` and `scripts/check_films.mjs` are all untouched on disk, exactly as the lantern, the
+forest tint and the potter film (which left the home page on 19-20 Aug, when `feat/home-v2` was cut) were
+handled before it. `feat/image-sizing`, `main` and `demo` still ship the tiger and still pass this rig
+unmodified.
+
+**On `feat/home-v2` and `feat/journal-and-mobile`, `node scripts/check_films.mjs` now has nothing left to
+check on the home page and FAILS.** That failure is the ruling recorded at this commit, not a regression —
+`check_films.mjs` itself now carries a header note saying so (26 Aug 2026), and so do CLAUDE.md's Tests row
+and non-negotiable #5. **Do not "fix" this by remounting a film or weakening an assertion.**
+
+The header band's 7/5 grid (copy `lg:col-span-7`, film `lg:col-span-5`) collapses to one column, and the
+two measures that were sized to a 7-column slot widen with it — `16ch`→`20ch` on the heading, `54ch`→`62ch`
+on the paragraph — because at full width the old caps would have left the band emptier than the grid did,
+the opposite of what the client asked for. Density moved with it: `field-days` (the chapter this band sits
+in) read **42.4% mean / 42.4% worst** immediately before this task's own work began — already superseding
+CLAUDE.md's previously-quoted 27.0%/31.1% (that figure describes `feat/image-sizing`'s pinned coverflow, a
+different composition entirely) — went **over** the ceiling once the tiger's removal alone was measured
+(**48.3% mean/worst**, `passesWorst` FALSE), and was brought back under it by a genuine two-column
+recomposition (5/7 split, swept against 6/6 and 7/5) to **35.6% mean/worst**, `passesWorst` TRUE with 9.4
+points of margin. Re-confirmed by this task's own fresh measurement at the same figure.
+
+### 22.3 The widget supersedes `REVIEWS.mode`, and non-negotiable #5's dated exception moves with it
+
+`ReviewCarousel.tsx`, `lib/reviews.ts` (+ its test), `scripts/check_reviews.mjs`, `components/ui/
+RatingCircles.tsx`, `lib/motion.ts`'s `REVIEWS` and `app/globals.css`'s `.reviews*` block are **retired
+outright**, not superseded in place. The `REVIEWS.mode: "loop"` vs `"settle"` question §21.10 built two full
+arms to let the client answer never gets answered — the widget makes it moot, and both arms are gone rather
+than one being kept.
+
+**Cost, measured before it was gated.** Task 2 landed the widget alone, deliberately, before the rest of
+this plan's restructuring, so its cost would be attributable: **588 KB over 9 requests, fetched on page
+`load` regardless of scroll position** — `data-elfsight-app-lazy` does not defer the platform script,
+`tripadvisorReviews.js` alone is 533 KB, three times this whole site's own first-load JavaScript. Desktop
+initial transfer went to **1,554 KB against the 1,500 KB ceiling**, and the hero's arrival from **4,616 ms
+to 5,377 ms**, medians of five. **Neither `measure_js_budget.mjs` nor `measure_page.mjs` could see any of
+it**: both read `PerformanceResourceTiming.transferSize`, which a cross-origin response with no
+`Timing-Allow-Origin` header reports as exactly **0**, and Elfsight sends none. Both reported PASS at
+byte-identical figures with and without the widget mounted. This is the first instrument blind spot — see
+§22.8.
+
+**Ruling 9: gate it.** `components/ui/ElfsightLoader.tsx`, a small `"use client"` component, loads the
+platform script only once the widget's section approaches within 600px of the viewport
+(`IntersectionObserver`), guarded by a DOM check (not a module flag) so two widgets on one page — which the
+property pages now have — fetch the platform once. Measured both directions: the boundary itself costs
+**~0.1 KB** of first-load brotli (167.5 → 167.6 KB at the time; this task's own fresh build reads 167.2 KB,
+small rig/build variance, still effectively unchanged); it buys back all 9 Elfsight requests and 588 KB from
+a no-scroll load (confirmed with a Chrome DevTools Protocol probe, not the blind rigs); hero `responseEnd`
+returned to **4,608 ms**, within 8 ms of the pre-widget baseline. This task's own fresh isolated measurement,
+medians of five: **4,603 ms, range 4,580–4,610 ms** — unchanged.
+
+**Ruling 10: the auto-scroll is accepted as the new dated exception.** Measured directly: two screenshots of
+the widget's own bounding box, five seconds apart, twice, with no interaction — **~12% of its pixels change
+each time**, consistent with a carousel advancing on its own
+(`docs/reviews/2026-08-26-restructure/widget-network-cost.md`). Non-negotiable #5's rewritten exception
+paragraph (CLAUDE.md) now names this, not the retired carousel's loop, as the one thing on this site that
+moves forever, and is explicit that it is vendor behaviour rather than a choice made here. **The widget
+currently renders solid black cards, white text and a green Tripadvisor roundel directly on cream** on both
+property pages' `Written About` chapters (screenshotted at 390/768/1440/1920, not assumed) — foreign
+against non-negotiable #3, and the client is restyling it himself in his own Elfsight dashboard using the
+values above. The free-tier "Free Tripadvisor Reviews Widget" badge is left for now; he will upgrade the
+plan before launch. Both are owed items, `docs/PROJECT-STATE.md`.
+
+### 22.4 Three quote bands removed, and the three photographs they released
+
+`vann-table`, `tola-guest-word` and `tola-table` are deleted whole — chapter, `quoteCopy` entry and all —
+matched by one client description rather than three. `FullBleedQuote.tsx` becomes unrouted everywhere (both
+heroes still use the `fullBleed` *shape*, so it is kept, exactly as `LodgeCards.tsx` was kept unrouted on 19
+Aug), but nothing on either property page renders a `fullBleed` chapter with a `quoteCopy` entry any more.
+
+**`lawn-picnic-golden-hour`, `tola-guest-word` (the photograph) and `tola-dining` are released** and are now
+curated-but-unused. **They are not to be parked in another chapter to prop up a density figure** —
+`measure_density.mjs` scores what is painted, and a chapter that needs imagery needs a composition, not a
+photograph borrowed from a deleted one. Removing the bands cost real density and it is recorded honestly
+rather than hidden: see §22.9's before/after table.
+
+### 22.5 `alsoLine` — deferred, not deleted
+
+Ruling 7. The honest "also" line naming what the lodges do not claim (cycling, swimming, table tennis and
+carrom, karaoke, the conference hall — the client's own 9 Aug ruling to name it rather than hide or promote
+it) has no slot in `StripCopy`, the type the shared activities carousel takes its copy through. Rather than
+invent one for a section due to change again soon, the client chose to drop it for now. The strings
+themselves are **kept, commented, at their own site** in both `content/mahua-vann.ts` and
+`content/mahua-tola.ts` — this project's rule that a decision to revisit is not a decision to discard.
+
+### 22.6 "Written About" on Tola — a ruling, not an oversight
+
+Ruling 8. Tola's press band was deliberately left off the page originally: there are no real press mentions
+of that lodge, and `content/mahua-tola.ts` already recorded that inventing three would be exactly the kind
+of fabrication non-negotiable "verify hard numbers, do not trust the sources" forbids. Told this, and
+offered a heading that named press and reviews together instead of reusing "Written About" for a page with
+no press, the client chose to keep the shared name anyway. `PressBandCopy.articles` becomes **optional**
+(a real code change, not a content one) and `PressBand.tsx` renders the heading and the widget with no
+article grid, rather than collapsing. Tola's `04 · Written About` is therefore a heading over guest reviews
+alone — loose, and a ruling.
+
+### 22.7 The map's `continues`, and what "extension of" already meant here
+
+Ruling 4. `vann-where` and `tola-where` drop their `number` and `label` — both `PropertyMap` and `PressBand`
+already render `ChapterMark` behind `chapter.number && chapter.label`, so dropping the heading is a content
+edit, not a component change. **"Extension of" is not a new idea on this site.** The client ruled on 19 Aug
+that `04 · Mahua Philosophy` is *"an extension of an already existing section"*, and `app/page.tsx`'s
+`continues` mechanism already implements exactly two things for that: the second chapter stands on the same
+cream surface as the first, and the two meet with no band of cream between them. `PropertyMap` gained the
+same `continues` prop in Task 6, so the map now gets the identical treatment and reads as part of `01`
+rather than as an unlabelled orphan. A chapter that continues does **not** advance the cream-alternation
+counter, so every chapter below it keeps its own surface — verified by hand-dumping `data-surface` down
+both real spines and confirming no double-flip.
+
+### 22.8 Four instrument blind spots, and they are the most reusable thing this branch produced
+
+1. **Cross-origin bytes invisible to two rigs.** `measure_js_budget.mjs` and `measure_page.mjs` both read
+   `PerformanceResourceTiming.transferSize`, which the spec zeroes for any cross-origin response with no
+   `Timing-Allow-Origin` header. Elfsight sends none, so both rigs reported the widget as costing nothing —
+   PASS at byte-identical figures with and without it — while a Chrome DevTools Protocol probe
+   (`Network.loadingFinished`'s `encodedDataLength`, immune to that restriction) found 588 KB over 9
+   requests. **Not "fixed" by guessing** — a guessed number is worse than a known gap — the CDP probe is
+   the instrument that can actually see this, and it is what `docs/reviews/2026-08-26-restructure/
+   widget-network-cost.md` uses. §22.3.
+2. **`check_docs.mjs` crashed rather than reporting drift, since Task 2's own deletion.** It reads
+   `scripts/check_reviews.mjs` at a fixed line to check the figure it prints; Task 2 deleted that file the
+   same day, and neither its implementer nor its reviewer ran the docs rig to notice (the reviewer was
+   instructed not to run rigs). Found by the controller running it directly. This project's own "do the
+   documents still describe the repository?" gate was dead for the length of that gap — precisely the gate
+   that exists because the client asked for it three times. Fixed as part of this task; see §22.9.
+3. **Two rigs hardcoded the home page's chapter id and could not check a property route at all** —
+   `check_experience_strip.mjs` and `check_contrast_over_photos.mjs` both assumed `field-days`/the home
+   page. One **crashed** outright when pointed at `/mahua-vann`; the other **silently measured nothing** —
+   the more dangerous failure, because it reported PASS. Fixed additively in Task 7 (a `--chapter` flag and
+   route-aware `RUN_SETS`), confirmed the home page's own behaviour unchanged, and both now run cleanly on
+   all three routes — this task re-ran them fresh on all three and confirms 0 dead probes on both property
+   routes (`docs/reviews/2026-08-26-restructure/contrast-vann-task9.json`,
+   `contrast-tola-task9.json`).
+4. **`measure_density.mjs` could not pierce a shadow root.** It hit-tests with
+   `document.elementsFromPoint` and `Range`-based text detection, neither of which sees into a shadow root,
+   and Elfsight renders its cards into an **open** one. So the rig scored the entire live review-card row as
+   bare cream while the widget was rendering correctly on screen — `vann-press` read 85.1% → 90.5% and
+   `tola-press` 92.2% *with the widget rendering*, confirmed by screenshot and DOM inspection. **The same
+   shape of blindness `measure_density.mjs` had for `pointer-events: none` elements, fixed 7 Aug 2026** — an
+   open shadow root can be pierced (`shadowRoot.elementsFromPoint`), and doing so is in keeping with this
+   project's practice, not gaming the measurement. Fixed with a `seen` `Set` guard after the first attempt
+   blew the call stack against the live widget (Swiper's loop mode nests and repeats shadow roots). The fix
+   was proven against a control: `field-days` (byte-identical, no shadow roots) held at 35.6% → 35.6% while
+   `vann-press` moved 90.5% → 80.0% and `tola-press` 92.2% → 82.1% — real area given back, not invented.
+
+**A fifth and sixth blind spot, of the same shape, found by this task and not fixed** — both are
+pre-existing, dating to `feat/home-v2`'s own 19-20 Aug restructure, not to anything Tasks 1-8b of this plan
+changed, and both are left as found rather than "fixed" inside a documentation task:
+
+5. **`scripts/check_plates.mjs` crashes to a FAIL on all three routes** ("no `[data-plate-grid]` boards
+   found") because `PlateGrid.tsx` has been unrouted since 19 Aug 2026, when the twelve-chapter page's plate
+   boards (`03 · The Forest`, `05 · The Rooms`, `07 · Details`) were retired along with the rest of the
+   twelve-chapter structure — `content/chapters.ts`'s own comment records it. This is not new and not caused
+   by the 26 Aug restructure; it is simply the first time this task ran the rig against this branch family
+   and read the result.
+6. **`scripts/check_rule_in.mjs` CRASHES with an uncaught exception on the home page**, rather than failing
+   gracefully, because its assertion 7 assumes the resting hairline lives on `LodgeCards.tsx`'s own links —
+   true on `feat/image-sizing`, but `LodgeCards.tsx` has been unrouted since the same 19 Aug cut (the home
+   page's `01 · The Lodges` chapter is a different component now). Confirmed by pointing the same rig at
+   `/mahua-vann` with an explicit `--url`, where `.rule-in--rest` lives on `PropertyInvitation.tsx` instead:
+   **0 failures, all 7 assertions pass.** Not fixed here — it is a pre-existing gap in a shared rig's default
+   URL, not a defect this plan's own eleven rulings created.
+
+### 22.9 Whole-branch verification, 26 August 2026 — the numbers, and two findings recorded rather than resolved
+
+Full figures, every one with the command that produced it: `docs/reviews/2026-08-26-restructure/README.md`.
+Headlines only, here:
+
+- **497 tests** (was 491 immediately before Task 1; the path there is not monotonic — it went as high as 499
+  and as low as 484 as the carousel came out and the widget/gating/strip work landed — see CLAUDE.md's Tests
+  row for the shape of it). `npm run build`, `npm run lint` green. Contrast: **336 probes across all three
+  routes, 0 failures, 0 dead** (156 home, 90 each property route).
+- **`imagesPerScreen`, the figure the client's original complaint actually turns on** (CLAUDE.md: *"Look at
+  images-per-screen, not at the chapter"*) — measured before this plan's restructure (`b9eecaa`, in an
+  isolated worktree) and after (this commit), same instrument, same viewport:
+
+  | | Vann before | Vann after | Tola before | Tola after |
+  |---|---|---|---|---|
+  | `imagesPerScreen` | 1.26 | **1.55** | 1.28 | **1.57** |
+  | document height | 11,440px | 7,540px | 12,641px | 8,011px |
+  | page mean empty | 35.3% | 45.2% | 30.9% | 43.0% |
+  | page worst empty | 87.0% | 80.8% | 72.7% | 83.1% |
+
+  Both properties gained real image density per scroll (three photograph bands removed, six shared
+  activity-strip photographs added, and the page itself got much shorter — three-photograph-scale
+  showcases and the old activity lists were considerably taller than what replaced them). **The page-level
+  *mean* empty% rising alongside that is not a contradiction**: a shorter document (72→46 sampled screens on
+  Vann, 80→49 on Tola) gives the persistently-empty joins and the two long-standing over-ceiling chapters
+  (`vann-forest`/`tola-reserve`, `vann-press`/`tola-press`) a larger share of a smaller sample pool. Judge
+  this restructure by `imagesPerScreen`, which improved on both routes, not by the page mean, which the
+  client's own methodology (non-negotiable #8) already warns is the wrong lever to read a pin — or, here, a
+  removal — by.
+- **`vann-press` improved 87.0% → 80.0%** (b9eecaa → now) and **`tola-press` is a brand-new chapter reading
+  82.1%** (it did not exist before Task 8). Both are **real figures now, not blind ones** — §22.8 finding 4
+  — and both remain **long-standing open items**, not new regressions: `vann-press` was already 88.4% empty
+  before any work on this branch (`docs/DECISIONS.md` §5), so its current 80.0% is an improvement of ~8
+  points, not a new failure. `vann-forest` similarly improved 55.8% → 45.2% and `tola-reserve` 58.0% → 46.9%
+  — both still over the ceiling, both pre-existing per §5.
+- **`vann-day` and `tola-day` read 45.8%/45.5% against the 45% ceiling.** The chapter is 0.86 screens tall,
+  and `measure_density.mjs`'s own documented fallback for a sub-screen chapter is "the one sample centred on
+  it" — which, at that height, necessarily draws in part of a neighbour. Task 7 traced this precisely: the
+  identical component (`ExperienceStrip`, byte-identical scrims and card sizes) reads **35.6%** on the home
+  page, where the chapter is taller and the same fixed 150px sampling grid happens to land somewhere kinder.
+  A join-shortening lever was tried and **measured worse** (45.8% → 47.7%/47.2%) and reverted rather than
+  shipped. This is recorded as an **instrument limitation corroborated by `imagesPerScreen`**, not resolved:
+  the strip's own composition is unchanged from the home page's passing build, and non-negotiable #8's
+  `passesWorst` rule was never written with a 0.86-screen chapter in mind.
+- **`tola-rooms` reads 45.3% worst, `passesWorst` FALSE — a genuine finding, not one already carried in this
+  plan's own task ledger.** It was passing at Task 5's own commit (36.3%/43.5%) and reads 36.7%/45.3% at
+  every measurement since Task 6, including this task's own repeated runs and every prior task's committed
+  JSON back to Task 8 — fully reproducible, not noise, and not related to the review widget (`tola-rooms`
+  hosts no shadow content). `task-7-report.md` recorded the number in passing while measuring a different
+  chapter's neighbours ("`tola-rooms` worst 45.3% — already over budget on its own") but it was never
+  escalated to this plan's distilled progress ledger or put to the client. `vann-rooms` passes at 43.7%.
+  Nothing in `RoomCardStack.tsx` changed during this plan; the most likely mechanism is the same
+  page-anchored-grid sensitivity §22.8 and this section describe for `vann-day`/`tola-day` — Task 6's map
+  `continues` change sits above `tola-rooms` in the document and could plausibly have shifted by a few
+  pixels which fixed 150px sample lands nearest its worst point — but this task did not bisect it to a
+  specific commit, and does not assert more than it measured. **Reported to the client per this project's
+  "give the number, let him choose" practice, not fixed unilaterally inside a documentation task.**

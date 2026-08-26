@@ -1,0 +1,877 @@
+{
+  "measuredAt": "2026-08-26T17:16:54.723Z",
+  "url": "http://localhost:3100/mahua-tola",
+  "densityCap": 2,
+  "results": [
+    {
+      "viewport": "390x844@1x",
+      "images": 18,
+      "softestServed": {
+        "file": "/brand/leaf-26.webp",
+        "fileWidth": 26,
+        "widestOffered": 1440,
+        "objectFit": "fill",
+        "cssWidth": 26,
+        "drawnWidth": 26,
+        "needed": 26,
+        "ratio": 1,
+        "ratioAtDeviceDensity": 1,
+        "atLibraryCeiling": false
+      },
+      "deviceDensity": {
+        "worst": 1,
+        "median": 1.17,
+        "best": 4.21
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 110,
+          "drawnWidth": 110,
+          "needed": 110,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 190,
+          "drawnWidth": 190,
+          "needed": 190,
+          "ratio": 1.47
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 344,
+          "needed": 344,
+          "ratio": 1.16
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 4.21
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 19,
+          "drawnWidth": 19,
+          "needed": 19,
+          "ratio": 4.21
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1442,
+          "needed": 1442,
+          "ratio": 1
+        },
+        {
+          "file": "/media/tola-room-deluxe-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-suite-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-family-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 304,
+          "drawnWidth": 304,
+          "needed": 304,
+          "ratio": 1.32
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 304,
+          "drawnWidth": 305,
+          "needed": 305,
+          "ratio": 1.31
+        },
+        {
+          "file": "/media/vann-hero-400.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 342,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-deluxe-400.avif",
+          "cssWidth": 343,
+          "drawnWidth": 343,
+          "needed": 343,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-suite-400.avif",
+          "cssWidth": 343,
+          "drawnWidth": 343,
+          "needed": 343,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-400.avif",
+          "cssWidth": 343,
+          "drawnWidth": 343,
+          "needed": 343,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/tola-room-family-400.avif",
+          "cssWidth": 343,
+          "drawnWidth": 343,
+          "needed": 343,
+          "ratio": 1.17
+        }
+      ]
+    },
+    {
+      "viewport": "390x844@3x",
+      "images": 18,
+      "softestServed": {
+        "file": "/media/tola-hero-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 390,
+        "drawnWidth": 1442,
+        "needed": 2883,
+        "ratio": 0.5,
+        "ratioAtDeviceDensity": 0.33,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.33,
+        "median": 1,
+        "best": 2.11
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "needed": 2883,
+          "ratio": 0.5
+        },
+        {
+          "file": "/media/bonfire-dinner-542.avif",
+          "needed": 608,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/sound-healing-493.avif",
+          "needed": 608,
+          "ratio": 0.81
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-486.webp",
+          "cssWidth": 110,
+          "drawnWidth": 110,
+          "needed": 220,
+          "ratio": 2.21
+        },
+        {
+          "file": "/brand/welcome-wordmark-840.webp",
+          "cssWidth": 190,
+          "drawnWidth": 190,
+          "needed": 380,
+          "ratio": 2.21
+        },
+        {
+          "file": "/brand/leaf-78.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 52,
+          "ratio": 1.5
+        },
+        {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 2.11
+        },
+        {
+          "file": "/brand/emblem-120.webp",
+          "cssWidth": 19,
+          "drawnWidth": 19,
+          "needed": 38,
+          "ratio": 3.16
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 390,
+          "drawnWidth": 1442,
+          "needed": 2883,
+          "ratio": 0.5
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.11
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/tola-room-family-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/bonfire-dinner-542.avif",
+          "cssWidth": 304,
+          "drawnWidth": 304,
+          "needed": 608,
+          "ratio": 0.89
+        },
+        {
+          "file": "/media/sound-healing-493.avif",
+          "cssWidth": 304,
+          "drawnWidth": 304,
+          "needed": 608,
+          "ratio": 0.81
+        },
+        {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 342,
+          "drawnWidth": 342,
+          "needed": 684,
+          "ratio": 1.12
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 239,
+          "drawnWidth": 239,
+          "needed": 478,
+          "ratio": 1.59
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 239,
+          "drawnWidth": 239,
+          "needed": 478,
+          "ratio": 1.59
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-768.avif",
+          "cssWidth": 239,
+          "drawnWidth": 239,
+          "needed": 478,
+          "ratio": 1.61
+        },
+        {
+          "file": "/media/tola-room-family-768.avif",
+          "cssWidth": 239,
+          "drawnWidth": 239,
+          "needed": 478,
+          "ratio": 1.61
+        }
+      ]
+    },
+    {
+      "viewport": "768x1024@1x",
+      "images": 18,
+      "softestServed": {
+        "file": "/media/tola-hero-1440.avif",
+        "fileWidth": 1440,
+        "widestOffered": 1440,
+        "objectFit": "cover",
+        "cssWidth": 768,
+        "drawnWidth": 1749,
+        "needed": 1749,
+        "ratio": 0.82,
+        "ratioAtDeviceDensity": 0.82,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.82,
+        "median": 1.14,
+        "best": 4.54
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "needed": 1749,
+          "ratio": 0.82
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 316,
+          "drawnWidth": 318,
+          "needed": 318,
+          "ratio": 2.42
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 316,
+          "drawnWidth": 318,
+          "needed": 318,
+          "ratio": 4.53
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 42,
+          "drawnWidth": 42,
+          "needed": 42,
+          "ratio": 1.9
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 768,
+          "drawnWidth": 1749,
+          "needed": 1749,
+          "ratio": 0.82
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.13
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.13
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/tola-room-family-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/vann-hero-768.avif",
+          "cssWidth": 672,
+          "drawnWidth": 672,
+          "needed": 672,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/tola-room-deluxe-640.avif",
+          "cssWidth": 614,
+          "drawnWidth": 614,
+          "needed": 614,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/tola-room-suite-640.avif",
+          "cssWidth": 614,
+          "drawnWidth": 614,
+          "needed": 614,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-640.avif",
+          "cssWidth": 614,
+          "drawnWidth": 614,
+          "needed": 614,
+          "ratio": 1.04
+        },
+        {
+          "file": "/media/tola-room-family-640.avif",
+          "cssWidth": 532,
+          "drawnWidth": 532,
+          "needed": 532,
+          "ratio": 1.2
+        }
+      ]
+    },
+    {
+      "viewport": "1440x900@1x",
+      "images": 20,
+      "softestServed": {
+        "file": "/media/tola-room-deluxe-762.avif",
+        "fileWidth": 762,
+        "widestOffered": 762,
+        "objectFit": "fill",
+        "cssWidth": 1053,
+        "drawnWidth": 1053,
+        "needed": 1053,
+        "ratio": 0.72,
+        "ratioAtDeviceDensity": 0.72,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.72,
+        "median": 1.17,
+        "best": 2.56
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "needed": 1008,
+          "ratio": 0.76
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "needed": 1008,
+          "ratio": 0.76
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "needed": 1053,
+          "ratio": 0.72
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "needed": 1053,
+          "ratio": 0.72
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-1440.avif",
+          "cssWidth": 652,
+          "drawnWidth": 654,
+          "needed": 654,
+          "ratio": 2.2
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 652,
+          "drawnWidth": 654,
+          "needed": 654,
+          "ratio": 2.2
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 42,
+          "drawnWidth": 42,
+          "needed": 42,
+          "ratio": 1.9
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 1440,
+          "drawnWidth": 1536,
+          "needed": 1536,
+          "ratio": 0.94
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 0.76
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 0.76
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-1440.avif",
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 1.43
+        },
+        {
+          "file": "/media/tola-room-family-1440.avif",
+          "cssWidth": 1008,
+          "drawnWidth": 1008,
+          "needed": 1008,
+          "ratio": 1.43
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/star-talks-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/guide-sunrise-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/vann-hero-1440.avif",
+          "cssWidth": 1344,
+          "drawnWidth": 1344,
+          "needed": 1344,
+          "ratio": 1.07
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 1053,
+          "drawnWidth": 1053,
+          "needed": 1053,
+          "ratio": 0.72
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 1053,
+          "drawnWidth": 1053,
+          "needed": 1053,
+          "ratio": 0.72
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-1200.avif",
+          "cssWidth": 1053,
+          "drawnWidth": 1053,
+          "needed": 1053,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/tola-room-family-1200.avif",
+          "cssWidth": 468,
+          "drawnWidth": 468,
+          "needed": 468,
+          "ratio": 2.56
+        }
+      ]
+    },
+    {
+      "viewport": "1920x1080@1x",
+      "images": 21,
+      "softestServed": {
+        "file": "/media/tola-room-deluxe-762.avif",
+        "fileWidth": 762,
+        "widestOffered": 762,
+        "objectFit": "fill",
+        "cssWidth": 1264,
+        "drawnWidth": 1264,
+        "needed": 1264,
+        "ratio": 0.6,
+        "ratioAtDeviceDensity": 0.6,
+        "atLibraryCeiling": true
+      },
+      "deviceDensity": {
+        "worst": 0.6,
+        "median": 1.17,
+        "best": 2.56
+      },
+      "understatedSizes": [],
+      "atLibraryCeiling": [
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "needed": 1139,
+          "ratio": 0.67
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "needed": 1139,
+          "ratio": 0.67
+        },
+        {
+          "file": "/media/vann-hero-1440.avif",
+          "needed": 1504,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "needed": 1264,
+          "ratio": 0.6
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "needed": 1264,
+          "ratio": 0.6
+        }
+      ],
+      "all": [
+        {
+          "file": "/brand/welcome-flower-162.webp",
+          "cssWidth": 162,
+          "drawnWidth": 162,
+          "needed": 162,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/welcome-wordmark-280.webp",
+          "cssWidth": 280,
+          "drawnWidth": 280,
+          "needed": 280,
+          "ratio": 1
+        },
+        {
+          "file": "/brand/leaf-26.webp",
+          "cssWidth": 26,
+          "drawnWidth": 26,
+          "needed": 26,
+          "ratio": 1
+        },
+        {
+          "file": "/media/vann-hero-1440.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.97
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 732,
+          "drawnWidth": 732,
+          "needed": 732,
+          "ratio": 1.97
+        },
+        {
+          "file": "/brand/emblem-80.webp",
+          "cssWidth": 42,
+          "drawnWidth": 42,
+          "needed": 42,
+          "ratio": 1.9
+        },
+        {
+          "file": "/media/tola-hero-1440.avif",
+          "cssWidth": 1920,
+          "drawnWidth": 1920,
+          "needed": 1920,
+          "ratio": 0.75
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 1128,
+          "drawnWidth": 1139,
+          "needed": 1139,
+          "ratio": 0.67
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 1128,
+          "drawnWidth": 1139,
+          "needed": 1139,
+          "ratio": 0.67
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-1440.avif",
+          "cssWidth": 1128,
+          "drawnWidth": 1139,
+          "needed": 1139,
+          "ratio": 1.26
+        },
+        {
+          "file": "/media/tola-room-family-1440.avif",
+          "cssWidth": 1128,
+          "drawnWidth": 1128,
+          "needed": 1128,
+          "ratio": 1.28
+        },
+        {
+          "file": "/media/bonfire-dinner-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/sound-healing-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/star-talks-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/guide-sunrise-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 341,
+          "needed": 341,
+          "ratio": 1.17
+        },
+        {
+          "file": "/media/potters-hands-400.avif",
+          "cssWidth": 340,
+          "drawnWidth": 340,
+          "needed": 340,
+          "ratio": 1.18
+        },
+        {
+          "file": "/media/vann-hero-1440.avif",
+          "cssWidth": 1504,
+          "drawnWidth": 1504,
+          "needed": 1504,
+          "ratio": 0.96
+        },
+        {
+          "file": "/media/tola-room-deluxe-762.avif",
+          "cssWidth": 1264,
+          "drawnWidth": 1264,
+          "needed": 1264,
+          "ratio": 0.6
+        },
+        {
+          "file": "/media/tola-room-suite-762.avif",
+          "cssWidth": 1264,
+          "drawnWidth": 1264,
+          "needed": 1264,
+          "ratio": 0.6
+        },
+        {
+          "file": "/media/tola-room-super-deluxe-1440.avif",
+          "cssWidth": 1264,
+          "drawnWidth": 1264,
+          "needed": 1264,
+          "ratio": 1.14
+        },
+        {
+          "file": "/media/tola-room-family-1440.avif",
+          "cssWidth": 562,
+          "drawnWidth": 562,
+          "needed": 562,
+          "ratio": 2.56
+        }
+      ]
+    }
+  ],
+  "galleryFailures": []
+}

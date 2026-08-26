@@ -1,0 +1,993 @@
+{
+  "measuredAt": "2026-08-26T17:31:57.831Z",
+  "url": "http://localhost:3100",
+  "mechanism": ":target — see this file's own header comment for the full history (popover -> :target, 14 Aug 2026)",
+  "method": "Real Chromium, production build. Every assertion drives the page through the same paths a visitor uses (Playwright's own .click(), page.mouse.click(x,y)) and reads computed `display` / `document.activeElement` / `window.scrollY` off the live DOM — never `location.hash = ...` set directly. Assertion 6 additionally proves the mechanism works with javaScriptEnabled:false, not only that nothing errors.",
+  "esc": "NOT supported by this construction — a deliberate trade, not an oversight. Reached from the keyboard via Tab then ENTER ONLY (Space scrolls the page, it does not activate a link). See the header comment.",
+  "focusOnClose": "NOT returned to the trigger — closing navigates to a fragment matching no element, so no focusing steps run, and focus drops to <body>. A real regression from the popover version (whose hide algorithm restored it), not fixed (would need a listener this construction deliberately has none of), measured per combo in assertion4.activeElementAfterClose.",
+  "backButton": "steps back through opened rooms — measured THREE deep (open room 0, 1, 2 in sequence; press Back three times) per route, in backButtonDeep, not extrapolated from one step.",
+  "boxOverflow": "measured per combo in assertion2.boxOverflow (scrollWidth vs clientWidth on the panel's own .room-gallery-box) — Minor 6, fixed in app/globals.css, still 0px at 390x844/1440x900 on every room, both routes. `checkBoxOverflowBand` (which sampled 1500x900, inside the ~1200-1690.9px band where the fixed cap is genuinely narrower than the pre-fix one) was DELETED 14 Aug 2026, third review pass: no height at that width, or anywhere in that band, can ever make the cap bind — GALLERY_SIZES's own 80vw sizes-hint caps the photo narrower than max-w-[88vw] for any viewport >=768px wide, so the box's 88vw-sized cap is structurally unreachable there. A genuinely different, WIDER overflow (past ~1858px of viewport width, paired with a tall-enough viewport) was found the same pass and left unfixed — CLOSED 14 Aug 2026, image-sizing Task 8: the gallery Photo's max-w-[88vw] had no rem ceiling to match the box's own saturating one, so past ~1690.9px the box stopped growing while the image kept growing. Fixed by changing the image's own CSS max-width to max-w-[min(88vw,93rem)] — identically equal to the box's inner width (its own cap minus 3rem of padding) at every viewport, in both regimes, not merely 'wide enough.' Measured per combo in `report.wideOverflow` (1920x1500 and 2400x1800, both routes, every room) — see checkWideOverflow's own comment, just above `const browser = ...`, for the full derivation and why GALLERY_SIZES's own 80vw term did not need to change.",
+  "combos": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-vann-rooms-0",
+            "cardSrc": "http://localhost:3100/media/vann-room-deluxe-400.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-deluxe-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-1",
+            "cardSrc": "http://localhost:3100/media/vann-room-cottage-plain-400.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-cottage-plain-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-2",
+            "cardSrc": "http://localhost:3100/media/suite-tiger-painting-400.avif",
+            "panelSrc": "http://localhost:3100/media/suite-tiger-painting-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "visibleAfterOpen": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 2197,
+        "scrollAfterOpen": 2197,
+        "activeElementId": "room-gallery-vann-rooms-0",
+        "minWidth": 156,
+        "naturalWidth": 358,
+        "width": 343.15625,
+        "boxOverflow": {
+          "scrollWidth": 389,
+          "clientWidth": 389,
+          "overflowPx": 0
+        }
+      },
+      "assertion3": {
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-1"
+            ],
+            "scrollBefore": 2197,
+            "scrollAfter": 2197
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-2"
+            ],
+            "scrollBefore": 2197,
+            "scrollAfter": 2197
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-0"
+            ],
+            "scrollBefore": 2197,
+            "scrollAfter": 2197
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "visible": [
+            "room-gallery-vann-rooms-2"
+          ],
+          "scrollBeforePrev": 2197,
+          "scrollAfterPrev": 2197
+        }
+      },
+      "assertion4": {
+        "openBeforeClose": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "closeClicked": true,
+        "afterClose": [],
+        "activeElementAfterClose": "BODY"
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          632
+        ],
+        "confirmedOutside": true
+      },
+      "backButtonDeep": {
+        "openedThreeDeep": [
+          "room-gallery-vann-rooms-2"
+        ],
+        "backSteps": [
+          [
+            "room-gallery-vann-rooms-1"
+          ],
+          [
+            "room-gallery-vann-rooms-0"
+          ],
+          []
+        ]
+      }
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-vann-rooms-0",
+            "cardSrc": "http://localhost:3100/media/vann-room-deluxe-762.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-deluxe-762.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-1",
+            "cardSrc": "http://localhost:3100/media/vann-room-cottage-plain-1184.avif",
+            "panelSrc": "http://localhost:3100/media/vann-room-cottage-plain-1184.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-vann-rooms-2",
+            "cardSrc": "http://localhost:3100/media/suite-tiger-painting-1440.avif",
+            "panelSrc": "",
+            "naturalWidth": 0,
+            "sharedWithCard": null,
+            "requestCount": 0
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "visibleAfterOpen": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 2213,
+        "scrollAfterOpen": 2213,
+        "activeElementId": "room-gallery-vann-rooms-0",
+        "minWidth": 576,
+        "naturalWidth": 1152,
+        "width": 1053,
+        "boxOverflow": {
+          "scrollWidth": 1101,
+          "clientWidth": 1101,
+          "overflowPx": 0
+        }
+      },
+      "assertion3": {
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-1"
+            ],
+            "scrollBefore": 2213,
+            "scrollAfter": 2213
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-2"
+            ],
+            "scrollBefore": 2213,
+            "scrollAfter": 2213
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-vann-rooms-0"
+            ],
+            "scrollBefore": 2213,
+            "scrollAfter": 2213
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "visible": [
+            "room-gallery-vann-rooms-2"
+          ],
+          "scrollBeforePrev": 2213,
+          "scrollAfterPrev": 2213
+        }
+      },
+      "assertion4": {
+        "openBeforeClose": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "closeClicked": true,
+        "afterClose": [],
+        "activeElementAfterClose": "BODY"
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-vann-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          882
+        ],
+        "confirmedOutside": true
+      },
+      "backButtonDeep": {
+        "openedThreeDeep": [
+          "room-gallery-vann-rooms-2"
+        ],
+        "backSteps": [
+          [
+            "room-gallery-vann-rooms-1"
+          ],
+          [
+            "room-gallery-vann-rooms-0"
+          ],
+          []
+        ]
+      }
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-tola-rooms-0",
+            "cardSrc": "http://localhost:3100/media/tola-room-deluxe-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-deluxe-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-1",
+            "cardSrc": "http://localhost:3100/media/tola-room-suite-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-suite-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-2",
+            "cardSrc": "http://localhost:3100/media/tola-room-super-deluxe-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-super-deluxe-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-3",
+            "cardSrc": "http://localhost:3100/media/tola-room-family-400.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-family-400.avif",
+            "naturalWidth": 358,
+            "sharedWithCard": true,
+            "requestCount": 1
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "visibleAfterOpen": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 2237,
+        "scrollAfterOpen": 2237,
+        "activeElementId": "room-gallery-tola-rooms-0",
+        "minWidth": 156,
+        "naturalWidth": 358,
+        "width": 343.15625,
+        "boxOverflow": {
+          "scrollWidth": 389,
+          "clientWidth": 389,
+          "overflowPx": 0
+        }
+      },
+      "assertion3": {
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-1"
+            ],
+            "scrollBefore": 2237,
+            "scrollAfter": 2237
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-2"
+            ],
+            "scrollBefore": 2237,
+            "scrollAfter": 2237
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-3"
+            ],
+            "scrollBefore": 2237,
+            "scrollAfter": 2237
+          },
+          {
+            "clicked": "next",
+            "from": 3,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-0"
+            ],
+            "scrollBefore": 2237,
+            "scrollAfter": 2237
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "visible": [
+            "room-gallery-tola-rooms-3"
+          ],
+          "scrollBeforePrev": 2237,
+          "scrollAfterPrev": 2237
+        }
+      },
+      "assertion4": {
+        "openBeforeClose": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "closeClicked": true,
+        "afterClose": [],
+        "activeElementAfterClose": "BODY"
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          626
+        ],
+        "confirmedOutside": true
+      },
+      "backButtonDeep": {
+        "openedThreeDeep": [
+          "room-gallery-tola-rooms-2"
+        ],
+        "backSteps": [
+          [
+            "room-gallery-tola-rooms-1"
+          ],
+          [
+            "room-gallery-tola-rooms-0"
+          ],
+          []
+        ]
+      }
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "assertion1": {
+        "afterFullPageScroll": [
+          {
+            "id": "room-gallery-tola-rooms-0",
+            "cardSrc": "http://localhost:3100/media/tola-room-deluxe-762.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-deluxe-762.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-1",
+            "cardSrc": "http://localhost:3100/media/tola-room-suite-762.avif",
+            "panelSrc": "http://localhost:3100/media/tola-room-suite-762.avif",
+            "naturalWidth": 1152,
+            "sharedWithCard": true,
+            "requestCount": 1
+          },
+          {
+            "id": "room-gallery-tola-rooms-2",
+            "cardSrc": "http://localhost:3100/media/tola-room-super-deluxe-1440.avif",
+            "panelSrc": "",
+            "naturalWidth": 0,
+            "sharedWithCard": null,
+            "requestCount": 0
+          },
+          {
+            "id": "room-gallery-tola-rooms-3",
+            "cardSrc": "http://localhost:3100/media/tola-room-family-1440.avif",
+            "panelSrc": "",
+            "naturalWidth": 0,
+            "sharedWithCard": null,
+            "requestCount": 0
+          }
+        ]
+      },
+      "assertion2": {
+        "clickedTrigger0": true,
+        "visibleAfterOpen": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "opened0": true,
+        "scrollBeforeOpen": 2351,
+        "scrollAfterOpen": 2351,
+        "activeElementId": "room-gallery-tola-rooms-0",
+        "minWidth": 576,
+        "naturalWidth": 1152,
+        "width": 1053,
+        "boxOverflow": {
+          "scrollWidth": 1101,
+          "clientWidth": 1101,
+          "overflowPx": 0
+        }
+      },
+      "assertion3": {
+        "steps": [
+          {
+            "clicked": "next",
+            "from": 0,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-1"
+            ],
+            "scrollBefore": 2351,
+            "scrollAfter": 2351
+          },
+          {
+            "clicked": "next",
+            "from": 1,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-2"
+            ],
+            "scrollBefore": 2351,
+            "scrollAfter": 2351
+          },
+          {
+            "clicked": "next",
+            "from": 2,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-3"
+            ],
+            "scrollBefore": 2351,
+            "scrollAfter": 2351
+          },
+          {
+            "clicked": "next",
+            "from": 3,
+            "clickSucceeded": true,
+            "visible": [
+              "room-gallery-tola-rooms-0"
+            ],
+            "scrollBefore": 2351,
+            "scrollAfter": 2351
+          }
+        ],
+        "previousFromZero": {
+          "clicked": true,
+          "visible": [
+            "room-gallery-tola-rooms-3"
+          ],
+          "scrollBeforePrev": 2351,
+          "scrollAfterPrev": 2351
+        }
+      },
+      "assertion4": {
+        "openBeforeClose": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "closeClicked": true,
+        "afterClose": [],
+        "activeElementAfterClose": "BODY"
+      },
+      "assertion5": {
+        "openBeforeDismiss": [
+          "room-gallery-tola-rooms-0"
+        ],
+        "afterDismiss": [],
+        "point": [
+          8,
+          882
+        ],
+        "confirmedOutside": true
+      },
+      "backButtonDeep": {
+        "openedThreeDeep": [
+          "room-gallery-tola-rooms-2"
+        ],
+        "backSteps": [
+          [
+            "room-gallery-tola-rooms-1"
+          ],
+          [
+            "room-gallery-tola-rooms-0"
+          ],
+          []
+        ]
+      }
+    }
+  ],
+  "noJs": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "stackHeight": 2160,
+      "triggerCount": 3,
+      "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "stackHeight": 2280,
+      "triggerCount": 3,
+      "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "stackHeight": 2824,
+      "triggerCount": 4,
+      "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "stackHeight": 3040,
+      "triggerCount": 4,
+      "scrolled": true,
+      "openedWithoutJs": true,
+      "dismissedWithoutJs": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  ],
+  "welcomeCollision": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 390,
+      "height": 844,
+      "target": "room-gallery-vann-rooms-0",
+      "midHold": {
+        "welcomeOpacity": 1,
+        "welcomeZ": 90,
+        "galleryZ": 60,
+        "galleryDisplay": "block",
+        "topmostIsWelcomeOrDescendant": true
+      },
+      "afterHold": {
+        "welcomeOpacity": 0,
+        "visible": [
+          "room-gallery-vann-rooms-0"
+        ]
+      }
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1440,
+      "height": 900,
+      "target": "room-gallery-vann-rooms-0",
+      "midHold": {
+        "welcomeOpacity": 1,
+        "welcomeZ": 90,
+        "galleryZ": 60,
+        "galleryDisplay": "block",
+        "topmostIsWelcomeOrDescendant": true
+      },
+      "afterHold": {
+        "welcomeOpacity": 0,
+        "visible": [
+          "room-gallery-vann-rooms-0"
+        ]
+      }
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 390,
+      "height": 844,
+      "target": "room-gallery-tola-rooms-0",
+      "midHold": {
+        "welcomeOpacity": 1,
+        "welcomeZ": 90,
+        "galleryZ": 60,
+        "galleryDisplay": "block",
+        "topmostIsWelcomeOrDescendant": true
+      },
+      "afterHold": {
+        "welcomeOpacity": 0,
+        "visible": [
+          "room-gallery-tola-rooms-0"
+        ]
+      }
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1440,
+      "height": 900,
+      "target": "room-gallery-tola-rooms-0",
+      "midHold": {
+        "welcomeOpacity": 1,
+        "welcomeZ": 90,
+        "galleryZ": 60,
+        "galleryDisplay": "block",
+        "topmostIsWelcomeOrDescendant": true
+      },
+      "afterHold": {
+        "welcomeOpacity": 0,
+        "visible": [
+          "room-gallery-tola-rooms-0"
+        ]
+      }
+    }
+  ],
+  "wideOverflow": [
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 1920,
+      "height": 1500,
+      "rooms": [
+        {
+          "id": "room-gallery-vann-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        }
+      ]
+    },
+    {
+      "route": "vann",
+      "path": "/mahua-vann",
+      "width": 2400,
+      "height": 1800,
+      "rooms": [
+        {
+          "id": "room-gallery-vann-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-vann-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 1920,
+      "height": 1500,
+      "rooms": [
+        {
+          "id": "room-gallery-tola-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-3",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 828,
+            "clientWidth": 828
+          },
+          "overflowPx": 0
+        }
+      ]
+    },
+    {
+      "route": "tola",
+      "path": "/mahua-tola",
+      "width": 2400,
+      "height": 1800,
+      "rooms": [
+        {
+          "id": "room-gallery-tola-rooms-0",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-1",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-2",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 1534,
+            "clientWidth": 1534
+          },
+          "overflowPx": 0
+        },
+        {
+          "id": "room-gallery-tola-rooms-3",
+          "opened": true,
+          "overflow": {
+            "scrollWidth": 984,
+            "clientWidth": 984
+          },
+          "overflowPx": 0
+        }
+      ]
+    }
+  ],
+  "knownDefects": [
+    {
+      "id": "arrows-nest-instead-of-replacing",
+      "status": "FIXED 14 Aug 2026",
+      "summary": "Was: the gallery's popover-based arrows nested rather than replaced, because the invoking button lived inside the popover it targeted a sibling of. Fixed by switching the whole mechanism to CSS `:target`, which cannot nest by construction (`location.hash` is one string). See RoomCardStack.tsx."
+    },
+    {
+      "id": "gallery-panel-not-centred",
+      "status": "FIXED 14 Aug 2026",
+      "summary": "Was: Tailwind's preflight (`* { margin: 0 }`) defeated the popover UA stylesheet's `margin: auto` centring. Fixed by centring the panel's own box explicitly with `transform: translate(-50%, -50%)`, which never touches `margin` at all. See app/globals.css's `.room-gallery-box`."
+    },
+    {
+      "id": "z-index-misattributed-and-welcome-collision",
+      "status": "FIXED 14 Aug 2026",
+      "summary": "Was: a CSS comment claimed [data-site-header] was z-index:90 without reading the file — the header is z-40 (StickyHeader.tsx), and the real z-index:90 belongs to [data-welcome]. The gallery's own z-index:100 therefore sat ABOVE the welcome screen, and :target applies on first paint, so a room fragment already in the URL on load (reload, bookmark, Back) would paint the panel over the welcome intro. Fixed: z-index read correctly off every stacked element, gallery moved to z-index:60 (above persistent chrome, below the welcome's 90), verified with checkWelcomeCollision."
+    },
+    {
+      "id": "gallery-box-horizontal-overflow",
+      "status": "FIXED 14 Aug 2026, both regimes (narrow AND wide) — see image-sizing Task 8",
+      "summary": "Was: the panel's box capped at min(92vw, 96rem) while the image inside is max-w-[88vw] plus 3rem of the box's own padding — real horizontal overflow (10px, measured, every room, both routes) at 390x844; 0px at 768x1024 and 1440x900. Fixed (Minor 6): box cap widened to min(calc(88vw + 3rem), 96rem). That fix's own write-up then repeated the same unread-confidence mistake it corrected — 'provably never narrower than the old cap below 1200px and unchanged above it' was false on both halves (see DECISIONS.md §18) — and a SECOND, wider, genuinely reachable overflow was found past ~1858px of viewport width (paired with a tall-enough viewport): 26px at 1920x1500, growing to ~713px at 3000x1900, because the box's own cap saturates at 96rem past ~1690.9px of viewport width while the image's max-w-[88vw] had no matching ceiling and kept growing. CLOSED 14 Aug 2026 (image-sizing Task 8): the image's own CSS max-width changed to max-w-[min(88vw,93rem)] — identically equal to the box's own inner width (its cap minus 3rem of padding) at every viewport width, in both regimes, by construction. Measured 0px at every sampled shape after the fix, including the two the defect was originally found at — see report.wideOverflow and checkWideOverflow's own comment for the full derivation."
+    }
+  ],
+  "watchedFailing": [
+    {
+      "id": "a-trigger-href-removed",
+      "sabotaged": "components/sections/RoomCard.tsx — removed `href={`#${galleryId}`}` from the trigger `<a>` (the element stays an `<a>`, just without a working href)",
+      "expected": "assertions 2 and 3 fail (brief's own prediction)",
+      "failedAssertions": [
+        "2",
+        "3 (skipped)",
+        "4",
+        "5",
+        "6 (no-JS)"
+      ],
+      "quotedOutput": [
+        "vann@390x844: assertion 2: clicking room 0's trigger did not leave exactly panel \"room-gallery-vann-rooms-0\" visible — visible: [(none)]",
+        "vann@390x844: assertion 2: focus did not land on panel \"room-gallery-vann-rooms-0\" after opening (tabindex=\"-1\"'s own purpose) — document.activeElement.id was \"\"",
+        "vann@390x844: assertion 3: skipped — panel 0 was never the sole visible panel after assertion 2, navigation cannot be exercised",
+        "vann@390x844 (no-JS): assertion 6: clicking the trigger link without JS did not open exactly panel 0 — this mechanism should not need script"
+      ],
+      "note": "Clean, fast failure on every route/width/no-JS combination — 46 failure lines total. No hang: the trigger selector is structural (position, not `[href]`-scoped), a lesson learned the hard way earlier in this same task when a stricter selector matched zero elements and hung Playwright's own 30s default timeout."
+    },
+    {
+      "id": "b-panel-photo-eager",
+      "sabotaged": "components/sections/RoomCardStack.tsx — added `priority` to the gallery panel's `<Photo>` (loading=\"eager\", fetchPriority=\"high\")",
+      "expected": "assertion 1 fails (brief's own prediction)",
+      "failedAssertions": [
+        "1"
+      ],
+      "quotedOutput": [
+        "vann@1440x900: assertion 1: panel \"room-gallery-vann-rooms-2\" has naturalWidth 1152 before being opened, and its resolved image (\".../suite-tiger-painting-1200.avif\") is NOT the same file its own card is showing (\".../suite-tiger-painting-1440.avif\") — this is an independent load, not shared-cache reuse",
+        "tola@1440x900: assertion 1: panel \"room-gallery-tola-rooms-2\" has naturalWidth 1152 before being opened, and its resolved image (\".../tola-room-super-deluxe-1200.avif\") is NOT the same file its own card is showing (\".../tola-room-super-deluxe-1440.avif\") — this is an independent load, not shared-cache reuse",
+        "tola@1440x900: assertion 1: panel \"room-gallery-tola-rooms-3\" has naturalWidth 1152 before being opened, and its resolved image (\".../tola-room-family-1200.avif\") is NOT the same file its own card is showing (\".../tola-room-family-1440.avif\") — this is an independent load, not shared-cache reuse"
+      ],
+      "note": "Fails only at 1440x900, only assertion 1, exactly the shape the corrected 'shared-with-card' logic is meant to catch: a genuinely independent fetch (different resolved file than the card's own), not the benign cache-reuse case assertion 1 otherwise allows. 3 failures total, identical both times this arm was run."
+    },
+    {
+      "id": "c-next-mispointed-at-panel-0",
+      "sabotaged": "components/sections/RoomCardStack.tsx — every panel's \"next\" link's href changed from `roomGalleryId(chapter.id, (i + 1) % n)` to `roomGalleryId(chapter.id, 0)`",
+      "expected": "assertion 3's wraparound and panel-1 checks fail (brief's own prediction)",
+      "failedAssertions": [
+        "3",
+        "back-button (3 deep), as a knock-on effect"
+      ],
+      "quotedOutput": [
+        "vann@390x844: assertion 3: after \"next\" from panel 0, expected exactly [room-gallery-vann-rooms-1] visible — got [room-gallery-vann-rooms-0]",
+        "vann@390x844: back-button (3 deep): step 1 of 3 expected visible [room-gallery-vann-rooms-1], got [(none)]"
+      ],
+      "note": "Distinct signature from sabotage (d): 'next' from an already-open panel 0, re-pointed at itself, is a same-fragment navigation — a genuine no-op under :target (the hash does not change), so panel 0 stays the ONLY thing visible ('got [room-gallery-vann-rooms-0]'), not 'more than one open' (that is sabotage (d)'s signature) and not 'nothing open' (that was the popover-era version of this same sabotage, which toggled panel 0 closed). Confirms the rig discriminates between different real causes, not just between pass/fail. 8 failures total."
+    },
+    {
+      "id": "d-display-none-default-removed",
+      "sabotaged": ".room-gallery's own `display: none;` default rule removed (`.room-gallery:target { display: block; }` left in place, so every panel now defaults to a plain div's own `display: block`, permanently visible regardless of :target)",
+      "expected": "the 'exactly one panel visible' check fails — the one assertion this whole fix exists to satisfy",
+      "failedAssertions": [
+        "2",
+        "3 (skipped)",
+        "4",
+        "5",
+        "6 (no-JS)",
+        "welcome collision (new)",
+        "back-button (3 deep)"
+      ],
+      "quotedOutput": [
+        "vann@390x844: assertion 2: clicking room 0's trigger did not leave exactly panel \"room-gallery-vann-rooms-0\" visible — visible: [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1, room-gallery-vann-rooms-2]",
+        "vann@390x844: assertion 4: the close control did not close every panel — still visible: [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1, room-gallery-vann-rooms-2]",
+        "vann@390x844 (welcome collision): welcome collision: after the welcome's hold, expected exactly [room-gallery-vann-rooms-0] visible (deep-link-open kept), got [room-gallery-vann-rooms-0, room-gallery-vann-rooms-1, room-gallery-vann-rooms-2]",
+        "vann@1440x900: assertion 1: panel \"room-gallery-vann-rooms-2\" has naturalWidth 1152 before being opened... this is an independent load, not shared-cache reuse"
+      ],
+      "note": "The most comprehensive failure of all five arms — every panel visible simultaneously cascades into assertions 2, 4, 5, 6, the welcome-collision check (new) and the deep back-button check, ~60 failure lines across all combos. `:target` itself still correctly names exactly one element throughout (a browser-native, unfalsifiable guarantee) — it is the CSS AUTHOR RULE that broke, which is exactly why assertion 3 checks computed `display`, never `:target` directly. Slow (~5 minutes: every click attempt against an always-covering panel legitimately exhausts its own 5s bound) but not stuck — confirmed via the JSON's own `verdict: \"fail\"` after one run where the background task runner's own completion notice misreported the exit code."
+    },
+    {
+      "id": "e-position-fixed-dropped",
+      "sabotaged": "`position: fixed;` removed from `.room-gallery` (display:none/z-index/inset left in place)",
+      "expected": "the scroll-jump check fails — nothing had proven it could until this arm",
+      "failedAssertions": [
+        "2 (scroll jump)",
+        "5 (light dismiss, as a knock-on effect of the box no longer being viewport-relative)"
+      ],
+      "quotedOutput": [
+        "vann@390x844: assertion 2: opening panel 0 moved window.scrollY from 2293 to 4497 — a scroll jump the fixed-position panel should not have caused",
+        "tola@1440x900: assertion 2: opening panel 0 moved window.scrollY from 3378 to 6067 — a scroll jump the fixed-position panel should not have caused"
+      ],
+      "note": "Real, large jumps (~2,200-2,700px) on every combo — without `position: fixed` the panel flows into the normal document at its point in the DOM (after the room stack), and `:target`'s own 'scroll the indicated part into view' step must move the page to reach it, exactly the behaviour non-fixed positioning was chosen to avoid. Assertion 5 also fails as a side effect (the light-dismiss probe assumes a viewport-relative box) — a reasonable cascade, not a separate bug."
+    },
+    {
+      "id": "z-welcome-z-index-100",
+      "sabotaged": ".room-gallery's z-index reverted from 60 to the old, wrong 100 (a supplementary check, not one of the five named arms, run to prove the NEW welcome-collision check itself is sensitive both ways)",
+      "expected": "the welcome-collision check fails on both its own sub-checks",
+      "failedAssertions": [
+        "welcome collision"
+      ],
+      "quotedOutput": [
+        "vann@390x844 (welcome collision): welcome collision: welcome's z-index (90) is not above the gallery's (100) — the panel could paint over the welcome intro",
+        "vann@390x844 (welcome collision): welcome collision: at the viewport's centre, mid-hold, the topmost element was NOT the welcome screen — the gallery panel (z-index 100, display block) may be painting over it"
+      ],
+      "note": "Confirms the welcome-collision check (added for Important 4) is a real, two-way-sensitive instrument, not merely a passing formality — both its z-index-ordering check and its paint-order hit-test correctly fail on the old, wrong value, on all four route/width combinations."
+    },
+    {
+      "id": "git-checkout-mistake",
+      "sabotaged": "not a sabotage — a real process error, recorded here because it shaped every revert after it",
+      "note": "After watching sabotage (d) fail in an earlier pass, `git checkout -- app/globals.css` was used to revert it — safe for the ORIGINAL Task 7's three arms (no other uncommitted work in those files at the time), wrong here: this file carried substantial uncommitted, legitimate `:target` CSS on top of the sabotage, and `git checkout --` reverts to the last COMMIT, not \"one edit back\" — it silently wiped the whole CSS fix. Caught immediately by the harness's own external-change warning, confirmed with `git diff` (empty — matching HEAD, the old popover CSS), recovered by re-applying the exact `:target` CSS from the session's own record. Every sabotage revert after this one — and both review passes' worth, all five arms above — used a targeted `Edit` on the one sabotaged line instead."
+    },
+    {
+      "id": "f-wide-viewport-overflow-prefix",
+      "sabotaged": "not a synthetic sabotage — this is the shipped, unmodified build itself, run BEFORE the image-sizing Task 8 fix below existed. RoomCardStack.tsx's gallery <Photo> carried a bare, unbounded `max-w-[88vw]` while .room-gallery-box's own max-width (`min(calc(88vw + 3rem), 96rem)`) saturates at 96rem past ~1690.9px of viewport width — the box stops growing, the image does not.",
+      "expected": "checkWideOverflow reports real, nonzero overflow at 1920x1500 and 2400x1800, both routes, on every landscape room (a portrait room's own height constraint can keep it under either cap regardless)",
+      "failedAssertions": [
+        "box overflow (wide)"
+      ],
+      "quotedOutput": [
+        "vann@1920x1500 (box overflow, wide): box overflow (wide): panel \"room-gallery-vann-rooms-0\"'s box scrolls horizontally by 26px (scrollWidth 1560px vs clientWidth 1534px)",
+        "vann@2400x1800 (box overflow, wide): box overflow (wide): panel \"room-gallery-vann-rooms-0\"'s box scrolls horizontally by 410px (scrollWidth 1944px vs clientWidth 1534px)",
+        "tola@1920x1500 (box overflow, wide): box overflow (wide): panel \"room-gallery-tola-rooms-0\"'s box scrolls horizontally by 26px (scrollWidth 1560px vs clientWidth 1534px)",
+        "tola@2400x1800 (box overflow, wide): box overflow (wide): panel \"room-gallery-tola-rooms-2\"'s box scrolls horizontally by 410px (scrollWidth 1944px vs clientWidth 1534px)"
+      ],
+      "note": "12 failures total (3 landscape rooms x 2 shapes x 2 routes) — every landscape room on both properties, growing with the viewport (26px at 1920x1500, 410px at 2400x1800), exactly the shape DECISIONS.md §18 already documented from a manual sweep (26px at 1920x1500, ~713px at 3000x1900). tola-rooms-3 (the one portrait room) read 0px at every shape, both before and after the fix — its own max-h-[78svh] height constraint binds before its width ever reaches either cap, so it was never exposed to this defect and is not evidence the check is insensitive. After the fix (RoomCardStack.tsx's gallery <Photo> changed to `max-w-[min(88vw,93rem)]`), the identical rebuild-and-rerun read 0px at every room, both shapes, both routes — the clean run below."
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

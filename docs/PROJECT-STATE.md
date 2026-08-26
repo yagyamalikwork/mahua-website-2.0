@@ -993,6 +993,27 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
 
 ## Still owed to the client
 
+**From the 26 August restructure (`feat/journal-and-mobile`), still owed — see `docs/DECISIONS.md` §22:**
+
+- **The widget's no-JavaScript fallback sentence.** `ReviewWidget` renders a `<noscript>` line only when it
+  is given a `fallback` prop, and `Invitation.tsx`'s own comment records that it currently passes none — "an
+  omission rather than a choice." Not invented; not owed a copy edit until he supplies one.
+- **His Elfsight restyle.** The widget currently renders solid black cards, white text and a green
+  Tripadvisor roundel directly on cream, on both property pages (screenshotted, not assumed) — foreign
+  against non-negotiable #3. He is restyling it himself in his own Elfsight dashboard; values already given:
+  card background `#F1E9D7`, text `#31402C`, meta `#5A5240`, rating `#BB8F2E`, link `#7A5C18`.
+- **A paid Elfsight plan**, to remove the free-tier "Free Tripadvisor Reviews Widget" badge stamped under the
+  review cards at every width, before launch.
+- **Confirmation of the Vercel plan.** The free tier does not permit commercial use, and the site is already
+  deployed (`feat/home-v2`, `https://mahua-resorts.vercel.app`) — this needs settling independent of anything
+  this restructure changed.
+- **A ruling on `vann-press`/`tola-press`** at 80.0%/82.1% empty — both real, measured figures now (a
+  shadow-DOM instrument fix stopped the rig scoring the widget's own review cards as bare cream), both
+  improved over their pre-branch figures, and both still well over the 45% ceiling. `docs/DECISIONS.md` §22.9
+  has the full before/after.
+- **A ruling on `tola-rooms`**, newly reading 45.3% worst (`vann-rooms` passes at 43.7%) — a real,
+  reproducible figure first noted in a task report's prose and never put to him. `docs/DECISIONS.md` §22.9.
+
 - **The targeted shot list** — the 3–4 photographs that would most transform the page, so a small shoot can
   be priced precisely. The library tops out at 1920px and only 17 of 34 images clear 1400px. **More urgent
   than it was**: the audit of 4 Aug cut four duplicates out of what was thought to be a 35-image library,

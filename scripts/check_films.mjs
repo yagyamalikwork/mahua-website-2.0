@@ -1,7 +1,22 @@
 // The two films — the tiger closing `04 · Days in the Field`, the potter closing
 // `02 · Rooted like the mahua` — in a real browser.
 //
-// Run (with `npx next start -p 3100` already up):
+// **On `feat/home-v2` and its descendants (including `feat/journal-and-mobile`,
+// 26 August 2026), THIS RIG FAILS AND THAT IS CORRECT — do not "fix" it by
+// remounting a film or weakening an assertion.** The potter left the home page
+// when the seven-chapter restructure was cut (19-20 Aug); the tiger followed on
+// 26 Aug, client ruling: *"Remove the tiger from 'The Experience' section, hence
+// removing the big gap between the activities and the text for this section."*
+// Both films are UNMOUNTED, not deleted — `components/signature/SignatureFilm.tsx`,
+// `/media/tiger-film.mp4`, `/media/potter-film.mp4` and this rig are all untouched
+// on disk, exactly as the lantern, the hornbill tint and (now) the tiger were
+// handled — and `feat/image-sizing` still ships both films and still passes this
+// rig unmodified. See `docs/DECISIONS.md` §22 and CLAUDE.md's Tests row. A FAIL
+// here on `feat/home-v2`/`feat/journal-and-mobile` means "no film to check", not
+// "a film is broken" — there is nothing left on either home-page build for this
+// file to find.
+//
+// Run (with `npx next start -p 3100` already up), on `feat/image-sizing` or `main`:
 //   node scripts/check_films.mjs
 //
 // **These were the only signature interaction on the page with no automated

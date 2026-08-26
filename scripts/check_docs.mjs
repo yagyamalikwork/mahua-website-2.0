@@ -83,6 +83,12 @@ const GONE = new Set([
   "components/sections/Coverflow.tsx",
   "components/sections/CoverflowCard.tsx",
   "components/sections/Testimonials.tsx",
+  // The hand-built review carousel, retired 26 Aug 2026 when the client supplied
+  // his own Elfsight widget instead — see docs/DECISIONS.md §22.
+  "lib/reviews.ts",
+  "scripts/check_reviews.mjs",
+  "components/sections/ReviewCarousel.tsx",
+  "components/ui/RatingCircles.tsx",
   "components/sections/SplitFeature.tsx",
   "scripts/check_coverflow.mjs",
   "lib/band-height.ts",
