@@ -2717,7 +2717,9 @@ Headlines only, here:
   removal — by.
 - **`vann-press` improved 87.0% → 80.0%** (b9eecaa → now) and **`tola-press` is a brand-new chapter reading
   82.1%** (it did not exist before Task 8). Both are **real figures now, not blind ones** — §22.8 finding 4
-  — and both remain **long-standing open items**, not new regressions: `vann-press` was already 88.4% empty
+  — but neither is a *settled* one: both carry the widget, and §22.10 traces why that means neither figure,
+  nor `invitation`'s, may be quoted without re-deriving it. Both remain **long-standing open items**, not new
+  regressions: `vann-press` was already 88.4% empty
   before any work on this branch (`docs/DECISIONS.md` §5), so its current 80.0% is an improvement of ~8
   points, not a new failure. `vann-forest` similarly improved 55.8% → 45.2% and `tola-reserve` 58.0% → 46.9%
   — both still over the ceiling, both pre-existing per §5.
@@ -2743,3 +2745,87 @@ Headlines only, here:
   pixels which fixed 150px sample lands nearest its worst point — but this task did not bisect it to a
   specific commit, and does not assert more than it measured. **Reported to the client per this project's
   "give the number, let him choose" practice, not fixed unilaterally inside a documentation task.**
+
+### 22.10 A wrong mechanism in `ae26bd6`, corrected — why `invitation` moved 14.3% → 19.9%
+
+**Fix round 1 on this task. §22 entry #4 above (the shadow-root fix itself) is accurate. This corrects a
+different claim: the explanation `ae26bd6`'s own commit message and `task-8b-report.md` give for *why*
+`invitation` moved in the opposite direction from `vann-press`/`tola-press`.** That record reads:
+
+> "`Invitation.tsx` mounts the widget behind a `Scrim flat={0.6}` — 60% alpha, below this rig's own 0.98
+> 'opaque' threshold — so the walk fell straight through the see-through scrim to the real photograph
+> behind everything."
+
+**This is wrong, on two independent counts, and traced rather than disbelieved on the strength of a plausible
+alternative — the same discipline this project already applied to §17's own explanation of itself (§20.1),
+applied here to a commit message rather than a component comment.**
+
+1. `components/ui/Scrim.tsx`'s `flat` layer applies its strength through the CSS **`opacity` property** on
+   the whole `<div>` — `style={{ backgroundColor: "var(--overlay)", opacity: flat }}` — not through an rgba
+   alpha channel on the colour itself.
+2. `lib/palette.ts`'s `overlay` is a solid hex, `#232B21`, carrying no alpha component to begin with.
+3. `scripts/measure_density.mjs`'s `alphaOf` reads only the fourth component of an `rgba(...)` string; a
+   `backgroundColor` with three components — any solid colour, whatever its CSS `opacity` — falls through
+   `p.length < 4` and returns **1**. Confirmed live, in the running page: the Scrim's own div computes to
+   `backgroundColor: rgb(35, 43, 33)`, `opacity: 0.6` as two separate facts, and `alphaOf` on that
+   `backgroundColor` string returns 1, not 0.6.
+4. Decisively, none of the above is ever reached. The Scrim's div is `pointer-events-none`, and the rig's
+   pointer-events override (`scripts/measure_density.mjs`, the loop over
+   `document.querySelectorAll("img, video, svg, canvas")`) only switches `img`/`video`/`svg`/`canvas`
+   elements clickable for the duration of a sample — a plain `<div>` like the Scrim's is never touched by
+   that override and so **never appears in `document.elementsFromPoint`'s returned stack at all, at any
+   alpha.** Confirmed live: sampling at the Scrim div's own centre, `document.elementsFromPoint` returns the
+   paragraph above it, its wrapper divs, the section's own `<img>`, and on up to `<html>` — seventeen
+   elements, none of them the Scrim.
+
+So there is no "walk falls through a see-through scrim" in either direction: the Scrim was never in the
+stack to fall through, and had it somehow been, `alphaOf` would have read it as opaque, not 60%.
+
+**The verified mechanism**, traced live against the running page with a throwaway probe script — written for
+this fix round only and not committed, in the spirit of Task 2's own one-off `widget-network-cost.md` probe —
+sampling real points inside the rendered widget and reading exactly what `document.elementsFromPoint` / the
+shadow-pierced walk return at each:
+
+- **Pre-fix**, `document.elementsFromPoint` at any point over the widget returned its own mount wrappers
+  (`elfsight-app-…`, `es-embed-root`) — both computed `background-color: rgba(0, 0, 0, 0)`, fully
+  transparent — and continued straight through them, because neither is opaque, to `invitation`'s own
+  full-bleed `<img>` underneath, crediting it as imagery. That is a real miscredit: a visitor at that point
+  on screen sees an opaque review card, not the photograph, but the pre-fix rig counted the cell as occupied
+  regardless.
+- **Post-fix**, `deepElementsFromPoint` enters the shadow root at that same transparent host and finds
+  Elfsight's own markup. Sampled directly: a point in a card's own padding (10px inside its top-left corner)
+  resolves to `ReviewBackground__Container`, computed `background-color: rgb(17, 17, 17)` — solid,
+  `alphaOf` = 1 — and the walk **stops there**, matching neither the image nor the text branch: **kind = 0,
+  scored empty.** The avatar block samples the same way. A point over the review text itself still resolves
+  to a real `Range` line box and scores as text, unchanged. A point in the gap between two cards resolves to
+  transparent Elfsight layout wrappers all the way through and — nothing opaque intervening — still falls
+  through to the underlying `<img>`, exactly as before the fix.
+
+So `invitation`'s rise in empty% is the cards' own solid, non-text chrome — padding, the avatar box, the
+space around each line of review text — being counted honestly as neither image nor text for the first
+time, not a scrim's alpha ceasing to be "seen through." `PressBand` never had this miscredit to remove: it
+stands on opaque cream with no photograph behind either wrapper, so the identical fix could only ever *add*
+occupancy there. Same fix, two opposite directions, for a real and now-traced reason rather than the one
+recorded on 26 Aug.
+
+**One nuance the rig's own two-category model cannot express, worth recording alongside this.** A solid,
+non-text card background is not "bare cream" either, and the rig has no third label for it —
+`measure_density.mjs` scores "neither image nor text as this instrument defines them," not "a visitor sees
+paper." Read `invitation`'s post-fix figure as "the widget's own chrome no longer miscredited as the photo
+behind it," not as "this much of the screen is empty paper."
+
+**This also means `invitation` — and every other chapter carrying the widget — is subject to
+`docs/reviews/2026-08-26-restructure/density-variance-NOTE.md`, which this section did not previously cite.**
+The widget's own carousel autoplays and its rendered height is not fully deterministic between page loads:
+`heightPx` was observed at two distinct modes across repeated runs on one unchanged build — home 1068px in 5
+of 6 runs, 900px in the sixth; Vann 857px in 3 of 4, 622px in the fourth (the same 622px Task 8's own report
+independently recorded); Tola showed no such swing in four runs, which is evidence of a lower rate, not
+proof of immunity. **Do not quote `invitation`'s 19.9%, `vann-press`'s 80.0%, `tola-press`'s 82.1%, or any
+page-level mean/worst that inherits from them, as settled** — re-derive with `node
+scripts/measure_density.mjs` if a figure that binds is needed.
+
+**For completeness, `invitation`'s own movement, which §22 did not previously record at all:** the home
+page's closing chapter read **14.3% empty before the shadow-DOM fix and 19.9% after** (Task 8b,
+`heightPx` 900 → 1068 across the two measurements compared — itself inside the variance just described, not
+a clean single before/after). `CLAUDE.md`'s own density-history table already carries a caveat pointing at
+`density-variance-NOTE.md` for this chapter; this entry is the corresponding one in `DECISIONS.md`.

@@ -1009,8 +1009,10 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
   this restructure changed.
 - **A ruling on `vann-press`/`tola-press`** at 80.0%/82.1% empty — both real, measured figures now (a
   shadow-DOM instrument fix stopped the rig scoring the widget's own review cards as bare cream), both
-  improved over their pre-branch figures, and both still well over the 45% ceiling. `docs/DECISIONS.md` §22.9
-  has the full before/after.
+  improved over their pre-branch figures, and both still well over the 45% ceiling. **Both figures swing
+  with the widget's own carousel state and must not be quoted as settled** — `docs/DECISIONS.md` §22.9–§22.10
+  and `docs/reviews/2026-08-26-restructure/density-variance-NOTE.md` have the full before/after and the
+  observed range.
 - **A ruling on `tola-rooms`**, newly reading 45.3% worst (`vann-rooms` passes at 43.7%) — a real,
   reproducible figure first noted in a task report's prose and never put to him. `docs/DECISIONS.md` §22.9.
 
