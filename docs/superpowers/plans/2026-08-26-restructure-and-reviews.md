@@ -1713,6 +1713,114 @@ EOF
 
 ---
 
+### Task 8b: Fix the instruments, because Task 9 is only as good as they are
+
+**Added 26 August 2026, after Tasks 2, 7 and 8 each found a rig that could not see what it was pointed at.**
+Task 9's entire job is to run these rigs and commit their numbers. **Run them as they stand and it commits
+four wrong answers.**
+
+**Files:**
+- Modify: `scripts/measure_density.mjs`
+- Modify: `scripts/check_docs.mjs`
+- Modify: `scripts/check_contrast_over_photos.mjs`
+
+**Interfaces:** none — these are instruments, not product code.
+
+**The rule this task works under, stated first because it is the one that could be abused.** A rig may be
+changed so that it can **see** something it was blind to. A rig may never be changed so that a number comes
+out differently. Every change here must be justified by *what the browser actually paints*, and each must be
+demonstrated by watching the rig give a different, better-founded answer on a page nobody changed.
+
+#### 8b.1 `measure_density.mjs` cannot see inside a shadow root
+
+`document.elementsFromPoint()` does not pierce shadow boundaries, and neither does the `Range`-based text
+detection beside it. Elfsight renders its review cards into an **open** shadow root. So with the widget
+rendering correctly — screenshotted, DOM-inspected — the rig scored **the entire live card row as bare
+paper**: `vann-press` 85.1% → **90.5%**, `tola-press` **92.2%**.
+
+**This is the same defect this rig already had once**, and CLAUDE.md records the fix: it was blind to
+`pointer-events: none` elements until 7 Aug 2026, "so the lantern — which is deliberately click-through —
+scored as bare paper while appearing in the same report's image inventory. **Two numbers from one instrument
+disagreeing is what gave it away.**" Same instrument, same failure, new cause.
+
+**The fix:** where `elementsFromPoint` returns an element with an open `shadowRoot`, recurse into
+`shadowRoot.elementsFromPoint(x, y)` and continue until the deepest hit is reached. Closed shadow roots
+cannot be pierced and must be **reported, not silently skipped** — a rig that cannot see something should
+say so.
+
+**Watch it fail first.** Against the current build, `vann-press` must read ~90.5% before the change and
+materially less after, with nothing on the page having changed. If the figure does not move, the fix is not
+working and the shadow root is not being reached.
+
+#### 8b.2 `check_docs.mjs` crashes instead of reporting
+
+Line ~197 reads a hard-coded list including `"check_reviews.mjs"`, deleted in Task 2. The rig throws
+`ENOENT` and exits — **this project's own "do the documents still describe the repository?" gate has been
+dead since that commit**, and it is the gate the client asked for three times. Remove the stale entry.
+Make the loop tolerate a missing file by **reporting it as drift** rather than throwing, so the next
+deletion produces a finding instead of a crash.
+
+#### 8b.3 `check_contrast_over_photos.mjs`'s property runs are mostly dead
+
+**24 of 30** property probes point at chapters deleted in Task 5. A dead probe is worse than no probe: it
+reports nothing and reads as coverage. Remove the dead entries, and **make an unmatched selector fail
+loudly** rather than pass silently — the same lesson as 8b.2 in a different rig.
+
+#### The steps
+
+- [ ] **Step 1: Record the before-figures.** Against a production build of the current commit, run
+  `measure_density.mjs` on both property routes and save the output. These are the "blind" numbers and they
+  are the evidence the fix worked.
+- [ ] **Step 2: Fix `measure_density.mjs` to pierce open shadow roots.** Comment the change in house style,
+  citing the 7 Aug `pointer-events` precedent as the same defect recurring.
+- [ ] **Step 3: Re-measure both property routes.** `vann-press` and `tola-press` must move materially, on a
+  page where **not one product file changed**. Report both figures side by side. If they do not move, stop
+  and report why.
+- [ ] **Step 4: Confirm the home page is unmoved.** `field-days` must still read 35.6% and the page's other
+  chapters must be unchanged — the home page has no shadow roots in it, so a figure moving there means the
+  change did something other than what it claims.
+- [ ] **Step 5: Fix `check_docs.mjs`** and run it. It must complete and report, whatever it reports.
+- [ ] **Step 6: Fix `check_contrast_over_photos.mjs`'s property run-sets** and run all three routes. Report
+  how many probes are live per route before and after.
+- [ ] **Step 7: `npm test`, `npm run lint`, `npm run build`.** No product code changed, so the count must be
+  unchanged. Any movement is a finding.
+- [ ] **Step 8: Commit.**
+
+```bash
+git add -A
+git commit -m "$(cat <<'EOF'
+fix: three rigs that could not see what they were pointed at
+
+Task 9's whole job is to run these and commit their numbers. Run as they
+stood, it would have committed four wrong answers.
+
+measure_density hit-tests with document.elementsFromPoint, which does not
+pierce a shadow boundary, and Elfsight renders into an open shadow root —
+so with the widget rendering correctly, screenshotted and DOM-inspected,
+the rig scored the entire live card row as bare paper: vann-press 90.5%,
+tola-press 92.2%. This is the SAME instrument's SAME failure as the
+pointer-events blindness fixed on 7 Aug 2026, and it was caught the same
+way: two numbers from one instrument disagreeing.
+
+check_docs crashed on ENOENT reading a rig Task 2 deleted, so the "do the
+documents still describe the repository?" gate has been dead since that
+commit — the gate the client asked for three times. It now reports a
+missing file as drift instead of throwing.
+
+check_contrast_over_photos had 24 of 30 property probes pointing at
+chapters deleted in Task 5. A dead probe is worse than no probe: it
+reports nothing and reads as coverage. Unmatched selectors now fail loudly.
+
+No product file changed. Every figure that moved, moved because the
+instrument can now see what the browser was already painting.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+---
+
 ### Task 9: Whole-branch verification, and the record
 
 **Files:**
