@@ -565,22 +565,32 @@ const HOME_RUNS = [
  * page's, retargeted at that page's own hero id — the selectors are the same
  * because `Hero` and `SiteHeader` are the same components.
  *
- * `scrolledAt` should be a chapter where the scrolled header sits over a
- * photograph, so a missing cream bar fails loudly (the home page's own rule
- * above). Tola has one — the full-bleed guest quote (`#tola-guest-word`).
+ * **The three "header scrolled · *" runs — and the `scrolledAt` anchor that
+ * placed them — were removed here on 26 August 2026 (Task 8b), not added
+ * back.** They used to scroll to a chapter where the header sits over a
+ * photograph, so a missing cream bar would fail loudly (the home page's own
+ * `#invitation` still does this). Task 5 of the 26 Aug restructure deleted
+ * `vann-table`, `tola-guest-word` and `tola-table` outright on the client's
+ * ruling, and neither that task nor its own fix round updated this rig to
+ * match: `scrolledAt` went on naming an anchor that no longer existed, so
+ * every one of these three runs, on both routes, reported NOT FOUND on every
+ * width, every run since — Task 7 found and documented this (24 dead targets
+ * on `/mahua-vann`, 30 on `/mahua-tola`) and left it for whoever owned this
+ * file next, rather than patch over it unasked.
  *
- * **Vann's own scrolled anchor moved on 9/10 Aug 2026, Task 15.** It was
- * `#vann-rooms`, a cream showcase band, with a comment here claiming "Vann
- * has no full-bleed chapter below its hero at all" — true of the page this
- * rig was first written against, false of the shape-vocabulary redesign that
- * shipped in `05d8925`: `vann-table` ("04 · The Table") is now a `fullBleed`
- * chapter with a photograph under it. `#vann-rooms` was a probe that could
- * never fail the way its home-page counterpart can, exactly the weakness the
- * comment it replaced flagged and then left unfixed. `scrolledAt` is now
- * `#vann-table`, which is also where the new quote probe below reads its
- * type.
+ * **A dead probe is worse than no probe.** It does not fail quietly — this
+ * rig's own `missing` counter already turns an unmatched selector into a hard
+ * exit (see `main()` below) — but a run-set where 24 of 30 entries can now
+ * never do anything BUT fail reads as if the rig still has meaningful
+ * coverage of the scrolled header, when nobody has been able to see that
+ * coverage pass since the chapters it needs were deleted. Removed rather than
+ * patched: reconstructed from `PropertyPage.tsx`'s own dispatcher comment,
+ * neither property page has any non-hero `fullBleed` chapter left at all, so
+ * there is no honest photograph anchor left for a "scrolled header over a
+ * photograph" probe to point at. Restoring it needs a real anchor to exist on
+ * the page first, which is a product decision, not this rig's to invent.
  */
-const propertyRuns = (heroId, scrolledAt) => [
+const propertyRuns = (heroId) => [
   { name: "header · menu", min: 4.5, at: `#${heroId}`, container: "header", sel: "[aria-controls='site-menu']" },
   { name: "header · wordmark", min: 4.5, at: `#${heroId}`, container: "header", sel: '[data-contrast="brand-wordmark"]' },
   {
@@ -595,17 +605,6 @@ const propertyRuns = (heroId, scrolledAt) => [
   { name: "hero · headline", min: 3, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} h1 [data-word]` },
   { name: "hero · sub", min: 4.5, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} > div > p` },
   { name: "hero · scroll cue", min: 4.5, at: `#${heroId}`, container: `#${heroId}`, sel: `#${heroId} div.flex > span:nth-child(2)` },
-  { name: "header scrolled · menu", min: 4.5, at: scrolledAt, container: "header", sel: "[aria-controls='site-menu']", text: INK },
-  { name: "header scrolled · wordmark", min: 4.5, at: scrolledAt, container: "header", sel: '[data-contrast="brand-wordmark"]', text: BRAND },
-  {
-    name: "header scrolled · pill",
-    min: 4.5,
-    at: scrolledAt,
-    container: "header",
-    sel: "[data-contrast='header-pill'] a span",
-    text: OVERLAY,
-    hide: "color",
-  },
   ...MENU_RUNS(heroId),
 ];
 
@@ -617,40 +616,36 @@ const propertyRuns = (heroId, scrolledAt) => [
  * said "verified". A rig must refuse to measure a page it has no probes for.
  */
 /*
- * **Found running this rig for Task 7 (26 Aug 2026), not caused by it and
- * not fixed here: both `propertyRuns` calls below name a `scrolledAt` and a
- * `quote · …` probe that no longer exist.** Task 5 of this same restructure
- * deleted `vann-table`, `tola-guest-word` and `tola-table` outright (the
- * client's ruling), and neither this file nor Task 5's own fix round updated
- * to match — 24 "NOT FOUND" targets across the six widths on each property
- * route, confirmed by actually running it. Left alone rather than patched
- * over: `scrolledAt` exists so the scrolled header is checked over a real
- * PHOTOGRAPH, and neither property page has a non-hero `fullBleed` chapter
- * left at all any more (`PropertyPage.tsx`'s own dispatcher comment says so),
- * so there may be no honest photograph anchor left to point it at — a
- * judgement call this task did not make unasked. See the task report.
+ * **Found running this rig for Task 7 (26 Aug 2026): both `propertyRuns`
+ * calls below named a `scrolledAt` and a `quote · …` probe that no longer
+ * existed** — Task 5 of this same restructure deleted `vann-table`,
+ * `tola-guest-word` and `tola-table` outright (the client's ruling), and
+ * neither this file nor Task 5's own fix round updated to match. 24 "NOT
+ * FOUND" targets on `/mahua-vann`, 30 on `/mahua-tola`, confirmed by actually
+ * running it — a dead probe that reports nothing and reads as coverage.
+ *
+ * **Removed here (Task 8b, 26 Aug 2026), rather than left for a further
+ * round.** The four `quote · *` entries and both `scrolledAt` arguments are
+ * gone; `propertyRuns` no longer takes that parameter at all (see its own
+ * doc comment above for the full reasoning — the short version is that
+ * neither property page has a non-hero `fullBleed` chapter left to point a
+ * "scrolled header over a photograph" probe at, so there is nothing honest
+ * to restore this to without a product change first). The rig's own
+ * `missing` counter (`main()` below) already turns any future unmatched
+ * selector into a hard failure — removing these entries does not weaken
+ * that, it stops it firing on targets that were never coming back.
  */
 const RUN_SETS = {
   "/": HOME_RUNS,
   "/mahua-vann": [
-    ...propertyRuns("vann-hero", "#vann-table"),
-    // `vann-table` renders as `FullBleedQuote` — type over a photograph —
-    // and until Task 15 (9/10 Aug 2026) had never been measured: it fell
-    // through to that component's generic default scrim
-    // (`{ flat: 0.4, centre: 0.4 }`), tuned for no composition in particular.
-    // Added alongside `tola-table`'s equivalent below.
-    { name: "quote · vann-table", min: 3, at: "#vann-table", container: "#vann-table", sel: "#vann-table [data-word]" },
+    ...propertyRuns("vann-hero"),
     // `03 · The Experience`'s six cards, added 26 Aug 2026 — the client's own
     // card strip, mounted here unmodified. Same six runs as the home page's
     // `STRIP_RUNS`, retargeted at this page's own chapter id.
     ...makeStripRuns("vann-day"),
   ],
   "/mahua-tola": [
-    ...propertyRuns("tola-hero", "#tola-guest-word"),
-    { name: "quote · tola-guest-word", min: 3, at: "#tola-guest-word", container: "#tola-guest-word", sel: "#tola-guest-word [data-word]" },
-    // `tola-table`, this page's other generic-scrim `FullBleedQuote` chapter
-    // — same gap `vann-table` had, closed the same way, Task 15.
-    { name: "quote · tola-table", min: 3, at: "#tola-table", container: "#tola-table", sel: "#tola-table [data-word]" },
+    ...propertyRuns("tola-hero"),
     // `03 · The Experience`'s six cards, added 26 Aug 2026 — see the identical
     // note on `/mahua-vann` above.
     ...makeStripRuns("tola-day"),

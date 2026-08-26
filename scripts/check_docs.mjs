@@ -194,7 +194,31 @@ if (pageMean === null) {
 
 // A rig that prints "PASS — N assertions" is claiming a number about itself.
 // CLAUDE.md's command list describes these rigs, so it must carry the same N.
-for (const f of ["check_reviews.mjs", "check_experience_strip.mjs"]) {
+//
+// **`check_reviews.mjs` sat in this list from the day it was written until the
+// day it was deleted — Task 2 of the 26 Aug 2026 restructure, which replaced
+// the review carousel with the client's own Elfsight widget — and this loop
+// went on reading it anyway.** The line below called `read(\`scripts/${f}\`)`
+// with no existence check, exactly like `exists()` guards every other file
+// this rig opens; the very next run threw `ENOENT` and took the whole rig
+// down with it, uncaught, exit code aside. **This project's own "do the
+// documents still describe the repository?" gate — the gate the client has
+// asked for three times — was therefore dead from that commit onward, and
+// nothing said so until this fix (Task 8b, 26 Aug 2026).** The stale entry is
+// removed, and the loop now checks existence first, so the NEXT rig this list
+// outlives produces a finding here rather than a crash — the same lesson
+// non-negotiable #8's own history already carries for `measure_density.mjs`
+// twice over: a rig that cannot see something must say so, not fall silent
+// (or, worse, fall over).
+for (const f of ["check_experience_strip.mjs"]) {
+  if (!exists(`scripts/${f}`)) {
+    fail(
+      3,
+      `scripts/${f} is named in check_docs.mjs's own hard-coded assertion-count list but no ` +
+        `longer exists — remove it here, the way check_reviews.mjs should have been`,
+    );
+    continue;
+  }
   const n = /PASS — (\d+) assertions/.exec(read(`scripts/${f}`))?.[1];
   if (!n) {
     fail(3, `scripts/${f} prints no assertion count — this check cannot see it`);

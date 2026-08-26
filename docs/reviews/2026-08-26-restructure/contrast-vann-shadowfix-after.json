@@ -1,0 +1,1512 @@
+{
+  "measuredAt": "2026-08-26T15:25:11.728Z",
+  "url": "http://localhost:3100/mahua-vann",
+  "widths": {
+    "360": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.82,
+        "brightest": [
+          47,
+          58,
+          48
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.06,
+        "brightest": [
+          54,
+          63,
+          52
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 3.76,
+        "brightest": [
+          137,
+          115,
+          76
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.17,
+        "brightest": [
+          93,
+          98,
+          91
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.49,
+        "brightest": [
+          66,
+          75,
+          67
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.11,
+        "brightest": [
+          200,
+          192,
+          175
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          179
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.16,
+        "brightest": [
+          200,
+          193,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.02,
+        "brightest": [
+          103,
+          99,
+          74
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 31.2
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.22,
+        "brightest": [
+          95,
+          97,
+          86
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.8,
+          "rightSlack": 11.41
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.38,
+        "brightest": [
+          96,
+          95,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.59,
+          "rightSlack": 11.61
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.4,
+        "brightest": [
+          94,
+          95,
+          76
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.39,
+          "rightSlack": 10.81
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.9,
+        "brightest": [
+          95,
+          102,
+          94
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.19,
+          "rightSlack": 11.02
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          106,
+          95,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 30.98,
+          "rightSlack": 0.22
+        },
+        "misplaced": null
+      }
+    ],
+    "390": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.71,
+        "brightest": [
+          47,
+          59,
+          48
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.06,
+        "brightest": [
+          54,
+          63,
+          52
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 5.09,
+        "brightest": [
+          95,
+          99,
+          88
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 4.96,
+        "brightest": [
+          94,
+          101,
+          96
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.95,
+        "brightest": [
+          63,
+          71,
+          63
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.11,
+        "brightest": [
+          200,
+          192,
+          175
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          201,
+          194,
+          176
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.1,
+        "brightest": [
+          199,
+          192,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.37,
+        "brightest": [
+          101,
+          94,
+          66
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 37.81
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.52,
+        "brightest": [
+          83,
+          82,
+          70
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.19,
+          "rightSlack": 17.63
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.24,
+        "brightest": [
+          89,
+          84,
+          72
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20.38,
+          "rightSlack": 17.44
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.43,
+        "brightest": [
+          96,
+          94,
+          75
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.56,
+          "rightSlack": 18.25
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.13,
+        "brightest": [
+          92,
+          99,
+          90
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 19.75,
+          "rightSlack": 18.06
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.13,
+        "brightest": [
+          107,
+          96,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 37.94,
+          "rightSlack": -0.13
+        },
+        "misplaced": null
+      }
+    ],
+    "768": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.37,
+        "brightest": [
+          45,
+          54,
+          44
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.21,
+        "brightest": [
+          53,
+          62,
+          50
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 6.99,
+        "brightest": [
+          73,
+          79,
+          68
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.07,
+        "brightest": [
+          81,
+          88,
+          81
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.44,
+        "brightest": [
+          52,
+          60,
+          51
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.05,
+        "brightest": [
+          199,
+          191,
+          174
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.17,
+        "brightest": [
+          201,
+          193,
+          175
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.1,
+        "brightest": [
+          199,
+          192,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.6,
+        "brightest": [
+          100,
+          91,
+          59
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 332
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.23,
+        "brightest": [
+          86,
+          85,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.16,
+        "brightest": [
+          89,
+          85,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.93,
+        "brightest": [
+          66,
+          71,
+          56
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 312
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.2,
+        "brightest": [
+          106,
+          95,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 332,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ],
+    "1024": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.02,
+        "brightest": [
+          59,
+          54,
+          32
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.6,
+        "brightest": [
+          74,
+          63,
+          29
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 6.89,
+        "brightest": [
+          73,
+          80,
+          71
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.89,
+        "brightest": [
+          55,
+          64,
+          57
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.45,
+        "brightest": [
+          46,
+          53,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.3,
+        "brightest": [
+          203,
+          195,
+          177
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          179
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.16,
+        "brightest": [
+          200,
+          193,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.67,
+        "brightest": [
+          100,
+          90,
+          58
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 588
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.23,
+        "brightest": [
+          86,
+          85,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.16,
+        "brightest": [
+          89,
+          85,
+          73
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.47,
+        "brightest": [
+          93,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 568
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.06,
+        "brightest": [
+          65,
+          70,
+          55
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 228,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.2,
+        "brightest": [
+          106,
+          95,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 588,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ],
+    "1440": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.89,
+        "brightest": [
+          50,
+          49,
+          32
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.23,
+        "brightest": [
+          67,
+          59,
+          29
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.73,
+        "brightest": [
+          183,
+          140,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.03,
+        "brightest": [
+          110,
+          115,
+          104
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 8.58,
+        "brightest": [
+          59,
+          66,
+          57
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.45,
+        "brightest": [
+          46,
+          53,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.28,
+        "brightest": [
+          201,
+          195,
+          179
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          200,
+          194,
+          178
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.09,
+        "brightest": [
+          198,
+          192,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.51,
+        "brightest": [
+          101,
+          92,
+          62
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 1004
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.23,
+        "brightest": [
+          86,
+          85,
+          72
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 984
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.3,
+        "brightest": [
+          93,
+          96,
+          88
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 984
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.47,
+        "brightest": [
+          93,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 284,
+          "rightSlack": 720
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.52,
+        "brightest": [
+          70,
+          74,
+          63
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 644,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.21,
+        "brightest": [
+          106,
+          95,
+          70
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 1004,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ],
+    "1920": [
+      {
+        "name": "header · menu",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 9.5,
+        "brightest": [
+          62,
+          58,
+          31
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · wordmark",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 11.25,
+        "brightest": [
+          46,
+          47,
+          33
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "header · pill",
+        "min": 4.5,
+        "text": "#232b21",
+        "worst": 4.8,
+        "brightest": [
+          185,
+          141,
+          46
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · headline",
+        "min": 3,
+        "text": "#f1e9d7",
+        "worst": 4.15,
+        "brightest": [
+          107,
+          113,
+          103
+        ],
+        "boxes": 7,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · sub",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.94,
+        "brightest": [
+          64,
+          71,
+          62
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "hero · scroll cue",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 10.45,
+        "brightest": [
+          46,
+          53,
+          45
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · place over frost",
+        "min": 3,
+        "text": "#31402c",
+        "worst": 6.3,
+        "brightest": [
+          202,
+          195,
+          179
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · region over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.16,
+        "brightest": [
+          199,
+          193,
+          178
+        ],
+        "boxes": 2,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "menu · hint over frost",
+        "min": 4.5,
+        "text": "#31402c",
+        "worst": 6.22,
+        "brightest": [
+          201,
+          194,
+          176
+        ],
+        "boxes": 1,
+        "pass": true,
+        "placement": null,
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 01",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.6,
+        "brightest": [
+          100,
+          91,
+          59
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 0,
+          "rightSlack": 1164
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 02",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 6.33,
+        "brightest": [
+          85,
+          84,
+          71
+        ],
+        "boxes": 3,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 20,
+          "rightSlack": 1144
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 03",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.36,
+        "brightest": [
+          93,
+          95,
+          87
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 84,
+          "rightSlack": 1080
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 04",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.45,
+        "brightest": [
+          94,
+          94,
+          78
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 444,
+          "rightSlack": 720
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 05",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 7.51,
+        "brightest": [
+          70,
+          74,
+          64
+        ],
+        "boxes": 4,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 804,
+          "rightSlack": 360
+        },
+        "misplaced": null
+      },
+      {
+        "name": "strip · card 06",
+        "min": 4.5,
+        "text": "#f1e9d7",
+        "worst": 5.2,
+        "brightest": [
+          106,
+          95,
+          71
+        ],
+        "boxes": 5,
+        "pass": true,
+        "placement": {
+          "found": true,
+          "leftSlack": 1164,
+          "rightSlack": 0
+        },
+        "misplaced": null
+      }
+    ]
+  }
+}

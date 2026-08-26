@@ -107,6 +107,42 @@ const STEP = Number(flag("step", "150"));
 const MAX_EMPTY = 45;
 
 /**
+ * Marks any element given a CLOSED shadow root, at the one moment the
+ * distinction is visible — so `sampleScreen` can say "something real is here
+ * and I cannot see it" rather than mistake it for bare paper.
+ *
+ * There is no way to ask afterwards whether an element has a closed shadow
+ * root: `el.shadowRoot` reads `null` for "no shadow root at all" and for "a
+ * shadow root exists but is closed" alike — that is the entire point of
+ * `{ mode: "closed" }`. The only place the two cases are ever distinguishable
+ * is the call to `attachShadow()` itself, so this patches
+ * `Element.prototype.attachShadow` — installed once per page via
+ * `page.addInitScript`, which Playwright guarantees runs before any other
+ * script, first-party or third-party, on every document the page loads — to
+ * tag the host and hand back the real shadow root completely unmodified.
+ * Nothing about the page's own behaviour changes: this adds one boolean-ish
+ * data attribute that nothing on this site reads or styles, and every caller
+ * of `attachShadow` gets back exactly what it would have without this patch.
+ *
+ * **A known, disclosed gap rather than a solved one**: declarative shadow DOM
+ * (`<template shadowrootmode="closed">`) attaches a root during HTML parsing,
+ * never through a call to `attachShadow()`, so a closed root created that way
+ * would still be invisible to this rig. Nothing on this page uses it today —
+ * Elfsight's platform calls `attachShadow()` at runtime, which this patch
+ * does catch (confirmed: it is OPEN, see `deepElementsFromPoint` below) — and
+ * a gap that is named is a smaller one than a rig that quietly claims to have
+ * closed it.
+ */
+function markClosedShadowHosts() {
+  const real = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function attachShadow(init) {
+    const root = real.call(this, init);
+    if (init && init.mode === "closed") this.setAttribute("data-density-rig-closed-shadow", "1");
+    return root;
+  };
+}
+
+/**
  * One screen, hit-tested. Runs in the page.
  *
  * A real function, not a source string: `page.evaluate("(a) => …", a)` makes
@@ -187,11 +223,83 @@ function sampleScreen(cell) {
     return boxes;
   };
 
+  /** Cells where the deepest thing this rig could reach was a CLOSED shadow root. */
+  let closedShadowCells = 0;
+
+  /**
+   * `document.elementsFromPoint` — and `ShadowRoot.elementsFromPoint`, the
+   * same method on the `DocumentOrShadowRoot` mixin — do not pierce INTO a
+   * shadow tree on their own; each stops at the host, exactly the way this
+   * rig used to stop at anything with `pointer-events: none` until 7 Aug
+   * 2026. Elfsight renders its whole review carousel into an OPEN shadow root
+   * on the widget's mount div, and with the widget rendering correctly —
+   * screenshotted, DOM-inspected, confirmed non-empty by Task 8's own report
+   * (`.superpowers/sdd/2026-08-26-restructure-and-reviews/task-8-report.md`)
+   * — this rig scored the entire live card row as bare paper: `vann-press`
+   * 85.1% -> 90.5%, `tola-press` 92.2%. **Same instrument, same shape of
+   * defect as the lantern**: "two numbers from one instrument disagreeing is
+   * what gave it away" then; here, a screenshot showing real review cards
+   * disagreeing with a rig reporting 90%+ empty is the same tell, recurring
+   * for a different reason.
+   *
+   * The fix is the same shape too: descend into what the flat stack could not
+   * previously reach, and change nothing about what the page actually paints.
+   * Recursion, not a single extra step, because a widget could in principle
+   * nest a shadow root inside a shadow root — this rig has no way to know the
+   * nesting depth in advance and does not need to, since the same method
+   * exists at every level.
+   *
+   * A CLOSED root cannot be entered this way: `el.shadowRoot` reads `null`
+   * whether there is no shadow root at all or a closed one, so a host tagged
+   * by `markClosedShadowHosts` above (patched in before this page ever
+   * navigated) is recorded as unmeasurable rather than silently read as bare
+   * paper — the whole lesson of this fix is that a rig which cannot see
+   * something should say so.
+   *
+   * **`seen` guards against re-entering the same shadow root, and this is not
+   * a defensive nicety — it is what makes this fix work at all against the
+   * real widget.** The first version of this recursion had no such guard and
+   * crashed every real run against `/mahua-vann` and `/mahua-tola` with
+   * `RangeError: Maximum call stack size exceeded` inside
+   * `deepElementsFromPoint`, watched failing directly (Task 8b, 26 Aug 2026).
+   * Elfsight's carousel is built on Swiper, which Task 8's own DOM trace
+   * already found (`Main__Container → … → Carousel__* → swiper →
+   * swiper-slide → CarouselItem__*`); modern Swiper ships its slides as real
+   * custom elements that each attach their OWN shadow root, and its loop mode
+   * clones slide nodes for the seamless wrap — which is exactly the shape of
+   * repetition that sent this recursion back into a shadow root it had
+   * already entered, over and over, rather than into new content. A `Set` of
+   * already-entered roots makes a repeat re-entry a no-op instead of another
+   * stack frame, which is correct independently of the exact mechanism above:
+   * visiting the same shadow tree's content twice would only double-count it
+   * for occupancy anyway, so refusing to re-enter it is the right rule
+   * whether or not this specific cause is the whole story.
+   */
+  function deepElementsFromPoint(x, y, root, seen) {
+    seen ??= new Set();
+    const stack = root.elementsFromPoint(x, y);
+    const out = [];
+    let closed = false;
+    for (const el of stack) {
+      out.push(el);
+      if (el.shadowRoot && !seen.has(el.shadowRoot)) {
+        seen.add(el.shadowRoot);
+        const inner = deepElementsFromPoint(x, y, el.shadowRoot, seen);
+        out.push(...inner.stack);
+        closed = closed || inner.closed;
+      } else if (el.hasAttribute?.("data-density-rig-closed-shadow")) {
+        closed = true;
+      }
+    }
+    return { stack: out, closed };
+  }
+
   for (let row = 0; row < rows; row++) {
     const y = row * cell + cell / 2;
     for (let col = 0; col < cols; col++) {
       const x = col * cell + cell / 2;
-      const stack = document.elementsFromPoint(x, y);
+      const { stack, closed } = deepElementsFromPoint(x, y, document);
+      if (closed) closedShadowCells++;
       let kind = 0;
       for (const el of stack) {
         const cs = getComputedStyle(el);
@@ -227,7 +335,20 @@ function sampleScreen(cell) {
   restore();
   // `scrollY` is read back rather than assumed: Lenis smooths the jump, so
   // `window.scrollTo` is a request and not an assignment.
-  return { cols, rows, image, text, scrollY: Math.round(window.scrollY) };
+  return {
+    cols,
+    rows,
+    image,
+    text,
+    // Cells behind a closed shadow root — reported, never folded into `image`
+    // or `text`. Guessing which one it should be would be exactly the kind of
+    // invented number this rig's own rule forbids; on this page it is always
+    // 0 (Elfsight's root is open, see `deepElementsFromPoint` above), and it
+    // exists so the day something on this site DOES use a closed root, this
+    // number says so instead of silently reading as bare paper again.
+    closedShadowCells,
+    scrollY: Math.round(window.scrollY),
+  };
 }
 
 /** Every distinct photograph the page has rendered, keyed by media id. */
@@ -272,7 +393,20 @@ function score(sample) {
   const imagePercent = pct((sample.image.length / total) * 100);
   const typePercent = pct((sample.text.length / total) * 100);
   const occupied = pct(imagePercent + typePercent);
-  return { at: sample.scrollY, occupied, empty: pct(100 - occupied), imagePercent, typePercent };
+  // Reported alongside `empty`, never folded into it: a cell behind a closed
+  // shadow root is neither known-occupied nor known-empty, and `empty` keeps
+  // its original, unchanged definition (100 - occupied) so no committed
+  // figure moves because this field started existing. See `sampleScreen`'s
+  // own comment on `closedShadowCells` for why guessing here would be wrong.
+  const closedShadowPercent = pct(((sample.closedShadowCells ?? 0) / total) * 100);
+  return {
+    at: sample.scrollY,
+    occupied,
+    empty: pct(100 - occupied),
+    imagePercent,
+    typePercent,
+    closedShadowPercent,
+  };
 }
 
 /**
@@ -332,6 +466,10 @@ async function main() {
   const browser = await chromium.launch();
   const context = await browser.newContext({ viewport: { width: WIDTH, height: HEIGHT } });
   const page = await context.newPage();
+  // Installed before ANY page script runs, first-party or third-party — see
+  // `markClosedShadowHosts`'s own comment for why this has to happen this
+  // early rather than after the page has loaded.
+  await page.addInitScript(markClosedShadowHosts);
   await page.goto(URL, { waitUntil: "load", timeout: 120_000 });
   await page.waitForTimeout(2000);
 
@@ -447,6 +585,14 @@ async function main() {
       meanImagePercent: pct(screens.reduce((n, s) => n + s.imagePercent, 0) / screens.length),
       meanTypePercent: pct(screens.reduce((n, s) => n + s.typePercent, 0) / screens.length),
     },
+    // How much of the page this rig could not classify at all, because it sat
+    // behind a CLOSED shadow root. Always 0 on this build (Elfsight's own root
+    // is open) — present so the day that stops being true, the gap shows up
+    // here rather than reading as bare paper the way the open case used to.
+    closedShadowRoots: {
+      screensAffected: screens.filter((s) => s.closedShadowPercent > 0).length,
+      worstPercent: pct(Math.max(0, ...screens.map((s) => s.closedShadowPercent))),
+    },
     chapters,
     emptiestScreens: emptiest.map((w) => ({ at: w.at, empty: w.empty, spans: spans(w.at) })),
     screens,
@@ -485,6 +631,14 @@ async function main() {
     `the average screen is ${report.page.meanImagePercent}% imagery and ` +
       `${report.page.meanTypePercent}% type`,
   );
+  if (report.closedShadowRoots.screensAffected > 0) {
+    console.warn(
+      `\nWARNING: ${report.closedShadowRoots.screensAffected} screen(s) sat behind a CLOSED shadow root ` +
+        `this rig cannot see into (up to ${report.closedShadowRoots.worstPercent}% of one screen). That ` +
+        `content is real and unmeasured — it is NOT counted as empty, but it is also not counted as ` +
+        `occupied, so any chapter's empty% touching those screens may be understating how full it is.`,
+    );
+  }
 
   if (chapters.length) {
     console.log(`\nchapter          tall  screens  mean empty  worst empty   (budget ${MAX_EMPTY}%)`);
