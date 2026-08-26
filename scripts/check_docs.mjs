@@ -150,7 +150,21 @@ for (const f of readdirSync(path.join(ROOT, "scripts"))) {
 const figures = [];
 
 // The density rig writes its own report; the docs must not disagree with it.
-const density = JSON.parse(read("docs/reviews/2026-08-03-chapters/density.json"));
+//
+// **This pointed at `docs/reviews/2026-08-03-chapters/density.json` until 27
+// Aug 2026, and that was stale twice over by the time it was found.** That
+// file was last written 20 Aug 2026, on `feat/home-v2`, and describes a home
+// page that no longer exists on this branch (`field-days` 42.4%/42.4% there;
+// this branch's own build reads 35.6%/35.6% — a different chapter entirely,
+// the sideways activity strip rather than the pinned coverflow). Every
+// density run this branch's own work actually produced wrote somewhere else
+// (`docs/reviews/2026-08-26-restructure/density-home-task9.json` and
+// siblings), so this check was comparing a stale doc's figure to a stale
+// file's figure and reporting PASS on the coincidence — while CLAUDE.md's own
+// banner and non-negotiable #8 quoted 33.6%, a number no committed run on
+// this branch ever produced (the seven committed home runs span 32.4–33.0%).
+// Repointed at a fresh, this-branch run instead of a historical one.
+const density = JSON.parse(read("docs/reviews/2026-08-26-restructure/density.json"));
 const pageMean = density.page?.meanEmptyPercent ?? density.page?.mean ?? null;
 if (pageMean === null) {
   notes.push("density.json has no page mean under a key this rig knows — figure check skipped");
@@ -246,15 +260,43 @@ for (const f of ["check_experience_strip.mjs"]) {
 const motion = read("lib/motion.ts");
 const css = read("app/globals.css");
 
-// The review carousel's two modes: CLAUDE.md tells a future session that one of
-// them is one word away and that one is meant to be deleted.
-if (claude.includes('REVIEWS.mode: "settle"')) {
-  if (!/mode:\s*"loop"\s*as\s*"loop"\s*\|\s*"settle"/.test(motion)) {
-    fail(4, "CLAUDE.md describes REVIEWS.mode as a two-value switch; lib/motion.ts no longer is");
-  }
-  if (!css.includes('[data-reviews-mode="settle"]')) {
-    fail(4, "CLAUDE.md promises a `settle` mode that app/globals.css does not implement");
-  }
+// **This used to check the review carousel's two modes, and it was dead from
+// the day it was written to the day it was found, 27 Aug 2026.** It only ran
+// when `claude.includes('REVIEWS.mode: "settle"')` — a string CLAUDE.md
+// stopped containing on 26 Aug 2026, when Task 2 of that day's restructure
+// retired `REVIEWS.mode` outright rather than choosing between its two values
+// (`docs/DECISIONS.md` §22.3). So neither inner assertion below it could ever
+// run again, including the one checking `app/globals.css`'s `.reviews*`
+// block — which Task 2 deleted the same day. It read as live coverage while
+// checking nothing, which is exactly the class of hole this whole file exists
+// to close; found by a whole-branch fix-wave review, not by this rig itself.
+//
+// Repointed at something true rather than removed outright: `REVIEWS.mode`
+// is retired, not merely unmentioned, so the live check now guards against
+// it quietly coming back — a future session re-adding it to `lib/motion.ts`
+// without also updating every place that called it "retired outright"
+// (CLAUDE.md non-negotiable #5, `docs/DECISIONS.md` §22.3) would be exactly
+// this project's fifty-five-instance defect pattern once more.
+// A declaration, not a mention — `lib/motion.ts` itself deliberately keeps a
+// historical comment naming `REVIEWS` (this project's own convention for
+// marking something gone, per this file's `HISTORICAL` regex above), and that
+// comment must not trip this check the way the ORIGINAL version of this
+// section tripped over a stray same-string coincidence (see this file's own
+// git history / the fix-wave note above).
+if (/^\s*export\s+const\s+REVIEWS\b/m.test(motion)) {
+  fail(
+    4,
+    "lib/motion.ts defines REVIEWS again, but CLAUDE.md's non-negotiable #5 and DECISIONS.md §22.3 both " +
+      "say REVIEWS.mode was retired outright, not superseded — update those before reviving this export",
+  );
+}
+if (css.includes('[data-reviews-mode')) {
+  fail(
+    4,
+    "app/globals.css has a [data-reviews-mode=...] rule, but the review carousel it belonged to was " +
+      "deleted 26 Aug 2026 (DECISIONS.md §22.3) — either this is dead CSS or REVIEWS.mode came back " +
+      "silently",
+  );
 }
 
 // The four documents every session is told to read must be the four it names.

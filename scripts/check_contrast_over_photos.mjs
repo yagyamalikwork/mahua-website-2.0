@@ -543,19 +543,36 @@ const HOME_RUNS = [
    */
   { name: "invitation · body", min: 4.5, at: "#invitation", container: "#invitation", sel: "#invitation [data-contrast='invitation-body']" },
   /*
-   * **The review carousel is deliberately NOT measured here, and the reason is
-   * worth stating so nobody adds it back.** Two runs for it were written on
-   * 20 Aug 2026 and removed the same hour: this rig crops one screenshot to an
-   * element's rect, and a card in a marquee is at a different place on the
-   * photograph in every frame — half of them outside the frame entirely, which
-   * is a `bad extract area` crash rather than a wrong answer. Measuring the
-   * position a card happens to be in when the shutter falls answers a question
-   * nobody asked.
+   * **The review widget is deliberately NOT measured here, and nothing
+   * currently measures it — that is a real, open gap, not a solved one.**
+   * Two runs for the OLD hand-built carousel were written on 20 Aug 2026 and
+   * removed the same hour: this rig crops one screenshot to an element's
+   * rect, and a card in a marquee is at a different place on the photograph
+   * in every frame — half of them outside the frame entirely, which is a
+   * `bad extract area` crash rather than a wrong answer.
    *
-   * `scripts/check_reviews.mjs` owns it instead, and asks the question this
-   * composition actually poses: the worst pixel under the type at **any** point
-   * in the loop, taken by freezing the marquee at eight phases and reading real
-   * pixels at each. See the note there.
+   * `scripts/check_reviews.mjs` used to own this instead — freezing the
+   * marquee at eight phases and reading real pixels at each — but Task 2 of
+   * the 26 Aug 2026 restructure deleted that rig along with the carousel it
+   * measured (`docs/DECISIONS.md` §22.3), and nothing replaced it for the
+   * Elfsight widget that took the carousel's place. `check_docs.mjs` caught
+   * this comment still pointing at a file that no longer exists — see its
+   * own §22.8/§22.11 write-up.
+   *
+   * **This is benign only for as long as the widget's own cards stay
+   * near-black.** A card in a marquee is the same "different place on the
+   * photograph every frame" problem this rig was built to avoid, so building
+   * a real probe for it means the same eight-phase-freeze technique
+   * `check_reviews.mjs` used, adapted for the widget's OPEN shadow root
+   * (`measure_density.mjs`'s own shadow-piercing walk, §22.8 finding 4, is
+   * the precedent). **Not built here, because the client's own restyle
+   * values (`docs/PROJECT-STATE.md`'s owed list — cream card, ink text) have
+   * not shipped yet**: measuring contrast against cards that are about to
+   * change would commit a number to a state nobody will see for long. Build
+   * this the day his restyle lands, before calling that work done — a cream
+   * card with ink text sitting directly over a scrimmed photograph is
+   * exactly the kind of contrast this project checks by instrument, not by
+   * eye, everywhere else on the page.
    */
   ...MENU_RUNS("arrival"),
 ];

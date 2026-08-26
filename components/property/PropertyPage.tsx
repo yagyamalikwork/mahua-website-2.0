@@ -79,13 +79,20 @@ function surfaces(
 /**
  * A bare full-bleed photograph carrying the chapter's own number/label
  * instead of a quote — the third of `fullBleed`'s three jobs (see the long
- * comment in the switch below). No chapter in either spine reaches this as
- * of 9 Aug 2026: every non-hero `fullBleed` chapter on both pages carries a
- * `quoteCopy` entry, and `content/mahua-vann.test.ts` /
- * `content/mahua-tola.test.ts` both require one. Kept anyway, because the
- * alternative is a `fullBleed` chapter with nowhere to go the day a future
- * one *doesn't* carry a quote — and this codebase does not paper over that
- * with a silent fallback.
+ * comment in the switch below). **No chapter in either spine reaches this as
+ * of 26 Aug 2026** — corrected from this comment's own 9 Aug claim ("every
+ * non-hero `fullBleed` chapter... carries a `quoteCopy` entry"), which the
+ * 26 Aug restructure's Task 5 made false the same day it deleted `vann-table`,
+ * `tola-guest-word` and `tola-table` on the client's ruling: **neither page
+ * has ANY non-hero `fullBleed` chapter left at all**, so this branch is
+ * exactly as unreachable as `FullBleedQuote`'s own branch in the switch
+ * below. `content/mahua-vann.test.ts` / `content/mahua-tola.test.ts` still
+ * assert `quoteCopy` is required *the day such a chapter exists* (both
+ * `expect(…quoteCopy).toBeUndefined()` today, confirming none does) — they
+ * do not require one to exist now. Kept anyway, because the alternative is a
+ * `fullBleed` chapter with nowhere to go the day a future one *doesn't*
+ * carry a quote — and this codebase does not paper over that with a silent
+ * fallback.
  */
 function PlainFullBleed({ chapter, scrim }: { chapter: PropertyChapter; scrim?: ScrimStrength }) {
   return (
@@ -131,7 +138,13 @@ export function PropertyPage({
    * `app/page.tsx`. Covers both the hero chapter and any `fullBleedQuote`
    * chapter: a hero photograph needs the same per-photograph tuning a
    * quote's backdrop does, and an entry missing for either falls through to
-   * that section's own built-in default.
+   * that section's own built-in default. **As of 26 Aug 2026 neither property
+   * page has a `fullBleedQuote` chapter left** (Task 5 of the 26 Aug
+   * restructure deleted the three that did — see `PlainFullBleed`'s own doc
+   * comment above and the switch's `fullBleed` case below) — this record
+   * covers only each page's own hero entry today, kept `Record`-shaped for
+   * the day a `fullBleedQuote` chapter exists again rather than narrowed to
+   * one key.
    */
   scrim: Record<string, ScrimStrength>;
   bookHref: string;
@@ -289,11 +302,22 @@ export function PropertyPage({
               // — one sentence, read from one place, so a screen-reader
               // announcement can never differ between the three routes that
               // now mount this widget.
+              //
+              // `appId={pressCopy.reviewsAppId}` — added 27 Aug 2026. Both
+              // property pages shared the same hardcoded id until Mahua
+              // Tola's own band was found showing Mahua Vann's reviews (there
+              // is only one Elfsight app). The client's ruling was to keep it
+              // that way until he supplies his own Tola embed
+              // (`docs/DECISIONS.md` §22.11) — `PressBandCopy.reviewsAppId`
+              // is undefined for both properties today, so `ReviewWidget`'s
+              // own default still supplies the shared id; the day he sends a
+              // Tola id, it is one line in `content/mahua-tola.ts`, not a
+              // second look at this dispatcher.
               const pressCopy = copy.pressCopy?.[chapter.id];
               if (!pressCopy) throw new Error(`No press copy for "${chapter.id}"`);
               return (
                 <PressBand key={chapter.id} chapter={chapter} copy={pressCopy} surface={surface}>
-                  <ReviewWidget label={REVIEWS_LABEL} />
+                  <ReviewWidget label={REVIEWS_LABEL} appId={pressCopy.reviewsAppId} />
                 </PressBand>
               );
             }

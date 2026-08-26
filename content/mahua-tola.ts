@@ -114,10 +114,16 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
    * exact same … activities carousel … place the entire carousel as it is" —
    * so `media` below is now `HOME_EXPERIENCES`' own six ids, in its own order,
    * not this lodge's. `tola-tiger-safari`, `tola-river-walk`,
-   * `bonfire-circle-night`, `tola-candlelit-dinner`, `tola-swimming` and
-   * `tola-experiences` are released and now curated-but-unused — not parked
-   * in another chapter to keep a density figure up, per this project's own
-   * standing rule. See `docs/DECISIONS.md` §22.
+   * `bonfire-circle-night`, `tola-swimming` and `tola-experiences` are
+   * released and now curated-but-unused — not parked in another chapter to
+   * keep a density figure up, per this project's own standing rule. See
+   * `docs/DECISIONS.md` §22. **`tola-candlelit-dinner` is NOT one of these,
+   * corrected in the 27 Aug 2026 fix wave** — it is still rendered by Mahua
+   * Vann's own closing invitation (`content/mahua-vann.ts`, `vann-invitation`'s
+   * `sibling.mediaId` — a cross-page photograph of the *other* lodge, by
+   * design; see `PropertyInvitation`'s own doc comment). This comment got
+   * that wrong for a day; acting on the old wording would have deleted a
+   * photograph Mahua Vann's page still draws.
    */
   {
     id: "tola-day",
@@ -538,6 +544,14 @@ export const TOLA_COPY: PropertyPageCopy = {
       // entry above, and PressBandCopy.articles' own comment
       // (components/sections/PressBand.tsx) for why a band with none is a
       // supported state rather than an omission on this page.
+      //
+      // No `reviewsAppId` either, deliberately, as of 27 Aug 2026: this band
+      // currently shows Mahua Vann's own reviews (there is only one Elfsight
+      // app), and the client ruled to keep it that way until he supplies his
+      // own Tola embed — "keep it same for all three pages for now."
+      // `reviewsAppId: "<his uuid>"` is the entire fix the day he does;
+      // see `PressBandCopy.reviewsAppId`'s own comment and
+      // `docs/DECISIONS.md` §22.11.
     } satisfies PressBandCopy,
   },
 

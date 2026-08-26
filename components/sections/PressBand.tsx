@@ -31,6 +31,22 @@ export type PressBandCopy = {
    * grid only when this has entries.
    */
   readonly articles?: readonly PressArticleCopy[];
+  /**
+   * **Which Elfsight app the widget in this band's `children` slot should
+   * mount, added 27 August 2026.** Both property pages shared one hardcoded
+   * id (`REVIEWS_APP_ID` in `lib/elfsight.ts`) until a whole-branch review
+   * found Mahua Tola's own "Written About" band showing Mahua Pench's
+   * reviews — there is only one Elfsight app, tied to the client's Vann/Pench
+   * Tripadvisor listing. **The client's ruling, 27 Aug 2026, verbatim**:
+   * *"Keep it as it is for now and i'll share the embeded code for the Mahua
+   * Tola widget later when i make it — keep it same for all three pages for
+   * now."* So nothing here is hidden or removed; this field exists so his
+   * Tola id is a one-line drop-in the day he supplies it, rather than another
+   * find-the-call-site exercise. Omit it (as Mahua Vann's own entry does) and
+   * `ReviewWidget`'s own default parameter supplies the shared id — see
+   * `docs/DECISIONS.md` §22.11.
+   */
+  readonly reviewsAppId?: string;
 };
 
 /**

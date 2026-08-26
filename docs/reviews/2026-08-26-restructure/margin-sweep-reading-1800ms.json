@@ -1,0 +1,38 @@
+[
+  {
+    "margin": "600px",
+    "scrollWallClockMs": 27251,
+    "firstElfsightRequestAfterMs": 21832,
+    "renderedByArrival": false,
+    "renderLagAfterArrivalMs": 961,
+    "neverRenderedWithin10s": false,
+    "renderedHeightPx": 271
+  },
+  {
+    "margin": "1200px",
+    "scrollWallClockMs": 27175,
+    "firstElfsightRequestAfterMs": 19982,
+    "renderedByArrival": false,
+    "renderLagAfterArrivalMs": 4,
+    "neverRenderedWithin10s": false,
+    "renderedHeightPx": 287
+  },
+  {
+    "margin": "2000px",
+    "scrollWallClockMs": 27844,
+    "firstElfsightRequestAfterMs": 18225,
+    "renderedByArrival": false,
+    "renderLagAfterArrivalMs": 4,
+    "neverRenderedWithin10s": false,
+    "renderedHeightPx": 287
+  },
+  {
+    "margin": "100%",
+    "scrollWallClockMs": 28311,
+    "firstElfsightRequestAfterMs": 21844,
+    "renderedByArrival": false,
+    "renderLagAfterArrivalMs": 107,
+    "neverRenderedWithin10s": false,
+    "renderedHeightPx": 287
+  }
+]

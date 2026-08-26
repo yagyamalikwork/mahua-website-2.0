@@ -6,12 +6,41 @@ import { ELFSIGHT_SCRIPT } from "@/lib/elfsight";
 /**
  * How far ahead of the viewport the platform starts loading.
  *
- * Far enough that the widget has drawn by the time a visitor arrives at it, and
- * near enough that most visitors who never reach the foot of the page never pay
- * for it. 600px is roughly two-thirds of a laptop screen — one unhurried scroll
- * gesture's worth of warning on the page this sits at the bottom of.
+ * **600px was reasoning in a doc comment, never measured, and a whole-branch
+ * review found the failure it produced: the widget's own screenshots showed
+ * two lodge pills and then only the "Free Tripadvisor Reviews Widget" badge —
+ * zero review cards — at 390, 768 and 1440px
+ * (`docs/reviews/2026-08-26-restructure/shots-task9/w1440-06-invitation.webp`).
+ * That is the worst available failure state: the vendor's own advertising
+ * paints and the client's reviews do not.**
+ *
+ * **Measured 27 Aug 2026** (`docs/reviews/2026-08-26-restructure/margin-sweep.md`
+ * has the full sweep table and method): 600, 1200, 2000px and a
+ * viewport-relative `100%` were each tried under Slow 4G + 4x CPU throttle,
+ * at two scroll paces — this project's own already-committed "whole page
+ * scrolled" pace (`scripts/measure_page.mjs`'s `scrollWholePage`, ~3.1s top
+ * to bottom) and a slower, attentive-reader pace closer to how this page is
+ * actually meant to be read (~27s top to bottom). **At the reading pace,
+ * 600px still left the cards rendering ~1.0s after arrival; 1200px and
+ * 2000px both rendered essentially exactly by arrival (≈4ms lag).** 1200px
+ * is the smallest of the candidates that closed the gap, so it is what
+ * shipped — not the largest one tried, and not a round number picked without
+ * sweeping past it.
+ *
+ * **This does not make the widget appear instantly for every visitor, and
+ * that is recorded rather than hidden.** At the FAST pace above, even 2000px
+ * still lagged arrival by ~3.1s: the vendor's own fetch-and-render chain
+ * (four sequential round-trips behind a 533 KB bundle,
+ * `docs/reviews/2026-08-26-restructure/widget-network-cost.md`) takes longer
+ * than that pace's entire top-to-bottom scroll, and no `rootMargin` can pull
+ * a trigger earlier than the page finishing its own load. Widening the
+ * margin further buys diminishing lead time and starts spending bytes on
+ * visitors who never reach the foot of the page — see
+ * `ReviewWidget`'s own doc comment for the `<link rel="preconnect">` that
+ * now also ships alongside this, which shortens the round-trips themselves
+ * rather than guessing the runway.
  */
-const APPROACH_MARGIN = "600px";
+const APPROACH_MARGIN = "1200px";
 
 /**
  * Loads Elfsight's platform when the visitor comes near it, and not before.

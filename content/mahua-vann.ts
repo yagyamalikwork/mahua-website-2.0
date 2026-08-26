@@ -91,10 +91,14 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
    * exact same … activities carousel … place the entire carousel as it is" —
    * so `media` below is now `HOME_EXPERIENCES`' own six ids, in its own order,
    * not this lodge's. `vann-tiger`, `vann-kohka-lake`, `vann-bird-watching`,
-   * `vann-dining`, `vann-potters-village` and `forest-trail-canopy` are
-   * released and now curated-but-unused — not parked in another chapter to
-   * keep a density figure up, per this project's own standing rule. See
-   * `docs/DECISIONS.md` §22.
+   * `vann-dining` and `forest-trail-canopy` are released and now
+   * curated-but-unused — not parked in another chapter to keep a density
+   * figure up, per this project's own standing rule. See `docs/DECISIONS.md`
+   * §22. **`vann-potters-village` is NOT one of these, corrected in the 27 Aug
+   * 2026 fix wave** — it is still rendered by the home page's own `rooted`
+   * chapter (`content/chapters.ts`, `media` array), a fact this comment got
+   * wrong for a day; acting on the old wording would have deleted a
+   * photograph the home page still draws.
    */
   {
     id: "vann-day",

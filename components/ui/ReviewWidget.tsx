@@ -1,5 +1,5 @@
 import { ElfsightLoader } from "@/components/ui/ElfsightLoader";
-import { elfsightClass, REVIEWS_APP_ID } from "@/lib/elfsight";
+import { elfsightClass, ELFSIGHT_ORIGINS, REVIEWS_APP_ID } from "@/lib/elfsight";
 
 /**
  * The client's Tripadvisor reviews, as his own Elfsight widget.
@@ -44,6 +44,23 @@ import { elfsightClass, REVIEWS_APP_ID } from "@/lib/elfsight";
  * on this site moves forever — is live again, and it is the client's call
  * whether it stays, not this component's. `docs/reviews/2026-08-26-restructure/`
  * carries the observation.
+ *
+ * ## `<link rel="preconnect">`, added 27 Aug 2026 — a socket, not a payload
+ *
+ * `ELFSIGHT_ORIGINS` (`lib/elfsight.ts`) renders one `preconnect` plus one
+ * `dns-prefetch` per origin the widget's own fetch chain hits, straight into
+ * this render output. React 19 hoists `<link>` elements to `<head>` wherever
+ * they render, so this needs no `next/head` and no client boundary — the
+ * hint ships on every page that mounts `ReviewWidget` and nowhere else,
+ * which keeps faith with this file's own rule that `ELFSIGHT_SCRIPT` is
+ * loaded only by the pages that use it, never from `app/layout.tsx`.
+ *
+ * **This buys back the connection setup, not the 533 KB itself.** Measured:
+ * `docs/reviews/2026-08-26-restructure/margin-sweep.md`. A DNS lookup plus a
+ * TCP+TLS handshake are real time on a mobile connection, and they are the
+ * one part of "four sequential round-trips behind half a megabyte" a
+ * `<link>` can actually shorten — nothing here makes the file smaller, and
+ * nothing here starts the fetch before `ElfsightLoader` decides to.
  */
 export function ReviewWidget({
   appId = REVIEWS_APP_ID,
@@ -59,6 +76,12 @@ export function ReviewWidget({
 }) {
   const mount = (
     <>
+      {ELFSIGHT_ORIGINS.map((origin) => (
+        <link key={origin} rel="preconnect" href={origin} />
+      ))}
+      {ELFSIGHT_ORIGINS.map((origin) => (
+        <link key={origin} rel="dns-prefetch" href={origin} />
+      ))}
       <ElfsightLoader />
       <div className={elfsightClass(appId)} data-elfsight-app-lazy />
       {fallback && (

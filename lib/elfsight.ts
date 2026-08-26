@@ -41,6 +41,35 @@
 export const ELFSIGHT_SCRIPT = "https://elfsightcdn.com/platform.js";
 
 /**
+ * Every origin the widget's own fetch chain actually hits, in the order it
+ * hits them — measured directly (Chrome DevTools Protocol, not the two
+ * `transferSize`-blind rigs) in
+ * `docs/reviews/2026-08-26-restructure/widget-network-cost.md`:
+ * `platform.js` (`elfsightcdn.com`) → boot (`core.service.elfsight.com`) →
+ * the 533 KB `tripadvisorReviews.js` bundle and its language file
+ * (`universe-static.elfsightcdn.com`) → the reviews/sources data
+ * (`service-reviews-ultimate.elfsight.com`) → one small SVG icon
+ * (`static.elfsight.com`).
+ *
+ * **This is what `ReviewWidget` renders `<link rel="preconnect">` /
+ * `dns-prefetch` for, added 27 Aug 2026 — a socket warmed ahead of time, not
+ * a payload fetched early.** Four sequential round-trips is what the client's
+ * own ruling called "guessing the runway" out of: a `<link>` cannot do
+ * anything about the 533 KB itself, but it can remove the DNS lookup and
+ * TCP+TLS handshake — each one of these round-trips' own first cost — from
+ * the critical path once `ElfsightLoader` actually starts the fetch.
+ * `ReviewWidget` renders it, not `app/layout.tsx`: see this file's own note
+ * above about why the script is loaded only by the pages that use it.
+ */
+export const ELFSIGHT_ORIGINS = [
+  "https://elfsightcdn.com",
+  "https://universe-static.elfsightcdn.com",
+  "https://core.service.elfsight.com",
+  "https://service-reviews-ultimate.elfsight.com",
+  "https://static.elfsight.com",
+] as const;
+
+/**
  * The reviews app, exactly as the client supplied it on 26 August 2026.
  *
  * It replaced `ReviewCarousel` — a curated set of three placeholder quotes in

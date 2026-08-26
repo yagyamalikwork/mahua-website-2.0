@@ -29,7 +29,7 @@ Path from the branch point, 491 → 497, not monotonic — every step is explain
 | Task 1 | 499 | `lib/elfsight.test.ts` (4) + `components/ui/ReviewWidget.test.tsx` (4) |
 | Task 2 | 484 | `ReviewCarousel`/`lib/reviews.ts`'s own tests removed with the carousel; one `content/home.test.ts` case replaced |
 | Task 2b | ~488 | `components/ui/ElfsightLoader.test.tsx` (4 new), `ReviewWidget.test.tsx`'s eager-script assertion inverted |
-| Task 3 | 490 | `components/sections/ExperienceStrip.test.tsx` created (2) |
+| Task 3 | **491** | `components/sections/ExperienceStrip.test.tsx` created (2 in the initial pass, 490 total); **fix round 1 (density breach) added one more** — "is a 5/7 header band" (`c7b2a86`) — for 491, which is what Task 4's own entry in `progress.md` starts counting from. Corrected in this fix wave; this row previously said 490 and did not account for the fix round's own test |
 | Task 4 | 492 | one more `ExperienceStrip` case (renders copy from any page) |
 | Task 5 | 498 | `content/mahua-vann.test.ts` + `content/mahua-tola.test.ts` spine assertions (6) |
 | Task 6 | 499 | `PropertyMap`'s `continues` prop tested |
@@ -112,11 +112,18 @@ node scripts/measure_density.mjs --port 3100 --out density-home-task9.json
 `invitation` read **19.7% empty, `heightPx` 1068** (the "widget rendered" mode — the same mode 5 of 6 prior
 runs on this same widget landed in; the 6th read `heightPx` 900 / 14.3% empty — see the variance note, this
 0.2-point difference from the previously-quoted 19.9% is that same variance, observed again, not
-reconciled). Page: **50 screens sampled, mean 32.9% empty** (CLAUDE.md's own banner cites 33.6% — within
-the noise this same variance produces on a 150px-grid re-sample), worst **61.4%** at a join, **all 7
-chapters pass `passesWorst`**. `field-days` — the chapter the tiger's removal touched — reads **35.6% mean
-/ 35.6% worst**, identical to Task 4's own confirmation that the copy-as-props refactor moved nothing.
-`imagesPerScreen`: **2.08** (`documentHeightPx` 8,215px, 19 distinct images).
+reconciled). Page: **50 screens sampled, mean 32.9% empty**, worst **61.4%**, attributed singly to
+`invitation` (not a join — see `emptiestScreens[0]`'s own `spans` field, which names one chapter, not an
+X/Y pair), **all 7 chapters pass `passesWorst`**. `field-days` — the chapter the tiger's removal touched —
+reads **35.6% mean / 35.6% worst**, identical to Task 4's own confirmation that the copy-as-props refactor
+moved nothing. `imagesPerScreen`: **2.08** (`documentHeightPx` 8,215px, 19 distinct images).
+
+**Correction, fix wave, 27 Aug 2026 — this section previously excused CLAUDE.md's own 33.6% page-mean
+citation as "within the noise this same variance produces," and that was wrong, not a coincidence worth
+explaining away.** No committed run on this branch ever produced 33.6% (the seven committed home runs span
+32.4–33.0%); `CLAUDE.md` and `check_docs.mjs` (which was silently comparing against a stale, different-branch
+`density.json`) have both been corrected — see `docs/DECISIONS.md` §22.11 and
+`.superpowers/sdd/2026-08-26-restructure-and-reviews/final-fix-report.md`.
 
 **Do not quote `invitation`'s 19.7%/14.3% split, or the page mean/worst that inherits it, as a fixed fact.**
 Re-run the command above if a settled number is needed for something that binds.
@@ -222,10 +229,22 @@ repository controls. Both lodges currently show the **same five review cards** i
 reads as a single shared app-id rather than a per-property feed; that is a fact about the widget's current
 configuration, reported rather than assumed to be wrong.
 
-Frames referenced: `shots-task9/w390-*.webp` (home), and `shots-task9/*-390.png` /
-`shots-task9/*-1440.png` (property pages) — see the earlier `shots-widget/vann-press.png` and
-`tola-press.png` captured during Task 8 for the same reading at a different point in the branch, unchanged
-in substance since.
+Frames referenced for the paragraph above: `shots-task9/mahua-vann-1440.png` / `mahua-tola-1440.png`
+(full-page property captures) and the earlier `shots-widget/vann-press.png` / `tola-press.png` captured
+during Task 8 for the same reading at a different point in the branch, unchanged in substance since — all
+four show real, rendered cards.
+
+**Correction, fix wave, 27 Aug 2026 — this section previously also cited `shots-task9/w390-*.webp` (the
+HOME page) as evidence for the paragraph above, and that was wrong: those frames show no cards at all.**
+`shots-task9/w1440-06-invitation.webp` (and its 390/768/1920 siblings) show the two lodge pills and then
+only the grey "Free Tripadvisor Reviews Widget" badge — the gate's own `APPROACH_MARGIN` (then 600px,
+reasoned rather than measured) had not resolved by the time `capture_chapters.mjs`'s teleport-and-1.6s-wait
+took its screenshot. That was the whole-branch review's Critical 1 finding, not a restyle question — the
+CSS-styling paragraph above was true of the property-page frames the whole time; the home page's own gate
+was the actual defect. **Fixed**: `APPROACH_MARGIN` widened to 1200px (the smallest of four swept values
+that reliably renders under a realistic scroll) plus a `<link rel="preconnect">` warm-up for the widget's
+own origins. Full sweep table, method and re-confirmation at all four widths:
+`docs/reviews/2026-08-26-restructure/margin-sweep.md`.
 
 ---
 

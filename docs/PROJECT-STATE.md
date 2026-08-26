@@ -9,6 +9,14 @@ Written as a handoff so no context is lost when a session is compacted. **Read t
 stakeholders' restructure; everything after this section describes the twelve-chapter page that still ships
 on `feat/image-sizing`, `main` and `demo`, and still serves the live demo.
 
+**On `feat/journal-and-mobile` (branched from `feat/home-v2`, 26 Aug 2026, not yet merged or deployed),
+this section is one layer further removed.** The seven-chapter page below is still the right shape, but the
+tiger is off `05 · Experiences`, the reviews are the client's own Elfsight widget rather than the hand-built
+carousel this section describes, and both property pages are restructured — none of which this document's
+"What is still owed" list (below) reflected until the 27 Aug fix wave corrected it. **`CLAUDE.md`'s own
+branch table is the authoritative one for which figure applies to which branch; `docs/DECISIONS.md` §22 is
+the full account of what changed on this branch.**
+
 **DEPLOYED to production on 20 Aug 2026**, after being built on a branch and shown on a preview URL — the
 client's own framing was *"rather than deleting, let us create a completely new branch… we don't push it to
 Vercel, I just present it on localhost to them,"* and he promoted it once he had seen it. **`demo` was moved
@@ -31,16 +39,19 @@ no mount here.
 
 ### The numbers
 
-**491 tests. Every chapter inside the 45% ceiling; page mean 33.6%, worst 66.4%, imagery 56.8% of the average
-screen, 2.03 photographs per screen.** Contrast: 156 probes on the home route, 0 failures; 318 across all
-three. Resolution: 0 under-served at every width, DPR 1 and 3. First-load JS **167.5 KB brotli** — the same
-figure the restructure shipped at, because every effect added since has been CSS. Initial transfer 669 KB at
-390, 965 KB at 1440. Hero arrival 4,611ms at 390x844, medians of five, against the standing 2,500ms budget
-that CLAUDE.md non-negotiable #6 records as knowingly failed.
+**(`feat/home-v2`, as of 20 Aug 2026 — see the banner above for what changed further on
+`feat/journal-and-mobile`.) 491 tests. Every chapter inside the 45% ceiling; page mean 33.6%, worst 66.4%,
+imagery 56.8% of the average screen, 2.03 photographs per screen.** Contrast: 156 probes on the home route,
+0 failures; 318 across all three. Resolution: 0 under-served at every width, DPR 1 and 3. First-load JS
+**167.5 KB brotli** — the same figure the restructure shipped at, because every effect added since has been
+CSS. Initial transfer 669 KB at 390, 965 KB at 1440. Hero arrival 4,611ms at 390x844, medians of five,
+against the standing 2,500ms budget that CLAUDE.md non-negotiable #6 records as knowingly failed.
 
-**The page mean moved 33.2 → 33.6% when the review carousel landed** and `invitation` went 6.0 → 14.7%: the
-closing section grew, and `measure_density.mjs` scores the band below a photograph as empty. It is still the
-emptiest chapter on the page by a wide margin and every chapter is still inside 45%.
+**The page mean moved 33.2 → 33.6% when the review carousel landed (`feat/home-v2`, 20 Aug 2026)** and
+`invitation` went 6.0 → 14.7%: the closing section grew, and `measure_density.mjs` scores the band below a
+photograph as empty. It is still the emptiest chapter on the page by a wide margin and every chapter is
+still inside 45%. **On `feat/journal-and-mobile`, re-measured 27 Aug 2026: page mean 32.9%, worst 61.4%,
+still every chapter inside 45%** — `docs/reviews/2026-08-26-restructure/density.json`.
 
 **The guests' reviews became a carousel on 20 Aug 2026** — auto-scrolling, pausing under the pointer, gold
 rating circles, and a read-more panel on `:target`, all at **zero added JavaScript** (167.7 KB brotli,
@@ -67,7 +78,15 @@ complaint turns on — quote it beside the mean, never instead of it.
 
 ### What is still owed, and what he has not ruled on
 
-0. **The 15–20 Tripadvisor reviews, and it is the one thing blocking finished work.** The carousel is built,
+0. **STALE on `feat/journal-and-mobile` — superseded 26 Aug 2026, kept below as history for `feat/home-v2`
+   only.** This item described the hand-built `ReviewCarousel` and its open `REVIEWS.mode` question. Both
+   are moot: the client supplied his own Elfsight/Tripadvisor widget instead, which replaced the carousel
+   outright rather than choosing between its two modes (`docs/DECISIONS.md` §22.3). **Read the "From the 26
+   August restructure" owed block further down this file** for what is actually still owed on this branch —
+   his Tola Elfsight embed code, his Elfsight restyle, a paid plan, and the two density rulings. The
+   paragraphs immediately below are the original, now-historical item, unedited:
+
+   **The 15–20 Tripadvisor reviews, and it is the one thing blocking finished work.** The carousel is built,
    measured and shipping; it is running on the three reviews that were already there. Each new one needs the
    **text in full** (not an excerpt — the card cuts it with CSS so the site never stores an edited version of
    what a guest wrote), the **name** as Tripadvisor shows it, the **year**, and the **rating out of five**.
@@ -1001,7 +1020,17 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
 - **His Elfsight restyle.** The widget currently renders solid black cards, white text and a green
   Tripadvisor roundel directly on cream, on both property pages (screenshotted, not assumed) — foreign
   against non-negotiable #3. He is restyling it himself in his own Elfsight dashboard; values already given:
-  card background `#F1E9D7`, text `#31402C`, meta `#5A5240`, rating `#BB8F2E`, link `#7A5C18`.
+  card background `#F1E9D7`, text `#31402C`, meta `#5A5240`, rating `#BB8F2E`, link `#7A5C18`. **Caveat on
+  the rating value**: `#BB8F2E` is `PALETTE.gold`, ~2.5:1 on cream — non-negotiable #7 says gold must never
+  carry text. Fine for the rating **circles** themselves (decorative); a breach if Elfsight's own theme
+  editor paints a numeral (e.g. "4.5") in that colour rather than a shape.
+- **His Mahua Tola Elfsight embed code.** Both property pages currently mount the same Elfsight app
+  (`REVIEWS_APP_ID`, tied to his Vann/Pench Tripadvisor listing), so Tola's own "Written About" band shows
+  Vann's reviews — found in the whole-branch fix wave, 27 Aug 2026, and his ruling was to leave it exactly
+  as it is until he sends a Tola-specific embed: *"Keep it as it is for now and i'll share the embeded code
+  for the Mahua Tola widget later when i make it — keep it same for all three pages for now."*
+  `PressBandCopy.reviewsAppId` (`content/mahua-tola.ts`, `pressCopy["tola-press"]`) is where it goes — a
+  one-line drop-in, not a code change. `docs/DECISIONS.md` §22.11.
 - **A paid Elfsight plan**, to remove the free-tier "Free Tripadvisor Reviews Widget" badge stamped under the
   review cards at every width, before launch.
 - **Confirmation of the Vercel plan.** The free tier does not permit commercial use, and the site is already
@@ -1015,6 +1044,14 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
   observed range.
 - **A ruling on `tola-rooms`**, newly reading 45.3% worst (`vann-rooms` passes at 43.7%) — a real,
   reproducible figure first noted in a task report's prose and never put to him. `docs/DECISIONS.md` §22.9.
+
+**The Journal page — approved, not yet planned or built.** This is why the branch is named
+`feat/journal-and-mobile` rather than for the restructure above, which is the second of three bodies of work
+the client agreed to on 26 Aug 2026.
+[`docs/superpowers/specs/2026-08-26-journal-page-design.md`](superpowers/specs/2026-08-26-journal-page-design.md)
+carries his rulings (entries mixing short field notes and long-form articles, unauthenticated comments held
+for his approval, a standalone photo gallery he and his team alone upload to) and invents no copy. Not
+started.
 
 - **The targeted shot list** — the 3–4 photographs that would most transform the page, so a small shoot can
   be priced precisely. The library tops out at 1920px and only 17 of 34 images clear 1400px. **More urgent

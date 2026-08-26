@@ -2514,7 +2514,10 @@ which carries every figure below with the command that produced it.
 10. **He accepts the widget's own auto-scroll**, once told it is the first thing on the page that never
     stops and why that rule exists, in place of the `REVIEWS.mode: "loop"` ruling he had not yet made. He
     will restyle the widget's black-on-cream cards himself in his own Elfsight dashboard (values given: card
-    background `#F1E9D7`, text `#31402C`, meta `#5A5240`, rating `#BB8F2E`, link `#7A5C18`) and upgrade the Elfsight plan to
+    background `#F1E9D7`, text `#31402C`, meta `#5A5240`, rating `#BB8F2E`, link `#7A5C18` — **caveat, added
+    in the 27 Aug fix wave: the rating value is `PALETTE.gold`, ~2.5:1 on cream, and non-negotiable #7 says
+    gold must never carry text — fine for the rating circles themselves, a breach if Elfsight's theme editor
+    ever paints a numeral in that colour rather than a shape**) and upgrade the Elfsight plan to
     remove the free-tier badge before launch. See §22.3 and `docs/PROJECT-STATE.md`'s owed list.
 11. **The closing "Stay at Mahua Vann/Tola" CTA is deferred, deliberately last.** *"we need to work on our
     CTA the 'Stay at Mahua Vann/Tola' section as it looks very bland and not at all appealing, but we'll do
@@ -2829,3 +2832,59 @@ page's closing chapter read **14.3% empty before the shadow-DOM fix and 19.9% af
 `heightPx` 900 → 1068 across the two measurements compared — itself inside the variance just described, not
 a clean single before/after). `CLAUDE.md`'s own density-history table already carries a caveat pointing at
 `density-variance-NOTE.md` for this chapter; this entry is the corresponding one in `DECISIONS.md`.
+
+### 22.11 The fix-wave findings, 27 August 2026 — the widget's gate, and Tola showing Vann's reviews
+
+A final whole-branch review (opus) found two Criticals in the nine tasks' own combined output — neither
+visible from inside a single task — and four Important findings. Fixed in one wave; the two Criticals
+carried their own client rulings.
+
+**Critical 1 — the gate stopped the widget rendering at all, and `APPROACH_MARGIN` had never been
+measured.** `600px` was reasoning in `ElfsightLoader.tsx`'s own doc comment, and the branch's own evidence
+already contradicted it: `shots-task9/w1440-06-invitation.webp` (and its 390/768/1920 siblings) show the two
+lodge pills and then only the grey "Free Tripadvisor Reviews Widget" badge — zero cards — while the pre-gate
+capture at `046ea41` shows three. §22.9's own README (§5) had cited that same frame as evidence for a
+different, true claim (the property pages' cards render solid-black-on-cream) without noticing it showed no
+cards at all — corrected there in the same fix wave.
+
+**Fixed by measuring rather than reasoning again.** Swept 600/1200/2000px and a viewport-relative `100%`
+under Slow 4G + 4x CPU throttle, at two scroll paces: this project's own already-committed "whole page
+scrolled" pace (`scripts/measure_page.mjs`, ≈3.1s top-to-bottom) and a slower, attentive-reader pace closer
+to how this page is actually meant to be read (≈27–28s). At the reading pace, 600px still left the cards
+rendering ~1s after arrival; **1200px and 2000px both closed the gap to ≈4ms — 1200px shipped, the smallest
+margin tested that reliably renders.** A `<link rel="preconnect">` / `dns-prefetch` pair per origin the
+widget's own fetch chain hits (`ELFSIGHT_ORIGINS`, `lib/elfsight.ts`) was added alongside it — the client's
+own second lever, "a connection warm-up" — costing `verify:budget` nothing (167.2 KB brotli, unchanged) since
+a preconnect is a socket, not a payload. **Recorded honestly, not glossed over: even 2000px did not close
+the gap at the FAST scroll pace** (~3.1–3.6s of lag remained) — the vendor's own fetch-and-render chain
+(four sequential round-trips behind 533 KB, §22.3) takes longer under Slow 4G than that pace's entire
+top-to-bottom scroll, and no `rootMargin` can trigger before the page itself has finished loading. Full
+sweep table, method, and a render confirmation at all four widths on an un-throttled connection:
+`docs/reviews/2026-08-26-restructure/margin-sweep.md`.
+
+**Critical 2 — Mahua Tola's own "Written About" band shows Mahua Vann's reviews.**
+`shots-widget/tola-press.png` reads "Mahua Vann is one of the be...", "Awesome Experience at Mahua Pench!",
+"Our stay at Mahua Pench Jungle Resort..." — five Pench reviews on the Tadoba page, because there is only
+one Elfsight app (`REVIEWS_APP_ID`, tied to the client's Vann/Pench Tripadvisor listing) and both property
+mounts used it. This inverts §22.6's own reasoning — Tola's press band was left off the page in the first
+place because there was nothing real to put there, and this fills it with a *different* lodge's content
+instead, by the client's own choice below.
+
+**The client's ruling, 27 August 2026, verbatim:** *"Keep it as it is for now and i'll share the embeded
+code for the Mahua Tola widget later when i make it — keep it same for all three pages for now."* So nothing
+is removed or hidden. `PressBandCopy` (`components/sections/PressBand.tsx`) gained an optional
+`reviewsAppId` field, threaded through `PropertyPage.tsx`'s `press` case to `ReviewWidget`'s own `appId`
+prop (which already existed, unused by either property page until now) — so his Tola id is a one-line drop
+into `content/mahua-tola.ts`'s `pressCopy["tola-press"]` the day he supplies it, not a second look at the
+dispatcher. Mahua Vann's own entry is left with no `reviewsAppId`, deliberately: the shared id already *is*
+Vann's own listing, so the default is already correct there. **Owed**: his Tola Elfsight embed code —
+`docs/PROJECT-STATE.md`'s owed list.
+
+**The four Important findings** (a docs gate anchored to a stale, different-branch density file with a page
+mean CLAUDE.md quotes but no committed run reaches; `PROJECT-STATE.md` still listing the deleted carousel's
+owed items and contradicting its own newer block; review-band contrast handed to a rig deleted the same
+branch, with nothing measuring it now; non-negotiable #3's own text never updated to name the widget the way
+#5's was) and the minors (a "join" mislabelled, two test-count transcriptions, the gold rating-circle caveat,
+a missing pointer to this branch's own spec, an incomplete branch banner) are all fixed in the same wave —
+see `.superpowers/sdd/2026-08-26-restructure-and-reviews/final-fix-report.md` for the full list of what
+changed where.
