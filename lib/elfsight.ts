@@ -16,10 +16,25 @@
  * embed, the client chose the embed knowing it, and it is recorded rather than
  * solved — see `docs/superpowers/specs/2026-08-26-restructure-and-reviews-design.md` §2.3.
  *
- * Two things keep it bounded and both are load-bearing:
- * **it is loaded only by the pages that use it, never from `app/layout.tsx`**,
- * and it keeps `async` + `data-elfsight-app-lazy` so it cannot block the first
- * screen.
+ * **It is loaded only by the pages that use it, never from `app/layout.tsx`** —
+ * that much genuinely keeps it bounded, because a route that never mounts
+ * `ReviewWidget` never even references `ELFSIGHT_SCRIPT`.
+ *
+ * **`data-elfsight-app-lazy` is kept on the mount below because it is the
+ * vendor's own contract for it — Elfsight's platform reads that attribute to
+ * decide how to boot the widget once it exists — but it is not what keeps the
+ * platform script off the first screen, and this file used to claim it was.**
+ * Measured 26 August 2026: with the platform script rendered directly here,
+ * `data-elfsight-app-lazy` did not defer it at all — it fetched 588 KB over 9
+ * requests on `load`, regardless of the widget sitting in the page's last
+ * chapter. Full working: `docs/reviews/2026-08-26-restructure/widget-network-cost.md`.
+ *
+ * What actually keeps it off the first screen is `components/ui/ElfsightLoader.tsx`,
+ * mounted by `ReviewWidget` alongside this class — an `IntersectionObserver`
+ * that injects `ELFSIGHT_SCRIPT` only once the mount approaches the viewport.
+ * Read that component's own doc comment for the mechanism; this file is
+ * identifiers only, and the correction belongs where the earlier, disproven
+ * claim was made.
  */
 
 /** The vendor's platform loader. */
