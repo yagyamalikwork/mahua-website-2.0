@@ -1,0 +1,761 @@
+{
+  "measuredAt": "2026-08-26T11:26:43.525Z",
+  "url": "http://localhost:3100/mahua-vann",
+  "viewport": "1440x900",
+  "method": "Per scroll position, every 150px. At each one the 1440x900 viewport is hit-tested on a 6px grid via document.elementsFromPoint; a cell counts as occupied if the topmost thing painted there — before any opaque background — is a photograph (img/video/svg/canvas or a background-image) or a line box of type from Range.getClientRects(). position:fixed is skipped. Percentages are of the screen, not of the document, so nothing pinned is double-counted.",
+  "imagery": {
+    "distinctImages": 16,
+    "imgElements": 19,
+    "documentHeightPx": 11440,
+    "screensOfScroll": 12.7,
+    "imagesPerScreen": 1.26,
+    "ids": [
+      {
+        "id": "lawn-picnic-golden-hour",
+        "instances": 1,
+        "area": 1654290
+      },
+      {
+        "id": "vann-hero",
+        "instances": 1,
+        "area": 1475123
+      },
+      {
+        "id": "vann-tiger",
+        "instances": 1,
+        "area": 903168
+      },
+      {
+        "id": "vann-dining",
+        "instances": 1,
+        "area": 903168
+      },
+      {
+        "id": "tola-candlelit-dinner",
+        "instances": 1,
+        "area": 774144
+      },
+      {
+        "id": "suite-tiger-painting",
+        "instances": 1,
+        "area": 673344
+      },
+      {
+        "id": "vann-room-deluxe",
+        "instances": 2,
+        "area": 594967
+      },
+      {
+        "id": "vann-room-cottage-plain",
+        "instances": 2,
+        "area": 594967
+      },
+      {
+        "id": "vann-kohka-lake",
+        "instances": 1,
+        "area": 537920
+      },
+      {
+        "id": "vann-bird-watching",
+        "instances": 1,
+        "area": 537920
+      },
+      {
+        "id": "vann-potters-village",
+        "instances": 1,
+        "area": 537920
+      },
+      {
+        "id": "forest-trail-canopy",
+        "instances": 1,
+        "area": 537920
+      },
+      {
+        "id": "welcome-flower",
+        "instances": 1,
+        "area": 26044
+      },
+      {
+        "id": "welcome-wordmark",
+        "instances": 1,
+        "area": 23612
+      },
+      {
+        "id": "emblem",
+        "instances": 1,
+        "area": 1764
+      },
+      {
+        "id": "leaf",
+        "instances": 1,
+        "area": 728
+      }
+    ]
+  },
+  "page": {
+    "screens": 72,
+    "meanEmptyPercent": 35.3,
+    "medianEmptyPercent": 34.7,
+    "bestEmptyPercent": 0.2,
+    "worstEmptyPercent": 87,
+    "worstAt": 9300,
+    "overBudget": 18,
+    "meanImagePercent": 57.9,
+    "meanTypePercent": 6.8
+  },
+  "chapters": [
+    {
+      "id": "vann-hero",
+      "heightPx": 900,
+      "screensTall": 1,
+      "wholeScreensAvailable": true,
+      "screens": 1,
+      "meanEmptyPercent": 0.2,
+      "medianEmptyPercent": 0.2,
+      "bestEmptyPercent": 0.2,
+      "worstEmptyPercent": 0.2,
+      "worstAt": 0,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-forest",
+      "heightPx": 494,
+      "screensTall": 0.55,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 55.8,
+      "medianEmptyPercent": 55.8,
+      "bestEmptyPercent": 55.8,
+      "worstEmptyPercent": 55.8,
+      "worstAt": 750,
+      "overBudget": 1,
+      "passesMean": false,
+      "passesWorst": false
+    },
+    {
+      "id": "vann-where",
+      "heightPx": 846,
+      "screensTall": 0.94,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 36.5,
+      "medianEmptyPercent": 36.5,
+      "bestEmptyPercent": 36.5,
+      "worstEmptyPercent": 36.5,
+      "worstAt": 1350,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-rooms",
+      "heightPx": 2371,
+      "screensTall": 2.63,
+      "wholeScreensAvailable": true,
+      "screens": 10,
+      "meanEmptyPercent": 36,
+      "medianEmptyPercent": 35.6,
+      "bestEmptyPercent": 33.9,
+      "worstEmptyPercent": 43.2,
+      "worstAt": 2250,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-table",
+      "heightPx": 900,
+      "screensTall": 1,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 4.1,
+      "medianEmptyPercent": 4.1,
+      "bestEmptyPercent": 4.1,
+      "worstEmptyPercent": 4.1,
+      "worstAt": 4650,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-day",
+      "heightPx": 3973,
+      "screensTall": 4.41,
+      "wholeScreensAvailable": true,
+      "screens": 21,
+      "meanEmptyPercent": 23.1,
+      "medianEmptyPercent": 23,
+      "bestEmptyPercent": 16.6,
+      "worstEmptyPercent": 30.5,
+      "worstAt": 8550,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    },
+    {
+      "id": "vann-press",
+      "heightPx": 514,
+      "screensTall": 0.57,
+      "wholeScreensAvailable": false,
+      "screens": 1,
+      "meanEmptyPercent": 87,
+      "medianEmptyPercent": 87,
+      "bestEmptyPercent": 87,
+      "worstEmptyPercent": 87,
+      "worstAt": 9300,
+      "overBudget": 1,
+      "passesMean": false,
+      "passesWorst": false
+    },
+    {
+      "id": "vann-invitation",
+      "heightPx": 1079,
+      "screensTall": 1.2,
+      "wholeScreensAvailable": true,
+      "screens": 1,
+      "meanEmptyPercent": 34.8,
+      "medianEmptyPercent": 34.8,
+      "bestEmptyPercent": 34.8,
+      "worstEmptyPercent": 34.8,
+      "worstAt": 10050,
+      "overBudget": 0,
+      "passesMean": true,
+      "passesWorst": true
+    }
+  ],
+  "emptiestScreens": [
+    {
+      "at": 9300,
+      "empty": 87,
+      "spans": "vann-day / vann-press / vann-invitation"
+    },
+    {
+      "at": 9450,
+      "empty": 85.3,
+      "spans": "vann-day / vann-press / vann-invitation"
+    },
+    {
+      "at": 9150,
+      "empty": 82.5,
+      "spans": "vann-day / vann-press / vann-invitation"
+    },
+    {
+      "at": 9600,
+      "empty": 73.7,
+      "spans": "vann-press / vann-invitation"
+    },
+    {
+      "at": 9000,
+      "empty": 67.7,
+      "spans": "vann-day / vann-press"
+    }
+  ],
+  "screens": [
+    {
+      "at": 0,
+      "occupied": 99.8,
+      "empty": 0.2,
+      "imagePercent": 89.3,
+      "typePercent": 10.5
+    },
+    {
+      "at": 150,
+      "occupied": 85.1,
+      "empty": 14.9,
+      "imagePercent": 72.6,
+      "typePercent": 12.5
+    },
+    {
+      "at": 300,
+      "occupied": 71.2,
+      "empty": 28.8,
+      "imagePercent": 55.9,
+      "typePercent": 15.3
+    },
+    {
+      "at": 450,
+      "occupied": 58.5,
+      "empty": 41.5,
+      "imagePercent": 39.6,
+      "typePercent": 18.9
+    },
+    {
+      "at": 600,
+      "occupied": 46.1,
+      "empty": 53.9,
+      "imagePercent": 31.6,
+      "typePercent": 14.5
+    },
+    {
+      "at": 750,
+      "occupied": 44.2,
+      "empty": 55.8,
+      "imagePercent": 31.8,
+      "typePercent": 12.4
+    },
+    {
+      "at": 900,
+      "occupied": 42.4,
+      "empty": 57.6,
+      "imagePercent": 28.7,
+      "typePercent": 13.7
+    },
+    {
+      "at": 1050,
+      "occupied": 53.4,
+      "empty": 46.6,
+      "imagePercent": 40.1,
+      "typePercent": 13.3
+    },
+    {
+      "at": 1200,
+      "occupied": 64.3,
+      "empty": 35.7,
+      "imagePercent": 52.5,
+      "typePercent": 11.8
+    },
+    {
+      "at": 1350,
+      "occupied": 63.5,
+      "empty": 36.5,
+      "imagePercent": 55.1,
+      "typePercent": 8.4
+    },
+    {
+      "at": 1500,
+      "occupied": 59.8,
+      "empty": 40.2,
+      "imagePercent": 50.2,
+      "typePercent": 9.6
+    },
+    {
+      "at": 1650,
+      "occupied": 50.9,
+      "empty": 49.1,
+      "imagePercent": 39.5,
+      "typePercent": 11.4
+    },
+    {
+      "at": 1800,
+      "occupied": 48.5,
+      "empty": 51.5,
+      "imagePercent": 39.1,
+      "typePercent": 9.4
+    },
+    {
+      "at": 1950,
+      "occupied": 47.4,
+      "empty": 52.6,
+      "imagePercent": 38.7,
+      "typePercent": 8.7
+    },
+    {
+      "at": 2100,
+      "occupied": 47.5,
+      "empty": 52.5,
+      "imagePercent": 39,
+      "typePercent": 8.5
+    },
+    {
+      "at": 2250,
+      "occupied": 56.8,
+      "empty": 43.2,
+      "imagePercent": 48.6,
+      "typePercent": 8.2
+    },
+    {
+      "at": 2400,
+      "occupied": 66.1,
+      "empty": 33.9,
+      "imagePercent": 60,
+      "typePercent": 6.1
+    },
+    {
+      "at": 2550,
+      "occupied": 64.4,
+      "empty": 35.6,
+      "imagePercent": 61.4,
+      "typePercent": 3
+    },
+    {
+      "at": 2700,
+      "occupied": 65.2,
+      "empty": 34.8,
+      "imagePercent": 61.4,
+      "typePercent": 3.8
+    },
+    {
+      "at": 2850,
+      "occupied": 64.4,
+      "empty": 35.6,
+      "imagePercent": 61.4,
+      "typePercent": 3
+    },
+    {
+      "at": 3000,
+      "occupied": 64.5,
+      "empty": 35.5,
+      "imagePercent": 61.5,
+      "typePercent": 3
+    },
+    {
+      "at": 3150,
+      "occupied": 64.3,
+      "empty": 35.7,
+      "imagePercent": 61.3,
+      "typePercent": 3
+    },
+    {
+      "at": 3300,
+      "occupied": 65.3,
+      "empty": 34.7,
+      "imagePercent": 61,
+      "typePercent": 4.3
+    },
+    {
+      "at": 3450,
+      "occupied": 64.5,
+      "empty": 35.5,
+      "imagePercent": 60.8,
+      "typePercent": 3.7
+    },
+    {
+      "at": 3600,
+      "occupied": 64.1,
+      "empty": 35.9,
+      "imagePercent": 61.1,
+      "typePercent": 3
+    },
+    {
+      "at": 3750,
+      "occupied": 59.1,
+      "empty": 40.9,
+      "imagePercent": 56.1,
+      "typePercent": 3
+    },
+    {
+      "at": 3900,
+      "occupied": 71.5,
+      "empty": 28.5,
+      "imagePercent": 68.5,
+      "typePercent": 3
+    },
+    {
+      "at": 4050,
+      "occupied": 76.5,
+      "empty": 23.5,
+      "imagePercent": 72,
+      "typePercent": 4.5
+    },
+    {
+      "at": 4200,
+      "occupied": 80.1,
+      "empty": 19.9,
+      "imagePercent": 70.7,
+      "typePercent": 9.4
+    },
+    {
+      "at": 4350,
+      "occupied": 84.5,
+      "empty": 15.5,
+      "imagePercent": 73.1,
+      "typePercent": 11.4
+    },
+    {
+      "at": 4500,
+      "occupied": 90.3,
+      "empty": 9.7,
+      "imagePercent": 78.9,
+      "typePercent": 11.4
+    },
+    {
+      "at": 4650,
+      "occupied": 95.9,
+      "empty": 4.1,
+      "imagePercent": 84.5,
+      "typePercent": 11.4
+    },
+    {
+      "at": 4800,
+      "occupied": 82.4,
+      "empty": 17.6,
+      "imagePercent": 68,
+      "typePercent": 14.4
+    },
+    {
+      "at": 4950,
+      "occupied": 77.3,
+      "empty": 22.7,
+      "imagePercent": 64.9,
+      "typePercent": 12.4
+    },
+    {
+      "at": 5100,
+      "occupied": 76.2,
+      "empty": 23.8,
+      "imagePercent": 69.8,
+      "typePercent": 6.4
+    },
+    {
+      "at": 5250,
+      "occupied": 75.1,
+      "empty": 24.9,
+      "imagePercent": 70.8,
+      "typePercent": 4.3
+    },
+    {
+      "at": 5400,
+      "occupied": 74,
+      "empty": 26,
+      "imagePercent": 69.7,
+      "typePercent": 4.3
+    },
+    {
+      "at": 5550,
+      "occupied": 74.2,
+      "empty": 25.8,
+      "imagePercent": 69.8,
+      "typePercent": 4.4
+    },
+    {
+      "at": 5700,
+      "occupied": 73.8,
+      "empty": 26.2,
+      "imagePercent": 71.7,
+      "typePercent": 2.1
+    },
+    {
+      "at": 5850,
+      "occupied": 76.7,
+      "empty": 23.3,
+      "imagePercent": 74.6,
+      "typePercent": 2.1
+    },
+    {
+      "at": 6000,
+      "occupied": 76.3,
+      "empty": 23.7,
+      "imagePercent": 74.2,
+      "typePercent": 2.1
+    },
+    {
+      "at": 6150,
+      "occupied": 75.8,
+      "empty": 24.2,
+      "imagePercent": 73.7,
+      "typePercent": 2.1
+    },
+    {
+      "at": 6300,
+      "occupied": 75.4,
+      "empty": 24.6,
+      "imagePercent": 73.3,
+      "typePercent": 2.1
+    },
+    {
+      "at": 6450,
+      "occupied": 80.3,
+      "empty": 19.7,
+      "imagePercent": 78.4,
+      "typePercent": 1.9
+    },
+    {
+      "at": 6600,
+      "occupied": 81.9,
+      "empty": 18.1,
+      "imagePercent": 79.1,
+      "typePercent": 2.8
+    },
+    {
+      "at": 6750,
+      "occupied": 77,
+      "empty": 23,
+      "imagePercent": 74,
+      "typePercent": 3
+    },
+    {
+      "at": 6900,
+      "occupied": 77.4,
+      "empty": 22.6,
+      "imagePercent": 74.4,
+      "typePercent": 3
+    },
+    {
+      "at": 7050,
+      "occupied": 77.8,
+      "empty": 22.2,
+      "imagePercent": 74.8,
+      "typePercent": 3
+    },
+    {
+      "at": 7200,
+      "occupied": 78.2,
+      "empty": 21.8,
+      "imagePercent": 75.2,
+      "typePercent": 3
+    },
+    {
+      "at": 7350,
+      "occupied": 77,
+      "empty": 23,
+      "imagePercent": 74,
+      "typePercent": 3
+    },
+    {
+      "at": 7500,
+      "occupied": 73.8,
+      "empty": 26.2,
+      "imagePercent": 71.6,
+      "typePercent": 2.2
+    },
+    {
+      "at": 7650,
+      "occupied": 77.4,
+      "empty": 22.6,
+      "imagePercent": 75.2,
+      "typePercent": 2.2
+    },
+    {
+      "at": 7800,
+      "occupied": 77,
+      "empty": 23,
+      "imagePercent": 74.8,
+      "typePercent": 2.2
+    },
+    {
+      "at": 7950,
+      "occupied": 76.6,
+      "empty": 23.4,
+      "imagePercent": 74.4,
+      "typePercent": 2.2
+    },
+    {
+      "at": 8100,
+      "occupied": 76.2,
+      "empty": 23.8,
+      "imagePercent": 74,
+      "typePercent": 2.2
+    },
+    {
+      "at": 8250,
+      "occupied": 79.2,
+      "empty": 20.8,
+      "imagePercent": 77.1,
+      "typePercent": 2.1
+    },
+    {
+      "at": 8400,
+      "occupied": 83.4,
+      "empty": 16.6,
+      "imagePercent": 80.3,
+      "typePercent": 3.1
+    },
+    {
+      "at": 8550,
+      "occupied": 69.5,
+      "empty": 30.5,
+      "imagePercent": 65.2,
+      "typePercent": 4.3
+    },
+    {
+      "at": 8700,
+      "occupied": 55.1,
+      "empty": 44.9,
+      "imagePercent": 50,
+      "typePercent": 5.1
+    },
+    {
+      "at": 8850,
+      "occupied": 41.5,
+      "empty": 58.5,
+      "imagePercent": 34.9,
+      "typePercent": 6.6
+    },
+    {
+      "at": 9000,
+      "occupied": 32.3,
+      "empty": 67.7,
+      "imagePercent": 19.7,
+      "typePercent": 12.6
+    },
+    {
+      "at": 9150,
+      "occupied": 17.5,
+      "empty": 82.5,
+      "imagePercent": 5,
+      "typePercent": 12.5
+    },
+    {
+      "at": 9300,
+      "occupied": 13,
+      "empty": 87,
+      "imagePercent": 0.2,
+      "typePercent": 12.8
+    },
+    {
+      "at": 9450,
+      "occupied": 14.7,
+      "empty": 85.3,
+      "imagePercent": 0.2,
+      "typePercent": 14.5
+    },
+    {
+      "at": 9600,
+      "occupied": 26.3,
+      "empty": 73.7,
+      "imagePercent": 12.6,
+      "typePercent": 13.7
+    },
+    {
+      "at": 9750,
+      "occupied": 39.6,
+      "empty": 60.4,
+      "imagePercent": 28.2,
+      "typePercent": 11.4
+    },
+    {
+      "at": 9900,
+      "occupied": 49.8,
+      "empty": 50.2,
+      "imagePercent": 43.7,
+      "typePercent": 6.1
+    },
+    {
+      "at": 10050,
+      "occupied": 65.2,
+      "empty": 34.8,
+      "imagePercent": 59.3,
+      "typePercent": 5.9
+    },
+    {
+      "at": 10200,
+      "occupied": 63.7,
+      "empty": 36.3,
+      "imagePercent": 59.9,
+      "typePercent": 3.8
+    },
+    {
+      "at": 10350,
+      "occupied": 62.3,
+      "empty": 37.7,
+      "imagePercent": 58.8,
+      "typePercent": 3.5
+    },
+    {
+      "at": 10500,
+      "occupied": 50.6,
+      "empty": 49.4,
+      "imagePercent": 46.4,
+      "typePercent": 4.2
+    },
+    {
+      "at": 10540,
+      "occupied": 46.9,
+      "empty": 53.1,
+      "imagePercent": 42.6,
+      "typePercent": 4.3
+    }
+  ]
+}

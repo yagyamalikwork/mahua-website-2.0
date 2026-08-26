@@ -221,4 +221,25 @@ describe("VANN_CHAPTERS", () => {
       expect(occurrences, `"${dim}" appears ${occurrences}× in "${text}"`).toBe(1);
     }
   });
+
+  it("has the client's 26 Aug spine — no table band, an unheaded map, renumbered chapters", () => {
+    const ids = VANN_CHAPTERS.map((c) => c.id);
+    expect(ids).toEqual([
+      "vann-hero", "vann-forest", "vann-where", "vann-rooms", "vann-day", "vann-press", "vann-invitation",
+    ]);
+    const numbered = VANN_CHAPTERS.filter((c) => c.number).map((c) => `${c.number} ${c.label}`);
+    expect(numbered).toEqual([
+      "01 The Forest", "02 The Rooms", "03 The Experience", "04 Written About",
+    ]);
+  });
+
+  it("gives the map no heading — it is an extension of 01, by the client's ruling", () => {
+    const map = VANN_CHAPTERS.find((c) => c.id === "vann-where");
+    expect(map?.number).toBeUndefined();
+    expect(map?.label).toBeUndefined();
+  });
+
+  it("carries no full-bleed quote copy — the table band went on 26 Aug 2026", () => {
+    expect(VANN_COPY.quoteCopy).toBeUndefined();
+  });
 });

@@ -3,7 +3,6 @@ import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
 import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
 import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
 import type { PressBandCopy } from "@/components/sections/PressBand";
-import type { FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
 import type { HeroCopy } from "@/components/sections/Hero";
 import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
@@ -11,18 +10,21 @@ import type { PropertyContactCopy } from "@/components/property/PropertyContact"
 import type { PropertyChapter } from "./property-chapters";
 
 /**
- * Mahua Vann's spine, in the redesign's shape vocabulary. Eight moments, no
- * two adjacent alike (`findRepeatedShape` is unit-tested generically in
- * `content/property-chapters.test.ts`; the test watched failing against
- * *this* file's actual spine lives in `content/mahua-vann.test.ts` — see its
- * own note), and `column` / `press` — the two quiet shapes — are each
- * flanked by image-led ones so the older rhythm rule (CLAUDE.md
- * non-negotiable #10) holds too.
+ * Mahua Vann's spine, in the redesign's shape vocabulary. **Seven moments as
+ * of 26 August 2026** (was eight — see the removal comment on the deleted
+ * `vann-table` chapter below), no two adjacent alike (`findRepeatedShape` is
+ * unit-tested generically in `content/property-chapters.test.ts`; the test
+ * watched failing against *this* file's actual spine lives in
+ * `content/mahua-vann.test.ts` — see its own note), and `column` / `press` —
+ * the two quiet shapes — are each flanked by image-led ones so the older
+ * rhythm rule (CLAUDE.md non-negotiable #10) holds too.
  *
- * `vann-hero` and `vann-invitation` carry no number/label, matching the
- * spec's own menu (Stay · Dining · Experiences · Getting there is now Rooms ·
- * Where it is · The table · The day · Written about) — the numbered run is
- * 01–06, `vann-forest` through `vann-press`.
+ * `vann-hero`, `vann-where` and `vann-invitation` carry no number/label.
+ * `vann-hero`/`vann-invitation` never did; `vann-where` (the map) lost its
+ * "02 · Where It Is" heading on 26 Aug 2026 — see the doc comment on that
+ * chapter below. The numbered run is now 01–04, `vann-forest` /
+ * `vann-rooms` / `vann-day` / `vann-press`, renumbered down from 01/03/05/06
+ * the same day.
  */
 export const VANN_CHAPTERS: readonly PropertyChapter[] = [
   { id: "vann-hero", shape: "fullBleed", media: ["vann-hero"] },
@@ -33,10 +35,19 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
     shape: "column",
     media: [],
   },
+  /*
+   * **No `number` and no `label` since 26 August 2026.** Client: *"the map is an
+   * extention to the first sections on both the pages 01-The Forest and 01-The
+   * Reserve respectively."*
+   *
+   * "Extension of" has a defined meaning on this site — the client's own 19 Aug
+   * ruling on `04 · Mahua Philosophy` — and it is two things, not one: the same
+   * cream, and no band of cream between. Dropping the heading is this half;
+   * `PropertyPage.tsx`'s `continues` is the other. Both are needed or the map
+   * reads as an unlabelled orphan rather than as part of 01.
+   */
   {
     id: "vann-where",
-    number: "02",
-    label: "Where It Is",
     shape: "map",
     media: [],
   },
@@ -46,25 +57,26 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
     // Deck" tab, so the "Shown: Cottage with Deck" note the old file carried
     // no longer applies to either cottage type.
     id: "vann-rooms",
-    number: "03",
+    number: "02",
     label: "The Rooms",
     shape: "showcase",
     media: ["vann-room-deluxe", "vann-room-cottage-plain", "suite-tiger-painting"],
   },
-  {
-    // NOT "vann-dining" — see the long comment on VANN_COPY.quoteCopy below.
-    // vann-dining is 1163px wide, short of the 1400px full-bleed floor
-    // (non-negotiable #11), and this shape renders edge-to-edge.
-    id: "vann-table",
-    number: "04",
-    label: "The Table",
-    shape: "fullBleed",
-    media: ["lawn-picnic-golden-hour"],
-  },
+  /*
+   * **`vann-table` ("04 · The Table") was here until 26 August 2026.** Client:
+   * *"Remove the section that comes just above 05-The Day that has a wide image
+   * and text in the center"*, naming its copy — "Chulai ki bhaaji, Mahua kheer
+   * and…".
+   *
+   * `lawn-picnic-golden-hour` is released and is now curated-but-unused. **It is
+   * not to be parked in another chapter to keep a density figure up** —
+   * `measure_density.mjs` scores what is painted, and a chapter that needs
+   * imagery needs a composition. See `docs/DECISIONS.md` §22.
+   */
   {
     id: "vann-day",
-    number: "05",
-    label: "The Day",
+    number: "03",
+    label: "The Experience",
     shape: "pair",
     media: [
       "vann-tiger",
@@ -77,7 +89,7 @@ export const VANN_CHAPTERS: readonly PropertyChapter[] = [
   },
   {
     id: "vann-press",
-    number: "06",
+    number: "04",
     label: "Written About",
     shape: "press",
     media: [],
@@ -267,38 +279,17 @@ export const VANN_COPY: PropertyPageCopy = {
     } satisfies RoomShowcaseCopy,
   },
 
-  /**
-   * `vann-table` ("04 · The Table") is a `fullBleed` shape, which renders
-   * edge-to-edge — non-negotiable #11 requires the underlying image to be
-   * ≥1400px wide. The old file's dining photograph, `vann-dining`, is only
-   * 1163px (its own source file tops out there; re-checked directly with
-   * `sharp(...).metadata()`, not assumed from the manifest), so it cannot be
-   * used here without failing the full-bleed-safety test — the brief's own
-   * worked spine table names it for this slot, which is a defect in the
-   * brief, not a rule to bend.
-   *
-   * `vann-dining` still appears once on this page — as the pair's
-   * "Candlelight Bush Dinner" (`weight: "hero"`, a *contained*, not
-   * edge-to-edge, box), which is where the brief's own worked `pairCopy`
-   * example already put it, and where a photograph under 1400px is fine.
-   *
-   * In its place: `lawn-picnic-golden-hour` (source
-   * `reference/wp-media/JAS05507-HDR-scaled.jpg`, 2560×1707, already curated
-   * and fullBleedSafe) — picnic tables and umbrellas set out on a lawn at
-   * golden hour, looked at directly rather than taken on the alt text alone.
-   * It matches this chapter's own copy ("served under the open sky") without
-   * repeating the candlelit-night mood the pair chapter right after it
-   * already carries with vann-dining. `FullBleed`'s photograph is
-   * `decorative` (`alt=""`), so it makes no factual claim beyond what the
-   * quote below says — it does not need to be Mahua Vann's own dining table
-   * specifically to be honest here, only to not misrepresent what it shows,
-   * which it does not.
+  /*
+   * **`quoteCopy` was here until 26 August 2026** — one entry, `"vann-table"`,
+   * the copy this chapter carried ("Chulai ki Bhaaji, Mahua Kheer, and
+   * whatever the season gives — under the open sky."). Deleted whole with the
+   * chapter it belonged to; see the removal comment on `VANN_CHAPTERS` above
+   * for the client's own words and what happened to the photograph.
+   * `vann-dining` (discussed at length in the deleted comment that used to sit
+   * here, weighing it against `lawn-picnic-golden-hour` for this now-gone
+   * slot) is untouched and still appears once on this page, in `pairCopy`
+   * below, as "Candlelight Bush Dinner".
    */
-  quoteCopy: {
-    "vann-table": {
-      quote: "Chulai ki Bhaaji, Mahua Kheer, and whatever the season gives — under the open sky.",
-    } satisfies FullBleedQuoteCopy,
-  },
 
   pairCopy: {
     "vann-day": {

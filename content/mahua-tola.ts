@@ -2,7 +2,6 @@ import type { OpeningColumnCopy } from "@/components/sections/OpeningColumn";
 import type { PropertyMapCopy } from "@/components/sections/PropertyMap";
 import type { RoomShowcaseCopy } from "@/components/sections/RoomShowcase.types";
 import type { ExperiencePairCopy } from "@/components/sections/ExperiencePair";
-import type { FullBleedQuoteCopy } from "@/components/sections/FullBleedQuote";
 import type { HeroCopy } from "@/components/sections/Hero";
 import type { PropertyPageCopy } from "@/components/property/PropertyPage";
 import type { PropertyInvitationCopy } from "@/components/property/PropertyInvitation";
@@ -10,32 +9,27 @@ import type { PropertyContactCopy } from "@/components/property/PropertyContact"
 import type { PropertyChapter } from "./property-chapters";
 
 /**
- * Mahua Tola's spine, in the redesign's shape vocabulary — deliberately NOT
- * Vann's. Vann runs hero → column → map → showcase → fullBleed → pair →
- * press → invitation. Tola has no press mentions (inventing parity with
- * Vann's three articles would be inventing content) and it does have a real,
- * attributed guest quote (Vedant, 2019, Tripadvisor — names Tadoba directly),
- * so in place of the press band it gets a second full-bleed moment, moved
- * earlier in the run: hero → column → map → **fullBleed (the guest's word)**
- * → showcase → fullBleed (the table) → pair → invitation.
+ * Mahua Tola's spine, in the redesign's shape vocabulary. **Six moments as of
+ * 26 August 2026** (was eight — two `fullBleed` bands, `tola-guest-word` and
+ * `tola-table`, both removed the same day on the client's own ruling; see
+ * their removal comments below): hero → column → map → showcase → pair →
+ * invitation.
  *
- * Shape sequence: fullBleed, column, map, fullBleed, showcase, fullBleed,
- * pair, invitation — no two adjacent alike, checked against
- * `findRepeatedShape` before this shipped (`content/mahua-tola.test.ts`
- * carries the same generic guard Vann's file does). `tola-guest-word` and
- * `tola-table` are both `fullBleed` but sit three moments apart (`map`,
- * `showcase` between them), and `tola-hero` and `tola-guest-word` are also
- * both `fullBleed` but have `column` and `map` between *them* — the closest
- * two full-bleed moments ever sit is one shape (`map` or `showcase`) apart,
- * never zero.
+ * This page no longer diverges from Vann's own shape sequence the way it did
+ * before 26 Aug — both of the extra `fullBleed` moments that used to set it
+ * apart (the guest's word, the table) are gone, and `tola-press` (Task 8 of
+ * this same restructure) is what will make the two pages' spines match
+ * exactly, hero through invitation.
  *
- * `column` is this page's one quiet shape (there is no `press` band to be a
- * second one), and it sits between two image-led moments (`vann-hero`,
- * `vann-where`) — CLAUDE.md's older rhythm rule (non-negotiable #10) holds
- * even though only one quiet screen exists to check it against.
+ * No two adjacent moments share a shape (`findRepeatedShape`,
+ * `content/mahua-tola.test.ts`). `column` is this page's one quiet shape
+ * (there is no `press` band yet to be a second one), and it sits between two
+ * image-led moments (`tola-hero`, `tola-where`) — CLAUDE.md's older rhythm
+ * rule (non-negotiable #10) holds even though only one quiet screen exists to
+ * check it against.
  *
- * Numbered chapters are 01–05 (`tola-reserve` through `tola-day`), one fewer
- * than Vann's 01–06 — this page has no `press` moment to number.
+ * Numbered chapters are 01–03 (`tola-reserve` through `tola-day`) — `tola-where`
+ * (the map) carries no number, same reasoning as Vann's own map, below.
  */
 export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
   { id: "tola-hero", shape: "fullBleed", media: ["tola-hero"] },
@@ -52,44 +46,52 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
     shape: "column",
     media: [],
   },
+  /*
+   * **No `number` and no `label` since 26 August 2026.** Client: *"the map is an
+   * extention to the first sections on both the pages 01-The Forest and 01-The
+   * Reserve respectively."*
+   *
+   * "Extension of" has a defined meaning on this site — the client's own 19 Aug
+   * ruling on `04 · Mahua Philosophy` — and it is two things, not one: the same
+   * cream, and no band of cream between. Dropping the heading is this half;
+   * `PropertyPage.tsx`'s `continues` is the other. Both are needed or the map
+   * reads as an unlabelled orphan rather than as part of 01.
+   */
   {
     id: "tola-where",
-    number: "02",
-    label: "Where It Is",
     shape: "map",
     media: [],
   },
-  {
-    // Vedant, 2019, Tripadvisor — a genuine, attributed guest quote that
-    // names Tadoba directly. Where Vann has a press band (three articles
-    // about Pench, none of them about Tola), this page has this instead:
-    // moved up from a "Dining" plate caption in the pre-redesign file into
-    // its own full-bleed moment, because it is stronger than anything wire
-    // copy could say about the reserve, and inventing three press mentions
-    // to match Vann's shape would be inventing content.
-    id: "tola-guest-word",
-    shape: "fullBleed",
-    media: ["tola-guest-word"],
-  },
+  /*
+   * **`tola-guest-word` (the guest's word, a bare `fullBleed` quote) was here
+   * until 26 August 2026.** Client: *"Remove the section that comes just above
+   * 05-The Day that has a wide image and text in the center"*, naming its
+   * copy — "One of the best forests for seeing tigers…".
+   *
+   * `tola-guest-word` (the photograph, same id as the chapter it backed) is
+   * released and is now curated-but-unused. **It is not to be parked in
+   * another chapter to keep a density figure up** — `measure_density.mjs`
+   * scores what is painted, and a chapter that needs imagery needs a
+   * composition. See `docs/DECISIONS.md` §22.
+   */
   {
     id: "tola-rooms",
-    number: "03",
+    number: "02",
     label: "The Rooms",
     shape: "showcase",
     media: ["tola-room-deluxe", "tola-room-suite", "tola-room-super-deluxe", "tola-room-family"],
   },
-  {
-    // tola-dining is 1440px wide and fullBleedSafe (non-negotiable #11) —
-    // checked directly against lib/media-manifest.ts before this shipped.
-    // Task 12's own brief was tripped by exactly this rule (a 1163px
-    // photograph assigned to a fullBleed slot); tola-guest-word above and
-    // tola-hero are also both checked and both 1440px.
-    id: "tola-table",
-    number: "04",
-    label: "The Table",
-    shape: "fullBleed",
-    media: ["tola-dining"],
-  },
+  /*
+   * **`tola-table` ("04 · The Table") was here until 26 August 2026.** Client:
+   * *"Remove the section that comes just above 05-The Day that has a wide image
+   * and text in the center"*, naming its copy — "Maharashtrian specialities and
+   * whatever the day brings fresh…".
+   *
+   * `tola-dining` is released and is now curated-but-unused. **It is not to be
+   * parked in another chapter to keep a density figure up** —
+   * `measure_density.mjs` scores what is painted, and a chapter that needs
+   * imagery needs a composition. See `docs/DECISIONS.md` §22.
+   */
   {
     // Six experiences, matching Vann's own tola-day/vann-day rhythm of two
     // "hero" (full-row) entries with an even run of "quiet" ones before each
@@ -97,8 +99,8 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
     // is not "Village Walk & Bamboo Crafts Market" despite that being one of
     // the six the brief named.
     id: "tola-day",
-    number: "05",
-    label: "The Day",
+    number: "03",
+    label: "The Experience",
     shape: "pair",
     media: [
       "tola-tiger-safari",
@@ -135,9 +137,12 @@ export const TOLA_CHAPTERS: readonly PropertyChapter[] = [
  * and Tola's own address, transcribed verbatim from the live site's "Find
  * Us" field and from `reference/site-copy.md`. Kept as its own literal
  * record rather than importing `VANN_CONTACT` and overriding `address`:
- * every other cross-page fact on this page (the guest quote, the sibling
- * photograph) is bound to its source by a test that fails if the two ever
- * diverge, not by a shared import, and this follows the same pattern.
+ * the other cross-page fact this page still carries (the invitation's
+ * sibling photograph) is bound to its source by a test that fails if the
+ * two ever diverge, not by a shared import, and this follows the same
+ * pattern. (The guest quote used to be a second example here; it was one
+ * of the two `quoteCopy` entries deleted on 26 Aug 2026 — see that
+ * removal comment below.)
  */
 export const TOLA_CONTACT: PropertyContactCopy = {
   phone: { label: "Speak to us", value: "+91 87448 67278", href: "tel:+918744867278" },
@@ -363,45 +368,23 @@ export const TOLA_COPY: PropertyPageCopy = {
     } satisfies PropertyMapCopy,
   },
 
-  /**
-   * `tola-guest-word` — Vedant, 2019, Tripadvisor, byte-identical to
-   * `content/home.ts`'s own copy of it
-   * (`content/mahua-tola.test.ts`'s "reuses its guest quote byte-identical
-   * to the attributed original" carries this forward from the pre-redesign
-   * file). `FullBleedQuoteCopy` carries only `quote` — there is nowhere on a
-   * full-bleed photograph to set a name, source and year in the display
-   * serif the home page uses for pull-quotes — so this page's attribution
-   * lives one level up, in `content/home.ts`'s `guests.quotes`, which
-   * `content/home.test.ts`'s "attributes every guest quote" test already
-   * holds to a name, a source and a year.
+  /*
+   * **`quoteCopy` was here until 26 August 2026** — two entries,
+   * `"tola-guest-word"` (Vedant, 2019, Tripadvisor: "One of the best forests
+   * for seeing tigers and one of the best resorts to stay in Tadoba.") and
+   * `"tola-table"` ("Maharashtrian specialities and whatever the day brings
+   * fresh, under wicker lamps — or candlelit by the water."). Deleted whole
+   * with the two chapters they belonged to; see the removal comments on
+   * `TOLA_CHAPTERS` above for the client's own words and what happened to
+   * each photograph.
+   *
+   * Vedant's attribution is not carried anywhere else in this codebase any
+   * more — `content/home.ts`'s own copy of it (`guests`/`invitation.quotes`)
+   * was already deleted in Task 2 of this same restructure, when the
+   * client's Elfsight widget replaced the curated quote set outright (see
+   * that file's own removal comment). This deletion is the second and last
+   * place the words lived; nothing here is invented to replace it.
    */
-  quoteCopy: {
-    "tola-guest-word": {
-      quote: "One of the best forests for seeing tigers and one of the best resorts to stay in Tadoba.",
-    } satisfies FullBleedQuoteCopy,
-
-    /**
-     * `tola-table` ("04 · The Table"). Condensed from the live site's own
-     * dining copy (reference/site-copy.md: "Our kitchen serves a delightful
-     * mix of Maharashtrian specialties and global favorites, crafted using
-     * fresh, locally sourced ingredients. Enjoy a meal while listening to
-     * the sounds of the jungle, or opt for a candlelit dinner by the
-     * river."), with British spelling corrected on the way in —
-     * "specialities", not the live site's American "specialties", which
-     * CLAUDE.md flags as a defect that has already shipped once on this
-     * branch. "Wicker lamps" is not invented: it is `tola-dining`'s own
-     * caption in the pre-redesign file ("tables laid under wicker pendant
-     * lamps"), carried into the line the photograph now sits under. No dish
-     * is named — unlike Vann's own quote ("Chulai ki Bhaaji, Mahua
-     * Kheer…"), no specific Tola dish traces to a source
-     * (docs/copy-provenance.md), so none is invented here (non-negotiable
-     * #6 / the brief's own warning against a repeat of Task 12's "seats
-     * forty").
-     */
-    "tola-table": {
-      quote: "Maharashtrian specialities and whatever the day brings fresh, under wicker lamps — or candlelit by the water.",
-    } satisfies FullBleedQuoteCopy,
-  },
 
   showcaseCopy: {
     "tola-rooms": {

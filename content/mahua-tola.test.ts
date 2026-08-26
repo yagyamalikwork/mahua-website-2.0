@@ -276,4 +276,33 @@ describe("TOLA_CHAPTERS", () => {
    * belongs to a different task's copy or be quietly weakened to pass, and
    * either is worse than removing it here and letting Task 5 finish the job.
    */
+
+  it("has the client's 26 Aug spine — two fewer full-bleed bands, an unheaded map, renumbered chapters", () => {
+    // `tola-press` does not exist yet — Task 8 of this restructure adds it
+    // between `tola-day` and `tola-invitation`
+    // (docs/superpowers/plans/2026-08-26-restructure-and-reviews.md §3.1), so
+    // this assertion checks the whole spine as it stands today rather than a
+    // slice of a bigger one: Task 8's own edit is "insert tola-press here",
+    // not "extend a truncated assertion". `numbered` is one entry short of
+    // Vann's four for the same reason — "04 Written About" is `tola-press`'s
+    // own number/label, and it ships with the chapter, not before it.
+    const ids = TOLA_CHAPTERS.map((c) => c.id);
+    expect(ids).toEqual([
+      "tola-hero", "tola-reserve", "tola-where", "tola-rooms", "tola-day", "tola-invitation",
+    ]);
+    const numbered = TOLA_CHAPTERS.filter((c) => c.number).map((c) => `${c.number} ${c.label}`);
+    expect(numbered).toEqual([
+      "01 The Reserve", "02 The Rooms", "03 The Experience",
+    ]);
+  });
+
+  it("gives the map no heading — it is an extension of 01, by the client's ruling", () => {
+    const map = TOLA_CHAPTERS.find((c) => c.id === "tola-where");
+    expect(map?.number).toBeUndefined();
+    expect(map?.label).toBeUndefined();
+  });
+
+  it("carries no full-bleed quote copy — both bands went on 26 Aug 2026", () => {
+    expect(TOLA_COPY.quoteCopy).toBeUndefined();
+  });
 });
