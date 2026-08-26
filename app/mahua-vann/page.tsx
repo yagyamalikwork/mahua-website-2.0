@@ -23,13 +23,17 @@ export default function MahuaVannPage() {
       // raised until the worst pixel under the sub cleared 4.5. Figures in
       // `docs/reviews/2026-08-08-property-pages/vann-contrast.json`.
       //
-      // `vann-table`, this page's other `fullBleed` chapter, carries no entry
-      // here on purpose: it renders as a `FullBleedQuote` (it has a
-      // `quoteCopy` entry — see `PropertyPage.tsx`'s dispatcher). Task 15
-      // measured it against the real composition (9/10 Aug 2026) and it
-      // clears the 3.0 floor comfortably on the untouched default scrim —
-      // worst-pixel contrast 3.30 at 390px, 3.58 at 768/1440/1920 — so no
-      // scrim was added here.
+      // `vann-table`, this page's other former `fullBleed` chapter, is gone —
+      // removed on 26 August 2026 on the client's own ruling (Task 5 of the
+      // 26 Aug restructure; `content/mahua-vann.ts`'s own removal comment
+      // carries his words), so there is nothing left for a scrim entry to key
+      // to. While it existed it carried no entry here on purpose: it rendered
+      // as a `FullBleedQuote` (it had a `quoteCopy` entry — see
+      // `PropertyPage.tsx`'s dispatcher) and Task 15 measured it against the
+      // real composition (9/10 Aug 2026): worst-pixel contrast 3.30 at 390px,
+      // 3.58 at 768/1440/1920, comfortably clear of the 3.0 floor on the
+      // untouched default scrim, so no scrim was ever added for it here
+      // either.
       // docs/reviews/2026-08-09-property-redesign/README.md §1.
       scrim={{ "vann-hero": { top: 0.92, bottom: 0.78, corner: 0.88 } }}
       bookHref="https://asiatech.in/booking_engine/index3?token=ODM1MQ=="

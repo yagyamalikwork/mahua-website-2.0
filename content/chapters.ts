@@ -83,11 +83,16 @@ export type ChapterKind =
    * `fullBleedQuote` before it was, and its floor is a crop of the photograph's
    * own length rather than the whole of it (`JUNGLE_BAND.minHeightVw`).
    *
-   * **It replaces `"fullBleedQuote"` on this chapter only.** That kind is still
-   * in the union and still routed, because both property pages use it
-   * (`vann-table`, `tola-table`, `tola-guest-word`); the home page has none
-   * left. The client's words for why: the full-screen version *"covers the whole
-   * screen currently and feels too overwhelming"*.
+   * **It replaces `"fullBleedQuote"` on this chapter only.** The kind itself left
+   * the union with `"lodgeCards"` on 19 Aug 2026 (see the note below) — what
+   * survives is the component, `components/sections/FullBleedQuote.tsx`, which
+   * both property pages' own `"fullBleed"` shape used to route to (`vann-table`,
+   * `tola-table`, `tola-guest-word`) until Task 5 of the 26 August 2026
+   * restructure deleted all three chapters on the client's own ruling. It is
+   * unrouted everywhere as of that date — see the note below for why it is kept
+   * anyway. The client's own words for why the home page moved off it in the
+   * first place: the full-screen version *"covers the whole screen currently
+   * and feels too overwhelming"*.
    */
   | "junglesBand"
   | "invitation";
@@ -97,10 +102,16 @@ export type ChapterKind =
  * positions afterwards. `components/sections/LodgeCards.tsx` is now routed by
  * nothing at all — `lodges` was its only caller on any page — and is a candidate
  * for retirement alongside `PlateGrid.tsx` and
- * `ui/ForestBackdrop.tsx`. `components/sections/FullBleedQuote.tsx` is very much
- * alive: both property pages route their own `"fullBleed"` kind to it
- * (`vann-table`, `tola-table`, `tola-guest-word`), so what has gone is this
- * page's use of it, not the component. Deleting it would break two routes.
+ * `ui/ForestBackdrop.tsx`. `components/sections/FullBleedQuote.tsx` is now
+ * routed by nothing at all too, as of 26 August 2026 — Task 5 of that day's
+ * restructure deleted `vann-table`, `tola-table` and `tola-guest-word`, the
+ * three property-page chapters that used to route their own `"fullBleed"`
+ * shape to it, on the client's own ruling. Unlike `LodgeCards.tsx` just above,
+ * it is **not** a retirement candidate: `"fullBleed"` is still the shape both
+ * property pages' own heroes use (`components/property/PropertyPage.tsx`'s
+ * dispatcher), and an unrouted component with an already-solved scrim is the
+ * cheap way back if the client reverses this call — keeping it costs nothing a
+ * future revert would not have to pay for anyway.
  *
  * **`"plateGrid"` and `"testimonials"` were retired from this union on 19 Aug
  * 2026** with the chapters that used them — `03 · The Forest`, `05 · The Rooms`

@@ -177,15 +177,17 @@ export function PropertyPage({
                *    (headline/sub/scrollCue) and a scrim built from
                *    top/bottom/corner, neither of which a quote's copy or
                *    scrim shape can stand in for.
-               * 2. Every other `fullBleed` chapter on both pages carries a
-               *    `quoteCopy` entry today — both content test files' "keeps
-               *    every chapter's copy joined to the spine it renders
-               *    under" test requires one for any non-hero `fullBleed`
-               *    chapter, and `vann-table`/`tola-table`'s own doc comments
-               *    in their content files confirm the quote text is meant to
-               *    show over the photograph, not stand in for a caption on a
-               *    photograph that shows nothing of its own. This is the
-               *    branch every real chapter beyond the hero takes.
+               * 2. A non-hero `fullBleed` chapter with a `quoteCopy` entry
+               *    renders as a `FullBleedQuote` — the branch `vann-table`,
+               *    `tola-table` and `tola-guest-word` used to take, until
+               *    Task 5 of the 26 Aug 2026 restructure deleted all three on
+               *    the client's own ruling (their content files' own removal
+               *    comments carry his words). **As of that date neither page
+               *    has any non-hero `fullBleed` chapter left at all, so this
+               *    branch is exactly as unreachable as branch 3 below** —
+               *    kept for the day a future `fullBleed` chapter carries a
+               *    quote again, on the same reasoning branch 3's own comment
+               *    already gives for itself.
                * 3. `PlainFullBleed` below is the fallback for a `fullBleed`
                *    chapter that is neither — unreachable under the current
                *    spines, kept for the day one exists rather than left as
