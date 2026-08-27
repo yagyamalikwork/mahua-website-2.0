@@ -253,10 +253,39 @@ for (const route of ROUTES) {
       const els = [...document.querySelectorAll("a[href], button, [role='button'], summary, input")];
       return els
         .filter((el) => isVisible(el))
-        .map((el) => ({ desc: describe(el), box: effectiveHitBox(el) }))
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          return {
+            desc: describe(el),
+            own: { x: r.x, y: r.y, w: r.width, h: r.height },
+            box: effectiveHitBox(el),
+          };
+        })
         .filter(({ box }) => box.w > 0 && box.h > 0)
         .map((t) => ({
           desc: t.desc,
+          // The element's own rendered box — unrounded to 2dp like the
+          // effective box below. Fix-round 1, 28 Aug 2026: a whole-branch
+          // review found this task's own central geometric claim (the
+          // pager's measured 29.29px pitch) existed only in a report's prose
+          // and a deleted throwaway script, nowhere in committed evidence —
+          // against this project's own rule that every committed number must
+          // be re-derivable from a script in `scripts/`, not quoted. Adding
+          // `own` here (alongside the effective box already read by
+          // assertions 2 & 3, unchanged below) means a pitch, a gap, or any
+          // other position-derived figure is re-derivable from this file's
+          // own committed JSON forever, by anyone, without re-writing a
+          // script. Purely additive: `x`/`y`/`w`/`h` below are byte-identical
+          // to what assertions 2 and 3 already consumed before this change.
+          own: {
+            x: Number(t.own.x.toFixed(2)),
+            y: Number(t.own.y.toFixed(2)),
+            w: Number(t.own.w.toFixed(2)),
+            h: Number(t.own.h.toFixed(2)),
+          },
+          // The EFFECTIVE hit box — own box, or its `.tap`-grown `::after`,
+          // whichever is larger. Unchanged: this is exactly what assertions
+          // 2 and 3 below have always read.
           x: Number(t.box.x.toFixed(2)),
           y: Number(t.box.y.toFixed(2)),
           w: Number(t.box.w.toFixed(2)),
@@ -282,6 +311,13 @@ for (const route of ROUTES) {
     shapeReport.targetsChecked = targets.length;
     shapeReport.under24 = under24;
     shapeReport.under44Warning = under44;
+    // Per-target geometry, added fix-round 1 (28 Aug 2026) — additive only,
+    // no threshold or assertion above touched. Each entry: `desc`, `own` (the
+    // element's real rendered box) and the effective hit box (`x`/`y`/`w`/`h`
+    // — the same fields assertions 2 and 3 already read, now also written
+    // out). A pitch between two adjacent targets, or any other position
+    // question, is derivable from this array without a bespoke script.
+    shapeReport.targets = targets;
 
     // 3 — pairwise overlap on the same rectangles. O(n²) over a page's own
     // interactive elements (tens, not thousands), so the naive form is the

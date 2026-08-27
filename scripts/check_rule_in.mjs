@@ -349,107 +349,132 @@ const browser = await chromium.launch();
 
 // ---------------------------------------------------------------------------
 // 8. Fix round 1, 28 Aug 2026: `.rule-in.tap` moved inside `@media (pointer:
-//    coarse)`. This is the hover state, on a REAL affected element, on both
+//    coarse)`. This is the hover state, on REAL affected elements, on both
 //    pointer types — not screenshotted at rest only, which is what the fix
 //    round's own finding said the deliverable was missing.
+//
+//    **Task 3 fix round, 28 Aug 2026: extended to a second target.** This
+//    check originally probed only the footer's legal link. Task 3
+//    (`70fe0ec`) gave `.tap` to the Experiences pager — which also carries
+//    `.rule-in` — and its own report never ran this check against it: it
+//    screenshotted the pager at rest only, the identical "confirmed at rest,
+//    never at hover" gap this very check exists to close for the footer.
+//    Rather than duplicate the whole probe/assert block for one more
+//    element, `SEL` became `TARGETS`, and the two probes plus three
+//    assertions below run once per target, each failure named by which
+//    target it came from.
 // ---------------------------------------------------------------------------
 {
   console.log("\n8. the .rule-in/.tap compound: fine pointer untouched, coarse pointer still works");
 
-  // The footer's "Terms & Conditions" link — one of the four elements the
-  // Task 2 fix actually changed, and present on all three routes. Untouched
-  // by checks 1-7 above, which target the footer's PLACES links instead.
-  const SEL = "#site-footer a[href='https://mahuaresorts.com/terms-conditions/']";
+  const TARGETS = [
+    // The footer's "Terms & Conditions" link — one of the four elements the
+    // Task 2 fix actually changed, and present on all three routes.
+    // Untouched by checks 1-7 above, which target the footer's PLACES links
+    // instead.
+    { name: "footer legal link", sel: "#site-footer a[href='https://mahuaresorts.com/terms-conditions/']" },
+    // The Experiences pager's first link — Task 3's own, on the home route,
+    // the element this fix round's finding said was never actually checked
+    // under hover.
+    { name: "experiences pager link (field-days card 0)", sel: "a[href='#field-days-card-0']" },
+  ];
 
-  const probePointer = async (label, contextOptions) => {
+  const probePointer = async (label, contextOptions, sel) => {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, ...contextOptions });
     const page = await context.newPage();
     await page.goto(URL, { waitUntil: "networkidle" });
 
-    const rect = await page.$eval(SEL, (el) => {
+    const rect = await page.$eval(sel, (el) => {
       const r = el.getBoundingClientRect();
       return { x: r.x, y: r.y, width: r.width, height: r.height };
     });
 
-    const restBefore = scaleX(await page.$eval(SEL, (el) => getComputedStyle(el, "::before").transform));
-    const restAfter = scaleX(await readAfter(page, SEL));
-    const afterBg = await page.$eval(SEL, (el) => getComputedStyle(el, "::after").backgroundColor);
-    const beforeContent = await page.$eval(SEL, (el) => getComputedStyle(el, "::before").content);
+    const restBefore = scaleX(await page.$eval(sel, (el) => getComputedStyle(el, "::before").transform));
+    const restAfter = scaleX(await readAfter(page, sel));
+    const afterBg = await page.$eval(sel, (el) => getComputedStyle(el, "::after").backgroundColor);
+    const beforeContent = await page.$eval(sel, (el) => getComputedStyle(el, "::before").content);
 
-    await page.hover(SEL);
+    await page.hover(sel);
     await page.waitForTimeout(DURATION.ruleIn * 1000 + 200);
 
-    const hoveredBefore = scaleX(await page.$eval(SEL, (el) => getComputedStyle(el, "::before").transform));
-    const hoveredAfter = scaleX(await readAfter(page, SEL));
+    const hoveredBefore = scaleX(await page.$eval(sel, (el) => getComputedStyle(el, "::before").transform));
+    const hoveredAfter = scaleX(await readAfter(page, sel));
 
     await context.close();
     return { label, rect, restBefore, restAfter, afterBg, beforeContent, hoveredBefore, hoveredAfter };
   };
 
-  // `hasTouch: true` is what actually flips Chromium's `(pointer: coarse)`
-  // media feature — confirmed against a throwaway `about:blank` probe before
-  // wiring this in, rather than assumed from the Playwright docs alone
-  // (`hasTouch` alone was sufficient; `isMobile` changed nothing further).
-  const fine = await probePointer("fine (mouse)", {});
-  const coarse = await probePointer("coarse (touch)", { hasTouch: true });
+  report.tapRuleInFixRound1 = {};
 
-  report.tapRuleInFixRound1 = { fine, coarse };
+  for (const { name, sel } of TARGETS) {
+    console.log(`  — ${name}`);
 
-  // Fine pointer: `.rule-in.tap`'s rules must not exist at all here — the
-  // `::before` box must be absent (content: none), and the visible hairline
-  // must still be the untouched `.rule-in::after` path, exactly like every
-  // other link on the site.
-  if (fine.beforeContent !== "none") {
-    fail(
-      `fine pointer: an unexpected ::before box exists on the footer link (content: ${fine.beforeContent}) — ` +
-        `the coarse-only scoping did not hold`,
-    );
-  } else if (fine.restAfter > 0.02) {
-    fail(`fine pointer: the hairline is already drawn at rest (::after scaleX ${fine.restAfter.toFixed(3)})`);
-  } else if (fine.hoveredAfter < 0.98) {
-    fail(
-      `fine pointer: hover did not draw the hairline on ::after (scaleX ${fine.hoveredAfter.toFixed(3)}) — ` +
-        `it moved onto ::before instead of staying on the untouched path`,
-    );
-  } else {
-    ok(
-      `fine pointer: no ::before box exists; ::after still travels 0 → ${fine.hoveredAfter.toFixed(3)}, ` +
-        `identical to an ordinary .rule-in link`,
-    );
-  }
+    // `hasTouch: true` is what actually flips Chromium's `(pointer: coarse)`
+    // media feature — confirmed against a throwaway `about:blank` probe
+    // before wiring this in, rather than assumed from the Playwright docs
+    // alone (`hasTouch` alone was sufficient; `isMobile` changed nothing
+    // further).
+    const fine = await probePointer("fine (mouse)", {}, sel);
+    const coarse = await probePointer("coarse (touch)", { hasTouch: true }, sel);
 
-  // Coarse pointer: `::after` is now the 44px hit region and must stay
-  // transparent at all times; the visible hairline must be on `::before`,
-  // and it must actually travel on hover, not just sit at scaleX(1) from a
-  // stray rule.
-  if (coarse.afterBg !== "rgba(0, 0, 0, 0)" && coarse.afterBg !== "transparent") {
-    fail(`coarse pointer: ::after is not transparent (${coarse.afterBg}) — the tap hit box would paint visibly`);
-  } else if (coarse.restBefore > 0.02) {
-    fail(`coarse pointer: the hairline is already drawn at rest (::before scaleX ${coarse.restBefore.toFixed(3)})`);
-  } else if (coarse.hoveredBefore < 0.98) {
-    fail(`coarse pointer: hover did not draw the hairline on ::before (scaleX ${coarse.hoveredBefore.toFixed(3)})`);
-  } else {
-    ok(
-      `coarse pointer: ::after stays transparent (the hit box); ::before travels ` +
-        `0 → ${coarse.hoveredBefore.toFixed(3)}`,
-    );
-  }
+    report.tapRuleInFixRound1[name] = { fine, coarse };
 
-  // Nothing visible moved: the link's own rendered box must be identical
-  // between pointer types — a change to the invisible hit area must never
-  // be a change to the geometry a visitor actually sees.
-  const rectsMatch =
-    Math.abs(fine.rect.x - coarse.rect.x) < 0.5 &&
-    Math.abs(fine.rect.y - coarse.rect.y) < 0.5 &&
-    Math.abs(fine.rect.width - coarse.rect.width) < 0.5 &&
-    Math.abs(fine.rect.height - coarse.rect.height) < 0.5;
-  if (!rectsMatch) {
-    fail(
-      `the link's own box differs between pointer types: fine ${JSON.stringify(fine.rect)} vs ` +
-        `coarse ${JSON.stringify(coarse.rect)}`,
-    );
-  } else {
-    ok(`the link's own rendered box is identical between pointer types (${JSON.stringify(fine.rect)})`);
+    // Fine pointer: `.rule-in.tap`'s rules must not exist at all here — the
+    // `::before` box must be absent (content: none), and the visible
+    // hairline must still be the untouched `.rule-in::after` path, exactly
+    // like every other link on the site.
+    if (fine.beforeContent !== "none") {
+      fail(
+        `${name} — fine pointer: an unexpected ::before box exists (content: ${fine.beforeContent}) — ` +
+          `the coarse-only scoping did not hold`,
+      );
+    } else if (fine.restAfter > 0.02) {
+      fail(`${name} — fine pointer: the hairline is already drawn at rest (::after scaleX ${fine.restAfter.toFixed(3)})`);
+    } else if (fine.hoveredAfter < 0.98) {
+      fail(
+        `${name} — fine pointer: hover did not draw the hairline on ::after (scaleX ${fine.hoveredAfter.toFixed(3)}) — ` +
+          `it moved onto ::before instead of staying on the untouched path`,
+      );
+    } else {
+      ok(
+        `${name} — fine pointer: no ::before box exists; ::after still travels 0 → ${fine.hoveredAfter.toFixed(3)}, ` +
+          `identical to an ordinary .rule-in link`,
+      );
+    }
+
+    // Coarse pointer: `::after` is now the 44px (or, on the pager, 29px —
+    // `--tap-w`) hit region and must stay transparent at all times; the
+    // visible hairline must be on `::before`, and it must actually travel on
+    // hover, not just sit at scaleX(1) from a stray rule.
+    if (coarse.afterBg !== "rgba(0, 0, 0, 0)" && coarse.afterBg !== "transparent") {
+      fail(`${name} — coarse pointer: ::after is not transparent (${coarse.afterBg}) — the tap hit box would paint visibly`);
+    } else if (coarse.restBefore > 0.02) {
+      fail(`${name} — coarse pointer: the hairline is already drawn at rest (::before scaleX ${coarse.restBefore.toFixed(3)})`);
+    } else if (coarse.hoveredBefore < 0.98) {
+      fail(`${name} — coarse pointer: hover did not draw the hairline on ::before (scaleX ${coarse.hoveredBefore.toFixed(3)})`);
+    } else {
+      ok(
+        `${name} — coarse pointer: ::after stays transparent (the hit box); ::before travels ` +
+          `0 → ${coarse.hoveredBefore.toFixed(3)}`,
+      );
+    }
+
+    // Nothing visible moved: the link's own rendered box must be identical
+    // between pointer types — a change to the invisible hit area must never
+    // be a change to the geometry a visitor actually sees.
+    const rectsMatch =
+      Math.abs(fine.rect.x - coarse.rect.x) < 0.5 &&
+      Math.abs(fine.rect.y - coarse.rect.y) < 0.5 &&
+      Math.abs(fine.rect.width - coarse.rect.width) < 0.5 &&
+      Math.abs(fine.rect.height - coarse.rect.height) < 0.5;
+    if (!rectsMatch) {
+      fail(
+        `${name} — the link's own box differs between pointer types: fine ${JSON.stringify(fine.rect)} vs ` +
+          `coarse ${JSON.stringify(coarse.rect)}`,
+      );
+    } else {
+      ok(`${name} — the link's own rendered box is identical between pointer types (${JSON.stringify(fine.rect)})`);
+    }
   }
 }
 

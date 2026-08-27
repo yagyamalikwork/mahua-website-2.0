@@ -1,0 +1,103 @@
+{
+  "measuredAt": "2026-08-27T22:45:52.567Z",
+  "url": "http://localhost:3100/",
+  "ruleInDuration": 0.4,
+  "coverage": {
+    "total": 25,
+    "uncovered": []
+  },
+  "rest": 0,
+  "travel": {
+    "durationMs": 400,
+    "atFifteenPercent": 0.554011,
+    "atFiftyFivePercent": 0.974493
+  },
+  "complete": 1,
+  "keyboard": {
+    "reachedByTab": true,
+    "tabsUsed": 16,
+    "scaleX": 1
+  },
+  "reducedMotion": {
+    "scaleX": 1,
+    "running": false
+  },
+  "surfaces": [
+    {
+      "where": "menu overlay",
+      "rule": "rgb(49, 64, 44)",
+      "behind": "color(srgb 0.945098 0.913725 0.843137 / 0.82)",
+      "delta": 0.7738328703029722
+    }
+  ],
+  "tapRuleInFixRound1": {
+    "footer legal link": {
+      "fine": {
+        "label": "fine (mouse)",
+        "rect": {
+          "x": 1116.125,
+          "y": 7965.40625,
+          "width": 144.765625,
+          "height": 16.875
+        },
+        "restBefore": 1,
+        "restAfter": 0,
+        "afterBg": "rgb(241, 233, 215)",
+        "beforeContent": "none",
+        "hoveredBefore": 1,
+        "hoveredAfter": 1
+      },
+      "coarse": {
+        "label": "coarse (touch)",
+        "rect": {
+          "x": 1116.125,
+          "y": 7965.40625,
+          "width": 144.765625,
+          "height": 16.875
+        },
+        "restBefore": 0,
+        "restAfter": 1,
+        "afterBg": "rgba(0, 0, 0, 0)",
+        "beforeContent": "\"\"",
+        "hoveredBefore": 1,
+        "hoveredAfter": 1
+      }
+    },
+    "experiences pager link (field-days card 0)": {
+      "fine": {
+        "label": "fine (mouse)",
+        "rect": {
+          "x": 1222.90625,
+          "y": 6714.09375,
+          "width": 13.296875,
+          "height": 14.875
+        },
+        "restBefore": 1,
+        "restAfter": 0,
+        "afterBg": "rgb(90, 82, 64)",
+        "beforeContent": "none",
+        "hoveredBefore": 1,
+        "hoveredAfter": 1
+      },
+      "coarse": {
+        "label": "coarse (touch)",
+        "rect": {
+          "x": 1222.90625,
+          "y": 6714.09375,
+          "width": 13.296875,
+          "height": 14.875
+        },
+        "restBefore": 0,
+        "restAfter": 1,
+        "afterBg": "rgba(0, 0, 0, 0)",
+        "beforeContent": "\"\"",
+        "hoveredBefore": 1,
+        "hoveredAfter": 1
+      }
+    }
+  },
+  "failures": [
+    "no element carries `.rule-in--rest` — dead code on this branch since `LodgePanels` superseded `LodgeCards` (pre-existing, see Task 2 report Concerns)"
+  ],
+  "verdict": "fail"
+}

@@ -549,10 +549,27 @@ export function ExperienceStrip({
                * CSS pixel under that tightest pitch, so adjacent hit areas
                * have a real, measured gap between them rather than merely
                * relying on `check_responsive.mjs` assertion 3's own ±1.5px
-               * touching tolerance. The vertical has no competing neighbour,
-               * so `--tap-h` goes to the full 44px comfort figure — confirmed
-               * by re-running assertion 3 (still exactly 21 pairs, all of
-               * them the room-gallery's, none of them this pager's).
+               * touching tolerance. `--tap-h` goes to the full 44px comfort
+               * figure because nothing else sits close enough above or below
+               * this row to compete for vertical space — confirmed by
+               * assertion 3 not flagging a new pair (still exactly 21, all
+               * of them the room-gallery's), which proves no OVERLAP
+               * resulted, not a measured clearance distance to the nearest
+               * neighbour above/below.
+               *
+               * **Fix round 1, 28 Aug 2026: the 29.29px figure above is now
+               * re-derivable from committed evidence, not only this comment
+               * and a deleted throwaway script.** `check_responsive.mjs`
+               * records each target's own rendered box (`shapeReport.targets
+               * […].own`) alongside the effective hit box its assertions
+               * already used — `docs/reviews/2026-08-27-mobile/
+               * after-pager-fixround1.json` carries it for every route and
+               * shape. The `.rule-in`/`.tap` hover interaction on this exact
+               * link is also now asserted, not just screenshotted at rest —
+               * `check_rule_in.mjs` check 8 probes this link under both a
+               * fine and a coarse pointer context; see `.superpowers/sdd/
+               * 2026-08-27-mobile-tablet-and-zoom/task-3-report.md`'s fix-
+               * round section.
                *
                * 29×44 clears the 24px floor with margin in both axes and
                * overlaps nothing. Full sweep: `.superpowers/sdd/
