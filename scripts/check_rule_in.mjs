@@ -300,15 +300,30 @@ const browser = await chromium.launch();
   // photograph too, and a full-banner-width resting hairline would be wrong).
   // The measurement is the same either way — the rule's colour against the
   // section behind it.
-  await page.$eval(".rule-in--rest", (el) => el.scrollIntoView({ block: "center" }));
-  await page.waitForTimeout(400);
-  surfaces.push(
-    await page.$eval(".rule-in--rest", (el) => ({
-      where: "cream",
-      rule: getComputedStyle(el, "::after").backgroundColor,
-      behind: getComputedStyle(el.closest("section") ?? document.body).backgroundColor,
-    })),
-  );
+  //
+  // **Guarded, fix round 1 (28 Aug 2026): `.rule-in--rest` only exists in
+  // `components/sections/LodgeCards.tsx`, dead code on `feat/journal-and-
+  // mobile` since `LodgePanels` superseded it — a pre-existing, unrelated
+  // drift the Task 2 report already flagged under Concerns.** Before this
+  // guard, a missing selector threw an UNCAUGHT exception here and killed
+  // the process before check 8 (below) ever ran. This makes that a reported
+  // failure instead — the same known drift, not silently hidden — so the
+  // rest of the file, including a later fix round's own new checks, is not
+  // held hostage by one already-recorded, out-of-scope defect.
+  const restHandle = await page.$(".rule-in--rest");
+  if (!restHandle) {
+    fail("no element carries `.rule-in--rest` — dead code on this branch since `LodgePanels` superseded `LodgeCards` (pre-existing, see Task 2 report Concerns)");
+  } else {
+    await page.$eval(".rule-in--rest", (el) => el.scrollIntoView({ block: "center" }));
+    await page.waitForTimeout(400);
+    surfaces.push(
+      await page.$eval(".rule-in--rest", (el) => ({
+        where: "cream",
+        rule: getComputedStyle(el, "::after").backgroundColor,
+        behind: getComputedStyle(el.closest("section") ?? document.body).backgroundColor,
+      })),
+    );
+  }
 
   // The dark overlay: a chapter link inside the open menu panel.
   await page.click("[aria-controls='site-menu']");
@@ -330,6 +345,112 @@ const browser = await chromium.launch();
     }
   }
   await page.close();
+}
+
+// ---------------------------------------------------------------------------
+// 8. Fix round 1, 28 Aug 2026: `.rule-in.tap` moved inside `@media (pointer:
+//    coarse)`. This is the hover state, on a REAL affected element, on both
+//    pointer types — not screenshotted at rest only, which is what the fix
+//    round's own finding said the deliverable was missing.
+// ---------------------------------------------------------------------------
+{
+  console.log("\n8. the .rule-in/.tap compound: fine pointer untouched, coarse pointer still works");
+
+  // The footer's "Terms & Conditions" link — one of the four elements the
+  // Task 2 fix actually changed, and present on all three routes. Untouched
+  // by checks 1-7 above, which target the footer's PLACES links instead.
+  const SEL = "#site-footer a[href='https://mahuaresorts.com/terms-conditions/']";
+
+  const probePointer = async (label, contextOptions) => {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, ...contextOptions });
+    const page = await context.newPage();
+    await page.goto(URL, { waitUntil: "networkidle" });
+
+    const rect = await page.$eval(SEL, (el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    });
+
+    const restBefore = scaleX(await page.$eval(SEL, (el) => getComputedStyle(el, "::before").transform));
+    const restAfter = scaleX(await readAfter(page, SEL));
+    const afterBg = await page.$eval(SEL, (el) => getComputedStyle(el, "::after").backgroundColor);
+    const beforeContent = await page.$eval(SEL, (el) => getComputedStyle(el, "::before").content);
+
+    await page.hover(SEL);
+    await page.waitForTimeout(DURATION.ruleIn * 1000 + 200);
+
+    const hoveredBefore = scaleX(await page.$eval(SEL, (el) => getComputedStyle(el, "::before").transform));
+    const hoveredAfter = scaleX(await readAfter(page, SEL));
+
+    await context.close();
+    return { label, rect, restBefore, restAfter, afterBg, beforeContent, hoveredBefore, hoveredAfter };
+  };
+
+  // `hasTouch: true` is what actually flips Chromium's `(pointer: coarse)`
+  // media feature — confirmed against a throwaway `about:blank` probe before
+  // wiring this in, rather than assumed from the Playwright docs alone
+  // (`hasTouch` alone was sufficient; `isMobile` changed nothing further).
+  const fine = await probePointer("fine (mouse)", {});
+  const coarse = await probePointer("coarse (touch)", { hasTouch: true });
+
+  report.tapRuleInFixRound1 = { fine, coarse };
+
+  // Fine pointer: `.rule-in.tap`'s rules must not exist at all here — the
+  // `::before` box must be absent (content: none), and the visible hairline
+  // must still be the untouched `.rule-in::after` path, exactly like every
+  // other link on the site.
+  if (fine.beforeContent !== "none") {
+    fail(
+      `fine pointer: an unexpected ::before box exists on the footer link (content: ${fine.beforeContent}) — ` +
+        `the coarse-only scoping did not hold`,
+    );
+  } else if (fine.restAfter > 0.02) {
+    fail(`fine pointer: the hairline is already drawn at rest (::after scaleX ${fine.restAfter.toFixed(3)})`);
+  } else if (fine.hoveredAfter < 0.98) {
+    fail(
+      `fine pointer: hover did not draw the hairline on ::after (scaleX ${fine.hoveredAfter.toFixed(3)}) — ` +
+        `it moved onto ::before instead of staying on the untouched path`,
+    );
+  } else {
+    ok(
+      `fine pointer: no ::before box exists; ::after still travels 0 → ${fine.hoveredAfter.toFixed(3)}, ` +
+        `identical to an ordinary .rule-in link`,
+    );
+  }
+
+  // Coarse pointer: `::after` is now the 44px hit region and must stay
+  // transparent at all times; the visible hairline must be on `::before`,
+  // and it must actually travel on hover, not just sit at scaleX(1) from a
+  // stray rule.
+  if (coarse.afterBg !== "rgba(0, 0, 0, 0)" && coarse.afterBg !== "transparent") {
+    fail(`coarse pointer: ::after is not transparent (${coarse.afterBg}) — the tap hit box would paint visibly`);
+  } else if (coarse.restBefore > 0.02) {
+    fail(`coarse pointer: the hairline is already drawn at rest (::before scaleX ${coarse.restBefore.toFixed(3)})`);
+  } else if (coarse.hoveredBefore < 0.98) {
+    fail(`coarse pointer: hover did not draw the hairline on ::before (scaleX ${coarse.hoveredBefore.toFixed(3)})`);
+  } else {
+    ok(
+      `coarse pointer: ::after stays transparent (the hit box); ::before travels ` +
+        `0 → ${coarse.hoveredBefore.toFixed(3)}`,
+    );
+  }
+
+  // Nothing visible moved: the link's own rendered box must be identical
+  // between pointer types — a change to the invisible hit area must never
+  // be a change to the geometry a visitor actually sees.
+  const rectsMatch =
+    Math.abs(fine.rect.x - coarse.rect.x) < 0.5 &&
+    Math.abs(fine.rect.y - coarse.rect.y) < 0.5 &&
+    Math.abs(fine.rect.width - coarse.rect.width) < 0.5 &&
+    Math.abs(fine.rect.height - coarse.rect.height) < 0.5;
+  if (!rectsMatch) {
+    fail(
+      `the link's own box differs between pointer types: fine ${JSON.stringify(fine.rect)} vs ` +
+        `coarse ${JSON.stringify(coarse.rect)}`,
+    );
+  } else {
+    ok(`the link's own rendered box is identical between pointer types (${JSON.stringify(fine.rect)})`);
+  }
 }
 
 await browser.close();

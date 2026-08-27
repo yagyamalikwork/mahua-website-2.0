@@ -2049,57 +2049,85 @@ body {
     /* Purely a hit area. It must never paint and never affect layout. */
     pointer-events: auto;
   }
-}
 
-/*
- * Where `.tap` lands on a link that also carries `.rule-in` — this task's
- * footer legal links, the press "Read the article" links, and the property
- * bar's phone number — both classes reach for the SAME `::after`, and a
- * plain class combination breaks the visible one. `.tap::after`'s own
- * `transform: translate(-50%, -50%)` overrides `.rule-in::after`'s
- * `transform: scaleX(0)` — the declaration that HIDES the hairline at rest —
- * because the two rules have equal specificity and `.tap` is later in this
- * file. `.rule-in::after`'s `background-color: currentColor` is never
- * touched by `.tap::after` (which sets no background) and keeps painting.
- * The result: a solid block the size of the tap region, visible at every
- * width, all the time — caught by this task's own before/after screenshot,
- * not by any rig. `check_rule_in.mjs` never probes these four elements (it
- * targets the footer's PLACES links and the menu), and
- * `check_responsive.mjs`'s `effectiveHitBox` reads `::after` specifically
- * (given verbatim by the brief), so `.tap` cannot simply move to `::before`
- * without going invisible to the rig this task answers to.
- *
- * The fix leaves both `.tap` and the site-wide `.rule-in` untouched and gives
- * the hairline its own `::before` box on exactly this pairing, at higher
- * specificity than either class alone so it wins outright rather than
- * partially composing. `.rule-in.tap::after` then only has to erase the
- * leftover background; `.tap::after`'s own geometry (position/left/top/
- * width/height/transform) is never redeclared here and keeps winning.
- */
-.rule-in.tap::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.28em;
-  height: 1px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--rule-in-duration) var(--enter-ease);
-  pointer-events: none;
-}
+  /*
+   * Where `.tap` lands on a link that also carries `.rule-in` — this task's
+   * footer legal links, the press "Read the article" links, the property
+   * bar's phone number, and (since `70fe0ec`) the Experiences pager — both
+   * classes reach for the SAME `::after`, and a plain class combination
+   * breaks the visible one. `.tap::after`'s own `transform: translate(-50%,
+   * -50%)` overrides `.rule-in::after`'s `transform: scaleX(0)` — the
+   * declaration that HIDES the hairline at rest — because the two rules have
+   * equal specificity and `.tap` is later in this file. `.rule-in::after`'s
+   * `background-color: currentColor` is never touched by `.tap::after`
+   * (which sets no background) and keeps painting. The result: a solid
+   * block the size of the tap region, visible at every width, all the time —
+   * caught by this task's own before/after screenshot, not by any rig.
+   * `check_rule_in.mjs` never probes these elements (it targets the
+   * footer's PLACES links and the menu), and `check_responsive.mjs`'s
+   * `effectiveHitBox` reads `::after` specifically (given verbatim by the
+   * brief), so `.tap` cannot simply move to `::before` without going
+   * invisible to the rig this task answers to.
+   *
+   * **Fix-round 1 correction, 28 Aug 2026: this compound rule used to sit
+   * OUTSIDE this `@media (pointer: coarse)` block.** `.rule-in.tap::after`'s
+   * `background-color: transparent` has specificity 0,2,1 against
+   * `.rule-in::after`'s `background-color: currentColor` at 0,1,1 — an
+   * unconditional win regardless of pointer type, confirmed with a
+   * standalone Chromium reproduction rather than trusted from the cascade
+   * arithmetic alone (`.superpowers/sdd/2026-08-27-mobile-tablet-and-zoom/
+   * task-2-report.md`'s fix-round section). So the hairline's visible
+   * mechanism had silently moved onto this `::before` box for MOUSE users
+   * too, everywhere `.tap` and `.rule-in` combine — not only on touch, where
+   * `.tap::after` actually changes the hit geometry. It happened to
+   * reproduce the same appearance, so nothing visibly regressed, but nothing
+   * had verified that either. Moving the whole compound rule inside this
+   * media query restores `.rule-in::after`'s own, already-proven path for
+   * every fine-pointer visitor, and confines the `::before` duplicate to
+   * exactly the case — a coarse pointer, where `.tap::after` really does
+   * grow — that needs it neutralised.
+   *
+   * The fix leaves both `.tap` and the site-wide `.rule-in` untouched and
+   * gives the hairline its own `::before` box on exactly this pairing, at
+   * higher specificity than either class alone so it wins outright rather
+   * than partially composing. `.rule-in.tap::after` then only has to erase
+   * the leftover background; `.tap::after`'s own geometry (position/left/
+   * top/width/height/transform) is never redeclared here and keeps winning.
+   *
+   * **Forward note:** a third class also writes `.rule-in`'s `::after` —
+   * `.rule-in--fixed` (below), at `bottom: -6px` rather than this rule's
+   * `-0.28em`, used by `SiteMenu`'s place labels. Nothing combines
+   * `.rule-in--fixed` with `.tap` today, so this is not a live defect, but
+   * this compound selector does not know about that offset and would not
+   * restore it — if a future element ever carries all three classes, add a
+   * `.rule-in--fixed.tap::before { bottom: -6px; }` override rather than
+   * assuming this rule already covers it.
+   */
+  .rule-in.tap::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.28em;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--rule-in-duration) var(--enter-ease);
+    pointer-events: none;
+  }
 
-.rule-in.tap::after {
-  background-color: transparent;
-}
+  .rule-in.tap::after {
+    background-color: transparent;
+  }
 
-.rule-in.tap:hover::before,
-.rule-in.tap:focus-visible::before,
-a:hover .rule-in.tap::before,
-a:focus-visible .rule-in.tap::before,
-button:hover .rule-in.tap::before,
-button:focus-visible .rule-in.tap::before {
-  transform: scaleX(1);
+  .rule-in.tap:hover::before,
+  .rule-in.tap:focus-visible::before,
+  a:hover .rule-in.tap::before,
+  a:focus-visible .rule-in.tap::before,
+  button:hover .rule-in.tap::before,
+  button:focus-visible .rule-in.tap::before {
+    transform: scaleX(1);
+  }
 }
 
