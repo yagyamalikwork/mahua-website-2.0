@@ -74,6 +74,40 @@
 //    configuration merely claims (`docs/DECISIONS.md`, "attribute alone is a
 //    configuration claim").
 //
+//    **Task 5 (28 Aug 2026) added tagging, not a threshold.** The baseline's
+//    ~2,400 assertion-6 findings are dominated by one artefact class —
+//    `SplitLines.tsx` wraps every headline word in its own `overflow-hidden`
+//    mask (`[data-word]`), so a root text-scale that changes a word's glyph
+//    metrics by even a fraction of a pixel registers as "clips" on hundreds
+//    of near-identical one-word boxes at once. Every clip/intersection
+//    finding is now tagged `isWordSpan` (`closest("[data-word]")`, a real DOM
+//    check, not a guess from the description text), and `clippedWordSpanCount`
+//    / `clippedOtherCount` / `intersectionWordSpanCount` /
+//    `intersectionOtherCount` report the split. `clippedCount` and
+//    `intersectionCount` are UNCHANGED — same totals, same `fail()` calls,
+//    same elements counted as failing. This is the rig seeing more, not a
+//    number coming out differently — see `docs/reviews/2026-08-27-mobile/
+//    unmeasured.md` §1 for what the split found. §4's own diagnostic gained
+//    a similar addition: `under12Count`/`under12MapCount` on every
+//    shapeReport, tracing (not asserting) how many text-bearing elements
+//    render under 12px and how many of those sit inside the property map's
+//    `<svg>` — unmeasured.md §3.
+//
+//    **A second artefact class, found while tracing the first.** `.drift-
+//    frame` (the non-negotiable-#5 parallax mask — `app/globals.css` — around
+//    a photograph drawn deliberately oversized so it always covers its frame
+//    as it translates) has `scrollHeight > clientHeight` BY DESIGN, at rest,
+//    with no font scale involved at all — confirmed by measuring it before
+//    this rig ever touches the root font-size. Assertion 6's clip check never
+//    compared against a rest state, so this permanent, load-bearing overflow
+//    read identically to a genuine scaling regression on every route that
+//    carries a drift photograph. `restOverflow` (below) snapshots every
+//    overflow-hidden candidate BEFORE the scale changes; `wasClippedAtRest` on
+//    each clipped entry says whether it was already clipping then;
+//    `clippedAtRestCount` / `clippedGenuineNewCount` report the split. Same
+//    rule as above: nothing about which elements FAIL changed, only what is
+//    now known about each one.
+//
 // ## Why every assertion here was watched failing before being believed
 //
 // "A rig that has never failed has proved nothing" is this project's own
@@ -346,6 +380,18 @@ for (const route of ROUTES) {
     }
 
     /* ── 4 — Type floor: the smallest rendered font size on this route/shape ── */
+    //
+    // Task 5 (28 Aug 2026) added the `under12*` fields below, purely
+    // additively — nothing about `min`/`desc` (assertion 4's own reading) or
+    // any threshold changed. They exist to TRACE, not assert, the spec §5
+    // question of why the property routes' small-type count rose at
+    // tablet-1024 against tablet-768: `under12Count` is every text-bearing,
+    // visible element whose `getComputedStyle().fontSize` reads under 12 —
+    // the same measurement assertion 4 already takes, just counted rather
+    // than minimised — and `under12MapCount` is the subset of those sitting
+    // inside an `<svg>` (i.e. the property map's own `<text>` labels, the
+    // only SVG text on any of these three routes). See `unmeasured.md` §3 for
+    // what this traced.
     const smallest = await page.evaluate(() => {
       const describe = (el) => {
         const tag = el.tagName.toLowerCase();
@@ -365,6 +411,9 @@ for (const route of ROUTES) {
 
       let min = Infinity;
       let minDesc = null;
+      let under12Count = 0;
+      let under12MapCount = 0;
+      const under12Sample = [];
       for (const el of document.querySelectorAll("body *")) {
         const hasOwnText = [...el.childNodes].some(
           (n) => n.nodeType === 3 && n.textContent.trim().length > 0,
@@ -377,11 +426,28 @@ for (const route of ROUTES) {
           min = size;
           minDesc = describe(el);
         }
+        if (size < 12) {
+          under12Count += 1;
+          const inMap = el.closest("svg") !== null;
+          if (inMap) under12MapCount += 1;
+          if (under12Sample.length < 12) {
+            under12Sample.push({ desc: describe(el), px: Number(size.toFixed(2)), inMap });
+          }
+        }
       }
-      return { min: min === Infinity ? null : Number(min.toFixed(2)), desc: minDesc };
+      return {
+        min: min === Infinity ? null : Number(min.toFixed(2)),
+        desc: minDesc,
+        under12Count,
+        under12MapCount,
+        under12Sample,
+      };
     });
     shapeReport.smallestFontPx = smallest.min;
     shapeReport.smallestFontEl = smallest.desc;
+    shapeReport.under12Count = smallest.under12Count;
+    shapeReport.under12MapCount = smallest.under12MapCount;
+    shapeReport.under12Sample = smallest.under12Sample;
 
     /* ── 5 — Zoom policy: the document's own viewport meta ───────────────── */
     const viewportMeta = await page.evaluate(
@@ -422,6 +488,24 @@ for (const route of ROUTES) {
         });
         const before = textEls.map((el) => parseFloat(getComputedStyle(el).fontSize));
 
+        // Task 5 (28 Aug 2026), additive: a REST-STATE snapshot of every
+        // overflow:hidden/clip candidate, taken before the root font-size
+        // ever changes. `.drift-frame` (the non-negotiable-#5 parallax
+        // mask around an intentionally oversized photograph — see its own
+        // comment in `app/globals.css`) clips BY DESIGN at 100% scale,
+        // every time, on every route: the drifting photo is drawn larger
+        // than its frame so it always covers the frame as it translates.
+        // Without this snapshot, that permanent, load-bearing "overflow"
+        // reads identically to a real OS-text-scaling regression. Keyed by
+        // element reference (this whole rig runs inside one page.evaluate,
+        // so the reference is stable across both passes).
+        const restOverflow = new Map();
+        for (const el of document.querySelectorAll("body *")) {
+          const cs = getComputedStyle(el);
+          if (cs.overflowY !== "hidden" && cs.overflowY !== "clip" && cs.overflow !== "hidden" && cs.overflow !== "clip") continue;
+          restOverflow.set(el, el.scrollHeight > el.clientHeight + 1.5);
+        }
+
         document.documentElement.style.fontSize = s;
 
         // Clipping: any overflow:hidden/clip element whose content now
@@ -438,7 +522,26 @@ for (const route of ROUTES) {
           const cs = getComputedStyle(el);
           if (cs.overflowY !== "hidden" && cs.overflowY !== "clip" && cs.overflow !== "hidden" && cs.overflow !== "clip") continue;
           if (el.scrollHeight > el.clientHeight + 1.5) {
-            clipped.push({ desc: describe(el), scrollHeight: el.scrollHeight, clientHeight: el.clientHeight });
+            // Task 5 (28 Aug 2026), additive: is this element the per-word
+            // entrance-animation mask `SplitLines.tsx` wraps every headline
+            // word in (`[data-word]`, `overflow-hidden` by construction), or
+            // its own descendant? `closest` matches the element itself too,
+            // which is exactly right here — `[data-word]` is the element
+            // that IS overflow-hidden and so is the one this loop finds.
+            // This is a code-traceable tag, not a guess from the element's
+            // description text.
+            const isWordSpan = el.closest("[data-word]") !== null;
+            // Was this element ALREADY clipping before the root font-size
+            // changed? If so, OS text scaling did not cause it — see the
+            // `restOverflow` comment above.
+            const wasClippedAtRest = restOverflow.get(el) === true;
+            clipped.push({
+              desc: describe(el),
+              scrollHeight: el.scrollHeight,
+              clientHeight: el.clientHeight,
+              isWordSpan,
+              wasClippedAtRest,
+            });
           }
         }
 
@@ -474,7 +577,12 @@ for (const route of ROUTES) {
             const overlapsX = a.x < b.x + b.w - EPS2 && a.x + a.w > b.x + EPS2;
             const overlapsY = a.y < b.y + b.h - EPS2 && a.y + a.h > b.y + EPS2;
             if (overlapsX && overlapsY) {
-              intersections.push(`${a.desc} × ${b.desc}`);
+              // Task 5, additive (see the `clipped` loop above for the same
+              // tag on the other half of assertion 6): true when EITHER side
+              // of the pair is a `SplitLines` per-word mask's own text node
+              // (`[data-line-inner]`, nested inside `[data-word]`).
+              const isWordSpan = a.el.closest("[data-word]") !== null || b.el.closest("[data-word]") !== null;
+              intersections.push({ pair: `${a.desc} × ${b.desc}`, isWordSpan });
             }
           }
         }
@@ -489,7 +597,19 @@ for (const route of ROUTES) {
         for (let i = 0; i < textEls.length; i++) {
           if (Math.abs(after[i] - before[i]) < 0.05) {
             nonScaling += 1;
-            if (nonScalingSample.length < 10) nonScalingSample.push(describe(textEls[i]));
+            // Task 5, additive: the actual before/after px, not just a
+            // description — needed to tell "genuinely fixed px" (before ===
+            // after exactly) apart from "a CSS clamp() whose vw-driven
+            // middle term happens to still be the operative bound at both
+            // scales", which reads identically as "non-scaling" here but is
+            // a different mechanism (`unmeasured.md` §1).
+            if (nonScalingSample.length < 10) {
+              nonScalingSample.push({
+                desc: describe(textEls[i]),
+                beforePx: Number(before[i].toFixed(2)),
+                afterPx: Number(after[i].toFixed(2)),
+              });
+            }
           }
         }
 
@@ -504,23 +624,60 @@ for (const route of ROUTES) {
         };
       }, scale);
 
+      // Task 5, additive: split each of assertion 6's two failure kinds into
+      // the `SplitLines` per-word reveal-span artefact class and everything
+      // else, using the `isWordSpan` tag computed in-browser above (real
+      // code — `closest("[data-word]")` — not a guess from the message
+      // text). `clippedCount`/`intersectionCount` are UNCHANGED: still the
+      // full, untagged totals assertion 6 has always reported; the fields
+      // below are a strictly additive breakdown of that same total, never a
+      // different number for it. See `unmeasured.md` §1.
+      //
+      // A second, orthogonal split on `clipped` only: `wasClippedAtRest`
+      // separates a PRE-EXISTING overflow (`.drift-frame`'s own
+      // intentionally-oversized photograph, clipping at 100% scale before
+      // this rig ever touches the root font-size) from one that only
+      // appears once the scale changes — the second artefact class this
+      // task found, distinct from the word-span one. `clippedGenuineNew` is
+      // what remains once BOTH known artefact classes are removed: neither a
+      // per-word reveal mask nor an element that was already clipping at
+      // rest for an unrelated, by-design reason.
+      const clippedWordSpan = result.clipped.filter((c) => c.isWordSpan).length;
+      const intersectionWordSpan = result.intersections.filter((p) => p.isWordSpan).length;
+      const clippedAtRest = result.clipped.filter((c) => c.wasClippedAtRest).length;
+      const clippedGenuineNew = result.clipped.filter((c) => !c.isWordSpan && !c.wasClippedAtRest).length;
       shapeReport.textScaling[scale] = {
         textElsChecked: result.textElsChecked,
         nonScaling: result.nonScaling,
         nonScalingSample: result.nonScalingSample,
         clippedCount: result.clipped.length,
+        clippedWordSpanCount: clippedWordSpan,
+        clippedOtherCount: result.clipped.length - clippedWordSpan,
+        clippedAtRestCount: clippedAtRest,
+        clippedGenuineNewCount: clippedGenuineNew,
         intersectionCount: result.intersections.length,
+        intersectionWordSpanCount: intersectionWordSpan,
+        intersectionOtherCount: result.intersections.length - intersectionWordSpan,
       };
 
       for (const c of result.clipped) {
+        const tag = c.isWordSpan
+          ? " [word-span artefact]"
+          : c.wasClippedAtRest
+            ? " [pre-existing at rest, e.g. drift-frame]"
+            : "";
         fail(
           6,
           `${where} @ ${scale}`,
-          `${c.desc} clips at ${scale} root text scale — scrollHeight ${c.scrollHeight} over clientHeight ${c.clientHeight}`,
+          `${c.desc} clips at ${scale} root text scale — scrollHeight ${c.scrollHeight} over clientHeight ${c.clientHeight}${tag}`,
         );
       }
-      for (const pair of result.intersections) {
-        fail(6, `${where} @ ${scale}`, `text blocks intersect at ${scale} root text scale — ${pair}`);
+      for (const p of result.intersections) {
+        fail(
+          6,
+          `${where} @ ${scale}`,
+          `text blocks intersect at ${scale} root text scale — ${p.pair}${p.isWordSpan ? " [word-span artefact]" : ""}`,
+        );
       }
     }
 
