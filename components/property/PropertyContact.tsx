@@ -84,11 +84,23 @@ export function ContactBlock({ copy }: { copy: PropertyContactCopy }) {
  * and adding a third item wraps it to two lines. The number is one tap away in the
  * closing band's ContactBlock, so the bar's job at narrow widths is Book.
  */
-export function ContactLine({ copy }: { copy: PropertyContactCopy }) {
+export function ContactLine({
+  copy,
+  className = "",
+}: {
+  copy: PropertyContactCopy;
+  /**
+   * Same escape hatch as `PillButton`'s — `.tap` (`app/globals.css`) has to
+   * land on this `<a>` itself, not on a wrapper around it, because a tap
+   * inside the generated `::after` is dispatched to the element that
+   * generated it. Empty by default so every existing render is unchanged.
+   */
+  className?: string;
+}) {
   return (
     <a
       href={copy.phone.href}
-      className="rule-in hidden whitespace-nowrap pb-0.5 font-[family-name:var(--font-body)] text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)] sm:inline-block"
+      className={`rule-in hidden whitespace-nowrap pb-0.5 font-[family-name:var(--font-body)] text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)] sm:inline-block ${className}`}
       style={{ color: "var(--accent-text)" }}
     >
       {copy.phone.value}

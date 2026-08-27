@@ -132,11 +132,22 @@ export function PressBand({
                   >
                     {article.standfirst}
                   </p>
+                  {/*
+                   * `tap` (`app/globals.css`) — this measured 140.73×20.19 on
+                   * Mahua Vann's three articles (`docs/reviews/
+                   * 2026-08-27-mobile/baseline.json`, assertion 2), under the
+                   * 24×24 floor on height alone. Each card is its own column
+                   * (`lg:grid-cols-3`, `gap-x-10`) or its own full-width row
+                   * (`gap-y-10` below that), with a headline and standfirst
+                   * above the link and nothing but the next card's border
+                   * below it — real room on every side for the region to
+                   * grow into.
+                   */}
                   <a
                     href={article.href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="rule-in mt-5 inline-block pb-1 font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.22em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
+                    className="tap rule-in mt-5 inline-block pb-1 font-[family-name:var(--font-label)] text-[0.68rem] uppercase tracking-[0.22em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--accent-text)]"
                     style={{ color: "var(--accent-text)" }}
                   >
                     {article.linkLabel}

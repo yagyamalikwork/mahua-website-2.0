@@ -24,6 +24,7 @@ export function PillButton({
   size = "small",
   external = false,
   raise = false,
+  className = "",
 }: {
   href: string;
   children: React.ReactNode;
@@ -37,6 +38,17 @@ export function PillButton({
    * thing on the page that must never move while a visitor is reading past it.
    */
   raise?: boolean;
+  /**
+   * An escape hatch for a caller-specific hook — `.tap` (see `app/globals.css`)
+   * is the reason this exists. This component is the `<a>` a visitor's tap
+   * actually has to land on: growing the hit area on a wrapping element around
+   * it does nothing, because generated content (`::after`) is dispatched to
+   * its OWN element, not a parent's. Empty by default, so every existing call
+   * site is unchanged; a caller opts in per instance rather than every pill on
+   * the site gaining a hit-area class it may not need or may need shaped
+   * differently (`--tap-w`/`--tap-h`).
+   */
+  className?: string;
 }) {
   return (
     <a
@@ -77,6 +89,7 @@ export function PillButton({
             // header's three items fitting and the brand lockup touching the
             // pill. Nothing else about the pill changes.
             "px-4 py-2.5 text-[0.6rem] tracking-[0.06em] min-[360px]:tracking-[0.12em] sm:px-6 sm:py-3 sm:text-xs sm:tracking-[0.18em]",
+        className,
       ].join(" ")}
       style={{ backgroundColor: "var(--accent)", color: "var(--overlay)" }}
     >

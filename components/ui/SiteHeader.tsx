@@ -132,7 +132,14 @@ export function SiteHeader({
           href="/"
           aria-label="Mahua Resorts — home"
           data-rule="none"
-          className="pointer-events-auto justify-self-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)]"
+          /*
+           * `tap` (see `app/globals.css`) — this link measured 124×19.25 at
+           * phone-360/390, under the WCAG 2.5.8 24×24 floor on its own height
+           * alone (`docs/reviews/2026-08-27-mobile/baseline.json`, assertion
+           * 2). The wordmark itself does not change; only the invisible region
+           * a thumb can land on does.
+           */
+          className="tap pointer-events-auto justify-self-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--header-ink)]"
         >
           <BrandMark />
         </a>
@@ -148,7 +155,13 @@ export function SiteHeader({
          * child of this header and keeps its layout boxes while closed.
          */}
         <div data-contrast="header-pill" className="pointer-events-auto justify-self-end">
-          <PillButton href={ctaHref}>{ctaLabel}</PillButton>
+          {/* `tap` — the client's 27 Aug ruling: this pill keeps its exact
+              look, and only the pressable region it sits on grows toward the
+              44px comfort target. See `PillButton`'s own comment on why the
+              class has to land here, on the anchor, rather than on this div. */}
+          <PillButton href={ctaHref} className="tap">
+            {ctaLabel}
+          </PillButton>
         </div>
       </div>
     </StickyHeader>

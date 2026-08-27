@@ -139,11 +139,21 @@ export function SiteFooter() {
           <ul className="flex flex-wrap gap-x-8 gap-y-2">
             {SITE.footer.legal.map((l) => (
               <li key={l.href}>
+                {/*
+                 * `tap` (`app/globals.css`) — these two measured 144.77×16.88
+                 * and 99.11×16.88 (`docs/reviews/2026-08-27-mobile/
+                 * baseline.json`, assertion 2): under the 24×24 WCAG floor on
+                 * height alone. `gap-x-8` (32px) between them and their own
+                 * width (both already >44px) mean the invisible region only
+                 * has to grow vertically, with no neighbour on either side —
+                 * the copyright text beside them is not a link and does not
+                 * count for assertion 3's overlap check.
+                 */}
                 <a
                   href={l.href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className={`${LABEL} ${RULE_IN_LINK}`}
+                  className={`tap ${LABEL} ${RULE_IN_LINK}`}
                   style={{ color: "var(--bg)" }}
                 >
                   {l.label}

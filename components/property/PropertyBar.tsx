@@ -98,8 +98,16 @@ export function PropertyBar({
           {name}
         </span>
         <div className="flex shrink-0 items-center gap-5">
-          <ContactLine copy={contact} />
-          <PillButton href={bookHref} external>
+          {/*
+           * `tap` on both links (see `app/globals.css`) — the client's 27 Aug
+           * ruling: neither changes how it looks, only the region a thumb can
+           * land on. `gap-5` (20px) between them is real, measured room: the
+           * rig re-run after this task (`docs/reviews/2026-08-27-mobile/
+           * after-tap.json`) is what actually proves the two 44px regions
+           * never touch, rather than this comment asserting it.
+           */}
+          <ContactLine copy={contact} className="tap" />
+          <PillButton href={bookHref} external className="tap">
             {bookLabel}
           </PillButton>
         </div>
