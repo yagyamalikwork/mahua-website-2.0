@@ -223,8 +223,10 @@ const ZONE_MIN_REACH_PX = 45;
  * collide by that measure, however long the first one's *name* runs — and
  * "Irai Dam Backwaters" (twenty characters) does exactly that, running
  * straight through "Moharli" a couple of gate-widths to its right.
+ *
+ * Exported for the test only — not a public API of this module.
  */
-function labelReachPx(l: MapLabelCopy, scale: number): number {
+export function labelReachPx(l: MapLabelCopy, scale: number): number {
   const fontPx = (l.kind === "gate" ? MOBILE_FONT_PX.gate : MOBILE_FONT_PX.other) * scale;
   const markerGap = l.kind === "water" || l.kind === "road" ? 0 : 8 * scale;
   const reach = markerGap + l.text.length * AVG_CHAR_WIDTH_EM * fontPx;
@@ -284,15 +286,64 @@ function labelReachPx(l: MapLabelCopy, scale: number): number {
  * mechanical pass happened to reach first. Tuned against the actual
  * screenshots, not assumed from the arithmetic alone — see the task's
  * final fix report.
+ *
+ * **The lodge joined this pass on 27 Aug 2026 — it never had before.** Every
+ * paragraph above is about `labels`, because that is all this function ever
+ * walked: the call site passed `copy.labels` and the lodge, `copy.lodge`,
+ * was drawn separately further down the component. Nothing here ever asked
+ * whether a kept label ran into the lodge's own name, so at 390px on Mahua
+ * Vann, "Turia Gate" — a couple of gate-widths from "Mahua Vann" on the very
+ * same row — rendered straight through it. Same failure family as the
+ * 4.3px labels of 9 August (`DECISIONS.md` §2 #29): a mark on the map this
+ * pass had never been taught to declutter against, fixed here by teaching
+ * it to move rather than by shrinking or growing anything.
+ *
+ * The fix reuses the array-order priority rule above rather than inventing
+ * a second one: the lodge seeds `kept` before any real label is walked, so
+ * it behaves as priority zero — ahead of even the one gate each page's own
+ * copy names first. It can never itself be dropped (only items drawn from
+ * `labels` are ever added to `dropped`), which is deliberate: it is the one
+ * mark the whole page is about, and a gate label is expendable beside it,
+ * never the other way round. It is not a `MapLabelCopy` — nothing else on
+ * either map is unmarked by a `kind` — but for the purposes of this pass it
+ * is drawn exactly like one, an upright name beside a marker, so the caller
+ * hands it in with `kind: "gate"` for the reach and row-sharing formulas,
+ * matching what it visually is.
+ *
+ * **Measured on both maps, not assumed.** On Mahua Vann this drops exactly
+ * the one label the defect report named — "Turia Gate" — and nothing else:
+ * "Karmajhiri Gate", "Jamtara Gate" and "Pench Reservoir" all sit far enough
+ * from the lodge's own row to clear it untouched. On Mahua Tola, whose
+ * sixteen gates already lean on the priority order above, seeding the lodge
+ * drops nothing further: "Kolara" — the one gate this page's own heading and
+ * getting-there row name — clears the lodge's reach with margin, and every
+ * gate close enough to the lodge's row to be at risk (Nimdela, Ramdegi,
+ * Alizanza, Navegaon) was already being dropped by the pre-existing
+ * intra-gate priority order before the lodge ever entered the walk. See the
+ * task report for the 390px screenshots this was checked against.
+ *
+ * Exported for the test only — not a public API of this module.
  */
-function declutterMobile(
+export function declutterMobile(
   labels: readonly MapLabelCopy[],
   width: number,
   height: number,
+  /**
+   * The lodge, in the shape this pass needs it in — not a `MapLabelCopy`
+   * (see the comment above), so a narrower type than that: just the three
+   * fields `copy.lodge` actually carries. `kind: "gate"` is added inside
+   * this function, at the one place it is needed, rather than asked of
+   * every caller.
+   */
+  lodge: { readonly text: string; readonly x: number; readonly y: number },
 ): ReadonlySet<MapLabelCopy> {
   const scale = MOBILE_COLUMN_PX / width;
   const rowPx = MOBILE_FONT_PX.gate * scale * 1.3; // a generous single line-height
-  const kept: MapLabelCopy[] = [];
+  // Priority zero: see the comment above. Seeded before the walk below ever
+  // starts, so every real label is checked against the lodge from its very
+  // first comparison — the lodge can suppress a label, never the reverse.
+  const lodgeAsGate: MapLabelCopy = { text: lodge.text, x: lodge.x, y: lodge.y, kind: "gate" };
+  const kept: MapLabelCopy[] = [lodgeAsGate];
   const dropped = new Set<MapLabelCopy>();
   for (const l of labels) {
     if (l.kind !== "gate" && l.kind !== "zone" && l.kind !== "water") continue;
@@ -383,7 +434,9 @@ export function PropertyMap({
   // See declutterMobile's own comment above. Computed once per render, off
   // the same copy.labels the aria-label above reads — a screen reader still
   // hears every name at every width; only the drawn <text> disappears.
-  const mobileDropped = declutterMobile(copy.labels, width, height);
+  // copy.lodge seeds the pass's kept set (27 Aug 2026 fix) so a gate label
+  // can never render through the lodge's own name.
+  const mobileDropped = declutterMobile(copy.labels, width, height, copy.lodge);
 
   return (
     <ChapterSurface
