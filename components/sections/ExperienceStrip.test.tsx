@@ -72,4 +72,22 @@ describe("ExperienceStrip", () => {
     expect(getByText("Jungle Safari")).toBeTruthy();
     expect(getByText("03")).toBeTruthy();
   });
+
+  it("gives every pager link a hit area that clears the accessibility floor", () => {
+    // The pager's six links render 13x15 against WCAG 2.5.8 (AA)'s 24x24 floor
+    // — the one control on this site that fails a standard rather than merely
+    // sitting under Apple/Google's 44px comfort guidance (`docs/reviews/
+    // 2026-08-27-mobile/`, Task 3). `.tap` (`app/globals.css`) grows the
+    // effective hit area on touch with no layout change; this only checks the
+    // class lands on every link, not the geometry — that is
+    // `scripts/check_responsive.mjs`'s job, against a real browser.
+    const { container } = render(
+      <ExperienceStrip chapter={chapter("field-days")} copy={FIELD_DAYS_COPY} labels={STRIP_LABELS} />,
+    );
+    const links = container.querySelectorAll("nav a");
+    expect(links).toHaveLength(6);
+    for (const a of links) {
+      expect(a.className).toContain("tap");
+    }
+  });
 });

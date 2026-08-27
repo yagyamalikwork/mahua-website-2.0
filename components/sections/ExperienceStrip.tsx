@@ -527,8 +527,38 @@ export function ExperienceStrip({
               // reader nothing apart. The activity's own title is the name — no
               // new copy, and distinct by construction.
               aria-label={`${labels.jump} — ${experience.title}`}
-              className="rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-              style={{ color: "var(--dim)" }}
+              className="tap rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+              /*
+               * **The one control on this site that failed a standard rather
+               * than a guideline.** These render 13.3×14.88 against WCAG
+               * 2.5.8 (AA)'s 24×24 floor, on all three routes since the strip
+               * moved onto both property pages 26 Aug 2026 — 18 links, not 6.
+               *
+               * The width is SOLVED, not carried over from the plan's own
+               * estimate. Six links this close overlap at a full 44px
+               * extension, so the pitch — the largest non-overlapping width —
+               * has to be measured, and the plan's ~31px was a guess from one
+               * width. Measured directly (Playwright, a production build, all
+               * three routes, all eight of `check_responsive.mjs`'s shapes,
+               * 24 loads total): every link is 13.3×14.88 and the tightest
+               * centre-to-centre pitch is **29.29px, byte-identical on every
+               * route and every shape** — this pager's text is a fixed
+               * `rem` size and its `gap-4` is a fixed `rem` gap, so nothing
+               * about a route's own container width, a phone's DPR or a
+               * browser's zoom level moves it. `--tap-w: 29px` sits one whole
+               * CSS pixel under that tightest pitch, so adjacent hit areas
+               * have a real, measured gap between them rather than merely
+               * relying on `check_responsive.mjs` assertion 3's own ±1.5px
+               * touching tolerance. The vertical has no competing neighbour,
+               * so `--tap-h` goes to the full 44px comfort figure — confirmed
+               * by re-running assertion 3 (still exactly 21 pairs, all of
+               * them the room-gallery's, none of them this pager's).
+               *
+               * 29×44 clears the 24px floor with margin in both axes and
+               * overlaps nothing. Full sweep: `.superpowers/sdd/
+               * 2026-08-27-mobile-tablet-and-zoom/task-3-report.md`.
+               */
+              style={{ color: "var(--dim)", "--tap-w": "29px", "--tap-h": "44px" } as React.CSSProperties}
             >
               {String(i + 1).padStart(2, "0")}
             </a>
