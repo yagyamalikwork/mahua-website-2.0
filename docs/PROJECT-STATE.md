@@ -1,7 +1,43 @@
-# Project state — 15 August 2026
+# Project state — 29 August 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
+
+## ⚠ THIS BRANCH IS THE ONLY COPY OF 37 COMMITS UNTIL IT IS PUSHED
+
+`feat/journal-and-mobile` had **no remote tracking branch at all** until 29 August 2026 — every commit of
+both the 26 Aug restructure and the 27-28 Aug mobile work existed on one machine and nowhere else. A power
+outage on 27 Aug had already cost this project one session mid-task.
+
+**Check it before starting work and before stopping:**
+
+```bash
+git log --oneline origin/feat/journal-and-mobile..HEAD   # unpushed commits
+git status -sb                                            # ahead/behind, in one line
+```
+
+**`feat/page-structure` is also 1 commit ahead of its own remote**, and has been since long before this
+branch existed. Not urgent; recorded so it is not mistaken for something this work caused.
+
+## Where the three agreed bodies of work stand (29 Aug 2026)
+
+Three were agreed with the client on 26 August. Two are finished on this branch; the third is specified and
+not started.
+
+| | | |
+|---|---|---|
+| **B** — the restructure and the reviews widget | client's items 3 and 4a-4e | **DONE**, 25 commits, `docs/DECISIONS.md` §22 |
+| **C** — mobile, tablet and zoom | client's item 2 | **DONE**, 12 commits, §23 |
+| **A** — the Journal page | client's item 1 | **SPECIFIED, NOT BUILT** — `docs/superpowers/specs/2026-08-26-journal-page-design.md` |
+| — | client's item 4f, the closing CTA | **NOT STARTED**, deferred by the client to last |
+
+**501 tests, 167.2 KB brotli first load, `npm run verify:budget` PASS, `node scripts/check_docs.mjs` PASS.**
+Neither merged nor deployed; `feat/home-v2` and the live demo are untouched.
+
+**The Journal is the one that needs a decision before it can start**, and both blockers are the client's:
+the Vercel plan (§9.1 of its spec — the free tier does not permit commercial use and this site is already
+deployed on that account) and a privacy notice (§9.2 — the site has none, and a comment form collecting
+email addresses requires one).
 
 ## ⚠ ON `feat/home-v2` THE HOME PAGE IS SEVEN CHAPTERS, NOT TWELVE — 19-20 Aug 2026
 
@@ -528,6 +564,21 @@ chapter on `/mahua-vann` and `/mahua-tola`, chosen over a plain pile-up and a pe
   looks on a computer/laptop screen, we can workout and optimize mobile screens later."* Recorded, not
   acted on — and **the phone stays in every rig**, because that is where this plan's two worst defects were
   found. See `docs/DECISIONS.md` §1 and §5.
+
+  **The deferral is spent as of 27 August 2026 and the card stack was re-examined under it.** The client
+  reversed the 12 Aug sequencing himself — *"I want the website experience and optimization for every zoom
+  and every device to be on point"* — and the mobile work that followed measured this chapter on a phone
+  properly. **It is not broken there**: `scripts/check_card_stack.mjs` assertion 8 already asserts every
+  card's text is legible at 390×844 and passes on both routes, and the section reads 2.8 screens (Vann) /
+  3.4 (Tola) at ~38% bare, in line with the page. A first reconnaissance claimed it was "six screens of
+  blank cream" and that claim was **false** — one of three false findings traced to measuring `next dev` and
+  to element-screenshotting a `position: sticky` container. **The client was shown the correction and ruled
+  the stack stays.** `docs/DECISIONS.md` §23.1 and §23.2.
+
+  **One genuinely new finding about it stands unfixed and unruled**: at 150%/200% *OS text scale* — the
+  phone's own accessibility setting, not browser zoom — a room card's text clips out of its own card, 49
+  instances. That is a different failure from the growth figure above and it reaches a real visitor. See the
+  four unfixed findings in "What is still owed".
 - **The rig**, `scripts/check_card_stack.mjs`, runs eight assertions on both routes at four widths: cards
   pin and dim on time, no clipping by the header or booking bar, the bar's reserve really covers the
   measured bar, the deck is visible, a covered card is measurably smaller and dimmer, no photograph crops

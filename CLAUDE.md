@@ -677,6 +677,32 @@ python scripts/extract_mockup_imgs.py  # pull images out of the prior HTML mocku
 python scripts/extract_docx.py         # plain text of the strategy documents
 ```
 
+## Running this on Windows — four traps that have each cost real time
+
+Recorded 29 August 2026, after a power outage mid-session changed the shell environment underneath a
+running plan.
+
+**The Bash tool's environment is not guaranteed.** After the 27 Aug outage it came back without `git`,
+`head` or `which` — every shell command in the mobile plan's six tasks ran through PowerShell instead.
+**Check before relying on it**, and know that the `superpowers` SDD helper scripts are bash+git and will not
+run in that state; PowerShell stand-ins live beside each plan's ledger.
+
+**`git commit -m` with a multi-paragraph message fails under PowerShell.** The parser eats the newlines and
+git reports `pathspec … did not match any file(s)`. **Write the message to a file and use
+`git commit -F <file>`.** Every commit on the mobile plan was made that way.
+
+**`Stop-Process` does not reliably kill `next start`.** It leaves an orphaned child bound to the port, which
+then serves an increasingly stale build to every rig pointed at it — in one Task this produced **~1,600
+bogus failures** before it was traced. Use `taskkill /F /T /PID <id>`, and **confirm the port is actually
+free** before believing any measurement:
+
+```powershell
+Get-NetTCPConnection -LocalPort 3100 -State Listen -ErrorAction SilentlyContinue
+```
+
+**`[IO.File]::ReadAllText` uses the process working directory, not PowerShell's.** `Set-Location` does not
+move it. Pass absolute paths to any .NET file API.
+
 ## Verification
 
 **If nothing animates, check the operating system before the code.** Windows *Settings → Accessibility →
