@@ -77,9 +77,13 @@
 //    **Task 5 (28 Aug 2026) added tagging, not a threshold.** The baseline's
 //    ~2,400 assertion-6 findings are dominated by one artefact class —
 //    `SplitLines.tsx` wraps every headline word in its own `overflow-hidden`
-//    mask (`[data-word]`), so a root text-scale that changes a word's glyph
-//    metrics by even a fraction of a pixel registers as "clips" on hundreds
-//    of near-identical one-word boxes at once. Every clip/intersection
+//    mask (`[data-word]`), and its `scrollHeight`/`clientHeight` ratio sits
+//    near 1.9× — IDENTICAL at 150% and 200% root scale, which on its own
+//    rules out anything proportional to the applied scale factor (a fix-round-
+//    1 correction: an earlier version of this comment attributed this to "a
+//    word's glyph metrics changing by a fraction of a pixel," which the
+//    figures never supported and which fix round 1 traced to something else
+//    entirely — see the rest-state paragraph below). Every clip/intersection
 //    finding is now tagged `isWordSpan` (`closest("[data-word]")`, a real DOM
 //    check, not a guess from the description text), and `clippedWordSpanCount`
 //    / `clippedOtherCount` / `intersectionWordSpanCount` /
@@ -93,20 +97,51 @@
 //    render under 12px and how many of those sit inside the property map's
 //    `<svg>` — unmeasured.md §3.
 //
-//    **A second artefact class, found while tracing the first.** `.drift-
-//    frame` (the non-negotiable-#5 parallax mask — `app/globals.css` — around
-//    a photograph drawn deliberately oversized so it always covers its frame
-//    as it translates) has `scrollHeight > clientHeight` BY DESIGN, at rest,
-//    with no font scale involved at all — confirmed by measuring it before
-//    this rig ever touches the root font-size. Assertion 6's clip check never
+//    **A second artefact class, found while tracing the first — and it turned
+//    out to swallow the first, not sit beside it.** `.drift-frame` (the
+//    non-negotiable-#5 parallax mask — `app/globals.css` — around a
+//    photograph drawn deliberately oversized so it always covers its frame as
+//    it translates) has `scrollHeight > clientHeight` BY DESIGN, at rest, with
+//    no font scale involved at all — confirmed by measuring it before this
+//    rig ever touches the root font-size. Assertion 6's clip check never
 //    compared against a rest state, so this permanent, load-bearing overflow
 //    read identically to a genuine scaling regression on every route that
 //    carries a drift photograph. `restOverflow` (below) snapshots every
 //    overflow-hidden candidate BEFORE the scale changes; `wasClippedAtRest` on
 //    each clipped entry says whether it was already clipping then;
-//    `clippedAtRestCount` / `clippedGenuineNewCount` report the split. Same
-//    rule as above: nothing about which elements FAIL changed, only what is
-//    now known about each one.
+//    `clippedAtRestCount` / `clippedGenuineNewCount` report the split. **Fix
+//    round 1 found that `wasClippedAtRest` is true for EVERY `isWordSpan` clip
+//    on this page (1,376 of 1,376) — but traced this to a DIFFERENT mechanism
+//    than `.drift-frame`'s, not the same one.** `[data-word]` only overflows
+//    while its heading is `data-lines-enter="pending"` — not yet scrolled
+//    into view, `[data-line-inner]` sitting translated 115% of its own
+//    height below the mask, exactly as designed, awaiting its entrance. This
+//    rig never scrolls, so every below-the-fold heading sits in that pending
+//    position for its entire run. Confirmed empirically (scratch probe, not
+//    committed): scrolling one such heading into view and letting its
+//    transition settle takes `scrollHeight`/`clientHeight` from 130/67 to
+//    exactly 67/67 — the overflow is not permanent, it is scroll-position-
+//    dependent, and it is gone by the time a visitor would ever see the
+//    heading. The word-span bucket is a subset of the at-rest one by the
+//    numbers, but for its own, unrelated reason — see `unmeasured.md` §1 for
+//    the full account, including why the `.drift-frame` framing in an
+//    earlier version of this comment was itself imprecise.
+//    `clippedWordSpanCount` still reports the same number it always has
+//    (word-span clips are counted there whether or not they are also
+//    at-rest), so no total changed — only the NARRATIVE was wrong. Same rule
+//    as always: nothing about which elements FAIL changed, only what is now
+//    known about each one.
+//
+//    **Fix round 1 also built the intersection half's rest-state check**,
+//    which the first pass of this task never did — only clips got a
+//    `restOverflow` snapshot; intersections got only the word-span split.
+//    `restIntersectionSigs` (below) snapshots every text-block pair that
+//    already intersects at rest, keyed by the same `"a × b"` signature the
+//    post-scale loop produces; `wasIntersectingAtRest` on each intersection
+//    finding says whether that pair was already there. `intersectionAtRestCount`
+//    / `intersectionGenuineNewCount` report the split, the latter using the
+//    same AND-exclusion (`!isWordSpan && !wasIntersectingAtRest`)
+//    `clippedGenuineNewCount` already used — see `unmeasured.md` §1.4.
 //
 // ## Why every assertion here was watched failing before being believed
 //
@@ -488,6 +523,12 @@ for (const route of ROUTES) {
         });
         const before = textEls.map((el) => parseFloat(getComputedStyle(el).fontSize));
 
+        // Hoisted from the post-scale intersections block below (it used to
+        // be declared there alone) so the fix-round-1 rest-state intersection
+        // snapshot immediately below can use the exact same tolerance. Same
+        // value, same constant — not a threshold change, just shared.
+        const EPS2 = 1.5;
+
         // Task 5 (28 Aug 2026), additive: a REST-STATE snapshot of every
         // overflow:hidden/clip candidate, taken before the root font-size
         // ever changes. `.drift-frame` (the non-negotiable-#5 parallax
@@ -504,6 +545,35 @@ for (const route of ROUTES) {
           const cs = getComputedStyle(el);
           if (cs.overflowY !== "hidden" && cs.overflowY !== "clip" && cs.overflow !== "hidden" && cs.overflow !== "clip") continue;
           restOverflow.set(el, el.scrollHeight > el.clientHeight + 1.5);
+        }
+
+        // Fix round 1 (28 Aug 2026), additive: the SAME rest-state idea as
+        // `restOverflow` immediately above, but for assertion 6's OTHER half
+        // — intersections — which the first pass of this task never built an
+        // equivalent check for. Built from the identical ancestor-exclusion
+        // and overlap logic the post-scale intersection loop below uses (see
+        // its own comment), on the same `textEls`, read BEFORE the root
+        // font-size changes. A pair's signature is the same `"a × b"` string
+        // used post-scale, so a post-scale pair can be looked up here by
+        // identity, not by re-deriving geometry.
+        const restRects = textEls
+          .map((el) => {
+            const r = el.getBoundingClientRect();
+            return { el, desc: describe(el), x: r.x, y: r.y, w: r.width, h: r.height };
+          })
+          .filter((r) => r.w > 0 && r.h > 0);
+        const restIntersectionSigs = new Set();
+        for (let i = 0; i < restRects.length; i++) {
+          for (let j = i + 1; j < restRects.length; j++) {
+            const a = restRects[i];
+            const b = restRects[j];
+            if (a.el.contains(b.el) || b.el.contains(a.el)) continue;
+            const overlapsX = a.x < b.x + b.w - EPS2 && a.x + a.w > b.x + EPS2;
+            const overlapsY = a.y < b.y + b.h - EPS2 && a.y + a.h > b.y + EPS2;
+            if (overlapsX && overlapsY) {
+              restIntersectionSigs.add(`${a.desc} × ${b.desc}`);
+            }
+          }
         }
 
         document.documentElement.style.fontSize = s;
@@ -567,8 +637,9 @@ for (const route of ROUTES) {
           })
           .filter((r) => r.w > 0 && r.h > 0);
         // Uncapped for the same reason as `clipped`, above — see its comment.
+        // `EPS2` is the same constant hoisted above, shared with the
+        // rest-state snapshot.
         const intersections = [];
-        const EPS2 = 1.5;
         for (let i = 0; i < rects.length; i++) {
           for (let j = i + 1; j < rects.length; j++) {
             const a = rects[i];
@@ -582,7 +653,13 @@ for (const route of ROUTES) {
               // of the pair is a `SplitLines` per-word mask's own text node
               // (`[data-line-inner]`, nested inside `[data-word]`).
               const isWordSpan = a.el.closest("[data-word]") !== null || b.el.closest("[data-word]") !== null;
-              intersections.push({ pair: `${a.desc} × ${b.desc}`, isWordSpan });
+              // Fix round 1, additive: does this exact pair (by the same
+              // `"a × b"` signature) already intersect at rest, before the
+              // root font-size changes? The intersection-half analogue of
+              // `wasClippedAtRest` above.
+              const pair = `${a.desc} × ${b.desc}`;
+              const wasIntersectingAtRest = restIntersectionSigs.has(pair);
+              intersections.push({ pair, isWordSpan, wasIntersectingAtRest });
             }
           }
         }
@@ -646,6 +723,18 @@ for (const route of ROUTES) {
       const intersectionWordSpan = result.intersections.filter((p) => p.isWordSpan).length;
       const clippedAtRest = result.clipped.filter((c) => c.wasClippedAtRest).length;
       const clippedGenuineNew = result.clipped.filter((c) => !c.isWordSpan && !c.wasClippedAtRest).length;
+      // Fix round 1, additive: the intersection-half analogue of
+      // `clippedAtRest`/`clippedGenuineNew` above, using `wasIntersectingAtRest`
+      // computed in-browser from the new `restIntersectionSigs` snapshot.
+      // `intersectionAtRest` counts every pair (word-span or not) that
+      // already intersected at rest; `intersectionGenuineNew` is the same
+      // AND-exclusion `clippedGenuineNew` uses (neither a word-span mask nor
+      // already-intersecting at rest) — see `unmeasured.md` §1.4 for what
+      // this found on the 201 previously-unclassified "real" intersections.
+      const intersectionAtRest = result.intersections.filter((p) => p.wasIntersectingAtRest).length;
+      const intersectionGenuineNew = result.intersections.filter(
+        (p) => !p.isWordSpan && !p.wasIntersectingAtRest,
+      ).length;
       shapeReport.textScaling[scale] = {
         textElsChecked: result.textElsChecked,
         nonScaling: result.nonScaling,
@@ -658,6 +747,8 @@ for (const route of ROUTES) {
         intersectionCount: result.intersections.length,
         intersectionWordSpanCount: intersectionWordSpan,
         intersectionOtherCount: result.intersections.length - intersectionWordSpan,
+        intersectionAtRestCount: intersectionAtRest,
+        intersectionGenuineNewCount: intersectionGenuineNew,
       };
 
       for (const c of result.clipped) {
@@ -673,10 +764,15 @@ for (const route of ROUTES) {
         );
       }
       for (const p of result.intersections) {
+        const tag = p.isWordSpan
+          ? " [word-span artefact]"
+          : p.wasIntersectingAtRest
+            ? " [pre-existing at rest]"
+            : "";
         fail(
           6,
           `${where} @ ${scale}`,
-          `text blocks intersect at ${scale} root text scale — ${p.pair}${p.isWordSpan ? " [word-span artefact]" : ""}`,
+          `text blocks intersect at ${scale} root text scale — ${p.pair}${tag}`,
         );
       }
     }

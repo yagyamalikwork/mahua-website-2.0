@@ -1,0 +1,374 @@
+{
+  "desktop": [
+    {
+      "text": "The",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "wild",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "and",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "the",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "calm,",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "held",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "together",
+      "word": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "108.547px",
+        "clientHeight": 109,
+        "scrollHeight": 109,
+        "offsetHeight": 109,
+        "paddingBottom": "14.72px",
+        "marginBottom": "-14.72px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "92px",
+        "lineHeight": "93.84px",
+        "height": "93.8281px",
+        "clientHeight": 94,
+        "scrollHeight": 102,
+        "offsetHeight": 94
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "Two",
+      "word": {
+        "fontSize": "56px",
+        "lineHeight": "58.24px",
+        "height": "67.1875px",
+        "clientHeight": 67,
+        "scrollHeight": 130,
+        "offsetHeight": 67,
+        "paddingBottom": "8.96px",
+        "marginBottom": "-8.96px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "56px",
+        "lineHeight": "58.24px",
+        "height": "58.2344px",
+        "clientHeight": 58,
+        "scrollHeight": 63,
+        "offsetHeight": 58
+      },
+      "hasLinesEnterAttr": true
+    }
+  ],
+  "phone": [
+    {
+      "text": "The",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "wild",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "and",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "the",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "calm,",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "held",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "together",
+      "word": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "49.0625px",
+        "clientHeight": 49,
+        "scrollHeight": 49,
+        "offsetHeight": 49,
+        "paddingBottom": "6.656px",
+        "marginBottom": "-6.656px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "41.6px",
+        "lineHeight": "42.432px",
+        "height": "42.4219px",
+        "clientHeight": 42,
+        "scrollHeight": 46,
+        "offsetHeight": 42
+      },
+      "hasLinesEnterAttr": false
+    },
+    {
+      "text": "Two",
+      "word": {
+        "fontSize": "32px",
+        "lineHeight": "33.28px",
+        "height": "38.375px",
+        "clientHeight": 38,
+        "scrollHeight": 74,
+        "offsetHeight": 38,
+        "paddingBottom": "5.12px",
+        "marginBottom": "-5.12px",
+        "boxSizing": "border-box"
+      },
+      "inner": {
+        "fontSize": "32px",
+        "lineHeight": "33.28px",
+        "height": "33.2656px",
+        "clientHeight": 33,
+        "scrollHeight": 36,
+        "offsetHeight": 33
+      },
+      "hasLinesEnterAttr": true
+    }
+  ]
+}
