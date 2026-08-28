@@ -301,18 +301,32 @@ const browser = await chromium.launch();
   // The measurement is the same either way — the rule's colour against the
   // section behind it.
   //
-  // **Guarded, fix round 1 (28 Aug 2026): `.rule-in--rest` only exists in
-  // `components/sections/LodgeCards.tsx`, dead code on `feat/journal-and-
-  // mobile` since `LodgePanels` superseded it — a pre-existing, unrelated
-  // drift the Task 2 report already flagged under Concerns.** Before this
-  // guard, a missing selector threw an UNCAUGHT exception here and killed
-  // the process before check 8 (below) ever ran. This makes that a reported
-  // failure instead — the same known drift, not silently hidden — so the
-  // rest of the file, including a later fix round's own new checks, is not
-  // held hostage by one already-recorded, out-of-scope defect.
+  // **`.rule-in--rest` is NOT dead code — it is only absent from THIS route.**
+  // A whole-branch review (this final fix wave) found the previous version of
+  // this comment, plus `DECISIONS.md` §23.5 and §23.9, all called it dead code
+  // superseded by `LodgePanels` — false. It lives, live and rendered, in
+  // `components/property/PropertyInvitation.tsx:99` on BOTH `/mahua-vann` and
+  // `/mahua-tola` (`PropertyPage.tsx:328`). What is genuinely unrouted is
+  // `components/sections/LodgeCards.tsx`'s OWN copy of the class — that
+  // component carries no traffic on any route since `LodgePanels` superseded
+  // it (`app/page.tsx`'s own comment), but the class itself is very much live
+  // elsewhere. So this check finding nothing here means only that `URL` (the
+  // home page by default) does not render it — run this file with `--url
+  // http://localhost:<port>/mahua-vann` (or `/mahua-tola`) to measure the
+  // resting hairline where it actually lives.
+  //
+  // **Guarded, fix round 1 (28 Aug 2026):** before this guard, a missing
+  // selector threw an UNCAUGHT exception here and killed the process before
+  // check 8 (below) ever ran. This makes that a reported failure instead — so
+  // the rest of the file, including a later fix round's own new checks, is not
+  // held hostage by one route simply not carrying this element.
   const restHandle = await page.$(".rule-in--rest");
   if (!restHandle) {
-    fail("no element carries `.rule-in--rest` — dead code on this branch since `LodgePanels` superseded `LodgeCards` (pre-existing, see Task 2 report Concerns)");
+    fail(
+      `no element carries \`.rule-in--rest\` on this route (${URL}) — it is NOT dead code: it lives on ` +
+        "both property routes via `PropertyInvitation.tsx:99`. Re-run with `--url .../mahua-vann` or " +
+        "`.../mahua-tola` to measure it where it actually renders (`DECISIONS.md` §22.8 #6, §23.5).",
+    );
   } else {
     await page.$eval(".rule-in--rest", (el) => el.scrollIntoView({ block: "center" }));
     await page.waitForTimeout(400);
@@ -363,6 +377,23 @@ const browser = await chromium.launch();
 //    element, `SEL` became `TARGETS`, and the two probes plus three
 //    assertions below run once per target, each failure named by which
 //    target it came from.
+//
+//    **Final whole-branch review, 28 Aug 2026: the pager selector was
+//    hardcoded to the home page's own chapter id and crashed on every
+//    property route.** `sel: "a[href='#field-days-card-0']"` matches
+//    nothing on `/mahua-vann` (`#vann-day-card-0`) or `/mahua-tola`
+//    (`#tola-day-card-0`), and `page.$eval` on a selector that matches
+//    nothing THROWS — uncaught, it killed the whole script before check 8's
+//    own first target (the footer link, which every route DOES carry) ever
+//    got a verdict recorded. Created by this very fix round, generalised by
+//    Task 3's — this rig could no longer produce a clean pass on ANY route.
+//    Fixed by resolving the pager at runtime instead of naming one route's
+//    chapter id: every route's first pager link is `experienceCardId(chapterId,
+//    0)` (`ExperienceStrip.tsx`), which always ends `-card-0` regardless of
+//    the chapter id in front of it — `a[href$='-card-0']` finds it on `/`,
+//    `/mahua-vann` and `/mahua-tola` alike. `probePointer` now checks the
+//    element exists before touching it and reports a named skip rather than
+//    throwing if a future route ever drops the pager entirely.
 // ---------------------------------------------------------------------------
 {
   console.log("\n8. the .rule-in/.tap compound: fine pointer untouched, coarse pointer still works");
@@ -373,16 +404,27 @@ const browser = await chromium.launch();
     // Untouched by checks 1-7 above, which target the footer's PLACES links
     // instead.
     { name: "footer legal link", sel: "#site-footer a[href='https://mahuaresorts.com/terms-conditions/']" },
-    // The Experiences pager's first link — Task 3's own, on the home route,
-    // the element this fix round's finding said was never actually checked
-    // under hover.
-    { name: "experiences pager link (field-days card 0)", sel: "a[href='#field-days-card-0']" },
+    // The Experiences pager's first link — resolved by SHAPE, not by one
+    // route's chapter id, so it finds the pager on `/`, `/mahua-vann` and
+    // `/mahua-tola` alike (`experienceCardId` always ends `-card-0`).
+    { name: "experiences pager link (card 0)", sel: "a[href$='-card-0']" },
   ];
 
   const probePointer = async (label, contextOptions, sel) => {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, ...contextOptions });
     const page = await context.newPage();
     await page.goto(URL, { waitUntil: "networkidle" });
+
+    // Resolve before touching the selector at all — `page.$eval` on a
+    // selector that matches nothing THROWS uncaught, which is exactly what
+    // killed this check on every property route until this fix. Reporting a
+    // named skip lets the rest of the file, and the OTHER target in this
+    // same loop, keep running instead of dying with no JSON written.
+    const handle = await page.$(sel);
+    if (!handle) {
+      await context.close();
+      return null;
+    }
 
     const rect = await page.$eval(sel, (el) => {
       const r = el.getBoundingClientRect();
@@ -415,6 +457,13 @@ const browser = await chromium.launch();
     // alone (`hasTouch` alone was sufficient; `isMobile` changed nothing
     // further).
     const fine = await probePointer("fine (mouse)", {}, sel);
+
+    if (fine === null) {
+      report.tapRuleInFixRound1[name] = { skipped: true, reason: `no element matches \`${sel}\` on this route` };
+      console.log(`   skip  ${name} — no element matches \`${sel}\` on this route (${URL})`);
+      continue;
+    }
+
     const coarse = await probePointer("coarse (touch)", { hasTouch: true }, sel);
 
     report.tapRuleInFixRound1[name] = { fine, coarse };

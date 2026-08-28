@@ -529,33 +529,51 @@ export function ExperienceStrip({
               aria-label={`${labels.jump} — ${experience.title}`}
               className="tap rule-in font-[family-name:var(--font-label)] text-[0.62rem] uppercase tracking-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
               /*
-               * **The one control on this site that failed a standard rather
-               * than a guideline.** These render 13.3×14.88 against WCAG
-               * 2.5.8 (AA)'s 24×24 floor, on all three routes since the strip
-               * moved onto both property pages 26 Aug 2026 — 18 links, not 6.
+               * **Grown for real ergonomic comfort, not to fix a standards
+               * failure — corrected 28 Aug 2026, a final whole-branch review
+               * found this comment (and five other sites) overstating the
+               * finding.** These render **13.30–15.67px wide × 14.88px tall**
+               * (the digit pairs "01"–"06" kern slightly differently, so the
+               * six widths are not identical) against WCAG 2.5.8 (AA)'s
+               * 24×24 **minimum-size condition**, on all three routes since
+               * the strip moved onto both property pages 26 Aug 2026 — 18
+               * links, not 6. SC 2.5.8 also carries a **spacing exception**:
+               * an undersized target still conforms if a 24px-diameter
+               * circle centred on it does not intersect another target or
+               * another such circle. The true centre-to-centre pitch between
+               * the tightest pair is **30.20px** (below) — comfortably clear
+               * of 24 — so **this pager already conformed via the spacing
+               * exception before this task touched anything; it never failed
+               * a standard, before or after.**
                *
-               * The width is SOLVED, not carried over from the plan's own
-               * estimate. Six links this close overlap at a full 44px
+               * The width is SOLVED anyway, not carried over from the plan's
+               * own estimate. Six links this close overlap at a full 44px
                * extension, so the pitch — the largest non-overlapping width —
                * has to be measured, and the plan's ~31px was a guess from one
                * width. Measured directly (Playwright, a production build, all
                * three routes, all eight of `check_responsive.mjs`'s shapes,
-               * 24 loads total): every link is 13.3×14.88 and the tightest
-               * centre-to-centre pitch is **29.29px, byte-identical on every
-               * route and every shape** — this pager's text is a fixed
-               * `rem` size and its `gap-4` is a fixed `rem` gap, so nothing
-               * about a route's own container width, a phone's DPR or a
-               * browser's zoom level moves it. `--tap-w: 29px` sits one whole
-               * CSS pixel under that tightest pitch, so adjacent hit areas
-               * have a real, measured gap between them rather than merely
-               * relying on `check_responsive.mjs` assertion 3's own ±1.5px
-               * touching tolerance. `--tap-h` goes to the full 44px comfort
-               * figure because nothing else sits close enough above or below
-               * this row to compete for vertical space — confirmed by
-               * assertion 3 not flagging a new pair (still exactly 21, all
-               * of them the room-gallery's), which proves no OVERLAP
-               * resulted, not a measured clearance distance to the nearest
-               * neighbour above/below.
+               * 24 loads total): the six links render **13.30, 15.13, 14.73,
+               * 15.67, 14.83, 15.44px** wide, and the tightest LEFT-EDGE
+               * pitch is **29.29px, byte-identical on every route and every
+               * shape** — this pager's text is a fixed `rem` size and its
+               * `gap-4` is a fixed `rem` gap, so nothing about a route's own
+               * container width, a phone's DPR or a browser's zoom level
+               * moves it. **The TRUE centre-to-centre minimum is larger, not
+               * the same — 30.20px, not 29.29px** (`DECISIONS.md` §23.3: this
+               * comment previously called the left-edge figure
+               * "centre-to-centre", which understated the real margin).
+               * `--tap-w: 29px` sits one whole CSS pixel under the tighter
+               * (left-edge) figure, so adjacent hit areas have a real,
+               * measured margin — ≈1.20px against the true centre pitch, not
+               * ≈0.29px — rather than merely relying on
+               * `check_responsive.mjs` assertion 3's own ±1.5px touching
+               * tolerance. `--tap-h` goes to the full 44px comfort figure
+               * because nothing else sits close enough above or below this
+               * row to compete for vertical space — confirmed by assertion 3
+               * not flagging a new pair (still exactly 21, all of them the
+               * room-gallery's), which proves no OVERLAP resulted, not a
+               * measured clearance distance to the nearest neighbour
+               * above/below.
                *
                * **Fix round 1, 28 Aug 2026: the 29.29px figure above is now
                * re-derivable from committed evidence, not only this comment

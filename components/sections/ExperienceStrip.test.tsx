@@ -74,13 +74,19 @@ describe("ExperienceStrip", () => {
   });
 
   it("gives every pager link a hit area that clears the accessibility floor", () => {
-    // The pager's six links render 13x15 against WCAG 2.5.8 (AA)'s 24x24 floor
-    // — the one control on this site that fails a standard rather than merely
-    // sitting under Apple/Google's 44px comfort guidance (`docs/reviews/
-    // 2026-08-27-mobile/`, Task 3). `.tap` (`app/globals.css`) grows the
-    // effective hit area on touch with no layout change; this only checks the
-    // class lands on every link, not the geometry — that is
-    // `scripts/check_responsive.mjs`'s job, against a real browser.
+    // The pager's six links render 13.30-15.67 wide x 14.88 tall against WCAG
+    // 2.5.8 (AA)'s 24x24 minimum-size condition — but the true centre-to-centre
+    // pitch between the tightest pair is 30.20px, over the 24px spacing-
+    // exception floor, so this pager already conformed via that exception
+    // before this task touched anything (corrected 28 Aug 2026 — an earlier
+    // draft called this "the one control on this site that fails a standard",
+    // which overstated the finding; `docs/DECISIONS.md` §23.3). Grown to a
+    // real 29x44px hit area anyway, for ergonomic comfort rather than a
+    // standards fix (`docs/reviews/2026-08-27-mobile/`, Task 3). `.tap`
+    // (`app/globals.css`) grows the effective hit area on touch with no
+    // layout change; this only checks the class lands on every link, not the
+    // geometry — that is `scripts/check_responsive.mjs`'s job, against a
+    // real browser.
     const { container } = render(
       <ExperienceStrip chapter={chapter("field-days")} copy={FIELD_DAYS_COPY} labels={STRIP_LABELS} />,
     );

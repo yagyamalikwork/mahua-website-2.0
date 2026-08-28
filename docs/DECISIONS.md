@@ -2953,12 +2953,24 @@ carrying forward: the fix here is not "look more carefully next time" but "measu
 the viewport not the element, and never judge motion from a still" — as a standing discipline, not a
 one-off correction.
 
-### 23.3 The carousel pager — the only standards failure, and what "29px" is actually a measurement of
+### 23.3 The carousel pager — already conformant via the spacing exception, and what "29px" is actually a measurement of
 
-The six pager numerals under `05 · Experiences` / `0N · The Experience` render at **13.30 × 14.88px**
-against WCAG 2.5.8 (AA)'s 24×24 floor — the only control on the site failing a standard rather than a
-comfort guideline. Fixed with a real, larger target (`.tap`, `--tap-w`, `--tap-h`) rather than an invisible
-one, because six small numerals under a strip have room to grow without costing the composition anything.
+**Corrected in the final whole-branch review's fix wave (28 Aug 2026): the opening claim below overstated
+the finding, and it was repeated in six places across this repository before being caught.** The six pager
+numerals under `05 · Experiences` / `0N · The Experience` render **13.30–15.67px wide × 14.88px tall** (the
+digit pairs "01"–"06" kern slightly differently, so the six widths are not identical) against WCAG 2.5.8
+(AA)'s 24×24 **minimum-size condition** — under it, yes, but SC 2.5.8 also carries a **spacing exception**:
+an undersized target still conforms if a 24px-diameter circle centred on it does not intersect another
+target or another such circle. The true centre-to-centre pitch between the tightest pair is **30.20px**
+(below), comfortably clear of 24, so **the pager already conformed via the spacing exception before this
+task touched anything — nothing on the site ever failed SC 2.5.8, before or after.** An earlier draft of
+this section (and of `CLAUDE.md`, `ExperienceStrip.tsx`'s own comment and its test, `check_rule_in.mjs`'s
+guard message where it discussed this control, and `check_responsive.mjs`'s header) called this "the only
+control on the site failing a standard rather than a comfort guideline" — wrong, and corrected everywhere it
+appeared. **The work stands regardless of the claim**: grown to a real, solved **29×44px** hit area anyway
+(`.tap`, `--tap-w`, `--tap-h`), because 44px is genuine ergonomic comfort for a thumb and the client ruled
+for it on 27 Aug 2026 — an ergonomic improvement, not a compliance fix, because six small numerals under a
+strip have room to grow without costing the composition anything.
 
 **The width is solved, not chosen, and the geometry is re-derivable from committed evidence, not a report's
 own prose.** Every one of the six links renders at an identical box on all three routes and all eight
@@ -3030,12 +3042,18 @@ arms (fine: no `::before` box exists, `::after` travels 0→1 on hover, indistin
 `.rule-in` link; coarse: `::after` stays transparent, `::before` travels 0→1), on both the footer link the
 original fix touched and the pager link Task 3 shipped.
 
-**One pre-existing rig failure was found and made non-fatal in the same pass, not fixed.** `check_rule_in.mjs`
-check 7 throws on `.rule-in--rest`, a selector that exists only in `LodgeCards.tsx` — dead code on this
-branch since `LodgePanels` superseded it on 19 August. The uncaught exception was killing every check after
-it, including the new one this task needed to run. Guarded with a presence check so it reports a clean
-`fail()` instead of crashing the whole script — **the underlying drift is unchanged and still reported as a
-failure**, this only stops one already-known, out-of-scope defect from blocking everything downstream of it.
+**One pre-existing rig failure was found and made non-fatal in the same pass — and this write-up first got
+its own cause wrong, corrected in the final whole-branch review's fix wave (28 Aug 2026).** `check_rule_in.mjs`
+check 7 threw on `.rule-in--rest` when run against the home page. The first draft of this note called that
+"dead code" — false, and contradicted by §22.8 #6 two sections above in this same file, which already had it
+right: `.rule-in--rest` lives, live and rendered, in `components/property/PropertyInvitation.tsx:99` on
+**both** property routes (`PropertyPage.tsx:328`). What is genuinely unrouted is `LodgeCards.tsx`'s own copy
+of the class — that component carries no traffic on any route since `LodgePanels` superseded it — but the
+class itself is very much live elsewhere; check 7 was only ever failing because it was run against the one
+route (the home page, the rig's default `URL`) that does not render it. The uncaught exception was killing
+every check after it, including the new one this task needed to run. Guarded with a presence check so it
+reports a clean, honest `fail()` naming where the element actually lives instead of crashing the whole
+script or misnaming the drift as dead code.
 
 ### 23.6 The word-span mechanism, traced correctly at the third attempt
 
@@ -3118,12 +3136,19 @@ ask for it:
     viewport for a stretch of scroll before the map itself appears. Unlike `Hero.tsx`, `FullBleedQuote.tsx`
     and `Invitation.tsx`, which already carry a `pocket:`/`short:` compaction for exactly this squeeze,
     `PropertyMap.tsx`'s legend has never been given one.
-(d) **The property map's `<text>` labels never scale with OS text size, at any width, and are already
-    crowded at rest** — `LABEL_TEXT_SIZE` declares each tier as a literal `text-[Npx]` class inside the SVG's
-    own `viewBox` coordinate system, which never tracks a visitor's root font size. 70 of the 71 map-label ×
-    map-label intersection pairs this task found already intersect before any scaling is applied at all — a
-    real, pre-existing crowding fact about the map's own layout, not a scaling regression, and not the same
-    thing as (c)'s legend-pacing finding above.
+(d) **The property map's `<text>` labels are already crowded at rest, on both properties, independent of
+    any OS text scaling — re-led here after the final whole-branch review found the earlier draft led with
+    the never-scales point and buried this one second.** This plan's own committed screenshot,
+    `docs/reviews/2026-08-27-mobile/mahua-tola-map-390.png`, shows two real, visible collisions at 390px with
+    no scaling applied at all: **`Nimdela` running into the `Zone 3` marker, and `Devada Adegaon` overlapping
+    `Zone 4`.** 70 of the 71 map-label × map-label intersection pairs this task found already intersect
+    before any scaling is applied at all — the same pre-existing crowding fact, not a scaling regression.
+    **Separately, and not fixed by any amount of scaling**, the labels also never move with OS text size at
+    all, at any width: `LABEL_TEXT_SIZE` declares each tier as a literal `text-[Npx]` class inside the SVG's
+    own `viewBox` coordinate system, which never tracks a visitor's root font size. Not the same thing as
+    (c)'s legend-pacing finding above. **Do not fix the map here** — `declutterMobile` was just touched by
+    this plan (§23.4) and a label-crowding fix needs its own task and its own review, per `CLAUDE.md`'s own
+    instruction to that effect.
 
 ### 23.9 Instrument notes, so a future reader does not mistake noise for drift
 
@@ -3139,28 +3164,38 @@ ask for it:
   `tola-press`.
 - **`check_films.mjs` fails by design** on this branch — no film is mounted on the home page, per §22.2 —
   and **`check_plates.mjs` fails pre-existing**, since `PlateGrid.tsx` was unrouted on 19 August, per §22.8
-  #5. Neither is this plan's to fix, and neither was touched. **`check_rule_in.mjs` check 7 also fails**, on
-  the same dead-code `.rule-in--rest` selector §22.8 #6 already names — now guarded so it reports cleanly
-  rather than crashing the rest of the script (§23.5), which is the one change made to it.
-- **New this task, and not yet fixed: `check_rule_in.mjs --url .../mahua-vann` crashes outright, an
-  uncaught exception, on check 8's second target.** `TARGETS` (the array check 8 walks) hardcodes
+  #5. Neither is this plan's to fix, and neither was touched. **`check_rule_in.mjs` check 7 also fails on
+  the home page** — not on dead code, a mislabel corrected in the final whole-branch review's fix wave (28
+  Aug 2026; see the correction to §23.5 above) — `.rule-in--rest` is live on both property routes via
+  `PropertyInvitation.tsx`, and check 7 was only ever failing because the rig's default `URL` is the one
+  route that does not render it. Now guarded so it reports that honestly rather than crashing the rest of
+  the script, and confirmed **PASS, 0 failures, all 8 checks**, on both `/mahua-vann` and `/mahua-tola` —
+  the first time this measurement has actually been taken on this branch (`docs/reviews/2026-08-27-mobile/
+  rule-in-vann-finalfix.json`, `rule-in-tola-finalfix.json`): the resting hairline stands off cream by a
+  luminance delta of 0.700 on both routes.
+- **Fixed in the same fix wave: `check_rule_in.mjs --url .../mahua-vann` used to crash outright, an
+  uncaught exception, on check 8's second target.** `TARGETS` (the array check 8 walks) hardcoded
   `{ name: "experiences pager link (field-days card 0)", sel: "a[href='#field-days-card-0']" }` —
   `field-days-card-0` is the home page's own chapter id; Mahua Vann's pager uses `vann-day-card-0`, Mahua
   Tola's `tola-day-card-0`. `page.$eval(sel, …)` throws when the selector matches nothing, and nothing
-  catches it, so the whole script dies mid-run — no JSON is written, no summary is printed, and check 8's
-  *first* target (the footer legal link, which the same route DOES carry) never gets its own verdict
-  recorded either, because the process is gone before it can print one. **Confirmed on `/mahua-vann` by
-  this task's own run** (`docs/reviews/2026-08-27-mobile/rule-in-home-task6.json` exists and reports check 7
-  as the only failure; no `rule-in-vann-task6.json` was ever written — the crash happened first). Mahua Tola
-  would fail identically; not separately run, because the cause is already established in the source, not a
-  hypothesis needing a second crash to confirm it.
+  caught it, so the whole script died mid-run — no JSON was written, no summary was printed, and check 8's
+  *first* target (the footer legal link, which the same route DOES carry) never got its own verdict
+  recorded either, because the process was gone before it could print one. **This was this plan's own
+  defect, not a pre-existing one** — check 8 was created by Task 2's fix round and generalised by Task 3's,
+  both inside this plan, so the rig could no longer produce a clean pass on *any* route by the time the plan
+  closed.
 
   **Exactly the same shape of gap `check_experience_strip.mjs` and `check_contrast_over_photos.mjs` both had
   before Task 7 of the 26 Aug plan fixed them additively** (§22.8 #3) — a rig written and verified against
   the home route only, never exercised against a property route until a later whole-branch sweep tried it.
   Task 3's own fix round for check 8 (28 Aug) ran it only against the default URL (no `--url` in its own
-  committed command), so this was never caught before now. **Not fixed here** — this task's own charter is
-  the sweep and the record, and the global instruction covering this whole plan is explicit that
-  `check_rule_in.mjs`'s failures are not this plan's to fix. Worth a future task's attention: the fix is the
-  same shape as Task 7's own (parameterise `TARGETS`' pager selector by the chapter id the route actually
-  carries, the way `check_experience_strip.mjs` already takes a `--chapter` flag).
+  committed command), so this was never caught before the final review.
+
+  **Fixed the same shape as Task 7's own**: `TARGETS`' pager selector is resolved at runtime rather than
+  naming one route's chapter id — `a[href$='-card-0']` finds the pager's first link on `/`, `/mahua-vann`
+  and `/mahua-tola` alike, because `experienceCardId` always ends `-card-0` regardless of which chapter id
+  sits in front of it. `probePointer` also checks the element exists before touching it, so a future route
+  that ever drops the pager reports a named skip rather than crashing. Re-run against all three routes on
+  one production build: `/` — checks 1–6 and 8 PASS, check 7 fails cleanly with its corrected message;
+  `/mahua-vann` and `/mahua-tola` — **PASS, 0 failures, all 8 checks**, the first genuinely clean run this
+  rig has ever produced on a property route.

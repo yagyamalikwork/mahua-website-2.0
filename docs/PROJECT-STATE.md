@@ -1067,11 +1067,13 @@ and review the way `CLAUDE.md` already says a park-map fix does.
 - **(c) The property map's legend column wastes roughly 1.5 screens of scroll at landscape-phone width
   (844×390)** — `PropertyMap.tsx`'s facts/legend column has never been given the `pocket:`/`short:`
   compaction `Hero.tsx`, `FullBleedQuote.tsx` and `Invitation.tsx` already carry for exactly this shape.
-- **(d) The property map's `<text>` labels never scale with OS text size, at any width, and are already
-  crowded at rest** — 70 of 71 map-label × map-label pairs already intersect before any scaling is applied.
-  `LABEL_TEXT_SIZE` sizes each tier as a literal pixel value inside the SVG's own coordinate system, which is
-  why it never responds to a visitor's accessibility setting. Same component `CLAUDE.md` already says a
-  label fix needs its own task and review for.
+- **(d) The property map's `<text>` labels are already crowded at rest, independent of OS text scaling** —
+  the committed Mahua Tola screenshot at 390px shows two real collisions with no scaling applied at all:
+  `Nimdela` running into the `Zone 3` marker, and `Devada Adegaon` overlapping `Zone 4`. 70 of 71 map-label ×
+  map-label pairs already intersect before any scaling is applied — a pre-existing crowding fact, not a
+  scaling regression. Separately, the labels also never move with OS text size at all, at any width:
+  `LABEL_TEXT_SIZE` sizes each tier as a literal pixel value inside the SVG's own coordinate system. Same
+  component `CLAUDE.md` already says a label fix needs its own task and review for.
 
 **The Journal page — approved, not yet planned or built.** This is why the branch is named
 `feat/journal-and-mobile` rather than for the restructure above, which is the second of three bodies of work

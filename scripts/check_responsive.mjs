@@ -41,6 +41,16 @@
 //    numbers answer different questions and this project's own client ruling
 //    (27 Aug 2026) is to extend hit areas toward 44 where it can, not to
 //    require it everywhere.
+//
+//    **This assertion applies ONLY the 24×24 minimum-size condition — it does
+//    NOT evaluate SC 2.5.8's spacing exception** (an undersized target still
+//    conforms if a 24px-diameter circle centred on it does not intersect
+//    another target or another such circle), because that needs the pairwise
+//    geometry assertion 3 already computes, not a per-target size check.
+//    Read a target reported under-24 here as "under the minimum-size
+//    condition", never as a bare conformance verdict — a control can fail
+//    this line and still conform to SC 2.5.8 via spacing (the carousel pager
+//    did, both before and after this task touched it; `DECISIONS.md` §23.3).
 // 3. No overlapping hit areas — no two effective hit rectangles intersect.
 //    **This is the assertion that stops Task 2 breaking things.** Extending a
 //    target invisibly is exactly how six neighbouring pager links become one

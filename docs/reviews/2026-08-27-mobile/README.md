@@ -30,7 +30,7 @@ node scripts/check_responsive.mjs --port 3100 \
 | 3 · overlap | **21** | byte-identical to every prior committed run since the Task 1 baseline — the pre-approved room-card-stack recede overlap, none of it new |
 | 4 · type-floor regression | 0 | no font shrank below the recorded baseline, any route, any shape |
 | 5 · zoom policy | 0 | no `maximum-scale`/`user-scalable=no` anywhere |
-| 6 · OS text scaling | 2,414 on this run | **do not quote this total as settled** — §5 below and `unmeasured.md` §1.9. Traced breakdown: 1,376 word-span-mask artefact (visually inert, confirmed §23.6) + 282 `.drift-frame` by-design overflow + 49 genuine room-card clips + 85 already-intersecting-at-rest + 116 genuinely new intersections = 165 real findings, not ~2,400 |
+| 6 · OS text scaling | 2,414 on this run | **do not quote this total as settled** — §5 below and `unmeasured.md` §1.9. **Corrected 28 Aug 2026: the row below previously summed to 1,908, silently omitting the 506 word-span intersections — `unmeasured.md` §1.3 always had this right.** Full split, re-derived directly from `task6-final.json`'s own per-shape fields, not estimated: **clips 1,707** = 1,376 word-span-mask artefact (visually inert, confirmed §23.6; a subset of the 1,658 at-rest figure) + 282 `.drift-frame` by-design at-rest overflow + 49 genuinely new (all `RoomCardStack`). **Intersections 707** = 506 word-span-mask artefact + 450 already-intersecting-at-rest (this figure overlaps the word-span set, unlike the clips row — see `unmeasured.md` §1.4 for the further, non-overlapping split of the 201 non-word-span intersections into 85 at-rest, 70 of them the pre-existing map-label × map-label pairs, and 116 new) + 116 genuinely new. **165 real findings** (49 clips + 116 intersections), not ~2,400 |
 
 **Total: 2,489 findings, exit code 1 — correct, not a broken rig.** Assertions 2 and 3 (the two
 global-constraint numbers) are exactly what every prior task's own committed run already showed; this run
@@ -117,7 +117,7 @@ they will repeat.
 |---|---|---|---|---|---|
 | home | 33% | 61.9% (`invitation`) | 2.08 | all 7 chapters inside 45% | `invitation` read 19.8% this run — within the known variance range (§ above), not a new figure to quote |
 | `/mahua-vann` | 45.2% | 80.8% (`vann-press`) | 1.55 | 3 over budget (`vann-forest`, `vann-day`, `vann-press` — all pre-existing, unrelated to this plan) | `vann-rooms` 36.1%/43.7%, matching every prior committed figure exactly |
-| `/mahua-tola` | 43% | 83.1% (`tola-press`) | 1.57 | 3 over budget (`tola-reserve`, `tola-day`, `tola-press` — all pre-existing, unrelated to this plan) | `tola-rooms` reads 36.7%/45.3% — `passesWorst` FALSE, matching every prior committed figure exactly (§22.9); not fixed by this plan, not caused by it |
+| `/mahua-tola` | 43% | 83.1% (`tola-press`) | 1.57 | **4** over budget (`tola-reserve`, `tola-day`, `tola-press`, `tola-rooms` — all pre-existing, unrelated to this plan; corrected 28 Aug 2026 — an earlier draft said "3" and omitted `tola-rooms` from the count even though the very next cell discloses it) | `tola-rooms` reads 36.7%/45.3% — `passesWorst` FALSE, matching every prior committed figure exactly (§22.9); not fixed by this plan, not caused by it |
 
 | | transfer / hero `responseEnd` |
 |---|---|
@@ -127,21 +127,31 @@ they will repeat.
 
 ---
 
-## 4 · `check_rule_in.mjs`, `check_plates.mjs`, `check_films.mjs` — pre-existing/by-design failures, not this plan's
+## 4 · `check_rule_in.mjs`, `check_plates.mjs`, `check_films.mjs`
+
+**Corrected 28 Aug 2026, final whole-branch review.** This section's own heading used to group all three
+rigs together as "pre-existing/by-design failures, not this plan's" — true for `check_plates.mjs` and
+`check_films.mjs`, **false for `check_rule_in.mjs`'s crash**, which was this plan's own regression (check 8
+was created by Task 2's fix round and generalised by Task 3's, both inside this plan) and is now fixed, not
+merely recorded. Re-run against the same production build this task closed with, all three routes:
 
 ```
-node scripts/check_rule_in.mjs --port 3100 --out rule-in-home-task6.json
-node scripts/check_rule_in.mjs --port 3100 --url http://localhost:3100/mahua-vann --out rule-in-vann-task6.json
+node scripts/check_rule_in.mjs --port 3100 --out docs/reviews/2026-08-27-mobile/rule-in-home-finalfix.json
+node scripts/check_rule_in.mjs --port 3100 --url http://localhost:3100/mahua-vann --out docs/reviews/2026-08-27-mobile/rule-in-vann-finalfix.json
+node scripts/check_rule_in.mjs --port 3100 --url http://localhost:3100/mahua-tola --out docs/reviews/2026-08-27-mobile/rule-in-tola-finalfix.json
 node scripts/check_plates.mjs --port 3100 --out plates-task6.json
 node scripts/check_films.mjs
 ```
 
 | rig | result |
 |---|---|
-| `check_rule_in.mjs` (home) | checks 1–6, 8 **PASS** (25 links covered, the hairline collapses/travels/completes/answers keyboard, reduced motion holds, the `.rule-in`/`.tap` compound proven on both the footer link and the pager under real fine/coarse pointer contexts); **check 7 FAILS** on the pre-existing dead-code `.rule-in--rest` selector (`DECISIONS.md` §22.8 #6) — reported cleanly, not a crash, since Task 2's own fix round guarded it |
-| `check_rule_in.mjs` (`/mahua-vann`) | **CRASHES — a new finding, not fixed here.** Check 8's `TARGETS` hardcodes the home page's own pager selector (`#field-days-card-0`); Vann's pager is `#vann-day-card-0`, so `page.$eval` throws and the whole script dies uncaught before writing any JSON or printing a summary. Same shape as the pre-26-Aug gap in `check_experience_strip.mjs`/`check_contrast_over_photos.mjs` (§22.8 #3) — a rig verified only against the home route. Full account: `DECISIONS.md` §23.9 |
+| `check_rule_in.mjs` (home) | checks 1–6, 8 **PASS** (25 links covered, the hairline collapses/travels/completes/answers keyboard, reduced motion holds, the `.rule-in`/`.tap` compound proven on both the footer link and the pager under real fine/coarse pointer contexts); **check 7 FAILS**, honestly — `.rule-in--rest` is not dead code, it simply is not rendered on this route (it lives on both property routes via `PropertyInvitation.tsx:99`); the guard message now says so instead of the earlier, incorrect "dead code" claim (`DECISIONS.md` §22.8 #6, §23.5) |
+| `check_rule_in.mjs` (`/mahua-vann`) | **FIXED, no longer crashes — PASS, 0 failures, all 8 checks.** Check 8's `TARGETS` previously hardcoded the home page's own pager selector (`#field-days-card-0`); resolved at runtime instead (`a[href$='-card-0']`, which matches the pager's first link on every route because `experienceCardId` always ends that way regardless of the chapter id in front of it). **This is the first time check 7 has ever actually run against a property route on this branch — the resting hairline stands off cream by a luminance delta of 0.700**, a measurement that had never been taken before this fix wave |
+| `check_rule_in.mjs` (`/mahua-tola`) | **Also PASS, 0 failures, all 8 checks** — same 0.700 delta, run for completeness alongside the required `/mahua-vann` verdict |
 | `check_plates.mjs` | FAILS on all three routes (`0.00%` distortion everywhere is the boards NOT being found, not a passing measurement) — pre-existing since `PlateGrid.tsx` was unrouted 19 Aug 2026 (`DECISIONS.md` §22.8 #5). Not this plan's, not touched |
 | `check_films.mjs` | FAILS by design — an uncaught exception (`no film in #field-days`), since no film is mounted on this branch's home page (`DECISIONS.md` §22.2). Not this plan's, not touched |
+
+Full account of both the crash's real cause and the "dead code" mislabel: `DECISIONS.md` §23.5, §23.9.
 
 ---
 
@@ -170,11 +180,21 @@ this way, not by an assertion:
   720×450) were also opened as a spot check: both clean, no overflow, no dev indicator, hero composition
   intact at the smaller viewport.
 
-No new visual defect was found in this sweep. The four genuine findings this plan traced (§23.8) do not
-show up in a top-of-page capture — they are below the fold (the room card stack, the map's legend and
-labels) or require an OS text-scaling probe rather than a screenshot (`PropertyContact`) — which is exactly
-why they were found by `check_responsive.mjs` and the OS-text-scaling investigation, not by this screenshot
-sweep, and are recorded in `unmeasured.md` and `DECISIONS.md` §23.8 instead.
+**Corrected 28 Aug 2026, a final whole-branch review: every one of these 24 frames is a TOP-OF-PAGE capture,
+plainly stated rather than left implicit.** That means every element this plan changed except the header
+logo and the CTA pill — the pager, the footer legal links, the press links, and the map — sits below the
+fold and appears in NONE of them. No new visual defect was found in what this sweep DID look at, but this
+sweep is not what proves "nothing moved" for this plan's own changes, and it was never meant to be read that
+way: the four genuine findings this plan traced (§23.8) do not show up in a top-of-page capture — they are
+below the fold (the room card stack, the map's legend and labels) or require an OS text-scaling probe rather
+than a screenshot (`PropertyContact`) — which is exactly why they were found by `check_responsive.mjs` and
+the OS-text-scaling investigation, not by this screenshot sweep, and are recorded in `unmeasured.md` and
+`DECISIONS.md` §23.8 instead. **What actually carries the "nothing visible moved" claim for this plan's own
+edits is the per-task before/after screenshot comparison** — Task 2's (the footer legal link, the press
+link, `.tap`/`.rule-in` at rest) and Task 3's (the pager, before and after `--tap-w`/`--tap-h`), both
+confirmed byte-for-byte identical by SHA256, committed alongside the earlier task evidence in this same
+directory. This 24-frame sweep is a general clean-bill-of-health for the pages as a whole, not the
+verification for this plan's own changes specifically.
 
 ---
 
@@ -193,7 +213,7 @@ node scripts/check_docs.mjs
 | `npm test` | **501 passed, 46 files** — no `lib/media.test.ts` timeout on this run |
 | `npm run build` | green (Turbopack, 7 static routes) — run standalone and again inside `verify:budget` |
 | `npm run lint` | **0 errors**, the same 5 pre-existing warnings every prior task on this branch has recorded (two `<img>` notes in `SiteMenu.test.tsx`, three unused-parameter notes in `lib/booking/asiatech-provider.ts`) |
-| `npm run verify:budget` | **PASS — 167.2 KB brotli first load, 9 files**, unchanged. LIVE at 1440×900: 158 KB untouched / 202 KB after scroll |
+| `npm run verify:budget` | **PASS — 167.2 KB brotli first load, 9 files**, unchanged. LIVE at 1440×900: 158 KB untouched / 202 KB after scroll. **Corrected 28 Aug 2026: this was the only headline figure in this document with no committed JSON beside it — every prior body of work on this project committed one.** Re-run with `--out`: `docs/reviews/2026-08-27-mobile/budget-finalfix.json` (171,246 bytes brotli raw first-load payload before rounding — the `167.2 KB` above is that figure rounded the same way every other commit on this project rounds it) |
 | `node scripts/check_docs.mjs` | **PASS** — "the documents still describe the repository." Figures it read back: page mean empty 32.9%, `check_experience_strip.mjs` 13 assertions |
 
 ---
@@ -206,13 +226,19 @@ Four genuine findings, all traced rather than assumed, all left deliberately unf
 1. **`RoomCardStack`'s room cards clip their own text at 150%/200% OS text scale.**
 2. **`PropertyContact`'s email/address block wraps into itself at the same scales.**
 3. **The property map's legend column wastes ~1.5 screens of scroll at landscape-phone width (844×390).**
-4. **The property map's `<text>` labels never scale with OS text size, and are already crowded at rest.**
+4. **The property map's `<text>` labels are already crowded at rest on both properties, independent of any
+   OS text scaling — `Nimdela` into `Zone 3`, `Devada Adegaon` into `Zone 4`, visible in this plan's own
+   `mahua-tola-map-390.png` — and, separately, never scale with OS text size at all** (re-led 28 Aug 2026;
+   an earlier draft led with the never-scales point and named neither pair).
 
 None touches a composition this plan's own file structure lists as deliberately untouched, and none is a
 regression this plan introduced — each is a pre-existing fact about the page, newly measured.
 
-**A fifth thing was found and also left unfixed, but it is an instrument gap, not a product finding**:
-`check_rule_in.mjs --url .../mahua-vann` crashes outright (check 8's `TARGETS` hardcodes the home page's own
-pager selector, `#field-days-card-0`, which does not exist on the property routes). Full account —
-`DECISIONS.md` §23.9. Not fixed here, per the same "not this plan's to fix" instruction covering
-`check_rule_in.mjs`'s other, already-known failure.
+**A fifth thing was found, and it WAS this plan's own regression, fixed in the final whole-branch review's
+fix wave (28 Aug 2026), not merely recorded as an instrument gap**: `check_rule_in.mjs --url .../mahua-vann`
+used to crash outright (check 8's `TARGETS` hardcoded the home page's own pager selector,
+`#field-days-card-0`, which does not exist on the property routes — created by Task 2's fix round and
+generalised by Task 3's, both inside this plan, not pre-existing). Fixed by resolving the pager selector at
+runtime (`a[href$='-card-0']`); re-run against all three routes — see §4 above for the actual verdicts,
+including check 7's first-ever genuine measurement on a property route. Full account — `DECISIONS.md` §23.5,
+§23.9.

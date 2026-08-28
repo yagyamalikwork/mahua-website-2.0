@@ -2092,16 +2092,51 @@ body {
    * higher specificity than either class alone so it wins outright rather
    * than partially composing. `.rule-in.tap::after` then only has to erase
    * the leftover background; `.tap::after`'s own geometry (position/left/
-   * top/width/height/transform) is never redeclared here and keeps winning.
+   * top/width/height) is never redeclared here and keeps winning — but its
+   * `transform` did NOT, until the rule immediately below was added.
    *
-   * **Forward note:** a third class also writes `.rule-in`'s `::after` —
-   * `.rule-in--fixed` (below), at `bottom: -6px` rather than this rule's
-   * `-0.28em`, used by `SiteMenu`'s place labels. Nothing combines
-   * `.rule-in--fixed` with `.tap` today, so this is not a live defect, but
-   * this compound selector does not know about that offset and would not
-   * restore it — if a future element ever carries all three classes, add a
-   * `.rule-in--fixed.tap::before { bottom: -6px; }` override rather than
-   * assuming this rule already covers it.
+   * **A second cascade collision, found by a whole-branch review, 28 Aug
+   * 2026: `.tap::after`'s own `transform: translate(-50%, -50%)` — the
+   * centring that makes this an invisible box straddling the link rather
+   * than a corner-anchored one — lost to `.rule-in:hover::after` /
+   * `.rule-in:focus-visible::after`'s `transform: scaleX(1)` on hover or
+   * focus.** `.tap::after` is one class + the pseudo-element, (0,1,1).
+   * `.rule-in:hover::after` (line 388) is one class + one pseudo-class + the
+   * pseudo-element, (0,2,1) — HIGHER, and it is unconditional, not scoped to
+   * `pointer: coarse`, so it applies to this element on every pointer type.
+   * Nothing in this file had ever given the compound its own hover-scoped
+   * `transform` to win that fight on `.tap::after`'s behalf — the
+   * `.rule-in.tap::after` rule above only erases the leftover
+   * `background-color`, and nothing was ever declared for `transform` — so
+   * `.rule-in:hover::after`'s `scaleX(1)` simply out-specifies whatever
+   * `.tap::after` was doing, replacing `translate(-50%, -50%)` outright the
+   * moment the pointer hovers or focus lands. The invisible hit box's origin
+   * then jumps from centred to top-left, moving it by (+width/2, +height/2)
+   * — measured at +72px right, +22px down on a footer legal link.
+   * **Invisible and coarse-pointer-only, so nothing a mouse user or a
+   * screenshot at rest could ever see — but iOS's "sticky hover" (a tap
+   * leaves an element in its `:hover` state until something else is tapped)
+   * makes this a REAL, if invisible, shifted hit region on exactly the
+   * devices `.tap` exists for.** Fixed by the rule immediately below, at
+   * (0,3,1) — high enough to win outright rather than merely tie.
+   *
+   * **Forward note:** two more classes write pseudo-elements this compound
+   * does not know about. `.rule-in--fixed` (below) writes `.rule-in`'s own
+   * `::after` at `bottom: -6px` rather than this rule's `-0.28em`, used by
+   * `SiteMenu`'s place labels. `.rule-in--rest` (above, `::before` rather
+   * than `::after` — live on both property routes, `PropertyInvitation.tsx`'s
+   * sibling link) writes its OWN `::before` at specificity (0,1,1) — and
+   * `.rule-in.tap::before` just below, at (0,2,1), would silently win over
+   * it and erase its resting `opacity: 0.35` hairline outright if a future
+   * element ever carried `.rule-in`, `.rule-in--rest` AND `.tap` together.
+   * Nothing combines `.tap` with either class today, so neither is a live
+   * defect, but this compound selector does not know about either the
+   * `-6px` offset or the resting opacity and would not restore either — if
+   * a future element carries `.rule-in--fixed` and `.tap`, add a
+   * `.rule-in--fixed.tap::before { bottom: -6px; }` override; if one carries
+   * `.rule-in--rest` and `.tap`, add a `.rule-in--rest.tap::before { opacity:
+   * 0.35; }` override — rather than assuming this rule already covers
+   * either case.
    */
   .rule-in.tap::before {
     content: "";
@@ -2119,6 +2154,21 @@ body {
 
   .rule-in.tap::after {
     background-color: transparent;
+  }
+
+  /*
+   * M1, 28 Aug 2026 (final whole-branch review): without this rule,
+   * `.rule-in:hover::after`/`:focus-visible::after` (0,2,1), unconditional
+   * and not scoped to this media query, wins the tie against `.tap::after`'s
+   * own `transform: translate(-50%, -50%)` (0,1,1) on hover/focus, snapping
+   * the invisible hit box from centred to corner-anchored — see the comment
+   * above `.rule-in.tap::before`. Pinning the centring here, at (0,3,1),
+   * keeps the tap region exactly where it sits at rest through hover and
+   * focus, on every pointer type this block applies to.
+   */
+  .rule-in.tap:hover::after,
+  .rule-in.tap:focus-visible::after {
+    transform: translate(-50%, -50%);
   }
 
   .rule-in.tap:hover::before,
