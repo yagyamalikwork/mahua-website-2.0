@@ -1,0 +1,1021 @@
+{
+  "url": "http://localhost:3100/mahua-vann",
+  "chapter": "vann-day",
+  "cards": 6,
+  "sweptWidths": 99,
+  "step": 16,
+  "sweep": [
+    {
+      "width": 360,
+      "cardW": 280.8,
+      "cardH": 379.45,
+      "scrollWidth": 1785,
+      "clientWidth": 312,
+      "visible": 1.04,
+      "worstCrop": 0
+    },
+    {
+      "width": 376,
+      "cardW": 293.27,
+      "cardH": 396.3,
+      "scrollWidth": 1860,
+      "clientWidth": 328,
+      "visible": 1.05,
+      "worstCrop": 0.0024
+    },
+    {
+      "width": 392,
+      "cardW": 305.75,
+      "cardH": 413.17,
+      "scrollWidth": 1935,
+      "clientWidth": 344,
+      "visible": 1.06,
+      "worstCrop": 0.0004
+    },
+    {
+      "width": 408,
+      "cardW": 318.23,
+      "cardH": 430.03,
+      "scrollWidth": 2009,
+      "clientWidth": 360,
+      "visible": 1.06,
+      "worstCrop": 0.0017
+    },
+    {
+      "width": 424,
+      "cardW": 330.72,
+      "cardH": 446.91,
+      "scrollWidth": 2084,
+      "clientWidth": 376,
+      "visible": 1.07,
+      "worstCrop": 0
+    },
+    {
+      "width": 440,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 392,
+      "visible": 1.09,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 456,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 408,
+      "visible": 1.13,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 472,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 424,
+      "visible": 1.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 488,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 440,
+      "visible": 1.22,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 504,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 456,
+      "visible": 1.27,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 520,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 472,
+      "visible": 1.31,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 536,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 488,
+      "visible": 1.36,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 552,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 504,
+      "visible": 1.4,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 568,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 520,
+      "visible": 1.44,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 584,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 536,
+      "visible": 1.49,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 600,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 552,
+      "visible": 1.53,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 616,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 568,
+      "visible": 1.58,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 632,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 584,
+      "visible": 1.62,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 648,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 600,
+      "visible": 1.67,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 664,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 616,
+      "visible": 1.71,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 680,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 632,
+      "visible": 1.76,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 696,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 648,
+      "visible": 1.8,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 712,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 664,
+      "visible": 1.84,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 728,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 680,
+      "visible": 1.89,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 744,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 696,
+      "visible": 1.93,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 760,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 712,
+      "visible": 1.98,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 776,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 680,
+      "visible": 1.89,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 792,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 696,
+      "visible": 1.93,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 808,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 712,
+      "visible": 1.98,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 824,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 728,
+      "visible": 2.02,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 840,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 744,
+      "visible": 2.07,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 856,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 760,
+      "visible": 2.11,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 872,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 776,
+      "visible": 2.16,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 888,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 792,
+      "visible": 2.2,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 904,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 808,
+      "visible": 2.24,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 920,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 824,
+      "visible": 2.29,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 936,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 840,
+      "visible": 2.33,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 952,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 856,
+      "visible": 2.38,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 968,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 872,
+      "visible": 2.42,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 984,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 888,
+      "visible": 2.47,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1000,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 904,
+      "visible": 2.51,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1016,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 920,
+      "visible": 2.56,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1032,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 936,
+      "visible": 2.6,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1048,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 952,
+      "visible": 2.64,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1064,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 968,
+      "visible": 2.69,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1080,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 984,
+      "visible": 2.73,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1096,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1000,
+      "visible": 2.78,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1112,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1016,
+      "visible": 2.82,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1128,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1032,
+      "visible": 2.87,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1144,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1048,
+      "visible": 2.91,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1160,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1064,
+      "visible": 2.96,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1176,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1080,
+      "visible": 3,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1192,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1096,
+      "visible": 3.04,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1208,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1112,
+      "visible": 3.09,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1224,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1128,
+      "visible": 3.13,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1240,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1144,
+      "visible": 3.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1256,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1160,
+      "visible": 3.22,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1272,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1176,
+      "visible": 3.27,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1288,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1192,
+      "visible": 3.31,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1304,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1208,
+      "visible": 3.36,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1320,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1224,
+      "visible": 3.4,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1336,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1240,
+      "visible": 3.44,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1352,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1256,
+      "visible": 3.49,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1368,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1272,
+      "visible": 3.53,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1384,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1288,
+      "visible": 3.58,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1400,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1304,
+      "visible": 3.62,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1416,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1320,
+      "visible": 3.67,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1432,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1336,
+      "visible": 3.71,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1448,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1352,
+      "visible": 3.76,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1464,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1368,
+      "visible": 3.8,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1480,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1384,
+      "visible": 3.84,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1496,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1400,
+      "visible": 3.89,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1512,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1416,
+      "visible": 3.93,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1528,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1432,
+      "visible": 3.98,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1544,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1448,
+      "visible": 4.02,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1560,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1464,
+      "visible": 4.07,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1576,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1480,
+      "visible": 4.11,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1592,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1496,
+      "visible": 4.16,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1608,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1624,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1640,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1656,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1672,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1688,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1704,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1720,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1736,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1752,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1768,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1784,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1800,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1816,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1832,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1848,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1864,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1880,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1896,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1912,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    },
+    {
+      "width": 1920,
+      "cardW": 340,
+      "cardH": 459.45,
+      "scrollWidth": 2140,
+      "clientWidth": 1504,
+      "visible": 4.18,
+      "worstCrop": 0.0032
+    }
+  ],
+  "reach": [
+    {
+      "where": "390x844",
+      "ladderAsked": [
+        0,
+        158,
+        317,
+        475,
+        633,
+        792,
+        950,
+        1108,
+        1266,
+        1425,
+        1583
+      ],
+      "ladderGot": [
+        0,
+        158,
+        317,
+        475,
+        633,
+        792,
+        950,
+        1108,
+        1266,
+        1425,
+        1583
+      ]
+    },
+    {
+      "where": "768x1024",
+      "ladderAsked": [
+        0,
+        147,
+        294,
+        440,
+        587,
+        734,
+        881,
+        1028,
+        1174,
+        1321,
+        1468
+      ],
+      "ladderGot": [
+        0,
+        147,
+        294,
+        440,
+        587,
+        734,
+        881,
+        1028,
+        1174,
+        1321,
+        1468
+      ]
+    },
+    {
+      "where": "1440x900",
+      "ladderAsked": [
+        0,
+        80,
+        159,
+        239,
+        318,
+        398,
+        478,
+        557,
+        637,
+        716,
+        796
+      ],
+      "ladderGot": [
+        0,
+        80,
+        159,
+        239,
+        318,
+        398,
+        478,
+        557,
+        637,
+        716,
+        796
+      ]
+    }
+  ],
+  "noPeek": [
+    {
+      "width": 360,
+      "peek": 11.2
+    },
+    {
+      "width": 376,
+      "peek": 14.7
+    },
+    {
+      "width": 392,
+      "peek": 18.3
+    },
+    {
+      "width": 824,
+      "peek": 8
+    },
+    {
+      "width": 1176,
+      "peek": 0
+    },
+    {
+      "width": 1192,
+      "peek": 16
+    },
+    {
+      "width": 1544,
+      "peek": 8
+    }
+  ],
+  "hoverZoomApplies": false,
+  "failures": []
+}

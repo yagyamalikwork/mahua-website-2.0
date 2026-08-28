@@ -1044,6 +1044,34 @@ people-containing images were kept after inspection — `guide-sunrise`, `sound-
   observed range.
 - **A ruling on `tola-rooms`**, newly reading 45.3% worst (`vann-rooms` passes at 43.7%) — a real,
   reproducible figure first noted in a task report's prose and never put to him. `docs/DECISIONS.md` §22.9.
+- **His "a few minor changes"**, noted while reviewing the 26 August restructure on 27 Aug and chosen to
+  give later rather than in that sitting — ask for them before this branch closes. Nothing else is recorded
+  about what they are.
+
+**From the mobile, tablet and zoom work (`feat/journal-and-mobile`, 27-28 Aug 2026), still owed — see
+`docs/DECISIONS.md` §23:**
+
+Nothing here is blocking; everything below is a genuine finding this plan traced and deliberately left
+unfixed, either because it touches a composition the client has ruled to leave alone, because fixing it
+would be a visible-design change the plan's own global constraint forbids, or because it needs its own task
+and review the way `CLAUDE.md` already says a park-map fix does.
+
+- **(a) `RoomCardStack`'s room cards clip their own text at 150%/200% OS text scale.** The client's 27 Aug
+  ruling was to leave the card stack alone architecturally — that ruling answered a *different*, false
+  finding ("six screens of blank cream"), not this one. This is a real accessibility gap for a visitor who
+  has set larger system text, and he has not been told about it. **The newest of these four, and the one
+  that most affects a real visitor.**
+- **(b) `PropertyContact`'s email/address block wraps into itself at the same 150%/200% OS text scales** —
+  confirmed genuinely new (none of its 18 findings are already present at 100% zoom), not touched by any
+  ruling to date.
+- **(c) The property map's legend column wastes roughly 1.5 screens of scroll at landscape-phone width
+  (844×390)** — `PropertyMap.tsx`'s facts/legend column has never been given the `pocket:`/`short:`
+  compaction `Hero.tsx`, `FullBleedQuote.tsx` and `Invitation.tsx` already carry for exactly this shape.
+- **(d) The property map's `<text>` labels never scale with OS text size, at any width, and are already
+  crowded at rest** — 70 of 71 map-label × map-label pairs already intersect before any scaling is applied.
+  `LABEL_TEXT_SIZE` sizes each tier as a literal pixel value inside the SVG's own coordinate system, which is
+  why it never responds to a visitor's accessibility setting. Same component `CLAUDE.md` already says a
+  label fix needs its own task and review for.
 
 **The Journal page — approved, not yet planned or built.** This is why the branch is named
 `feat/journal-and-mobile` rather than for the restructure above, which is the second of three bodies of work

@@ -2888,3 +2888,279 @@ branch, with nothing measuring it now; non-negotiable #3's own text never update
 a missing pointer to this branch's own spec, an incomplete branch banner) are all fixed in the same wave —
 see `.superpowers/sdd/2026-08-26-restructure-and-reviews/final-fix-report.md` for the full list of what
 changed where.
+
+## 23. Mobile, tablet and zoom — touch targets, the map's lodge collision, and a reconnaissance that was wrong three times (27-28 Aug 2026)
+
+Six tasks of `docs/superpowers/plans/2026-08-27-mobile-tablet-and-zoom.md`, closed out by this whole-branch
+sweep. Full evidence: `docs/reviews/2026-08-27-mobile/README.md`, which names the command behind every
+figure below. Ledger: `.superpowers/sdd/2026-08-27-mobile-tablet-and-zoom/progress.md`.
+
+### 23.1 The client's rulings, 27 August 2026, verbatim where he gave them
+
+He reversed his own 12 August sequencing ruling — *"right now our only focus is how it looks on a
+computer/laptop screen, we can workout and optimize mobile screens later"* — with: *"We need to optimize
+the complete website for mobile phone so the website looks as it is on a big computer screen but also the
+layout and placement of everyting looks refined and we optimized for mobile and tablets as well … I want the
+website experience and optimization for every zoom and every device to be on point and should not spoil or
+disturbe the user experience at any point."* Shown measurements rather than a redesign, he ruled on five
+things:
+
+1. **The rooms card stack on phones: leave it.** The finding that prompted the question — "six screens of
+   blank cream" — was itself false. See §23.2.
+2. **Buttons under the 44px comfort size: extend the tap area invisibly.** The visible design does not
+   change at any width — a screenshot diff showing one moved pixel is a failed task, not a judgement call.
+3. **The header pill's 9.6px label: stays at 9.6px.** He was shown 9.6px and 11px rendered side by side and
+   chose 9.6px himself, because 11px closes the gap to the wordmark.
+4. **Which kinds of zoom matter: all of them, to one standard** — browser zoom, pinch-zoom, and OS-level
+   text scaling.
+5. **How "done" is judged: a rig that asserts, run every time** — not a screenshot and a claim.
+
+### 23.2 The reconnaissance was wrong three times, and the three lessons are the most reusable thing this branch produced
+
+The first pass that went to the client measured `next dev`, took an element screenshot of a
+`position: sticky` container, and judged a scroll-driven effect from a single frame. Every one of its four
+headline claims was false, re-measured against a production build:
+
+| Claimed | Actually |
+|---|---|
+| `02 · The Rooms` is "six screens of blank cream" on a phone, structurally broken | **2.8 screens (Vann) / 3.4 (Tola)**, ~38% bare across the scroll — in line with the site's own 32.9% page mean |
+| A room's description is cut off mid-sentence | **False.** `check_card_stack.mjs` assertion 8 already asserts every card's text is simultaneously inside the visible band, inside its own clip box and at opacity ≥0.98, at 390×844, and passes on both routes |
+| The park map is clipped on a phone | **False.** The full drawing renders — river, four gates, reservoir, road, compass |
+| The booking bar's compass mark overlaps its own text | **False. That was Next.js's own dev-mode indicator**, bottom-left, which does not exist in a production build |
+
+**Three lessons, and they outlive this task — read them before trusting any future report of a defect on
+this site:**
+
+1. **Measure a production build, never `next dev`.** A dev overlay was read as a layout collision. Every rig
+   this project owns says so somewhere in its own header comment; this is the first time it was actually the
+   cause of a false finding rather than a precaution against a hypothetical one.
+2. **An element screenshot of a `position: sticky` container is not what a visitor sees.** `position: sticky`
+   renders its *whole scroll range* into an element capture — every card the stack will ever show, stacked
+   in one tall image — while a visitor sees one viewport of it at a time, at one scroll position. Capture the
+   **viewport at a real scroll position**, not the element. This is the same distinction `docs/DECISIONS.md`
+   §20.1 already drew for *why* the stack works (the RANGE PHASE, not `position: sticky`, freezes the view
+   timeline) — here it recurs as a distinct mistake, about evidence rather than mechanism: a correct
+   construction, read by the wrong kind of screenshot, manufactures a defect that isn't there.
+3. **One frame of a scroll-driven effect proves nothing.** The "truncated text" was a transition state
+   `check_card_stack.mjs` already covers across the whole scroll, caught mid-recede rather than at rest.
+
+**The site was in substantially better shape on a phone than the first pass claimed, and the brief shrank
+accordingly** — from a redesign to touch ergonomics, one map defect, and a rig. Nobody had actually looked at
+a production build on a phone before this; every rig on the project measured 1440×900 (the same shared blind
+spot §2 #29 already names for the park map's 4.3px labels), so nothing had ever been positioned to *catch*
+these three mistakes and prevent them reaching the client in the first place. That is the point worth
+carrying forward: the fix here is not "look more carefully next time" but "measure a production build, capture
+the viewport not the element, and never judge motion from a still" — as a standing discipline, not a
+one-off correction.
+
+### 23.3 The carousel pager — the only standards failure, and what "29px" is actually a measurement of
+
+The six pager numerals under `05 · Experiences` / `0N · The Experience` render at **13.30 × 14.88px**
+against WCAG 2.5.8 (AA)'s 24×24 floor — the only control on the site failing a standard rather than a
+comfort guideline. Fixed with a real, larger target (`.tap`, `--tap-w`, `--tap-h`) rather than an invisible
+one, because six small numerals under a strip have room to grow without costing the composition anything.
+
+**The width is solved, not chosen, and the geometry is re-derivable from committed evidence, not a report's
+own prose.** Every one of the six links renders at an identical box on all three routes and all eight
+shapes — confirmed independently for this section by reading `own: {x, y, w, h}` straight out of
+`docs/reviews/2026-08-27-mobile/after-pager-fixround1.json` rather than trusting the number handed down from
+Task 3: link widths `13.30, 15.13, 14.73, 15.67, 14.83, 15.44`px, byte-identical whether read from `/` at
+`phone-360` or `/mahua-vann` at `zoom-200`, because the pager's font size and row `gap-4` are both fixed
+`rem` values with no responsive override anywhere. A full 44px extension on the tightest gap between two
+links would overlap; the largest safe width is the gap itself, and `--tap-w: 29px` — one whole pixel under
+it — is what shipped, giving each pager numeral a 29×44 hit area that clears the 24×24 floor with margin in
+both axes and overlaps nothing (`check_responsive.mjs` assertion 3, 21 pairs both before and after, none
+involving the pager).
+
+**One thing is corrected here, not re-derived differently: the figure this project has called a
+"centre-to-centre pitch" throughout Task 3's own report and `ExperienceStrip.tsx`'s own comment is actually
+a LEFT-EDGE-to-left-edge pitch, and the true centre-to-centre minimum is larger, not the same.** Because the
+six links are not quite the same width (13.30 to 15.67px, the digit pairs "01"–"06" kern slightly
+differently), a left-edge measurement and a true centre measurement diverge. Recomputed directly from the
+same committed JSON, both ways, for the tightest gap (link 0 → link 1, `x: 166.91, w: 13.3` and
+`x: 196.2, w: 15.13`):
+
+- **Left-edge pitch** (`b.x − a.x`): `196.2 − 166.91 = 29.29px` — the figure previously reported.
+- **True centre-to-centre pitch** (`(b.x + b.w/2) − (a.x + a.w/2)`): `204.765 − 173.56 = 30.20px`.
+
+**The real margin against the shipped 29px extension is therefore ≈1.20px, not ≈0.29px — more generous than
+the original report claimed, not less.** This is safety-neutral: `check_responsive.mjs` assertion 3 checks
+real, overlapping rectangles directly, so it was never relying on the mislabelled arithmetic to reach its
+verdict, and the shipped value was correct either way. What was wrong was the *name* given to the number in
+the prose and the component's own comment, not the number itself or anything that depended on it. Corrected
+at both sites.
+
+### 23.4 The map's collision pass never knew about the lodge
+
+At 390px on Mahua Vann, "Turia Gate" ran straight through "Mahua Vann." `PropertyMap.tsx` already carries a
+sophisticated collision pass, `declutterMobile(labels, width, height)` — but it walks `copy.labels` only. The
+lodge is `copy.lodge`, rendered at a separate call site, and had never been part of the pass at all: nothing
+checked whether a gate label's own reach ran into the one mark that is not a label.
+
+**Same failure family as the 4.3px labels of 9 August** (§2 #29): the labels were made *bigger* then, and
+never taught to *move* around the lodge. Fixed by seeding `declutterMobile`'s `kept` array with the lodge —
+as a `kind: "gate"` shape, for reach purposes — before walking any real label, so **the lodge always wins**:
+it can suppress a colliding label, but nothing drawn from `labels` can ever suppress it. Confirmed against
+the real content on both properties, not merely the mechanism: seeding the lodge drops exactly one label on
+the whole site, `Turia Gate` on Mahua Vann (the gate distance is still stated twice in the same screen's
+prose, so nothing factual is lost); on Tola, every drop this pass produces is byte-identical to before the
+fix, and **"Kolara" — the label the page's own "getting there" row and heading both name — survives**,
+clear of the lodge by roughly 15px of margin, because `content/mahua-tola.ts`'s own gate-priority ordering
+already put it first among Tola's gates for exactly this reason. `PropertyMap.test.tsx` gained four tests,
+including a geometric one that checks no kept label on either property's real, committed map copy collides
+with the lodge — not just the one case the defect was found in.
+
+### 23.5 The `.rule-in` / `.tap` collision, and why it had to be scoped to `pointer: coarse`
+
+Applying `.tap` to the footer's legal links, the press link and the pager (all of which also carry
+`.rule-in`, the site's hairline hover affordance) painted a solid, permanently-visible block over the link's
+own text at rest — caught by the mandated before/after screenshot comparison, not by a rig, which is exactly
+what that step of the brief exists for. Both classes write the same anchor's `::after`; the fix gives the
+combination its own `::before` box (`.rule-in.tap`) rather than fighting over one pseudo-element.
+
+**The first version of this fix sat outside `@media (pointer: coarse)`, and a whole-branch review found that
+this — not the mechanism — was the real gap.** `.rule-in.tap::after`'s `background-color: transparent`
+(specificity 0,2,1) beats `.rule-in::after`'s `currentColor` (0,1,1) **on every pointer type**, not only
+touch, because nothing had gated the compound rule to coarse pointers the way `.tap` itself already is. On a
+fine (mouse) pointer, where `.tap::after` should generate no box at all, the site-wide hairline mechanism was
+silently moved onto the new `::before` for every visitor — it happened to draw the same pixels either way,
+which is exactly why a rest-state screenshot comparison could not have caught it and did not. Moved inside
+the same `@media (pointer: coarse)` block as `.tap`; verified with a real Playwright pointer context on both
+arms (fine: no `::before` box exists, `::after` travels 0→1 on hover, indistinguishable from an ordinary
+`.rule-in` link; coarse: `::after` stays transparent, `::before` travels 0→1), on both the footer link the
+original fix touched and the pager link Task 3 shipped.
+
+**One pre-existing rig failure was found and made non-fatal in the same pass, not fixed.** `check_rule_in.mjs`
+check 7 throws on `.rule-in--rest`, a selector that exists only in `LodgeCards.tsx` — dead code on this
+branch since `LodgePanels` superseded it on 19 August. The uncaught exception was killing every check after
+it, including the new one this task needed to run. Guarded with a presence check so it reports a clean
+`fail()` instead of crashing the whole script — **the underlying drift is unchanged and still reported as a
+failure**, this only stops one already-known, out-of-scope defect from blocking everything downstream of it.
+
+### 23.6 The word-span mechanism, traced correctly at the third attempt
+
+Assertion 6 (OS text scaling) found roughly 2,400 clip/intersection findings, and the story told about the
+largest bucket (1,376 clips, one word-span `<span>` at a time) was wrong twice before it was traced to its
+real cause — worth recording in full because the two wrong explanations are the more instructive part.
+
+1. **First explanation, wrong:** "a root text-scale changing a word's glyph metrics by a fraction of a
+   pixel." The actual deltas are ~50–90px, not sub-pixel, and the ratio between the 150%/200% scale versions
+   of the same clip is identical (~1.9×) at both scale factors — which on its own rules out anything
+   proportional to the scale applied.
+2. **Second explanation, also wrong:** that the word-span clips and a separate "pre-existing at rest"
+   bucket (`.drift-frame`'s permanent, by-design parallax overflow) were two independent, sibling causes.
+   They are not: `1,707 − 49 = 1,658`, exactly `clippedAtRestCount` — every one of the 1,376 word-span clips
+   is *also* `wasClippedAtRest`. It is a strict subset, not a sibling.
+3. **The real mechanism, traced in the source and then confirmed empirically:** `components/motion/
+   SplitLines.tsx` wraps every headline word in an `overflow-hidden` mask. While a heading has not yet
+   scrolled into view, it carries `data-lines-enter="pending"`, under which `[data-line-inner] { translate:
+   0 var(--lines-from, 115%); }` — the word sits translated 115% of its own height *below* the mask,
+   waiting for its scroll-triggered entrance, exactly as designed. `check_responsive.mjs` never scrolls the
+   page at any point in any of its six assertions, so **every heading below the very first viewport sits in
+   this pending, translated-down position for the rig's entire run** — proportional to how much below-the-fold
+   heading text the page has, nothing to do with text scaling at all. Confirmed directly: the same word
+   ("Two", `01 · The Lodges`' heading) read `clientHeight 67 / scrollHeight 130` while pending, and
+   `clientHeight 67 / scrollHeight 67` — zero overflow, not reduced — once scrolled into view and settled.
+   Established visually too, not only by measurement: real viewport screenshots of the hero headline at rest
+   (never pending, since it is in view at mount) and of `01`'s heading after being scrolled into view show
+   clean type at both 1440×900 and 390×844, no cropping, no visible mask edge.
+
+**Established: visually inert, a rig artefact (this rig never scrolls) rather than a defect.** No product
+change follows from it. The lesson is the one this project keeps relearning under different names
+(`mechanism-not-outcome`): a plausible-sounding cause and an arithmetically-consistent split are each, on
+their own, not the same thing as having traced the actual mechanism — this one took two wrong drafts and a
+whole-branch review before the third held up against its own committed numbers.
+
+A second, symmetric check built alongside it (`wasIntersectingAtRest`) found that of the 201 previously
+unclassified "real" intersections, 85 (42%) were already intersecting at 100% zoom — 70 of them the map's
+own label-versus-label pairs (a real, pre-existing crowding fact, not a scaling regression) — leaving **165**
+genuinely new findings for the whole rig (49 room-card clips + 116 intersections, of which all 18
+`PropertyContact` pairs are new). See §23.8.
+
+### 23.7 The whole-branch sweep, 28 August 2026 — one production build, every rig
+
+Full figures and the command behind each: `docs/reviews/2026-08-27-mobile/README.md`. Headline:
+
+- `check_responsive.mjs` (`--baseline responsive-task5-fixround1.json`): **assertion 2 = 54** (all at
+  `zoom-150`/`zoom-200`, mouse-only shapes where `.tap`'s coarse-pointer gate correctly does nothing —
+  nothing under 24×24 remains on any touch shape, on any route), **assertion 3 = 21 pairs** (all the
+  pre-approved room-card-stack recede overlap, byte-identical to every prior committed run since the
+  baseline), **assertion 6 = 2,414** on this run — **do not quote this total as settled** (§23.9).
+- `check_contrast_over_photos.mjs`, `check_image_resolution.mjs`, `check_experience_strip.mjs`,
+  `check_card_stack.mjs`, `check_room_gallery.mjs`, `check_menu.mjs`, `check_header.mjs`, `measure_page.mjs`,
+  `measure_density.mjs` — all three routes, this build. Figures in the README; nothing this plan touched
+  moved any of them off their prior committed state except where §23.3–§23.5 describe a real, intended
+  change.
+- `npm test`: **501 passed**, 46 files. `npm run lint`: clean. `npm run build`: green. `npm run
+  verify:budget`: **PASS, 167.2 KB brotli, unchanged** — this whole plan added no JavaScript; every fix is
+  CSS (`.tap`) or a data change (the map's `kept` seed). `node scripts/check_docs.mjs`: PASS.
+- Screenshots at all eight shapes, all three routes, read by eye — the 390 and landscape frames opened
+  first and specifically, per this project's own standing rule that its two worst defects (a 4.3px map
+  label, a continuously shrinking plate board) were both found this way, not by an assertion.
+
+### 23.8 Four findings recorded honestly rather than resolved — for the client or a follow-up task
+
+None of these touch anything this plan's own file structure lists as deliberately untouched-or-forbidden, and
+none is fixed here — each is named plainly rather than fixed quietly inside a task whose own brief did not
+ask for it:
+
+(a) **`RoomCardStack`'s room cards clip their own text at 150%/200% OS text scale** — the card's fixed-height
+    text-reserve budget (`ROOM_STACK.textReserve`) was solved for legibility at 100% root font size and does
+    not hold above it, on both property routes, across every room type sampled. The client's 27 Aug ruling
+    was to leave the stack alone architecturally; this is a real accessibility gap in it he has not been
+    told about, and it is not the same thing as the ruling that closed §23.2's false finding.
+(b) **`PropertyContact`'s email/address block wraps into itself at 150%/200% OS text scale** — confirmed
+    genuinely new (zero of its 18 findings are already present at 100% zoom), a novel finding this task's own
+    symmetric rest-state check surfaced.
+(c) **The property map's legend column wastes roughly 1.5 screens of scroll at landscape-phone width
+    (844×390)** — below Tailwind's `lg` breakpoint the facts/legend column and the map `<svg>` stack full
+    width, one after the other; at this specific short, wide shape the legend alone fills the whole 390px
+    viewport for a stretch of scroll before the map itself appears. Unlike `Hero.tsx`, `FullBleedQuote.tsx`
+    and `Invitation.tsx`, which already carry a `pocket:`/`short:` compaction for exactly this squeeze,
+    `PropertyMap.tsx`'s legend has never been given one.
+(d) **The property map's `<text>` labels never scale with OS text size, at any width, and are already
+    crowded at rest** — `LABEL_TEXT_SIZE` declares each tier as a literal `text-[Npx]` class inside the SVG's
+    own `viewBox` coordinate system, which never tracks a visitor's root font size. 70 of the 71 map-label ×
+    map-label intersection pairs this task found already intersect before any scaling is applied at all — a
+    real, pre-existing crowding fact about the map's own layout, not a scaling regression, and not the same
+    thing as (c)'s legend-pacing finding above.
+
+### 23.9 Instrument notes, so a future reader does not mistake noise for drift
+
+- **`check_responsive.mjs` assertion 6's own total is not stable run to run.** Two consecutive runs against
+  one unrebuilt build produced 1,976 and 2,414 findings with assertions 2 and 3 byte-identical both times —
+  almost certainly a font-loading/reflow timing race, since the assertion sets the root font size and
+  re-measures layout immediately afterward across ~200 candidates. Flagged, not chased; a real fix would
+  wait on `document.fonts.ready` before measuring, which is a rig change with its own mandate. **Do not quote
+  a single assertion-6 total as a settled fact** — `docs/reviews/2026-08-27-mobile/unmeasured.md` §1.9.
+- **Density figures for any chapter carrying the Elfsight widget remain non-deterministic**, per §22.9/§22.10
+  and `docs/reviews/2026-08-26-restructure/density-variance-NOTE.md` — unrelated to anything this plan
+  changed, and unaffected by it. Do not quote a single figure as settled for `invitation`, `vann-press` or
+  `tola-press`.
+- **`check_films.mjs` fails by design** on this branch — no film is mounted on the home page, per §22.2 —
+  and **`check_plates.mjs` fails pre-existing**, since `PlateGrid.tsx` was unrouted on 19 August, per §22.8
+  #5. Neither is this plan's to fix, and neither was touched. **`check_rule_in.mjs` check 7 also fails**, on
+  the same dead-code `.rule-in--rest` selector §22.8 #6 already names — now guarded so it reports cleanly
+  rather than crashing the rest of the script (§23.5), which is the one change made to it.
+- **New this task, and not yet fixed: `check_rule_in.mjs --url .../mahua-vann` crashes outright, an
+  uncaught exception, on check 8's second target.** `TARGETS` (the array check 8 walks) hardcodes
+  `{ name: "experiences pager link (field-days card 0)", sel: "a[href='#field-days-card-0']" }` —
+  `field-days-card-0` is the home page's own chapter id; Mahua Vann's pager uses `vann-day-card-0`, Mahua
+  Tola's `tola-day-card-0`. `page.$eval(sel, …)` throws when the selector matches nothing, and nothing
+  catches it, so the whole script dies mid-run — no JSON is written, no summary is printed, and check 8's
+  *first* target (the footer legal link, which the same route DOES carry) never gets its own verdict
+  recorded either, because the process is gone before it can print one. **Confirmed on `/mahua-vann` by
+  this task's own run** (`docs/reviews/2026-08-27-mobile/rule-in-home-task6.json` exists and reports check 7
+  as the only failure; no `rule-in-vann-task6.json` was ever written — the crash happened first). Mahua Tola
+  would fail identically; not separately run, because the cause is already established in the source, not a
+  hypothesis needing a second crash to confirm it.
+
+  **Exactly the same shape of gap `check_experience_strip.mjs` and `check_contrast_over_photos.mjs` both had
+  before Task 7 of the 26 Aug plan fixed them additively** (§22.8 #3) — a rig written and verified against
+  the home route only, never exercised against a property route until a later whole-branch sweep tried it.
+  Task 3's own fix round for check 8 (28 Aug) ran it only against the default URL (no `--url` in its own
+  committed command), so this was never caught before now. **Not fixed here** — this task's own charter is
+  the sweep and the record, and the global instruction covering this whole plan is explicit that
+  `check_rule_in.mjs`'s failures are not this plan's to fix. Worth a future task's attention: the fix is the
+  same shape as Task 7's own (parameterise `TARGETS`' pager selector by the chapter id the route actually
+  carries, the way `check_experience_strip.mjs` already takes a `--chapter` flag).
