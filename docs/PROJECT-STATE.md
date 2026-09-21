@@ -39,6 +39,25 @@ the Vercel plan (§9.1 of its spec — the free tier does not permit commercial 
 deployed on that account) and a privacy notice (§9.2 — the site has none, and a comment form collecting
 email addresses requires one).
 
+## The client is editing the site's copy — 20 Sep 2026
+
+He asked for every word on the site in one document so he could rework it. That document is
+[`WEBSITE-COPY.md`](WEBSITE-COPY.md): all three routes, the chrome, the hidden text (titles, descriptions,
+photo descriptions, accessible names) and a section of discrepancies found while compiling it. It was taken
+from a production build of this branch in a browser and checked back: every rendered string appears in it.
+**It is a snapshot, not a source** — the site reads `content/*.ts`, never this file.
+
+**When he sends it back, diff it against the version first written on 20 Sep 2026 and apply each change to
+the file its §8 names** — his changes are edits in place, his questions are lines starting `NOTE:`. Then
+re-measure before claiming done: copy changes length, and length moves density, the contrast of type over
+photographs and the room card stack's text fit.
+
+Discrepancies it raised, all unruled: Tola's Suite says "king bed" in its line and "Queen bed" in its facts;
+the Super Deluxe Cottage has no size and the old site gives 300 sq ft; the home Tola panel describes the
+three river machaans as existing though they were under construction on 12 Aug; `content/home.ts` still
+holds an unrendered `rooms: "Fourteen rooms"` for Tola (and unrendered `gate`/`rooms` for both lodges —
+`LodgePanels` reads neither).
+
 ## ⚠ ON `feat/home-v2` THE HOME PAGE IS SEVEN CHAPTERS, NOT TWELVE — 19-20 Aug 2026
 
 **Check `git branch --show-current` before reading any home-page state below.** This branch carries the
