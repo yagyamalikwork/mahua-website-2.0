@@ -1,5 +1,50 @@
 # Deploying the demo
 
+> **22 September 2026 — the demo is `feat/journal-and-mobile`, both bodies of work that branch carries.**
+> Deployed at the client's request, *"so we have the new website with fresh changes up there and it gets
+> easier to demonstrate"*, from `86592cc`: the 26 Aug restructure (the tiger off `05 · Experiences`, his own
+> Tripadvisor widget in place of the carousel, both property pages restructured to seven chapters) **and** the
+> 27-28 Aug mobile, tablet and zoom work. `demo` was fast-forwarded to match. **Not merged into anything** —
+> `feat/home-v2` and `main` are untouched.
+>
+> | | |
+> |---|---|
+> | **Live** | `dpl_GvCaX9UQZvVxyAq36n6iX3gDdgkf`, created 22 Sep 2026 02:22 IST |
+> | **Previous, the rollback target** | `dpl_7bLFtYaVLHuzmoQhLoQpat76RLXZ` — `feat/home-v2` as republished 21 Aug 2026 |
+> | **Roll back in one command** | `npx vercel rollback dpl_7bLFtYaVLHuzmoQhLoQpat76RLXZ --yes` |
+>
+> **Verified from the public internet as an anonymous visitor, not from a logged-in session:** all three
+> routes and `robots.txt` return 200 with no login wall; `robots.txt` is `Disallow: /` and every route
+> carries `noindex, nofollow, nocache`, so indexing is still shut; ten markers unique to this branch are
+> present or absent as they should be (the widget mounted, `03 · The Experience` and `04 · Written About` on
+> both property pages; the tiger film, the carousel, `The Table`, `Where It Is` and Tola's guest-quote band
+> all gone); and a real browser scrolling each page at a reading pace found **0 broken images and 0 failed
+> requests on all three**, with the widget rendering **5,994 / 7,472 / 7,484 characters of real review text**
+> on `/` / `/mahua-vann` / `/mahua-tola` — so the 27 Aug failure, where the gate let only the vendor's badge
+> paint, is not present on the live network. **0 videos on `/` is correct on this branch** (the tiger is
+> unmounted); the "two videos" below describes the twelve-chapter page.
+>
+> **What a stakeholder will see that is the client's to change, all ruled and recorded:** the widget's black
+> cards and green roundels on cream, its **"Free Tripadvisor Reviews Widget" badge** (a paid Elfsight plan
+> removes it), and **Tola's `Written About` showing Vann's reviews** until he supplies a Tola embed
+> (`PressBandCopy.reviewsAppId`, one line). Also live and unfixed by his choice: the four accessibility
+> findings in `docs/DECISIONS.md` §23.8 and the two label collisions on Tola's map.
+>
+> **The CLI auth trap bit again, in a new shape, and cost about ten minutes.** Two things, both worth
+> knowing before the next headless deploy:
+>
+> 1. **`npx vercel` was no longer in the npx cache**, so the first call silently downloaded `vercel@59.23.2`
+>    and took over a minute doing it — **which looks exactly like a hang on a login prompt.** Install it
+>    explicitly first: `npx --yes vercel@59.23.2 --version`.
+> 2. **Run every CLI call from a headless session with its input closed** — `cmd /c "npx vercel … < NUL"`.
+>    With stdin closed, v59 does not wait on a prompt: `whoami` returns JSON with `"loggedIn": false,
+>    "reason": "login_required"` and exits. That turned an ambiguous hang into a plain answer. **The fix is
+>    still a human**: the client ran `npx vercel login` in his own terminal, and `whoami` then answered
+>    `yagyamalikwork` and the deploy went through first time.
+>
+> **This file's old warning still holds and is the reason for the check above:** a read command answering
+> is not proof a write will work. Check `whoami` before a deploy, but believe only the deploy.
+
 > **What `demo` names, stated precisely (21 Aug 2026).** It names the deployed **page**, not the deployed
 > commit — it may run ahead by commits that touch no source. To tell the difference in one command:
 > `git diff --stat <deployed-commit>..demo -- app components lib content public`. Empty output means the
@@ -210,8 +255,10 @@ All four routes are **fully static** — no server functions, nothing to cold-st
 
 ## Known, and deliberate
 
-- **The phone is a later pass.** Client ruling, 12 Aug: *"right now our only focus is how it looks on a
-  computer/laptop screen."* The site works on a phone and is measured there; it is not tuned there.
+- **~~The phone is a later pass.~~ Superseded 27-28 Aug 2026, and live since 22 Sep.** The 12 Aug ruling
+  (*"right now our only focus is how it looks on a computer/laptop screen"*) was sequencing, and the client
+  reversed it himself. Phones, tablets and every kind of zoom are done and asserted by
+  `scripts/check_responsive.mjs` — `docs/DECISIONS.md` §23.
 - Three chapters on the property pages sit over the 45%-empty ceiling after measured attempts — see
   `docs/DECISIONS.md` §5. Two arguably cannot satisfy it by their own definition.
 - The hero photograph lands at ~4.3s on a throttled connection against a 2.5s budget, knowingly: the client

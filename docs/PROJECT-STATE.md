@@ -1,13 +1,25 @@
-# Project state — 29 August 2026
+# Project state — 22 September 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
 
-## ⚠ THIS BRANCH IS THE ONLY COPY OF 37 COMMITS UNTIL IT IS PUSHED
+## ✅ LIVE SINCE 22 SEP 2026 — `https://mahua-resorts.vercel.app` SERVES `feat/journal-and-mobile`
+
+Deployed at the client's request so the new site is easier to demonstrate: both the 26 Aug restructure and
+the 27-28 Aug mobile work. **`demo` now points here. Nothing is merged** — `feat/home-v2`, which the demo
+served from 20 Aug until today, and `main` are untouched. Verified from the public internet, indexing still
+shut, and the one-command rollback to the previous deployment are all in **`docs/DEPLOY.md`'s top entry.**
+
+**`WEBSITE-COPY.md` says this version "is not live yet". That line went stale on 22 Sep and is deliberately
+left as written** — that file is the base the client's own edits will be diffed against, and editing it would
+make his diff show a change he never made. If he asks why the demo differs from what the file says, this is
+why.
+
+## Pushing: resolved 29 Aug, and still worth checking every session
 
 `feat/journal-and-mobile` had **no remote tracking branch at all** until 29 August 2026 — every commit of
 both the 26 Aug restructure and the 27-28 Aug mobile work existed on one machine and nowhere else. A power
-outage on 27 Aug had already cost this project one session mid-task.
+outage on 27 Aug had already cost this project one session mid-task. It has tracked `origin` since.
 
 **Check it before starting work and before stopping:**
 
@@ -19,10 +31,10 @@ git status -sb                                            # ahead/behind, in one
 **`feat/page-structure` is also 1 commit ahead of its own remote**, and has been since long before this
 branch existed. Not urgent; recorded so it is not mistaken for something this work caused.
 
-## Where the three agreed bodies of work stand (29 Aug 2026)
+## Where the three agreed bodies of work stand (22 Sep 2026)
 
-Three were agreed with the client on 26 August. Two are finished on this branch; the third is specified and
-not started.
+Three were agreed with the client on 26 August. Two are finished on this branch **and live since 22 Sep**;
+the third is specified and not started.
 
 | | | |
 |---|---|---|
@@ -31,8 +43,9 @@ not started.
 | **A** — the Journal page | client's item 1 | **SPECIFIED, NOT BUILT** — `docs/superpowers/specs/2026-08-26-journal-page-design.md` |
 | — | client's item 4f, the closing CTA | **NOT STARTED**, deferred by the client to last |
 
-**501 tests, 167.2 KB brotli first load, `npm run verify:budget` PASS, `node scripts/check_docs.mjs` PASS.**
-Neither merged nor deployed; `feat/home-v2` and the live demo are untouched.
+**501 tests, 167.2 KB brotli first load, `npm run verify:budget` PASS, `node scripts/check_docs.mjs` PASS**
+— all re-run on 22 Sep immediately before the deploy. **Deployed 22 Sep 2026, not merged**; `feat/home-v2`
+and `main` are untouched.
 
 **The Journal is the one that needs a decision before it can start**, and both blockers are the client's:
 the Vercel plan (§9.1 of its spec — the free tier does not permit commercial use and this site is already
@@ -64,15 +77,16 @@ holds an unrendered `rooms: "Fourteen rooms"` for Tola (and unrendered `gate`/`r
 stakeholders' restructure; everything after this section describes the twelve-chapter page that still ships
 on `feat/image-sizing`, `main` and `demo`, and still serves the live demo.
 
-**On `feat/journal-and-mobile` (branched from `feat/home-v2`, 26 Aug 2026, not yet merged or deployed),
-this section is one layer further removed.** The seven-chapter page below is still the right shape, but the
+**On `feat/journal-and-mobile` (branched from `feat/home-v2`, 26 Aug 2026; not merged; DEPLOYED 22 Sep
+2026, replacing this section's branch on the live demo), this section is one layer further removed.** The seven-chapter page below is still the right shape, but the
 tiger is off `05 · Experiences`, the reviews are the client's own Elfsight widget rather than the hand-built
 carousel this section describes, and both property pages are restructured — none of which this document's
 "What is still owed" list (below) reflected until the 27 Aug fix wave corrected it. **`CLAUDE.md`'s own
 branch table is the authoritative one for which figure applies to which branch; `docs/DECISIONS.md` §22 is
 the full account of what changed on this branch.**
 
-**DEPLOYED to production on 20 Aug 2026**, after being built on a branch and shown on a preview URL — the
+**DEPLOYED to production on 20 Aug 2026, and REPLACED there on 22 Sep 2026 by `feat/journal-and-mobile`**
+— it remains the one-command rollback target, `docs/DEPLOY.md`. It was built on a branch and shown on a preview URL — the
 client's own framing was *"rather than deleting, let us create a completely new branch… we don't push it to
 Vercel, I just present it on localhost to them,"* and he promoted it once he had seen it. **`demo` was moved
 to match, because that branch exists to name what is live.**
