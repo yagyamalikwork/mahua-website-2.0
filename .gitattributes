@@ -1,0 +1,4 @@
+# This branch holds a built website, not source. Git must not "helpfully"
+# rewrite line endings in it — these files are the exact bytes a browser
+# is served, and the .js filenames carry content hashes that must match.
+* -text
