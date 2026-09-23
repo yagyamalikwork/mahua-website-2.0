@@ -1,7 +1,38 @@
-# Project state — 22 September 2026
+# Project state — 24 September 2026
 
 Written as a handoff so no context is lost when a session is compacted. **Read this second**, after
 `CLAUDE.md`.
+
+## 🆕 THE HOSTING PARTNER, AND THE TWO BRANCHES THEY CREATED (23-24 SEP 2026)
+
+The client changed hosting and managing partner. The new partner runs **.NET**, cannot host a Node
+application, and asked for "the front-end files (HTML, CSS and JS)". Nothing about the site changed to
+answer that — it has never needed a server to render a page.
+
+| Branch | What it carries | Who it is for |
+|---|---|---|
+| **`Evolve-Dev`** | The source, plus `output: "export"` in `next.config.ts` and one `force-static` line in `app/robots.ts`. **The client's instruction, 23 Sep: every new client request goes here** so the other branches stay where they are. | Developers — ours and theirs |
+| **`Evolve-Dev-static`** | An orphan branch: the **built site only**, 745 files / 48.2 MB, plus `web.config` and a `README.md` for their engineers. No source, no history. | The hosting partner |
+
+**It took two attempts, and the failure is worth keeping.** The partner was first pointed at `Evolve-Dev`,
+opened it, saw `.ts` files and replied *"i need only plain html and css js file, These are in Typescript
+which will not support our .Net Sql framework"*. They were describing what they saw accurately. The
+mistake was ours: **`out/` is gitignored, so the repository held no HTML at all** — we had sent them a
+branch that *builds* a website instead of a website. `Evolve-Dev-static` is the fix. **When anyone asks
+for front-end files, send files.**
+
+`docs/STATIC-EXPORT-HANDOVER.md` (hosting it) and `docs/SOURCE-HANDOVER.md` (developing it) are both
+written for their engineers rather than for us — no defect history, no client rulings.
+
+**Two things about that handover are still open and are the client's:** whether the partner gets access to
+this repository (recommended, because both teams will be developing and a copy would diverge) or a trimmed
+source archive; and whether they see our candid internal record — `docs/DECISIONS.md`, this file, the
+`.superpowers/` ledgers — or only the code and the two handover guides. `docs/` alone is 861 MB of review
+evidence and `.git` is 1.5 GB, so it is a size question as well as a disclosure one.
+
+**Indexing is still off in every build**, compiled in, and the partner has been told in writing that
+publishing as-is means Google never sees the site. Turning it on needs `NEXT_PUBLIC_ALLOW_INDEXING=true` at
+build time **and** the client's ruling on timing, because the WordPress site is still live.
 
 ## ✅ LIVE SINCE 22 SEP 2026 — `https://mahua-resorts.vercel.app` SERVES `feat/journal-and-mobile`
 

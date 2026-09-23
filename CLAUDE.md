@@ -72,10 +72,25 @@ hand-drawn field-guide idiom.
 
 ## ⚠ WHICH BRANCH ARE YOU ON?
 
-**This file is currently checked out on `feat/journal-and-mobile`** (branched from `feat/home-v2` on 26 Aug
+**Two branches were added on 23-24 Sep 2026 and neither appears in the table below, because neither
+changes a pixel of the site.** They exist for the client's new hosting partner, who runs .NET:
+
+| | What it is |
+|---|---|
+| **`Evolve-Dev`** | **The source, and where every new client request now goes** — the client's own instruction, 23 Sep. Branched from `feat/journal-and-mobile` at `9d0399b`, so the page is identical to it. The one real difference is `next.config.ts`: `output: "export"` + `trailingSlash` + `images.unoptimized`, so `npm run build` writes `out/` — plain HTML/CSS/JS with no server. **Do not port those three lines to any other branch**; `feat/journal-and-mobile` is what Vercel serves and must keep building the normal way. `app/robots.ts` also gained `export const dynamic = "force-static"`, which declares what was already true and changes nothing on Vercel. |
+| **`Evolve-Dev-static`** | **An orphan branch holding the BUILT SITE and nothing else** — 745 files, 48.2 MB, no source, no history, no config. It exists so *Code → Download ZIP* gives a folder that is ready to serve, plus a `web.config` for IIS and a `README.md` written for their engineers. Regenerate it by rebuilding `Evolve-Dev` and copying `out/` over it. |
+
+**The lesson that created the second one:** the partner was pointed at `Evolve-Dev`, saw `.ts` files, and
+replied that TypeScript would not run on their .NET stack. They were right about what they were looking at
+and wrong about what it meant — TypeScript compiles away at build time — but the real failure was ours:
+`out/` is gitignored, so **the repository contained no HTML at all** and they had never seen the built site.
+**When somebody asks for "the front-end files", send them files, not a branch that builds files.**
+
+**The column that describes this page is `feat/journal-and-mobile`** (branched from `feat/home-v2` on 26 Aug
 2026; not merged; **DEPLOYED 22 Sep 2026** — `https://mahua-resorts.vercel.app` serves it and `demo` points
 here, `docs/DEPLOY.md`) **and it is the only branch of the three where the home page carries the
-26 Aug restructure AND the property pages differ from `feat/home-v2`.** Run `git branch --show-current`
+26 Aug restructure AND the property pages differ from `feat/home-v2`.** `Evolve-Dev` reads that column too —
+it was branched from it and the page is identical. Run `git branch --show-current`
 before trusting a figure below — the property-pages row that used to say "identical on both branches" is no
 longer true for this branch, see below.
 

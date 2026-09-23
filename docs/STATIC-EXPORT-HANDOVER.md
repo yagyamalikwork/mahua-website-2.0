@@ -3,6 +3,11 @@
 For the team hosting this site. Everything below is about the folder you have been sent (or can build
 yourself). **You do not need Node.js, npm, TypeScript, Python or any runtime on your servers.**
 
+> **The built files are on the `Evolve-Dev-static` branch** — that branch holds the finished site and
+> nothing else, no source, so *Code → Download ZIP* on it gives a folder that is ready to serve.
+> `Evolve-Dev` is the **source** we edit; a partner sent there instead saw `.ts` files and reasonably
+> concluded the site would not run on their stack (23 Sep 2026). Point people at the right one.
+
 ---
 
 ## 1. What this is
@@ -31,9 +36,11 @@ it disabled.
 | HTML | 6 | 793 KB |
 | CSS | 1 | 64 KB |
 | JavaScript | 16 | 774 KB |
-| Images (`.avif` / `.webp`) | 620 | 37.3 MB |
+| Images (`.avif`, `.webp`, `.jpg`, `.png`) | 680 | 43.9 MB |
 | Fonts (`.woff2`) | 10 | 261 KB |
 | Video (`.mp4`) | 2 | 1.3 MB |
+| Navigation data (`.txt`) | 28 | 1.1 MB |
+| Icons (`.ico`) | 2 | 3 KB |
 | **Total** | **745** | **48.2 MB** |
 
 Most of the weight is photographs, served at eight widths each so a phone downloads a small one. A visitor
