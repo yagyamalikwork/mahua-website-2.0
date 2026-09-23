@@ -26,7 +26,7 @@ site touches it.
 | HTML | 6 | 793 KB |
 | CSS | 1 | 64 KB |
 | JavaScript | 16 | 774 KB |
-| Images (`.avif`, `.webp`, `.jpg`, `.png`) | 680 | 43.0 MB |
+| Images (`.avif`, `.webp`, `.jpg`, `.png`) | 680 | 43.9 MB |
 | Fonts (`.woff2`) | 10 | 261 KB |
 | Video (`.mp4`) | 2 | 1.3 MB |
 | Data (`.txt`, used for page-to-page navigation) | 28 | 1.1 MB |
