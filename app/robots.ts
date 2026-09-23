@@ -18,6 +18,22 @@ import { INDEXING_ALLOWED } from "@/lib/indexing";
  *
  * See `lib/indexing.ts` for the switch and why its default is the safe one.
  */
+
+/**
+ * Declares what was already true, and what `output: "export"` insists be said
+ * out loud.
+ *
+ * This route reads one build-time constant and returns one of two fixed
+ * objects — there is nothing dynamic in it. A normal `next build` works that
+ * out on its own, but a static export refuses to guess: without this line it
+ * fails with *"export const dynamic = \"force-static\" … not configured on
+ * route /robots.txt"* and the whole export stops.
+ *
+ * It changes nothing about the Vercel build, where this route was already
+ * emitted as `○ (Static)`.
+ */
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
   if (!INDEXING_ALLOWED) {
     return { rules: { userAgent: "*", disallow: "/" } };

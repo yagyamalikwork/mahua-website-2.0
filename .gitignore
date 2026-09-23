@@ -52,3 +52,7 @@ __pycache__/
 *.pyc
 
 .env*
+
+# The handover zip built from out/ — regenerate, never commit (46 MB of photographs
+# already tracked once in public/media). docs/STATIC-EXPORT-HANDOVER.md
+mahua-frontend-static-*.zip
